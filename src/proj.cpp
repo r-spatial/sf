@@ -16,18 +16,19 @@ Rcpp::LogicalVector CPL_proj_h(bool b = false) {
 
 // [[Rcpp::export]]
 Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVector authority, 
-	Rcpp::NumericVector AOI, Rcpp::CharacterVector Use, 
-	Rcpp::CharacterVector grid_availability,
-	double accuracy = -1.0,
-	bool strict_containment = false
-	) {
+		Rcpp::NumericVector AOI, Rcpp::CharacterVector Use, 
+		Rcpp::CharacterVector grid_availability,
+		double accuracy = -1.0,
+		bool strict_containment = false,
+		bool axis_order_auth_compl = false) {
 #if PROJ_VERSION_MAJOR >= 7
 	if (crs.size() != 2)
 		Rcpp::stop("length 2 character vector expected");
 	const char *auth = NULL;
 	if (authority.size())
 		auth = authority[0];
-	PJ_OPERATION_FACTORY_CONTEXT *factory_ctx = proj_create_operation_factory_context(PJ_DEFAULT_CTX, auth);
+	PJ_OPERATION_FACTORY_CONTEXT *factory_ctx = 
+		proj_create_operation_factory_context(PJ_DEFAULT_CTX, auth);
 	if (accuracy >= 0.0)
 		proj_operation_factory_context_set_desired_accuracy(PJ_DEFAULT_CTX, factory_ctx, accuracy);
 	if (AOI.size() == 4)
@@ -35,13 +36,17 @@ Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVect
 			AOI[0], AOI[1], AOI[2], AOI[3]);
 	else if (Use.size() == 1) {
 		if (Use[0] == "NONE")
-			proj_operation_factory_context_set_crs_extent_use(PJ_DEFAULT_CTX, factory_ctx, PJ_CRS_EXTENT_NONE);
+			proj_operation_factory_context_set_crs_extent_use(PJ_DEFAULT_CTX, factory_ctx, 
+				PJ_CRS_EXTENT_NONE);
 		else if (Use[0] == "BOTH")
-			proj_operation_factory_context_set_crs_extent_use(PJ_DEFAULT_CTX, factory_ctx, PJ_CRS_EXTENT_BOTH);
+			proj_operation_factory_context_set_crs_extent_use(PJ_DEFAULT_CTX, factory_ctx, 
+				PJ_CRS_EXTENT_BOTH);
 		else if (Use[0] == "INTERSECTION")
-			proj_operation_factory_context_set_crs_extent_use(PJ_DEFAULT_CTX, factory_ctx, PJ_CRS_EXTENT_INTERSECTION);
+			proj_operation_factory_context_set_crs_extent_use(PJ_DEFAULT_CTX, factory_ctx,
+				PJ_CRS_EXTENT_INTERSECTION);
 		else if (Use[0] == "SMALLEST")
-			proj_operation_factory_context_set_crs_extent_use(PJ_DEFAULT_CTX, factory_ctx, PJ_CRS_EXTENT_SMALLEST);
+			proj_operation_factory_context_set_crs_extent_use(PJ_DEFAULT_CTX, factory_ctx, 
+				PJ_CRS_EXTENT_SMALLEST);
 		else
 			Rcpp::stop("unknown value for Use");
 	}
@@ -72,14 +77,6 @@ PROJ_GRID_AVAILABILITY_KNOWN_AVAILABLE); // Results will be presented as if grid
 			Rcpp::stop("Unknown value for grid_availability");
 	}
 
-/*
-	void proj_operation_factory_context_set_allow_use_intermediate_crs(PJ_CONTEXT *ctx, PJ_OPERATION_FACTORY_CONTEXT *factory_ctx, PROJ_INTERMEDIATE_CRS_USE use);
-
-	void proj_operation_factory_context_set_discard_superseded(PJ_CONTEXT *ctx, PJ_OPERATION_FACTORY_CONTEXT *factory_ctx, int discard)
-
-	void proj_operation_factory_context_set_allow_ballpark_transformations(PJ_CONTEXT *ctx, PJ_OPERATION_FACTORY_CONTEXT *factory_ctx, int allow);
-*/
-
 	PJ *source_crs = proj_create(PJ_DEFAULT_CTX, crs[0]);
 	if (source_crs == NULL)
 		Rcpp::stop(proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX)));
@@ -87,25 +84,61 @@ PROJ_GRID_AVAILABILITY_KNOWN_AVAILABLE); // Results will be presented as if grid
 	if (target_crs == NULL)
 		Rcpp::stop(proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX)));
 
-
-	PJ_OBJ_LIST *obj_list = proj_create_operations(PJ_DEFAULT_CTX, source_crs, target_crs, factory_ctx);
+	PJ_OBJ_LIST *obj_list = proj_create_operations(PJ_DEFAULT_CTX, source_crs, target_crs, 
+		factory_ctx);
 	int n = proj_list_get_count(obj_list);
 	Rcpp::CharacterVector id(n);
 	Rcpp::CharacterVector description(n);
 	Rcpp::CharacterVector definition(n);
 	Rcpp::LogicalVector   has_inverse(n);
+	Rcpp::LogicalVector   axis_order(n);
 	Rcpp::NumericVector   acc(n);
+	Rcpp::IntegerVector   grid_count(n);
+	Rcpp::LogicalVector   instantiable(n);
+	Rcpp::List            grids(n);
 	for (int i = 0; i < n; i++) {
 		PJ *pj = proj_list_get(PJ_DEFAULT_CTX, obj_list, i);
+		if (! axis_order_auth_compl) {
+			PJ* orig = pj;
+			pj = proj_normalize_for_visualization(PJ_DEFAULT_CTX, orig);
+			proj_destroy(orig);
+        }
+		axis_order(i) = axis_order_auth_compl;
+		grid_count(i) = proj_coordoperation_get_grid_used_count(PJ_DEFAULT_CTX, pj);
+		instantiable(i) = (bool) proj_coordoperation_is_instantiable(PJ_DEFAULT_CTX, pj);
 		PJ_PROJ_INFO info = proj_pj_info(pj);
 		description(i) = info.description;
 		definition(i) = info.definition;
-		id(i) = info.id;
+		if (info.id != NULL)
+			id(i) = info.id;
 		has_inverse(i) = info.has_inverse != 0;
 		if (info.accuracy == -1.0)
 			acc(i) = NA_REAL;
 		else
 			acc(i) = info.accuracy;
+		if (grid_count(i) > 0) {
+			Rcpp::List g(grid_count(i));
+			for (int j = 0; j < grid_count(i); j++) {
+				const char *out_short_name, *out_full_name, *out_package_name, *out_url;
+				int grid_OK, out_direct_download, out_open_license, out_available;
+				grid_OK = proj_coordoperation_get_grid_used(PJ_DEFAULT_CTX, pj,
+					j, &out_short_name, &out_full_name, &out_package_name,
+					&out_url, &out_direct_download, &out_open_license,
+					&out_available);
+				if (grid_OK) {
+					g(j) = Rcpp::List::create(
+						Rcpp::Named("out_short_name") = out_short_name,
+						Rcpp::Named("out_full_name") = out_full_name,
+						Rcpp::Named("out_package_name") = out_package_name,
+						Rcpp::Named("out_url") = out_url,
+						Rcpp::Named("out_direct_download") = out_direct_download,
+						Rcpp::Named("out_open_license") = out_open_license,
+						Rcpp::Named("out_available") = out_available
+					);
+				}
+			}
+			grids(i) = g;
+		}
 		proj_destroy(pj);
 	}
 	// int sug = proj_get_suggested_operation(PJ_DEFAULT_CTX, *obj_list, PJ_DIRECTION direction, PJ_COORD coord)
@@ -115,7 +148,12 @@ PROJ_GRID_AVAILABILITY_KNOWN_AVAILABLE); // Results will be presented as if grid
 		Rcpp::Named("description") = description,
 		Rcpp::Named("definition") = definition,
 		Rcpp::Named("has_inverse") = has_inverse,
-		Rcpp::Named("accuracy") = acc);
+		Rcpp::Named("accuracy") = acc,
+		Rcpp::Named("axis_order") = axis_order,
+		Rcpp::Named("grid_count") = grid_count,
+		Rcpp::Named("instantiable") = instantiable
+	);
+	df.attr("grids") = grids;
 
 	proj_destroy(source_crs);
 	proj_destroy(target_crs);

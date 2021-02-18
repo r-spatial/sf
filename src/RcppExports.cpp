@@ -873,8 +873,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_get_pipelines
-Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVector authority, Rcpp::NumericVector AOI, Rcpp::CharacterVector Use, Rcpp::CharacterVector grid_availability, double accuracy, bool strict_containment);
-RcppExport SEXP _sf_CPL_get_pipelines(SEXP crsSEXP, SEXP authoritySEXP, SEXP AOISEXP, SEXP UseSEXP, SEXP grid_availabilitySEXP, SEXP accuracySEXP, SEXP strict_containmentSEXP) {
+Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVector authority, Rcpp::NumericVector AOI, Rcpp::CharacterVector Use, Rcpp::CharacterVector grid_availability, double accuracy, bool strict_containment, bool axis_order_auth_compl);
+RcppExport SEXP _sf_CPL_get_pipelines(SEXP crsSEXP, SEXP authoritySEXP, SEXP AOISEXP, SEXP UseSEXP, SEXP grid_availabilitySEXP, SEXP accuracySEXP, SEXP strict_containmentSEXP, SEXP axis_order_auth_complSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -885,7 +885,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type grid_availability(grid_availabilitySEXP);
     Rcpp::traits::input_parameter< double >::type accuracy(accuracySEXP);
     Rcpp::traits::input_parameter< bool >::type strict_containment(strict_containmentSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_get_pipelines(crs, authority, AOI, Use, grid_availability, accuracy, strict_containment));
+    Rcpp::traits::input_parameter< bool >::type axis_order_auth_compl(axis_order_auth_complSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_get_pipelines(crs, authority, AOI, Use, grid_availability, accuracy, strict_containment, axis_order_auth_compl));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1308,7 +1309,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_polygonize", (DL_FUNC) &_sf_CPL_polygonize, 10},
     {"_sf_CPL_rasterize", (DL_FUNC) &_sf_CPL_rasterize, 6},
     {"_sf_CPL_proj_h", (DL_FUNC) &_sf_CPL_proj_h, 1},
-    {"_sf_CPL_get_pipelines", (DL_FUNC) &_sf_CPL_get_pipelines, 7},
+    {"_sf_CPL_get_pipelines", (DL_FUNC) &_sf_CPL_get_pipelines, 8},
     {"_sf_CPL_is_network_enabled", (DL_FUNC) &_sf_CPL_is_network_enabled, 1},
     {"_sf_CPL_enable_network", (DL_FUNC) &_sf_CPL_enable_network, 2},
     {"_sf_CPL_get_data_dir", (DL_FUNC) &_sf_CPL_get_data_dir, 1},

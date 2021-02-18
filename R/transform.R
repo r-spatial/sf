@@ -24,16 +24,16 @@ chk_mpol = function(x) {
 }
 
 sanity_check = function(x) {
-    d = st_dimension(x) # flags empty geoms as NA
-    if (any(d == 2, na.rm = TRUE)) { # the polygon stuff
+	d = st_dimension(x) # flags empty geoms as NA
+	if (any(d == 2, na.rm = TRUE)) { # the polygon stuff
 		if (inherits(x, "sfc_POLYGON"))
-        	st_sfc(lapply(x, chk_pol), crs = st_crs(x))
+			st_sfc(lapply(x, chk_pol), crs = st_crs(x))
 		else if (inherits(x, "sfc_MULTIPOLYGON"))
-        	st_sfc(lapply(x, chk_mpol), crs = st_crs(x))
+			st_sfc(lapply(x, chk_mpol), crs = st_crs(x))
 		else
 			stop(paste("no check implemented for", class(x)[1]))
-    } else
-        x # nocov
+	} else
+		x # nocov
 }
 
 #' Transform or convert coordinates of simple feature
@@ -164,15 +164,15 @@ sf_proj_info = function(type = "proj", path) {
 	if (type == "network")
 		return(CPL_is_network_enabled(TRUE))
 
-    opts <- c("proj", "ellps", "datum", "units", "prime_meridians")
-    if (!(type %in% opts))
+	opts <- c("proj", "ellps", "datum", "units", "prime_meridians")
+	if (!(type %in% opts))
 		stop("unknown type") # nocov
-    t <- as.integer(match(type[1], opts) - 1)
+	t <- as.integer(match(type[1], opts) - 1)
 	res = CPL_proj_info(as.integer(t))
-    if (type == "proj")
+	if (type == "proj")
 		res$description <- sapply(strsplit(as.character(res$description), "\n"),
 			function(x) x[1])
-    data.frame(res)
+	data.frame(res)
 }
 
 #' @name st_transform
@@ -268,7 +268,6 @@ sf_proj_search_paths = function(paths = character(0)) {
 		CPL_set_proj_search_paths(as.character(paths)) # set
 }
 
-#' Get or set the PROJ search paths
 #' @param enable logical; set this to enable (TRUE) or disable (FALSE) the proj network search facility
 #' @param url character; use this to specify and override the default proj network CDN 
 #' @return `sf_proj_network` when called without arguments returns a logical indicating whether
@@ -281,4 +280,108 @@ sf_proj_network = function(enable = FALSE, url = character(0)) {
 		CPL_is_network_enabled()
 	else 
 		CPL_enable_network(url, enable)
+}
+
+#' @param source_crs object of class `crs` or character
+#' @param target_crs object of class `crs` or character
+#' @param authority character; constrain output pipelines to those of authority
+#' @param AOI length four numeric; desired area of interest for the resulting 
+#' coordinate transformations (west, south, east, north, in degrees).
+#' For an area of interest crossing the anti-meridian, west will be greater than east.
+#' @param Use one of "NONE", "BOTH", "INTERSECTION", "SMALLEST", indicating how AOI's
+#' of source_crs and target_crs are being used
+#' @param grid_availability character; one of "USED" (Grid availability is only used for sorting 
+#' results. Operations where some grids are missing will be sorted last), "DISCARD"
+#' (Completely discard an operation if a required grid is missing)
+#' , "IGNORED" (Ignore grid availability at all. Results will be presented as if all grids were 
+#' available.), or "AVAILABLE" (Results will be presented as if grids known to PROJ (that is 
+#' registered in the grid_alternatives table of its database) were available. Used typically when 
+#' networking is enabled.)
+#' @param accuracy numeric; only return pipelines with at least this accuracy
+#' @param strict_containment logical; default FALSE; permit partial matching of the area
+#' of interest; if TRUE strictly contain the area of interest.
+#' The area of interest is either as given in AOI, or as implied by the
+#' source/target coordinate reference systems 
+#' @param axis_order_authority_compliant: if FALSE always choose ‘x’ or longitude for the first 
+#' axis; if TRUE, follow the axis orders given by the coordinate reference systems when 
+#' constructing the for the first axis; if FALSE, follow the axis orders given by
+#' @return `sf_proj_pipelines` returns a table with candidate coordinate transformation
+#' pipelines along with their accuracy; `NA` accuracy indicates ballpark accuracy.
+#' @name proj_tools
+#' @export
+sf_proj_pipelines = function(source_crs, target_crs, authority = character(0), AOI = numeric(0),
+		Use = "NONE", grid_availability = "USED", accuracy = -1.0, 
+		strict_containment = FALSE, axis_order_authority_compliant = st_axis_order()) {
+	stopifnot(!missing(source_crs), !missing(target_crs))
+	if (inherits(source_crs, "crs"))
+		source_crs = source_crs$wkt
+	if (inherits(target_crs, "crs"))
+		target_crs = target_crs$wkt
+	stopifnot(is.character(source_crs), is.character(target_crs))
+
+	ret = CPL_get_pipelines(c(source_crs, target_crs), as.character(authority), 
+		as.numeric(AOI), as.character(Use), as.character(grid_availability),
+		as.numeric(accuracy), as.logical(strict_containment), 
+		as.logical(axis_order_authority_compliant))
+	if (nrow(ret)) {
+		if (substr(ret$definition[1], 1, 1) != "+") # paste + to every word
+			ret$definition = 
+				lapply(strsplit(ret$definition, " "), 
+					function(x) paste0(paste0("+", x), collapse=" "))
+		ret$containment = strict_containment
+		structure(ret, class = c("proj_pipelines", "data.frame"),
+			source_crs = source_crs, target_crs = target_crs)
+	} else
+		invisible(NULL)
+}
+
+#' @export
+print.proj_pipelines = function(x, ...) {
+	cat("Candidate coordinate operations found: ", nrow(x), "\n")
+	nos <- which(!x$instantiable)
+	if (length(nos) > 0L)
+		xx <- x[-nos,]
+	else
+		xx <- x
+	xx <- xx[order(xx$accuracy),]
+	y = xx[1,]
+	cat("Strict containment:    ", y$containment, "\n")
+	cat("Axis order auth compl: ", y$axis_order, "\n")
+	cat("Source: ", attr(x, "source_crs"), "\n")
+	cat("Target: ", attr(x, "target_crs"), "\n")
+	if (is.na(y$accuracy))
+		cat("Best instantiable operation has only ballpark accuracy", "\n")
+	else
+		cat("Best instantiable operation has accuracy:", y$accuracy, "m\n")
+	cat("Description: ")
+	desc <- strwrap(y$description, exdent=13, width=0.8*getOption("width"))
+	if (length(desc) == 1L)
+		cat(desc, "\n")
+	else
+		cat(desc, sep="\n")
+	cat("Definition:  ")
+	def <- strwrap(y$definition, exdent=13, width=0.8*getOption("width"))
+	if (length(def) == 1L)
+		cat(def, "\n")
+	else
+		cat(def, sep="\n")
+	# nos:
+	if (length(nos) > 0L) {
+		grds <- attr(x, "grids")
+		for (i in seq(along=nos)) {
+			grd <- grds[[nos[i]]]
+			ii <- length(grd)
+			if (ii > 0L) {
+				cat("Operation", nos[i], "is lacking", ii,
+				ifelse(ii == 1L, "grid", "grids"),
+					"with accuracy", x$accuracy[nos[i]], "m\n")
+				for (j in 1:ii) {
+					cat("Missing grid:", grd[[j]][[1]], "\n")
+					if (nzchar(grd[[j]][[2]])) cat("Name:", grd[[j]][[2]], "\n")
+					if (nzchar(grd[[j]][[4]])) cat("URL:", grd[[j]][[4]], "\n")
+				}
+			}
+		}
+	}
+	invisible(x)
 }
