@@ -150,7 +150,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Write simple features object to file or database</h1>
-    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/read.R'><code>R/read.R</code></a>, <a href='https://github.com/r-spatial/sf/blob/master/R/db.R'><code>R/db.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/read.R'><code>R/read.R</code></a></small>
     <div class="hidden name"><code>st_write.Rd</code></div>
     </div>
 
@@ -183,35 +183,7 @@
 <span class='co'># S3 method for data.frame</span>
 <span class='fu'>st_write</span><span class='op'>(</span><span class='va'>obj</span>, <span class='va'>dsn</span>, layer <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>write_sf</span><span class='op'>(</span><span class='va'>...</span>, quiet <span class='op'>=</span> <span class='cn'>TRUE</span>, append <span class='op'>=</span> <span class='cn'>FALSE</span>, delete_layer <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-
-<span class='co'># S4 method for PostgreSQLConnection,character,sf</span>
-<span class='fu'>dbWriteTable</span><span class='op'>(</span>
-  <span class='va'>conn</span>,
-  <span class='va'>name</span>,
-  <span class='va'>value</span>,
-  <span class='va'>...</span>,
-  row.names <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  overwrite <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  append <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  field.types <span class='op'>=</span> <span class='cn'>NULL</span>,
-  factorsAsCharacter <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  binary <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span>
-
-<span class='co'># S4 method for DBIObject,character,sf</span>
-<span class='fu'>dbWriteTable</span><span class='op'>(</span>
-  <span class='va'>conn</span>,
-  <span class='va'>name</span>,
-  <span class='va'>value</span>,
-  <span class='va'>...</span>,
-  row.names <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  overwrite <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  append <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  field.types <span class='op'>=</span> <span class='cn'>NULL</span>,
-  factorsAsCharacter <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  binary <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span></pre>
+<span class='fu'>write_sf</span><span class='op'>(</span><span class='va'>...</span>, quiet <span class='op'>=</span> <span class='cn'>TRUE</span>, append <span class='op'>=</span> <span class='cn'>FALSE</span>, delete_layer <span class='op'>=</span> <span class='op'>!</span><span class='va'>append</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -222,14 +194,16 @@
     </tr>
     <tr>
       <th>dsn</th>
-      <td><p>data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a
-folder or contain a database name) or a Database Connection (currently
-official support is for RPostgreSQL connections)</p></td>
+      <td><p>data source name. Interpretation varies by driver: can be
+a filename, a folder, a database name, or a Database Connection
+(we officially test support for
+<code><a href='https://rpostgres.r-dbi.org/reference/Postgres.html'>RPostgres::Postgres()</a></code> connections).</p></td>
     </tr>
     <tr>
       <th>layer</th>
-      <td><p>layer name (varies by driver, may be a file name without extension); if layer is missing, the
-<a href='https://rdrr.io/r/base/basename.html'>basename</a> of <code>dsn</code> is taken.</p></td>
+      <td><p>layer name. Varies by driver, may be a file name without
+extension; for database connection, it is the name of the table. If layer
+is missing, the <code>basename</code> of <code>dsn</code> is taken.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -254,16 +228,23 @@ multiple options supported.</p></td>
     </tr>
     <tr>
       <th>quiet</th>
-      <td><p>logical; suppress info on name, driver, size and spatial reference</p></td>
+      <td><p>logical; suppress info on name, driver, size and spatial
+reference</p></td>
     </tr>
     <tr>
       <th>factorsAsCharacter</th>
-      <td><p>logical; convert <code>factor</code> objects into
-character strings (default), else into numbers by <code>as.numeric</code>.</p></td>
+      <td><p>logical; convert <code>factor</code> levels to character
+strings (<code>TRUE</code>, default), otherwise into numbers when
+factorsAsCharacter is <code>FALSE</code>. For database connections,
+<code>factorsAsCharacter</code> is always <code>TRUE</code>.</p></td>
     </tr>
     <tr>
       <th>append</th>
-      <td><p>Append rows to existing table; default <code>FALSE</code>.</p></td>
+      <td><p>logical; should we append to an existing layer, or replace it?
+if <code>TRUE</code> append, if <code>FALSE</code> replace.
+The default for <code>st_write</code> is <code>NA</code> which raises an error if the layer exists.
+The default for <code>write_sf</code> is <code>FALSE</code>, which overwrites any existing data.
+See also next two arguments for more control on overwrite behavior.</p></td>
     </tr>
     <tr>
       <th>delete_dsn</th>
@@ -273,43 +254,14 @@ to write?</p></td>
     <tr>
       <th>delete_layer</th>
       <td><p>logical; delete layer <code>layer</code> before attempting to
-write?</p></td>
+write?
+The default for <code>st_write</code> is <code>FALSE</code> which raises an error if the layer exists.
+The default for <code>write_sf</code> is <code>TRUE</code>.</p></td>
     </tr>
     <tr>
       <th>fid_column_name</th>
       <td><p>character, name of column with feature IDs; if
 specified, this column is no longer written as feature attribute.</p></td>
-    </tr>
-    <tr>
-      <th>conn</th>
-      <td><p>DBIObject</p></td>
-    </tr>
-    <tr>
-      <th>name</th>
-      <td><p>character vector of names (table names, fields, keywords).</p></td>
-    </tr>
-    <tr>
-      <th>value</th>
-      <td><p>a data.frame.</p></td>
-    </tr>
-    <tr>
-      <th>row.names</th>
-      <td><p>Add a <code>row.name</code> column, or a vector of length <code><a href='https://rdrr.io/r/base/nrow.html'>nrow(obj)</a></code>
-containing row.names; default <code>FALSE</code>.</p></td>
-    </tr>
-    <tr>
-      <th>overwrite</th>
-      <td><p>Will try to <code>drop</code> table before writing; default <code>FALSE</code>.</p></td>
-    </tr>
-    <tr>
-      <th>field.types</th>
-      <td><p>default <code>NULL</code>. Allows to override type conversion from R
-to PostgreSQL. See <code>dbDataType()</code> for details.</p></td>
-    </tr>
-    <tr>
-      <th>binary</th>
-      <td><p>Send geometries serialized as Well-Known Binary (WKB);
-if <code>FALSE</code>, uses Well-Known Text (WKT). Defaults to <code>TRUE</code> (WKB).</p></td>
     </tr>
     </table>
 
@@ -328,30 +280,30 @@ raise warnings or errors or fail silently.</p>
 handled with care; the former may erase complete directories or databases.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='st_drivers.html'>st_drivers</a></p></div>
+    <div class='dont-index'><p><a href='st_drivers.html'>st_drivers</a>, dbWriteTable</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>nc</span> <span class='op'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"shape/nc.shp"</span>, package<span class='op'>=</span><span class='st'>"sf"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpG8OlEF/temp_libpathe7fa558ff51a/sf/shape/nc.shp' using driver `ESRI Shapefile'
+</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpOVmgLB/temp_libpath4d0c5db0de7d/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
 #&gt; bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 #&gt; geographic CRS: NAD27</div><div class='input'><span class='fu'>st_write</span><span class='op'>(</span><span class='va'>nc</span>, <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"/"</span>, <span class='st'>"nc.shp"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Writing layer `nc' to data source `/tmp/RtmppRVIxJ/nc.shp' using driver `ESRI Shapefile'
+</div><div class='output co'>#&gt; Writing layer `nc' to data source `/tmp/RtmpoDyWSV/nc.shp' using driver `ESRI Shapefile'
 #&gt; Writing 100 features with 14 fields and geometry type Multi Polygon.</div><div class='input'><span class='fu'>st_write</span><span class='op'>(</span><span class='va'>nc</span>, <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"/"</span>, <span class='st'>"nc.shp"</span><span class='op'>)</span>, delete_layer <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='co'># overwrites</span>
 </div><div class='output co'>#&gt; Deleting layer `nc' using driver `ESRI Shapefile'
-#&gt; Writing layer `nc' to data source `/tmp/RtmppRVIxJ/nc.shp' using driver `ESRI Shapefile'
+#&gt; Writing layer `nc' to data source `/tmp/RtmpoDyWSV/nc.shp' using driver `ESRI Shapefile'
 #&gt; Writing 100 features with 14 fields and geometry type Multi Polygon.</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>meuse</span>, package <span class='op'>=</span> <span class='st'>"sp"</span><span class='op'>)</span> <span class='co'># loads data.frame from sp</span>
 <span class='va'>meuse_sf</span> <span class='op'>=</span> <span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span><span class='op'>(</span><span class='va'>meuse</span>, coords <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"x"</span>, <span class='st'>"y"</span><span class='op'>)</span>, crs <span class='op'>=</span> <span class='fl'>28992</span><span class='op'>)</span>
 <span class='co'># writes X and Y as columns:</span>
 <span class='fu'>st_write</span><span class='op'>(</span><span class='va'>meuse_sf</span>, <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"/"</span>, <span class='st'>"meuse.csv"</span><span class='op'>)</span>, layer_options <span class='op'>=</span> <span class='st'>"GEOMETRY=AS_XY"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Writing layer `meuse' to data source `/tmp/RtmppRVIxJ/meuse.csv' using driver `CSV'
+</div><div class='output co'>#&gt; Writing layer `meuse' to data source `/tmp/RtmpoDyWSV/meuse.csv' using driver `CSV'
 #&gt; options:        GEOMETRY=AS_XY 
 #&gt; Writing 155 features with 12 fields and geometry type Point.</div><div class='input'><span class='fu'>st_write</span><span class='op'>(</span><span class='va'>meuse_sf</span>, <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='st'>"/"</span>, <span class='st'>"meuse.csv"</span><span class='op'>)</span>, layer_options <span class='op'>=</span> <span class='st'>"GEOMETRY=AS_WKT"</span>,
   delete_dsn<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span> <span class='co'># overwrites</span>
-</div><div class='output co'>#&gt; Deleting source `/tmp/RtmppRVIxJ/meuse.csv' using driver `CSV'
-#&gt; Writing layer `meuse' to data source `/tmp/RtmppRVIxJ/meuse.csv' using driver `CSV'
+</div><div class='output co'>#&gt; Deleting source `/tmp/RtmpoDyWSV/meuse.csv' using driver `CSV'
+#&gt; Writing layer `meuse' to data source `/tmp/RtmpoDyWSV/meuse.csv' using driver `CSV'
 #&gt; options:        GEOMETRY=AS_WKT 
 #&gt; Writing 155 features with 12 fields and geometry type Point.</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
  <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/edzer/sp/'>sp</a></span><span class='op'>)</span>
