@@ -58,7 +58,8 @@ of interest; if TRUE strictly contain the area of interest.
 The area of interest is either as given in AOI, or as implied by the
 source/target coordinate reference systems}
 
-\item{axis_order_authority_compliant:}{if FALSE always choose ‘x’ or longitude for the first 
+\item{axis_order_authority_compliant}{logical; if FALSE always 
+choose ‘x’ or longitude for the first 
 axis; if TRUE, follow the axis orders given by the coordinate reference systems when 
 constructing the for the first axis; if FALSE, follow the axis orders given by}
 }
