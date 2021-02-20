@@ -242,16 +242,21 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 
 	using namespace Rcpp;
 
-	if (from_to.size() != 2)
-		stop("from_to should be size 2 character vector"); // #nocov
+	if (from_to.size() != 1 && from_to.size() != 2)
+		stop("from_to should be size 1 or 2 character vector"); // #nocov
 	if (pts.ncol() != 2)
 		stop("pts should be 2-column numeric vector"); // #nocov
 
-	proj_context_use_proj4_init_rules(PJ_DEFAULT_CTX, 1);
-	PJ *P = proj_create_crs_to_crs(PJ_DEFAULT_CTX, from_to[0], from_to[1], NULL); // PJ_AREA *area);
+	proj_context_use_proj4_init_rules(PJ_DEFAULT_CTX, 1); // FIXME: needed?
+	PJ *P = NULL;
+	if (from_to.size() == 2) // source + target:
+		P = proj_create_crs_to_crs(PJ_DEFAULT_CTX, from_to[0], from_to[1], NULL); 
+		// PJ_AREA *area);
+	else  // source to target pipeline:
+		P = proj_create(PJ_DEFAULT_CTX, from_to[0]);
 	if (P == NULL)
 		stop(proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX)));
-	if (!authority_compliant) // always keep lat/lon as lon/lat
+	if (!authority_compliant && from_to.size() == 2) // keep lat/lon as lon/lat
 		P = proj_normalize_for_visualization(PJ_DEFAULT_CTX, P);
 	// copy over:
 	std::vector<PJ_COORD> x(pts.nrow());

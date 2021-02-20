@@ -520,16 +520,16 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 	}
 #if GDAL_VERSION_MAJOR >= 3
 	OGRCoordinateTransformationOptions *options = new OGRCoordinateTransformationOptions;
-	if (pipeline.size() || AOI.size()) {
-		if (AOI.size() && !options->SetAreaOfInterest(AOI[0], AOI[1], AOI[2], AOI[3])) // and pray!
+	if (pipeline.size() == 1 || AOI.size() == 4) {
+		if (AOI.size() && !options->SetAreaOfInterest(AOI[0], AOI[1], AOI[2], AOI[3]))
 			Rcpp::stop("values for area of interest not accepted");
 		if (pipeline.size() && !options->SetCoordinateOperation(pipeline[0], reverse))
 			Rcpp::stop("pipeline value not accepted");
 	}
-	unset_error_handler(); // FIXME: is this always a good idea?
+	// unset_error_handler(); // FIXME: is this always a good idea?
 	OGRCoordinateTransformation *ct =
 		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest, *options);
-	set_error_handler();
+	// set_error_handler();
 	delete options;
 #else
 	if (pipeline.size() || AOI.size())

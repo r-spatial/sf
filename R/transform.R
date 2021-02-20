@@ -41,7 +41,7 @@ sanity_check = function(x) {
 #' Transform or convert coordinates of simple feature
 #'
 #' @param x object of class sf, sfc or sfg
-#' @param crs coordinate reference system: integer with the EPSG code, or character with proj4string
+#' @param crs target coordinate reference system: object of class `crs`, or input string for \link{st_crs}
 #' @param ... ignored
 #' @param aoi area of interest, in degrees: 
 #' WestLongitude, SouthLatitude, EastLongitude, NorthLatitude
@@ -76,12 +76,13 @@ st_transform.sfc = function(x, crs = st_crs(x), ...,
 		aoi = numeric(0), pipeline = character(0), reverse = FALSE,
 		partial = TRUE, check = FALSE) {
 
+	crs_missing = missing(crs)
 	if (length(pipeline) == 0) {
 		if (is.na(st_crs(x)))
 			stop("cannot transform sfc object with missing crs")
 		if (missing(crs))
 			stop("argument crs cannot be missing")
-	}
+	} 
 
 	crs = make_crs(crs)
 
@@ -96,7 +97,7 @@ st_transform.sfc = function(x, crs = st_crs(x), ...,
 		Sys.setenv(OGR_ENABLE_PARTIAL_REPROJECTION = "TRUE")
 	}
 
-	if (crs != st_crs(x)) {
+	if (!crs_missing && crs != st_crs(x)) {
 		ret = structure(CPL_transform(x, crs, aoi, pipeline, reverse),
 			single_type = NULL, crs = crs)
 		ret = st_sfc(ret)
@@ -104,10 +105,12 @@ st_transform.sfc = function(x, crs = st_crs(x), ...,
 			sanity_check(ret)
 		else
 			ret
-	} else if (length(pipeline))
-		st_sfc(CPL_transform(x, crs, aoi, pipeline, reverse))
-	else
-		x
+	} else {
+		if (length(pipeline)) # crs_missing: don't set CRS to st_crs(x):
+			st_sfc(CPL_transform(x, crs, aoi, pipeline, reverse), crs = NA_crs_)
+		else # crs_missing, no pipeline, do nothing:
+			x 
+	}
 }
 
 #' @name st_transform
@@ -222,7 +225,8 @@ st_to_s2 = function(x) {
 #' directly transform a set of coordinates
 #'
 #' directly transform a set of coordinates
-#' @param from character description of source CRS, or object of class \code{crs} 
+#' @param from character description of source CRS, or object of class \code{crs}, 
+#' or pipeline describing a transformation
 #' @param to character description of target CRS, or object of class \code{crs} 
 #' @param pts two-column numeric matrix, or object that can be coerced into a matrix
 #' @param keep logical value controlling the handling of unprojectable points. If
@@ -232,9 +236,11 @@ st_to_s2 = function(x) {
 #' @param authority_compliant logical; \code{TRUE} means handle axis order authority compliant (e.g. EPSG:4326 implying x=lat, y=lon), \code{FALSE} means use visualisation order (i.e. always x=lon, y=lat)
 #' @return two-column numeric matrix with transformed/converted coordinates, returning invalid values as \code{Inf}
 #' @export
-sf_project = function(from, to, pts, keep = FALSE, warn = TRUE, 
+sf_project = function(from, to = character(0), pts, keep = FALSE, warn = TRUE, 
 		authority_compliant = st_axis_order()) {
 
+	if (!is.logical(keep) || length(keep) != 1 || is.na(keep))
+		stop("'keep' must be single-length non-NA logical value")
 	proj_from_crs = function(x) {
 		if (inherits(x, "crs")) {
 			x = if (sf_extSoftVersion()["proj.4"] >= "6.0.0")
@@ -242,16 +248,20 @@ sf_project = function(from, to, pts, keep = FALSE, warn = TRUE,
 			else
 				x$proj4string
 		}
-		v = CPL_proj_is_valid(x)
-		if (!v[[1]])
-			stop(paste0(v[[2]], ": ", x))
-		x[1]
+		if (length(x)) {
+			v = CPL_proj_is_valid(x)
+			if (!v[[1]])
+				stop(paste0(v[[2]], ": ", x))
+			x[1]
+		} else
+			x # empty
 	}
-	if (!is.logical(keep) || length(keep) != 1 || is.na(keep))
-		stop("'keep' must be single-length non-NA logical value")
 
-	CPL_proj_direct(c(proj_from_crs(from), proj_from_crs(to)), as.matrix(pts), 
-			keep, warn, authority_compliant)
+	from_to = c(proj_from_crs(from), proj_from_crs(to))
+	if ((length(from_to) == 1) && !missing(authority_compliant))
+		stop("when setting a projection pipeline, setting authority_compliant has no effect")
+
+	CPL_proj_direct(from_to, as.matrix(pts), keep, warn, authority_compliant)
 }
 
 #' Manage PROJ settings
@@ -327,7 +337,7 @@ sf_proj_pipelines = function(source_crs, target_crs, authority = character(0), A
 	if (nrow(ret)) {
 		if (substr(ret$definition[1], 1, 1) != "+") # paste + to every word
 			ret$definition = 
-				lapply(strsplit(ret$definition, " "), 
+				sapply(strsplit(ret$definition, " "), 
 					function(x) paste0(paste0("+", x), collapse=" "))
 		ret$containment = strict_containment
 		structure(ret, class = c("proj_pipelines", "data.frame"),
