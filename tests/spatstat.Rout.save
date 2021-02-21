@@ -1,6 +1,6 @@
 
-R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
-Copyright (C) 2020 The R Foundation for Statistical Computing
+R version 4.0.4 (2021-02-15) -- "Lost Library Book"
+Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -108,7 +108,7 @@ First 10 features:
 > x <- sf::st_sfc(sf::st_polygon(list(rbind(c(0, 0), c(10, 0), c(10, 10), c(0, 0)))))
 > try(pts <- st_sample(x, type = "thomas"))
 Error in st_poly_sample(x, size = size, ..., type = type, by_polygon = by_polygon) : 
-  rthomas is not an exported function from spatstat.
+  rthomas is not an exported function from spatstat.core.
 > try(pts <- st_sample(x, kappa = 1, mu = 10, type = "Thomas"))
 Error in st_poly_sample(x, size = size, ..., type = type, by_polygon = by_polygon) : 
   The spatstat function rThomas did not return a valid result. Consult the help file.
@@ -150,7 +150,7 @@ First 10 features:
 Planar point pattern: 3 points
 window: rectangle = [-1, 1] x [1, 2] units
 > try(as.ppp(st_set_crs(p, 4326)))
-Error in as.ppp.sfc(st_set_crs(p, 4326)) : 
+Error in check_spatstat("spatstat.geom", X) : 
   Only projected coordinates may be converted to spatstat class objects
 > 
 > sf = st_sf(geom = p)
@@ -302,4 +302,4 @@ LINESTRING (1 1, 2 0)
 > 
 > proc.time()
    user  system elapsed 
-  1.869   0.089   1.951 
+  1.924   0.108   2.026 

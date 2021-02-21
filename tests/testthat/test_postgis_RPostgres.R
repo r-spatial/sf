@@ -57,6 +57,17 @@ test_that("can write to db", {
     expect_equal(nrow(DBI::dbReadTable(pg, "sf_meuse3__")), nrow(z) * 2)
     expect_silent(sf3 <- st_write(z, pg, "sf_meuse3__", delete_layer = TRUE))
     expect_true(st_crs(sf3) == st_crs(epsg_31370))
+    # also test write_sf options
+    expect_error(write_sf(pts, pg, "sf_meuse__", append = FALSE, delete_layer = FALSE), "exists")
+    expect_silent(write_sf(pts, pg, "sf_meuse__", delete_layer = TRUE))
+    expect_error(write_sf(pts, pg, "sf_meuse__", append = FALSE, delete_layer = FALSE))
+    expect_error(write_sf(pts[1, ], pg, "sf_meuse__", append = TRUE, delete_layer = TRUE))
+    expect_error(write_sf(pts, pg, "sf_meuse__", overwrite = TRUE), "deprecated")
+    expect_silent(write_sf(pts[1, ], pg, "sf_meuse__", append = TRUE))
+
+    p2 <- st_read(pg, "sf_meuse__")
+    expect_equal(nrow(p2), nrow(pts) + 1)
+    expect_silent(write_sf(pts, pg, "sf_meuse__", delete_layer = TRUE))
 })
 
 test_that("can handle multiple geom columns", {
