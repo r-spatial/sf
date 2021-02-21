@@ -1,4 +1,4 @@
-suppressPackageStartupMessages(library(spatstat))
+suppressPackageStartupMessages(library(spatstat.core))
 suppressPackageStartupMessages(library(sf))
 
 data(chicago)
@@ -13,7 +13,7 @@ st_as_sf(g)
 window = read_sf(system.file("shape/nc.shp", package = "sf")) %>%
   st_transform(32119)
 
-win = spatstat::as.owin(window)
+win = spatstat.geom::as.owin(window)
 
 set.seed(1331)
 pp2a = runifpoint(n = 50, win = win)

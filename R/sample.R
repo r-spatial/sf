@@ -20,7 +20,7 @@ st_sample = function(x, size, ...) UseMethod("st_sample")
 #' @param warn_if_not_integer logical; if \code{FALSE} then no warning is emitted if \code{size} is not an integer
 #' @param ... passed on to \link[base]{sample} for \code{multipoint} sampling, or to \code{spatstat} functions for spatstat sampling types (see details)
 #' @param type character; indicates the spatial sampling type; one of \code{random}, \code{hexagonal} (triangular really), \code{regular},
-#' or one of the \code{spatstat} methods such as \code{Thomas} for calling \code{spatstat::rThomas} (see Details).
+#' or one of the \code{spatstat} methods such as \code{Thomas} for calling \code{spatstat.core::rThomas} (see Details).
 #' @param exact logical; should the length of output be exactly
 #' @param by_polygon logical; for \code{MULTIPOLYGON} geometries, should the effort be split by \code{POLYGON}? See https://github.com/r-spatial/sf/issues/1480https://github.com/r-spatial/sf/issues/1480
 #' the same as specified by \code{size}? \code{TRUE} by default. Only applies to polygons, and
@@ -33,7 +33,7 @@ st_sample = function(x, size, ...) UseMethod("st_sample")
 #' As parameter called \code{offset} can be passed to control ("fix") regular or hexagonal sampling: for polygons a length 2 numeric vector (by default: a random point from \code{st_bbox(x)}); for lines use a number like \code{runif(1)}.
 #'
 #' Sampling methods from package \code{spatstat} are interfaced (see examples), and need their own parameters to be set. 
-#' For instance, to use \code{spatstat::rThomas()}, set \code{type = "Thomas"}.
+#' For instance, to use \code{spatstat.core::rThomas()}, set \code{type = "Thomas"}.
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' p1 = st_sample(nc[1:3, ], 6)
@@ -81,9 +81,9 @@ st_sample = function(x, size, ...) UseMethod("st_sample")
 #' st_sample(ls, 80)
 #' plot(st_sample(ls, 80))
 #' # spatstat example:
-#' if (require(spatstat)) {
+#' if (require(spatstat.core)) {
 #'  x <- sf::st_sfc(sf::st_polygon(list(rbind(c(0, 0), c(10, 0), c(10, 10), c(0, 0)))))
-#'  # for spatstat::rThomas(), set type = "Thomas":
+#'  # for spatstat.core::rThomas(), set type = "Thomas":
 #'  pts <- st_sample(x, kappa = 1, mu = 10, scale = 0.1, type = "Thomas") 
 #' }
 #' @export
@@ -183,12 +183,12 @@ st_poly_sample = function(x, size, ..., type = "random",
 		}
 		pts[x]
 	} else { # try to go into spatstat
-		if (!requireNamespace("spatstat", quietly = TRUE))
-			stop("package spatstat required, please install it first")
-		spatstat_fun = try(get(paste0("r", type), asNamespace("spatstat")), silent = TRUE)
+		if (!requireNamespace("spatstat.core", quietly = TRUE))
+			stop("package spatstat.core required, please install it (or the full spatstat package) first")
+		spatstat_fun = try(get(paste0("r", type), asNamespace("spatstat.core")), silent = TRUE)
 		if (inherits(spatstat_fun, "try-error"))
-			stop(paste0("r", type), " is not an exported function from spatstat.")
-		pts = try(spatstat_fun(..., win = spatstat::as.owin(x)), silent = TRUE)
+			stop(paste0("r", type), " is not an exported function from spatstat.core.")
+		pts = try(spatstat_fun(..., win = spatstat.geom::as.owin(x)), silent = TRUE)
 		if (inherits(pts, "try-error"))
 			stop("The spatstat function ", paste0("r", type),
              " did not return a valid result. Consult the help file.\n",
