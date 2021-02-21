@@ -42,7 +42,7 @@ st_wrap_dateline(x, options, quiet)
 \arguments{
 \item{x}{object of class sf, sfc or sfg}
 
-\item{crs}{coordinate reference system: integer with the EPSG code, or character with proj4string}
+\item{crs}{target coordinate reference system: object of class `crs`, or input string for \link{st_crs}}
 
 \item{...}{ignored}
 

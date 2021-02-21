@@ -9,7 +9,7 @@ sf_add_proj_units()
 
 sf_project(
   from,
-  to,
+  to = character(0),
   pts,
   keep = FALSE,
   warn = TRUE,
@@ -17,7 +17,8 @@ sf_project(
 )
 }
 \arguments{
-\item{from}{character description of source CRS, or object of class \code{crs}}
+\item{from}{character description of source CRS, or object of class \code{crs}, 
+or pipeline describing a transformation}
 
 \item{to}{character description of target CRS, or object of class \code{crs}}
 
