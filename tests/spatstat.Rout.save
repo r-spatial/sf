@@ -15,7 +15,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> suppressPackageStartupMessages(library(spatstat))
+> suppressPackageStartupMessages(library(spatstat.core))
 > suppressPackageStartupMessages(library(sf))
 > 
 > data(chicago)
@@ -81,7 +81,7 @@ First 10 features:
 > window = read_sf(system.file("shape/nc.shp", package = "sf")) %>%
 +   st_transform(32119)
 > 
-> win = spatstat::as.owin(window)
+> win = spatstat.geom::as.owin(window)
 > 
 > set.seed(1331)
 > pp2a = runifpoint(n = 50, win = win)
