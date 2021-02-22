@@ -12,7 +12,7 @@
 #' @export
 gdal_read = function(x, ..., options = character(0), driver = character(0), read_data = TRUE, NA_value = NA_real_,
 		RasterIO_parameters = list())
-	CPL_read_gdal(as.character(x), as.character(options), as.character(driver), 
+	CPL_read_gdal(as.character(x), as.character(options), as.character(driver),
 		as.logical(read_data), as.double(NA_value), RasterIO_parameters)
 
 #' @name gdal
@@ -20,7 +20,7 @@ gdal_read = function(x, ..., options = character(0), driver = character(0), read
 #' @param type gdal write type
 #' @param geotransform length 6 numeric vector with GDAL geotransform parameters.
 #' @param update logical; \code{TRUE} if in an existing raster file pixel values shall be updated.
-gdal_write = function(x, ..., file, driver = "GTiff", options = character(0), type = "Float32", 
+gdal_write = function(x, ..., file, driver = "GTiff", options = character(0), type = "Float32",
 		NA_value = NA_real_, geotransform, update = FALSE) {
 
 	if (!requireNamespace("stars", quietly = TRUE))
@@ -71,7 +71,7 @@ gdal_write = function(x, ..., file, driver = "GTiff", options = character(0), ty
 gdal_inv_geotransform = function(gt)
 	CPL_inv_geotransform(as.double(gt))
 
-## @param x two-column matrix with columns and rows, as understood by GDAL; 0.5 refers to the first cell's center; 
+## @param x two-column matrix with columns and rows, as understood by GDAL; 0.5 refers to the first cell's center;
 ## FIXME: this is now duplicate in sf and stars
 xy_from_colrow = function(x, geotransform, inverse = FALSE) {
 # http://www.gdal.org/classGDALDataset.html , search for geotransform:
@@ -84,7 +84,7 @@ xy_from_colrow = function(x, geotransform, inverse = FALSE) {
 			stop("geotransform not invertible") # nocov end
 	}
 	stopifnot(ncol(x) == 2)
-	matrix(geotransform[c(1, 4)], nrow(x), 2, byrow = TRUE) + 
+	matrix(geotransform[c(1, 4)], nrow(x), 2, byrow = TRUE) +
 		x %*% matrix(geotransform[c(2, 3, 5, 6)], nrow = 2, ncol = 2)
 }
 
@@ -135,7 +135,7 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 			c(x[1] - 0.5 * d[1], x + 0.5 * c(d, tail(d, 1)))
 		}
 		if (raster$curvilinear) { # expand jointly:
-			if (!as_points && all(dim(xd$values) == dim(x)[xy_names])) { # expand from points to cells/polygons: 
+			if (!as_points && all(dim(xd$values) == dim(x)[xy_names])) { # expand from points to cells/polygons:
 				xd$values = apply((apply(xd$values, 1, expand)), 1, expand)
 				yd$values = apply((apply(yd$values, 1, expand)), 1, expand)
 			}
@@ -161,7 +161,7 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 	}
 	dims = dim(x) + !as_points
 	if (use_cpp)
-		structure(CPL_xy2sfc(cc, as.integer(dims), as_points, as.integer(which)), 
+		structure(CPL_xy2sfc(cc, as.integer(dims), as_points, as.integer(which)),
 			crs = st_crs(xd$refsys), n_empty = 0L, bbox = bbox.Mtrx(cc))
 	else
 		st_sfc(xy2sfc(cc, dims, as_points), crs = xd$refsys)
@@ -240,7 +240,7 @@ gdal_subdatasets = function(file, options = character(0), name = TRUE) {
 #' @name gdal
 #' @export
 gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", use_integer = TRUE,
-		geotransform, breaks = classInt::classIntervals(na.omit(as.vector(x[[1]])))$brks, 
+		geotransform, breaks = classInt::classIntervals(na.omit(as.vector(x[[1]])))$brks,
 		use_contours = FALSE, contour_lines = FALSE, connect8 = FALSE, ...) {
 	gdal_write(x, file = file, driver = driver, geotransform = geotransform) # nocov start
 	on.exit(unlink(file))
@@ -270,12 +270,23 @@ gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", 
 	pol = CPL_polygonize(file, mask_name, "GTiff", "Memory", "foo", options, 0, contour_options, use_contours, use_integer)
 	out = process_cpl_read_ogr(pol, quiet = TRUE)
 	names(out)[1] = names(x)[1]
-	if (use_contours) {
-		m = as.integer(cut(out[[1]], breaks = nbreaks, include.lowest = TRUE)) # FIXME: add coverage when GDAL 2.4.0 is here
-		if (any(is.na(m)) && !all(is.na(m)))
-			warning("range of breaks does not cover range of cell values")
-		out[[1]] = structure(m, levels = levels(cut(breaks, breaks, include.lowest = TRUE)), class = "factor")
-	}
+        if (use_contours) {
+            if (!contour_lines) {
+                out[[1]] =
+                    sapply(seq_len(nrow(out)),
+                           FUN = function(i) {
+                               mean(st_extract(x, st_sample(out[i, ], size = 50))[[1]], na.rm = TRUE)
+                           })
+                m = as.integer(cut(out[[1]], breaks = nbreaks, include.lowest = TRUE))
+                if (any(is.na(m)) && !all(is.na(m)))
+                    warning("range of breaks does not cover range of cell values")
+                out[[1]] = structure(m, levels = levels(cut(breaks,
+                                                            breaks, include.lowest = TRUE)), class = "factor")
+            }
+            else {
+                out[[1]] = factor(out[[1]], levels = breaks)
+            }
+        }
 	out # nocov end
 }
 
