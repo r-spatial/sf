@@ -124,6 +124,7 @@ Collate:
     'geom-predicates.R'
     'geom-transformers.R'
     'transform.R'
+    'proj.R'
     'sp.R'
     'grid.R'
     'arith.R'

@@ -507,17 +507,16 @@ Rcpp::List CPL_curve_to_linestring(Rcpp::List sfc) { // need to pass more parame
 Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 		Rcpp::NumericVector AOI, Rcpp::CharacterVector pipeline, bool reverse = false) {
 
-	// import crs:
-	OGRSpatialReference *dest = OGRSrs_from_crs(crs);
-	if (dest == NULL)
-		Rcpp::stop("crs not found: is it missing?"); // #nocov
-
 	// transform geometries:
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
-	if (g.size() == 0) {
-		dest->Release();
+	if (g.size() == 0)
 		return sfc_from_ogr(g, true); // destroys g
-	}
+
+	OGRSpatialReference *dest = NULL;
+	// if pipeline was not set, import crs to dest:
+	if (pipeline.size() == 0 && !(dest = OGRSrs_from_crs(crs)))
+		Rcpp::stop("crs not found: is it missing?"); // #nocov
+
 #if GDAL_VERSION_MAJOR >= 3
 	OGRCoordinateTransformationOptions *options = new OGRCoordinateTransformationOptions;
 	if (pipeline.size() == 1 || AOI.size() == 4) {
@@ -538,7 +537,8 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest);
 #endif
 	if (ct == NULL) {
-		dest->Release(); // #nocov start
+		if (dest)
+			dest->Release(); // #nocov start
 		sfc_from_ogr(g, true); // to destroy g
 		Rcpp::stop("OGRCreateCoordinateTransformation() returned NULL: PROJ available?"); // #nocov end
 	}
@@ -558,7 +558,8 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 
 	Rcpp::List ret = sfc_from_ogr(g, true); // destroys g;
 	ct->DestroyCT(ct);
-	dest->Release();
+	if (dest)
+		dest->Release();
 	return ret;
 }
 
