@@ -18,7 +18,7 @@ sf_proj_pipelines(
   AOI = numeric(0),
   Use = "NONE",
   grid_availability = "USED",
-  accuracy = -1,
+  desired_accuracy = -1,
   strict_containment = FALSE,
   axis_order_authority_compliant = st_axis_order()
 )
@@ -51,7 +51,7 @@ available.), or "AVAILABLE" (Results will be presented as if grids known to PROJ
 registered in the grid_alternatives table of its database) were available. Used typically when 
 networking is enabled.)}
 
-\item{accuracy}{numeric; only return pipelines with at least this accuracy}
+\item{desired_accuracy}{numeric; only return pipelines with at least this accuracy}
 
 \item{strict_containment}{logical; default FALSE; permit partial matching of the area
 of interest; if TRUE strictly contain the area of interest.

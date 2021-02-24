@@ -122,7 +122,7 @@ sf_proj_network = function(enable = FALSE, url = character(0)) {
 #' available.), or "AVAILABLE" (Results will be presented as if grids known to PROJ (that is 
 #' registered in the grid_alternatives table of its database) were available. Used typically when 
 #' networking is enabled.)
-#' @param accuracy numeric; only return pipelines with at least this accuracy
+#' @param desired_accuracy numeric; only return pipelines with at least this accuracy
 #' @param strict_containment logical; default FALSE; permit partial matching of the area
 #' of interest; if TRUE strictly contain the area of interest.
 #' The area of interest is either as given in AOI, or as implied by the
@@ -136,7 +136,7 @@ sf_proj_network = function(enable = FALSE, url = character(0)) {
 #' @name proj_tools
 #' @export
 sf_proj_pipelines = function(source_crs, target_crs, authority = character(0), AOI = numeric(0),
-		Use = "NONE", grid_availability = "USED", accuracy = -1.0, 
+		Use = "NONE", grid_availability = "USED", desired_accuracy = -1.0, 
 		strict_containment = FALSE, axis_order_authority_compliant = st_axis_order()) {
 	stopifnot(!missing(source_crs), !missing(target_crs))
 	if (inherits(source_crs, "crs"))
@@ -147,7 +147,7 @@ sf_proj_pipelines = function(source_crs, target_crs, authority = character(0), A
 
 	ret = CPL_get_pipelines(c(source_crs, target_crs), as.character(authority), 
 		as.numeric(AOI), as.character(Use), as.character(grid_availability),
-		as.numeric(accuracy), as.logical(strict_containment), 
+		as.numeric(desired_accuracy), as.logical(strict_containment), 
 		as.logical(axis_order_authority_compliant))
 	if (nrow(ret)) {
 		if (substr(ret$definition[1], 1, 1) != "+") # paste + to every word

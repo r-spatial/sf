@@ -21,6 +21,8 @@ st_transform(x, crs, ...)
   aoi = numeric(0),
   pipeline = character(0),
   reverse = FALSE,
+  desired_accuracy = -1,
+  allow_ballpark = TRUE,
   partial = TRUE,
   check = FALSE
 )
@@ -53,6 +55,13 @@ WestLongitude, SouthLatitude, EastLongitude, NorthLatitude}
 
 \item{reverse}{boolean; has only an effect when \code{pipeline} is defined:
 if \code{TRUE}, the inverse operation of the pipeline is applied}
+
+\item{desired_accuracy}{numeric; Only coordinate operations that offer an accuracy of 
+at least the one specified will be considered; a negative value disables this feature
+(requires GDAL >= 3.3)}
+
+\item{allow_ballpark}{logical; are ballpark (low accuracy) transformations allowed? 
+(requires GDAL >= 3.3)}
 
 \item{partial}{logical; allow for partial projection, if not all points of a geometry can be projected (corresponds to setting environment variable \code{OGR_ENABLE_PARTIAL_REPROJECTION} to \code{TRUE})}
 

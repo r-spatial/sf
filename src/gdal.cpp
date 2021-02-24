@@ -505,7 +505,8 @@ Rcpp::List CPL_curve_to_linestring(Rcpp::List sfc) { // need to pass more parame
 
 // [[Rcpp::export]]
 Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
-		Rcpp::NumericVector AOI, Rcpp::CharacterVector pipeline, bool reverse = false) {
+		Rcpp::NumericVector AOI, Rcpp::CharacterVector pipeline, bool reverse = false,
+		double desired_accuracy = -1.0, bool allow_ballpark = true) {
 
 	// transform geometries:
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
@@ -519,12 +520,14 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 
 #if GDAL_VERSION_MAJOR >= 3
 	OGRCoordinateTransformationOptions *options = new OGRCoordinateTransformationOptions;
-	if (pipeline.size() == 1 || AOI.size() == 4) {
-		if (AOI.size() && !options->SetAreaOfInterest(AOI[0], AOI[1], AOI[2], AOI[3]))
-			Rcpp::stop("values for area of interest not accepted");
-		if (pipeline.size() && !options->SetCoordinateOperation(pipeline[0], reverse))
-			Rcpp::stop("pipeline value not accepted");
-	}
+	if (pipeline.size() && !options->SetCoordinateOperation(pipeline[0], reverse))
+		Rcpp::stop("pipeline value not accepted");
+	if (AOI.size() == 4 && !options->SetAreaOfInterest(AOI[0], AOI[1], AOI[2], AOI[3]))
+		Rcpp::stop("values for area of interest not accepted");
+#if GDAL_VERSION_MINOR >= 3
+	options->SetDesiredAccuracy(desired_accuracy);
+	options->SetBallparkAllowed(allow_ballpark);
+#endif
 	// unset_error_handler(); // FIXME: is this always a good idea?
 	OGRCoordinateTransformation *ct =
 		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest, *options);

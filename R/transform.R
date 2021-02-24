@@ -47,6 +47,11 @@ sanity_check = function(x) {
 #' @param pipeline character; coordinate operation pipeline, for overriding the default operation
 #' @param reverse boolean; has only an effect when \code{pipeline} is defined:
 #' if \code{TRUE}, the inverse operation of the pipeline is applied
+#' @param desired_accuracy numeric; Only coordinate operations that offer an accuracy of 
+#' at least the one specified will be considered; a negative value disables this feature
+#' (requires GDAL >= 3.3)
+#' @param allow_ballpark logical; are ballpark (low accuracy) transformations allowed? 
+#' (requires GDAL >= 3.3)
 #' @param partial logical; allow for partial projection, if not all points of a geometry can be projected (corresponds to setting environment variable \code{OGR_ENABLE_PARTIAL_REPROJECTION} to \code{TRUE})
 #' @param check logical; if \code{TRUE}, perform a sanity check on resulting polygons
 #' @details Transforms coordinates of object to new projection. 
@@ -79,6 +84,7 @@ st_transform = function(x, crs, ...) UseMethod("st_transform")
 #' }
 st_transform.sfc = function(x, crs = st_crs(x), ..., 
 		aoi = numeric(0), pipeline = character(0), reverse = FALSE,
+		desired_accuracy = -1.0, allow_ballpark = TRUE,
 		partial = TRUE, check = FALSE) {
 
 	crs_missing = missing(crs)
@@ -110,8 +116,8 @@ st_transform.sfc = function(x, crs = st_crs(x), ...,
 		} else
 			crs = NA_crs_  # to avoid st_crs(x) is crs of the returned object
 	}
-	ret = st_sfc(structure(CPL_transform(x, crs, aoi, pipeline, reverse), single_type = NULL,
-		crs = crs)) # this hard-sets crs to the new crs before calling st_sfc()
+	ret = st_sfc(structure(CPL_transform(x, crs, aoi, pipeline, reverse, desired_accuracy,
+			allow_ballpark), single_type = NULL, crs = crs)) # hard-sets crs to new crs
 	if (check)
 		sanity_check(ret)
 	else

@@ -139,8 +139,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_transform
-Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs, Rcpp::NumericVector AOI, Rcpp::CharacterVector pipeline, bool reverse);
-RcppExport SEXP _sf_CPL_transform(SEXP sfcSEXP, SEXP crsSEXP, SEXP AOISEXP, SEXP pipelineSEXP, SEXP reverseSEXP) {
+Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs, Rcpp::NumericVector AOI, Rcpp::CharacterVector pipeline, bool reverse, double desired_accuracy, bool allow_ballpark);
+RcppExport SEXP _sf_CPL_transform(SEXP sfcSEXP, SEXP crsSEXP, SEXP AOISEXP, SEXP pipelineSEXP, SEXP reverseSEXP, SEXP desired_accuracySEXP, SEXP allow_ballparkSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -149,7 +149,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type AOI(AOISEXP);
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type pipeline(pipelineSEXP);
     Rcpp::traits::input_parameter< bool >::type reverse(reverseSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_transform(sfc, crs, AOI, pipeline, reverse));
+    Rcpp::traits::input_parameter< double >::type desired_accuracy(desired_accuracySEXP);
+    Rcpp::traits::input_parameter< bool >::type allow_ballpark(allow_ballparkSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_transform(sfc, crs, AOI, pipeline, reverse, desired_accuracy, allow_ballpark));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1255,7 +1257,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_multisurface_to_multipolygon", (DL_FUNC) &_sf_CPL_multisurface_to_multipolygon, 1},
     {"_sf_CPL_compoundcurve_to_linear", (DL_FUNC) &_sf_CPL_compoundcurve_to_linear, 1},
     {"_sf_CPL_curve_to_linestring", (DL_FUNC) &_sf_CPL_curve_to_linestring, 1},
-    {"_sf_CPL_transform", (DL_FUNC) &_sf_CPL_transform, 5},
+    {"_sf_CPL_transform", (DL_FUNC) &_sf_CPL_transform, 7},
     {"_sf_CPL_wrap_dateline", (DL_FUNC) &_sf_CPL_wrap_dateline, 3},
     {"_sf_CPL_get_rgdal_drivers", (DL_FUNC) &_sf_CPL_get_rgdal_drivers, 1},
     {"_sf_CPL_sfc_from_wkt", (DL_FUNC) &_sf_CPL_sfc_from_wkt, 1},

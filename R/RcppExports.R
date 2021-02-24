@@ -49,8 +49,8 @@ CPL_curve_to_linestring <- function(sfc) {
     .Call('_sf_CPL_curve_to_linestring', PACKAGE = 'sf', sfc)
 }
 
-CPL_transform <- function(sfc, crs, AOI, pipeline, reverse = FALSE) {
-    .Call('_sf_CPL_transform', PACKAGE = 'sf', sfc, crs, AOI, pipeline, reverse)
+CPL_transform <- function(sfc, crs, AOI, pipeline, reverse = FALSE, desired_accuracy = -1.0, allow_ballpark = TRUE) {
+    .Call('_sf_CPL_transform', PACKAGE = 'sf', sfc, crs, AOI, pipeline, reverse, desired_accuracy, allow_ballpark)
 }
 
 CPL_wrap_dateline <- function(sfc, opt, quiet = TRUE) {
