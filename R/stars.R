@@ -256,7 +256,7 @@ gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", 
 			if (max(breaks) == max(x[[1]], na.rm = TRUE)) # expand, because GDAL will not include interval RHS
 				nbreaks[length(nbreaks)] = breaks[length(breaks)] * 1.01
 			c(paste0("FIXED_LEVELS=", paste0(nbreaks, collapse = ",")),
-			paste0("ELEV_FIELD=Value"),
+			"ELEV_FIELD=Value", "ELEV_FIELD_MIN=Min", "ELEV_FIELD_MAX=Max",
 			paste0("POLYGONIZE=", ifelse(contour_lines, "NO", "YES")))
 		} else
 			character(0)
@@ -270,8 +270,8 @@ gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", 
 	pol = CPL_polygonize(file, mask_name, "GTiff", "Memory", "foo", options, 0, contour_options, use_contours, use_integer)
 	out = process_cpl_read_ogr(pol, quiet = TRUE)
 	names(out)[1] = names(x)[1]
-	if (use_contours) {
-		m = as.integer(cut(out[[1]], breaks = nbreaks, include.lowest = TRUE)) # FIXME: add coverage when GDAL 2.4.0 is here
+	if (! contour_lines) {
+		m = as.integer(cut(out[[1]], breaks = nbreaks, include.lowest = TRUE))
 		if (any(is.na(m)) && !all(is.na(m)))
 			warning("range of breaks does not cover range of cell values")
 		out[[1]] = structure(m, levels = levels(cut(breaks, breaks, include.lowest = TRUE)), class = "factor")
