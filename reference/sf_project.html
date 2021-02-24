@@ -150,7 +150,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>directly transform a set of coordinates</h1>
-    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/init.R'><code>R/init.R</code></a>, <a href='https://github.com/r-spatial/sf/blob/master/R/transform.R'><code>R/transform.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/init.R'><code>R/init.R</code></a>, <a href='https://github.com/r-spatial/sf/blob/master/R/proj.R'><code>R/proj.R</code></a></small>
     <div class="hidden name"><code>sf_project.Rd</code></div>
     </div>
 
@@ -161,8 +161,8 @@
     <pre class="usage"><span class='fu'>sf_add_proj_units</span><span class='op'>(</span><span class='op'>)</span>
 
 <span class='fu'>sf_project</span><span class='op'>(</span>
-  <span class='va'>from</span>,
-  <span class='va'>to</span>,
+  from <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
+  to <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   <span class='va'>pts</span>,
   keep <span class='op'>=</span> <span class='cn'>FALSE</span>,
   warn <span class='op'>=</span> <span class='cn'>TRUE</span>,
@@ -174,7 +174,8 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>from</th>
-      <td><p>character description of source CRS, or object of class <code>crs</code></p></td>
+      <td><p>character description of source CRS, or object of class <code>crs</code>, 
+or pipeline describing a transformation</p></td>
     </tr>
     <tr>
       <th>to</th>

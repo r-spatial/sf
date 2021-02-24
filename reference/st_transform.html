@@ -150,7 +150,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Transform or convert coordinates of simple feature</h1>
-    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/transform.R'><code>R/transform.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/transform.R'><code>R/transform.R</code></a>, <a href='https://github.com/r-spatial/sf/blob/master/R/proj.R'><code>R/proj.R</code></a></small>
     <div class="hidden name"><code>st_transform.Rd</code></div>
     </div>
 
@@ -168,6 +168,8 @@
   aoi <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   pipeline <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   reverse <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  desired_accuracy <span class='op'>=</span> <span class='op'>-</span><span class='fl'>1</span>,
+  allow_ballpark <span class='op'>=</span> <span class='cn'>TRUE</span>,
   partial <span class='op'>=</span> <span class='cn'>TRUE</span>,
   check <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span>
@@ -178,8 +180,6 @@
 <span class='co'># S3 method for sfg</span>
 <span class='fu'>st_transform</span><span class='op'>(</span><span class='va'>x</span>, crs <span class='op'>=</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>sf_proj_info</span><span class='op'>(</span>type <span class='op'>=</span> <span class='st'>"proj"</span>, <span class='va'>path</span><span class='op'>)</span>
-
 <span class='fu'>st_wrap_dateline</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>options</span>, <span class='va'>quiet</span><span class='op'>)</span>
 
 <span class='co'># S3 method for sfc</span>
@@ -189,7 +189,9 @@
 <span class='fu'>st_wrap_dateline</span><span class='op'>(</span><span class='va'>x</span>, options <span class='op'>=</span> <span class='st'>"WRAPDATELINE=YES"</span>, quiet <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
 <span class='co'># S3 method for sfg</span>
-<span class='fu'>st_wrap_dateline</span><span class='op'>(</span><span class='va'>x</span>, options <span class='op'>=</span> <span class='st'>"WRAPDATELINE=YES"</span>, quiet <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
+<span class='fu'>st_wrap_dateline</span><span class='op'>(</span><span class='va'>x</span>, options <span class='op'>=</span> <span class='st'>"WRAPDATELINE=YES"</span>, quiet <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+
+<span class='fu'>sf_proj_info</span><span class='op'>(</span>type <span class='op'>=</span> <span class='st'>"proj"</span>, <span class='va'>path</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -200,7 +202,7 @@
     </tr>
     <tr>
       <th>crs</th>
-      <td><p>coordinate reference system: integer with the EPSG code, or character with proj4string</p></td>
+      <td><p>target coordinate reference system: object of class `crs`, or input string for <a href='st_crs.html'>st_crs</a></p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -213,11 +215,23 @@ WestLongitude, SouthLatitude, EastLongitude, NorthLatitude</p></td>
     </tr>
     <tr>
       <th>pipeline</th>
-      <td><p>character; proj4 or WKT coordinate operation, to override the default operation</p></td>
+      <td><p>character; coordinate operation pipeline, for overriding the default operation</p></td>
     </tr>
     <tr>
       <th>reverse</th>
-      <td><p>boolean; if <code>TRUE</code>, the inverse operation of the pipeline is applied</p></td>
+      <td><p>boolean; has only an effect when <code>pipeline</code> is defined:
+if <code>TRUE</code>, the inverse operation of the pipeline is applied</p></td>
+    </tr>
+    <tr>
+      <th>desired_accuracy</th>
+      <td><p>numeric; Only coordinate operations that offer an accuracy of 
+at least the one specified will be considered; a negative value disables this feature
+(requires GDAL &gt;= 3.3)</p></td>
+    </tr>
+    <tr>
+      <th>allow_ballpark</th>
+      <td><p>logical; are ballpark (low accuracy) transformations allowed? 
+(requires GDAL &gt;= 3.3)</p></td>
     </tr>
     <tr>
       <th>partial</th>
@@ -225,15 +239,7 @@ WestLongitude, SouthLatitude, EastLongitude, NorthLatitude</p></td>
     </tr>
     <tr>
       <th>check</th>
-      <td><p>logical; perform a sanity check on resulting polygons?</p></td>
-    </tr>
-    <tr>
-      <th>type</th>
-      <td><p>character; one of <code>have_datum_files</code>, <code>proj</code>, <code>ellps</code>, <code>datum</code>, <code>units</code> or <code>prime_meridians</code>; see Details.</p></td>
-    </tr>
-    <tr>
-      <th>path</th>
-      <td><p>character; PROJ search path to be set</p></td>
+      <td><p>logical; if <code>TRUE</code>, perform a sanity check on resulting polygons</p></td>
     </tr>
     <tr>
       <th>options</th>
@@ -243,19 +249,33 @@ WestLongitude, SouthLatitude, EastLongitude, NorthLatitude</p></td>
       <th>quiet</th>
       <td><p>logical; print options after they have been parsed?</p></td>
     </tr>
+    <tr>
+      <th>type</th>
+      <td><p>character; one of <code>have_datum_files</code>, <code>proj</code>, <code>ellps</code>, <code>datum</code>, <code>units</code> or <code>prime_meridians</code>; see Details.</p></td>
+    </tr>
+    <tr>
+      <th>path</th>
+      <td><p>character; PROJ search path to be set</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Transforms coordinates of object to new projection. Features that cannot be transformed are returned as empty geometries.</p>
-<p>Projecting to projections not supported by GDAL may be done by <a href='https://rdrr.io/pkg/lwgeom/man/st_transform_proj.html'>st_transform_proj</a>, part of package lwgeom.</p>
+    <p>Transforms coordinates of object to new projection. 
+Features that cannot be transformed are returned as empty geometries.</p>
 <p>The <code>st_transform</code> method for <code>sfg</code> objects assumes that the CRS of the object is available as an attribute of that name.</p>
+<p>For a discussion of using <code>options</code>, see <a href='https://github.com/r-spatial/sf/issues/280'>https://github.com/r-spatial/sf/issues/280</a> and <a href='https://github.com/r-spatial/sf/issues/541'>https://github.com/r-spatial/sf/issues/541</a></p>
 <p><code>sf_proj_info</code> lists the available projections, ellipses, datums, units, or data search path of the PROJ library when <code>type</code> is equal to proj, ellps, datum, units or path; when <code>type</code> equals <code>have_datum_files</code> a boolean is returned indicating whether datum files are installed and accessible (checking for <code>conus</code>).</p>
 <p>for PROJ &gt;= 6, <code>sf_proj_info</code> does not provide option <code>type = "datums"</code>. 
 PROJ &lt; 6 does not provide the option <code>type = "prime_meridians"</code>.</p>
 <p>for PROJ &gt;= 7.1.0, the "units" query of <code>sf_proj_info</code> returns the <code>to_meter</code> 
 variable as numeric, previous versions return a character vector containing a numeric expression.</p>
-<p>For a discussion of using <code>options</code>, see <a href='https://github.com/r-spatial/sf/issues/280'>https://github.com/r-spatial/sf/issues/280</a> and <a href='https://github.com/r-spatial/sf/issues/541'>https://github.com/r-spatial/sf/issues/541</a></p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Projecting simple feature geometries 
+to projections not supported by GDAL may be done by 
+<a href='https://rdrr.io/pkg/lwgeom/man/st_transform_proj.html'>st_transform_proj</a>, part of package lwgeom.</p>
+<p><a href='sf_project.html'>sf_project</a> projects a matrix of coordinates, bypassing GDAL altogether</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>p1</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>7</span>,<span class='fl'>52</span><span class='op'>)</span><span class='op'>)</span>
@@ -280,7 +300,7 @@ variable as numeric, previous versions return a character vector containing a nu
 #&gt;   a                     geom
 #&gt; 1 2 POINT (779236.4 6800125)
 #&gt; 2 1 POINT (-3339585 2273031)</div><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='fu'>st_transform</span><span class='op'>(</span><span class='va'>sfc</span>, <span class='fl'>3857</span>, aoi <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>280</span>,<span class='op'>-</span><span class='fl'>90</span>,<span class='fl'>180</span>,<span class='fl'>90</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: GDAL Error 1: Invalid dfWestLongitudeDeg</span></div><div class='output co'>#&gt; Error in CPL_transform(x, crs, aoi, pipeline, reverse) : 
+</div><div class='output co'>#&gt; <span class='warning'>Warning: GDAL Error 1: Invalid dfWestLongitudeDeg</span></div><div class='output co'>#&gt; Error in CPL_transform(x, crs, aoi, pipeline, reverse, desired_accuracy,  : 
 #&gt;   values for area of interest not accepted</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='sf_extSoftVersion.html'>sf_extSoftVersion</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>[</span><span class='st'>"GDAL"</span><span class='op'>]</span> <span class='op'>&gt;=</span> <span class='st'>"3.0.0"</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='fu'>st_transform</span><span class='op'>(</span><span class='va'>sfc</span>, pipeline <span class='op'>=</span>
     <span class='st'>"+proj=pipeline +step +proj=axisswap +order=2,1"</span><span class='op'>)</span> <span class='co'># reverse axes</span>
@@ -290,9 +310,9 @@ variable as numeric, previous versions return a character vector containing a nu
 </div><div class='output co'>#&gt; Geometry set for 2 features 
 #&gt; geometry type:  POINT
 #&gt; dimension:      XY
-#&gt; bbox:           xmin: 20 ymin: -30 xmax: 52 ymax: 7
-#&gt; geographic CRS: WGS 84</div><div class='output co'>#&gt; <span class='message'>POINT (52 7)</span></div><div class='output co'>#&gt; <span class='message'>POINT (20 -30)</span></div><div class='input'><span class='va'>nc</span> <span class='op'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"shape/nc.shp"</span>, package<span class='op'>=</span><span class='st'>"sf"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/RtmpHFVElD/temp_libpathf83f6bdb19c2/sf/shape/nc.shp' using driver `ESRI Shapefile'
+#&gt; bbox:           xmin: -30 ymin: 20 xmax: 7 ymax: 52
+#&gt; CRS:            NA</div><div class='output co'>#&gt; <span class='message'>POINT (7 52)</span></div><div class='output co'>#&gt; <span class='message'>POINT (-30 20)</span></div><div class='input'><span class='va'>nc</span> <span class='op'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"shape/nc.shp"</span>, package<span class='op'>=</span><span class='st'>"sf"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Reading layer `nc' from data source `/tmp/Rtmplq9hPy/temp_libpath4fbbfa37963/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; geometry type:  MULTIPOLYGON
 #&gt; dimension:      XY
@@ -303,8 +323,7 @@ variable as numeric, previous versions return a character vector containing a nu
 </div><div class='output co'>#&gt; 12244955726 [US_survey_foot^2]</div><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/r-quantities/units/'>units</a></span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>udunits system database from /usr/share/xml/udunits</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/units/man/set_units.html'>set_units</a></span><span class='op'>(</span><span class='fu'><a href='geos_measures.html'>st_area</a></span><span class='op'>(</span><span class='fu'>st_transform</span><span class='op'>(</span><span class='va'>nc</span><span class='op'>[</span><span class='fl'>1</span>,<span class='op'>]</span>, <span class='fl'>2264</span><span class='op'>)</span><span class='op'>)</span>, <span class='va'>m</span><span class='op'>^</span><span class='fl'>2</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; 1137598162 [m^2]</div><div class='input'><span class='fu'>st_transform</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/structure.html'>structure</a></span><span class='op'>(</span><span class='va'>p1</span>, proj4string <span class='op'>=</span> <span class='st'>"+init=epsg:4326"</span><span class='op'>)</span>, <span class='st'>"+init=epsg:3857"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>POINT (779236.4 6800125)</span></div><div class='input'><span class='fu'>sf_proj_info</span><span class='op'>(</span><span class='st'>"datum"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; data frame with 0 columns and 0 rows</div><div class='input'><span class='fu'>st_wrap_dateline</span><span class='op'>(</span><span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_linestring</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>179</span>,<span class='fl'>0</span><span class='op'>)</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>179</span>,<span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>, crs <span class='op'>=</span> <span class='fl'>4326</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>POINT (779236.4 6800125)</span></div><div class='input'><span class='fu'>st_wrap_dateline</span><span class='op'>(</span><span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_linestring</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>179</span>,<span class='fl'>0</span><span class='op'>)</span>,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>179</span>,<span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>, crs <span class='op'>=</span> <span class='fl'>4326</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Geometry set for 1 feature 
 #&gt; geometry type:  MULTILINESTRING
 #&gt; dimension:      XY
@@ -315,7 +334,8 @@ variable as numeric, previous versions return a character vector containing a nu
    quiet <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: GDAL Error 1: IllegalArgumentException: Points of LinearRing do not form a closed linestring</span></div><div class='output co'>#&gt; <span class='warning'>Warning: GDAL Error 1: IllegalArgumentException: Points of LinearRing do not form a closed linestring</span></div><div class='input'><span class='va'>wrld_moll</span> <span class='op'>&lt;-</span> <span class='fu'>st_transform</span><span class='op'>(</span><span class='va'>wrld_wrap</span>, <span class='st'>"+proj=moll"</span><span class='op'>)</span>
 <span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='fu'><a href='st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>wrld_moll</span><span class='op'>)</span>, col <span class='op'>=</span> <span class='st'>"transparent"</span><span class='op'>)</span>
-</div><div class='img'><img src='st_transform-1.png' alt='' width='700' height='433' /></div></pre>
+</div><div class='img'><img src='st_transform-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>sf_proj_info</span><span class='op'>(</span><span class='st'>"datum"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; data frame with 0 columns and 0 rows</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
