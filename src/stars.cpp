@@ -349,13 +349,24 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 			nodatavalue[0] = poBand->GetNoDataValue(NULL); // #nocov
 	}
 
+	// bands:
+	IntegerVector bands;
+	if (RasterIO_parameters.containsElementNamed("bands"))
+		bands = RasterIO_parameters["bands"]; // #nocov
+	else {
+		bands = IntegerVector(poDataset->GetRasterCount());
+		for (int j = 0; j < bands.size(); j++)
+			bands(j) = j + 1; // bands is 1-based
+	}
+
 	// get color table, attribute table, and min/max values:
-	List colorTables(poDataset->GetRasterCount());
-	List attributeTables(poDataset->GetRasterCount());
-	CharacterVector descriptions(poDataset->GetRasterCount());
-	NumericMatrix ranges(poDataset->GetRasterCount(), 4);
-	for (int i = 0; i < poDataset->GetRasterCount(); i++) {
-		poBand = poDataset->GetRasterBand(i + 1);
+	List colorTables(bands.size());
+	List attributeTables(bands.size());
+	CharacterVector descriptions(bands.size());
+	NumericMatrix ranges(bands.size(), 4);
+	// for (int i = 0; i < poDataset->GetRasterCount(); i++) {
+	for (int i = 0; i < bands.size(); i++) {
+		poBand = poDataset->GetRasterBand(bands(i));
 		const char *md = poBand->GetMetadataItem("BANDNAME", NULL);
 		if (md == NULL)
 			descriptions(i) = poBand->GetDescription();
@@ -390,16 +401,6 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	int nYSize = get_from_list(RasterIO_parameters, "nYSize", poDataset->GetRasterYSize() - nYOff);
 	int nBufXSize = get_from_list(RasterIO_parameters, "nBufXSize", nXSize);
 	int nBufYSize = get_from_list(RasterIO_parameters, "nBufYSize", nYSize);
-
-	// bands:
-	IntegerVector bands;
-	if (RasterIO_parameters.containsElementNamed("bands"))
-		bands = RasterIO_parameters["bands"]; // #nocov
-	else {
-		bands = IntegerVector(poDataset->GetRasterCount());
-		for (int j = 0; j < bands.size(); j++)
-			bands(j) = j + 1; // bands is 1-based
-	}
 
 	// resampling method:
 	GDALRasterIOExtraArg resample;
