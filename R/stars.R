@@ -271,11 +271,8 @@ gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", 
 	out = process_cpl_read_ogr(pol, quiet = TRUE)
 	names(out)[1] = names(x)[1]
 	if (! contour_lines) {
-		if (!inherits(x, "stars_proxy")) { # work around GDAL bug
-			m = min(x[[1]])
-			if (out$Min[1] == 0 && out$Min[1] > m)
-				out$Min[1] = m
-		}
+		if (out$Min[1] == 0 && out$Min[1] > min(breaks))
+			out$Min[1] = -Inf
 		out$Max[out$Max == 2^32 - 1] = Inf
 		f = paste0("[", out$Min, ",", out$Max, ")")
 		out[[1]] = factor(f, levels = f)
