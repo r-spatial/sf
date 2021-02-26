@@ -59,7 +59,7 @@ st_m_range = function(obj, ...) UseMethod("st_m_range")
 
 #' @export
 #' @name st_m_range
-st_m_range.POINT = function(obj, ...) mb_wrap(c(obj[3L], obj[3L]))
+st_m_range.POINT = function(obj, ...) mb_wrap(if (inherits(obj, "XYM")) c(obj[3L], obj[3L]) else c(obj[4L],obj[4L]))
 #' @export
 #' @name st_m_range
 st_m_range.MULTIPOINT = m_range.Mtrx
