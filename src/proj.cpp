@@ -336,7 +336,7 @@ Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVect
 	Rcpp::NumericVector AOI, Rcpp::CharacterVector Use, double accuracy = -1.0) {
 
 	Rcpp::stop("PROJ 7 required");
-	return DataFrame::create();
+	return Rcpp::DataFrame::create();
 }
 
 // [[Rcpp::export]]
