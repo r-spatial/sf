@@ -333,7 +333,11 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 #endif
 
 Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVector authority, 
-	Rcpp::NumericVector AOI, Rcpp::CharacterVector Use, double accuracy = -1.0) {
+		Rcpp::NumericVector AOI, Rcpp::CharacterVector Use, 
+		Rcpp::CharacterVector grid_availability,
+		double accuracy = -1.0,
+		bool strict_containment = false,
+		bool axis_order_auth_compl = false) {
 
 	Rcpp::stop("PROJ 7 required");
 	return Rcpp::DataFrame::create();
