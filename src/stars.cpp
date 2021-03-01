@@ -585,17 +585,15 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 		// factor levels:
 		if (x.attr("levels") != R_NilValue) {
 			Rcpp::CharacterVector levels = x.attr("levels");
-			char **nameList = NULL;
-			nameList = CSLAddString(nameList, ""); // corresponding to value 0
-			for (int i = 0; i < levels.size(); ++i)
-				nameList = CSLAddString(nameList, levels[i]);
+			Rcpp::CharacterVector l(levels.size() + 1);
+			l[0] = ""; // levels start at 1, CategoryNames at 0.
+			for (int i = 0; i < levels.size(); i++)
+				l[i+1] = levels[i];
 			for (int band = 1; band <= dims(2); band++) {
 				GDALRasterBand *poBand = poDstDS->GetRasterBand( band );
-				CPLErr err = poBand->SetCategoryNames(nameList);
-				if (err != CE_None)
+				if (poBand->SetCategoryNames(create_options(l).data()) != CE_None)
 					warning("error writing factor levels to file");
 			}
-			CSLDestroy(nameList);
 		}
 
 	} else { // no create, update:
