@@ -270,14 +270,14 @@ gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", 
 		contour_options, use_contours, use_integer)
 	out = process_cpl_read_ogr(pol, quiet = TRUE)
 	names(out)[1] = names(x)[1]
-	if (! contour_lines) {
+	if (! contour_lines && use_contours) {
 #		if (out$Min[1] == 0 && out$Min[1] > min(breaks))
 #			out$Min[1] = -Inf
 #
 # https://github.com/r-spatial/sf/pull/1608 : 
 
 		i <- match(out$Max[1], sort(breaks))
-		out$Min[1] = if (i > 1)
+		out$Min[1] = if (!is.na(i) && i > 1)
 				sort(breaks)[i - 1]
 			else 
 				-Inf
@@ -285,7 +285,8 @@ gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", 
 		out$Max[out$Max == 2^32 - 1] = Inf
 		f = paste0("[", out$Min, ",", out$Max, ")")
 		out[[1]] = factor(f, levels = f)
-	}
+	} else
+		out$Min = out$Max = NULL
 	out # nocov end
 }
 
