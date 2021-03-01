@@ -364,7 +364,6 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	List attributeTables(bands.size());
 	CharacterVector descriptions(bands.size());
 	NumericMatrix ranges(bands.size(), 4);
-	// for (int i = 0; i < poDataset->GetRasterCount(); i++) {
 	for (int i = 0; i < bands.size(); i++) {
 		poBand = poDataset->GetRasterBand(bands(i));
 		const char *md = poBand->GetMetadataItem("BANDNAME", NULL);
@@ -372,6 +371,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 			descriptions(i) = poBand->GetDescription();
 		else
 			descriptions(i) = md;
+
 		if (poBand->GetColorTable() != NULL)
 			colorTables(i) = get_color_table(poBand->GetColorTable());
 		if (poBand->GetCategoryNames() != NULL)
@@ -384,6 +384,9 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		ranges(i, 2) = poBand->GetMaximum(&set);
 		ranges(i, 3) = (double) set;
 	}
+	// category names, only from first band:
+	char **pcCNames = poDataset->GetRasterBand(bands(0))->GetCategoryNames();
+	CharacterVector categorynames = charpp2CV(pcCNames);
 
 	// get metadata items:
 	CharacterVector items = get_meta_data((GDALDatasetH) poDataset, NA_STRING);
@@ -449,6 +452,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		_["color_tables"] = colorTables,
 		_["ranges"] = ranges,
 		_["descriptions"] = descriptions,
+		_["categorynames"] = categorynames,
 		_["default_geotransform"] = default_geotransform
 	);
 	if (read_data) {
@@ -576,6 +580,22 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 				GDALRasterBand *poBand = poDstDS->GetRasterBand( band );
 				poBand->SetDescription(descriptions(band-1));
 			}
+		}
+
+		// factor levels:
+		if (x.attr("levels") != R_NilValue) {
+			Rcpp::CharacterVector levels = x.attr("levels");
+			char **nameList = NULL;
+			nameList = CSLAddString(nameList, ""); // corresponding to value 0
+			for (int i = 0; i < levels.size(); ++i)
+				nameList = CSLAddString(nameList, levels[i]);
+			for (int band = 1; band <= dims(2); band++) {
+				GDALRasterBand *poBand = poDstDS->GetRasterBand( band );
+				CPLErr err = poBand->SetCategoryNames(nameList);
+				if (err != CE_None)
+					warning("error writing factor levels to file");
+			}
+			CSLDestroy(nameList);
 		}
 
 	} else { // no create, update:
