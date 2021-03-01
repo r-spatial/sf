@@ -384,9 +384,6 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		ranges(i, 2) = poBand->GetMaximum(&set);
 		ranges(i, 3) = (double) set;
 	}
-	// category names, only from first band:
-	char **pcCNames = poDataset->GetRasterBand(bands(0))->GetCategoryNames();
-	CharacterVector categorynames = charpp2CV(pcCNames);
 
 	// get metadata items:
 	CharacterVector items = get_meta_data((GDALDatasetH) poDataset, NA_STRING);
@@ -452,7 +449,6 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		_["color_tables"] = colorTables,
 		_["ranges"] = ranges,
 		_["descriptions"] = descriptions,
-		_["categorynames"] = categorynames,
 		_["default_geotransform"] = default_geotransform
 	);
 	if (read_data) {
