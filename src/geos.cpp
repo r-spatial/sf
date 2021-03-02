@@ -2,8 +2,14 @@
 #include <geos_c.h>
 
 #if GEOS_VERSION_MAJOR == 3
+# if GEOS_VERSION_MINOR >= 4
+#  define HAVE340
+# endif
 # if GEOS_VERSION_MINOR >= 5
 #  define HAVE350
+# endif
+# if GEOS_VERSION_MINOR >= 9
+#  define HAVE390
 # endif
 # if GEOS_VERSION_MINOR >= 8
 #  define HAVE380
@@ -19,10 +25,12 @@
 # endif
 #else
 # if GEOS_VERSION_MAJOR > 3
+#  define HAVE340
 #  define HAVE350
 #  define HAVE370
 #  define HAVE361
 #  define HAVE380
+#  define HAVE390
 # endif
 #endif
 
@@ -717,7 +725,8 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = geos_ptr(
 					preserveTopology[i] ?
-						chkNULL(GEOSTopologyPreserveSimplify_r(hGEOSCtxt, g[i].get(), dTolerance[i])) :
+						chkNULL(GEOSTopologyPreserveSimplify_r(hGEOSCtxt, g[i].get(),
+							dTolerance[i])) :
 						chkNULL(GEOSSimplify_r(hGEOSCtxt, g[i].get(), dTolerance[i])), hGEOSCtxt);
 	} else if (op == "linemerge") {
 		for (size_t i = 0; i < g.size(); i++)
@@ -732,13 +741,6 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 			out[i] = geos_ptr(chkNULL(GEOSGetCentroid_r(hGEOSCtxt, g[i].get())), hGEOSCtxt);
 		}
 	} else
-#ifdef HAVE370
-	if (op == "reverse") {
-		for (size_t i = 0; i < g.size(); i++) {
-			out[i] = geos_ptr(chkNULL(GEOSReverse_r(hGEOSCtxt, g[i].get())), hGEOSCtxt);
-		}
-	} else
-#endif
 	if (op == "node") {
 		for (size_t i = 0; i < g.size(); i++) {
 			out[i] = geos_ptr(chkNULL(GEOSNode_r(hGEOSCtxt, g[i].get())), hGEOSCtxt);
@@ -748,10 +750,26 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 			out[i] = geos_ptr(chkNULL(GEOSPointOnSurface_r(hGEOSCtxt, g[i].get())), hGEOSCtxt);
 		}
 	} else
-#if GEOS_VERSION_MAJOR >= 3 && GEOS_VERSION_MINOR >= 4
+#ifdef HAVE340
 	if (op == "triangulate") {
 		for (size_t i = 0; i < g.size(); i++)
-			out[i] = geos_ptr(chkNULL(GEOSDelaunayTriangulation_r(hGEOSCtxt, g[i].get(), dTolerance[i], bOnlyEdges)), hGEOSCtxt);
+			out[i] = geos_ptr(chkNULL(GEOSDelaunayTriangulation_r(hGEOSCtxt, g[i].get(),
+				dTolerance[i], bOnlyEdges)), hGEOSCtxt);
+	} else
+#endif
+#ifdef HAVE370
+	if (op == "reverse") {
+		for (size_t i = 0; i < g.size(); i++) {
+			out[i] = geos_ptr(chkNULL(GEOSReverse_r(hGEOSCtxt, g[i].get())), hGEOSCtxt);
+		}
+	} else
+#endif
+#ifdef HAVE390
+	if (op == "inscribed_circle") {
+		for (size_t i = 0; i < g.size(); i++) {
+			out[i] = geos_ptr(chkNULL(GEOSMaximumInscribedCircle_r(hGEOSCtxt, g[i].get(),
+				dTolerance[i])), hGEOSCtxt);
+		}
 	} else
 #endif
 		Rcpp::stop("invalid operation"); // #nocov
@@ -1124,13 +1142,17 @@ Rcpp::List CPL_nary_intersection(Rcpp::List sfc) {
 				// iterate over items in query and erase overlapping areas in geom
 				for (size_t j = 0; j < tree_sel.size(); j++) {
 					size_t k = tree_sel[j];
-					GeomPtr inters = nullptr;
+					GeomPtr inters = geos_ptr(GEOSIntersection_r(hGEOSCtxt, out[k].get(), geom.get()), hGEOSCtxt);
 					if (geom.get() != nullptr) {
-						inters = geos_ptr(GEOSIntersection_r(hGEOSCtxt, out[k].get(), geom.get()), hGEOSCtxt);
 						if (inters == nullptr)
 							errors++;
-						if (inters != nullptr && !chk_(GEOSisEmpty_r(hGEOSCtxt, inters.get()))) { // i and k intersection
-							GeomPtr g = geos_ptr(GEOSDifference_r(hGEOSCtxt, out[k].get(), inters.get()), hGEOSCtxt); // cut out inters from out[k]
+						else if (!chk_(GEOSisEmpty_r(hGEOSCtxt, inters.get()))) { // i and k intersection
+							// cut out inters from geom:
+							geom = geos_ptr(GEOSDifference_r(hGEOSCtxt, geom.get(), inters.get()), hGEOSCtxt); 
+							if (geom == nullptr)
+								Rcpp::stop("GEOS exception"); // #nocov
+							// cut out inters from out[k]:
+							GeomPtr g = geos_ptr(GEOSDifference_r(hGEOSCtxt, out[k].get(), inters.get()), hGEOSCtxt); 
 							if (g == nullptr)
 								Rcpp::warning("GEOS difference returns NULL"); // #nocov
 							else {

@@ -7,6 +7,7 @@
 \alias{st_convex_hull}
 \alias{st_simplify}
 \alias{st_triangulate}
+\alias{st_inscribed_circle}
 \alias{st_voronoi}
 \alias{st_polygonize}
 \alias{st_line_merge}
@@ -35,6 +36,8 @@ st_convex_hull(x)
 st_simplify(x, preserveTopology = FALSE, dTolerance = 0)
 
 st_triangulate(x, dTolerance = 0, bOnlyEdges = FALSE)
+
+st_inscribed_circle(x, dTolerance, ...)
 
 st_voronoi(x, envelope, dTolerance = 0, bOnlyEdges = FALSE)
 
@@ -104,6 +107,12 @@ See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.ht
 
 \code{st_triangulate} triangulates set of points (not constrained). \code{st_triangulate} requires GEOS version 3.4 or above
 
+\code{st_inscribed_circle} returns the maximum inscribed circle for polygon geometries. 
+For \code{st_inscribed_circle}, if \code{nQuadSegs} is 0 a 2-point LINESTRING is returned with the
+center point and a boundary point of every circle, otherwise a circle (buffer) is returned where
+\code{nQuadSegs} controls the number of points per quadrant to approximate the circle.
+\code{st_inscribed_circle} requires GEOS version 3.9 or above
+
 \code{st_voronoi} creates voronoi tesselation. \code{st_voronoi} requires GEOS version 3.5 or above
 
 \code{st_polygonize} creates polygon from lines that form a closed ring. In case of \code{st_polygonize}, \code{x} must be an object of class \code{LINESTRING} or \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
@@ -159,8 +168,15 @@ plot(st_buffer(l2, dist = 1, joinStyle="MITRE",mitreLimit=3), reset = FALSE,
 plot(l2, col = 'blue', add = TRUE)
 par(op)
 nc = st_read(system.file("shape/nc.shp", package="sf"))
-plot(st_convex_hull(nc))
-plot(nc, border = grey(.5))
+nc_g = st_geometry(nc)
+plot(st_convex_hull(nc_g))
+plot(nc_g, border = grey(.5), add = TRUE)
+if (sf_extSoftVersion()["GEOS"] >= "3.9.0") {
+  nc_t = st_transform(nc, 'EPSG:2264')
+  x = st_inscribed_circle(st_geometry(nc_t))
+  plot(st_geometry(nc_t), asp = 1, col = grey(.9))
+  plot(x, add = TRUE, col = '#ff9999')
+}
 set.seed(1)
 x = st_multipoint(matrix(runif(10),,2))
 box = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))))
@@ -183,19 +199,20 @@ if (sf_extSoftVersion()["GEOS"] >= "3.5.0") {
  plot(pts["id"], pch = 16) # ID is color
  plot(st_set_geometry(pts, "pols")["id"], xlim = c(0,1), ylim = c(0,1), reset = FALSE)
  plot(st_geometry(pts), add = TRUE)
+ layout(matrix(1)) # reset plot layout
 }
 mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
 st_polygonize(st_sfc(mls))
 mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
 st_line_merge(st_sfc(mls))
-plot(nc, axes = TRUE)
-plot(st_centroid(nc), add = TRUE, pch = 3)
+plot(nc_g, axes = TRUE)
+plot(st_centroid(nc_g), add = TRUE, pch = 3, col = 'red')
 mp = st_combine(st_buffer(st_sfc(lapply(1:3, function(x) st_point(c(x,x)))), 0.2 * 1:3))
 plot(mp)
 plot(st_centroid(mp), add = TRUE, col = 'red') # centroid of combined geometry
 plot(st_centroid(mp, of_largest_polygon = TRUE), add = TRUE, col = 'blue', pch = 3)
-plot(nc, axes = TRUE)
-plot(st_point_on_surface(nc), add = TRUE, pch = 3)
+plot(nc_g, axes = TRUE)
+plot(st_point_on_surface(nc_g), add = TRUE, pch = 3, col = 'red')
 if (sf_extSoftVersion()["GEOS"] >= "3.7.0") {
   st_reverse(st_linestring(rbind(c(1,1), c(2,2), c(3,3))))
 }

@@ -309,11 +309,13 @@ abbreviate_shapefile_names = function(x) {
 #'
 #' Write simple features object to file or database
 #' @param obj object of class \code{sf} or \code{sfc}
-#' @param dsn data source name (interpretation varies by driver - for some drivers, dsn is a file name, but may also be a
-#' folder or contain a database name) or a Database Connection (currently
-#' official support is for RPostgreSQL connections)
-#' @param layer layer name (varies by driver, may be a file name without extension); if layer is missing, the
-#' \link{basename} of \code{dsn} is taken.
+#' @param dsn data source name. Interpretation varies by driver: can be
+#'   a filename, a folder, a database name, or a Database Connection
+#'   (we officially test support for
+#'   \code{\link[RPostgres:Postgres]{RPostgres::Postgres()}} connections).
+#' @param layer layer name. Varies by driver, may be a file name without
+#'   extension; for database connection, it is the name of the table. If layer
+#'   is missing, the \code{basename} of \code{dsn} is taken.
 #' @param driver character; name of driver to be used; if missing and \code{dsn} is not a Database Connection, a driver name is guessed from \code{dsn};
 #' \code{st_drivers()} returns the drivers that are available with their properties; links to full driver documentation
 #' are found at \url{https://gdal.org/ogr_formats.html}.
@@ -323,16 +325,23 @@ abbreviate_shapefile_names = function(x) {
 #' multiple options supported.
 #' @param layer_options character; driver dependent layer creation options;
 #' multiple options supported.
-#' @param quiet logical; suppress info on name, driver, size and spatial reference
-#' @param factorsAsCharacter logical; convert \code{factor} objects into
-#' character strings (default), else into numbers by \code{as.numeric}.
+#' @param quiet logical; suppress info on name, driver, size and spatial
+#'   reference
+#' @param factorsAsCharacter logical; convert \code{factor} levels to character
+#'   strings (\code{TRUE}, default), otherwise into numbers when
+#'   factorsAsCharacter is \code{FALSE}. For database connections,
+#'   \code{factorsAsCharacter} is always \code{TRUE}.
 #' @param append logical; should we append to an existing layer, or replace it?
-#' if \code{TRUE} append, if \code{FALSE} replace; default \code{NA} will
-#' raise an error if the layer exists. See also next two arguments.
+#' if \code{TRUE} append, if \code{FALSE} replace.
+#' The default for \code{st_write} is \code{NA} which raises an error if the layer exists.
+#' The default for \code{write_sf} is \code{FALSE}, which overwrites any existing data.
+#' See also next two arguments for more control on overwrite behavior.
 #' @param delete_dsn logical; delete data source \code{dsn} before attempting
 #' to write?
 #' @param delete_layer logical; delete layer \code{layer} before attempting to
 #' write?
+#' The default for \code{st_write} is \code{FALSE} which raises an error if the layer exists.
+#' The default for \code{write_sf} is \code{TRUE}.
 #' @param fid_column_name character, name of column with feature IDs; if
 #' specified, this column is no longer written as feature attribute.
 #' @details
@@ -346,9 +355,8 @@ abbreviate_shapefile_names = function(x) {
 #' When deleting layers or data sources is not successful, no error is emitted.
 #' \code{delete_dsn} and \code{delete_layer} should be
 #' handled with care; the former may erase complete directories or databases.
-#' @seealso \link{st_drivers}
-#' @return \code{obj}, invisibly; in case \code{obj} is of class \code{sfc},
-#' it is returned as an \code{sf} object.
+#' @seealso \link{st_drivers}, \link{dbWriteTable}
+#' @return \code{obj}, invisibly
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' st_write(nc, paste0(tempdir(), "/", "nc.shp"))
@@ -377,6 +385,7 @@ st_write.sfc = function(obj, dsn, layer, ...) {
 		st_write.sf(st_sf(geom = obj), dsn, ...)
 	else
 		st_write.sf(st_sf(geom = obj), dsn, layer, ...)
+	invisible(obj)
 }
 
 #' @name st_write
@@ -387,6 +396,7 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 		append = NA, delete_dsn = FALSE, delete_layer = !is.na(append) && !append,
 		fid_column_name = NULL) {
 
+	ret = obj
 	if (!is.null(list(...)$update)) {
 		.Deprecated("append", old = "update") # deprecated at 0.9-0
 		if (is.na(append))
@@ -412,6 +422,13 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 			append = FALSE
 		}
 
+		# check arguments
+		cl <- as.list(match.call())[-1L]
+		if ("overwrite" %in% names(cl)) {
+			stop("Argument `overwite` in `st_write()` is deprecated, use `delete_layer` instead.", call. = FALSE)
+		}
+
+		check_append_delete(append, delete_layer)
 		dbWriteTable(dsn, name = layer, value = obj,
 					 append = append, overwrite = delete_layer,
 					 factorsAsCharacter = factorsAsCharacter, ...)
@@ -482,23 +499,24 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 		if (!file.remove(tmp))
 			warning(paste("removing", tmp, "failed"))
 	} # nocov end
-	invisible(obj)
+	invisible(ret)
 }
 
 #' @name st_write
 #' @export
 st_write.data.frame <- function(obj, dsn, layer = NULL, ...) {
-    sf = try(st_as_sf(obj), silent = TRUE)
+	sf = try(st_as_sf(obj), silent = TRUE)
 	if (!inherits(sf, "try-error"))
-    	st_write.sf(sf, dsn = dsn, layer = layer, ...)
+		st_write.sf(sf, dsn = dsn, layer = layer, ...)
 	else
-    	st_write.sf(obj, dsn = dsn, layer = layer, ...)
+		st_write.sf(obj, dsn = dsn, layer = layer, ...)
+	invisible(obj)
 }
 
 #' @name st_write
 #' @export
-write_sf <- function(..., quiet = TRUE, append = FALSE, delete_layer = TRUE) {
-	st_write(..., quiet = quiet, append = append, delete_layer = TRUE)
+write_sf <- function(..., quiet = TRUE, append = FALSE, delete_layer = !append) {
+	st_write(..., quiet = quiet, append = append, delete_layer = delete_layer)
 }
 
 #' Get GDAL drivers
@@ -683,3 +701,10 @@ prefix_map <- list(
 #' Drivers for which update should be \code{TRUE} by default
 #' @docType data
 db_drivers <- c(unlist(prefix_map), "GPKG", "SQLite")
+
+# Utils ----------------------------------------------------------------------
+check_append_delete <- function(append, delete) {
+	if (append && delete) {
+		stop("`delete_layer` and `append` cannot both be `TRUE`", call. = FALSE)
+	}
+}

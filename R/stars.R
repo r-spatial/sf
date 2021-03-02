@@ -256,7 +256,7 @@ gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", 
 			if (max(breaks) == max(x[[1]], na.rm = TRUE)) # expand, because GDAL will not include interval RHS
 				nbreaks[length(nbreaks)] = breaks[length(breaks)] * 1.01
 			c(paste0("FIXED_LEVELS=", paste0(nbreaks, collapse = ",")),
-			paste0("ELEV_FIELD=Value"),
+			"ELEV_FIELD=0", "ELEV_FIELD_MIN=1", "ELEV_FIELD_MAX=2",
 			paste0("POLYGONIZE=", ifelse(contour_lines, "NO", "YES")))
 		} else
 			character(0)
@@ -266,16 +266,27 @@ gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", 
 		else
 			character(0)
 
-	#pol = CPL_polygonize(file, mask_name, "GTiff", "GPKG", "foo", options, 0, contour_options, use_contours, use_integer)
-	pol = CPL_polygonize(file, mask_name, "GTiff", "Memory", "foo", options, 0, contour_options, use_contours, use_integer)
+	pol = CPL_polygonize(file, mask_name, "GTiff", "Memory", "foo", options, 0, 
+		contour_options, use_contours, use_integer)
 	out = process_cpl_read_ogr(pol, quiet = TRUE)
 	names(out)[1] = names(x)[1]
-	if (use_contours) {
-		m = as.integer(cut(out[[1]], breaks = nbreaks, include.lowest = TRUE)) # FIXME: add coverage when GDAL 2.4.0 is here
-		if (any(is.na(m)) && !all(is.na(m)))
-			warning("range of breaks does not cover range of cell values")
-		out[[1]] = structure(m, levels = levels(cut(breaks, breaks, include.lowest = TRUE)), class = "factor")
-	}
+	if (! contour_lines && use_contours) {
+#		if (out$Min[1] == 0 && out$Min[1] > min(breaks))
+#			out$Min[1] = -Inf
+#
+# https://github.com/r-spatial/sf/pull/1608 : 
+
+		i <- match(out$Max[1], sort(breaks))
+		out$Min[1] = if (!is.na(i) && i > 1)
+				sort(breaks)[i - 1]
+			else 
+				-Inf
+
+		out$Max[out$Max == 2^32 - 1] = Inf
+		f = paste0("[", out$Min, ",", out$Max, ")")
+		out[[1]] = factor(f, levels = f)
+	} else
+		out$Min = out$Max = NULL
 	out # nocov end
 }
 

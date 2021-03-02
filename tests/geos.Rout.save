@@ -1,6 +1,6 @@
 
-R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
-Copyright (C) 2019 The R Foundation for Statistical Computing
+R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
+Copyright (C) 2020 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -106,7 +106,6 @@ MULTIPOLYGON (((-81.47276 36.23436, -81.54084 3...
 > 
 > ncbb = st_as_sfc(st_bbox(nc))
 > g = st_make_grid(ncbb)
-although coordinates are longitude/latitude, st_relate_pattern assumes that they are planar
 > x = st_intersection(nc, g)
 although coordinates are longitude/latitude, st_intersection assumes that they are planar
 Warning message:
@@ -130,20 +129,19 @@ MULTIPOINT ((0 0.8878369))
 MULTIPOINT ((0.2986488 0), (2.48417 0), (2.5678...
 > 
 > g = st_make_grid(ncbb, n = c(20,10))
-although coordinates are longitude/latitude, st_relate_pattern assumes that they are planar
 > 
 > a1 = st_interpolate_aw(nc["BIR74"], g, FALSE)
 although coordinates are longitude/latitude, st_intersection assumes that they are planar
 Warning message:
 In st_interpolate_aw.sf(nc["BIR74"], g, FALSE) :
-  st_interpolate_aw assumes attributes are constant over areas of x
+  st_interpolate_aw assumes attributes are constant or uniform over areas of x
 > sum(a1$BIR74) / sum(nc$BIR74) # not close to one: property is assumed spatially intensive
 [1] 1.436169
 > a2 = st_interpolate_aw(nc["BIR74"], g, extensive = TRUE)
 although coordinates are longitude/latitude, st_intersection assumes that they are planar
 Warning message:
 In st_interpolate_aw.sf(nc["BIR74"], g, extensive = TRUE) :
-  st_interpolate_aw assumes attributes are constant over areas of x
+  st_interpolate_aw assumes attributes are constant or uniform over areas of x
 > sum(a2$BIR74) / sum(nc$BIR74)
 [1] 1.000013
 > 
@@ -157,10 +155,7 @@ In st_interpolate_aw.sf(nc["BIR74"], g, extensive = TRUE) :
 [1] 703
 > 
 > g1 = st_make_grid(ncbb, 0.1, what = "polygons", square = FALSE)
-although coordinates are longitude/latitude, st_relate_pattern assumes that they are planar
 > g2 = st_make_grid(ncbb, 0.1, what = "points", square = FALSE)
-although coordinates are longitude/latitude, st_intersects assumes that they are planar
-although coordinates are longitude/latitude, st_intersects assumes that they are planar
 > 
 > # st_line_merge:
 > mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
@@ -589,4 +584,4 @@ CRS:            NA
 > 
 > proc.time()
    user  system elapsed 
-  4.369   0.075   4.463 
+  3.273   0.052   3.318 

@@ -49,8 +49,8 @@ CPL_curve_to_linestring <- function(sfc) {
     .Call('_sf_CPL_curve_to_linestring', PACKAGE = 'sf', sfc)
 }
 
-CPL_transform <- function(sfc, crs, AOI, pipeline, reverse = FALSE) {
-    .Call('_sf_CPL_transform', PACKAGE = 'sf', sfc, crs, AOI, pipeline, reverse)
+CPL_transform <- function(sfc, crs, AOI, pipeline, reverse = FALSE, desired_accuracy = -1.0, allow_ballpark = TRUE) {
+    .Call('_sf_CPL_transform', PACKAGE = 'sf', sfc, crs, AOI, pipeline, reverse, desired_accuracy, allow_ballpark)
 }
 
 CPL_wrap_dateline <- function(sfc, opt, quiet = TRUE) {
@@ -265,8 +265,16 @@ CPL_proj_h <- function(b = FALSE) {
     .Call('_sf_CPL_proj_h', PACKAGE = 'sf', b)
 }
 
+CPL_get_pipelines <- function(crs, authority, AOI, Use, grid_availability, accuracy = -1.0, strict_containment = FALSE, axis_order_auth_compl = FALSE) {
+    .Call('_sf_CPL_get_pipelines', PACKAGE = 'sf', crs, authority, AOI, Use, grid_availability, accuracy, strict_containment, axis_order_auth_compl)
+}
+
 CPL_is_network_enabled <- function(b = FALSE) {
     .Call('_sf_CPL_is_network_enabled', PACKAGE = 'sf', b)
+}
+
+CPL_enable_network <- function(url, enable = TRUE) {
+    .Call('_sf_CPL_enable_network', PACKAGE = 'sf', url, enable)
 }
 
 CPL_get_data_dir <- function(b = FALSE) {

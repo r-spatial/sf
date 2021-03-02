@@ -105,6 +105,12 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
 		OGRFieldDefn oField("Value", OFTReal);
 		if (poLayer->CreateField(&oField) != OGRERR_NONE)
     		Rcpp::stop("Creating attribute field failed.\n"); // #nocov
+		OGRFieldDefn minField("Min", OFTReal);
+		if (poLayer->CreateField(&minField) != OGRERR_NONE)
+    		Rcpp::stop("Creating attribute field failed.\n"); // #nocov
+		OGRFieldDefn maxField("Max", OFTReal);
+		if (poLayer->CreateField(&maxField) != OGRERR_NONE)
+    		Rcpp::stop("Creating attribute field failed.\n"); // #nocov
 
 		if (!use_contours) {
 			if (GDALFPolygonize((GDALRasterBandH) poBand, maskBand,

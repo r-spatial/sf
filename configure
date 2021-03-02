@@ -3540,12 +3540,18 @@ fi
 # Optional local copy of GDAL datadir and PROJ_LIB
 
 data_copy=no
+if test "${PROJ_GDAL_DATA_COPY}" ; then
+    data_copy=yes
+    { $as_echo "$as_me:${as_lineno-$LINENO}: PROJ_GDAL_DATA_COPY used." >&5
+$as_echo "$as_me: PROJ_GDAL_DATA_COPY used." >&6;}
+else
 
 # Check whether --with-data-copy was given.
 if test "${with_data_copy+set}" = set; then :
   withval=$with_data_copy; data_copy=$withval
 fi
 
+fi
 if test "${data_copy}" = "yes" ; then
 { $as_echo "$as_me:${as_lineno-$LINENO}: Copy data for:" >&5
 $as_echo "$as_me: Copy data for:" >&6;}

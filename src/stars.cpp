@@ -194,7 +194,7 @@ NumericVector read_gdal_data(GDALDataset *poDataset,
 }
 
 int get_from_list(List lst, const char *name, int otherwise) {
-	if (lst.containsElementNamed(name)) {
+	if (lst.containsElementNamed(name) && lst[name] != R_NilValue) {
 		IntegerVector ret = lst[name]; // #nocov
 		return(ret[0]);                // #nocov
 	} else
@@ -349,18 +349,29 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 			nodatavalue[0] = poBand->GetNoDataValue(NULL); // #nocov
 	}
 
+	// bands:
+	IntegerVector bands;
+	if (RasterIO_parameters.containsElementNamed("bands"))
+		bands = RasterIO_parameters["bands"]; // #nocov
+	else {
+		bands = IntegerVector(poDataset->GetRasterCount());
+		for (int j = 0; j < bands.size(); j++)
+			bands(j) = j + 1; // bands is 1-based
+	}
+
 	// get color table, attribute table, and min/max values:
-	List colorTables(poDataset->GetRasterCount());
-	List attributeTables(poDataset->GetRasterCount());
-	CharacterVector descriptions(poDataset->GetRasterCount());
-	NumericMatrix ranges(poDataset->GetRasterCount(), 4);
-	for (int i = 0; i < poDataset->GetRasterCount(); i++) {
-		poBand = poDataset->GetRasterBand(i + 1);
+	List colorTables(bands.size());
+	List attributeTables(bands.size());
+	CharacterVector descriptions(bands.size());
+	NumericMatrix ranges(bands.size(), 4);
+	for (int i = 0; i < bands.size(); i++) {
+		poBand = poDataset->GetRasterBand(bands(i));
 		const char *md = poBand->GetMetadataItem("BANDNAME", NULL);
 		if (md == NULL)
 			descriptions(i) = poBand->GetDescription();
 		else
 			descriptions(i) = md;
+
 		if (poBand->GetColorTable() != NULL)
 			colorTables(i) = get_color_table(poBand->GetColorTable());
 		if (poBand->GetCategoryNames() != NULL)
@@ -390,16 +401,6 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	int nYSize = get_from_list(RasterIO_parameters, "nYSize", poDataset->GetRasterYSize() - nYOff);
 	int nBufXSize = get_from_list(RasterIO_parameters, "nBufXSize", nXSize);
 	int nBufYSize = get_from_list(RasterIO_parameters, "nBufYSize", nYSize);
-
-	// bands:
-	IntegerVector bands;
-	if (RasterIO_parameters.containsElementNamed("bands"))
-		bands = RasterIO_parameters["bands"]; // #nocov
-	else {
-		bands = IntegerVector(poDataset->GetRasterCount());
-		for (int j = 0; j < bands.size(); j++)
-			bands(j) = j + 1; // bands is 1-based
-	}
 
 	// resampling method:
 	GDALRasterIOExtraArg resample;
@@ -574,6 +575,20 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 			for (int band = 1; band <= dims(2); band++) {
 				GDALRasterBand *poBand = poDstDS->GetRasterBand( band );
 				poBand->SetDescription(descriptions(band-1));
+			}
+		}
+
+		// factor levels:
+		if (x.attr("levels") != R_NilValue) {
+			Rcpp::CharacterVector levels = x.attr("levels");
+			Rcpp::CharacterVector l(levels.size() + 1);
+			l[0] = ""; // levels start at 1, CategoryNames at 0.
+			for (int i = 0; i < levels.size(); i++)
+				l[i+1] = levels[i];
+			for (int band = 1; band <= dims(2); band++) {
+				GDALRasterBand *poBand = poDstDS->GetRasterBand( band );
+				if (poBand->SetCategoryNames(create_options(l).data()) != CE_None)
+					warning("error writing factor levels to file");
 			}
 		}
 

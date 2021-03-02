@@ -436,12 +436,12 @@ get_new_postgis_srid <- function(conn) {
 #' Write `sf` object to Database
 #' @inheritParams RPostgreSQL::postgresqlWriteTable
 #' @md
-#' @rdname st_write
+#' @rdname dbWriteTable
 #' @importMethodsFrom DBI dbWriteTable
 #' @export
 setMethod("dbWriteTable", c("PostgreSQLConnection", "character", "sf"),
           function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE,
-                   append = FALSE, field.types = NULL, factorsAsCharacter = TRUE, binary = TRUE) {
+                   append = FALSE, field.types = NULL, binary = TRUE) {
               if (is.null(field.types)) field.types <- dbDataType(conn, value)
               tryCatch({
                   dbWriteTable(conn, name, to_postgis(conn, value, binary),..., row.names = row.names,
@@ -465,12 +465,12 @@ setMethod("dbWriteTable", c("PostgreSQLConnection", "character", "sf"),
 #' @param field.types default `NULL`. Allows to override type conversion from R
 #' to PostgreSQL. See `dbDataType()` for details.
 #' @md
-#' @rdname st_write
+#' @rdname dbWriteTable
 #' @importMethodsFrom DBI dbWriteTable
 #' @export
 setMethod("dbWriteTable", c("DBIObject", "character", "sf"),
           function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE,
-                   append = FALSE, field.types = NULL, factorsAsCharacter = TRUE, binary = TRUE) {
+                   append = FALSE, field.types = NULL, binary = TRUE) {
           	if (is.null(field.types)) field.types <- dbDataType(conn, value)
               # DBI cannot set field types with append
               if (append) field.types <- NULL
@@ -517,7 +517,6 @@ sync_crs <- function(conn, geom) {
 #' Determine database type for R vector
 #'
 #' @export
-#' @inheritParams RPostgreSQL dbDataType
 #' @rdname dbDataType
 #' @importMethodsFrom DBI dbDataType
 setMethod("dbDataType", c("PostgreSQLConnection", "sf"), function(dbObj, obj) {
@@ -533,7 +532,6 @@ setMethod("dbDataType", c("PostgreSQLConnection", "sf"), function(dbObj, obj) {
 #' Determine database type for R vector
 #'
 #' @export
-#' @inheritParams DBI dbDataType
 #' @rdname dbDataType
 #' @importClassesFrom DBI DBIObject
 #' @importMethodsFrom DBI dbDataType

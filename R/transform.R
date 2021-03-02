@@ -1,4 +1,3 @@
-
 chk_pol = function(x, dim = class(x)[1]) {
 	PolClose = function(y) {
 		if (any(head(y[[1]], 1) != tail(y[[1]], 1))) # close
@@ -24,16 +23,16 @@ chk_mpol = function(x) {
 }
 
 sanity_check = function(x) {
-    d = st_dimension(x) # flags empty geoms as NA
-    if (any(d == 2, na.rm = TRUE)) { # the polygon stuff
+	d = st_dimension(x) # flags empty geoms as NA
+	if (any(d == 2, na.rm = TRUE)) { # the polygon stuff
 		if (inherits(x, "sfc_POLYGON"))
-        	st_sfc(lapply(x, chk_pol), crs = st_crs(x))
+			st_sfc(lapply(x, chk_pol), crs = st_crs(x))
 		else if (inherits(x, "sfc_MULTIPOLYGON"))
-        	st_sfc(lapply(x, chk_mpol), crs = st_crs(x))
+			st_sfc(lapply(x, chk_mpol), crs = st_crs(x))
 		else
 			stop(paste("no check implemented for", class(x)[1]))
-    } else
-        x # nocov
+	} else
+		x # nocov
 }
 
 #' Transform or convert coordinates of simple feature
@@ -41,17 +40,28 @@ sanity_check = function(x) {
 #' Transform or convert coordinates of simple feature
 #'
 #' @param x object of class sf, sfc or sfg
-#' @param crs coordinate reference system: integer with the EPSG code, or character with proj4string
+#' @param crs target coordinate reference system: object of class `crs`, or input string for \link{st_crs}
 #' @param ... ignored
 #' @param aoi area of interest, in degrees: 
 #' WestLongitude, SouthLatitude, EastLongitude, NorthLatitude
-#' @param pipeline character; proj4 or WKT coordinate operation, to override the default operation
-#' @param reverse boolean; if \code{TRUE}, the inverse operation of the pipeline is applied
+#' @param pipeline character; coordinate operation pipeline, for overriding the default operation
+#' @param reverse boolean; has only an effect when \code{pipeline} is defined:
+#' if \code{TRUE}, the inverse operation of the pipeline is applied
+#' @param desired_accuracy numeric; Only coordinate operations that offer an accuracy of 
+#' at least the one specified will be considered; a negative value disables this feature
+#' (requires GDAL >= 3.3)
+#' @param allow_ballpark logical; are ballpark (low accuracy) transformations allowed? 
+#' (requires GDAL >= 3.3)
 #' @param partial logical; allow for partial projection, if not all points of a geometry can be projected (corresponds to setting environment variable \code{OGR_ENABLE_PARTIAL_REPROJECTION} to \code{TRUE})
-#' @param check logical; perform a sanity check on resulting polygons?
-#' @details Transforms coordinates of object to new projection. Features that cannot be transformed are returned as empty geometries.
+#' @param check logical; if \code{TRUE}, perform a sanity check on resulting polygons
+#' @details Transforms coordinates of object to new projection. 
+#' Features that cannot be transformed are returned as empty geometries.
 #'
-#' Projecting to projections not supported by GDAL may be done by \link[lwgeom]{st_transform_proj}, part of package lwgeom.
+#' @seealso Projecting simple feature geometries 
+#' to projections not supported by GDAL may be done by 
+#' \link[lwgeom]{st_transform_proj}, part of package lwgeom.
+#' 
+#' \link{sf_project} projects a matrix of coordinates, bypassing GDAL altogether
 #' @examples
 #' p1 = st_point(c(7,52))
 #' p2 = st_point(c(-30,20))
@@ -74,14 +84,17 @@ st_transform = function(x, crs, ...) UseMethod("st_transform")
 #' }
 st_transform.sfc = function(x, crs = st_crs(x), ..., 
 		aoi = numeric(0), pipeline = character(0), reverse = FALSE,
+		desired_accuracy = -1.0, allow_ballpark = TRUE,
 		partial = TRUE, check = FALSE) {
 
+	crs_missing = missing(crs)
 	if (length(pipeline) == 0) {
 		if (is.na(st_crs(x)))
 			stop("cannot transform sfc object with missing crs")
 		if (missing(crs))
 			stop("argument crs cannot be missing")
-	}
+	} else 
+		stopifnot(length(pipeline) == 1)
 
 	crs = make_crs(crs)
 
@@ -96,18 +109,19 @@ st_transform.sfc = function(x, crs = st_crs(x), ...,
 		Sys.setenv(OGR_ENABLE_PARTIAL_REPROJECTION = "TRUE")
 	}
 
-	if (crs != st_crs(x)) {
-		ret = structure(CPL_transform(x, crs, aoi, pipeline, reverse),
-			single_type = NULL, crs = crs)
-		ret = st_sfc(ret)
-		if (check)
-			sanity_check(ret)
-		else
-			ret
-	} else if (length(pipeline))
-		st_sfc(CPL_transform(x, crs, aoi, pipeline, reverse))
+	if (length(pipeline)) {
+		if (!crs_missing && !is.na(crs)) { # verify pipeline is a legitimate option:
+			if (!pipeline[1] %in% sf_proj_pipelines(st_crs(x), crs)$definition)
+				warning("pipeline not found in PROJ-suggested candidate transformations")
+		} else
+			crs = NA_crs_  # to avoid st_crs(x) is crs of the returned object
+	}
+	ret = st_sfc(structure(CPL_transform(x, crs, aoi, pipeline, reverse, desired_accuracy,
+			allow_ballpark), single_type = NULL, crs = crs)) # hard-sets crs to new crs
+	if (check)
+		sanity_check(ret)
 	else
-		x
+		ret
 }
 
 #' @name st_transform
@@ -135,44 +149,6 @@ st_transform.sfg = function(x, crs = st_crs(x), ...) {
 		stop("argument crs cannot be missing")
 	crs = make_crs(crs)
 	structure(st_transform(x, crs, ...)[[1]], crs = crs)
-}
-
-#' @name st_transform
-#' @param type character; one of \code{have_datum_files}, \code{proj}, \code{ellps}, \code{datum}, \code{units} or \code{prime_meridians}; see Details.
-#' @param path character; PROJ search path to be set
-#' @export
-#' @details \code{sf_proj_info} lists the available projections, ellipses, datums, units, or data search path of the PROJ library when \code{type} is equal to proj, ellps, datum, units or path; when \code{type} equals \code{have_datum_files} a boolean is returned indicating whether datum files are installed and accessible (checking for \code{conus}).
-#'
-#' for PROJ >= 6, \code{sf_proj_info} does not provide option \code{type = "datums"}. 
-#' PROJ < 6 does not provide the option \code{type = "prime_meridians"}.
-#'
-#' for PROJ >= 7.1.0, the "units" query of \code{sf_proj_info} returns the \code{to_meter} 
-#' variable as numeric, previous versions return a character vector containing a numeric expression.
-#' @examples
-#' sf_proj_info("datum")
-sf_proj_info = function(type = "proj", path) {
-
-	if (type == "have_datum_files")
-		return(CPL_have_datum_files(0))
-
-	if (type == "path")
-		return(CPL_get_data_dir(FALSE))
-	
-	if (!missing(path) && is.character(path))
-		return(invisible(CPL_set_data_dir(path)))
-
-	if (type == "network")
-		return(CPL_is_network_enabled(TRUE))
-
-    opts <- c("proj", "ellps", "datum", "units", "prime_meridians")
-    if (!(type %in% opts))
-		stop("unknown type") # nocov
-    t <- as.integer(match(type[1], opts) - 1)
-	res = CPL_proj_info(as.integer(t))
-    if (type == "proj")
-		res$description <- sapply(strsplit(as.character(res$description), "\n"),
-			function(x) x[1])
-    data.frame(res)
 }
 
 #' @name st_transform
@@ -212,54 +188,4 @@ st_wrap_dateline.sf = function(x, options = "WRAPDATELINE=YES", quiet = TRUE) {
 #' @export
 st_wrap_dateline.sfg = function(x, options = "WRAPDATELINE=YES", quiet = TRUE) {
 	st_sfc(CPL_wrap_dateline(st_geometry(x), options, quiet), crs = st_crs(x))[[1]]
-}
-
-st_to_s2 = function(x) {
-	# to geocentric, spherical, unit sphere:
-	st_transform(x, st_crs("+proj=geocent +a=1 +b=1 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs")) # nocov
-}
-
-#' directly transform a set of coordinates
-#'
-#' directly transform a set of coordinates
-#' @param from character description of source CRS, or object of class \code{crs} 
-#' @param to character description of target CRS, or object of class \code{crs} 
-#' @param pts two-column numeric matrix, or object that can be coerced into a matrix
-#' @param keep logical value controlling the handling of unprojectable points. If
-#' `keep` is `TRUE`, then such points will yield `Inf` or `-Inf` in the
-#' return value; otherwise an error is reported and nothing is returned.
-#' @param warn logical; if \code{TRUE}, warn when non-finite values are generated
-#' @param authority_compliant logical; \code{TRUE} means handle axis order authority compliant (e.g. EPSG:4326 implying x=lat, y=lon), \code{FALSE} means use visualisation order (i.e. always x=lon, y=lat)
-#' @return two-column numeric matrix with transformed/converted coordinates, returning invalid values as \code{Inf}
-#' @export
-sf_project = function(from, to, pts, keep = FALSE, warn = TRUE, 
-		authority_compliant = st_axis_order()) {
-
-	proj_from_crs = function(x) {
-		if (inherits(x, "crs")) {
-			x = if (sf_extSoftVersion()["proj.4"] >= "6.0.0")
-				x$wkt
-			else
-				x$proj4string
-		}
-		v = CPL_proj_is_valid(x)
-		if (!v[[1]])
-			stop(paste0(v[[2]], ": ", x))
-		x[1]
-	}
-	if (!is.logical(keep) || length(keep) != 1 || is.na(keep))
-		stop("'keep' must be single-length non-NA logical value")
-
-	CPL_proj_direct(c(proj_from_crs(from), proj_from_crs(to)), as.matrix(pts), 
-			keep, warn, authority_compliant)
-}
-
-#' Get or set the PROJ search paths
-#' @param paths the search path to be set; omit if no paths need to be set
-#' @return the search path (possibly after setting to paths)
-#' @export
-sf_proj_search_paths = function(paths = NULL) {
-	if (!is.null(paths))
-		CPL_set_proj_search_paths(as.character(paths));
-	CPL_get_proj_search_paths(character(0));
 }

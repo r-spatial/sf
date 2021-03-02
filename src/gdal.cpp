@@ -505,31 +505,33 @@ Rcpp::List CPL_curve_to_linestring(Rcpp::List sfc) { // need to pass more parame
 
 // [[Rcpp::export]]
 Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
-		Rcpp::NumericVector AOI, Rcpp::CharacterVector pipeline, bool reverse = false) {
-
-	// import crs:
-	OGRSpatialReference *dest = OGRSrs_from_crs(crs);
-	if (dest == NULL)
-		Rcpp::stop("crs not found: is it missing?"); // #nocov
+		Rcpp::NumericVector AOI, Rcpp::CharacterVector pipeline, bool reverse = false,
+		double desired_accuracy = -1.0, bool allow_ballpark = true) {
 
 	// transform geometries:
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
-	if (g.size() == 0) {
-		dest->Release();
+	if (g.size() == 0)
 		return sfc_from_ogr(g, true); // destroys g
-	}
+
+	OGRSpatialReference *dest = NULL;
+	// if pipeline was not set, import crs to dest:
+	if (pipeline.size() == 0 && !(dest = OGRSrs_from_crs(crs)))
+		Rcpp::stop("crs not found: is it missing?"); // #nocov
+
 #if GDAL_VERSION_MAJOR >= 3
 	OGRCoordinateTransformationOptions *options = new OGRCoordinateTransformationOptions;
-	if (pipeline.size() || AOI.size()) {
-		if (AOI.size() && !options->SetAreaOfInterest(AOI[0], AOI[1], AOI[2], AOI[3])) // and pray!
-			Rcpp::stop("values for area of interest not accepted");
-		if (pipeline.size() && !options->SetCoordinateOperation(pipeline[0], reverse))
-			Rcpp::stop("pipeline value not accepted");
-	}
-	unset_error_handler(); // FIXME: is this always a good idea?
+	if (pipeline.size() && !options->SetCoordinateOperation(pipeline[0], reverse))
+		Rcpp::stop("pipeline value not accepted");
+	if (AOI.size() == 4 && !options->SetAreaOfInterest(AOI[0], AOI[1], AOI[2], AOI[3]))
+		Rcpp::stop("values for area of interest not accepted");
+#if GDAL_VERSION_MINOR >= 3
+	options->SetDesiredAccuracy(desired_accuracy);
+	options->SetBallparkAllowed(allow_ballpark);
+#endif
+	// unset_error_handler(); // FIXME: is this always a good idea?
 	OGRCoordinateTransformation *ct =
 		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest, *options);
-	set_error_handler();
+	// set_error_handler();
 	delete options;
 #else
 	if (pipeline.size() || AOI.size())
@@ -538,7 +540,8 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest);
 #endif
 	if (ct == NULL) {
-		dest->Release(); // #nocov start
+		if (dest)
+			dest->Release(); // #nocov start
 		sfc_from_ogr(g, true); // to destroy g
 		Rcpp::stop("OGRCreateCoordinateTransformation() returned NULL: PROJ available?"); // #nocov end
 	}
@@ -558,7 +561,8 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 
 	Rcpp::List ret = sfc_from_ogr(g, true); // destroys g;
 	ct->DestroyCT(ct);
-	dest->Release();
+	if (dest)
+		dest->Release();
 	return ret;
 }
 
