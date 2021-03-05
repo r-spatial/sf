@@ -1,5 +1,7 @@
 # version 0.9-8
 
+* add `st_as_sf` method for terra's `SpatVector` class; #1567
+
 * `distinct.sf` works by default on all variables, and keeps active geometry active; #1613
 
 * improve (fix?) polygonize/contour code; #1608

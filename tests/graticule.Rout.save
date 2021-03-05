@@ -1,6 +1,6 @@
 
-R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
-Copyright (C) 2020 The R Foundation for Statistical Computing
+R version 4.0.4 (2021-02-15) -- "Lost Library Book"
+Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -69,10 +69,10 @@ Type 'q()' to quit R.
 > library(maps) #421
 > (wrld2 = st_as_sf(map('world2', plot=FALSE, fill=TRUE )))
 Simple feature collection with 253 features and 1 field
-geometry type:  MULTIPOLYGON
-dimension:      XY
-bbox:           xmin: 0 ymin: -89.99001 xmax: 360 ymax: 83.59961
-geographic CRS: WGS 84
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 0 ymin: -89.99001 xmax: 360 ymax: 83.59961
+Geodetic CRS:  WGS 84
 First 10 features:
                      ID                           geom
 1                 Aruba MULTIPOLYGON (((290.1009 12...
@@ -89,4 +89,4 @@ First 10 features:
 > 
 > proc.time()
    user  system elapsed 
-  1.450   0.050   1.491 
+  3.120   0.258   3.505 

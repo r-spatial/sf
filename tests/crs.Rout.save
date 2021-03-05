@@ -1,6 +1,6 @@
 
-R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
-Copyright (C) 2020 The R Foundation for Statistical Computing
+R version 4.0.4 (2021-02-15) -- "Lost Library Book"
+Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -64,10 +64,10 @@ Coordinate Reference System: NA
 [2,]   NA        NA
 > st_transform(st_sfc(st_point(c(0,0)), st_point(c(1,1)), crs = 4326), 3857)
 Geometry set for 2 features 
-geometry type:  POINT
-dimension:      XY
-bbox:           xmin: 0 ymin: 0 xmax: 111319.5 ymax: 111325.1
-projected CRS:  WGS 84 / Pseudo-Mercator
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 0 ymin: 0 xmax: 111319.5 ymax: 111325.1
+Projected CRS: WGS 84 / Pseudo-Mercator
 POINT (0 0)
 POINT (111319.5 111325.1)
 > if (Sys.getenv("USER") %in% c("edzer", "travis")) { # causes memory leaks:
@@ -189,4 +189,4 @@ GEOGCRS["WGS 84 (with axis order normalized for visualization)",
 > 
 > proc.time()
    user  system elapsed 
-  0.839   0.051   0.883 
+  1.807   0.131   1.972 

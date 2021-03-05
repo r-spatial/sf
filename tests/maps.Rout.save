@@ -1,6 +1,6 @@
 
-R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
-Copyright (C) 2019 The R Foundation for Statistical Computing
+R version 4.0.4 (2021-02-15) -- "Lost Library Book"
+Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -21,10 +21,10 @@ Type 'q()' to quit R.
 > m = map(xlim = c(4,9), ylim = c(48,55), fill = TRUE, plot = FALSE)
 > st_as_sf(m)
 Simple feature collection with 6 features and 1 field
-geometry type:  MULTIPOLYGON
-dimension:      XY
-bbox:           xmin: -4.7625 ymin: 42.34048 xmax: 15.0166 ymax: 57.73692
-geographic CRS: WGS 84
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -4.7625 ymin: 42.34048 xmax: 15.0166 ymax: 57.73692
+Geodetic CRS:  WGS 84
            ID                           geom
 1     Belgium MULTIPOLYGON (((5.993945 50...
 2     Germany MULTIPOLYGON (((8.587891 54...
@@ -35,10 +35,10 @@ geographic CRS: WGS 84
 > m = map(xlim = c(4,9), ylim = c(48,55), plot = FALSE)
 > st_as_sf(m, fill = FALSE)
 Simple feature collection with 6 features and 1 field
-geometry type:  MULTILINESTRING
-dimension:      XY
-bbox:           xmin: 2.524902 ymin: 47.59272 xmax: 10.92617 ymax: 57.73692
-geographic CRS: WGS 84
+Geometry type: MULTILINESTRING
+Dimension:     XY
+Bounding box:  xmin: 2.524902 ymin: 47.59272 xmax: 10.92617 ymax: 57.73692
+Geodetic CRS:  WGS 84
            ID                           geom
 1     Belgium MULTILINESTRING ((5.993945 ...
 2     Germany MULTILINESTRING ((6.116504 ...
@@ -48,10 +48,10 @@ geographic CRS: WGS 84
 6 Netherlands MULTILINESTRING ((6.344336 ...
 > st_as_sf(map(), fill = FALSE)
 Simple feature collection with 253 features and 1 field
-geometry type:  MULTILINESTRING
-dimension:      XY
-bbox:           xmin: -180 ymin: -84.51308 xmax: 189.4905 ymax: 83.57725
-geographic CRS: WGS 84
+Geometry type: MULTILINESTRING
+Dimension:     XY
+Bounding box:  xmin: -180 ymin: -84.51308 xmax: 189.4905 ymax: 83.57725
+Geodetic CRS:  WGS 84
 First 10 features:
                      ID                           geom
 1                 Aruba MULTILINESTRING ((-69.89912...
@@ -66,10 +66,10 @@ First 10 features:
 10              Armenia MULTILINESTRING ((20.61133 ...
 > st_as_sf(map(fill = TRUE))
 Simple feature collection with 253 features and 1 field
-geometry type:  MULTIPOLYGON
-dimension:      XY
-bbox:           xmin: -180 ymin: -85.19218 xmax: 190.2708 ymax: 83.59961
-geographic CRS: WGS 84
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -180 ymin: -85.19218 xmax: 190.2708 ymax: 83.59961
+Geodetic CRS:  WGS 84
 First 10 features:
                      ID                           geom
 1                 Aruba MULTIPOLYGON (((-69.89912 1...
@@ -84,10 +84,10 @@ First 10 features:
 10              Armenia MULTIPOLYGON (((45.55235 40...
 > st_as_sf(map(), fill = FALSE, group = FALSE)
 Simple feature collection with 1627 features and 1 field
-geometry type:  MULTILINESTRING
-dimension:      XY
-bbox:           xmin: -180 ymin: -84.51308 xmax: 189.4905 ymax: 83.57725
-geographic CRS: WGS 84
+Geometry type: MULTILINESTRING
+Dimension:     XY
+Bounding box:  xmin: -180 ymin: -84.51308 xmax: 189.4905 ymax: 83.57725
+Geodetic CRS:  WGS 84
 First 10 features:
                                   ID                           geom
 1                              Aruba MULTILINESTRING ((-69.89912...
@@ -102,10 +102,10 @@ First 10 features:
 10                           Andorra MULTILINESTRING ((11.74307 ...
 > st_as_sf(map(fill = TRUE), group = FALSE)
 Simple feature collection with 1627 features and 1 field
-geometry type:  MULTIPOLYGON
-dimension:      XY
-bbox:           xmin: -180 ymin: -85.19218 xmax: 190.2708 ymax: 83.59961
-geographic CRS: WGS 84
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -180 ymin: -85.19218 xmax: 190.2708 ymax: 83.59961
+Geodetic CRS:  WGS 84
 First 10 features:
                                   ID                           geom
 1                              Aruba MULTIPOLYGON (((-69.89912 1...
@@ -121,4 +121,4 @@ First 10 features:
 > 
 > proc.time()
    user  system elapsed 
-  1.173   0.067   1.230 
+  3.026   0.138   3.334 

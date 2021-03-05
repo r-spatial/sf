@@ -69,7 +69,7 @@ read_sf(system.file("shape/nc.shp", package="sf"), quiet = TRUE) %>%
 	st_transform(3857) -> nc
 nc.merc <- st_transform(nc, 32119) # NC State Plane
 suppressPackageStartupMessages(library(units))
-install_symbolic_unit("person")
+install_unit("person")
 person = as_units("person")
 nc.merc <- nc.merc %>% mutate(area = st_area(nc.merc), dens = BIR74 * person / area)
 
