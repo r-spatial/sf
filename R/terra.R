@@ -5,7 +5,7 @@ st_as_sf.SpatVector = function(x, ..., hex = TRUE) {
 		stop("package terra required, please install it first")
 	if (!utils::packageVersion("terra") >= "1.1-5")
 		stop("package terra version 1.1-5 required")
-	d <- as.data.frame(x, geom = "hex")
+	d <- terra::as.data.frame(x, geom = "hex")
 	d$geometry <- structure(as.list(d$geometry), class = "WKB")
 	st_as_sf(d, crs = x@ptr$get_crs("wkt"))
 }
