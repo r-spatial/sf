@@ -91,6 +91,7 @@ Suggests:
     spatstat.geom, spatstat.core, spatstat.linnet, spatstat (>= 2.0-0),
     spatstat.utils,
     stars (>= 0.2-0),
+    terra,
     testthat,
     tibble (>= 1.4.1),
     tidyr (>= 1.0-0),
@@ -155,4 +156,5 @@ Collate:
     'shift_longitude.R'
     'make_grid.R'
     's2.R'
+    'terra.R'
     'geos-overlayng.R'
