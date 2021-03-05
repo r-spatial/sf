@@ -192,10 +192,10 @@ bounding box of <code>x</code></p></td>
 <span class='va'>sfc</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>p1</span>, <span class='va'>p2</span>, crs <span class='op'>=</span> <span class='fl'>4326</span><span class='op'>)</span>
 <span class='va'>sfc</span>
 </div><div class='output co'>#&gt; Geometry set for 2 features 
-#&gt; geometry type:  POINT
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -30 ymin: 20 xmax: 7 ymax: 52
-#&gt; geographic CRS: WGS 84</div><div class='output co'>#&gt; <span class='message'>POINT (7 52)</span></div><div class='output co'>#&gt; <span class='message'>POINT (-30 20)</span></div><div class='input'><span class='va'>sfc_norm</span> <span class='op'>&lt;-</span> <span class='fu'>st_normalize</span><span class='op'>(</span><span class='va'>sfc</span><span class='op'>)</span>
+#&gt; Geometry type: POINT
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -30 ymin: 20 xmax: 7 ymax: 52
+#&gt; Geodetic CRS:  WGS 84</div><div class='output co'>#&gt; <span class='message'>POINT (7 52)</span></div><div class='output co'>#&gt; <span class='message'>POINT (-30 20)</span></div><div class='input'><span class='va'>sfc_norm</span> <span class='op'>&lt;-</span> <span class='fu'>st_normalize</span><span class='op'>(</span><span class='va'>sfc</span><span class='op'>)</span>
 <span class='fu'><a href='st_bbox.html'>st_bbox</a></span><span class='op'>(</span><span class='va'>sfc_norm</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; xmin ymin xmax ymax 
 #&gt;    0    0    1    1 </div><div class='input'>

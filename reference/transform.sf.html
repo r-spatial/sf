@@ -182,19 +182,19 @@ st_transform, and all other functions starting with st_." />
 <span class='fu'><a href='st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/transform.html'>transform</a></span><span class='op'>(</span><span class='va'>a</span>, x1_sq <span class='op'>=</span> <span class='va'>x1</span><span class='op'>^</span><span class='fl'>2</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Simple feature collection with 3 features and 3 fields
-#&gt; geometry type:  POINT
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: 0 ymin: 0 xmax: 2 ymax: 2
-#&gt; CRS:            NA
+#&gt; Geometry type: POINT
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: 0 ymin: 0 xmax: 2 ymax: 2
+#&gt; CRS:           NA
 #&gt;   x1 x2 x1_sq    geometry
 #&gt; 1  1  5     1 POINT (0 0)
 #&gt; 2  2  6     4 POINT (1 1)
 #&gt; 3  3  7     9 POINT (2 2)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/transform.html'>transform</a></span><span class='op'>(</span><span class='va'>a</span>, x1_x2 <span class='op'>=</span> <span class='va'>x1</span><span class='op'>*</span><span class='va'>x2</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Simple feature collection with 3 features and 3 fields
-#&gt; geometry type:  POINT
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: 0 ymin: 0 xmax: 2 ymax: 2
-#&gt; CRS:            NA
+#&gt; Geometry type: POINT
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: 0 ymin: 0 xmax: 2 ymax: 2
+#&gt; CRS:           NA
 #&gt;   x1 x2 x1_x2    geometry
 #&gt; 1  1  5     5 POINT (0 0)
 #&gt; 2  2  6    12 POINT (1 1)

@@ -223,10 +223,10 @@
 </div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='va'>p</span>, add <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='img'><img src='aggregate.sf-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='op'>(</span><span class='va'>p_ag1</span> <span class='op'>=</span> <span class='fu'>aggregate</span><span class='op'>(</span><span class='va'>p</span>, <span class='va'>pol</span>, <span class='va'>mean</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Simple feature collection with 2 features and 1 field
-#&gt; geometry type:  POLYGON
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
-#&gt; CRS:            NA
+#&gt; Geometry type: POLYGON
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1
+#&gt; CRS:           NA
 #&gt;          X3                       geometry
 #&gt; 1 0.5951766 POLYGON ((0 0, 0 1, 1 1, 0 0))
 #&gt; 2 0.2997908 POLYGON ((0 0, 1 0, 1 1, 0 0))</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='va'>p_ag1</span><span class='op'>)</span> <span class='co'># geometry same as pol</span>
@@ -235,10 +235,10 @@
 <span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='va'>p_buff</span>, add <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='img'><img src='aggregate.sf-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='op'>(</span><span class='va'>p_ag2</span> <span class='op'>=</span> <span class='fu'>aggregate</span><span class='op'>(</span><span class='va'>p_buff</span>, <span class='va'>pol</span>, <span class='va'>mean</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># increased mean of second</span>
 </div><div class='output co'>#&gt; Simple feature collection with 2 features and 1 field
-#&gt; geometry type:  POLYGON
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
-#&gt; CRS:            NA
+#&gt; Geometry type: POLYGON
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1
+#&gt; CRS:           NA
 #&gt;          X3                       geometry
 #&gt; 1 0.5951766 POLYGON ((0 0, 0 1, 1 1, 0 0))
 #&gt; 2 0.5958297 POLYGON ((0 0, 1 0, 1 1, 0 0))</div><div class='input'><span class='co'># with non-matching features</span>
@@ -246,10 +246,10 @@
 <span class='va'>pol</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_polygon</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>m3</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_polygon</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>m1</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_polygon</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>m2</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>(</span><span class='va'>p_ag3</span> <span class='op'>=</span> <span class='fu'>aggregate</span><span class='op'>(</span><span class='va'>p</span>, <span class='va'>pol</span>, <span class='va'>mean</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Simple feature collection with 3 features and 1 field
-#&gt; geometry type:  POLYGON
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -0.1 ymin: 0 xmax: 1 ymax: 1
-#&gt; CRS:            NA
+#&gt; Geometry type: POLYGON
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -0.1 ymin: 0 xmax: 1 ymax: 1
+#&gt; CRS:           NA
 #&gt;          X3                       geometry
 #&gt; 1        NA POLYGON ((0 0, 0 0.1, -0.1 ...
 #&gt; 2 0.5951766 POLYGON ((0 0, 0 1, 1 1, 0 0))
@@ -258,10 +258,10 @@
 <span class='op'>(</span><span class='va'>p_ag4</span> <span class='op'>=</span> <span class='fu'>aggregate</span><span class='op'>(</span><span class='va'>p</span>, <span class='va'>pol</span>, <span class='va'>mean</span>, 
      join <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span> <span class='fu'><a href='geos_binary_pred.html'>st_is_within_distance</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, dist <span class='op'>=</span> <span class='fl'>0.3</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Simple feature collection with 3 features and 1 field
-#&gt; geometry type:  POLYGON
-#&gt; dimension:      XY
-#&gt; bbox:           xmin: -0.1 ymin: 0 xmax: 1 ymax: 1
-#&gt; CRS:            NA
+#&gt; Geometry type: POLYGON
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -0.1 ymin: 0 xmax: 1 ymax: 1
+#&gt; CRS:           NA
 #&gt;          X3                       geometry
 #&gt; 1        NA POLYGON ((0 0, 0 0.1, -0.1 ...
 #&gt; 2 0.5951766 POLYGON ((0 0, 0 1, 1 1, 0 0))

@@ -177,27 +177,27 @@
 <span class="va">mls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_multilinestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="op">(</span><span class="va">sfc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="va">ls</span>,<span class="va">mls</span><span class="op">)</span><span class="op">)</span>
 <span class="co">## Geometry set for 2 features </span>
-<span class="co">## geometry type:  GEOMETRY</span>
-<span class="co">## dimension:      XY</span>
-<span class="co">## bbox:           xmin: 0 ymin: 0 xmax: 2 ymax: 3</span>
-<span class="co">## CRS:            NA</span>
+<span class="co">## Geometry type: GEOMETRY</span>
+<span class="co">## Dimension:     XY</span>
+<span class="co">## Bounding box:  xmin: 0 ymin: 0 xmax: 2 ymax: 3</span>
+<span class="co">## CRS:           NA</span>
 <span class="co">## LINESTRING (0 0, 1 1, 2 1)</span>
 <span class="co">## MULTILINESTRING ((2 2, 1 3), (0 0, 1 1, 2 1))</span>
 <span class="fu"><a href="../reference/st_cast.html">st_cast</a></span><span class="op">(</span><span class="va">sfc</span>, <span class="st">"MULTILINESTRING"</span><span class="op">)</span>
 <span class="co">## Geometry set for 2 features </span>
-<span class="co">## geometry type:  MULTILINESTRING</span>
-<span class="co">## dimension:      XY</span>
-<span class="co">## bbox:           xmin: 0 ymin: 0 xmax: 2 ymax: 3</span>
-<span class="co">## CRS:            NA</span>
+<span class="co">## Geometry type: MULTILINESTRING</span>
+<span class="co">## Dimension:     XY</span>
+<span class="co">## Bounding box:  xmin: 0 ymin: 0 xmax: 2 ymax: 3</span>
+<span class="co">## CRS:           NA</span>
 <span class="co">## MULTILINESTRING ((0 0, 1 1, 2 1))</span>
 <span class="co">## MULTILINESTRING ((2 2, 1 3), (0 0, 1 1, 2 1))</span>
 <span class="va">sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sf.html">st_sf</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">5</span><span class="op">:</span><span class="fl">4</span>, geom <span class="op">=</span> <span class="va">sfc</span><span class="op">)</span>
 <span class="fu"><a href="../reference/st_cast.html">st_cast</a></span><span class="op">(</span><span class="va">sf</span>, <span class="st">"MULTILINESTRING"</span><span class="op">)</span>
 <span class="co">## Simple feature collection with 2 features and 1 field</span>
-<span class="co">## geometry type:  MULTILINESTRING</span>
-<span class="co">## dimension:      XY</span>
-<span class="co">## bbox:           xmin: 0 ymin: 0 xmax: 2 ymax: 3</span>
-<span class="co">## CRS:            NA</span>
+<span class="co">## Geometry type: MULTILINESTRING</span>
+<span class="co">## Dimension:     XY</span>
+<span class="co">## Bounding box:  xmin: 0 ymin: 0 xmax: 2 ymax: 3</span>
+<span class="co">## CRS:           NA</span>
 <span class="co">##   a                           geom</span>
 <span class="co">## 1 5 MULTILINESTRING ((0 0, 1 1,...</span>
 <span class="co">## 2 4 MULTILINESTRING ((2 2, 1 3)...</span></code></pre></div>
@@ -213,10 +213,10 @@
 <span class="va">mls2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_multilinestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">4</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="op">(</span><span class="va">sfc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="va">ls</span>,<span class="va">mls1</span>,<span class="va">mls2</span><span class="op">)</span><span class="op">)</span>
 <span class="co">## Geometry set for 3 features </span>
-<span class="co">## geometry type:  GEOMETRY</span>
-<span class="co">## dimension:      XY</span>
-<span class="co">## bbox:           xmin: 0 ymin: 0 xmax: 4 ymax: 4</span>
-<span class="co">## CRS:            NA</span>
+<span class="co">## Geometry type: GEOMETRY</span>
+<span class="co">## Dimension:     XY</span>
+<span class="co">## Bounding box:  xmin: 0 ymin: 0 xmax: 4 ymax: 4</span>
+<span class="co">## CRS:           NA</span>
 <span class="co">## LINESTRING (0 0, 1 1, 2 1)</span>
 <span class="co">## MULTILINESTRING ((2 2, 1 3), (0 0, 1 1, 2 1))</span>
 <span class="co">## MULTILINESTRING ((4 4, 4 3), (2 2, 2 1, 3 1))</span>
@@ -230,10 +230,10 @@
 <span class="va">gc3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_geometrycollection</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_multilinestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">4</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="op">(</span><span class="va">sfc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="va">gc1</span>,<span class="va">gc2</span>,<span class="va">gc3</span><span class="op">)</span><span class="op">)</span>
 <span class="co">## Geometry set for 3 features </span>
-<span class="co">## geometry type:  GEOMETRYCOLLECTION</span>
-<span class="co">## dimension:      XY</span>
-<span class="co">## bbox:           xmin: 0 ymin: 0 xmax: 4 ymax: 4</span>
-<span class="co">## CRS:            NA</span>
+<span class="co">## Geometry type: GEOMETRYCOLLECTION</span>
+<span class="co">## Dimension:     XY</span>
+<span class="co">## Bounding box:  xmin: 0 ymin: 0 xmax: 4 ymax: 4</span>
+<span class="co">## CRS:           NA</span>
 <span class="co">## GEOMETRYCOLLECTION (LINESTRING (0 0, 1 1, 2 1))</span>
 <span class="co">## GEOMETRYCOLLECTION (MULTILINESTRING ((2 2, 1 3)...</span>
 <span class="co">## GEOMETRYCOLLECTION (MULTILINESTRING ((4 4, 4 3)...</span>
@@ -324,10 +324,10 @@
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">s1</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/st_crs.html">st_set_crs</a></span><span class="op">(</span><span class="fl">4326</span><span class="op">)</span>
 <span class="co">## Simple feature collection with 2 features and 1 field</span>
-<span class="co">## geometry type:  POINT</span>
-<span class="co">## dimension:      XY</span>
-<span class="co">## bbox:           xmin: 0 ymin: 1 xmax: 11 ymax: 12</span>
-<span class="co">## geographic CRS: WGS 84</span>
+<span class="co">## Geometry type: POINT</span>
+<span class="co">## Dimension:     XY</span>
+<span class="co">## Bounding box:  xmin: 0 ymin: 1 xmax: 11 ymax: 12</span>
+<span class="co">## Geodetic CRS:  WGS 84</span>
 <span class="co">##    a      geometry</span>
 <span class="co">## 1 15   POINT (0 1)</span>
 <span class="co">## 2 16 POINT (11 12)</span></code></pre></div>
@@ -348,10 +348,10 @@
 <code class="sourceCode R"><span class="va">s3</span> <span class="op">&lt;-</span> <span class="va">s1</span> <span class="op">%&gt;%</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="fl">3857</span><span class="op">)</span>
 <span class="va">s3</span>
 <span class="co">## Simple feature collection with 2 features and 1 field</span>
-<span class="co">## geometry type:  POINT</span>
-<span class="co">## dimension:      XY</span>
-<span class="co">## bbox:           xmin: 0 ymin: 111325.1 xmax: 1224514 ymax: 1345708</span>
-<span class="co">## projected CRS:  WGS 84 / Pseudo-Mercator</span>
+<span class="co">## Geometry type: POINT</span>
+<span class="co">## Dimension:     XY</span>
+<span class="co">## Bounding box:  xmin: 0 ymin: 111325.1 xmax: 1224514 ymax: 1345708</span>
+<span class="co">## Projected CRS: WGS 84 / Pseudo-Mercator</span>
 <span class="co">##    a                geometry</span>
 <span class="co">## 1 15      POINT (0 111325.1)</span>
 <span class="co">## 2 16 POINT (1224514 1345708)</span></code></pre></div>
