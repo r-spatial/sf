@@ -8,20 +8,32 @@
 #		st_cast(p0, "POLYGON")
 # }
 
+check_spatstat <- function(pkg, X = NULL){
+  if(!requireNamespace(pkg, quietly = TRUE)){
+    stop("package ", pkg, " required, please install it (or the full spatstat package) first")
+  } else{
+    spst_ver <- try(packageVersion("spatstat"), silent = TRUE)
+    if(!inherits(spst_ver, "try-error") && spst_ver < 2.0-0){
+      stop("You have an old version of spatstat installed which is incompatible with ", pkg, 
+           ". Please update spatstat (or uninstall it).")
+    }
+  }
+  if (!is.null(X) && isTRUE(st_is_longlat(X)))
+    stop("Only projected coordinates may be converted to spatstat class objects")
+}
 
 #' @name st_as_sf
 #' @export
 #' @examples
-#' if (require(spatstat)) {
+#' if (require(spatstat.geom)) {
 #'   g = st_as_sf(gorillas)
 #'   # select only the points:
 #'   g[st_is(g, "POINT"),]
 #' }
 st_as_sf.ppp = function(x, ...) {
-  if (!requireNamespace("spatstat", quietly = TRUE))
-    stop("package spatstat required, please install it first") # nocov
+  check_spatstat("spatstat.geom")
   # window:
-  win = st_sf(label = "window", geom = st_as_sfc(spatstat::as.owin(x)))
+  win = st_sf(label = "window", geom = st_as_sfc(spatstat.geom::as.owin(x)))
 
   # points:
   m = as.matrix(data.frame(x$x, x$y))
@@ -30,9 +42,9 @@ st_as_sf.ppp = function(x, ...) {
 
   # merge window and points:
   ret = rbind(win, points_sf)
-  if (spatstat::is.marked(x)) {
+  if (spatstat.geom::is.marked(x)) {
 	# add marks:
-    m = as.data.frame(spatstat::marks(x))
+    m = as.data.frame(spatstat.geom::marks(x))
 	cbind.sf(ret, m[c(NA, seq_len(nrow(m))),])
   } else
   	ret
@@ -42,19 +54,18 @@ st_as_sf.ppp = function(x, ...) {
 #' @name st_as_sf
 #' @export
 st_as_sf.psp = function(x, ...) {
-	if (!requireNamespace("spatstat", quietly = TRUE))
-		stop("package spatstat required, please install it first")
+  check_spatstat("spatstat.geom")
 	# line segments:
  	m = as.matrix(x$ends)
 	lst1 = lapply(seq_len(NROW(m)), function(i) st_linestring(matrix(m[i,], 2, byrow = TRUE)))
 
 	# window:
-	win = st_as_sfc(spatstat::as.owin(x))[[1]]
+	win = st_as_sfc(spatstat.geom::as.owin(x))[[1]]
 
 	label = c("window", rep("segment", NROW(m)))
 	ret = st_sf(label = label, geom = st_sfc(c(list(win), lst1)))
-	if (spatstat::is.marked(x)) { # add marks:
-		m = as.data.frame(spatstat::marks(x))
+	if (spatstat.geom::is.marked(x)) { # add marks:
+		m = as.data.frame(spatstat.geom::marks(x))
 		cbind.sf(ret, m[c(NA, seq_len(nrow(m))),])
 	} else
 		ret
@@ -76,16 +87,15 @@ st_as_sfc.psp <- function(x, ...) {
 #' @name st_as_sf
 #' @export
 #' @examples
-#' if (require(spatstat)) {
+#' if (require(spatstat.linnet)) {
 #'  data(chicago)
 #'  plot(st_as_sf(chicago)["label"])
 #'  plot(st_as_sf(chicago)[-1,"label"])
 #' }
 st_as_sf.lpp = function(x, ...) {
-	if (!requireNamespace("spatstat", quietly = TRUE))
-		stop("package spatstat required, please install it first")
+  check_spatstat("spatstat.linnet")
 	# lines, polygon:
-	linework_sf = st_as_sf(spatstat::as.psp(spatstat::domain(x)))
+	linework_sf = st_as_sf(spatstat.geom::as.psp(spatstat.geom::domain(x)))
 	# points:
 	m = as.matrix(as.data.frame(x$data)[1:2])
 	pointwork = st_sfc(lapply(seq_len(NROW(m)), function(i) st_point(m[i,])))
@@ -98,32 +108,25 @@ st_as_sf.lpp = function(x, ...) {
 # as.ppp etc methods: from maptools/pkg/R/spatstat1.R
 
 as.ppp.sfc = function(X) {
-	# require(spatstat)
-	if (isTRUE(st_is_longlat(X)))
-		stop("Only projected coordinates may be converted to spatstat class objects")
-	if (!requireNamespace("spatstat", quietly = TRUE))
-		stop("package spatstat required: install first?")
+  check_spatstat("spatstat.geom", X)
 	d = st_dimension(X)
 	if (d[1] == 2 && all(d[-1] == 0)) {
-		W = spatstat::as.owin(X[1])
+		W = spatstat.geom::as.owin(X[1])
 		X = X[-1]
 		check = TRUE
 	} else if (all(d == 0)) { # no window in first feature geometry:
 		bb <- st_bbox(X)
-		W = spatstat::owin(bb[c("xmin", "xmax")], bb[c("ymin", "ymax")])
+		W = spatstat.geom::owin(bb[c("xmin", "xmax")], bb[c("ymin", "ymax")])
 		check = FALSE
 	} else
 		stop("sfc object does not consist of points, or a window followed by points")
 	cc = st_coordinates(X)
-	spatstat::ppp(cc[,1], cc[,2], window = W, marks = NULL, check = check)
+	spatstat.geom::ppp(cc[,1], cc[,2], window = W, marks = NULL, check = check)
 }
 
 as.ppp.sf = function(X) {
-	if (isTRUE(st_is_longlat(X)))
-		stop("Only projected coordinates may be converted to spatstat class objects")
-	if (!requireNamespace("spatstat", quietly = TRUE))
-		stop("package spatstat required: install first?")
-	pp = spatstat::as.ppp(st_geometry(X))
+  check_spatstat("spatstat.geom", X)
+	pp = spatstat.geom::as.ppp(st_geometry(X))
 	if (st_dimension(X[1,]) == 2)
 		X = X[-1,]
 	st_geometry(X) = NULL # remove geometry column
@@ -133,27 +136,23 @@ as.ppp.sf = function(X) {
 	if (ncol(X) == 0)
 		pp
 	else 
-		spatstat::setmarks(pp, X[1])
+		spatstat.geom::setmarks(pp, X[1])
 }
 
 as.owin.POLYGON = function(W, ..., fatal, check_polygons = TRUE) {
-	if (isTRUE(st_is_longlat(W)))
-		stop("Only projected coordinates may be converted to spatstat class objects")
-	if (!requireNamespace("spatstat", quietly = TRUE))
-		stop("package spatstat required: install first?")
+  check_spatstat("spatstat.geom", W)
 	if (check_polygons)
 		W = check_ring_dir(W)
 	bb = st_bbox(W)
-	spatstat::owin(bb[c("xmin", "xmax")], bb[c("ymin", "ymax")], poly = W)
+	spatstat.geom::owin(bb[c("xmin", "xmax")], bb[c("ymin", "ymax")], poly = W)
 }
 
 as.owin.MULTIPOLYGON = function(W, ..., fatal, check_polygons = TRUE) {
-	if (!requireNamespace("spatstat", quietly = TRUE))
-		stop("package spatstat required: install first?")
+  check_spatstat("spatstat.geom", W)
 	if (check_polygons)
 		W = check_ring_dir(W)
 	bb = st_bbox(W)
-	spatstat::owin(bb[c("xmin", "xmax")], bb[c("ymin", "ymax")], 
+	spatstat.geom::owin(bb[c("xmin", "xmax")], bb[c("ymin", "ymax")], 
 		poly = unlist(W, recursive = FALSE))
 }
 
@@ -187,11 +186,8 @@ as.owin.sf = function(W, ...) {
 #' @export
 st_as_sfc.owin = function(x, ...) {
 # FROM: methods for coercion to Spatial Polygons by Adrian Baddeley, pkg maptools
-	if (!requireNamespace("spatstat", quietly = TRUE))
-		stop("package spatstat required: install first?")
-	if (!requireNamespace("spatstat.utils", quietly = TRUE))
-		stop("package spatstat.utils required: install first?")
-	x <- spatstat::as.polygonal(x)
+  check_spatstat("spatstat.geom")
+  x <- spatstat.geom::as.polygonal(x)
 	closering <- function(df) { df[c(seq(nrow(df)), 1), ] }
 	pieces <- lapply(x$bdry,
 		function(p) st_polygon(list(closering(cbind(p$x,p$y)))))
@@ -218,10 +214,9 @@ st_as_sf.owin = function(x, ...) {
 
 #' @export
 st_as_sfc.tess <- function(x, ...) {
-	if (!requireNamespace("spatstat", quietly = TRUE))
-		stop("package spatstat required: install first?")
-	stopifnot(spatstat::is.tess(x))
-	y <- spatstat::tiles(x)
+  check_spatstat("spatstat.geom")
+  stopifnot(spatstat.geom::is.tess(x))
+	y <- spatstat.geom::tiles(x)
 	nam <- names(y)
 	z <- list()
 	for(i in seq_along(y)) {
@@ -236,46 +231,40 @@ st_as_sfc.tess <- function(x, ...) {
 
 # methods for 'as.psp' for sp classes by Adrian Baddeley
 as.psp.LINESTRING <- function(from, ..., window=NULL, marks=NULL, fatal) {
-	if (!requireNamespace("spatstat", quietly = TRUE))
-		stop("package spatstat required: install first?")
-	xy <- unclass(from)
+  check_spatstat("spatstat.geom")
+  xy <- unclass(from)
 	df <- as.data.frame(cbind(xy[-nrow(xy), , drop=FALSE], xy[-1, , drop=FALSE]))
 	if (is.null(window)) {
 		xrange <- range(xy[,1])
 		yrange <- range(xy[,2])
-		window <- spatstat::owin(xrange, yrange)
+		window <- spatstat.geom::owin(xrange, yrange)
 	}
-	spatstat::as.psp(df, window=window, marks=marks)
+	spatstat.geom::as.psp(df, window=window, marks=marks)
 }
 
 as.psp.MULTILINESTRING <- function(from, ..., window=NULL, marks=NULL, fatal) {
-	if (!requireNamespace("spatstat", quietly = TRUE))
-		stop("package spatstat required: install first?")
-	y <- lapply(from, as.psp.LINESTRING, window=window)
-    z <- do.call(spatstat::superimpose,c(y,list(W=window)))
+  check_spatstat("spatstat.geom")
+  y <- lapply(from, as.psp.LINESTRING, window=window)
+    z <- do.call(spatstat.geom::superimpose,c(y,list(W=window)))
 	if(!is.null(marks))
-		spatstat::setmarks(z, marks)
+		spatstat.geom::setmarks(z, marks)
 	else
 		z
 }
 
 as.psp.sfc_MULTILINESTRING <- function(from, ..., window=NULL, marks=NULL,
                                  characterMarks=FALSE, fatal) {
-
-	if (!requireNamespace("spatstat", quietly = TRUE))
-		stop("package spatstat required: install first?")
-	if (isTRUE(st_is_longlat(from)))
-		stop("Only projected coordinates may be converted to spatstat class objects")
-
+  check_spatstat("spatstat.geom", from)
+  
 	if(is.null(window)) {
 		bb = st_bbox(from)
-		window = spatstat::owin(bb[c("xmin", "xmax")], bb[c("ymin", "ymax")]) 
+		window = spatstat.geom::owin(bb[c("xmin", "xmax")], bb[c("ymin", "ymax")]) 
 	}
 	lin <- unclass(from)
 	y <- lapply(lin, as.psp.MULTILINESTRING, window=window)
-    z <- do.call(spatstat::superimpose, c(y, list(W = window)))
+    z <- do.call(spatstat.geom::superimpose, c(y, list(W = window)))
 	if(!is.null(marks))
-		spatstat::setmarks(z, marks)
+		spatstat.geom::setmarks(z, marks)
 	else
 		z
 }
@@ -285,22 +274,19 @@ as.psp.sfc = function(from, ...) {
 }
 
 as.psp.sf <- function(from, ..., window=NULL, marks=NULL, fatal) {
-	if (!requireNamespace("spatstat", quietly = TRUE))
-		stop("package spatstat required: install first?")
-	if (isTRUE(st_is_longlat(from)))
-		stop("Only projected coordinates may be converted to spatstat class objects")
-
+  check_spatstat("spatstat.geom", from)
+  
 	y <- st_geometry(from)
 	if (!inherits(y, "sfc_MULTILINESTRING"))
 		stop("geometries should be of type LINESTRING")
-	z <- spatstat::as.psp(y, window=window, marks=marks)
+	z <- spatstat.geom::as.psp(y, window=window, marks=marks)
 	if(is.null(marks)) {
 		# extract marks from first column of data frame
 		st_geometry(from) = NULL # remove geometry column
 		nseg.LINESTRING  <- function(x) { nrow(x) - 1 }
 		nseg.MULTILINESTRING <- function(x) { sum(unlist(lapply(x, nseg.LINESTRING))) }
 		nrep <- unlist(lapply(y, nseg.MULTILINESTRING))
-		spatstat::setmarks(z, from[rep(seq_len(nrow(from)), nrep),])
+		spatstat.geom::setmarks(z, from[rep(seq_len(nrow(from)), nrep),])
 	} else
 		z
 }

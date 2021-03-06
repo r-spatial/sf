@@ -1,6 +1,6 @@
 
-R version 4.0.0 (2020-04-24) -- "Arbor Day"
-Copyright (C) 2020 The R Foundation for Statistical Computing
+R version 4.0.4 (2021-02-15) -- "Lost Library Book"
+Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -105,10 +105,10 @@ GEOMETRYCOLLECTION EMPTY
 + st_multipolygon(list(), "XY"),
 + st_geometrycollection(, "XY")))
 Geometry set for 7 features  (with 7 geometries empty)
-geometry type:  GEOMETRY
-dimension:      XY
-bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
-CRS:            NA
+Geometry type: GEOMETRY
+Dimension:     XY
+Bounding box:  xmin: NA ymin: NA xmax: NA ymax: NA
+CRS:           NA
 First 5 geometries:
 POINT EMPTY
 MULTIPOINT EMPTY
@@ -124,11 +124,11 @@ POLYGON EMPTY
 + st_multipolygon(list(), "XYZ"),
 + st_geometrycollection(dim = "XYZ")))
 Geometry set for 7 features  (with 7 geometries empty)
-geometry type:  GEOMETRY
-dimension:      XYZ
-bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
-z_range:        zmin: NA zmax: NA
-CRS:            NA
+Geometry type: GEOMETRY
+Dimension:     XYZ
+Bounding box:  xmin: NA ymin: NA xmax: NA ymax: NA
+z_range:       zmin: NA zmax: NA
+CRS:           NA
 First 5 geometries:
 POINT Z EMPTY
 MULTIPOINT Z EMPTY
@@ -144,11 +144,11 @@ POLYGON Z EMPTY
 + st_multipolygon(list(), "XYM"),
 + st_geometrycollection(dim = "XYM")))
 Geometry set for 7 features  (with 7 geometries empty)
-geometry type:  GEOMETRY
-dimension:      XYM
-bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
-m_range:        mmin: NA mmax: NA
-CRS:            NA
+Geometry type: GEOMETRY
+Dimension:     XYM
+Bounding box:  xmin: NA ymin: NA xmax: NA ymax: NA
+m_range:       mmin: NA mmax: NA
+CRS:           NA
 First 5 geometries:
 POINT M EMPTY
 MULTIPOINT M EMPTY
@@ -164,12 +164,12 @@ POLYGON M EMPTY
 + st_multipolygon(list(), "XYZM"),
 + st_geometrycollection(dim = "XYZM")))
 Geometry set for 7 features  (with 7 geometries empty)
-geometry type:  GEOMETRY
-dimension:      XYZM
-bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
-z_range:        zmin: NA zmax: NA
-m_range:        mmin: NA mmax: NA
-CRS:            NA
+Geometry type: GEOMETRY
+Dimension:     XYZM
+Bounding box:  xmin: NA ymin: NA xmax: NA ymax: NA
+z_range:       zmin: NA zmax: NA
+m_range:       mmin: NA mmax: NA
+CRS:           NA
 First 5 geometries:
 POINT ZM EMPTY
 MULTIPOINT ZM EMPTY
@@ -179,10 +179,10 @@ POLYGON ZM EMPTY
 > 
 > st_as_sfc(st_as_binary(e1, pureR = TRUE))
 Geometry set for 7 features  (with 7 geometries empty)
-geometry type:  GEOMETRY
-dimension:      XY
-bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
-CRS:            NA
+Geometry type: GEOMETRY
+Dimension:     XY
+Bounding box:  xmin: NA ymin: NA xmax: NA ymax: NA
+CRS:           NA
 First 5 geometries:
 POINT EMPTY
 MULTIPOINT EMPTY
@@ -191,10 +191,10 @@ MULTILINESTRING EMPTY
 POLYGON EMPTY
 > st_as_sfc(st_as_binary(e1, pureR = FALSE))
 Geometry set for 7 features  (with 7 geometries empty)
-geometry type:  GEOMETRY
-dimension:      XY
-bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
-CRS:            NA
+Geometry type: GEOMETRY
+Dimension:     XY
+Bounding box:  xmin: NA ymin: NA xmax: NA ymax: NA
+CRS:           NA
 First 5 geometries:
 POINT EMPTY
 MULTIPOINT EMPTY
@@ -203,11 +203,11 @@ MULTILINESTRING EMPTY
 POLYGON EMPTY
 > st_as_sfc(st_as_binary(e2, pureR = FALSE))
 Geometry set for 7 features  (with 7 geometries empty)
-geometry type:  GEOMETRY
-dimension:      XYZ
-bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
-z_range:        zmin: NA zmax: NA
-CRS:            NA
+Geometry type: GEOMETRY
+Dimension:     XYZ
+Bounding box:  xmin: NA ymin: NA xmax: NA ymax: NA
+z_range:       zmin: NA zmax: NA
+CRS:           NA
 First 5 geometries:
 POINT Z EMPTY
 MULTIPOINT Z EMPTY
@@ -216,11 +216,11 @@ MULTILINESTRING Z EMPTY
 POLYGON Z EMPTY
 > st_as_sfc(st_as_binary(e3, pureR = FALSE))
 Geometry set for 7 features  (with 7 geometries empty)
-geometry type:  GEOMETRY
-dimension:      XYM
-bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
-m_range:        mmin: NA mmax: NA
-CRS:            NA
+Geometry type: GEOMETRY
+Dimension:     XYM
+Bounding box:  xmin: NA ymin: NA xmax: NA ymax: NA
+m_range:       mmin: NA mmax: NA
+CRS:           NA
 First 5 geometries:
 POINT M EMPTY
 MULTIPOINT M EMPTY
@@ -229,12 +229,12 @@ MULTILINESTRING M EMPTY
 POLYGON M EMPTY
 > st_as_sfc(st_as_binary(e4, pureR = FALSE))
 Geometry set for 7 features  (with 7 geometries empty)
-geometry type:  GEOMETRY
-dimension:      XYZM
-bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
-z_range:        zmin: NA zmax: NA
-m_range:        mmin: NA mmax: NA
-CRS:            NA
+Geometry type: GEOMETRY
+Dimension:     XYZM
+Bounding box:  xmin: NA ymin: NA xmax: NA ymax: NA
+z_range:       zmin: NA zmax: NA
+m_range:       mmin: NA mmax: NA
+CRS:           NA
 First 5 geometries:
 POINT ZM EMPTY
 MULTIPOINT ZM EMPTY
@@ -243,10 +243,10 @@ MULTILINESTRING ZM EMPTY
 POLYGON ZM EMPTY
 > st_as_sfc(st_as_binary(e1, pureR = FALSE))
 Geometry set for 7 features  (with 7 geometries empty)
-geometry type:  GEOMETRY
-dimension:      XY
-bbox:           xmin: NA ymin: NA xmax: NA ymax: NA
-CRS:            NA
+Geometry type: GEOMETRY
+Dimension:     XY
+Bounding box:  xmin: NA ymin: NA xmax: NA ymax: NA
+CRS:           NA
 First 5 geometries:
 POINT EMPTY
 MULTIPOINT EMPTY
@@ -285,4 +285,4 @@ POINT EMPTY
 > 
 > proc.time()
    user  system elapsed 
-  0.775   0.064   0.837 
+  1.477   0.086   1.616 

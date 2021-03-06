@@ -1,6 +1,6 @@
 
-R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
-Copyright (C) 2020 The R Foundation for Statistical Computing
+R version 4.0.4 (2021-02-15) -- "Lost Library Book"
+Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -94,10 +94,10 @@ Sparse geometry binary predicate list of length 3, where the predicate was `cont
 > 
 > st_combine(nc)
 Geometry set for 1 feature 
-geometry type:  MULTIPOLYGON
-dimension:      XY
-bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-geographic CRS: NAD27
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
+Geodetic CRS:  NAD27
 MULTIPOLYGON (((-81.47276 36.23436, -81.54084 3...
 > 
 > st_dimension(st_sfc(st_point(0:1), st_linestring(rbind(c(0,0),c(1,1))), 
@@ -121,10 +121,10 @@ although coordinates are longitude/latitude, st_intersection assumes that they a
 > 
 > st_line_sample(ls, density = 1, type = "random")
 Geometry set for 2 features 
-geometry type:  MULTIPOINT
-dimension:      XY
-bbox:           xmin: 0 ymin: 0 xmax: 6.880179 ymax: 0.8878369
-CRS:            NA
+Geometry type: MULTIPOINT
+Dimension:     XY
+Bounding box:  xmin: 0 ymin: 0 xmax: 6.880179 ymax: 0.8878369
+CRS:           NA
 MULTIPOINT ((0 0.8878369))
 MULTIPOINT ((0.2986488 0), (2.48417 0), (2.5678...
 > 
@@ -308,17 +308,17 @@ Sparse geometry binary predicate list of length 3, where the predicate was `inte
 MULTILINESTRING ((0 0, 0.5 0.5), (0.5 0.5, 1 1, 0 1, 0.5 0.5), (0.5 0.5, 1 0, 0 0))
 > st_node(st_sfc(l))
 Geometry set for 1 feature 
-geometry type:  MULTILINESTRING
-dimension:      XY
-bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
-CRS:            NA
+Geometry type: MULTILINESTRING
+Dimension:     XY
+Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1
+CRS:           NA
 MULTILINESTRING ((0 0, 0.5 0.5), (0.5 0.5, 1 1,...
 > st_node(st_sf(a = 1, st_sfc(l)))
 Simple feature collection with 1 feature and 1 field
-geometry type:  MULTILINESTRING
-dimension:      XY
-bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
-CRS:            NA
+Geometry type: MULTILINESTRING
+Dimension:     XY
+Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1
+CRS:           NA
   a                      st_sfc.l.
 1 1 MULTILINESTRING ((0 0, 0.5 ...
 > 
@@ -444,24 +444,24 @@ first 10 elements:
 > plot(b2, add = TRUE)
 > (ls0 = try(st_nearest_points(b1, b2))) # sfg
 Geometry set for 1 feature 
-geometry type:  LINESTRING
-dimension:      XY
-bbox:           xmin: 0.1707107 ymin: 0.1707107 xmax: 0.8292893 ymax: 0.8292893
-CRS:            NA
+Geometry type: LINESTRING
+Dimension:     XY
+Bounding box:  xmin: 0.1707107 ymin: 0.1707107 xmax: 0.8292893 ymax: 0.8292893
+CRS:           NA
 LINESTRING (0.1707107 0.1707107, 0.8292893 0.82...
 > (ls = try(st_nearest_points(st_sfc(b1), st_sfc(b2)))) # sfc
 Geometry set for 1 feature 
-geometry type:  LINESTRING
-dimension:      XY
-bbox:           xmin: 0.1707107 ymin: 0.1707107 xmax: 0.8292893 ymax: 0.8292893
-CRS:            NA
+Geometry type: LINESTRING
+Dimension:     XY
+Bounding box:  xmin: 0.1707107 ymin: 0.1707107 xmax: 0.8292893 ymax: 0.8292893
+CRS:           NA
 LINESTRING (0.1707107 0.1707107, 0.8292893 0.82...
 > (ls = try(st_nearest_points(st_sfc(b1), st_sfc(b2), pairwise = TRUE))) # sfc
 Geometry set for 1 feature 
-geometry type:  LINESTRING
-dimension:      XY
-bbox:           xmin: 0.1707107 ymin: 0.1707107 xmax: 0.8292893 ymax: 0.8292893
-CRS:            NA
+Geometry type: LINESTRING
+Dimension:     XY
+Bounding box:  xmin: 0.1707107 ymin: 0.1707107 xmax: 0.8292893 ymax: 0.8292893
+CRS:           NA
 LINESTRING (0.1707107 0.1707107, 0.8292893 0.82...
 > identical(ls0, ls)
 [1] TRUE
@@ -484,10 +484,10 @@ although coordinates are longitude/latitude, st_nearest_points assumes that they
 > ls3 = st_linestring(rbind(c(0,1), c(1,1)))
 > (l = st_sfc(ls1, ls2, ls3))
 Geometry set for 3 features 
-geometry type:  LINESTRING
-dimension:      XY
-bbox:           xmin: 0 ymin: 0 xmax: 1 ymax: 1
-CRS:            NA
+Geometry type: LINESTRING
+Dimension:     XY
+Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1
+CRS:           NA
 LINESTRING (0 0, 1 0)
 LINESTRING (0 0.1, 1 0.1)
 LINESTRING (0 1, 1 1)
@@ -500,10 +500,10 @@ LINESTRING (0 1, 1 1)
 > 
 > (p = st_sfc(p1, p2, p3, p4, p5))
 Geometry set for 5 features  (with 1 geometry empty)
-geometry type:  POINT
-dimension:      XY
-bbox:           xmin: 0.1 ymin: -0.1 xmax: 0.1 ymax: 0.9
-CRS:            NA
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 0.1 ymin: -0.1 xmax: 0.1 ymax: 0.9
+CRS:           NA
 POINT (0.1 -0.1)
 POINT (0.1 0.11)
 POINT (0.1 0.09)
@@ -518,10 +518,10 @@ POINT EMPTY
 +   print(st_nearest_feature(st_sfc(), l))
 + }
 Geometry set for 5 features  (with 1 geometry empty)
-geometry type:  LINESTRING
-dimension:      XY
-bbox:           xmin: 0.1 ymin: -0.1 xmax: 0.1 ymax: 1
-CRS:            NA
+Geometry type: LINESTRING
+Dimension:     XY
+Bounding box:  xmin: 0.1 ymin: -0.1 xmax: 0.1 ymax: 1
+CRS:           NA
 LINESTRING (0.1 -0.1, 0.1 0)
 LINESTRING (0.1 0.11, 0.1 0.1)
 LINESTRING (0.1 0.09, 0.1 0.1)
@@ -569,19 +569,19 @@ Sparse geometry binary predicate list of length 1, where the predicate was `inte
 + }
 LINESTRING (3 3, 2 2, 1 1)
 Geometry set for 1 feature 
-geometry type:  LINESTRING
-dimension:      XY
-bbox:           xmin: 1 ymin: 1 xmax: 3 ymax: 3
-CRS:            NA
+Geometry type: LINESTRING
+Dimension:     XY
+Bounding box:  xmin: 1 ymin: 1 xmax: 3 ymax: 3
+CRS:           NA
 LINESTRING (3 3, 2 2, 1 1)
 Simple feature collection with 1 feature and 1 field
-geometry type:  LINESTRING
-dimension:      XY
-bbox:           xmin: 1 ymin: 1 xmax: 3 ymax: 3
-CRS:            NA
+Geometry type: LINESTRING
+Dimension:     XY
+Bounding box:  xmin: 1 ymin: 1 xmax: 3 ymax: 3
+CRS:           NA
   a                       geom
 1 2 LINESTRING (3 3, 2 2, 1 1)
 > 
 > proc.time()
    user  system elapsed 
-  3.273   0.052   3.318 
+  7.003   0.169   7.361 

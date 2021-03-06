@@ -139,8 +139,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_transform
-Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs, Rcpp::NumericVector AOI, Rcpp::CharacterVector pipeline, bool reverse);
-RcppExport SEXP _sf_CPL_transform(SEXP sfcSEXP, SEXP crsSEXP, SEXP AOISEXP, SEXP pipelineSEXP, SEXP reverseSEXP) {
+Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs, Rcpp::NumericVector AOI, Rcpp::CharacterVector pipeline, bool reverse, double desired_accuracy, bool allow_ballpark);
+RcppExport SEXP _sf_CPL_transform(SEXP sfcSEXP, SEXP crsSEXP, SEXP AOISEXP, SEXP pipelineSEXP, SEXP reverseSEXP, SEXP desired_accuracySEXP, SEXP allow_ballparkSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -149,7 +149,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::NumericVector >::type AOI(AOISEXP);
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type pipeline(pipelineSEXP);
     Rcpp::traits::input_parameter< bool >::type reverse(reverseSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_transform(sfc, crs, AOI, pipeline, reverse));
+    Rcpp::traits::input_parameter< double >::type desired_accuracy(desired_accuracySEXP);
+    Rcpp::traits::input_parameter< bool >::type allow_ballpark(allow_ballparkSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_transform(sfc, crs, AOI, pipeline, reverse, desired_accuracy, allow_ballpark));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -872,6 +874,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_get_pipelines
+Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVector authority, Rcpp::NumericVector AOI, Rcpp::CharacterVector Use, Rcpp::CharacterVector grid_availability, double accuracy, bool strict_containment, bool axis_order_auth_compl);
+RcppExport SEXP _sf_CPL_get_pipelines(SEXP crsSEXP, SEXP authoritySEXP, SEXP AOISEXP, SEXP UseSEXP, SEXP grid_availabilitySEXP, SEXP accuracySEXP, SEXP strict_containmentSEXP, SEXP axis_order_auth_complSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type crs(crsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type authority(authoritySEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type AOI(AOISEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type Use(UseSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type grid_availability(grid_availabilitySEXP);
+    Rcpp::traits::input_parameter< double >::type accuracy(accuracySEXP);
+    Rcpp::traits::input_parameter< bool >::type strict_containment(strict_containmentSEXP);
+    Rcpp::traits::input_parameter< bool >::type axis_order_auth_compl(axis_order_auth_complSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_get_pipelines(crs, authority, AOI, Use, grid_availability, accuracy, strict_containment, axis_order_auth_compl));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_is_network_enabled
 Rcpp::LogicalVector CPL_is_network_enabled(bool b);
 RcppExport SEXP _sf_CPL_is_network_enabled(SEXP bSEXP) {
@@ -1237,7 +1257,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_multisurface_to_multipolygon", (DL_FUNC) &_sf_CPL_multisurface_to_multipolygon, 1},
     {"_sf_CPL_compoundcurve_to_linear", (DL_FUNC) &_sf_CPL_compoundcurve_to_linear, 1},
     {"_sf_CPL_curve_to_linestring", (DL_FUNC) &_sf_CPL_curve_to_linestring, 1},
-    {"_sf_CPL_transform", (DL_FUNC) &_sf_CPL_transform, 5},
+    {"_sf_CPL_transform", (DL_FUNC) &_sf_CPL_transform, 7},
     {"_sf_CPL_wrap_dateline", (DL_FUNC) &_sf_CPL_wrap_dateline, 3},
     {"_sf_CPL_get_rgdal_drivers", (DL_FUNC) &_sf_CPL_get_rgdal_drivers, 1},
     {"_sf_CPL_sfc_from_wkt", (DL_FUNC) &_sf_CPL_sfc_from_wkt, 1},
@@ -1291,6 +1311,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_polygonize", (DL_FUNC) &_sf_CPL_polygonize, 10},
     {"_sf_CPL_rasterize", (DL_FUNC) &_sf_CPL_rasterize, 6},
     {"_sf_CPL_proj_h", (DL_FUNC) &_sf_CPL_proj_h, 1},
+    {"_sf_CPL_get_pipelines", (DL_FUNC) &_sf_CPL_get_pipelines, 8},
     {"_sf_CPL_is_network_enabled", (DL_FUNC) &_sf_CPL_is_network_enabled, 1},
     {"_sf_CPL_enable_network", (DL_FUNC) &_sf_CPL_enable_network, 2},
     {"_sf_CPL_get_data_dir", (DL_FUNC) &_sf_CPL_get_data_dir, 1},

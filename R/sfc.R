@@ -126,8 +126,9 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 	# set n_empty, check XY* is uniform:
 	if (is.null(attr(lst, "n_empty")) || any(is_null)) { # n_empty is set by CPL_read_wkb:
 		attr(lst, "n_empty") = sum(vapply(lst, sfg_is_empty, TRUE))
-		if (length(u <- unique(sfg_classes[1L,])) > 1)
-			stop(paste("found multiple dimensions:", paste(u, collapse = " ")))
+# 		https://github.com/r-spatial/sf/issues/1592 :
+#		if (length(u <- unique(sfg_classes[1L,])) > 1)
+#			stop(paste("found multiple dimensions:", paste(u, collapse = " ")))
 	}
 	lst
 }
@@ -194,21 +195,22 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 	}
 	cat("\n")
 	if (length(x)) {
-		cat(paste0("geometry type:  ", cls, "\n"))
-		cat(paste0("dimension:      ", class(x[[1]])[1], "\n"))
+		cat(paste0("Geometry type: ", cls, "\n"))
+		u = sort(unique(sapply(x, function(x) class(x)[1])))
+		cat(paste0("Dimension:     ", paste(u, collapse = ", "), "\n"))
 	}
-	cat(paste0("bbox:           "))
+	cat(    paste0("Bounding box:  "))
 	bb = signif(attr(x, "bbox"), options("digits")$digits)
 	cat(paste(paste(names(bb), bb[], sep = ": "), collapse = " "))
 	cat("\n")
 	if( !is.null( attr(x, "z_range"))) {
-		cat(paste0("z_range:        "))
+		cat(paste0("z_range:       "))
 		zb = signif(attr(x, "z_range"), options("digits")$digits)
 		cat(paste(paste(names(zb), zb[], sep = ": "), collapse = " "))
 		cat("\n")
 	}
 	if( !is.null( attr(x, "m_range"))) {
-		cat(paste0("m_range:        "))
+		cat(paste0("m_range:       "))
 		mb = signif(attr(x, "m_range"), options("digits")$digits)
 		cat(paste(paste(names(mb), mb[], sep = ": "), collapse = " "))
 		cat("\n")
@@ -216,23 +218,23 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 	# attributes: epsg, proj4string, precision
 	crs = st_crs(x)
 	if (is.na(crs))
-		cat(paste0("CRS:            NA\n"))
+		cat(paste0("CRS:           NA\n"))
 	else {
 		p = crs_parameters(crs)
 		if (p$Name == "unknown") {
 			if (!is.character(crs$input) || is.na(crs$input))
-				cat(paste0("proj4string:    ", crs$proj4string, "\n"))
+				cat(paste0("proj4string:   ", crs$proj4string, "\n"))
 			else
-				cat(paste0("CRS:            ", crs$input, "\n"))
+				cat(paste0("CRS:           ", crs$input, "\n"))
 		} else if (p$IsGeographic)
-			cat(paste0("geographic CRS: ", p$Name, "\n"))
+			cat(paste0("Geodetic CRS:  ", p$Name, "\n"))
 		else
-			cat(paste0("projected CRS:  ", p$Name, "\n"))
+			cat(paste0("Projected CRS: ", p$Name, "\n"))
 #		if (!is.na(crs$epsg))
 #			cat(paste0("epsg (SRID):    ", crs$epsg, "\n"))
 	}
 	if (attr(x, "precision") != 0.0) {
-		cat(paste0("precision:      "))
+		cat(    paste0("Precision:     "))
 		if (attr(x, "precision") < 0.0)
 			cat("float (single precision)\n")
 		else

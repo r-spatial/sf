@@ -1,6 +1,6 @@
 
-R version 3.6.3 (2020-02-29) -- "Holding the Windsock"
-Copyright (C) 2020 The R Foundation for Statistical Computing
+R version 4.0.4 (2021-02-15) -- "Lost Library Book"
+Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -63,10 +63,10 @@ Units: [m]
 > st_crs(y) = 4326
 > (z = st_sfc(st_linestring(rbind(c(0,10), c(1,0), c(2,0), c(3,0), c(4,0))), crs = 4326))
 Geometry set for 1 feature 
-geometry type:  LINESTRING
-dimension:      XY
-bbox:           xmin: 0 ymin: 0 xmax: 4 ymax: 10
-geographic CRS: WGS 84
+Geometry type: LINESTRING
+Dimension:     XY
+Bounding box:  xmin: 0 ymin: 0 xmax: 4 ymax: 10
+Geodetic CRS:  WGS 84
 LINESTRING (0 10, 1 0, 2 0, 3 0, 4 0)
 > d = st_distance(y, y)
 > round(d, 7)
@@ -88,10 +88,10 @@ Units: [m]
 > # set.seed(135)
 > st_line_sample(ls, density = 1)
 Geometry set for 2 features 
-geometry type:  MULTIPOINT
-dimension:      XY
-bbox:           xmin: 0 ymin: 0 xmax: 9.5 ymax: 0.5
-CRS:            NA
+Geometry type: MULTIPOINT
+Dimension:     XY
+Bounding box:  xmin: 0 ymin: 0 xmax: 9.5 ymax: 0.5
+CRS:           NA
 MULTIPOINT ((0 0.5))
 MULTIPOINT ((0.5 0), (1.5 0), (2.5 0), (3.5 0),...
 > 
@@ -108,4 +108,4 @@ Error in st_line_sample(ls, density = 1/1000) :
 > 
 > proc.time()
    user  system elapsed 
-  0.576   0.048   0.615 
+  1.827   0.104   1.958 

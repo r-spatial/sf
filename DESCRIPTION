@@ -88,9 +88,10 @@ Suggests:
     RSQLite,
     s2 (>= 1.0.1),
     sp (>= 1.2-4),
-    spatstat,
+    spatstat.geom, spatstat.core, spatstat.linnet, spatstat (>= 2.0-0),
     spatstat.utils,
     stars (>= 0.2-0),
+    terra,
     testthat,
     tibble (>= 1.4.1),
     tidyr (>= 1.0-0),
@@ -105,6 +106,7 @@ Encoding: UTF-8
 RoxygenNote: 7.1.1
 SystemRequirements: C++11, GDAL (>= 2.0.1), GEOS (>= 3.4.0),
     PROJ (>= 4.8.0), sqlite3
+Remotes: baddstats/spatstat
 Collate: 
     'RcppExports.R'
     'init.R'
@@ -123,6 +125,7 @@ Collate:
     'geom-predicates.R'
     'geom-transformers.R'
     'transform.R'
+    'proj.R'
     'sp.R'
     'grid.R'
     'arith.R'
@@ -153,4 +156,5 @@ Collate:
     'shift_longitude.R'
     'make_grid.R'
     's2.R'
+    'terra.R'
     'geos-overlayng.R'
