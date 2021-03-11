@@ -14,6 +14,16 @@ Rcpp::LogicalVector CPL_proj_h(bool b = false) {
 #if defined(HAVE_PROJ_H) && !defined(ACCEPT_USE_OF_DEPRECATED_PROJ_API_H) // new api
 # include <proj.h>
 
+#if PROJ_VERSION_MAJOR > 7
+# define HAVE_71
+#else
+# if PROJ_VERSION_MAJOR == 7
+#  if PROJ_VERSION_MINOR >= 1
+#   define HAVE_71
+#  endif
+# endif
+#endif
+
 // [[Rcpp::export]]
 Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVector authority, 
 		Rcpp::NumericVector AOI, Rcpp::CharacterVector Use, 
@@ -21,7 +31,7 @@ Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVect
 		double accuracy = -1.0,
 		bool strict_containment = false,
 		bool axis_order_auth_compl = false) {
-#if PROJ_VERSION_MAJOR >= 7
+#ifdef HAVE_71
 	if (crs.size() != 2)
 		Rcpp::stop("length 2 character vector expected");
 	const char *auth = NULL;
@@ -160,7 +170,7 @@ PROJ_GRID_AVAILABILITY_KNOWN_AVAILABLE); // Results will be presented as if grid
 	proj_operation_factory_context_destroy(factory_ctx);
 	return df;
 #else
-	Rcpp::warning("PROJ >= 7 required");
+	Rcpp::warning("PROJ >= 7.1 required");
 	return Rcpp::DataFrame::create();
 #endif
 }
