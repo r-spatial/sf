@@ -312,7 +312,7 @@ plot(st_intersection(st_union(x),st_union(y)), add = TRUE, col = 'red')
 ```
 Note that the function `st_intersects` returns a logical matrix indicating whether each geometry pair intersects (see the previous section in this vignette).
 
-To get _everything but_ the intersection, use `st_difference` or st_sym_difference`:
+To get _everything but_ the intersection, use `st_difference` or `st_sym_difference`:
 ```{r,fig=TRUE}
 par(mfrow=c(2,2), mar = c(0,0,1,0))
 plot(x, col = '#ff333388'); 
