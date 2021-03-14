@@ -18,7 +18,7 @@ vignette: >
 knitr::opts_chunk$set(collapse = TRUE)
 ```
 
-This vignetted describes how simple feature geometries can be
+This vignette describes how simple feature geometries can be
 manipulated, where manipulations include
 
 * type transformations (e.g., `POLYGON` to `MULTIPOLYGON`)
