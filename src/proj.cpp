@@ -188,7 +188,7 @@ Rcpp::LogicalVector CPL_is_network_enabled(bool b = false) {
 }
 
 Rcpp::CharacterVector CPL_enable_network(Rcpp::CharacterVector url, bool enable = true) {
-#if PROJ_VERSION_MAJOR >= 7
+#ifdef HAVE_71
 	if (enable) {
 		proj_context_set_enable_network(PJ_DEFAULT_CTX, 1);
 		if (url.size())
