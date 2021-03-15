@@ -12,6 +12,12 @@ test_that("s2 roundtrips work", {
   expect_equal(sum(lengths(st_equals(st_set_precision(s2, 1e7), st_set_precision(nc, 1e7))) == 1), 100L)
 })
 
+test_that("as_s2_geography() is defined for sf and sfc objects", {
+  nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
+  expect_is(s2::as_s2_geography(nc), "s2_geography")
+  expect_is(s2::as_s2_geography(st_geometry(nc)), "s2_geography")
+})
+
 test_that("s2 polygon creation", {
   outer = rbind(c(10,35),  # CCW:
       c(20,10),
