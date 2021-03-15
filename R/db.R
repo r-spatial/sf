@@ -169,7 +169,7 @@ st_read.PostgreSQLConnection <- function(...) {
 }
 
 postgis_as_sfc <- function(x, EWKB, conn) {
-	geom <- st_as_sfc(as_wkb(x), EWKB = EWKB)
+	geom <- st_as_sfc(as_wkb_(x), EWKB = EWKB)
 	srid <- attr(geom, "srid")
 	if (!is.null(srid)) {
 		st_crs(geom) = db_find_srid(conn, srid = srid, validate = FALSE)
@@ -198,7 +198,7 @@ schema_table <- function(conn, table, public = "public") {
 	return(table)
 }
 
-as_wkb <- function(x) {
+as_wkb_ <- function(x) {
 	structure(x, class = "WKB")
 }
 
