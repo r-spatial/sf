@@ -523,9 +523,8 @@ register_all_s3_methods = function() {
 	register_s3_method("spatstat.geom", "as.psp", "sfc_MULTILINESTRING")
 	register_s3_method("spatstat.geom", "as.psp", "sfc")
 	register_s3_method("spatstat.geom", "as.psp", "sf")
-	register_s3_method("wk", "as_wkb", "sf")
-	register_s3_method("wk", "as_wkb", "sfc")
-	register_s3_method("wk", "as_wkb", "sfg")
+	register_s3_method("s2", "as_s2_geography", "sfc")
+	register_s3_method("s2", "as_s2_geography", "sf")
 	register_vctrs_methods()
 }
 

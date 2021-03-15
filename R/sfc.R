@@ -558,13 +558,13 @@ st_as_sfc.list = function(x, ..., crs = NA_crs_) {
 		return(st_sfc(crs = crs))
 
 	if (is.raw(x[[1]]))
-		st_as_sfc.WKB(as_wkb(x), ..., crs = crs)
+		st_as_sfc.WKB(structure(x, class = "WKB"), ..., crs = crs)
 	else if (inherits(x[[1]], "sfg"))
 		st_sfc(x, crs = crs)
 	else if (is.character(x[[1]])) { # hex wkb or wkt:
 		ch12 = substr(x[[1]], 1, 2)
 		if (ch12 == "0x" || ch12 == "00" || ch12 == "01") # hex wkb
-			st_as_sfc.WKB(as_wkb(x), ..., crs = crs)
+			st_as_sfc.WKB(structure(x, class = "WKB"), ..., crs = crs)
 		else
 			st_as_sfc(unlist(x), ..., crs = crs) # wkt
 	} else

@@ -3,7 +3,6 @@
 \name{s2}
 \alias{s2}
 \alias{sf_use_s2}
-\alias{st_as_sfc.wk_wkb}
 \alias{st_as_sfc.s2_geography}
 \alias{st_as_sf.s2_geography}
 \alias{st_as_s2}
@@ -12,8 +11,6 @@
 \title{functions for spherical geometry, using s2 package}
 \usage{
 sf_use_s2(use_s2)
-
-\method{st_as_sfc}{wk_wkb}(x, ..., crs = st_crs(4326))
 
 \method{st_as_sfc}{s2_geography}(
   x,
@@ -48,7 +45,7 @@ takes place and it is assumed that the inside of the polygon is to the
 left of the polygon's path.}
 }
 \value{
-\code{sf_use_s2} returns the value of this variable before (re)setting it, 
+\code{sf_use_s2} returns the value of this variable before (re)setting it,
 invisibly if \code{use_s2} is not missing.
 }
 \description{
@@ -63,8 +60,8 @@ m1 = rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,0), c(-1,-1))
 m0 = m[5:1,]
 mp = st_multipolygon(list(
 list(m, 0.8 * m0, 0.01 * m1 + 0.9),
-list(0.7* m, 0.6*m0), 
-list(0.5 * m0), 
+list(0.7* m, 0.6*m0),
+list(0.5 * m0),
 list(m+2),
 list(m+4,(.9*m0)+4)
 ))
