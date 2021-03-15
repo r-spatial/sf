@@ -160,9 +160,6 @@
 
     <pre class="usage"><span class='fu'>sf_use_s2</span><span class='op'>(</span><span class='va'>use_s2</span><span class='op'>)</span>
 
-<span class='co'># S3 method for wk_wkb</span>
-<span class='fu'><a href='st_as_sfc.html'>st_as_sfc</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span>, crs <span class='op'>=</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span><span class='op'>(</span><span class='fl'>4326</span><span class='op'>)</span><span class='op'>)</span>
-
 <span class='co'># S3 method for s2_geography</span>
 <span class='fu'><a href='st_as_sfc.html'>st_as_sfc</a></span><span class='op'>(</span>
   <span class='va'>x</span>,
@@ -217,7 +214,7 @@ left of the polygon's path.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>sf_use_s2</code> returns the value of this variable before (re)setting it, 
+    <p><code>sf_use_s2</code> returns the value of this variable before (re)setting it,
 invisibly if <code>use_s2</code> is not missing.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -229,8 +226,8 @@ invisibly if <code>use_s2</code> is not missing.</p>
 <span class='va'>m0</span> <span class='op'>=</span> <span class='va'>m</span><span class='op'>[</span><span class='fl'>5</span><span class='op'>:</span><span class='fl'>1</span>,<span class='op'>]</span>
 <span class='va'>mp</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_multipolygon</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
 <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>m</span>, <span class='fl'>0.8</span> <span class='op'>*</span> <span class='va'>m0</span>, <span class='fl'>0.01</span> <span class='op'>*</span> <span class='va'>m1</span> <span class='op'>+</span> <span class='fl'>0.9</span><span class='op'>)</span>,
-<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fl'>0.7</span><span class='op'>*</span> <span class='va'>m</span>, <span class='fl'>0.6</span><span class='op'>*</span><span class='va'>m0</span><span class='op'>)</span>, 
-<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fl'>0.5</span> <span class='op'>*</span> <span class='va'>m0</span><span class='op'>)</span>, 
+<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fl'>0.7</span><span class='op'>*</span> <span class='va'>m</span>, <span class='fl'>0.6</span><span class='op'>*</span><span class='va'>m0</span><span class='op'>)</span>,
+<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fl'>0.5</span> <span class='op'>*</span> <span class='va'>m0</span><span class='op'>)</span>,
 <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>+</span><span class='fl'>2</span><span class='op'>)</span>,
 <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>+</span><span class='fl'>4</span>,<span class='op'>(</span><span class='fl'>.9</span><span class='op'>*</span><span class='va'>m0</span><span class='op'>)</span><span class='op'>+</span><span class='fl'>4</span><span class='op'>)</span>
 <span class='op'>)</span><span class='op'>)</span>
