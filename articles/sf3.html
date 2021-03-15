@@ -118,7 +118,7 @@
 
     
     
-<p>This vignetted describes how simple feature geometries can be manipulated, where manipulations include</p>
+<p>This vignette describes how simple feature geometries can be manipulated, where manipulations include</p>
 <ul>
 <li>type transformations (e.g., <code>POLYGON</code> to <code>MULTIPOLYGON</code>)</li>
 <li>affine transformation (shift, scale, rotate)</li>
@@ -541,7 +541,7 @@
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">y</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/geos_binary_ops.html">st_intersection</a></span><span class="op">(</span><span class="fu"><a href="../reference/geos_combine.html">st_union</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,<span class="fu"><a href="../reference/geos_combine.html">st_union</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, col <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span></code></pre></div>
 <p><img src="sf3_files/figure-html/unnamed-chunk-28-1.png" width="700"> Note that the function <code>st_intersects</code> returns a logical matrix indicating whether each geometry pair intersects (see the previous section in this vignette).</p>
-<p>To get <em>everything but</em> the intersection, use <code>st_difference</code> or st_sym_difference`:</p>
+<p>To get <em>everything but</em> the intersection, use <code>st_difference</code> or <code>st_sym_difference</code>:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">x</span>, col <span class="op">=</span> <span class="st">'#ff333388'</span><span class="op">)</span>; 

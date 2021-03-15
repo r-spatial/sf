@@ -280,7 +280,7 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span>
 <span class="co">## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1</span>
 <span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## Reading layer `nc' from data source `/tmp/RtmpDcqJvJ/temp_libpathed8f8fae99b/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
+<span class="co">## Reading layer `nc' from data source `/tmp/RtmpdxUcD2/temp_libpath4d6e2e2a0d48/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Geometry type: MULTIPOLYGON</span>
 <span class="co">## Dimension:     XY</span>
@@ -365,11 +365,11 @@
 <span class="co">## MULTIPOLYGON (((-80.45634 36.24256, -80.47639 3...</span>
 <span class="co">## MULTIPOLYGON (((-76.00897 36.3196, -76.01735 36...</span>
 <span class="co">## MULTIPOLYGON (((-77.21767 36.24098, -77.23461 3...</span></code></pre></div>
-<p>Geometries are printed in abbreviated form, but we can can view a complete geometry by selecting it, e.g. the first one by</p>
+<p>Geometries are printed in abbreviated form, but we can view a complete geometry by selecting it, e.g. the first one by</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">nc_geom</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
 <span class="co">## MULTIPOLYGON (((-81.47276 36.23436, -81.54084 36.27251, -81.56198 36.27359, -81.63306 36.34069, -81.74107 36.39178, -81.69828 36.47178, -81.7028 36.51934, -81.67 36.58965, -81.3453 36.57286, -81.34754 36.53791, -81.32478 36.51368, -81.31332 36.4807, -81.26624 36.43721, -81.26284 36.40504, -81.24069 36.37942, -81.23989 36.36536, -81.26424 36.35241, -81.32899 36.3635, -81.36137 36.35316, -81.36569 36.33905, -81.35413 36.29972, -81.36745 36.2787, -81.40639 36.28505, -81.41233 36.26729, -81.43104 36.26072, -81.45289 36.23959, -81.47276 36.23436)))</span></code></pre></div>
-<p>The way this is printed is called <em>well-known text</em>, and is part of the standards. The word <code>MULTIPOLYGON</code> is followed by three parenthesis, because it can consist of multiple polygons, in the form of <code>MULTIPOLYGON(POL1,POL2)</code>, where <code>POL1</code> might consist of an exterior ring and zero or more interior rings, as of <code>(EXT1,HOLE1,HOLE2)</code>. Sets of coordinates are held together with parenthesis, so we get <code>((crds_ext)(crds_hole1)(crds_hole2))</code> where <code>crds_</code> is a comma-separated set of coordinates of a ring. This leads to the case above, where <code>MULTIPOLYGON(((crds_ext)))</code> refers to the exterior ring (1), without holes (2), of the first polygon (3) - hence three parentheses.</p>
+<p>The way this is printed is called <em>well-known text</em>, and is part of the standards. The word <code>MULTIPOLYGON</code> is followed by three parentheses, because it can consist of multiple polygons, in the form of <code>MULTIPOLYGON(POL1,POL2)</code>, where <code>POL1</code> might consist of an exterior ring and zero or more interior rings, as of <code>(EXT1,HOLE1,HOLE2)</code>. Sets of coordinates are held together with parentheses, so we get <code>((crds_ext)(crds_hole1)(crds_hole2))</code> where <code>crds_</code> is a comma-separated set of coordinates of a ring. This leads to the case above, where <code>MULTIPOLYGON(((crds_ext)))</code> refers to the exterior ring (1), without holes (2), of the first polygon (3) - hence three parentheses.</p>
 <p>We can see there is a single polygon with no rings:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
@@ -596,7 +596,7 @@
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">filename</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>
 <span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">filename</span><span class="op">)</span>
-<span class="co">## Reading layer `nc' from data source `/tmp/RtmpDcqJvJ/temp_libpathed8f8fae99b/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
+<span class="co">## Reading layer `nc' from data source `/tmp/RtmpdxUcD2/temp_libpath4d6e2e2a0d48/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Geometry type: MULTIPOLYGON</span>
 <span class="co">## Dimension:     XY</span>
@@ -922,7 +922,7 @@
         CNTY_ID <span class="op">=</span> <span class="st">"identity"</span>, NAME <span class="op">=</span> <span class="st">"identity"</span>, FIPS <span class="op">=</span> <span class="st">"identity"</span>, FIPSNO <span class="op">=</span> <span class="st">"identity"</span>,
         CRESS_ID <span class="op">=</span> <span class="st">"identity"</span>, BIR74 <span class="op">=</span> <span class="st">"aggregate"</span>, SID74 <span class="op">=</span> <span class="st">"aggregate"</span>, NWBIR74 <span class="op">=</span> <span class="st">"aggregate"</span>,
         BIR79 <span class="op">=</span> <span class="st">"aggregate"</span>, SID79 <span class="op">=</span> <span class="st">"aggregate"</span>, NWBIR79 <span class="op">=</span> <span class="st">"aggregate"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## Reading layer `nc' from data source `/tmp/RtmpDcqJvJ/temp_libpathed8f8fae99b/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
+<span class="co">## Reading layer `nc' from data source `/tmp/RtmpdxUcD2/temp_libpath4d6e2e2a0d48/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity</span>
 <span class="co">## Geometry type: MULTIPOLYGON</span>
