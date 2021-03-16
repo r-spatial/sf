@@ -16,6 +16,8 @@
 
 * allow to `st_cast` COMPOUNDCURVE, MULTISURFACE or CURVEPOLYGON to GEOMETRYCOLLECTION (and back); #1573
 
+* Fixed a bug in `st_as_grob()` when plotting a mix of MULTI and non-MULTI geometries of the same base type
+
 # version 0.9-7
 
 * n-ary `st_intersection` skips failing geometries, rather than returning an error; #1549
