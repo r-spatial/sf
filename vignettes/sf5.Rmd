@@ -14,11 +14,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r echo=FALSE, include=FALSE}
-tmap_fixed = TRUE
-#user_edzer_or_travis = Sys.getenv("USER") %in% c("travis", "edzer")
-user_edzer_or_travis = FALSE
-```
 This vignette describes the functions in `sf` that can help to plot 
 simple features. It tries to be complete about the plot methods 
 `sf` provides, and give examples and pointers to options to plot
@@ -193,7 +188,7 @@ ggplot() +
 
 Package `mapview` creates interactive maps in html pages, using package `leaflet` as a work horse. Extensive examples are found [here](https://r-spatial.github.io/mapview/).
 
-```{r,eval=user_edzer_or_travis}
+```{r, eval = FALSE}
 library(mapview)
 mapviewOptions(fgb = FALSE)
 mapview(nc["BIR74"], col.regions = sf.colors(10), fgb = FALSE)
@@ -211,13 +206,13 @@ qtm(nc)
 ```
 
 `tmap` also has interactive leaflet maps:
-```{r,eval=tmap_fixed}
+```{r}
 tmap_mode("view")
 tm_shape(nc) + tm_fill("BIR74", palette = sf.colors(5))
 ```
 
 replotting the last map in non-interactive mode is as simple as:
-```{r,eval=tmap_fixed}
+```{r}
 ttm()
 tmap_last()
 ```
