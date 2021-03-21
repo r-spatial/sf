@@ -304,13 +304,13 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 	// transform:
 	if (keep) {
 		// use proj_trans() on individual points, making unprojectable points be NA
-		PJ_COORD row = { 0.0, 0.0, 0.0, 0.0 };
+		PJ_COORD row = { 0.0, 0.0, 0.0, 0.0 }, projected;
 		for (int i = 0; i < pts.nrow(); i++) {
 			row.lp.lam = x.data()[i].lp.lam;
 			row.lp.phi = x.data()[i].lp.phi;
-			row = proj_trans(P, PJ_FWD, row);
-			x.data()[i].lp.lam = row.lp.lam;
-			x.data()[i].lp.phi = row.lp.phi;
+			projected = proj_trans(P, PJ_FWD, row);
+			x.data()[i].lp.lam = projected.lp.lam;
+			x.data()[i].lp.phi = projected.lp.phi;
 		}
 	} else {
 		// DEFAULT: use proj_trans_array() on array, returning zero-length if any point is unprojectable

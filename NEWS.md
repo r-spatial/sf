@@ -1,3 +1,7 @@
+# version 0.9-9
+
+* fix regression in `sf_project` when `keep = TRUE`; #1635
+
 # version 0.9-8
 
 * add `st_as_sf` method for terra's `SpatVector` class; #1567
