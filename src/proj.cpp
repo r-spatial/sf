@@ -14,6 +14,16 @@ Rcpp::LogicalVector CPL_proj_h(bool b = false) {
 #if defined(HAVE_PROJ_H) && !defined(ACCEPT_USE_OF_DEPRECATED_PROJ_API_H) // new api
 # include <proj.h>
 
+#if PROJ_VERSION_MAJOR > 7
+# define HAVE_71
+#else
+# if PROJ_VERSION_MAJOR == 7
+#  if PROJ_VERSION_MINOR >= 1
+#   define HAVE_71
+#  endif
+# endif
+#endif
+
 // [[Rcpp::export]]
 Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVector authority, 
 		Rcpp::NumericVector AOI, Rcpp::CharacterVector Use, 
@@ -21,7 +31,7 @@ Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVect
 		double accuracy = -1.0,
 		bool strict_containment = false,
 		bool axis_order_auth_compl = false) {
-#if PROJ_VERSION_MAJOR >= 7
+#ifdef HAVE_71
 	if (crs.size() != 2)
 		Rcpp::stop("length 2 character vector expected");
 	const char *auth = NULL;
@@ -102,7 +112,7 @@ PROJ_GRID_AVAILABILITY_KNOWN_AVAILABLE); // Results will be presented as if grid
 			PJ* orig = pj;
 			pj = proj_normalize_for_visualization(PJ_DEFAULT_CTX, orig);
 			proj_destroy(orig);
-        }
+		}
 		axis_order(i) = axis_order_auth_compl;
 		grid_count(i) = proj_coordoperation_get_grid_used_count(PJ_DEFAULT_CTX, pj);
 		instantiable(i) = (bool) proj_coordoperation_is_instantiable(PJ_DEFAULT_CTX, pj);
@@ -160,15 +170,17 @@ PROJ_GRID_AVAILABILITY_KNOWN_AVAILABLE); // Results will be presented as if grid
 	proj_operation_factory_context_destroy(factory_ctx);
 	return df;
 #else
-	Rcpp::warning("PROJ >= 7 required");
+	Rcpp::warning("PROJ >= 7.1 required");
 	return Rcpp::DataFrame::create();
 #endif
 }
 
+// [[Rcpp::export]]
 Rcpp::CharacterVector CPL_get_data_dir(bool b = false) {
 	return Rcpp::CharacterVector(proj_info().searchpath);
 }
 
+// [[Rcpp::export]]
 Rcpp::LogicalVector CPL_is_network_enabled(bool b = false) {
 #if PROJ_VERSION_MAJOR >= 7
 	return Rcpp::LogicalVector::create(proj_context_is_network_enabled(PJ_DEFAULT_CTX));
@@ -177,8 +189,9 @@ Rcpp::LogicalVector CPL_is_network_enabled(bool b = false) {
 #endif
 }
 
+// [[Rcpp::export]]
 Rcpp::CharacterVector CPL_enable_network(Rcpp::CharacterVector url, bool enable = true) {
-#if PROJ_VERSION_MAJOR >= 7
+#ifdef HAVE_71
 	if (enable) {
 		proj_context_set_enable_network(PJ_DEFAULT_CTX, 1);
 		if (url.size())
@@ -193,17 +206,20 @@ Rcpp::CharacterVector CPL_enable_network(Rcpp::CharacterVector url, bool enable 
 #endif
 }
 
+// [[Rcpp::export]]
 Rcpp::LogicalVector CPL_set_data_dir(std::string data_dir) {
 	const char *cp = data_dir.c_str();
 	proj_context_set_search_paths(PJ_DEFAULT_CTX, 1, &cp);
 	return true;
 }
 
+// [[Rcpp::export]]
 Rcpp::LogicalVector CPL_use_proj4_init_rules(Rcpp::IntegerVector v) {
 	proj_context_use_proj4_init_rules(PJ_DEFAULT_CTX, v[0]);
 	return true;
 }
 
+// [[Rcpp::export]]
 std::string CPL_proj_version(bool b = false) {
 
 	std::stringstream buffer;
@@ -211,6 +227,7 @@ std::string CPL_proj_version(bool b = false) {
 	return buffer.str();
 }
 
+// [[Rcpp::export]]
 Rcpp::List CPL_proj_is_valid(std::string proj4string) {
 	Rcpp::List out(2);
 
@@ -229,6 +246,7 @@ Rcpp::List CPL_proj_is_valid(std::string proj4string) {
 	return out;
 }
 
+// [[Rcpp::export]]
 bool CPL_have_datum_files(SEXP foo) {
 
 	// TODO:
@@ -237,6 +255,7 @@ bool CPL_have_datum_files(SEXP foo) {
 	return true;
 }
 
+// [[Rcpp::export]]
 Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts, 
 		bool keep, bool warn = true, bool authority_compliant = false) {
 
@@ -252,17 +271,23 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 	if (from_to.size() == 2) // source + target:
 		P = proj_create_crs_to_crs(PJ_DEFAULT_CTX, from_to[0], from_to[1], NULL); 
 		// PJ_AREA *area);
-	else  // source to target pipeline:
+	else // source to target pipeline:
 		P = proj_create(PJ_DEFAULT_CTX, from_to[0]);
 	if (P == NULL)
 		stop(proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX)));
-	if (!authority_compliant && from_to.size() == 2) // keep lat/lon as lon/lat
-		P = proj_normalize_for_visualization(PJ_DEFAULT_CTX, P);
+	if (!authority_compliant && from_to.size() == 2) { // keep lat/lon as lon/lat
+		PJ *NewP = proj_normalize_for_visualization(PJ_DEFAULT_CTX, P);
+		proj_destroy(P);
+		if (NewP == NULL)
+			stop(proj_errno_string(proj_context_errno(PJ_DEFAULT_CTX)));
+		else
+			P = NewP;
+	}
 	// copy over:
 	std::vector<PJ_COORD> x(pts.nrow());
 	for (int i = 0; i < pts.nrow(); i++) {
-   		 x.data()[i].lp.lam = pts(i, 0);
-   		 x.data()[i].lp.phi = pts(i, 1);
+		x.data()[i].lp.lam = pts(i, 0);
+		x.data()[i].lp.phi = pts(i, 1);
 	}
 
 	// deg2rad?
@@ -279,7 +304,7 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 	// transform:
 	if (keep) {
 		// use proj_trans() on individual points, making unprojectable points be NA
-		PJ_COORD row, projected;
+		PJ_COORD row = { 0.0, 0.0, 0.0, 0.0 }, projected;
 		for (int i = 0; i < pts.nrow(); i++) {
 			row.lp.lam = x.data()[i].lp.lam;
 			row.lp.phi = x.data()[i].lp.phi;
@@ -307,8 +332,8 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 	// copy to out matrix:
 	NumericMatrix out(pts.nrow(), pts.ncol());
 	for (int i = 0; i < out.nrow(); i++) {
-   		 out(i, 0) = x.data()[i].lp.lam;
-   		 out(i, 1) = x.data()[i].lp.phi;
+		out(i, 0) = x.data()[i].lp.lam;
+		out(i, 1) = x.data()[i].lp.phi;
 	}
 
 	int nwarn = 0;
@@ -343,7 +368,6 @@ Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVect
 	return Rcpp::DataFrame::create();
 }
 
-// [[Rcpp::export]]
 Rcpp::LogicalVector CPL_is_network_enabled(bool b = false) {
 #if PROJ_VERSION_MAJOR >= 7
 	return Rcpp::LogicalVector::create(proj_context_is_network_enabled(PJ_DEFAULT_CTX));
@@ -352,7 +376,6 @@ Rcpp::LogicalVector CPL_is_network_enabled(bool b = false) {
 #endif
 }
 
-// [[Rcpp::export]]
 Rcpp::CharacterVector CPL_enable_network(Rcpp::CharacterVector url, bool enable = true) {
 #if PROJ_VERSION_MAJOR >= 7
 	if (enable) {
@@ -369,7 +392,6 @@ Rcpp::CharacterVector CPL_enable_network(Rcpp::CharacterVector url, bool enable 
 #endif
 }
 
-// [[Rcpp::export]]
 Rcpp::CharacterVector CPL_get_data_dir(bool b = false) {
 #if PROJ_VERSION_MAJOR >= 7
 	return Rcpp::CharacterVector(proj_info().searchpath);
@@ -378,15 +400,13 @@ Rcpp::CharacterVector CPL_get_data_dir(bool b = false) {
 #endif
 }
 
-// [[Rcpp::export]]
 Rcpp::LogicalVector CPL_set_data_dir(std::string data_dir) { // #nocov start
 	return false;
 }
 
-// [[Rcpp::export]]
 Rcpp::LogicalVector CPL_use_proj4_init_rules(Rcpp::IntegerVector v) {
 	return false;
-}                                                            // #nocov end
+}  // #nocov end
 
 #if PJ_VERSION == 480
 extern "C" {
@@ -396,7 +416,6 @@ FILE *pj_open_lib(projCtx, const char *, const char *);
 
 #include "Rcpp.h"
 
-// [[Rcpp::export]]
 std::string CPL_proj_version(bool b = false) {
 	int v = PJ_VERSION;
 	std::stringstream buffer;
@@ -404,7 +423,6 @@ std::string CPL_proj_version(bool b = false) {
 	return buffer.str();
 }
 
-// [[Rcpp::export]]
 Rcpp::List CPL_proj_is_valid(std::string proj4string) {
 	Rcpp::List out(2);
 	projPJ pj = pj_init_plus(proj4string.c_str());
@@ -421,7 +439,6 @@ Rcpp::List CPL_proj_is_valid(std::string proj4string) {
 	return out;
 }
 
-// [[Rcpp::export]]
 bool CPL_have_datum_files(SEXP foo) {
 
 #if PJ_VERSION <= 480
@@ -443,7 +460,6 @@ bool CPL_have_datum_files(SEXP foo) {
 		return false; // #nocov
 }
 
-// [[Rcpp::export]]
 Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts, 
 		bool keep, bool warn = true, bool authority_compliant = false) {
 
@@ -528,5 +544,4 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 		warning("one or more projected point(s) not finite"); // #nocov
 	return out;
 }
-#endif // defined() etc
-
+#endif

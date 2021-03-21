@@ -1,5 +1,5 @@
 Package: sf
-Version: 0.9-8
+Version: 0.9-9
 Title: Simple Features for R
 Authors@R:
     c(person(given = "Edzer",
@@ -88,7 +88,10 @@ Suggests:
     RSQLite,
     s2 (>= 1.0.1),
     sp (>= 1.2-4),
-    spatstat.geom, spatstat.core, spatstat.linnet, spatstat (>= 2.0-0),
+    spatstat (>= 2.0-1),
+    spatstat.geom, 
+    spatstat.core, 
+    spatstat.linnet, 
     spatstat.utils,
     stars (>= 0.2-0),
     terra,
@@ -106,7 +109,6 @@ Encoding: UTF-8
 RoxygenNote: 7.1.1
 SystemRequirements: C++11, GDAL (>= 2.0.1), GEOS (>= 3.4.0),
     PROJ (>= 4.8.0), sqlite3
-Remotes: baddstats/spatstat
 Collate: 
     'RcppExports.R'
     'init.R'

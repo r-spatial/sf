@@ -84,6 +84,7 @@ problems. Doing this however leaves ambiguities, e.g. whether
 * passes through `POINT(180 0)`
 
 and whether it is
+
 * a straight line, cutting through the Earth's surface, or
 * a curved line following the Earth's surface
 

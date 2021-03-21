@@ -269,16 +269,16 @@ CPL_get_pipelines <- function(crs, authority, AOI, Use, grid_availability, accur
     .Call('_sf_CPL_get_pipelines', PACKAGE = 'sf', crs, authority, AOI, Use, grid_availability, accuracy, strict_containment, axis_order_auth_compl)
 }
 
+CPL_get_data_dir <- function(b = FALSE) {
+    .Call('_sf_CPL_get_data_dir', PACKAGE = 'sf', b)
+}
+
 CPL_is_network_enabled <- function(b = FALSE) {
     .Call('_sf_CPL_is_network_enabled', PACKAGE = 'sf', b)
 }
 
 CPL_enable_network <- function(url, enable = TRUE) {
     .Call('_sf_CPL_enable_network', PACKAGE = 'sf', url, enable)
-}
-
-CPL_get_data_dir <- function(b = FALSE) {
-    .Call('_sf_CPL_get_data_dir', PACKAGE = 'sf', b)
 }
 
 CPL_set_data_dir <- function(data_dir) {

@@ -55,7 +55,7 @@ test_that("st_as_sfc() honors crs argument", {
 
   list = list(raw)
   blob = blob::blob(raw)
-  wkb = as_wkb(list)
+  wkb = structure(list, class = "WKB")
 
   expect_identical(st_as_sfc(raw, crs = 2056), st_as_sfc(wkb, crs = 2056))
   expect_identical(st_as_sfc(list, crs = 2056), st_as_sfc(wkb, crs = 2056))

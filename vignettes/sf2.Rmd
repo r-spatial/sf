@@ -20,7 +20,7 @@ if (file.exists("nc1.shp"))
 	file.remove("nc1.shp", "nc1.dbf", "nc1.shx")
 ```
 
-This vignetted describes how simple features can be read in R
+This vignette describes how simple features can be read in R
 from files or databases, and how they can be converted to other
 formats (text, [sp](https://cran.r-project.org/package=sp))
 

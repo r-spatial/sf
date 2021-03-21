@@ -209,7 +209,7 @@ st_as_grob.sfc_CIRCULARSTRING <- function(x, ...) {
 st_as_grob.sfc <- function(x, pch = 1, size = unit(1, "char"), arrow = NULL, gp = gpar(), ...) {
 	x <- st_cast_sfc_default(x)
 	if (class(x)[1] %in% c('sfc_MULTIPOINT', 'sfc_MULTILINESTRING', 'sfc_MULTIPOLYGON')) {
-		return(st_as_grob(x, gp = gp, ...))
+		return(st_as_grob(x, pch = pch, size = size, arrow = arrow, gp = gp, ...))
 	}
 	scalar_grobs(x, pch, size, arrow, gp, ...)
 }

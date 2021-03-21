@@ -1,3 +1,7 @@
+# version 0.9-9
+
+* fix regression in `sf_project` when `keep = TRUE`; #1635
+
 # version 0.9-8
 
 * add `st_as_sf` method for terra's `SpatVector` class; #1567
@@ -15,6 +19,8 @@
 * `st_inscribed_circle` computes the maximum inscribed circle for polygons (requires GEOS >= 3.9.0)
 
 * allow to `st_cast` COMPOUNDCURVE, MULTISURFACE or CURVEPOLYGON to GEOMETRYCOLLECTION (and back); #1573
+
+* Fixed a bug in `st_as_grob()` when plotting a mix of MULTI and non-MULTI geometries of the same base type
 
 # version 0.9-7
 

@@ -380,8 +380,9 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 				Rcpp::CharacterVector::create(dim_str, "TRIANGLE", "sfg"), &empty);
 			break;
 		default: {
-			Rcpp::Rcout << "type is " << sf_type << std::endl; // #nocov
-			Rcpp::stop("reading this sf type is not supported, please file an issue"); // #nocov
+			char cp[100];
+			snprintf(cp, 100, "reading wkb type %d is not supported\n", sf_type);
+			Rcpp::stop(cp);
 		}
 	}
 	if (type != NULL) {
