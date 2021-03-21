@@ -365,7 +365,8 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	CharacterVector descriptions(bands.size());
 	NumericMatrix ranges(bands.size(), 4);
 	for (int i = 0; i < bands.size(); i++) {
-		poBand = poDataset->GetRasterBand(bands(i));
+		if ((poBand = poDataset->GetRasterBand(bands(i))) == NULL)
+			stop("trying to read a band that is not present");
 		const char *md = poBand->GetMetadataItem("BANDNAME", NULL);
 		if (md == NULL)
 			descriptions(i) = poBand->GetDescription();
