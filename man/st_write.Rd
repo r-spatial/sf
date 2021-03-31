@@ -25,7 +25,8 @@ st_write(obj, dsn, layer, ...)
   append = NA,
   delete_dsn = FALSE,
   delete_layer = !is.na(append) && !append,
-  fid_column_name = NULL
+  fid_column_name = NULL,
+  config_options = character(0)
 )
 
 \method{st_write}{data.frame}(obj, dsn, layer = NULL, ...)
@@ -79,7 +80,9 @@ write?
 The default for \code{st_write} is \code{FALSE} which raises an error if the layer exists.
 The default for \code{write_sf} is \code{TRUE}.}
 
-\item{fid_column_name}{character, name of column with feature IDs; if
+\item{fid_column_name}{character, name of column with feature IDs; if}
+
+\item{config_options}{character, named vector with GDAL config options
 specified, this column is no longer written as feature attribute.}
 }
 \value{

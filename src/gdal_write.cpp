@@ -152,8 +152,17 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer,
 	Rcpp::CharacterVector driver, Rcpp::CharacterVector dco, Rcpp::CharacterVector lco,
 	Rcpp::List geom, Rcpp::CharacterVector dim, Rcpp::CharacterVector fids,
+	Rcpp::CharacterVector ConfigOptions,
 	bool quiet, Rcpp::LogicalVector append, bool delete_dsn = false, bool delete_layer = false,
 	bool write_geometries = true) {
+
+	if (ConfigOptions.size()) {
+		if (ConfigOptions.attr("names") == R_NilValue)
+			Rcpp::stop("config_options should be a character vector with names, as in c(key=\"value\")");
+		Rcpp::CharacterVector names = ConfigOptions.attr("names");
+		for (int i = 0; i < ConfigOptions.size(); i++)
+			CPLSetConfigOption(names[i], ConfigOptions[i]);
+	}
 
 	// init:
 	if (driver.size() != 1 || dsn.size() != 1 || layer.size() != 1)

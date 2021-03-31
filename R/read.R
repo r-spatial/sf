@@ -343,6 +343,7 @@ abbreviate_shapefile_names = function(x) {
 #' The default for \code{st_write} is \code{FALSE} which raises an error if the layer exists.
 #' The default for \code{write_sf} is \code{TRUE}.
 #' @param fid_column_name character, name of column with feature IDs; if
+#' @param config_options character, named vector with GDAL config options
 #' specified, this column is no longer written as feature attribute.
 #' @details
 #' Columns (variables) of a class not supported are dropped with a warning.
@@ -394,7 +395,7 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 		driver = guess_driver_can_write(dsn),
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
 		append = NA, delete_dsn = FALSE, delete_layer = !is.na(append) && !append,
-		fid_column_name = NULL) {
+		fid_column_name = NULL, config_options = character(0)) {
 
 	ret = obj
 	if (!is.null(list(...)$update)) {
@@ -483,7 +484,7 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 
 	ret = CPL_write_ogr(obj, dsn, layer, driver,
 		as.character(dataset_options), as.character(layer_options),
-		geom, dim, fids, quiet, append, delete_dsn, delete_layer,
+		geom, dim, fids, config_options, quiet, append, delete_dsn, delete_layer,
 		write_geometries)
 	if (ret == 1) { # try through temp file:
 		tmp = tempfile(fileext = paste0(".", tools::file_ext(dsn))) # nocov start
@@ -491,7 +492,7 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 			message(paste("writing first to temporary file", tmp))
 		if (CPL_write_ogr(obj, tmp, layer, driver,
 				as.character(dataset_options), as.character(layer_options),
-				geom, dim, fids, quiet, append, delete_dsn, delete_layer,
+				geom, dim, fids, config_options, quiet, append, delete_dsn, delete_layer,
 				write_geometries) == 1)
 			stop(paste("failed writing to temporary file", tmp))
 		if (!file.copy(tmp, dsn, overwrite = append || delete_dsn || delete_layer))
