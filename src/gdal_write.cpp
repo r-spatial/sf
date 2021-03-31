@@ -354,5 +354,10 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 		Rcpp::stop("CommitTransaction() failed.\n"); 
 	} // #nocov end
 	GDALClose(poDS);
+	if (ConfigOptions.size()) {
+		Rcpp::CharacterVector names = ConfigOptions.attr("names");
+		for (int i = 0; i < ConfigOptions.size(); i++)
+			CPLSetConfigOption(names[i], NULL);
+	}
 	return 0; // all O.K.
 }

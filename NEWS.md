@@ -1,5 +1,7 @@
 # version 0.9-9
 
+* `st_write` gains an argument `config_options` to set GDAL config options; #1618
+
 * fix regression in `sf_project` when `keep = TRUE`; #1635
 
 # version 0.9-8
