@@ -105,8 +105,8 @@ CPL_get_layers <- function(datasource, options, do_count = FALSE) {
     .Call('_sf_CPL_get_layers', PACKAGE = 'sf', datasource, options, do_count)
 }
 
-CPL_read_ogr <- function(datasource, layer, query, options, quiet, toTypeUser, fid_column_name, drivers, wkt_filter, promote_to_multi = TRUE, int64_as_string = FALSE, dsn_exists = TRUE, dsn_isdb = FALSE) {
-    .Call('_sf_CPL_read_ogr', PACKAGE = 'sf', datasource, layer, query, options, quiet, toTypeUser, fid_column_name, drivers, wkt_filter, promote_to_multi, int64_as_string, dsn_exists, dsn_isdb)
+CPL_read_ogr <- function(datasource, layer, query, options, quiet, toTypeUser, fid_column_name, drivers, wkt_filter, promote_to_multi = TRUE, int64_as_string = FALSE, dsn_exists = TRUE, dsn_isdb = FALSE, width = 80L) {
+    .Call('_sf_CPL_read_ogr', PACKAGE = 'sf', datasource, layer, query, options, quiet, toTypeUser, fid_column_name, drivers, wkt_filter, promote_to_multi, int64_as_string, dsn_exists, dsn_isdb, width)
 }
 
 CPL_gdalinfo <- function(obj, options, oo) {
@@ -157,8 +157,8 @@ CPL_gdal_warper <- function(infile, outfile, options, oo, doo, quiet = TRUE) {
     .Call('_sf_CPL_gdal_warper', PACKAGE = 'sf', infile, outfile, options, oo, doo, quiet)
 }
 
-CPL_write_ogr <- function(obj, dsn, layer, driver, dco, lco, geom, dim, fids, ConfigOptions, quiet, append, delete_dsn = FALSE, delete_layer = FALSE, write_geometries = TRUE) {
-    .Call('_sf_CPL_write_ogr', PACKAGE = 'sf', obj, dsn, layer, driver, dco, lco, geom, dim, fids, ConfigOptions, quiet, append, delete_dsn, delete_layer, write_geometries)
+CPL_write_ogr <- function(obj, dsn, layer, driver, dco, lco, geom, dim, fids, ConfigOptions, quiet, append, delete_dsn = FALSE, delete_layer = FALSE, write_geometries = TRUE, width = 80L) {
+    .Call('_sf_CPL_write_ogr', PACKAGE = 'sf', obj, dsn, layer, driver, dco, lco, geom, dim, fids, ConfigOptions, quiet, append, delete_dsn, delete_layer, write_geometries, width)
 }
 
 CPL_geos_binop <- function(sfc0, sfc1, op, par = 0.0, pattern = "", prepared = FALSE) {

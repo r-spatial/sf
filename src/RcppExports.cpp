@@ -305,8 +305,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_read_ogr
-Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, Rcpp::CharacterVector query, Rcpp::CharacterVector options, bool quiet, Rcpp::NumericVector toTypeUser, Rcpp::CharacterVector fid_column_name, Rcpp::CharacterVector drivers, Rcpp::CharacterVector wkt_filter, bool promote_to_multi, bool int64_as_string, bool dsn_exists, bool dsn_isdb);
-RcppExport SEXP _sf_CPL_read_ogr(SEXP datasourceSEXP, SEXP layerSEXP, SEXP querySEXP, SEXP optionsSEXP, SEXP quietSEXP, SEXP toTypeUserSEXP, SEXP fid_column_nameSEXP, SEXP driversSEXP, SEXP wkt_filterSEXP, SEXP promote_to_multiSEXP, SEXP int64_as_stringSEXP, SEXP dsn_existsSEXP, SEXP dsn_isdbSEXP) {
+Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, Rcpp::CharacterVector query, Rcpp::CharacterVector options, bool quiet, Rcpp::NumericVector toTypeUser, Rcpp::CharacterVector fid_column_name, Rcpp::CharacterVector drivers, Rcpp::CharacterVector wkt_filter, bool promote_to_multi, bool int64_as_string, bool dsn_exists, bool dsn_isdb, int width);
+RcppExport SEXP _sf_CPL_read_ogr(SEXP datasourceSEXP, SEXP layerSEXP, SEXP querySEXP, SEXP optionsSEXP, SEXP quietSEXP, SEXP toTypeUserSEXP, SEXP fid_column_nameSEXP, SEXP driversSEXP, SEXP wkt_filterSEXP, SEXP promote_to_multiSEXP, SEXP int64_as_stringSEXP, SEXP dsn_existsSEXP, SEXP dsn_isdbSEXP, SEXP widthSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -323,7 +323,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type int64_as_string(int64_as_stringSEXP);
     Rcpp::traits::input_parameter< bool >::type dsn_exists(dsn_existsSEXP);
     Rcpp::traits::input_parameter< bool >::type dsn_isdb(dsn_isdbSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_read_ogr(datasource, layer, query, options, quiet, toTypeUser, fid_column_name, drivers, wkt_filter, promote_to_multi, int64_as_string, dsn_exists, dsn_isdb));
+    Rcpp::traits::input_parameter< int >::type width(widthSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_read_ogr(datasource, layer, query, options, quiet, toTypeUser, fid_column_name, drivers, wkt_filter, promote_to_multi, int64_as_string, dsn_exists, dsn_isdb, width));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -512,8 +513,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_write_ogr
-int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer, Rcpp::CharacterVector driver, Rcpp::CharacterVector dco, Rcpp::CharacterVector lco, Rcpp::List geom, Rcpp::CharacterVector dim, Rcpp::CharacterVector fids, Rcpp::CharacterVector ConfigOptions, bool quiet, Rcpp::LogicalVector append, bool delete_dsn, bool delete_layer, bool write_geometries);
-RcppExport SEXP _sf_CPL_write_ogr(SEXP objSEXP, SEXP dsnSEXP, SEXP layerSEXP, SEXP driverSEXP, SEXP dcoSEXP, SEXP lcoSEXP, SEXP geomSEXP, SEXP dimSEXP, SEXP fidsSEXP, SEXP ConfigOptionsSEXP, SEXP quietSEXP, SEXP appendSEXP, SEXP delete_dsnSEXP, SEXP delete_layerSEXP, SEXP write_geometriesSEXP) {
+int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer, Rcpp::CharacterVector driver, Rcpp::CharacterVector dco, Rcpp::CharacterVector lco, Rcpp::List geom, Rcpp::CharacterVector dim, Rcpp::CharacterVector fids, Rcpp::CharacterVector ConfigOptions, bool quiet, Rcpp::LogicalVector append, bool delete_dsn, bool delete_layer, bool write_geometries, int width);
+RcppExport SEXP _sf_CPL_write_ogr(SEXP objSEXP, SEXP dsnSEXP, SEXP layerSEXP, SEXP driverSEXP, SEXP dcoSEXP, SEXP lcoSEXP, SEXP geomSEXP, SEXP dimSEXP, SEXP fidsSEXP, SEXP ConfigOptionsSEXP, SEXP quietSEXP, SEXP appendSEXP, SEXP delete_dsnSEXP, SEXP delete_layerSEXP, SEXP write_geometriesSEXP, SEXP widthSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -532,7 +533,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type delete_dsn(delete_dsnSEXP);
     Rcpp::traits::input_parameter< bool >::type delete_layer(delete_layerSEXP);
     Rcpp::traits::input_parameter< bool >::type write_geometries(write_geometriesSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_write_ogr(obj, dsn, layer, driver, dco, lco, geom, dim, fids, ConfigOptions, quiet, append, delete_dsn, delete_layer, write_geometries));
+    Rcpp::traits::input_parameter< int >::type width(widthSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_write_ogr(obj, dsn, layer, driver, dco, lco, geom, dim, fids, ConfigOptions, quiet, append, delete_dsn, delete_layer, write_geometries, width));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1272,7 +1274,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_gdal_segmentize", (DL_FUNC) &_sf_CPL_gdal_segmentize, 2},
     {"_sf_CPL_gdal_linestring_sample", (DL_FUNC) &_sf_CPL_gdal_linestring_sample, 2},
     {"_sf_CPL_get_layers", (DL_FUNC) &_sf_CPL_get_layers, 3},
-    {"_sf_CPL_read_ogr", (DL_FUNC) &_sf_CPL_read_ogr, 13},
+    {"_sf_CPL_read_ogr", (DL_FUNC) &_sf_CPL_read_ogr, 14},
     {"_sf_CPL_gdalinfo", (DL_FUNC) &_sf_CPL_gdalinfo, 3},
     {"_sf_CPL_gdalwarp", (DL_FUNC) &_sf_CPL_gdalwarp, 6},
     {"_sf_CPL_gdalrasterize", (DL_FUNC) &_sf_CPL_gdalrasterize, 7},
@@ -1285,7 +1287,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_gdalmdiminfo", (DL_FUNC) &_sf_CPL_gdalmdiminfo, 3},
     {"_sf_CPL_gdalmdimtranslate", (DL_FUNC) &_sf_CPL_gdalmdimtranslate, 5},
     {"_sf_CPL_gdal_warper", (DL_FUNC) &_sf_CPL_gdal_warper, 6},
-    {"_sf_CPL_write_ogr", (DL_FUNC) &_sf_CPL_write_ogr, 15},
+    {"_sf_CPL_write_ogr", (DL_FUNC) &_sf_CPL_write_ogr, 16},
     {"_sf_CPL_geos_binop", (DL_FUNC) &_sf_CPL_geos_binop, 6},
     {"_sf_CPL_geos_is_valid_reason", (DL_FUNC) &_sf_CPL_geos_is_valid_reason, 1},
     {"_sf_CPL_geos_make_valid", (DL_FUNC) &_sf_CPL_geos_make_valid, 1},

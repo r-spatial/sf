@@ -1,5 +1,5 @@
 
-R version 4.0.4 (2021-02-15) -- "Lost Library Book"
+R version 4.0.5 (2021-03-31) -- "Shake and Throw"
 Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -87,7 +87,8 @@ Units: [m]
 8 covered_by  TRUE
 > 
 > st_contains_properly(ncm[1:3,], ncm[1:3])
-Sparse geometry binary predicate list of length 3, where the predicate was `contains_properly'
+Sparse geometry binary predicate list of length 3, where the predicate
+was `contains_properly'
  1: (empty)
  2: (empty)
  3: (empty)
@@ -193,7 +194,8 @@ LINESTRING (0 0, 1 1, 2 0)
 > sfc = st_as_sfc(st_bbox(st_sfc(st_point(c(0,0)), st_point(c(3,3)))))
 > grd = st_make_grid(sfc, n = c(3,3))
 > st_intersects(grd)
-Sparse geometry binary predicate list of length 9, where the predicate was `intersects'
+Sparse geometry binary predicate list of length 9, where the predicate
+was `intersects'
  1: 1, 2, 4, 5
  2: 1, 2, 3, 4, 5, 6
  3: 2, 3, 5, 6
@@ -204,7 +206,8 @@ Sparse geometry binary predicate list of length 9, where the predicate was `inte
  8: 4, 5, 6, 7, 8, 9
  9: 5, 6, 8, 9
 > st_relate(grd, pattern = "****1****")
-Sparse geometry binary predicate list of length 9, where the predicate was `relate_pattern'
+Sparse geometry binary predicate list of length 9, where the predicate
+was `relate_pattern'
  1: 1, 2, 4
  2: 1, 2, 3, 5
  3: 2, 3, 6
@@ -215,7 +218,8 @@ Sparse geometry binary predicate list of length 9, where the predicate was `rela
  8: 5, 7, 8, 9
  9: 6, 8, 9
 > st_relate(grd, pattern = "****0****")
-Sparse geometry binary predicate list of length 9, where the predicate was `relate_pattern'
+Sparse geometry binary predicate list of length 9, where the predicate
+was `relate_pattern'
  1: 5
  2: 4, 6
  3: 5
@@ -292,7 +296,8 @@ Units: [m]
 > pol_df <- data.frame(id = 1) 
 > st_geometry(pol_df) <- st_sfc(pol)
 > st_intersects(pts, pol_df[pol_df$id == 2,]) # with empty sf/sfc
-Sparse geometry binary predicate list of length 3, where the predicate was `intersects'
+Sparse geometry binary predicate list of length 3, where the predicate
+was `intersects'
  1: (empty)
  2: (empty)
  3: (empty)
@@ -325,7 +330,8 @@ CRS:           NA
 > # print.sgbp:
 > (lst = st_disjoint(nc, nc))
 although coordinates are longitude/latitude, st_intersects assumes that they are planar
-Sparse geometry binary predicate list of length 100, where the predicate was `disjoint'
+Sparse geometry binary predicate list of length 100, where the
+predicate was `disjoint'
 first 10 elements:
  1: 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, ...
  2: 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ...
@@ -350,7 +356,8 @@ first 10 elements:
 [5,]  TRUE  TRUE  TRUE  TRUE FALSE
 > # negate:
 > !lst
-Sparse geometry binary predicate list of length 100, where the predicate was `!disjoint'
+Sparse geometry binary predicate list of length 100, where the
+predicate was `!disjoint'
 first 10 elements:
  1: 1, 2, 18, 19
  2: 1, 2, 3, 18
@@ -558,7 +565,8 @@ POINT EMPTY
 [1] FALSE
 > 
 > st_intersects(st_point(0:1), st_point(2:3)) # sfg method
-Sparse geometry binary predicate list of length 1, where the predicate was `intersects'
+Sparse geometry binary predicate list of length 1, where the predicate
+was `intersects'
  1: (empty)
 > 
 > if (sf_extSoftVersion()["GEOS"] >= "3.7.0") {
@@ -584,4 +592,4 @@ CRS:           NA
 > 
 > proc.time()
    user  system elapsed 
-  7.003   0.169   7.361 
+  3.239   0.072   3.311 

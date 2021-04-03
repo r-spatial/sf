@@ -154,7 +154,7 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 	Rcpp::List geom, Rcpp::CharacterVector dim, Rcpp::CharacterVector fids,
 	Rcpp::CharacterVector ConfigOptions,
 	bool quiet, Rcpp::LogicalVector append, bool delete_dsn = false, bool delete_layer = false,
-	bool write_geometries = true) {
+	bool write_geometries = true, int width = 80) {
 
 	if (ConfigOptions.size()) {
 		if (ConfigOptions.attr("names") == R_NilValue)
@@ -259,9 +259,12 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 				Rcpp::stop("Creation failed.\n");
 			}
 		}
-		if (! quiet)
-			Rcpp::Rcout << "Writing layer `" << layer[0] << "' to data source `" << dsn[0] <<
-				"' using driver `" << driver[0] << "'" << std::endl;
+		if (! quiet) {
+			Rcpp::Rcout << "Writing layer `" << layer[0] << "' to data source ";
+			if (LENGTH(dsn[0]) > width - (30 - LENGTH(layer[0])))
+				Rcpp::Rcout << std::endl;
+			Rcpp::Rcout << "`" << dsn[0] << "' using driver `" << driver[0] << "'" << std::endl;
+		}
 	}
 
 	// can & do transaction?

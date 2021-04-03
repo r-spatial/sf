@@ -22,8 +22,9 @@ sgbp = function(x, predicate, region.id, ncol, sparse = TRUE) {
 #' @details \code{sgbp} are sparse matrices, stored as a list with integer vectors holding the ordered \code{TRUE} indices of each row. This means that for a dense, \eqn{m \times n}{m x n} matrix \code{Q} and a list \code{L}, if \code{Q[i,j]} is \code{TRUE} then \eqn{j} is an element of \code{L[[i]]}. Reversed: when \eqn{k} is the value of \code{L[[i]][j]}, then \code{Q[i,k]} is \code{TRUE}.
 print.sgbp = function(x, ..., n = 10, max_nb = 10) {
 	n = min(length(x), n)
-	cat("Sparse geometry binary predicate list of length ", length(x), ", ", sep = "")
-	cat("where the predicate was `", attr(x, "predicate"), "'\n", sep = "")
+	hd = paste0("Sparse geometry binary predicate list of length ", length(x), ", ",
+	 	"where the predicate was `", attr(x, "predicate"), "'")
+	cat(strwrap(hd), sep = "\n")
 	if (n < length(x))
 		cat("first ", n, " elements:\n", sep = "")
 	nbh = function(i, m) {

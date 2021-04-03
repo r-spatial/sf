@@ -1,6 +1,6 @@
 
-R version 4.0.3 (2020-10-10) -- "Bunny-Wunnies Freak Out"
-Copyright (C) 2020 The R Foundation for Statistical Computing
+R version 4.0.5 (2021-03-31) -- "Shake and Throw"
+Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -144,7 +144,8 @@ although coordinates are longitude/latitude, st_relate assumes that they are pla
 > 
 > st_disjoint(a, b)
 although coordinates are longitude/latitude, st_intersects assumes that they are planar
-Sparse geometry binary predicate list of length 5, where the predicate was `disjoint'
+Sparse geometry binary predicate list of length 5, where the predicate
+was `disjoint'
  1: 1, 2, 3, 4, 5, 6, 7
  2: 1, 2, 3, 4, 5, 6, 7
  3: 1, 2, 3, 4, 5, 6
@@ -153,7 +154,8 @@ Sparse geometry binary predicate list of length 5, where the predicate was `disj
 > 
 > st_touches(a, b)
 although coordinates are longitude/latitude, st_touches assumes that they are planar
-Sparse geometry binary predicate list of length 5, where the predicate was `touches'
+Sparse geometry binary predicate list of length 5, where the predicate
+was `touches'
  1: (empty)
  2: (empty)
  3: 7
@@ -162,7 +164,8 @@ Sparse geometry binary predicate list of length 5, where the predicate was `touc
 > 
 > st_crosses(a, b)
 although coordinates are longitude/latitude, st_crosses assumes that they are planar
-Sparse geometry binary predicate list of length 5, where the predicate was `crosses'
+Sparse geometry binary predicate list of length 5, where the predicate
+was `crosses'
  1: (empty)
  2: (empty)
  3: (empty)
@@ -171,7 +174,8 @@ Sparse geometry binary predicate list of length 5, where the predicate was `cros
 > 
 > st_within(a, b)
 although coordinates are longitude/latitude, st_within assumes that they are planar
-Sparse geometry binary predicate list of length 5, where the predicate was `within'
+Sparse geometry binary predicate list of length 5, where the predicate
+was `within'
  1: (empty)
  2: (empty)
  3: (empty)
@@ -180,7 +184,8 @@ Sparse geometry binary predicate list of length 5, where the predicate was `with
 > 
 > st_contains(a, b)
 although coordinates are longitude/latitude, st_contains assumes that they are planar
-Sparse geometry binary predicate list of length 5, where the predicate was `contains'
+Sparse geometry binary predicate list of length 5, where the predicate
+was `contains'
  1: (empty)
  2: (empty)
  3: (empty)
@@ -189,7 +194,8 @@ Sparse geometry binary predicate list of length 5, where the predicate was `cont
 > 
 > st_overlaps(a, b)
 although coordinates are longitude/latitude, st_overlaps assumes that they are planar
-Sparse geometry binary predicate list of length 5, where the predicate was `overlaps'
+Sparse geometry binary predicate list of length 5, where the predicate
+was `overlaps'
  1: (empty)
  2: (empty)
  3: (empty)
@@ -197,7 +203,8 @@ Sparse geometry binary predicate list of length 5, where the predicate was `over
  5: (empty)
 > 
 > st_equals(a, b)
-Sparse geometry binary predicate list of length 5, where the predicate was `equals'
+Sparse geometry binary predicate list of length 5, where the predicate
+was `equals'
  1: (empty)
  2: (empty)
  3: (empty)
@@ -206,7 +213,8 @@ Sparse geometry binary predicate list of length 5, where the predicate was `equa
 > 
 > st_covers(a, b)
 although coordinates are longitude/latitude, st_covers assumes that they are planar
-Sparse geometry binary predicate list of length 5, where the predicate was `covers'
+Sparse geometry binary predicate list of length 5, where the predicate
+was `covers'
  1: (empty)
  2: (empty)
  3: (empty)
@@ -215,7 +223,8 @@ Sparse geometry binary predicate list of length 5, where the predicate was `cove
 > 
 > st_covered_by(a, b)
 although coordinates are longitude/latitude, st_covered_by assumes that they are planar
-Sparse geometry binary predicate list of length 5, where the predicate was `covered_by'
+Sparse geometry binary predicate list of length 5, where the predicate
+was `covered_by'
  1: (empty)
  2: (empty)
  3: (empty)
@@ -223,7 +232,8 @@ Sparse geometry binary predicate list of length 5, where the predicate was `cove
  5: 2
 > 
 > st_equals_exact(a, b, 0.01)
-Sparse geometry binary predicate list of length 5, where the predicate was `equals_exact'
+Sparse geometry binary predicate list of length 5, where the predicate
+was `equals_exact'
  1: (empty)
  2: (empty)
  3: (empty)
@@ -339,4 +349,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-  1.003   0.043   1.039 
+  0.988   0.044   1.024 
