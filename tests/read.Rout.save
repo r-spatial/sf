@@ -1,5 +1,5 @@
 
-R version 4.0.4 (2021-02-15) -- "Lost Library Book"
+R version 4.0.5 (2021-03-31) -- "Shake and Throw"
 Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -343,7 +343,8 @@ First 3 features:
 + }
 Writing layer `tst__' to data source `tst__.gpkg' using driver `GPKG'
 Writing 100 features with 15 fields and geometry type Multi Polygon.
-Reading layer `tst__' from data source `/home/edzer/git/sf.Rcheck/tests/tst__.gpkg' using driver `GPKG'
+Reading layer `tst__' from data source 
+  `/home/edzer/git/sf.Rcheck/tests/tst__.gpkg' using driver `GPKG'
 Simple feature collection with 100 features and 15 fields
 Geometry type: MULTIPOLYGON
 Dimension:     XY
@@ -367,4 +368,4 @@ Error in CPL_read_ogr(dsn, layer, query, as.character(options), quiet,  :
 > 
 > proc.time()
    user  system elapsed 
-  2.907   0.120   3.059 
+  1.483   0.056   1.530 

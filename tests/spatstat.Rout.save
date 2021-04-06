@@ -1,5 +1,5 @@
 
-R version 4.0.4 (2021-02-15) -- "Lost Library Book"
+R version 4.0.5 (2021-03-31) -- "Shake and Throw"
 Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -210,7 +210,8 @@ enclosing rectangle: [-1, 1] x [1, 2] units
 > 
 > # as.owin.sf, as.owin.sfc_*
 > nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), check_ring_dir = TRUE)
-Reading layer `nc.gpkg' from data source `/home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg' using driver `GPKG'
+Reading layer `nc.gpkg' from data source 
+  `/home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg' using driver `GPKG'
 Simple feature collection with 100 features and 14 fields
 Geometry type: MULTIPOLYGON
 Dimension:     XY
@@ -302,4 +303,4 @@ LINESTRING (1 1, 2 0)
 > 
 > proc.time()
    user  system elapsed 
-  4.156   0.128   4.337 
+  2.025   0.076   2.094 
