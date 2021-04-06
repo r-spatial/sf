@@ -562,9 +562,12 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 
 	if (! quiet) {
 		Rcpp::Rcout << "Reading layer `" << layer[0] << "' from data source ";
-		if (LENGTH(datasource[0]) > width - (32 - LENGTH(layer[0])))
-			Rcpp::Rcout << std::endl;
-		Rcpp::Rcout << "`" << datasource[0] << "' using driver `" << poDS->GetDriverName() << "'" << std::endl;                       // #nocov
+		if (LENGTH(datasource[0]) > (width - (34 + LENGTH(layer[0]))))
+			Rcpp::Rcout << std::endl << "  ";
+		Rcpp::Rcout << "`" << datasource[0] << "' ";
+		if (LENGTH(datasource[0]) > (width - 25))
+			Rcpp::Rcout << std::endl << "  ";
+		Rcpp::Rcout << "using driver `" << poDS->GetDriverName() << "'" << std::endl;                       // #nocov
 	}
 
 	Rcpp::List out = sf_from_ogrlayer(poLayer, quiet, int64_as_string, toTypeUser, fid_column_name,

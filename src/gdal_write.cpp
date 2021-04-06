@@ -261,8 +261,8 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 		}
 		if (! quiet) {
 			Rcpp::Rcout << "Writing layer `" << layer[0] << "' to data source ";
-			if (LENGTH(dsn[0]) > width - (30 - LENGTH(layer[0])))
-				Rcpp::Rcout << std::endl;
+			if (LENGTH(dsn[0]) > width - (44 + LENGTH(layer[0]) + LENGTH(driver[0])))
+				Rcpp::Rcout << std::endl << "  ";
 			Rcpp::Rcout << "`" << dsn[0] << "' using driver `" << driver[0] << "'" << std::endl;
 		}
 	}
