@@ -107,6 +107,8 @@ st_nearest_points.sf = function(x, y, ...) {
 #'   nearest = c(1, 3, 2, 2)
 #' ls = st_nearest_points(pts, circles[nearest], pairwise = TRUE)
 #' plot(ls, col = 5:8, add = TRUE)
+#' # compute distance between pairs of nearest features:
+#' st_distance(pts, circles[nearest], by_element = TRUE)
 st_nearest_feature = function(x, y) {
 	stopifnot(st_crs(x) == st_crs(y))
 	longlat = isTRUE(st_is_longlat(x))
