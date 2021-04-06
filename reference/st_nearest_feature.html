@@ -222,7 +222,9 @@ empty geometries result in <code>NA</code> indexes</p>
   <span class='va'>nearest</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>3</span>, <span class='fl'>2</span>, <span class='fl'>2</span><span class='op'>)</span>
 <span class='va'>ls</span> <span class='op'>=</span> <span class='fu'><a href='st_nearest_points.html'>st_nearest_points</a></span><span class='op'>(</span><span class='va'>pts</span>, <span class='va'>circles</span><span class='op'>[</span><span class='va'>nearest</span><span class='op'>]</span>, pairwise <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='va'>ls</span>, col <span class='op'>=</span> <span class='fl'>5</span><span class='op'>:</span><span class='fl'>8</span>, add <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='img'><img src='st_nearest_feature-1.png' alt='' width='700' height='433' /></div></pre>
+</div><div class='img'><img src='st_nearest_feature-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># compute distance between pairs of nearest features:</span>
+<span class='fu'><a href='geos_measures.html'>st_distance</a></span><span class='op'>(</span><span class='va'>pts</span>, <span class='va'>circles</span><span class='op'>[</span><span class='va'>nearest</span><span class='op'>]</span>, by_element <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.05857864 0.17481378 0.28284271 0.36849479</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
