@@ -64,7 +64,7 @@
 #' .image_scale(1:10, col = sf.colors(9), key.length = lcm(8), key.pos = 4, at = 1:10)
 #' @export
 plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty",
-		max.plot = if(is.null(n <- options("sf_max.plot")[[1]])) 9 else n,
+		max.plot = if(is.null(n <- getOption("sf_max.plot"))) 9 else n,
 		key.pos = get_key_pos(x, ...), key.length = .618, key.width = lcm(1.8),
 		reset = TRUE, logz = FALSE, extent = x, xlim = st_bbox(extent)[c(1,3)],
 		ylim = st_bbox(extent)[c(2,4)]) {
