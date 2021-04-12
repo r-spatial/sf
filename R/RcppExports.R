@@ -57,8 +57,8 @@ CPL_wrap_dateline <- function(sfc, opt, quiet = TRUE) {
     .Call('_sf_CPL_wrap_dateline', PACKAGE = 'sf', sfc, opt, quiet)
 }
 
-CPL_get_rgdal_drivers <- function(dummy) {
-    .Call('_sf_CPL_get_rgdal_drivers', PACKAGE = 'sf', dummy)
+CPL_get_gdal_drivers <- function(dummy) {
+    .Call('_sf_CPL_get_gdal_drivers', PACKAGE = 'sf', dummy)
 }
 
 CPL_sfc_from_wkt <- function(wkt) {

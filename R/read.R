@@ -537,7 +537,7 @@ write_sf <- function(..., quiet = TRUE, append = FALSE, delete_layer = !append) 
 #' @examples
 #' st_drivers()
 st_drivers = function(what = "vector") {
-	ret = CPL_get_rgdal_drivers(0)
+	ret = CPL_get_gdal_drivers(0)
 	row.names(ret) = ret$name
 	switch(what,
 		vector = ret[ret$is_vector,],

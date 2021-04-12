@@ -168,14 +168,14 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// CPL_get_rgdal_drivers
-Rcpp::List CPL_get_rgdal_drivers(int dummy);
-RcppExport SEXP _sf_CPL_get_rgdal_drivers(SEXP dummySEXP) {
+// CPL_get_gdal_drivers
+Rcpp::List CPL_get_gdal_drivers(int dummy);
+RcppExport SEXP _sf_CPL_get_gdal_drivers(SEXP dummySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type dummy(dummySEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_get_rgdal_drivers(dummy));
+    rcpp_result_gen = Rcpp::wrap(CPL_get_gdal_drivers(dummy));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1262,7 +1262,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_curve_to_linestring", (DL_FUNC) &_sf_CPL_curve_to_linestring, 1},
     {"_sf_CPL_transform", (DL_FUNC) &_sf_CPL_transform, 7},
     {"_sf_CPL_wrap_dateline", (DL_FUNC) &_sf_CPL_wrap_dateline, 3},
-    {"_sf_CPL_get_rgdal_drivers", (DL_FUNC) &_sf_CPL_get_rgdal_drivers, 1},
+    {"_sf_CPL_get_gdal_drivers", (DL_FUNC) &_sf_CPL_get_gdal_drivers, 1},
     {"_sf_CPL_sfc_from_wkt", (DL_FUNC) &_sf_CPL_sfc_from_wkt, 1},
     {"_sf_CPL_gdal_with_geos", (DL_FUNC) &_sf_CPL_gdal_with_geos, 0},
     {"_sf_CPL_axis_order_authority_compliant", (DL_FUNC) &_sf_CPL_axis_order_authority_compliant, 1},
