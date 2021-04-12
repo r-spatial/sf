@@ -1,4 +1,4 @@
----
+g--
 title: "6. Miscellaneous"
 author: "Edzer Pebesma"
 output:
@@ -25,15 +25,10 @@ entries for this vignette (as for the others).
 # What is this EPSG code all about?
 
 EPSG stands for a maintained, well-understood set of spatial
-reference systems, maintained by the International Association of
-Oil \& Gass Producers (IOGP).
-From R, we can get access to the EPSG
-dataset programmatically (as a `data.frame`) by:
-```{r, eval=FALSE}
-rgdal::make_EPSG()
-```
-
-see also the first vignette.
+reference systems, maintained by the International Association
+of Oil \& Gass Producers (IOGP). "EPSG" stands for the authority,
+e.g. "EPSG:4326" stands for spatial reference system with ID 4326
+as it is maintained by the EPSG authority.
 
 # How does `sf` deal with secondary geometry columns?
 
