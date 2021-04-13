@@ -79,6 +79,7 @@ Suggests:
     pillar,
     pool,
     raster,
+    rgdal,
     rgeos,
     rlang,
     rmarkdown,
