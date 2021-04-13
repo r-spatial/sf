@@ -76,7 +76,7 @@
       <a href="../articles/sf5.html">5. Plotting Simple Features</a>
     </li>
     <li>
-      <a href="../articles/sf6.html">6. Miscellaneous</a>
+      <a href="../articles/sf6.html">UNKNOWN TITLE</a>
     </li>
     <li>
       <a href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
@@ -281,7 +281,7 @@
 <span class="co">## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1</span>
 <span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">## Reading layer `nc' from data source </span>
-<span class="co">##   `/tmp/RtmpwZV9DN/temp_libpath4d367a07047c/sf/shape/nc.shp' </span>
+<span class="co">##   `/tmp/Rtmp75WIRN/temp_libpath4f476f3b731c/sf/shape/nc.shp' </span>
 <span class="co">##   using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Geometry type: MULTIPOLYGON</span>
@@ -599,7 +599,7 @@
 <code class="sourceCode R"><span class="va">filename</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>
 <span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">filename</span><span class="op">)</span>
 <span class="co">## Reading layer `nc' from data source </span>
-<span class="co">##   `/tmp/RtmpwZV9DN/temp_libpath4d367a07047c/sf/shape/nc.shp' </span>
+<span class="co">##   `/tmp/Rtmp75WIRN/temp_libpath4f476f3b731c/sf/shape/nc.shp' </span>
 <span class="co">##   using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Geometry type: MULTIPOLYGON</span>
@@ -684,43 +684,6 @@
 <code>delete_dsn=TRUE</code> causes <code>st_write</code> to delete the data source when present, before writing the layer in a newly created data source. No error is given when the data source does not exist. This option should be handled with care, as it may wipe complete directories or databases.</li>
 </ul>
 </div>
-<div id="benchmarks" class="section level3">
-<h3 class="hasAnchor">
-<a href="#benchmarks" class="anchor"></a>Benchmarks</h3>
-<p>Benchmarks show that <code><a href="../reference/st_read.html">st_read()</a></code> is faster than <code><a href="http://rgdal.r-forge.r-project.org/reference/readOGR.html">rgdal::readOGR()</a></code>, for example:</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">shp_read_sp</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu">rgdal</span><span class="fu">::</span><span class="fu"><a href="http://rgdal.r-forge.r-project.org/reference/readOGR.html">readOGR</a></span><span class="op">(</span>dsn <span class="op">=</span> <span class="st">"."</span>, layer <span class="op">=</span> <span class="st">"biketrails"</span><span class="op">)</span>
-<span class="va">shp_read_sf</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"biketrails.shp"</span><span class="op">)</span>
-<span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.info.html">Sys.info</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">==</span> <span class="st">"Linux"</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">kmz_read_sp</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu">rgdal</span><span class="fu">::</span><span class="fu"><a href="http://rgdal.r-forge.r-project.org/reference/readOGR.html">readOGR</a></span><span class="op">(</span>dsn <span class="op">=</span> <span class="st">"BikePaths.kmz"</span><span class="op">)</span>
-  <span class="va">kmz_read_sf</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"BikePaths.kmz"</span><span class="op">)</span>
-<span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
-    <span class="va">kmz_read_sp</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html">message</a></span><span class="op">(</span><span class="st">"NA"</span><span class="op">)</span>
-    <span class="va">kmz_read_sf</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html">message</a></span><span class="op">(</span><span class="st">"NA"</span><span class="op">)</span>
-<span class="op">}</span>
-<span class="va">kml_read_sp</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu">rgdal</span><span class="fu">::</span><span class="fu"><a href="http://rgdal.r-forge.r-project.org/reference/readOGR.html">readOGR</a></span><span class="op">(</span><span class="st">"bikeraces.kml"</span><span class="op">)</span>
-<span class="va">kml_read_sf</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"bikeraces.kml"</span><span class="op">)</span>
-<span class="fu">microbenchmark</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/microbenchmark/man/microbenchmark.html">microbenchmark</a></span><span class="op">(</span><span class="fu">shp_read_sp</span><span class="op">(</span><span class="op">)</span>, <span class="fu">shp_read_sf</span><span class="op">(</span><span class="op">)</span>,
-                               <span class="fu">kmz_read_sp</span><span class="op">(</span><span class="op">)</span>, <span class="fu">kmz_read_sf</span><span class="op">(</span><span class="op">)</span>,
-                               <span class="fu">kml_read_sp</span><span class="op">(</span><span class="op">)</span>, <span class="fu">kml_read_sf</span><span class="op">(</span><span class="op">)</span>, times <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></code></pre></div>
-<p>On a laptop with an Intel i5-4300M CPU @ 2.60GHz with ssd the results were as follows:</p>
-<pre><code>Unit: milliseconds
-          expr         min          lq       mean     median          uq
- shp_read_sp() 4993.954530 5010.798950 5072.94155 5049.68057 5116.050416
- shp_read_sf()  331.580349  341.608044  352.99233  353.00169  364.601151
- kmz_read_sp() 4940.108931 4966.177983 5021.47680 4989.82589 5038.393259
- kmz_read_sf() 1086.925988 1088.850196 1103.04846 1090.15794 1100.518670
- kml_read_sp()  167.556454  176.395750  182.10324  185.31941  187.720235
- kml_read_sf()    8.132629    8.268952   10.44328    8.52626    9.420043
-        max neval   cld
- 5186.16240    10     e
-  376.64045    10   c  
- 5282.25874    10     e
- 1178.42358    10    d
-  189.29191    10  b   
-   26.20221    10 a    </code></pre>
-<p>This shows that <code><a href="../reference/st_read.html">sf::st_read()</a></code> is substantially faster than <code><a href="http://rgdal.r-forge.r-project.org/reference/readOGR.html">rgdal::readOGR()</a></code>: by a factor of 14-18 for the Shapefile and KML files, and more than a factor of 4 for the KMZ file used in this benchmark, respectively.</p>
-</div>
 <div id="connection-to-spatial-databases" class="section level3">
 <h3 class="hasAnchor">
 <a href="#connection-to-spatial-databases" class="anchor"></a>Connection to spatial databases</h3>
@@ -734,7 +697,7 @@
 <p><code>proj4string</code> is a generic, string-based description of a CRS, understood by the <a href="https://proj4.org/">PROJ</a> library. It defines projection types and (often) defines parameter values for particular projections, and hence can cover an infinite amount of different projections. This library (also used by GDAL) provides functions to convert or transform between different CRS. <code>epsg</code> is the integer ID for a particular, known CRS that can be resolved into a <code>proj4string</code>. Some <code>proj4string</code> values can resolved back into their corresponding <code>epsg</code> ID, but this does not always work.</p>
 <p>The importance of having <code>epsg</code> values stored with data besides <code>proj4string</code> values is that the <code>epsg</code> refers to particular, well-known CRS, whose parameters may change (improve) over time; fixing only the <code>proj4string</code> may remove the possibility to benefit from such improvements, and limit some of the provenance of datasets, but may help reproducibility.</p>
 <p>Coordinate reference system transformations can be carried out using <code>st_transform</code>, e.g. converting longitudes/latitudes in NAD27 to web mercator (EPSG:3857) can be done by</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">nc.web_mercator</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">nc</span>, <span class="fl">3857</span><span class="op">)</span>
 <span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc.web_mercator</span><span class="op">)</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span>
 <span class="co">##          [,1]    [,2]</span>
@@ -746,7 +709,7 @@
 <h2 class="hasAnchor">
 <a href="#conversion-including-to-and-from-sp" class="anchor"></a>Conversion, including to and from sp</h2>
 <p><code>sf</code> objects and objects deriving from <code>Spatial</code> (package <code>sp</code>) can be coerced both ways:</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">showMethods</span><span class="op">(</span><span class="st">"coerce"</span>, classes <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span>
 <span class="co">## Function: coerce (package methods)</span>
 <span class="co">## from="sf", to="Spatial"</span>
@@ -793,11 +756,11 @@
 <a href="#geometrycollection" class="anchor"></a>Geometrical operations</h2>
 <p>The standard for simple feature access defines a number of geometrical operations.</p>
 <p><code>st_is_valid</code> and <code>st_is_simple</code> return a boolean indicating whether a geometry is valid or simple.</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/valid.html">st_is_valid</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,<span class="op">]</span><span class="op">)</span>
 <span class="co">## [1] TRUE TRUE</span></code></pre></div>
 <p><code>st_distance</code> returns a dense numeric matrix with distances between geometries. <code>st_relate</code> returns a character matrix with the <a href="https://en.wikipedia.org/wiki/DE-9IM#Illustration">DE9-IM</a> values for each pair of geometries:</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">nc</span>, <span class="fl">32119</span><span class="op">)</span>
 <span class="fu"><a href="../reference/geos_measures.html">st_distance</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">4</span>,<span class="fl">22</span><span class="op">)</span>,<span class="op">]</span>, <span class="va">x</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">33</span>,<span class="fl">55</span>,<span class="fl">56</span><span class="op">)</span>,<span class="op">]</span><span class="op">)</span>
 <span class="co">## Units: [m]</span>
@@ -814,7 +777,7 @@
 <span class="co">## [4,] "FF2FF1212" "FF2FF1212" "FF2FF1212" "2FFF1FFF2"</span>
 <span class="co">## [5,] "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212"</span></code></pre></div>
 <p>The commands <code>st_intersects</code>, <code>st_disjoint</code>, <code>st_touches</code>, <code>st_crosses</code>, <code>st_within</code>, <code>st_contains</code>, <code>st_overlaps</code>, <code>st_equals</code>, <code>st_covers</code>, <code>st_covered_by</code>, <code>st_equals_exact</code> and <code>st_is_within_distance</code> return a sparse matrix with matching (TRUE) indexes, or a full logical matrix:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="op">]</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="op">]</span><span class="op">)</span>
 <span class="co">## although coordinates are longitude/latitude, st_intersects assumes that they are planar</span>
 <span class="co">## Sparse geometry binary predicate list of length 5, where the predicate</span>
@@ -833,23 +796,23 @@
 <span class="co">## [4,] FALSE FALSE FALSE  TRUE</span>
 <span class="co">## [5,] FALSE FALSE FALSE FALSE</span></code></pre></div>
 <p>The commands <code>st_buffer</code>, <code>st_boundary</code>, <code>st_convexhull</code>, <code>st_union_cascaded</code>, <code>st_simplify</code>, <code>st_triangulate</code>, <code>st_polygonize</code>, <code>st_centroid</code>, <code>st_segmentize</code>, and <code>st_union</code> return new geometries, e.g.:</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">5</span>,<span class="fl">14</span><span class="op">)</span>
 <span class="va">geom</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc.web_mercator</span><span class="op">[</span><span class="va">sel</span>,<span class="op">]</span><span class="op">)</span>
 <span class="va">buf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">geom</span>, dist <span class="op">=</span> <span class="fl">30000</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">buf</span>, border <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">geom</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">geom</span>, <span class="op">-</span><span class="fl">5000</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">'blue'</span><span class="op">)</span></code></pre></div>
-<p><img src="sf1_files/figure-html/unnamed-chunk-41-1.png" width="700"></p>
+<p><img src="sf1_files/figure-html/unnamed-chunk-39-1.png" width="700"></p>
 <p>Commands <code>st_intersection</code>, <code>st_union</code>, <code>st_difference</code>, <code>st_sym_difference</code> return new geometries that are a function of pairs of geometries:</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span>
 <span class="va">u</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/geos_combine.html">st_union</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span>
 <span class="co">## although coordinates are longitude/latitude, st_union assumes that they are planar</span>
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">u</span><span class="op">)</span></code></pre></div>
-<p><img src="sf1_files/figure-html/unnamed-chunk-42-1.png" width="700"></p>
+<p><img src="sf1_files/figure-html/unnamed-chunk-40-1.png" width="700"></p>
 <p>The following code shows how computing an intersection between two polygons may yield a <code>GEOMETRYCOLLECTION</code> with a point, line and polygon:</p>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">opar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>
 <span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">7.5</span>,<span class="fl">7.5</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="op">-</span><span class="fl">1</span>,<span class="op">-</span><span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span>,<span class="fl">7</span>,<span class="fl">7</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">.5</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0.5</span>,<span class="op">-</span><span class="fl">0.5</span>,<span class="op">-</span><span class="fl">0.5</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
@@ -862,15 +825,15 @@
 <span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span><span class="op">(</span><span class="st">"GEOMETRYCOLLECTION"</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">b</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">i</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, col <span class="op">=</span> <span class="st">'green'</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
-<p><img src="sf1_files/figure-html/unnamed-chunk-43-1.png" width="672"></p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<p><img src="sf1_files/figure-html/unnamed-chunk-41-1.png" width="672"></p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span><span class="va">opar</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="non-simple-and-non-valid-geometries" class="section level2">
 <h2 class="hasAnchor">
 <a href="#non-simple-and-non-valid-geometries" class="anchor"></a>Non-simple and non-valid geometries</h2>
 <p>Non-simple geometries are for instance self-intersecting lines (left); non-valid geometries are for instance polygons with slivers (middle) or self-intersections (right).</p>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span>
 <span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0.6</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
@@ -879,14 +842,14 @@
 <span class="co">## [1] FALSE</span>
 <span class="fu"><a href="../reference/valid.html">st_is_valid</a></span><span class="op">(</span><span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="va">x2</span>,<span class="va">x3</span><span class="op">)</span><span class="op">)</span>
 <span class="co">## [1] FALSE FALSE</span></code></pre></div>
-<p><img src="sf1_files/figure-html/unnamed-chunk-45-1.png" width="700"></p>
+<p><img src="sf1_files/figure-html/unnamed-chunk-43-1.png" width="700"></p>
 </div>
 </div>
 <div id="units" class="section level1">
 <h1 class="hasAnchor">
 <a href="#units" class="anchor"></a>Units</h1>
 <p>Where possible geometric operations such as <code><a href="../reference/geos_measures.html">st_distance()</a></code>, <code><a href="../reference/geos_measures.html">st_length()</a></code> and <code><a href="../reference/geos_measures.html">st_area()</a></code> report results with a units attribute appropriate for the CRS:</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/geos_measures.html">st_area</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/attributes.html">attributes</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span>
 <span class="co">## $units</span>
@@ -902,13 +865,13 @@
 <span class="co">## $class</span>
 <span class="co">## [1] "units"</span></code></pre></div>
 <p>The <strong>units</strong> package can be used to convert between units:</p>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">units</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html">set_units</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">km</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span> <span class="co"># result in square kilometers</span>
 <span class="co">## 1137.389 [km^2]</span>
 <span class="fu">units</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html">set_units</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">ha</span><span class="op">)</span> <span class="co"># result in hectares</span>
 <span class="co">## 113738.9 [ha]</span></code></pre></div>
 <p>The result can be stripped of their attributes if needs be:</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span>
 <span class="co">## [1] 1137388604</span></code></pre></div>
 </div>
@@ -918,14 +881,14 @@
 <p>(This will eventually be the topic of a new vignette; now here to explain the last attribute of <code>sf</code> objects)</p>
 <p>The standard documents about simple features are very detailed about the geometric aspects of features, but say nearly nothing about attributes, except that their values should be understood in another reference system (their units of measurement, e.g. as implemented in the package <a href="https://CRAN.R-project.org/package=units"><strong>units</strong></a>). But there is more to it. For variables like air temperature, interpolation usually makes sense, for others like human body temperature it doesn’t. The difference is that air temperature is a field, which continues between sensors, where body temperature is an object property that doesn’t extend beyond the body – in spatial statistics bodies would be called a point pattern, their temperature the point marks. For geometries that have a non-zero size (positive length or area), attribute values may refer to the every sub-geometry (every point), or may summarize the geometry. For example, a state’s population density summarizes the whole state, and is not a meaningful estimate of population density for a give point inside the state without the context of the state. On the other hand, land use or geological maps give polygons with constant land use or geology, every point inside the polygon is of that class. Some properties are spatially <a href="https://en.wikipedia.org/wiki/Intensive_and_extensive_properties">extensive</a>, meaning that attributes would summed up when two geometries are merged: population is an example. Other properties are spatially intensive, and should be averaged, with population density the example.</p>
 <p>Simple feature objects of class <code>sf</code> have an <em>agr</em> attribute that points to the <em>attribute-geometry-relationship</em>, how attributes relate to their geometry. It can be defined at creation time:</p>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>,
     agr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>AREA <span class="op">=</span> <span class="st">"aggregate"</span>, PERIMETER <span class="op">=</span> <span class="st">"aggregate"</span>, CNTY_ <span class="op">=</span> <span class="st">"identity"</span>,
         CNTY_ID <span class="op">=</span> <span class="st">"identity"</span>, NAME <span class="op">=</span> <span class="st">"identity"</span>, FIPS <span class="op">=</span> <span class="st">"identity"</span>, FIPSNO <span class="op">=</span> <span class="st">"identity"</span>,
         CRESS_ID <span class="op">=</span> <span class="st">"identity"</span>, BIR74 <span class="op">=</span> <span class="st">"aggregate"</span>, SID74 <span class="op">=</span> <span class="st">"aggregate"</span>, NWBIR74 <span class="op">=</span> <span class="st">"aggregate"</span>,
         BIR79 <span class="op">=</span> <span class="st">"aggregate"</span>, SID79 <span class="op">=</span> <span class="st">"aggregate"</span>, NWBIR79 <span class="op">=</span> <span class="st">"aggregate"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">## Reading layer `nc' from data source </span>
-<span class="co">##   `/tmp/RtmpwZV9DN/temp_libpath4d367a07047c/sf/shape/nc.shp' </span>
+<span class="co">##   `/tmp/Rtmp75WIRN/temp_libpath4f476f3b731c/sf/shape/nc.shp' </span>
 <span class="co">##   using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity</span>
