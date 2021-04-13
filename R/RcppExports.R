@@ -105,8 +105,8 @@ CPL_get_layers <- function(datasource, options, do_count = FALSE) {
     .Call('_sf_CPL_get_layers', PACKAGE = 'sf', datasource, options, do_count)
 }
 
-CPL_read_ogr <- function(datasource, layer, query, options, quiet, toTypeUser, fid_column_name, drivers, wkt_filter, promote_to_multi = TRUE, int64_as_string = FALSE, dsn_exists = TRUE, dsn_isdb = FALSE, width = 80L) {
-    .Call('_sf_CPL_read_ogr', PACKAGE = 'sf', datasource, layer, query, options, quiet, toTypeUser, fid_column_name, drivers, wkt_filter, promote_to_multi, int64_as_string, dsn_exists, dsn_isdb, width)
+CPL_read_ogr <- function(datasource, layer, query, options, quiet, toTypeUser, fid_column_name, drivers, wkt_filter, dialect, promote_to_multi = TRUE, int64_as_string = FALSE, dsn_exists = TRUE, dsn_isdb = FALSE, width = 80L) {
+    .Call('_sf_CPL_read_ogr', PACKAGE = 'sf', datasource, layer, query, options, quiet, toTypeUser, fid_column_name, drivers, wkt_filter, dialect, promote_to_multi, int64_as_string, dsn_exists, dsn_isdb, width)
 }
 
 CPL_gdalinfo <- function(obj, options, oo) {

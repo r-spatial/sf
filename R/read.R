@@ -51,7 +51,7 @@ set_utf8 = function(x) {
 #'   of LineString and MultiLineString, or of Polygon and MultiPolygon, convert
 #'   all to the Multi variety; defaults to \code{TRUE}
 #' @param stringsAsFactors logical; logical: should character vectors be
-#'   converted to factors?  Default for \code{read_sf} or R version >= 4.1.0 is 
+#'   converted to factors?  Default for \code{read_sf} or R version >= 4.1.0 is
 #' \code{FALSE}, for \code{st_read} and R version < 4.1.0 equal to
 #' \code{default.stringsAsFactors()}
 #' @param int64_as_string logical; if TRUE, Int64 attributes are returned as
@@ -141,7 +141,7 @@ st_read.default = function(dsn, layer, ...) {
 }
 
 process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
-		stringsAsFactors = ifelse(as_tibble, FALSE, sf_stringsAsFactors()), 
+		stringsAsFactors = ifelse(as_tibble, FALSE, sf_stringsAsFactors()),
 		geometry_column = 1, as_tibble = FALSE) {
 
 	which.geom = which(vapply(x, function(f) inherits(f, "sfc"), TRUE))
@@ -151,7 +151,7 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 
 	# in case no geometry is present:
 	if (length(which.geom) == 0) {
-		if (! quiet) 
+		if (! quiet)
 			warning("no simple feature geometries present: returning a data.frame or tbl_df", call. = FALSE)
 		x = if (!as_tibble) {
 				if (any(sapply(x, is.list)))
@@ -202,15 +202,16 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 #' @param fid_column_name character; name of column to write feature IDs to; defaults to not doing this
 #' @param drivers character; limited set of driver short names to be tried (default: try all)
 #' @param wkt_filter character; WKT representation of a spatial filter (may be used as bounding box, selecting overlapping geometries); see examples
+#' @param dialect TODO
 #' @note The use of \code{system.file} in examples make sure that examples run regardless where R is installed:
 #' typical users will not use \code{system.file} but give the file name directly, either with full path or relative
 #' to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename
 #' that reside in the same directory, only one of them having extension \code{.shp}.
 #' @export
-st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet = FALSE, geometry_column = 1L, 
+st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet = FALSE, geometry_column = 1L,
 		type = 0, promote_to_multi = TRUE, stringsAsFactors = sf_stringsAsFactors(),
 		int64_as_string = FALSE, check_ring_dir = FALSE, fid_column_name = character(0),
-		drivers = character(0), wkt_filter = character(0)) {
+		drivers = character(0), wkt_filter = character(0), dialect = character(0)) {
 
 	layer = if (missing(layer))
 		character(0)
@@ -228,7 +229,7 @@ st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet 
 		stop("`promote_to_multi' should have length one, and applies to all geometry columns")
 
 	x = CPL_read_ogr(dsn, layer, query, as.character(options), quiet, type, fid_column_name,
-		drivers, wkt_filter, promote_to_multi, int64_as_string, dsn_exists, dsn_isdb, getOption("width"))
+		drivers, wkt_filter, dialect, promote_to_multi, int64_as_string, dsn_exists, dsn_isdb, getOption("width"))
 	process_cpl_read_ogr(x, quiet, check_ring_dir = check_ring_dir,
 		stringsAsFactors = stringsAsFactors, geometry_column = geometry_column, ...)
 }
