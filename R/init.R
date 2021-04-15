@@ -62,10 +62,10 @@ pathGrob <- NULL
 #' Provide the external dependencies versions of the libraries linked to sf
 #' @export
 sf_extSoftVersion = function() {
-	structure(c(CPL_geos_version(), CPL_gdal_version(), CPL_proj_version(),
+	structure(c(CPL_geos_version(), CPL_gdal_version(), CPL_proj_version(), 
 		ifelse(CPL_gdal_with_geos(), "true", "false"),
-		ifelse(CPL_proj_h(), "true", "false")),
-		names = c("GEOS", "GDAL", "proj.4", "GDAL_with_GEOS", "USE_PROJ_H"))
+		ifelse(CPL_proj_h(), "true", "false"), CPL_proj_version()),
+		names = c("GEOS", "GDAL", "proj.4", "GDAL_with_GEOS", "USE_PROJ_H", "PROJ"))
 }
 
 load_gdal <- function() {
