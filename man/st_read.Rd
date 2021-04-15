@@ -101,7 +101,7 @@ clockwise, holes clockwise)}
 
 \item{wkt_filter}{character; WKT representation of a spatial filter (may be used as bounding box, selecting overlapping geometries); see examples}
 
-\item{dialect}{TODO}
+\item{dialect}{The dialect used by ExecuteSQL when running the \code{query}}
 
 \item{as_tibble}{logical; should the returned table be of class tibble or data.frame?}
 
@@ -143,12 +143,15 @@ In case of problems reading shapefiles from USB drives on OSX, please see
 For \code{query} with a character \code{dsn} the query text is handed to
 'ExecuteSQL' on the GDAL/OGR data set and will result in the creation of a
 new layer (and \code{layer} is ignored). See 'OGRSQL'
-\url{https://gdal.org/user/ogr_sql_dialect.html} for details. Please note that the
-'FID' special field is driver-dependent, and may be either 0-based (e.g. ESRI
-Shapefile), 1-based (e.g. MapInfo) or arbitrary (e.g. OSM). Other features of
-OGRSQL are also likely to be driver dependent. The available layer names may
-be obtained with
-\link{st_layers}. Care will be required to properly escape the use of some layer names.
+\url{https://gdal.org/user/ogr_sql_dialect.html} for details. The parameter
+\code{dialect} can be used to select the 'dialect' used by 'ExecuteSQL'. See
+\url{https://gdal.org/api/gdaldataset_cpp.html#_CPPv4N11GDALDataset10ExecuteSQLEPKcP11OGRGeometryPKc}
+for more details. Please note that the 'FID' special field is
+driver-dependent, and may be either 0-based (e.g. ESRI Shapefile), 1-based
+(e.g. MapInfo) or arbitrary (e.g. OSM). Other features of OGRSQL are also
+likely to be driver dependent. The available layer names may be obtained with
+\link{st_layers}. Care will be required to properly escape the use of some
+layer names.
 
 \code{read_sf} and \code{write_sf} are aliases for \code{st_read} and \code{st_write}, respectively, with some
 modified default arguments.

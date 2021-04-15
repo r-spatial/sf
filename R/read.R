@@ -80,12 +80,15 @@ set_utf8 = function(x) {
 #' For \code{query} with a character \code{dsn} the query text is handed to
 #' 'ExecuteSQL' on the GDAL/OGR data set and will result in the creation of a
 #' new layer (and \code{layer} is ignored). See 'OGRSQL'
-#' \url{https://gdal.org/user/ogr_sql_dialect.html} for details. Please note that the
-#' 'FID' special field is driver-dependent, and may be either 0-based (e.g. ESRI
-#' Shapefile), 1-based (e.g. MapInfo) or arbitrary (e.g. OSM). Other features of
-#' OGRSQL are also likely to be driver dependent. The available layer names may
-#' be obtained with
-#' \link{st_layers}. Care will be required to properly escape the use of some layer names.
+#' \url{https://gdal.org/user/ogr_sql_dialect.html} for details. The parameter
+#' \code{dialect} can be used to select the 'dialect' used by 'ExecuteSQL'. See
+#' \url{https://gdal.org/api/gdaldataset_cpp.html#_CPPv4N11GDALDataset10ExecuteSQLEPKcP11OGRGeometryPKc}
+#' for more details. Please note that the 'FID' special field is
+#' driver-dependent, and may be either 0-based (e.g. ESRI Shapefile), 1-based
+#' (e.g. MapInfo) or arbitrary (e.g. OSM). Other features of OGRSQL are also
+#' likely to be driver dependent. The available layer names may be obtained with
+#' \link{st_layers}. Care will be required to properly escape the use of some
+#' layer names.
 #'
 #' @return object of class \link{sf} when a layer was successfully read; in case
 #'   argument \code{layer} is missing and data source \code{dsn} does not
@@ -202,7 +205,7 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 #' @param fid_column_name character; name of column to write feature IDs to; defaults to not doing this
 #' @param drivers character; limited set of driver short names to be tried (default: try all)
 #' @param wkt_filter character; WKT representation of a spatial filter (may be used as bounding box, selecting overlapping geometries); see examples
-#' @param dialect TODO
+#' @param dialect The dialect used by ExecuteSQL when running the \code{query}
 #' @note The use of \code{system.file} in examples make sure that examples run regardless where R is installed:
 #' typical users will not use \code{system.file} but give the file name directly, either with full path or relative
 #' to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename
