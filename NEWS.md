@@ -1,3 +1,8 @@
+# version 1.0-0
+
+* use `s2` as default geometry back-end when coordinates are ellipsoidal, this can
+  be suppressed by setting environment variable `_SF_USE_S2` to `false`; #1649
+
 # version 0.9-9
 
 * `st_write` gains an argument `config_options` to set GDAL config options; #1618

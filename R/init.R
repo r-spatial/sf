@@ -37,7 +37,7 @@ pathGrob <- NULL
 		}
 	} # nocov end
 	load_gdal() 
-	assign(".sf.use_s2", Sys.getenv("_SF_USE_S2") == "true", envir=.sf_cache)
+	assign(".sf.use_s2", !(Sys.getenv("_SF_USE_S2") == "false"), envir=.sf_cache)
 }
 
 .onUnload = function(libname, pkgname) {
