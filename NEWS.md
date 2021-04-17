@@ -1,5 +1,7 @@
 # version 0.9-9
 
+* `st_read` gains an argument `dialect` to choose the dialect used by `ExecuteSQL`; #1646
+
 * `st_write` gains an argument `config_options` to set GDAL config options; #1618
 
 * fix regression in `sf_project` when `keep = TRUE`; #1635

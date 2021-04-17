@@ -145,13 +145,15 @@ For \code{query} with a character \code{dsn} the query text is handed to
 new layer (and \code{layer} is ignored). See 'OGRSQL'
 \url{https://gdal.org/user/ogr_sql_dialect.html} for details. The parameter
 \code{dialect} can be used to select the 'dialect' used by 'ExecuteSQL'. See
-\url{https://gdal.org/api/gdaldataset_cpp.html#_CPPv4N11GDALDataset10ExecuteSQLEPKcP11OGRGeometryPKc}
-for more details. Please note that the 'FID' special field is
-driver-dependent, and may be either 0-based (e.g. ESRI Shapefile), 1-based
-(e.g. MapInfo) or arbitrary (e.g. OSM). Other features of OGRSQL are also
-likely to be driver dependent. The available layer names may be obtained with
-\link{st_layers}. Care will be required to properly escape the use of some
-layer names.
+\href{https://gdal.org/api/gdaldataset_cpp.html#_CPPv4N11GDALDataset10ExecuteSQLEPKcP11OGRGeometryPKc}{here}
+and \href{https://gdal.org/user/sql_sqlite_dialect.html}{here} for more
+details. See \url{https://github.com/r-spatial/sf/pull/1646} for simple
+examples of spatial queries using the \code{SQLite} dialect. Please note that
+the 'FID' special field is driver-dependent, and may be either 0-based (e.g.
+ESRI Shapefile), 1-based (e.g. MapInfo) or arbitrary (e.g. OSM). Other
+features of OGRSQL are also likely to be driver dependent. The available
+layer names may be obtained with \link{st_layers}. Care will be required to
+properly escape the use of some layer names.
 
 \code{read_sf} and \code{write_sf} are aliases for \code{st_read} and \code{st_write}, respectively, with some
 modified default arguments.
@@ -203,6 +205,21 @@ nc_gpkg_sql = st_read(system.file("gpkg/nc.gpkg", package = "sf"),
 wkt = st_as_text(st_geometry(nc[1,]))
 # filter by (bbox overlaps of) first feature geometry:
 read_sf(system.file("gpkg/nc.gpkg", package="sf"), wkt_filter = wkt)
+# if you select the SQLite dialect, then you can use several spatial
+# functions when building the query:
+nc_sqlite = st_read(
+  system.file("shape/nc.shp", package="sf"),
+  query = "
+    SELECT GEOMETRY, ST_Area(ST_Transform(GEOMETRY, 32119)) AS AREA_m2
+    FROM nc
+    WHERE ST_Intersects(
+      ST_Transform(GEOMETRY, 32119),
+      GeomFromText('POINT (573193 199429)', 32119)
+    )
+  ",
+  dialect = "SQLite"
+)
+nc_sqlite
 # read geojson from string:
 geojson_txt <- paste("{\"type\":\"MultiPoint\",\"coordinates\":",
    "[[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}")
