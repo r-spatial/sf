@@ -1,4 +1,4 @@
-g--
+---
 title: "6. Miscellaneous"
 author: "Edzer Pebesma"
 output:
