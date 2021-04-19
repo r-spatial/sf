@@ -25,7 +25,7 @@ st_as_s2(x, ...)
 
 \method{st_as_s2}{sf}(x, ...)
 
-\method{st_as_s2}{sfc}(x, ..., oriented = FALSE)
+\method{st_as_s2}{sfc}(x, ..., oriented = FALSE, rebuild = TRUE)
 }
 \arguments{
 \item{use_s2}{logical; if \code{TRUE}, use the s2 spherical geometry package
@@ -39,7 +39,9 @@ for geographical coordinate operations}
 
 \item{endian}{integer; 0 or 1: defaults to the endian of the native machine}
 
-\item{oriented}{logical; if \code{FALSE}, polygons that
+\item{oriented}{logical; if \code{FALSE}, polygons that}
+
+\item{rebuild}{logical; call \link[s2]{s2_rebuild} on the geometry (think of this as a \code{st_make_valid} on the sphere)
 cover more than half of the globe are inverted; if \code{TRUE}, no reversal
 takes place and it is assumed that the inside of the polygon is to the
 left of the polygon's path.}

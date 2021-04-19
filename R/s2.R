@@ -81,11 +81,12 @@ st_as_s2.sf = function(x, ...) st_as_s2(st_geometry(x), ...)
 
 #' @name s2
 #' @param oriented logical; if \code{FALSE}, polygons that
+#' @param rebuild logical; call \link[s2]{s2_rebuild} on the geometry (think of this as a \code{st_make_valid} on the sphere)
 #' cover more than half of the globe are inverted; if \code{TRUE}, no reversal
 #' takes place and it is assumed that the inside of the polygon is to the
 #' left of the polygon's path.
 #' @export
-st_as_s2.sfc = function(x, ..., oriented = FALSE) {
+st_as_s2.sfc = function(x, ..., oriented = FALSE, rebuild = TRUE) {
 	if (! requireNamespace("s2", quietly = TRUE))
 		stop('package s2 required, please install it first')
 	if (!is.na(st_crs(x)) && !st_is_longlat(x))
@@ -94,5 +95,8 @@ st_as_s2.sfc = function(x, ..., oriented = FALSE) {
 		message("st_as_s2(): dropping Z and/or M coordinate")
 		x = st_zm(x)
 	}
-	s2::as_s2_geography(st_as_binary(x), ..., oriented = oriented)
+	if (rebuild)
+		s2::s2_rebuild(s2::as_s2_geography(st_as_binary(x), ..., oriented = oriented, check = FALSE))
+	else
+		s2::as_s2_geography(st_as_binary(x), ..., oriented = oriented)
 }
