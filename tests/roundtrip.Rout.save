@@ -1,5 +1,5 @@
 
-R version 4.0.4 (2021-02-15) -- "Lost Library Book"
+R version 4.0.5 (2021-03-31) -- "Shake and Throw"
 Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -158,7 +158,8 @@ In spTransform(meuse.grid, CRS("+proj=longlat +ellps=WGS84 +no_defs")) :
                      
 > 
 > nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg")
-Reading layer `nc.gpkg' from data source `/home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg' using driver `GPKG'
+Reading layer `nc.gpkg' from data source 
+  `/home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg' using driver `GPKG'
 Simple feature collection with 100 features and 14 fields
 Geometry type: MULTIPOLYGON
 Dimension:     XY
@@ -177,4 +178,4 @@ Geodetic CRS:  NAD27
 > 
 > proc.time()
    user  system elapsed 
-  8.348   0.207   8.682 
+  3.888   0.059   3.940 

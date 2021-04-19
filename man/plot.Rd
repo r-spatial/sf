@@ -26,7 +26,7 @@
   pal = NULL,
   nbreaks = 10,
   breaks = "pretty",
-  max.plot = if (is.null(n <- options("sf_max.plot")[[1]])) 9 else n,
+  max.plot = if (is.null(n <- getOption("sf_max.plot"))) 9 else n,
   key.pos = get_key_pos(x, ...),
   key.length = 0.618,
   key.width = lcm(1.8),

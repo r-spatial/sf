@@ -228,7 +228,7 @@ st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet 
 		stop("`promote_to_multi' should have length one, and applies to all geometry columns")
 
 	x = CPL_read_ogr(dsn, layer, query, as.character(options), quiet, type, fid_column_name,
-		drivers, wkt_filter, promote_to_multi, int64_as_string, dsn_exists, dsn_isdb)
+		drivers, wkt_filter, promote_to_multi, int64_as_string, dsn_exists, dsn_isdb, getOption("width"))
 	process_cpl_read_ogr(x, quiet, check_ring_dir = check_ring_dir,
 		stringsAsFactors = stringsAsFactors, geometry_column = geometry_column, ...)
 }
@@ -343,6 +343,7 @@ abbreviate_shapefile_names = function(x) {
 #' The default for \code{st_write} is \code{FALSE} which raises an error if the layer exists.
 #' The default for \code{write_sf} is \code{TRUE}.
 #' @param fid_column_name character, name of column with feature IDs; if
+#' @param config_options character, named vector with GDAL config options
 #' specified, this column is no longer written as feature attribute.
 #' @details
 #' Columns (variables) of a class not supported are dropped with a warning.
@@ -394,7 +395,7 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 		driver = guess_driver_can_write(dsn),
 		dataset_options = NULL, layer_options = NULL, quiet = FALSE, factorsAsCharacter = TRUE,
 		append = NA, delete_dsn = FALSE, delete_layer = !is.na(append) && !append,
-		fid_column_name = NULL) {
+		fid_column_name = NULL, config_options = character(0)) {
 
 	ret = obj
 	if (!is.null(list(...)$update)) {
@@ -483,16 +484,16 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 
 	ret = CPL_write_ogr(obj, dsn, layer, driver,
 		as.character(dataset_options), as.character(layer_options),
-		geom, dim, fids, quiet, append, delete_dsn, delete_layer,
-		write_geometries)
+		geom, dim, fids, config_options, quiet, append, delete_dsn, delete_layer,
+		write_geometries, getOption("width"))
 	if (ret == 1) { # try through temp file:
 		tmp = tempfile(fileext = paste0(".", tools::file_ext(dsn))) # nocov start
 		if (!quiet)
 			message(paste("writing first to temporary file", tmp))
 		if (CPL_write_ogr(obj, tmp, layer, driver,
 				as.character(dataset_options), as.character(layer_options),
-				geom, dim, fids, quiet, append, delete_dsn, delete_layer,
-				write_geometries) == 1)
+				geom, dim, fids, config_options, quiet, append, delete_dsn, delete_layer,
+				write_geometries, getOption("width")) == 1)
 			stop(paste("failed writing to temporary file", tmp))
 		if (!file.copy(tmp, dsn, overwrite = append || delete_dsn || delete_layer))
 			stop(paste("copying", tmp, "to", dsn, "failed"))
@@ -536,7 +537,7 @@ write_sf <- function(..., quiet = TRUE, append = FALSE, delete_layer = !append) 
 #' @examples
 #' st_drivers()
 st_drivers = function(what = "vector") {
-	ret = CPL_get_rgdal_drivers(0)
+	ret = CPL_get_gdal_drivers(0)
 	row.names(ret) = ret$name
 	switch(what,
 		vector = ret[ret$is_vector,],

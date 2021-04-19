@@ -152,8 +152,17 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer,
 	Rcpp::CharacterVector driver, Rcpp::CharacterVector dco, Rcpp::CharacterVector lco,
 	Rcpp::List geom, Rcpp::CharacterVector dim, Rcpp::CharacterVector fids,
+	Rcpp::CharacterVector ConfigOptions,
 	bool quiet, Rcpp::LogicalVector append, bool delete_dsn = false, bool delete_layer = false,
-	bool write_geometries = true) {
+	bool write_geometries = true, int width = 80) {
+
+	if (ConfigOptions.size()) {
+		if (ConfigOptions.attr("names") == R_NilValue)
+			Rcpp::stop("config_options should be a character vector with names, as in c(key=\"value\")");
+		Rcpp::CharacterVector names = ConfigOptions.attr("names");
+		for (int i = 0; i < ConfigOptions.size(); i++)
+			CPLSetConfigOption(names[i], ConfigOptions[i]);
+	}
 
 	// init:
 	if (driver.size() != 1 || dsn.size() != 1 || layer.size() != 1)
@@ -250,9 +259,12 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 				Rcpp::stop("Creation failed.\n");
 			}
 		}
-		if (! quiet)
-			Rcpp::Rcout << "Writing layer `" << layer[0] << "' to data source `" << dsn[0] <<
-				"' using driver `" << driver[0] << "'" << std::endl;
+		if (! quiet) {
+			Rcpp::Rcout << "Writing layer `" << layer[0] << "' to data source ";
+			if (LENGTH(dsn[0]) > width - (44 + LENGTH(layer[0]) + LENGTH(driver[0])))
+				Rcpp::Rcout << std::endl << "  ";
+			Rcpp::Rcout << "`" << dsn[0] << "' using driver `" << driver[0] << "'" << std::endl;
+		}
 	}
 
 	// can & do transaction?
@@ -345,5 +357,10 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 		Rcpp::stop("CommitTransaction() failed.\n"); 
 	} // #nocov end
 	GDALClose(poDS);
+	if (ConfigOptions.size()) {
+		Rcpp::CharacterVector names = ConfigOptions.attr("names");
+		for (int i = 0; i < ConfigOptions.size(); i++)
+			CPLSetConfigOption(names[i], NULL);
+	}
 	return 0; // all O.K.
 }

@@ -483,7 +483,8 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		Rcpp::CharacterVector wkt_filter,
 		bool promote_to_multi = true, bool int64_as_string = false,
 		bool dsn_exists = true,
-		bool dsn_isdb = false) {
+		bool dsn_isdb = false,
+		int width = 80) {
 
 	// adapted from the OGR tutorial @ www.gdal.org
 	std::vector <char *> open_options = create_options(options, quiet);
@@ -559,9 +560,15 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		OGRGeometryFactory::destroyGeometry(new_geom);
 	}
 
-	if (! quiet)
-		Rcpp::Rcout << "Reading layer `" << layer[0] << "' from data source `" << datasource[0] << // #nocov
-			"' using driver `" << poDS->GetDriverName() << "'" << std::endl;                       // #nocov
+	if (! quiet) {
+		Rcpp::Rcout << "Reading layer `" << layer[0] << "' from data source ";
+		if (LENGTH(datasource[0]) > (width - (34 + LENGTH(layer[0]))))
+			Rcpp::Rcout << std::endl << "  ";
+		Rcpp::Rcout << "`" << datasource[0] << "' ";
+		if (LENGTH(datasource[0]) > (width - 25))
+			Rcpp::Rcout << std::endl << "  ";
+		Rcpp::Rcout << "using driver `" << poDS->GetDriverName() << "'" << std::endl;                       // #nocov
+	}
 
 	Rcpp::List out = sf_from_ogrlayer(poLayer, quiet, int64_as_string, toTypeUser, fid_column_name,
 		promote_to_multi);

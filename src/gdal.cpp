@@ -580,7 +580,7 @@ Rcpp::List CPL_wrap_dateline(Rcpp::List sfc, Rcpp::CharacterVector opt, bool qui
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_get_rgdal_drivers(int dummy) {
+Rcpp::List CPL_get_gdal_drivers(int dummy) {
 
 	int ndr = GetGDALDriverManager()->GetDriverCount();
 	Rcpp::CharacterVector name(ndr);

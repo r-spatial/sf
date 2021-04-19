@@ -159,10 +159,13 @@ Rcpp::List CPL_rasterize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ras
 	
 	std::vector<OGRGeometry *> geoms = ogr_from_sfc(sfc, NULL);
 
-	int bandlist = 1;
+	// int bandlist = 1;
+	std::vector<int> bandlist(poDataset->GetRasterCount());
+	for (int i = 0; i < bandlist.size(); i++)
+		bandlist[i] = i+1; // 1-based
 	CPLErr err = GDALRasterizeGeometries((GDALDatasetH) poDataset, // hDS,
-		1, // int 	nBandCount,
-		&bandlist, // int * 	panBandList,
+		poDataset->GetRasterCount(), // int 	nBandCount,
+		bandlist.data(), // int * 	panBandList,
 		geoms.size(), // int 	nGeomCount,
 		(OGRGeometryH *) geoms.data(), // OGRGeometryH * 	pahGeometries,
 		NULL, // GDALTransformerFunc 	pfnTransformer,

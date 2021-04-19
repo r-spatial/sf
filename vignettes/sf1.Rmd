@@ -564,59 +564,6 @@ error is given when the data source does not exist. This option
 should be handled with care, as it may wipe complete directories
 or databases.
 
-### Benchmarks
-
-Benchmarks show that `st_read()` is faster than `rgdal::readOGR()`, for example:
-
-```{r, echo=TRUE, eval=FALSE}
-shp_read_sp <- function() rgdal::readOGR(dsn = ".", layer = "biketrails")
-shp_read_sf <- function() st_read("biketrails.shp")
-if(Sys.info()[1] == "Linux") {
-  kmz_read_sp <- function() rgdal::readOGR(dsn = "BikePaths.kmz")
-  kmz_read_sf <- function() st_read("BikePaths.kmz")
-} else {
-    kmz_read_sp <- function() message("NA")
-    kmz_read_sf <- function() message("NA")
-}
-kml_read_sp <- function() rgdal::readOGR("bikeraces.kml")
-kml_read_sf <- function() st_read("bikeraces.kml")
-microbenchmark::microbenchmark(shp_read_sp(), shp_read_sf(),
-                               kmz_read_sp(), kmz_read_sf(),
-                               kml_read_sp(), kml_read_sf(), times = 10)
-```
-
-```{r, echo=FALSE}
-# Tidy up
-files_to_remove <- list.files(pattern = "[B-b]ike")
-if(length(files_to_remove) > 0) file.remove(files_to_remove)
-```
-
-On a laptop with an Intel i5-4300M CPU @ 2.60GHz with ssd the
-results were as follows:
-
-```
-Unit: milliseconds
-          expr         min          lq       mean     median          uq
- shp_read_sp() 4993.954530 5010.798950 5072.94155 5049.68057 5116.050416
- shp_read_sf()  331.580349  341.608044  352.99233  353.00169  364.601151
- kmz_read_sp() 4940.108931 4966.177983 5021.47680 4989.82589 5038.393259
- kmz_read_sf() 1086.925988 1088.850196 1103.04846 1090.15794 1100.518670
- kml_read_sp()  167.556454  176.395750  182.10324  185.31941  187.720235
- kml_read_sf()    8.132629    8.268952   10.44328    8.52626    9.420043
-        max neval   cld
- 5186.16240    10     e
-  376.64045    10   c  
- 5282.25874    10     e
- 1178.42358    10    d
-  189.29191    10  b   
-   26.20221    10 a    
-```
-
-This shows that `sf::st_read()` is substantially faster than
-`rgdal::readOGR()`: by a factor of 14-18 for the Shapefile and KML
-files, and more than a factor of 4 for the KMZ file used in this
-benchmark, respectively.
-
 ### Connection to spatial databases
 
 Read and write functions, `st_read()` and `st_write()`, can handle 
