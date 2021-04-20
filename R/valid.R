@@ -12,7 +12,15 @@ st_is_valid = function(x, ...) UseMethod("st_is_valid")
 #' @export
 #' @name valid
 st_is_valid.sfc = function(x, ..., NA_on_exception = TRUE, reason = FALSE) {
-	if (reason) {
+	if (sf_use_s2() && isTRUE(st_is_longlat(x))) {
+		if (reason)
+			stop("reason only works for projected coordinates")
+		if (! requireNamespace("s2", quietly = TRUE))
+			stop('package s2 required, please install it first')
+		sapply(st_as_binary(x), function(x) !inherits(try(
+				s2::as_s2_geography(structure(list(x), class = "WKB"), check = TRUE), 
+				silent = TRUE), "try-error"))
+	} else if (reason) {
 		if (NA_on_exception) {
 			ret = rep(NA_character_, length(x))
 			not_na = !is.na(st_is_valid(x, reason = FALSE))
