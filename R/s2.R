@@ -81,12 +81,12 @@ st_as_s2.sf = function(x, ...) st_as_s2(st_geometry(x), ...)
 
 #' @name s2
 #' @param oriented logical; if \code{FALSE}, polygons that
-#' @param rebuild logical; call \link[s2]{s2_rebuild} on the geometry (think of this as a \code{st_make_valid} on the sphere)
 #' cover more than half of the globe are inverted; if \code{TRUE}, no reversal
 #' takes place and it is assumed that the inside of the polygon is to the
 #' left of the polygon's path.
+#' @param rebuild logical; call \link[s2]{s2_rebuild} on the geometry (think of this as a \code{st_make_valid} on the sphere)
 #' @export
-st_as_s2.sfc = function(x, ..., oriented = FALSE, rebuild = TRUE) {
+st_as_s2.sfc = function(x, ..., oriented = FALSE, rebuild = FALSE) {
 	if (! requireNamespace("s2", quietly = TRUE))
 		stop('package s2 required, please install it first')
 	if (!is.na(st_crs(x)) && !st_is_longlat(x))
