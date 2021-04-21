@@ -870,9 +870,11 @@ st_union.sfg = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 st_union.sfc = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 	if (missing(y)) { # unary union, possibly by_feature:
 		ll = isTRUE(st_is_longlat(x))
-		if (ll && sf_use_s2() && !by_feature)
-			st_as_sfc(s2::s2_union_agg(x, ...), crs = st_crs(x))
-		else {
+		if (ll && sf_use_s2() && !by_feature) {
+			# see https://github.com/r-spatial/s2/issues/97 :
+			# st_as_sfc(s2::s2_union_agg(x, ...), crs = st_crs(x)) 
+			st_as_sfc(Reduce(s2::s2_union, st_as_s2(x)), crs = st_crs(x))
+		} else {
 			if (ll)
 				message_longlat("st_union")
 			st_sfc(CPL_geos_union(st_geometry(x), by_feature, is_coverage))
