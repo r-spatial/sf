@@ -207,7 +207,26 @@ st_as_grob.sfc_CIRCULARSTRING <- function(x, ...) {
 #' @export
 #' @importFrom grid gList
 st_as_grob.sfc <- function(x, pch = 1, size = unit(1, "char"), arrow = NULL, gp = gpar(), ...) {
+	old_length <- length(x)
 	x <- st_cast_sfc_default(x)
+	ids <- attr(x, 'ids')
+	if (!is.null(ids)) {
+		# x was a geometrycollection that has been unlisted. Need to match gpar
+		if (length(pch) > 1) {
+			pch <- rep(rep_len(pch, old_length), ids)
+		}
+		if (length(size) > 1) {
+			size <- rep(rep_len(size, old_length), ids)
+		}
+		if (length(arrow) > 1) {
+			arrow <- rep(rep_len(arrow, old_length), ids)
+		}
+		for (par in names(gp)) {
+			if (length(gp[[par]]) > 1) {
+				gp[[par]] <- rep(rep_len(gp[[par]], old_length), ids)
+			}
+		}
+	}
 	if (class(x)[1] %in% c('sfc_MULTIPOINT', 'sfc_MULTILINESTRING', 'sfc_MULTIPOLYGON')) {
 		return(st_as_grob(x, pch = pch, size = size, arrow = arrow, gp = gp, ...))
 	}
