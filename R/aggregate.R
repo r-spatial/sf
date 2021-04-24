@@ -96,7 +96,7 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 #' @param to object of class \code{sf} or \code{sfc}, with the target geometries
 #' @param extensive logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population) and the sum is preserved, otherwise, spatially intensive (like population density) and the mean is preserved.
 #' @param ... ignored
-#' @param keep_NA logical; if \code{TRUE}, return all features in \code{to}, otherwise only those with non-NA values
+#' @param keep_NA logical; if \code{TRUE}, return all features in \code{to}, if \code{FALSE} return only those with non-NA values (but with \code{row.names} the index corresponding to the feature in \code{to})
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' g = st_make_grid(nc, n = c(20,10))
