@@ -182,7 +182,8 @@ Well-Know Binary geometries to sfc</p>
   check_ring_dir <span class='op'>=</span> <span class='cn'>FALSE</span>,
   fid_column_name <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
   drivers <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
-  wkt_filter <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>
+  wkt_filter <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
+  dialect <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>
 <span class='op'>)</span>
 
 <span class='fu'>read_sf</span><span class='op'>(</span><span class='va'>...</span>, quiet <span class='op'>=</span> <span class='cn'>TRUE</span>, stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span>, as_tibble <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
@@ -263,7 +264,7 @@ all to the Multi variety; defaults to <code>TRUE</code></p></td>
     <tr>
       <th>stringsAsFactors</th>
       <td><p>logical; logical: should character vectors be
-  converted to factors?  Default for <code>read_sf</code> or R version &gt;= 4.1.0 is 
+  converted to factors?  Default for <code>read_sf</code> or R version &gt;= 4.1.0 is
 <code>FALSE</code>, for <code>st_read</code> and R version &lt; 4.1.0 equal to
 <code><a href='https://rdrr.io/r/base/data.frame.html'>default.stringsAsFactors()</a></code></p></td>
     </tr>
@@ -290,6 +291,10 @@ clockwise, holes clockwise)</p></td>
     <tr>
       <th>wkt_filter</th>
       <td><p>character; WKT representation of a spatial filter (may be used as bounding box, selecting overlapping geometries); see examples</p></td>
+    </tr>
+    <tr>
+      <th>dialect</th>
+      <td><p>The dialect used by ExecuteSQL when running the <code>query</code></p></td>
     </tr>
     <tr>
       <th>as_tibble</th>
@@ -327,12 +332,17 @@ lead to spurious errors that accompanying <code>*.shp</code> are missing.</p>
 <p>For <code>query</code> with a character <code>dsn</code> the query text is handed to
 'ExecuteSQL' on the GDAL/OGR data set and will result in the creation of a
 new layer (and <code>layer</code> is ignored). See 'OGRSQL'
-<a href='https://gdal.org/user/ogr_sql_dialect.html'>https://gdal.org/user/ogr_sql_dialect.html</a> for details. Please note that the
-'FID' special field is driver-dependent, and may be either 0-based (e.g. ESRI
-Shapefile), 1-based (e.g. MapInfo) or arbitrary (e.g. OSM). Other features of
-OGRSQL are also likely to be driver dependent. The available layer names may
-be obtained with
-<a href='st_layers.html'>st_layers</a>. Care will be required to properly escape the use of some layer names.</p>
+<a href='https://gdal.org/user/ogr_sql_dialect.html'>https://gdal.org/user/ogr_sql_dialect.html</a> for details. The parameter
+<code>dialect</code> can be used to select the 'dialect' used by 'ExecuteSQL'. See
+<a href='https://gdal.org/api/gdaldataset_cpp.html#_CPPv4N11GDALDataset10ExecuteSQLEPKcP11OGRGeometryPKc'>here</a>
+and <a href='https://gdal.org/user/sql_sqlite_dialect.html'>here</a> for more
+details. See <a href='https://github.com/r-spatial/sf/pull/1646'>https://github.com/r-spatial/sf/pull/1646</a> for simple
+examples of spatial queries using the <code>SQLite</code> dialect. Please note that
+the 'FID' special field is driver-dependent, and may be either 0-based (e.g.
+ESRI Shapefile), 1-based (e.g. MapInfo) or arbitrary (e.g. OSM). Other
+features of OGRSQL are also likely to be driver dependent. The available
+layer names may be obtained with <a href='st_layers.html'>st_layers</a>. Care will be required to
+properly escape the use of some layer names.</p>
 <p><code>read_sf</code> and <code>write_sf</code> are aliases for <code>st_read</code> and <code>st_write</code>, respectively, with some
 modified default arguments.
 <code>read_sf</code> and <code>write_sf</code> are quiet by default: they do not print information
@@ -358,7 +368,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>nc</span> <span class='op'>=</span> <span class='fu'>st_read</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"shape/nc.shp"</span>, package<span class='op'>=</span><span class='st'>"sf"</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Reading layer `nc' from data source 
-#&gt;   `/tmp/RtmppQPyq7/temp_libpathe57841b2dfc5/sf/shape/nc.shp' 
+#&gt;   `/tmp/RtmpuO7Zyh/temp_libpath4c4e42b41966/sf/shape/nc.shp' 
 #&gt;   using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; Geometry type: MULTIPOLYGON
@@ -398,7 +408,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
 <span class='va'>nc_sql</span> <span class='op'>=</span> <span class='fu'>st_read</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"shape/nc.shp"</span>, package<span class='op'>=</span><span class='st'>"sf"</span><span class='op'>)</span>,
                      query <span class='op'>=</span> <span class='st'>"SELECT NAME, SID74, FIPS FROM \"nc\" WHERE BIR74 &gt; 20000"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Reading layer `nc' from data source 
-#&gt;   `/tmp/RtmppQPyq7/temp_libpathe57841b2dfc5/sf/shape/nc.shp' 
+#&gt;   `/tmp/RtmpuO7Zyh/temp_libpath4c4e42b41966/sf/shape/nc.shp' 
 #&gt;   using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 2 features and 3 fields
 #&gt; Geometry type: POLYGON
@@ -438,7 +448,35 @@ that reside in the same directory, only one of them having extension <code>.shp<
 #&gt; </span><span style='color: #BCBCBC;'>3</span><span> 0.199      1.98  </span><span style='text-decoration: underline;'>1</span><span>874    </span><span style='text-decoration: underline;'>1</span><span>874 Wilkes 37193  </span><span style='text-decoration: underline;'>37</span><span>193       97  </span><span style='text-decoration: underline;'>3</span><span>146     4     200
 #&gt; </span><span style='color: #BCBCBC;'>4</span><span> 0.061      1.23  </span><span style='text-decoration: underline;'>1</span><span>827    </span><span style='text-decoration: underline;'>1</span><span>827 Alleg… 37005  </span><span style='text-decoration: underline;'>37</span><span>005        3   487     0      10
 #&gt; </span><span style='color: #949494;'># … with 4 more variables: BIR79 &lt;dbl&gt;, SID79 &lt;dbl&gt;, NWBIR79 &lt;dbl&gt;,</span><span>
-#&gt; </span><span style='color: #949494;'>#   geom &lt;MULTIPOLYGON [°]&gt;</span><span></div><div class='input'><span class='co'># read geojson from string:</span>
+#&gt; </span><span style='color: #949494;'>#   geom &lt;MULTIPOLYGON [°]&gt;</span><span></div><div class='input'><span class='co'># if you select the SQLite dialect, then you can use several spatial</span>
+<span class='co'># functions when building the query:</span>
+<span class='va'>nc_sqlite</span> <span class='op'>=</span> <span class='fu'>st_read</span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"shape/nc.shp"</span>, package<span class='op'>=</span><span class='st'>"sf"</span><span class='op'>)</span>,
+  query <span class='op'>=</span> <span class='st'>"
+    SELECT GEOMETRY, ST_Area(ST_Transform(GEOMETRY, 32119)) AS AREA_m2
+    FROM nc
+    WHERE ST_Intersects(
+      ST_Transform(GEOMETRY, 32119),
+      GeomFromText('POINT (573193 199429)', 32119)
+    )
+  "</span>,
+  dialect <span class='op'>=</span> <span class='st'>"SQLite"</span>
+<span class='op'>)</span>
+</div><div class='output co'>#&gt; Reading layer `nc' from data source 
+#&gt;   `/tmp/RtmpuO7Zyh/temp_libpath4c4e42b41966/sf/shape/nc.shp' 
+#&gt;   using driver `ESRI Shapefile'
+#&gt; Simple feature collection with 1 feature and 1 field
+#&gt; Geometry type: POLYGON
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -79.55536 ymin: 35.51024 xmax: -78.90572 ymax: 35.86815
+#&gt; Geodetic CRS:  NAD27</div><div class='input'><span class='va'>nc_sqlite</span>
+</div><div class='output co'>#&gt; Simple feature collection with 1 feature and 1 field
+#&gt; Geometry type: POLYGON
+#&gt; Dimension:     XY
+#&gt; Bounding box:  xmin: -79.55536 ymin: 35.51024 xmax: -78.90572 ymax: 35.86815
+#&gt; Geodetic CRS:  NAD27
+#&gt;      AREA_m2                       GEOMETRY
+#&gt; 1 1810154467 POLYGON ((-79.55536 35.5130...</div><div class='input'><span class='co'># read geojson from string:</span>
 <span class='va'>geojson_txt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"{\"type\":\"MultiPoint\",\"coordinates\":"</span>,
    <span class='st'>"[[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}"</span><span class='op'>)</span>
 <span class='va'>x</span> <span class='op'>=</span> <span class='fu'>read_sf</span><span class='op'>(</span><span class='va'>geojson_txt</span><span class='op'>)</span>
