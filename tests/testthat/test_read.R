@@ -204,3 +204,21 @@ test_that("Missing data sources have useful error message (#967)", {
 	# delete temp file
 	file.remove(x)
 })
+
+test_that("SQLite dialect can be used in st_read (#1646)", {
+	# Define a query to
+	# 1) filter the counties that intesect the centroid of nc;
+	# 2) calculate the area of those counties
+	query = "
+	SELECT GEOMETRY, ST_Area(ST_Transform(GEOMETRY, 32119)) AS AREA_m2
+	FROM nc
+	WHERE ST_Intersects(ST_Transform(GEOMETRY, 32119), GeomFromText('POINT (573193 199429)', 32119))
+	"
+	nc_sqlite = st_read(
+		dsn = system.file("shape/nc.shp", package = "sf"),
+		query = query,
+		dialect = "SQLite",
+		quiet = TRUE
+	)
+	expect_true(nrow(nc_sqlite) == 1L)
+})
