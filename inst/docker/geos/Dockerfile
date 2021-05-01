@@ -145,7 +145,8 @@ RUN Rscript -e 'install.packages("rgeos", repos="http://R-Forge.R-project.org")'
 
 RUN (cd sf; git pull)
 RUN R CMD build --no-build-vignettes --no-manual sf
-#RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
+RUN R CMD check --no-manual --as-cran sf_*.tar.gz 
+
 #RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
 
 #RUN Rscript -e 'install.packages("starsdata", repos="http://gis-bigdata.uni-muenster.de/pebesma/")'
