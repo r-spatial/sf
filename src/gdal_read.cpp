@@ -481,7 +481,6 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		Rcpp::CharacterVector options, bool quiet, Rcpp::NumericVector toTypeUser,
 		Rcpp::CharacterVector fid_column_name, Rcpp::CharacterVector drivers,
 		Rcpp::CharacterVector wkt_filter,
-		Rcpp::CharacterVector dialect,
 		bool promote_to_multi = true, bool int64_as_string = false,
 		bool dsn_exists = true,
 		bool dsn_isdb = false,
@@ -491,7 +490,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	std::vector <char *> open_options = create_options(options, quiet);
 	std::vector <char *> drivers_v = create_options(drivers, quiet);
 	GDALDataset *poDS;
-	poDS = (GDALDataset *) GDALOpenEx( datasource[0], GDAL_OF_VECTOR | GDAL_OF_READONLY,
+	poDS = (GDALDataset *) GDALOpenEx( datasource[0], GDAL_OF_VECTOR | GDAL_OF_READONLY, 
 		drivers.size() ? drivers_v.data() : NULL, open_options.data(), NULL );
 	if( poDS == NULL ) {
 		// could not open dsn
@@ -534,11 +533,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 
 	OGRLayer *poLayer;
 	if (! Rcpp::CharacterVector::is_na(query[0])) {
-		if (dialect.size()) {
-			poLayer = poDS->ExecuteSQL(query[0], NULL, dialect[0]);
-		} else {
-			poLayer = poDS->ExecuteSQL(query[0], NULL, NULL);
-		}
+		poLayer = poDS->ExecuteSQL(query[0], NULL, NULL);
 		if (poLayer == NULL)
 			Rcpp::stop("Query execution failed, cannot open layer.\n"); // #nocov
 	} else

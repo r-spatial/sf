@@ -24,8 +24,7 @@ st_read(dsn, layer, ...)
   check_ring_dir = FALSE,
   fid_column_name = character(0),
   drivers = character(0),
-  wkt_filter = character(0),
-  dialect = character(0)
+  wkt_filter = character(0)
 )
 
 read_sf(..., quiet = TRUE, stringsAsFactors = FALSE, as_tibble = TRUE)
@@ -83,7 +82,7 @@ of LineString and MultiLineString, or of Polygon and MultiPolygon, convert
 all to the Multi variety; defaults to \code{TRUE}}
 
 \item{stringsAsFactors}{logical; logical: should character vectors be
-  converted to factors?  Default for \code{read_sf} or R version >= 4.1.0 is
+  converted to factors?  Default for \code{read_sf} or R version >= 4.1.0 is 
 \code{FALSE}, for \code{st_read} and R version < 4.1.0 equal to
 \code{default.stringsAsFactors()}}
 
@@ -100,8 +99,6 @@ clockwise, holes clockwise)}
 \item{drivers}{character; limited set of driver short names to be tried (default: try all)}
 
 \item{wkt_filter}{character; WKT representation of a spatial filter (may be used as bounding box, selecting overlapping geometries); see examples}
-
-\item{dialect}{The dialect used by ExecuteSQL when running the \code{query}}
 
 \item{as_tibble}{logical; should the returned table be of class tibble or data.frame?}
 
@@ -143,17 +140,12 @@ In case of problems reading shapefiles from USB drives on OSX, please see
 For \code{query} with a character \code{dsn} the query text is handed to
 'ExecuteSQL' on the GDAL/OGR data set and will result in the creation of a
 new layer (and \code{layer} is ignored). See 'OGRSQL'
-\url{https://gdal.org/user/ogr_sql_dialect.html} for details. The parameter
-\code{dialect} can be used to select the 'dialect' used by 'ExecuteSQL'. See
-\href{https://gdal.org/api/gdaldataset_cpp.html#_CPPv4N11GDALDataset10ExecuteSQLEPKcP11OGRGeometryPKc}{here}
-and \href{https://gdal.org/user/sql_sqlite_dialect.html}{here} for more
-details. See \url{https://github.com/r-spatial/sf/pull/1646} for simple
-examples of spatial queries using the \code{SQLite} dialect. Please note that
-the 'FID' special field is driver-dependent, and may be either 0-based (e.g.
-ESRI Shapefile), 1-based (e.g. MapInfo) or arbitrary (e.g. OSM). Other
-features of OGRSQL are also likely to be driver dependent. The available
-layer names may be obtained with \link{st_layers}. Care will be required to
-properly escape the use of some layer names.
+\url{https://gdal.org/user/ogr_sql_dialect.html} for details. Please note that the
+'FID' special field is driver-dependent, and may be either 0-based (e.g. ESRI
+Shapefile), 1-based (e.g. MapInfo) or arbitrary (e.g. OSM). Other features of
+OGRSQL are also likely to be driver dependent. The available layer names may
+be obtained with
+\link{st_layers}. Care will be required to properly escape the use of some layer names.
 
 \code{read_sf} and \code{write_sf} are aliases for \code{st_read} and \code{st_write}, respectively, with some
 modified default arguments.
@@ -205,21 +197,6 @@ nc_gpkg_sql = st_read(system.file("gpkg/nc.gpkg", package = "sf"),
 wkt = st_as_text(st_geometry(nc[1,]))
 # filter by (bbox overlaps of) first feature geometry:
 read_sf(system.file("gpkg/nc.gpkg", package="sf"), wkt_filter = wkt)
-# if you select the SQLite dialect, then you can use several spatial
-# functions when building the query:
-nc_sqlite = st_read(
-  system.file("shape/nc.shp", package="sf"),
-  query = "
-    SELECT GEOMETRY, ST_Area(ST_Transform(GEOMETRY, 32119)) AS AREA_m2
-    FROM nc
-    WHERE ST_Intersects(
-      ST_Transform(GEOMETRY, 32119),
-      GeomFromText('POINT (573193 199429)', 32119)
-    )
-  ",
-  dialect = "SQLite"
-)
-nc_sqlite
 # read geojson from string:
 geojson_txt <- paste("{\"type\":\"MultiPoint\",\"coordinates\":",
    "[[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}")
