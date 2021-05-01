@@ -10,7 +10,7 @@ PKG_CPPFLAGS =\
 
 PKG_LIBS = \
 	-L$(RWINLIB)/$(TARGET) \
-	-L$(RWINLIB)/lib$(R_ARCH) \
+	-L$(RWINLIB)/lib$(R_ARCH)$(CRT) \
 	-lgdal -lsqlite3 -lspatialite -lproj -lgeos_c -lgeos  \
 	-ljson-c -lnetcdf -lmariadbclient -lpq -lpgport -lpgcommon \
 	-lwebp -lcurl -lssh2 -lssl \
