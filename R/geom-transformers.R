@@ -872,8 +872,10 @@ st_union.sfc = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 		ll = isTRUE(st_is_longlat(x))
 		if (ll && sf_use_s2() && !by_feature) {
 			# see https://github.com/r-spatial/s2/issues/97 :
-			# st_as_sfc(s2::s2_union_agg(x, ...), crs = st_crs(x)) 
-			st_as_sfc(Reduce(s2::s2_union, st_as_s2(x)), crs = st_crs(x))
+			if (utils::packageVersion("s2") > "1.0.4")
+				st_as_sfc(s2::s2_union_agg(x, ...), crs = st_crs(x)) 
+			else
+				st_as_sfc(Reduce(s2::s2_union, st_as_s2(x)), crs = st_crs(x))
 		} else {
 			if (ll)
 				message_longlat("st_union")
