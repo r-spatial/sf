@@ -143,6 +143,7 @@ RUN Rscript -e 'install.packages(c("XML"))'
 RUN Rscript -e 'install.packages(c("tmaptools", "tmap", "mapview", "s2", "terra"))'
 RUN Rscript -e 'install.packages("rgeos", repos="http://R-Forge.R-project.org")'
 
+RUN echo
 RUN (cd sf; git pull)
 RUN R CMD build --no-build-vignettes --no-manual sf
 RUN R CMD check --no-manual --as-cran sf_*.tar.gz 
