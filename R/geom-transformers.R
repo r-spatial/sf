@@ -647,8 +647,9 @@ geos_op2_geom = function(op, x, y, s2_model = "semi-open", ...) {
 				sym_difference = s2::s2_sym_difference,
 				union = s2::s2_union, stop("invalid operator"))
 		# to be optimized -- this doesn't index on y:
-		lst = structure(unlist(lapply(x, fn, y, s2::s2_options(model = s2_model, ...)),
-			recursive = FALSE), class = "s2_geography")
+		lst = structure(unlist(lapply(seq_along(x), function(i) {
+			fn(x[i], y, s2::s2_options(model = s2_model, ...))
+		}), recursive = FALSE), class = "s2_geography")
 		e = s2::s2_is_empty(lst)
 		idx = cbind(rep(seq_along(x), length(y)), rep(seq_along(y), each = length(x)))
 		lst = st_as_sfc(lst, crs = st_crs(x))
