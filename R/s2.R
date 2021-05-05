@@ -44,6 +44,14 @@ st_as_sf.s2_geography = function(x, ..., crs = st_crs(4326)) {
 }
 
 # dynamically exported in tidyverse.R
+as_s2_geography.sfg <- function(x, ..., oriented = FALSE) {
+	if (! requireNamespace("s2", quietly = TRUE))
+		stop('package s2 required, please install it first')
+	b = structure(list(st_as_binary(x)), class = "WKB")
+	s2::as_s2_geography(b, ..., oriented = oriented)
+}
+
+# dynamically exported in tidyverse.R
 as_s2_geography.sfc <- function(x, ..., oriented = FALSE) {
 	st_as_s2.sfc(x, ..., oriented = oriented)
 }
