@@ -4,15 +4,28 @@
 \alias{st_nearest_feature}
 \title{get index of nearest feature}
 \usage{
-st_nearest_feature(x, y)
+st_nearest_feature(
+  x,
+  y,
+  ...,
+  check_crs = TRUE,
+  longlat = isTRUE(st_is_longlat(x))
+)
 }
 \arguments{
 \item{x}{object of class \code{sfg}, \code{sfc} or \code{sf}}
 
-\item{y}{object of class \code{sfg}, \code{sfc} or \code{sf}}
+\item{y}{object of class \code{sfg}, \code{sfc} or \code{sf}; if missing, features in code{x} will be compared to all remaining features in \code{x}.}
+
+\item{...}{ignored}
+
+\item{check_crs}{logical; should \code{x} and \code{y} be checked for CRS equality?}
+
+\item{longlat}{logical; does \code{x} have ellipsoidal coordinates?}
 }
 \value{
-for each feature (geometry) in \code{x} the index of the nearest feature (geometry) in set \code{y}; 
+for each feature (geometry) in \code{x} the index of the nearest feature (geometry) in 
+set \code{y}, or in the remaining set of \code{x} if \code{y} is missing;
 empty geometries result in \code{NA} indexes
 }
 \description{
