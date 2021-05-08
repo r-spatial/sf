@@ -158,7 +158,13 @@
     <p>get index of nearest feature</p>
     </div>
 
-    <pre class="usage"><span class='fu'>st_nearest_feature</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>st_nearest_feature</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>y</span>,
+  <span class='va'>...</span>,
+  check_crs <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  longlat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Logic.html'>isTRUE</a></span><span class='op'>(</span><span class='fu'><a href='st_is_longlat.html'>st_is_longlat</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -169,13 +175,26 @@
     </tr>
     <tr>
       <th>y</th>
-      <td><p>object of class <code>sfg</code>, <code>sfc</code> or <code>sf</code></p></td>
+      <td><p>object of class <code>sfg</code>, <code>sfc</code> or <code>sf</code>; if missing, features in codex will be compared to all remaining features in <code>x</code>.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>ignored</p></td>
+    </tr>
+    <tr>
+      <th>check_crs</th>
+      <td><p>logical; should <code>x</code> and <code>y</code> be checked for CRS equality?</p></td>
+    </tr>
+    <tr>
+      <th>longlat</th>
+      <td><p>logical; does <code>x</code> have ellipsoidal coordinates?</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>for each feature (geometry) in <code>x</code> the index of the nearest feature (geometry) in set <code>y</code>; 
+    <p>for each feature (geometry) in <code>x</code> the index of the nearest feature (geometry) in 
+set <code>y</code>, or in the remaining set of <code>x</code> if <code>y</code> is missing;
 empty geometries result in <code>NA</code> indexes</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
