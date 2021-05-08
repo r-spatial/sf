@@ -1,7 +1,8 @@
 # version 1.0-0
 
 * use `s2` as default geometry back-end when coordinates are ellipsoidal, this can
-  be suppressed by setting environment variable `_SF_USE_S2` to `false`; #1649
+  be suppressed by setting environment variable `_SF_USE_S2` to `false` before
+  package `sf` is loaded; #1649
 
 # version 0.9-9
 
