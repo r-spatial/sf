@@ -528,8 +528,10 @@ Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = tru
 
 	int notice = 0;
 	if (NA_on_exception) {
+/*
 		if (sfc.size() > 1)
 			Rcpp::stop("NA_on_exception will only work reliably with length 1 sfc objects"); // #nocov
+*/
 #ifdef HAVE350
 		GEOSContext_setNoticeMessageHandler_r(hGEOSCtxt,
 			(GEOSMessageHandler_r) __emptyNoticeHandler, (void *) &notice);
