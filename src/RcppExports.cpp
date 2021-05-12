@@ -803,15 +803,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // read_mdim
-List read_mdim(CharacterVector file, CharacterVector array_name, CharacterVector oo);
-RcppExport SEXP _sf_read_mdim(SEXP fileSEXP, SEXP array_nameSEXP, SEXP ooSEXP) {
+List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVector oo);
+RcppExport SEXP _sf_read_mdim(SEXP fileSEXP, SEXP array_namesSEXP, SEXP ooSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< CharacterVector >::type file(fileSEXP);
-    Rcpp::traits::input_parameter< CharacterVector >::type array_name(array_nameSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type array_names(array_namesSEXP);
     Rcpp::traits::input_parameter< CharacterVector >::type oo(ooSEXP);
-    rcpp_result_gen = Rcpp::wrap(read_mdim(file, array_name, oo));
+    rcpp_result_gen = Rcpp::wrap(read_mdim(file, array_names, oo));
     return rcpp_result_gen;
 END_RCPP
 }

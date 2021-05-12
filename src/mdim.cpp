@@ -47,7 +47,7 @@ List get_dimension(const std::shared_ptr<GDALDimension> dim) {
 }
 
 // [[Rcpp::export]]
-List read_mdim(CharacterVector file, CharacterVector array_name, CharacterVector oo) {
+List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVector oo) {
 
 	std::vector <char *> oo_char = create_options(oo, true); // open options
 	auto poDataset = std::unique_ptr<GDALDataset>(
@@ -70,14 +70,28 @@ List read_mdim(CharacterVector file, CharacterVector array_name, CharacterVector
 		}
 	}
 
-	const char* pszArrayName = array_name[0];
-	auto array(curGroup->OpenMDArray(pszArrayName));
+	// Rcout << "name: " << curGroup->GetName() << " full_name: " << curGroup->GetFullName() << std::endl;
+	if (array_names.size() == 0)
+		array_names = curGroup->GetMDArrayNames();
+
+	// how many arrays have identical dimensions to the first?
+
+	const char *name = array_names[0];
+	auto array(curGroup->OpenMDArray(name));
 	if( !array )
 		stop("Cannot find array");
-	/*
-	DumpArray(poDS, array, serializer, psOptions,
-			  alreadyDumpedDimensions, true, true);
-	*/
+	size_t sz = array->GetDimensions().size();
+	int n = 1;
+	if (array_names.size() > 1) {
+		for (n = 1; n < array_names.size(); n++) {
+			name = array_names[n];
+			Rcout << ":" << name << std::endl;
+			auto ar_n(curGroup->OpenMDArray(name));
+			if (ar_n->GetDimensions().size() != sz)
+				break;
+		}
+	}
+	Rcout << "[n]: " << n << std::endl;
 
 	size_t nValues = 1;
 	std::vector<size_t> anCount;
@@ -94,33 +108,48 @@ List read_mdim(CharacterVector file, CharacterVector array_name, CharacterVector
 		List dimension(get_dimension(poDim));
 		dimensions.push_back(dimension);
 	}
-	NumericVector vec( nValues );
-	array->Read(offset.data(),
-				anCount.data(),
-				nullptr, /* step: defaults to 1,1,1 */
-				nullptr, /* stride: default to row-major convention */
-				GDALExtendedDataType::Create(GDT_Float64),
-				vec.begin());
-	dims.attr("names") = dim_names;
-	dimensions.attr("names") = dim_names;
-	vec.attr("dim") = dims;
-	List other = List::create();
-	bool has = false;
-	double value = array->GetOffset(&has);
-	if (has)
-		other.attr("offset") = value;
-	value = array->GetScale(&has);
-	if (has)
-		other.attr("offset") = value;
-	value = array->GetNoDataValueAsDouble(&has);
-	if (has)
-		other.attr("NoDataValue") = value;
+	List vec_lst(n);
+	CharacterVector a_names(n);
+	for (int i = 0; i < n; i++) {
+		name = array_names[i];
+		a_names[i] = array_names[i];
+		auto arr(curGroup->OpenMDArray(name));
+		NumericVector vec( nValues );
+		arr->Read(offset.data(),
+					anCount.data(),
+					nullptr, /* step: defaults to 1,1,1 */
+					nullptr, /* stride: default to row-major convention */
+					GDALExtendedDataType::Create(GDT_Float64),
+					vec.begin());
+		dims.attr("names") = dim_names;
+		dimensions.attr("names") = dim_names;
+		bool has_offset = false;
+		double offst = arr->GetOffset(&has_offset);
+		if (!has_offset)
+			offst = 0.0;
+		bool has_scale = false;
+		double scale = arr->GetScale(&has_scale);
+		if (!has_scale)
+			scale = 1.0;
+		bool has_nodata = false;
+		double nodata_value = arr->GetNoDataValueAsDouble(&has_nodata);
+		if (has_offset || has_scale || has_nodata) {
+			for (size_t i = 0; i < nValues; i++) {
+				if (ISNAN(vec[i]) || (has_nodata && vec[i] == nodata_value))
+					vec[i] = NA_REAL;
+				else
+					vec[i] = vec[i] * scale + offst;
+			}
+		}
+		vec.attr("dim") = dims;
+		vec.attr("units") = arr->GetUnit();
+		vec_lst[i] = vec;
+	}
+	vec_lst.attr("names") = a_names;
 	std::shared_ptr<OGRSpatialReference> srs = array->GetSpatialRef();
 	List ret = List::create(
-		_["array"] = vec,
+		_["array_list"] = vec_lst,
 		_["dimensions"] = dimensions,
-		_["units"] = array->GetUnit(),
-		_["other"] = other,
 		_["srs"] = wkt_from_spatial_reference(srs.get())
 	);
 	return ret;
