@@ -802,6 +802,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// read_mdim
+List read_mdim(CharacterVector file, CharacterVector array_name, CharacterVector oo);
+RcppExport SEXP _sf_read_mdim(SEXP fileSEXP, SEXP array_nameSEXP, SEXP ooSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type file(fileSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type array_name(array_nameSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type oo(ooSEXP);
+    rcpp_result_gen = Rcpp::wrap(read_mdim(file, array_name, oo));
+    return rcpp_result_gen;
+END_RCPP
+}
 // opp_sfc
 SEXP opp_sfc(SEXP geom, SEXP value, SEXP mult, SEXP crs);
 RcppExport SEXP _sf_opp_sfc(SEXP geomSEXP, SEXP valueSEXP, SEXP multSEXP, SEXP crsSEXP) {
@@ -1309,6 +1322,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_nary_intersection", (DL_FUNC) &_sf_CPL_nary_intersection, 1},
     {"_sf_CPL_hex_to_raw", (DL_FUNC) &_sf_CPL_hex_to_raw, 1},
     {"_sf_CPL_raw_to_hex", (DL_FUNC) &_sf_CPL_raw_to_hex, 1},
+    {"_sf_read_mdim", (DL_FUNC) &_sf_read_mdim, 3},
     {"_sf_opp_sfc", (DL_FUNC) &_sf_opp_sfc, 4},
     {"_sf_normalize_sfc", (DL_FUNC) &_sf_normalize_sfc, 4},
     {"_sf_CPL_polygonize", (DL_FUNC) &_sf_CPL_polygonize, 10},
