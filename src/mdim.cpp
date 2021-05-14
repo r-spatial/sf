@@ -9,7 +9,8 @@
 
 using namespace Rcpp;
 
-NumericVector get_dimension_values(std::shared_ptr<GDALMDArray> array) {
+#if GDAL_VERSION_NUM >= 3010000
+List get_dimension_values(std::shared_ptr<GDALMDArray> array) {
 	size_t nValues = 1;
 	std::vector<size_t> anCount;
 	IntegerVector dims;
@@ -20,19 +21,37 @@ NumericVector get_dimension_values(std::shared_ptr<GDALMDArray> array) {
 		offset.push_back(0);
 		nValues *= anCount.back();
 	}
-	NumericVector vec( nValues );
-	bool ok = array->Read(offset.data(),
-				anCount.data(),
-				nullptr, /* step: defaults to 1,1,1 */
-				nullptr, /* stride: default to row-major convention */
-				GDALExtendedDataType::Create(GDT_Float64),
-				vec.begin());
-	if (!ok) {
-			Rcout << "cannot convert values for array: " << array->GetName() << std::endl;
+	List ret(1);
+	if (array->GetDataType().GetClass() == GEDTC_NUMERIC) {
+		NumericVector vec( nValues );
+		bool ok = array->Read(offset.data(),
+					anCount.data(),
+					nullptr, /* step: defaults to 1,1,1 */
+					nullptr, /* stride: default to row-major convention */
+					GDALExtendedDataType::Create(GDT_Float64),
+					vec.begin());
+		if (!ok)
+			Rcout << "cannot convert values for array " << array->GetName() << std::endl;
+		vec.attr("dim") = dims;
+		vec.attr("units") = array->GetUnit();
+		ret[0] = vec;
+	} else {
+		// CharacterVector vec(nValues);
+		std::vector<char *> vec(nValues);
+		bool ok = array->Read(offset.data(),
+					anCount.data(),
+					nullptr, /* step: defaults to 1,1,1 */
+					nullptr, /* stride: default to row-major convention */
+					GDALExtendedDataType::CreateString(100),
+					vec.data());
+		if (!ok)
+			Rcout << "cannot convert values for array " << array->GetName() << std::endl;
+		CharacterVector cv(nValues);
+		for (int i = 0; i < nValues; i++)
+			cv[i] = vec[i];
+		ret[0] = cv;
 	}
-	vec.attr("dim") = dims;
-	vec.attr("units") = array->GetUnit();
-	return vec;
+	return ret;
 }
 
 List get_dimension(const std::shared_ptr<GDALDimension> dim) {
@@ -51,7 +70,7 @@ List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVecto
 
 	std::vector <char *> oo_char = create_options(oo, true); // open options
 	auto poDataset = std::unique_ptr<GDALDataset>(
-		GDALDataset::Open((const char *) file[0], GDAL_OF_MULTIDIM_RASTER | GDAL_OF_VERBOSE_ERROR, 
+		GDALDataset::Open((const char *) file[0], GDAL_OF_MULTIDIM_RASTER | GDAL_OF_VERBOSE_ERROR,
 			nullptr, oo_char.data(), nullptr));
 	if( !poDataset )
 		stop("file not found");
@@ -64,34 +83,36 @@ List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVecto
 	auto groupNames = poRootGroup->GetGroupNames();
 	if (groupNames.size() > 0) {
 		curGroup = curGroup->OpenGroup(groupNames[0]);
-		if( !curGroup ) {
+		if (!curGroup) {
 			Rcout << "group: " << groupNames[0] << ";" << std::endl;
 			stop("Cannot find group");
 		}
 	}
 
 	// Rcout << "name: " << curGroup->GetName() << " full_name: " << curGroup->GetFullName() << std::endl;
-	if (array_names.size() == 0)
-		array_names = curGroup->GetMDArrayNames();
-
-	// how many arrays have identical dimensions to the first?
-
-	const char *name = array_names[0];
-	auto array(curGroup->OpenMDArray(name));
-	if( !array )
-		stop("Cannot find array");
-	size_t sz = array->GetDimensions().size();
-	int n = 1;
-	if (array_names.size() > 1) {
-		for (n = 1; n < array_names.size(); n++) {
-			name = array_names[n];
-			Rcout << ":" << name << std::endl;
-			auto ar_n(curGroup->OpenMDArray(name));
-			if (ar_n->GetDimensions().size() != sz)
-				break;
+	if (array_names.size() == 0) { // sort out: find the one(s) with the most dimensions
+		int ndim = 0;
+		int largest_size = 0;
+		for (const auto an: curGroup->GetMDArrayNames()) { // all:
+			auto a(curGroup->OpenMDArray(an));
+			ndim = a->GetDimensions().size();
+			if (ndim > largest_size)
+				largest_size = ndim;
+		}
+		for (const auto an: curGroup->GetMDArrayNames()) { // all:
+			auto a(curGroup->OpenMDArray(an));
+			ndim = a->GetDimensions().size();
+			if (ndim == largest_size)
+				array_names.push_back(an);
 		}
 	}
-	Rcout << "[n]: " << n << std::endl;
+	int n = array_names.size();
+
+	// how many arrays have identical dimensions to the first?
+	const char *name = array_names[0];
+	auto array(curGroup->OpenMDArray(name));
+	if (!array)
+		stop("Cannot find array");
 
 	size_t nValues = 1;
 	std::vector<size_t> anCount;
@@ -115,12 +136,14 @@ List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVecto
 		a_names[i] = array_names[i];
 		auto arr(curGroup->OpenMDArray(name));
 		NumericVector vec( nValues );
-		arr->Read(offset.data(),
+		bool ok = arr->Read(offset.data(),
 					anCount.data(),
 					nullptr, /* step: defaults to 1,1,1 */
 					nullptr, /* stride: default to row-major convention */
 					GDALExtendedDataType::Create(GDT_Float64),
 					vec.begin());
+		if (!ok)
+			Rcout << "Read failed for array " << name << std::endl;
 		dims.attr("names") = dim_names;
 		dimensions.attr("names") = dim_names;
 		bool has_offset = false;
@@ -150,7 +173,66 @@ List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVecto
 	List ret = List::create(
 		_["array_list"] = vec_lst,
 		_["dimensions"] = dimensions,
-		_["srs"] = wkt_from_spatial_reference(srs.get())
+		_["srs"] = srs == nullptr ? CharacterVector::create(NA_STRING) : wkt_from_spatial_reference(srs.get())
 	);
 	return ret;
 }
+
+// [[Rcpp::export]]
+List write_mdim(List x, CharacterVector file, List dimensions, CharacterVector units) {
+
+	stop("not implemented yet");
+
+	GDALDatasetH hDstDS = nullptr;
+	/* if( psOptionsForBinary->bUpdate )
+	{
+		CPLPushErrorHandler(CPLQuietErrorHandler);
+		hDstDS = GDALOpenEx(
+			psOptionsForBinary->pszDest,
+			GDAL_OF_RASTER | GDAL_OF_MULTIDIM_RASTER | GDAL_OF_VERBOSE_ERROR | GDAL_OF_UPDATE,
+			nullptr, nullptr, nullptr );
+		CPLPopErrorHandler();
+	}
+	*/
+
+	const char *pszDest = file[0];
+	CPLString osFormat("");
+	if( EQUAL(CPLGetExtension(pszDest), "nc") )
+		osFormat = "netCDF";
+	/*
+	else
+		osFormat = GetOutputDriverForRaster(pszDest);
+	*/
+	if( osFormat.empty() )
+		stop("format not found");
+	GDALDriver *poDriver = GDALDriver::FromHandle(GDALGetDriverByName( osFormat ));
+	char** papszDriverMD = poDriver ? poDriver->GetMetadata(): nullptr;
+	if( poDriver == nullptr
+		|| (!CPLTestBool(CSLFetchNameValueDef(papszDriverMD, GDAL_DCAP_RASTER, "FALSE")) &&
+			!CPLTestBool(CSLFetchNameValueDef(papszDriverMD, GDAL_DCAP_MULTIDIM_RASTER, "FALSE")))
+		|| (!CPLTestBool(CSLFetchNameValueDef(papszDriverMD, GDAL_DCAP_CREATE, "FALSE")) &&
+			!CPLTestBool(CSLFetchNameValueDef(papszDriverMD, GDAL_DCAP_CREATECOPY, "FALSE")) &&
+			!CPLTestBool(CSLFetchNameValueDef(papszDriverMD, GDAL_DCAP_CREATE_MULTIDIMENSIONAL, "FALSE")) &&
+			!CPLTestBool(CSLFetchNameValueDef(papszDriverMD, GDAL_DCAP_CREATECOPY_MULTIDIMENSIONAL, "FALSE"))) )
+				stop("output driver does not support creation");
+
+
+	/*
+	GDALDatasetH hRetDS = GDALMultiDimTranslate(
+										psOptionsForBinary->pszDest,
+					                    hDstDS,
+                                        1, &hInDS,
+                                        psOptions, &bUsageError);
+										*/
+
+	return x;
+}
+
+#else
+List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVector oo) {
+	stop("requires GDAL >= 3.1.0");
+}
+List write_mdim(List x, CharacterVector file, List dimensions, CharacterVector units) {
+	stop("requires GDAL >= 3.1.0");
+}
+#endif
