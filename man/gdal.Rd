@@ -70,7 +70,7 @@ gdal_extract(f, pts, bilinear = FALSE)
 
 gdal_read_mdim(file, array_name = character(0), options = character(0))
 
-gdal_write_mdim(x, file)
+gdal_write_mdim(x, file, dimension_values, units)
 }
 \arguments{
 \item{x}{character vector, possibly of length larger than 1 when more than one raster is read}
@@ -124,6 +124,10 @@ gdal_write_mdim(x, file)
 \item{bilinear}{logical; use bilinear interpolation, rather than nearest neighbor?}
 
 \item{array_name}{array name}
+
+\item{dimension_values}{list with dimension values}
+
+\item{units}{character; units names (udunits conform) corresponding to dimension_values}
 }
 \value{
 object of class \code{crs}, see \link{st_crs}.

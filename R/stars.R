@@ -319,6 +319,8 @@ gdal_read_mdim = function(file, array_name = character(0), options = character(0
 }
 
 #' @name gdal
+#' @param dimension_values list with dimension values
+#' @param units character; units names (udunits conform) corresponding to dimension_values
 #' @export
 gdal_write_mdim = function(x, file, dimension_values, units) {
 	write_mdim(x, file, dimension_values, units)
