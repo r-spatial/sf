@@ -177,6 +177,8 @@ test_that("sf can preserve types (#592)", {
     st_write(dtypes, pg, delete_layer = TRUE)
     x <- st_read(pg, "dtypes")
     dtypes$fact <- as.character(dtypes$fact)
+    # R 4.1; EP:
+    attr(x$time, "tzone") = attr(dtypes$time, "tzone") = NULL
     expect_equal(x, dtypes)
     DBI::dbRemoveTable(pg, "dtypes")
 })
@@ -359,9 +361,9 @@ test_that("can read using driver", {
 test_that("Can override local crs", {
 	skip_if_not(can_con(pg), "could not connect to postgis database")
 	ewkb <- c(
-		wgs84 =       db_binary(st_set_crs(st_sfc(st_point(1:2)), 4326)),
-		unavailable = db_binary(st_set_crs(st_sfc(st_point(1:2)), make_empty_crs(1111))),
-		missing =     db_binary(st_sfc(st_point(1:2)))
+		wgs84 =       sf:::db_binary(st_set_crs(st_sfc(st_point(1:2)), 4326)),
+		unavailable = sf:::db_binary(st_set_crs(st_sfc(st_point(1:2)), sf:::make_empty_crs(1111))),
+		missing =     sf:::db_binary(st_sfc(st_point(1:2)))
 	)
 
 	queries <- paste0("select st_srid('", ewkb, "'::geometry) as srid")
@@ -375,12 +377,12 @@ test_that("Can safely manipulate crs", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
     srid <- 4326
     crs <- st_crs(srid)
-    expect_true(db_find_srid(pg, srid = srid) == st_crs(srid))
-    expect_true(db_find_srtext(pg, crs) == st_crs(srid))
+    expect_true(sf:::db_find_srid(pg, srid = srid) == st_crs(srid))
+    expect_true(sf:::db_find_srtext(pg, crs) == st_crs(srid))
     expect_error(db_insert_crs(pg, st_crs(srid)), "already exists")
-    expect_warning(expect_true(is.na(st_crs(get_new_postgis_srid(pg)))), "not found")
-    new_crs <- make_empty_crs(
-    	epsg = get_new_postgis_srid(pg),
+    expect_warning(expect_true(is.na(st_crs(sf:::get_new_postgis_srid(pg)))), "not found")
+    new_crs <- sf:::make_empty_crs(
+    	epsg = sf:::get_new_postgis_srid(pg),
     	text = "+proj=longlat +datum=WGS84 +no_defs"
     )
     expect_message(db_insert_crs(pg, new_crs, auth_name = "sf_test"), "Inserted local crs")
@@ -389,14 +391,14 @@ test_that("Can safely manipulate crs", {
     expect_equal(delete_postgis_crs(pg, new_crs), 0)
 
     # set and delete
-    new_crs <- make_empty_crs(
+    new_crs <- sf:::make_empty_crs(
     	epsg = NA,
     	text = st_as_text(st_crs(epsg_31370))
     )
     expect_message(new_srid <- db_insert_crs(pg, new_crs), "Inserted local crs")
     expect_error(delete_postgis_crs(pg, new_crs), "Missing SRID")
 
-    crs2 <- make_empty_crs(epsg(new_srid), st_as_text(st_crs(3857)))
+    crs2 <- sf:::make_empty_crs(epsg(new_srid), st_as_text(st_crs(3857)))
     expect_equal(delete_postgis_crs(pg, crs2), 0)  # crs doesn't match any crs
     expect_equal(delete_postgis_crs(pg, new_srid), 1)
 
@@ -411,7 +413,7 @@ test_that("Can safely manipulate crs", {
 test_that("new SRIDs are handled correctly", {
 	skip_if_not(can_con(pg), "could not connect to postgis database")
 
-	crs <- make_empty_crs(
+	crs <- sf:::make_empty_crs(
 		epsg = NA,
 		wkt = st_as_text(st_crs(epsg_31370))
 	)
@@ -434,7 +436,7 @@ test_that("schema_table", {
 
 test_that("Can find a crs", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
-    expect_equal(db_find_srid(pg, st_crs(NA)), st_crs(NA))
+    expect_equal(sf:::db_find_srid(pg, st_crs(NA)), st_crs(NA))
     expect_error(sf:::delete_postgis_crs(pg, st_crs(NA)), "M|missing (crs)|(SRID)")
 })
 
