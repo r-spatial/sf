@@ -162,8 +162,8 @@ Rcpp::List CPL_rasterize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ras
 	// int bandlist = 1;
 	std::vector<int> bandlist(poDataset->GetRasterCount());
 	for (size_t i = 0; i < bandlist.size(); i++)
-		bandlist[i] = i + 1; // 1-based
-	CPLErr err = GDALRasterizeGeometries((GDALDatasetH) poDataset, // hDS,
+		bandlist[i] = (int) i+1; // 1-based
+		CPLErr err = GDALRasterizeGeometries((GDALDatasetH) poDataset, // hDS,
 		poDataset->GetRasterCount(), // int 	nBandCount,
 		bandlist.data(), // int * 	panBandList,
 		geoms.size(), // int 	nGeomCount,

@@ -11,6 +11,8 @@
 \alias{gdal_polygonize}
 \alias{gdal_rasterize}
 \alias{gdal_extract}
+\alias{gdal_read_mdim}
+\alias{gdal_write_mdim}
 \title{functions to interact with gdal not meant to be called directly by users (but e.g. by stars::read_stars)}
 \usage{
 gdal_read(
@@ -65,13 +67,17 @@ gdal_polygonize(
 gdal_rasterize(sf, x, gt, file, driver = "GTiff", options = character())
 
 gdal_extract(f, pts, bilinear = FALSE)
+
+gdal_read_mdim(file, array_name = character(0), options = character(0))
+
+gdal_write_mdim(x, file, dimension_values, units)
 }
 \arguments{
 \item{x}{character vector, possibly of length larger than 1 when more than one raster is read}
 
 \item{...}{ignored}
 
-\item{options}{character; raster layer read options}
+\item{options}{open options}
 
 \item{driver}{character; when empty vector, driver is auto-detected.}
 
@@ -81,7 +87,7 @@ gdal_extract(f, pts, bilinear = FALSE)
 
 \item{RasterIO_parameters}{list with named parameters to GDAL's RasterIO; see the stars::read_stars documentation.}
 
-\item{file}{character; file name}
+\item{file}{file name}
 
 \item{type}{gdal write type}
 
@@ -116,6 +122,12 @@ gdal_extract(f, pts, bilinear = FALSE)
 \item{pts}{points matrix}
 
 \item{bilinear}{logical; use bilinear interpolation, rather than nearest neighbor?}
+
+\item{array_name}{array name}
+
+\item{dimension_values}{list with dimension values}
+
+\item{units}{character; units names (udunits conform) corresponding to dimension_values}
 }
 \value{
 object of class \code{crs}, see \link{st_crs}.

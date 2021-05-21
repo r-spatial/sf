@@ -73,8 +73,12 @@ st_nearest_points.sf = function(x, y, ...) {
 #' 
 #' get index of nearest feature
 #' @param x object of class \code{sfg}, \code{sfc} or \code{sf}
-#' @param y object of class \code{sfg}, \code{sfc} or \code{sf}
-#' @return for each feature (geometry) in \code{x} the index of the nearest feature (geometry) in set \code{y}; 
+#' @param y object of class \code{sfg}, \code{sfc} or \code{sf}; if missing, features in code{x} will be compared to all remaining features in \code{x}.
+#' @param ... ignored
+#' @param check_crs logical; should \code{x} and \code{y} be checked for CRS equality?
+#' @param longlat logical; does \code{x} have ellipsoidal coordinates?
+#' @return for each feature (geometry) in \code{x} the index of the nearest feature (geometry) in 
+#' set \code{y}, or in the remaining set of \code{x} if \code{y} is missing;
 #' empty geometries result in \code{NA} indexes
 #' @seealso \link{st_nearest_points} for finding the nearest points for pairs of feature geometries
 #' @export
@@ -109,16 +113,28 @@ st_nearest_points.sf = function(x, y, ...) {
 #' plot(ls, col = 5:8, add = TRUE)
 #' # compute distance between pairs of nearest features:
 #' st_distance(pts, circles[nearest], by_element = TRUE)
-st_nearest_feature = function(x, y) {
-	stopifnot(st_crs(x) == st_crs(y))
-	longlat = isTRUE(st_is_longlat(x))
-	if (longlat && sf_use_s2()) {
-		if (! requireNamespace("s2", quietly = TRUE))
-			stop("package s2 required, please install it first")
-		s2::s2_closest_feature(x, y)
+st_nearest_feature = function(x, y, ..., check_crs = TRUE, longlat = isTRUE(st_is_longlat(x))) {
+
+	if (missing(y)) { # https://github.com/r-spatial/s2/issues/111#issuecomment-835306261
+		longlat = force(longlat) # evaluate only once
+		x = st_geometry(x)
+		ind <- vapply(
+			seq_along(x),
+			function(i) st_nearest_feature(x[i], x[-i], check_crs = FALSE, longlat = longlat),
+			integer(1)
+		)
+		ifelse(ind >= seq_along(x), ind + 1, ind)
 	} else {
-		if (longlat)
-			message_longlat("st_nearest_points")
-		CPL_geos_nearest_feature(st_geometry(x), st_geometry(y))
+		if (check_crs)
+			stopifnot(st_crs(x) == st_crs(y))
+		if (longlat && sf_use_s2()) {
+			if (! requireNamespace("s2", quietly = TRUE))
+				stop("package s2 required, please install it first")
+			s2::s2_closest_feature(x, y)
+		} else {
+			if (longlat)
+				message_longlat("st_nearest_feature")
+			CPL_geos_nearest_feature(st_geometry(x), st_geometry(y))
+		}
 	}
 }

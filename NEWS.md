@@ -6,6 +6,8 @@
 
 # version 0.9-9
 
+* `st_nearest_feature` with missing `y` returns nearest features in the remaining set of `x`; https://github.com/r-spatial/s2/issues/111
+
 * `st_write` gains an argument `config_options` to set GDAL config options; #1618
 
 * fix regression in `sf_project` when `keep = TRUE`; #1635
