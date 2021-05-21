@@ -47,7 +47,7 @@ List get_dimension_values(std::shared_ptr<GDALMDArray> array) {
 		if (!ok)
 			Rcout << "cannot convert values for array " << array->GetName() << std::endl;
 		CharacterVector cv(nValues);
-		for (int i = 0; i < nValues; i++)
+		for (size_t i = 0; i < nValues; i++)
 			cv[i] = vec[i];
 		ret[0] = cv;
 	}
@@ -183,7 +183,7 @@ List write_mdim(List x, CharacterVector file, List dimensions, CharacterVector u
 
 	stop("not implemented yet");
 
-	GDALDatasetH hDstDS = nullptr;
+	// GDALDatasetH hDstDS = nullptr;
 	/* if( psOptionsForBinary->bUpdate )
 	{
 		CPLPushErrorHandler(CPLQuietErrorHandler);
