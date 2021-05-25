@@ -41,8 +41,6 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 	longlat = inherits(x, "s2geography") || isTRUE(st_is_longlat(x))
 	if (longlat && sf_use_s2() && op %in% c("intersects", "contains", "within", 
 			"covers", "covered_by", "disjoint", "equals", "touches")) {
-		if (!requireNamespace("s2", quietly = TRUE))
-			stop("package s2 required, please install it first")
 		fn = get(paste0("s2_", op, "_matrix"), envir = getNamespace("s2")) # get op function
 		lst = fn(x, y, s2::s2_options(model = s2_model, ...)) # call function
 		id = if (is.null(row.names(x)))
@@ -244,8 +242,6 @@ st_is_within_distance = function(x, y = x, dist, sparse = TRUE, ...) {
 	ret = if (isTRUE(st_is_longlat(x))) {
 			units(dist) = as_units("m") # might convert
 			r = if (sf_use_s2()) {
-				if (!requireNamespace("s2", quietly = TRUE))
-					stop("package s2 required, please install it first")
 				if (inherits(dist, "units"))
 					dist = drop_units(dist)
 				s2::s2_dwithin_matrix(x, y, dist, ...)

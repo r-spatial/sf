@@ -86,7 +86,7 @@ Suggests:
     RPostgres (>= 1.1.0),
     RPostgreSQL,
     RSQLite,
-    s2 (>= 1.0.1),
+    s2 (>= 1.0.5),
     sp (>= 1.2-4),
     spatstat (>= 2.0-1),
     spatstat.geom, 

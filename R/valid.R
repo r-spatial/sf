@@ -13,13 +13,12 @@ st_is_valid = function(x, ...) UseMethod("st_is_valid")
 #' @name valid
 st_is_valid.sfc = function(x, ..., NA_on_exception = TRUE, reason = FALSE) {
 	if (sf_use_s2() && isTRUE(st_is_longlat(x))) {
-		if (reason)
-			stop("reason only works for projected coordinates")
-		if (! requireNamespace("s2", quietly = TRUE))
-			stop('package s2 required, please install it first')
-		sapply(st_as_binary(x), function(x) !inherits(try(
-				s2::as_s2_geography(structure(list(x), class = "WKB"), check = TRUE), 
-				silent = TRUE), "try-error"))
+		if (reason) {
+			r = s2::s2_is_valid_detail(x)
+			r$reason[r$is_valid] = "Valid Geometry"
+			r$reason
+		} else
+			s2::s2_is_valid(x)
 	} else if (reason) {
 		if (NA_on_exception) {
 			ret = rep(NA_character_, length(x))
@@ -82,12 +81,10 @@ st_make_valid.sfg = function(x, ...) {
 st_make_valid.sfc = function(x, ..., oriented = FALSE, s2_options = s2::s2_options(snap = s2::s2_snap_precision(1e7))) {
 	crs = st_crs(x)
 	if (sf_use_s2() && isTRUE(st_is_longlat(x))) {
-		if (! requireNamespace("s2", quietly = TRUE))
-			stop('package s2 required, please install it first')
 		s2 = s2::as_s2_geography(st_as_binary(st_set_precision(x, 0.0)), oriented = oriented, check = FALSE)
 		if (st_precision(x) != 0 && missing(s2_options))
 			s2_options = s2::s2_options(snap = s2::s2_snap_precision(st_precision(x)))
-		s2 = s2::s2_union(s2, s2_options)
+		s2 = s2::s2_rebuild(s2, s2_options)
 		st_as_sfc(s2, crs = crs)
 	} else if (sf_extSoftVersion()["GEOS"] < "3.8.0") {
 		if (!requireNamespace("lwgeom", quietly = TRUE))

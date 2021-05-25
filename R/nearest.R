@@ -42,9 +42,6 @@ st_nearest_points.sfc = function(x, y, ..., pairwise = FALSE) {
 	stopifnot(st_crs(x) == st_crs(y))
 	longlat = isTRUE(st_is_longlat(x))
 	if (longlat && sf_use_s2()) {
-		#message_longlat("st_nearest_points")
-		if (! requireNamespace("s2", quietly = TRUE))
-			stop("package s2 required, please install it first")
 		ret = if (pairwise)
 				s2::s2_minimum_clearance_line_between(x, y)
 			else
@@ -127,11 +124,9 @@ st_nearest_feature = function(x, y, ..., check_crs = TRUE, longlat = isTRUE(st_i
 	} else {
 		if (check_crs)
 			stopifnot(st_crs(x) == st_crs(y))
-		if (longlat && sf_use_s2()) {
-			if (! requireNamespace("s2", quietly = TRUE))
-				stop("package s2 required, please install it first")
+		if (longlat && sf_use_s2())
 			s2::s2_closest_feature(x, y)
-		} else {
+		else {
 			if (longlat)
 				message_longlat("st_nearest_feature")
 			CPL_geos_nearest_feature(st_geometry(x), st_geometry(y))
