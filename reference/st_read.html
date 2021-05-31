@@ -358,8 +358,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>nc</span> <span class='op'>=</span> <span class='fu'>st_read</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"shape/nc.shp"</span>, package<span class='op'>=</span><span class='st'>"sf"</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Reading layer `nc' from data source 
-#&gt;   `/tmp/RtmpC1rQL6/temp_libpathe2366f5d33d8/sf/shape/nc.shp' 
-#&gt;   using driver `ESRI Shapefile'
+#&gt;   `/tmp/Rtmp3MXh9Q/temp_libpath405a79d491b/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 100 features and 14 fields
 #&gt; Geometry type: MULTIPOLYGON
 #&gt; Dimension:     XY
@@ -398,8 +397,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
 <span class='va'>nc_sql</span> <span class='op'>=</span> <span class='fu'>st_read</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"shape/nc.shp"</span>, package<span class='op'>=</span><span class='st'>"sf"</span><span class='op'>)</span>,
                      query <span class='op'>=</span> <span class='st'>"SELECT NAME, SID74, FIPS FROM \"nc\" WHERE BIR74 &gt; 20000"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Reading layer `nc' from data source 
-#&gt;   `/tmp/RtmpC1rQL6/temp_libpathe2366f5d33d8/sf/shape/nc.shp' 
-#&gt;   using driver `ESRI Shapefile'
+#&gt;   `/tmp/Rtmp3MXh9Q/temp_libpath405a79d491b/sf/shape/nc.shp' using driver `ESRI Shapefile'
 #&gt; Simple feature collection with 2 features and 3 fields
 #&gt; Geometry type: POLYGON
 #&gt; Dimension:     XY
@@ -430,15 +428,15 @@ that reside in the same directory, only one of them having extension <code>.shp<
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: -81.91116 ymin: 35.98933 xmax: -80.87086 ymax: 36.58965
 #&gt; Geodetic CRS:  NAD27
-#&gt; <span style='color: #949494;'># A tibble: 4 x 15</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 4 x 15</span>
 #&gt;    AREA PERIMETER CNTY_ CNTY_ID NAME   FIPS  FIPSNO CRESS_ID BIR74 SID74 NWBIR74
-#&gt;   </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>     </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> 0.081      1.29  </span><span style='text-decoration: underline;'>1</span><span>880    </span><span style='text-decoration: underline;'>1</span><span>880 Watau… 37189  </span><span style='text-decoration: underline;'>37</span><span>189       95  </span><span style='text-decoration: underline;'>1</span><span>323     1      17
-#&gt; </span><span style='color: #BCBCBC;'>2</span><span> 0.114      1.44  </span><span style='text-decoration: underline;'>1</span><span>825    </span><span style='text-decoration: underline;'>1</span><span>825 Ashe   37009  </span><span style='text-decoration: underline;'>37</span><span>009        5  </span><span style='text-decoration: underline;'>1</span><span>091     1      10
-#&gt; </span><span style='color: #BCBCBC;'>3</span><span> 0.199      1.98  </span><span style='text-decoration: underline;'>1</span><span>874    </span><span style='text-decoration: underline;'>1</span><span>874 Wilkes 37193  </span><span style='text-decoration: underline;'>37</span><span>193       97  </span><span style='text-decoration: underline;'>3</span><span>146     4     200
-#&gt; </span><span style='color: #BCBCBC;'>4</span><span> 0.061      1.23  </span><span style='text-decoration: underline;'>1</span><span>827    </span><span style='text-decoration: underline;'>1</span><span>827 Alleg… 37005  </span><span style='text-decoration: underline;'>37</span><span>005        3   487     0      10
-#&gt; </span><span style='color: #949494;'># … with 4 more variables: BIR79 &lt;dbl&gt;, SID79 &lt;dbl&gt;, NWBIR79 &lt;dbl&gt;,</span><span>
-#&gt; </span><span style='color: #949494;'>#   geom &lt;MULTIPOLYGON [°]&gt;</span><span></div><div class='input'><span class='co'># read geojson from string:</span>
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span> 0.081      1.29  <span style='text-decoration: underline;'>1</span>880    <span style='text-decoration: underline;'>1</span>880 Watau… 37189  <span style='text-decoration: underline;'>37</span>189       95  <span style='text-decoration: underline;'>1</span>323     1      17
+#&gt; <span style='color: #BCBCBC;'>2</span> 0.114      1.44  <span style='text-decoration: underline;'>1</span>825    <span style='text-decoration: underline;'>1</span>825 Ashe   37009  <span style='text-decoration: underline;'>37</span>009        5  <span style='text-decoration: underline;'>1</span>091     1      10
+#&gt; <span style='color: #BCBCBC;'>3</span> 0.199      1.98  <span style='text-decoration: underline;'>1</span>874    <span style='text-decoration: underline;'>1</span>874 Wilkes 37193  <span style='text-decoration: underline;'>37</span>193       97  <span style='text-decoration: underline;'>3</span>146     4     200
+#&gt; <span style='color: #BCBCBC;'>4</span> 0.061      1.23  <span style='text-decoration: underline;'>1</span>827    <span style='text-decoration: underline;'>1</span>827 Alleg… 37005  <span style='text-decoration: underline;'>37</span>005        3   487     0      10
+#&gt; <span style='color: #949494;'># … with 4 more variables: BIR79 &lt;dbl&gt;, SID79 &lt;dbl&gt;, NWBIR79 &lt;dbl&gt;,</span>
+#&gt; <span style='color: #949494;'>#   geom &lt;MULTIPOLYGON [°]&gt;</span></div><div class='input'><span class='co'># read geojson from string:</span>
 <span class='va'>geojson_txt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"{\"type\":\"MultiPoint\",\"coordinates\":"</span>,
    <span class='st'>"[[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}"</span><span class='op'>)</span>
 <span class='va'>x</span> <span class='op'>=</span> <span class='fu'>read_sf</span><span class='op'>(</span><span class='va'>geojson_txt</span><span class='op'>)</span>
@@ -448,10 +446,10 @@ that reside in the same directory, only one of them having extension <code>.shp<
 #&gt; Dimension:     XY
 #&gt; Bounding box:  xmin: 3 ymin: 3.6 xmax: 3.9 ymax: 4.6
 #&gt; Geodetic CRS:  WGS 84
-#&gt; </span><span style='color: #949494;'># A tibble: 1 x 1</span><span>
+#&gt; <span style='color: #949494;'># A tibble: 1 x 1</span>
 #&gt;                                                         geometry
-#&gt;                                                 </span><span style='color: #949494;font-style: italic;'>&lt;MULTIPOINT [°]&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'>1</span><span> ((3.2 4), (3 4.6), (3.8 4.4), (3.5 3.8), (3.4 3.6), (3.9 4.5))</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+#&gt;                                                 <span style='color: #949494; font-style: italic;'>&lt;MULTIPOINT [°]&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span> ((3.2 4), (3 4.6), (3.8 4.4), (3.5 3.8), (3.4 3.6), (3.9 4.5))</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/tomoakin/RPostgreSQL'>RPostgreSQL</a></span><span class='op'>)</span>
 <span class='kw'><a href='https://rdrr.io/r/base/try.html'>try</a></span><span class='op'>(</span><span class='va'>conn</span> <span class='op'>&lt;-</span> <span class='fu'>dbConnect</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/RPostgreSQL/man/PostgreSQL.html'>PostgreSQL</a></span><span class='op'>(</span><span class='op'>)</span>, dbname <span class='op'>=</span> <span class='st'>"postgis"</span><span class='op'>)</span><span class='op'>)</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/exists.html'>exists</a></span><span class='op'>(</span><span class='st'>"conn"</span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/class.html'>inherits</a></span><span class='op'>(</span><span class='va'>conn</span>, <span class='st'>"try-error"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
@@ -461,7 +459,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
   <span class='fu'>dbDisconnect</span><span class='op'>(</span><span class='va'>conn</span><span class='op'>)</span>
  <span class='op'>}</span>
 <span class='op'>}</span>
-</div></span></pre>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
