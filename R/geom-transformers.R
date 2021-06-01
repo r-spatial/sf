@@ -868,21 +868,28 @@ st_union.sfg = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 
 #' @export
 st_union.sfc = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
+	ll = isTRUE(st_is_longlat(x))
 	if (missing(y)) { # unary union, possibly by_feature:
-		ll = isTRUE(st_is_longlat(x))
-		if (ll && sf_use_s2() && !by_feature) {
-			# see https://github.com/r-spatial/s2/issues/97 :
-			if (utils::packageVersion("s2") > "1.0.4")
+		if (ll && sf_use_s2()) { 
+			if (! by_feature) # see https://github.com/r-spatial/s2/issues/97 :
 				st_as_sfc(s2::s2_union_agg(x, ...), crs = st_crs(x)) 
 			else
-				st_as_sfc(Reduce(s2::s2_union, st_as_s2(x)), crs = st_crs(x))
+				st_as_sfc(s2::s2_union(x, ...), crs = st_crs(x)) 
 		} else {
 			if (ll)
 				message_longlat("st_union")
 			st_sfc(CPL_geos_union(st_geometry(x), by_feature, is_coverage))
 		}
-	} else
-		geos_op2_geom("union", x, y)
+	} else {
+		stopifnot(st_crs(x) == st_crs(y))
+		if (ll && sf_use_s2())
+			st_as_sfc(s2::s2_union(x, y, ...), crs = st_crs(x)) 
+		else {
+			if (ll)
+				message_longlat("st_union")
+			geos_op2_geom("union", x, y)
+		}
+	}
 }
 
 #' @export
