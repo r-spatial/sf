@@ -37,7 +37,10 @@ pathGrob <- NULL
 		}
 	} # nocov end
 	load_gdal() 
-	assign(".sf.use_s2", !(Sys.getenv("_SF_USE_S2") == "false"), envir=.sf_cache)
+	use_s2 = !(Sys.getenv("_SF_USE_S2") == "false")
+	if (!use_s2)
+		packageStartupMessage("Spherical geometry (s2) switched off")
+	assign(".sf.use_s2", use_s2, envir=.sf_cache)
 }
 
 .onUnload = function(libname, pkgname) {

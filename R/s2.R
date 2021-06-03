@@ -16,7 +16,9 @@ sf_use_s2 = function(use_s2) {
 		stopifnot(is.logical(use_s2), length(use_s2)==1, !is.na(use_s2))
 		if (use_s2 && !requireNamespace("s2", quietly = TRUE))
 			stop("package s2 not available: install it first?")
-		assign(".sf.use_s2", use_s2, envir=.sf_cache)
+		if (ret_val != use_s2)
+			cat(paste0("Spherical geometry (s2) switched ", ifelse(use_s2, "on", "off"), "\n"))
+		assign(".sf.use_s2", use_s2, envir = .sf_cache)
 		invisible(ret_val)
 	} else
 		ret_val

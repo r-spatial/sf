@@ -1,8 +1,11 @@
 # version 1.0-0
 
-* use `s2` as default geometry back-end when coordinates are ellipsoidal, this can
-  be suppressed by setting environment variable `_SF_USE_S2` to `false` before
-  package `sf` is loaded; #1649
+* `sf_use_s2()` prints a message when using s2 has been switched to on or off.
+
+* use `s2` spherical geometry as default when coordinates are ellipsoidal. This can
+  be switched off (defaulting to planar geometry, using GEOS, as in sf < 1.0-0) 
+  by setting environment variable `_SF_USE_S2` to `false` before package `sf` 
+  is loaded, or by `sf_use_s2(FALSE)`; #1649
 
 # version 0.9-9
 
