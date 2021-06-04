@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0-0</span>
       </span>
     </div>
 
@@ -152,6 +152,15 @@
       <small>Source: <a href='https://github.com/r-spatial/sf/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="version-10-0" class="section level1">
+<h1 class="page-header" data-toc-text="1.0-0">
+<a href="#version-10-0" class="anchor"></a>version 1.0-0<small> Unreleased </small>
+</h1>
+<ul>
+<li><p><code><a href="../reference/s2.html">sf_use_s2()</a></code> prints a message when using s2 has been switched to on or off.</p></li>
+<li><p>use <code>s2</code> spherical geometry as default when coordinates are ellipsoidal. This can be switched off (defaulting to planar geometry, using GEOS, as in sf &lt; 1.0-0) by setting environment variable <code>_SF_USE_S2</code> to <code>false</code> before package <code>sf</code> is loaded, or by <code><a href="../reference/s2.html">sf_use_s2(FALSE)</a></code>; <a href='https://github.com/r-spatial/sf/issues/1649'>#1649</a></p></li>
+</ul>
+</div>
     <div id="version-09-9" class="section level1">
 <h1 class="page-header" data-toc-text="0.9-9">
 <a href="#version-09-9" class="anchor"></a>version 0.9-9<small> Unreleased </small>

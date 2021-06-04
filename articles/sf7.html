@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0-0</span>
       </span>
     </div>
 
@@ -254,10 +254,12 @@
 <span class="co">## [1] TRUE</span></code></pre></div>
 <p>then we can switch it of (and use GEOS) by</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span>
+<span class="co">## Spherical geometry (s2) switched off</span></code></pre></div>
 <p>and switch it on (and use s2) by</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">## Spherical geometry (s2) switched on</span></code></pre></div>
 </div>
 <div id="measures" class="section level1">
 <h1 class="hasAnchor">
@@ -273,6 +275,7 @@
 <span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span>
 <span class="va">a1</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_measures.html">st_area</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span>
 <span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span>
+<span class="co">## Spherical geometry (s2) switched off</span>
 <span class="va">a2</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_measures.html">st_area</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">a1</span>, <span class="va">a2</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></code></pre></div>
@@ -288,8 +291,10 @@
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">nc_ls</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_cast.html">st_cast</a></span><span class="op">(</span><span class="va">nc</span>, <span class="st">"MULTILINESTRING"</span><span class="op">)</span>
 <span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">## Spherical geometry (s2) switched on</span>
 <span class="va">l1</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_measures.html">st_length</a></span><span class="op">(</span><span class="va">nc_ls</span><span class="op">)</span>
 <span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span>
+<span class="co">## Spherical geometry (s2) switched off</span>
 <span class="va">l2</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_measures.html">st_length</a></span><span class="op">(</span><span class="va">nc_ls</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">l1</span> , <span class="va">l2</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></code></pre></div>
@@ -304,8 +309,10 @@
 <a href="#distances" class="anchor"></a>Distances</h2>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">## Spherical geometry (s2) switched on</span>
 <span class="va">d1</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_measures.html">st_distance</a></span><span class="op">(</span><span class="va">nc</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span><span class="op">)</span>
 <span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span>
+<span class="co">## Spherical geometry (s2) switched off</span>
 <span class="va">d2</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_measures.html">st_distance</a></span><span class="op">(</span><span class="va">nc</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">d1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="va">d2</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></code></pre></div>
@@ -370,32 +377,32 @@
   <span class="va">uk_buffer_sf</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">uk_projected</span>, dist <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span>
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.048   0.000   0.049</span>
+<span class="co">##   0.039   0.004   0.043</span>
 <span class="co"># sf way with few than the 30 segments in the buffer</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="op">{</span>
   <span class="va">uk_projected</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">uk_sfc</span>, <span class="fl">27700</span><span class="op">)</span>
   <span class="va">uk_buffer_sf2</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">uk_projected</span>, dist <span class="op">=</span> <span class="fl">20000</span>, nQuadSegs <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span>
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.035   0.000   0.034</span>
+<span class="co">##   0.031   0.000   0.031</span>
 <span class="co"># s2 with default cell size</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="op">{</span>
   <span class="va">uk_buffer</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span>
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.042   0.000   0.041</span>
+<span class="co">##   0.035   0.000   0.035</span>
 <span class="co"># s2 with 10000 cells</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="op">{</span>
   <span class="va">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span>, max_cells <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span>
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.354   0.000   0.354</span>
+<span class="co">##   0.337   0.000   0.337</span>
 <span class="co"># s2 with 100 cells</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="op">{</span>
   <span class="va">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span>, max_cells <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span>
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.006   0.000   0.005</span></code></pre></div>
+<span class="co">##   0.005   0.000   0.005</span></code></pre></div>
 <p>The result of the previous benchmarks emphasise the point that there are trade-offs between geographic resolution and computational resources, something that web developers working on geographic services such as Google Maps understand well. In this case the default setting of 1000 cells, which runs slightly faster than the default transform -&gt; buffer workflow, is probably appropriate given the low resolution of the input geometry representing the UK.</p>
 </div>
 <div id="st_buffer-or-st_is_within_distance" class="section level2">

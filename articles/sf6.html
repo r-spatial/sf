@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0-0</span>
       </span>
     </div>
 
@@ -133,7 +133,7 @@
 <span class="co">## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/demo.html">demo</a></span><span class="op">(</span><span class="va">nc</span>, ask <span class="op">=</span> <span class="cn">FALSE</span>, echo <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="co">## Reading layer `nc.gpkg' from data source </span>
-<span class="co">##   `/tmp/Rtmppkv5Eb/temp_libpathe23751fa5bda/sf/gpkg/nc.gpkg' </span>
+<span class="co">##   `/tmp/RtmpvG1uTm/temp_libpath402b4fc475e6/sf/gpkg/nc.gpkg' </span>
 <span class="co">##   using driver `GPKG'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity</span>
@@ -142,8 +142,6 @@
 <span class="co">## Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span>
 <span class="co">## Geodetic CRS:  NAD27</span>
 <span class="va">nc</span><span class="op">$</span><span class="va">geom2</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_centroid</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## Warning in st_centroid.sfc(st_geometry(nc)): st_centroid does not give correct</span>
-<span class="co">## centroids for longitude/latitude data</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">nc</span>, n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity, 1 NA's</span>
@@ -160,8 +158,8 @@
 <span class="co">## 1      10  1364     0      19 MULTIPOLYGON (((-81.47276 3...</span>
 <span class="co">## 2      10   542     3      12 MULTIPOLYGON (((-81.23989 3...</span>
 <span class="co">##                        geom2</span>
-<span class="co">## 1  POINT (-81.49826 36.4314)</span>
-<span class="co">## 2 POINT (-81.12515 36.49101)</span></code></pre></div>
+<span class="co">## 1  POINT (-81.49823 36.4314)</span>
+<span class="co">## 2 POINT (-81.12513 36.49111)</span></code></pre></div>
 <p>We can switch the active geometry by using <code>st_geometry&lt;-</code> or <code>st_set_geometry</code>, as in</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span></code></pre></div>
@@ -199,10 +197,9 @@
         crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span>
 <span class="va">pole</span> <span class="op">=</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">90</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span>
 <span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span><span class="op">(</span><span class="va">polygon</span>, <span class="va">pole</span><span class="op">)</span>
-<span class="co">## although coordinates are longitude/latitude, st_intersects assumes that they are planar</span>
 <span class="co">## Sparse geometry binary predicate list of length 1, where the predicate</span>
 <span class="co">## was `intersects'</span>
-<span class="co">##  1: (empty)</span></code></pre></div>
+<span class="co">##  1: 1</span></code></pre></div>
 <p>which gives a wrong result (no intersection).</p>
 </div>
 <div id="st_centroid-does-not-give-correct-centroids-for-longitudelatitude-data" class="section level2">
@@ -212,9 +209,7 @@
 <p>Similar to the above, centroids are computed assuming flat, 2D space:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/geos_unary.html">st_centroid</a></span><span class="op">(</span><span class="va">polygon</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
-<span class="co">## Warning in st_centroid.sfc(polygon): st_centroid does not give correct centroids</span>
-<span class="co">## for longitude/latitude data</span>
-<span class="co">## POINT (120 80)</span></code></pre></div>
+<span class="co">## POINT (0 90)</span></code></pre></div>
 <p>where the centroid should have been the pole.</p>
 </div>
 <div id="dist-is-assumed-to-be-in-decimal-degrees-arc_degrees-" class="section level2">
@@ -225,12 +220,7 @@
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pt</span> <span class="op">=</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span>
 <span class="va">buf</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">polygon</span>, <span class="fl">1</span><span class="op">)</span>
-<span class="co">## Warning in st_buffer.sfc(polygon, 1): st_buffer does not correctly buffer</span>
-<span class="co">## longitude/latitude data</span>
-<span class="co">## dist is assumed to be in decimal degrees (arc_degrees).</span>
-<span class="va">buf</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">polygon</span>, <span class="fu">units</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html">set_units</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">degree</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## Warning in st_buffer.sfc(polygon, units::set_units(1, degree)): st_buffer does</span>
-<span class="co">## not correctly buffer longitude/latitude data</span></code></pre></div>
+<span class="va">buf</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">polygon</span>, <span class="fu">units</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html">set_units</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">degree</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
   </div>

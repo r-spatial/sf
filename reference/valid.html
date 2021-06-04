@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0-0</span>
       </span>
     </div>
 
@@ -169,10 +169,18 @@
 <span class='co'># S3 method for sfg</span>
 <span class='fu'>st_is_valid</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>st_make_valid</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+<span class='fu'>st_make_valid</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for sfg</span>
-<span class='fu'>st_make_valid</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></pre>
+<span class='fu'>st_make_valid</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for sfc</span>
+<span class='fu'>st_make_valid</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>...</span>,
+  oriented <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  s2_options <span class='op'>=</span> <span class='fu'>s2</span><span class='fu'>::</span><span class='fu'><a href='https://r-spatial.github.io/s2/reference/s2_options.html'>s2_options</a></span><span class='op'>(</span>snap <span class='op'>=</span> <span class='fu'>s2</span><span class='fu'>::</span><span class='fu'><a href='https://r-spatial.github.io/s2/reference/s2_options.html'>s2_snap_precision</a></span><span class='op'>(</span><span class='fl'>1e+07</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -183,7 +191,7 @@
     </tr>
     <tr>
       <th>...</th>
-      <td><p>passed on to sfc method</p></td>
+      <td><p>ignored</p></td>
     </tr>
     <tr>
       <th>NA_on_exception</th>
@@ -193,15 +201,24 @@
       <th>reason</th>
       <td><p>logical; if <code>TRUE</code>, return a character with, for each geometry, the reason for invalidity, <code>NA</code> on exception, or <code>"Valid Geometry"</code> otherwise.</p></td>
     </tr>
+    <tr>
+      <th>oriented</th>
+      <td><p>logical; only relevant if <code><a href='st_is_longlat.html'>st_is_longlat(x)</a></code> is <code>TRUE</code>; see <a href='s2.html'>s2</a></p></td>
+    </tr>
+    <tr>
+      <th>s2_options</th>
+      <td><p>only relevant if <code><a href='st_is_longlat.html'>st_is_longlat(x)</a></code> is <code>TRUE</code>; options for <a href='https://r-spatial.github.io/s2/reference/s2_boundary.html'>s2_rebuild</a>, see <a href='https://r-spatial.github.io/s2/reference/s2_options.html'>s2_options</a> and Details.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p><code>st_is_valid</code> returns a logical vector indicating for each geometries of <code>x</code> whether it is valid.</p>
+    <p><code>st_is_valid</code> returns a logical vector indicating for each geometries of <code>x</code> whether it is valid. <code>st_make_valid</code> returns an object with a topologically valid geometry.</p>
 <p>Object of the same class as <code>x</code></p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>st_make_valid</code> uses the <code>lwgeom_makevalid</code> method also used by the PostGIS command <code>ST_makevalid</code> if the GEOS version linked to is smaller than 3.8.0, and otherwise the version shipped in GEOS.</p>
+    <p>For projected geometries, <code>st_make_valid</code> uses the <code>lwgeom_makevalid</code> method also used by the PostGIS command <code>ST_makevalid</code> if the GEOS version linked to is smaller than 3.8.0, and otherwise the version shipped in GEOS; for geometries having ellipsoidal coordinates <code><a href='https://r-spatial.github.io/s2/reference/s2_boundary.html'>s2::s2_rebuild</a></code> is being used.</p>
+<p>if <code>s2_options</code> is not specified and <code>x</code> has a non-zero precision set, then this precision value will be used as the value in <code>s2_snap_precision</code>, passed on to <code>s2_options</code>, rather than the 1e7 default.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>p1</span> <span class='op'>=</span> <span class='fu'><a href='st_as_sfc.html'>st_as_sfc</a></span><span class='op'>(</span><span class='st'>"POLYGON((0 0, 0 10, 10 0, 10 10, 0 0))"</span><span class='op'>)</span>

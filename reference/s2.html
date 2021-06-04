@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0-0</span>
       </span>
     </div>
 
@@ -177,7 +177,7 @@
 <span class='fu'>st_as_s2</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for sfc</span>
-<span class='fu'>st_as_s2</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span>, oriented <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+<span class='fu'>st_as_s2</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span>, oriented <span class='op'>=</span> <span class='cn'>FALSE</span>, rebuild <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -209,6 +209,10 @@ for geographical coordinate operations</p></td>
 cover more than half of the globe are inverted; if <code>TRUE</code>, no reversal
 takes place and it is assumed that the inside of the polygon is to the
 left of the polygon's path.</p></td>
+    </tr>
+    <tr>
+      <th>rebuild</th>
+      <td><p>logical; call <a href='https://r-spatial.github.io/s2/reference/s2_boundary.html'>s2_rebuild</a> on the geometry (think of this as a <code>st_make_valid</code> on the sphere)</p></td>
     </tr>
     </table>
 

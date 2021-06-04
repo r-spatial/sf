@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0-0</span>
       </span>
     </div>
 
@@ -281,7 +281,7 @@
 <span class="co">## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1</span>
 <span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">## Reading layer `nc' from data source </span>
-<span class="co">##   `/tmp/Rtmppkv5Eb/temp_libpathe23751fa5bda/sf/shape/nc.shp' </span>
+<span class="co">##   `/tmp/RtmpvG1uTm/temp_libpath402b4fc475e6/sf/shape/nc.shp' </span>
 <span class="co">##   using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Geometry type: MULTIPOLYGON</span>
@@ -599,7 +599,7 @@
 <code class="sourceCode R"><span class="va">filename</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>
 <span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">filename</span><span class="op">)</span>
 <span class="co">## Reading layer `nc' from data source </span>
-<span class="co">##   `/tmp/Rtmppkv5Eb/temp_libpathe23751fa5bda/sf/shape/nc.shp' </span>
+<span class="co">##   `/tmp/RtmpvG1uTm/temp_libpath402b4fc475e6/sf/shape/nc.shp' </span>
 <span class="co">##   using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Geometry type: MULTIPOLYGON</span>
@@ -779,7 +779,6 @@
 <p>The commands <code>st_intersects</code>, <code>st_disjoint</code>, <code>st_touches</code>, <code>st_crosses</code>, <code>st_within</code>, <code>st_contains</code>, <code>st_overlaps</code>, <code>st_equals</code>, <code>st_covers</code>, <code>st_covered_by</code>, <code>st_equals_exact</code> and <code>st_is_within_distance</code> return a sparse matrix with matching (TRUE) indexes, or a full logical matrix:</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="op">]</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="op">]</span><span class="op">)</span>
-<span class="co">## although coordinates are longitude/latitude, st_intersects assumes that they are planar</span>
 <span class="co">## Sparse geometry binary predicate list of length 5, where the predicate</span>
 <span class="co">## was `intersects'</span>
 <span class="co">##  1: 1, 2</span>
@@ -788,7 +787,6 @@
 <span class="co">##  4: 4</span>
 <span class="co">##  5: (empty)</span>
 <span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="op">]</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="op">]</span>, sparse <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="co">## although coordinates are longitude/latitude, st_intersects assumes that they are planar</span>
 <span class="co">##       [,1]  [,2]  [,3]  [,4]</span>
 <span class="co">## [1,]  TRUE  TRUE FALSE FALSE</span>
 <span class="co">## [2,]  TRUE  TRUE  TRUE FALSE</span>
@@ -808,7 +806,6 @@
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span>
 <span class="va">u</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/geos_combine.html">st_union</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span>
-<span class="co">## although coordinates are longitude/latitude, st_union assumes that they are planar</span>
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">u</span><span class="op">)</span></code></pre></div>
 <p><img src="sf1_files/figure-html/unnamed-chunk-40-1.png" width="700"></p>
 <p>The following code shows how computing an intersection between two polygons may yield a <code>GEOMETRYCOLLECTION</code> with a point, line and polygon:</p>
@@ -867,13 +864,13 @@
 <p>The <strong>units</strong> package can be used to convert between units:</p>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">units</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html">set_units</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">km</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span> <span class="co"># result in square kilometers</span>
-<span class="co">## 1137.389 [km^2]</span>
+<span class="co">## 1137.108 [km^2]</span>
 <span class="fu">units</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html">set_units</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">ha</span><span class="op">)</span> <span class="co"># result in hectares</span>
-<span class="co">## 113738.9 [ha]</span></code></pre></div>
+<span class="co">## 113710.8 [ha]</span></code></pre></div>
 <p>The result can be stripped of their attributes if needs be:</p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span>
-<span class="co">## [1] 1137388604</span></code></pre></div>
+<span class="co">## [1] 1137107793</span></code></pre></div>
 </div>
 <div id="how-attributes-relate-to-geometries" class="section level1">
 <h1 class="hasAnchor">
@@ -888,7 +885,7 @@
         CRESS_ID <span class="op">=</span> <span class="st">"identity"</span>, BIR74 <span class="op">=</span> <span class="st">"aggregate"</span>, SID74 <span class="op">=</span> <span class="st">"aggregate"</span>, NWBIR74 <span class="op">=</span> <span class="st">"aggregate"</span>,
         BIR79 <span class="op">=</span> <span class="st">"aggregate"</span>, SID79 <span class="op">=</span> <span class="st">"aggregate"</span>, NWBIR79 <span class="op">=</span> <span class="st">"aggregate"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">## Reading layer `nc' from data source </span>
-<span class="co">##   `/tmp/Rtmppkv5Eb/temp_libpathe23751fa5bda/sf/shape/nc.shp' </span>
+<span class="co">##   `/tmp/RtmpvG1uTm/temp_libpath402b4fc475e6/sf/shape/nc.shp' </span>
 <span class="co">##   using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity</span>

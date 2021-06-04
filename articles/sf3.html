@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9-9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0-0</span>
       </span>
     </div>
 
@@ -271,8 +271,6 @@
 <span class="va">ncg</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">ncg</span>, border <span class="op">=</span> <span class="st">'grey'</span><span class="op">)</span>
 <span class="va">cntrd</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_centroid</a></span><span class="op">(</span><span class="va">ncg</span><span class="op">)</span>
-<span class="co">## Warning in st_centroid.sfc(ncg): st_centroid does not give correct centroids for</span>
-<span class="co">## longitude/latitude data</span>
 <span class="va">ncg2</span> <span class="op">=</span> <span class="op">(</span><span class="va">ncg</span> <span class="op">-</span> <span class="va">cntrd</span><span class="op">)</span> <span class="op">*</span> <span class="fu">rot</span><span class="op">(</span><span class="va">pi</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span> <span class="op">*</span> <span class="fl">.75</span> <span class="op">+</span> <span class="va">cntrd</span>
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">ncg2</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">cntrd</span>, col <span class="op">=</span> <span class="st">'red'</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, cex <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span></code></pre></div>
