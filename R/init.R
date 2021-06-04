@@ -24,6 +24,7 @@ setOldClass(c("sfc_MULTILINESTRING", "sfc"))
 setOldClass(c("sfc_POLYGON", "sfc"))
 setOldClass(c("sfc_MULTIPOLYGON", "sfc"))
 setOldClass(c("sfc_GEOMETRY", "sfc"))
+setOldClass(c("sfc_GEOMETRYCOLLECTION", "sfc"))
 setOldClass("sfg")
 setOldClass("crs")
 
