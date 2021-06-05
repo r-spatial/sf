@@ -678,7 +678,7 @@ get_first_sfg = function(x) {
 #' @export
 #' @return The intersection, difference or symmetric difference between two sets of geometries.
 #' The returned object has the same class as that of the first argument (\code{x}) with the non-empty geometries resulting from applying the operation to all geometry pairs in \code{x} and \code{y}. In case \code{x} is of class \code{sf}, the matching attributes of the original object(s) are added. The \code{sfc} geometry list-column returned carries an attribute \code{idx}, which is an \code{n}-by-2 matrix with every row the index of the corresponding entries of \code{x} and \code{y}, respectively.
-#' @details When using GEOS and not using s2, a spatial index is built on argument \code{x}; see \url{https://www.r-spatial.org/r/2017/06/22/spatial-index.html}. The reference for the STR tree algorithm is: Leutenegger, Scott T., Mario A. Lopez, and Jeffrey Edgington. "STR: A simple and efficient algorithm for R-tree packing." Data Engineering, 1997. Proceedings. 13th international conference on. IEEE, 1997. For the pdf, search Google Scholar.
+#' @details When using GEOS and not using s2, a spatial index is built on argument \code{x}; see \url{https://r-spatial.org/r/2017/06/22/spatial-index.html}. The reference for the STR tree algorithm is: Leutenegger, Scott T., Mario A. Lopez, and Jeffrey Edgington. "STR: A simple and efficient algorithm for R-tree packing." Data Engineering, 1997. Proceedings. 13th international conference on. IEEE, 1997. For the pdf, search Google Scholar.
 #' @seealso \link{st_union} for the union of simple features collections; \link{intersect} and \link{setdiff} for the base R set operations.
 #' @export
 #' @note To find whether pairs of simple feature geometries intersect, use
@@ -871,9 +871,12 @@ st_union.sfc = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 	ll = isTRUE(st_is_longlat(x))
 	if (missing(y)) { # unary union, possibly by_feature:
 		if (ll && sf_use_s2()) { 
-			if (! by_feature) # see https://github.com/r-spatial/s2/issues/97 :
-				st_as_sfc(s2::s2_union_agg(x, ...), crs = st_crs(x)) 
-			else
+			if (! by_feature) { # see https://github.com/r-spatial/s2/issues/97 :
+				if (is_coverage)
+					st_as_sfc(s2::s2_coverage_union_agg(x, ...), crs = st_crs(x))
+				else
+					st_as_sfc(s2::s2_union_agg(x, ...), crs = st_crs(x)) 
+			} else
 				st_as_sfc(s2::s2_union(x, ...), crs = st_crs(x)) 
 		} else {
 			if (ll)
