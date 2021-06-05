@@ -1,5 +1,5 @@
 
-R version 4.0.4 (2021-02-15) -- "Lost Library Book"
+R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
 Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -723,8 +723,6 @@ Geodetic CRS:  WGS 84
 > x = st_sfc(st_polygon(list(rbind(c(0,1),c(90,1),c(90,90),c(0,90),c(0,1)))), crs = st_crs(4326))
 > #if (sf_extSoftVersion()["proj.4"] >= "4.9.0")
 >   (p <- st_sample(x, 10))
-although coordinates are longitude/latitude, st_intersects assumes that they are planar
-although coordinates are longitude/latitude, st_intersects assumes that they are planar
 Geometry set for 10 features 
 Geometry type: POINT
 Dimension:     XY
@@ -1135,4 +1133,4 @@ CRS:           NA
 > 
 > proc.time()
    user  system elapsed 
-  9.508   0.331  10.118 
+  5.121   0.097   5.210 

@@ -1,5 +1,5 @@
 
-R version 4.0.5 (2021-03-31) -- "Shake and Throw"
+R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
 Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -79,46 +79,34 @@ In st_point_on_surface.sf(nc_tr) :
 > b = nc[4:10,]
 > 
 > x <- st_intersection(a[1,] ,b)
-although coordinates are longitude/latitude, st_intersection assumes that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
 > u = st_union(b) 
-although coordinates are longitude/latitude, st_union assumes that they are planar
 > 
 > x <- st_intersection(st_geometry(a), st_geometry(u))
-although coordinates are longitude/latitude, st_intersection assumes that they are planar
 > 
 > x = st_union(a[1,], b)
-although coordinates are longitude/latitude, st_union assumes that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
 > x = st_union(a, st_union(b))
-although coordinates are longitude/latitude, st_union assumes that they are planar
-although coordinates are longitude/latitude, st_union assumes that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
 > x = st_difference(a[1,], b)
-although coordinates are longitude/latitude, st_difference assumes that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
 > x = st_difference(a, st_union(b))
-although coordinates are longitude/latitude, st_union assumes that they are planar
-although coordinates are longitude/latitude, st_difference assumes that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
 > x = st_sym_difference(a[1,], b)
-although coordinates are longitude/latitude, st_sym_difference assumes that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
 > x = st_sym_difference(a, st_union(b))
-although coordinates are longitude/latitude, st_union assumes that they are planar
-although coordinates are longitude/latitude, st_sym_difference assumes that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
@@ -143,7 +131,6 @@ although coordinates are longitude/latitude, st_relate assumes that they are pla
 [5,] "FF2FF1212"
 > 
 > st_disjoint(a, b)
-although coordinates are longitude/latitude, st_intersects assumes that they are planar
 Sparse geometry binary predicate list of length 5, where the predicate
 was `disjoint'
  1: 1, 2, 3, 4, 5, 6, 7
@@ -153,7 +140,6 @@ was `disjoint'
  5: 1, 4, 5, 7
 > 
 > st_touches(a, b)
-although coordinates are longitude/latitude, st_touches assumes that they are planar
 Sparse geometry binary predicate list of length 5, where the predicate
 was `touches'
  1: (empty)
@@ -173,7 +159,6 @@ was `crosses'
  5: (empty)
 > 
 > st_within(a, b)
-although coordinates are longitude/latitude, st_within assumes that they are planar
 Sparse geometry binary predicate list of length 5, where the predicate
 was `within'
  1: (empty)
@@ -183,7 +168,6 @@ was `within'
  5: 2
 > 
 > st_contains(a, b)
-although coordinates are longitude/latitude, st_contains assumes that they are planar
 Sparse geometry binary predicate list of length 5, where the predicate
 was `contains'
  1: (empty)
@@ -212,7 +196,6 @@ was `equals'
  5: 2
 > 
 > st_covers(a, b)
-although coordinates are longitude/latitude, st_covers assumes that they are planar
 Sparse geometry binary predicate list of length 5, where the predicate
 was `covers'
  1: (empty)
@@ -222,7 +205,6 @@ was `covers'
  5: 2
 > 
 > st_covered_by(a, b)
-although coordinates are longitude/latitude, st_covered_by assumes that they are planar
 Sparse geometry binary predicate list of length 5, where the predicate
 was `covered_by'
  1: (empty)
@@ -304,16 +286,16 @@ Error in st_buffer.sfc(sfc, units::set_units(1000, km)) :
   x does not have a crs set: can't convert units
 > sfc = st_sfc(p1, p2, crs = 4326)
 > try(st_buffer(sfc, units::set_units(1000, km))) # error: wrong units
-Error : cannot convert km into °
-In addition: Warning message:
-In st_buffer.sfc(sfc, units::set_units(1000, km)) :
-  st_buffer does not correctly buffer longitude/latitude data
+Geometry set for 2 features 
+Geometry type: POLYGON
+Dimension:     XY
+Bounding box:  xmin: -39.65182 ymin: 10.93649 xmax: 21.97439 ymax: 61.16965
+Geodetic CRS:  WGS 84
+POLYGON ((-1.035063 59.83701, -1.558398 59.8318...
+POLYGON ((-22.57219 14.45171, -22.42915 14.4660...
 > if (version$os == "linux-gnu") { # FIXME: why does this break on windows - degree symbol?
 +   x = st_buffer(sfc, units::set_units(0.1, rad))      # OK: will convert to arc_degrees
 + }
-Warning message:
-In st_buffer.sfc(sfc, units::set_units(0.1, rad)) :
-  st_buffer does not correctly buffer longitude/latitude data
 > x = st_transform(sfc, 3857)
 > x = st_buffer(x, units::set_units(1000, km)) # success
 > 
@@ -349,4 +331,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-  0.988   0.044   1.024 
+  1.512   0.046   1.547 
