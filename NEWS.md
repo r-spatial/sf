@@ -1,5 +1,7 @@
 # version 1.0-0
 
+* add Dewey Dunnington to contributors
+
 * `sf_use_s2()` prints a message when using s2 has been switched to on or off.
 
 * use `s2` spherical geometry as default when coordinates are ellipsoidal. This can
