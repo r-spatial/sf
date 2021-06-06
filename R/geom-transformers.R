@@ -166,8 +166,7 @@ st_boundary.sfc = function(x)
 
 #' @export
 st_boundary.sf = function(x) {
-	st_geometry(x) <- st_boundary(st_geometry(x))
-	x
+	st_set_geometry(x, st_boundary(st_geometry(x)))
 }
 
 #' @name geos_unary
@@ -191,8 +190,7 @@ st_convex_hull.sfc = function(x)
 
 #' @export
 st_convex_hull.sf = function(x) {
-	st_geometry(x) <- st_convex_hull(st_geometry(x))
-	x
+	st_set_geometry(x, st_convex_hull(st_geometry(x)))
 }
 
 #' @name geos_unary
@@ -229,8 +227,7 @@ st_simplify.sfc = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
 
 #' @export
 st_simplify.sf = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
-	st_geometry(x) <- st_simplify(st_geometry(x), preserveTopology, dTolerance)
-	x
+	st_set_geometry(x, st_simplify(st_geometry(x), preserveTopology, dTolerance))
 }
 
 #' @name geos_unary
@@ -357,8 +354,7 @@ st_voronoi.sfc = function(x, envelope = st_polygon(), dTolerance = 0.0, bOnlyEdg
 
 #' @export
 st_voronoi.sf = function(x, envelope = st_polygon(), dTolerance = 0.0, bOnlyEdges = FALSE) {
-	st_geometry(x) <- st_voronoi(st_geometry(x), st_sfc(envelope), dTolerance, bOnlyEdges)
-	x
+	st_set_geometry(x, st_voronoi(st_geometry(x), st_sfc(envelope), dTolerance, bOnlyEdges))
 }
 
 #' @name geos_unary
@@ -382,8 +378,7 @@ st_polygonize.sfc = function(x) {
 
 #' @export
 st_polygonize.sf = function(x) {
-	st_geometry(x) <- st_polygonize(st_geometry(x))
-	x
+	st_set_geometry(x, st_polygonize(st_geometry(x)))
 }
 
 #' @name geos_unary
@@ -407,8 +402,7 @@ st_line_merge.sfc = function(x) {
 
 #' @export
 st_line_merge.sf = function(x) {
-	st_geometry(x) <- st_line_merge(st_geometry(x))
-	x
+	st_set_geometry(x, st_line_merge(st_geometry(x)))
 }
 
 #' @name geos_unary
@@ -585,8 +579,7 @@ st_segmentize.sfc	= function(x, dfMaxLength, ...) {
 
 #' @export
 st_segmentize.sf = function(x, dfMaxLength, ...) {
-	st_geometry(x) <- st_segmentize(st_geometry(x), dfMaxLength, ...)
-	x
+	st_set_geometry(x, st_segmentize(st_geometry(x), dfMaxLength, ...))
 }
 
 #' Combine or union feature geometries
