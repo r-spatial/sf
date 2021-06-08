@@ -1,5 +1,5 @@
 
-R version 4.0.4 (2021-02-15) -- "Lost Library Book"
+R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
 Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -196,7 +196,7 @@ Projected CRS: NAD83 / North Carolina
 # A tibble: 1 x 2
   `mean(dens)`                                                          geometry
   [person/m^2]                                                <MULTIPOLYGON [m]>
-1 2.593234e-06 (((446521.1 133561, 441668.6 140459.3, 436812.5 146953.9, 433885…
+1   0.00000259 (((446521.1 133561, 441668.6 140459.3, 436812.5 146953.9, 433885…
 > out %>% summarise(mean(new_dens))
 Simple feature collection with 1 feature and 1 field
 Geometry type: MULTIPOLYGON
@@ -206,7 +206,7 @@ Projected CRS: NAD83 / North Carolina
 # A tibble: 1 x 2
   `mean(new_dens)`                                                      geometry
       [person/m^2]                                            <MULTIPOLYGON [m]>
-1     2.589362e-06 (((154399.2 148898.9, 142569.6 149407.8, 123829 150481.4, 12…
+1       0.00000259 (((154399.2 148898.9, 142569.6 149407.8, 123829 150481.4, 12…
 > 
 > # total densities don't:
 > nc.merc %>% summarise(sum(area * dens))
@@ -284,4 +284,4 @@ First 10 features:
 > 
 > proc.time()
    user  system elapsed 
-  5.259   0.170   5.470 
+  2.566   0.076   2.656 
