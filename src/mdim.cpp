@@ -9,7 +9,11 @@
 
 using namespace Rcpp;
 
-#if GDAL_VERSION_NUM >= 3010000
+#if defined(__MINGW32__) && !defined(__MINGW64__)
+#define WIN32BIT
+#endif
+
+#if GDAL_VERSION_NUM >= 3010000 && !(defined(WIN32BIT))
 List get_dimension_values(std::shared_ptr<GDALMDArray> array) {
 	size_t nValues = 1;
 	std::vector<size_t> anCount;
@@ -230,9 +234,9 @@ List write_mdim(List x, CharacterVector file, List dimensions, CharacterVector u
 
 #else
 List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVector oo) {
-	stop("requires GDAL >= 3.1.0");
+	stop("requires GDAL >= 3.1.0 and 64-bit");
 }
 List write_mdim(List x, CharacterVector file, List dimensions, CharacterVector units) {
-	stop("requires GDAL >= 3.1.0");
+	stop("requires GDAL >= 3.1.0 and 64-bit");
 }
 #endif
