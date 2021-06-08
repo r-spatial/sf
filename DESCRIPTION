@@ -105,7 +105,7 @@ Suggests:
     tidyselect (>= 1.0.0),
     tmap (>= 2.0),
     vctrs,
-	wk
+    wk
 LinkingTo: 
     Rcpp
 VignetteBuilder: 
