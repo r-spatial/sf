@@ -1,4 +1,10 @@
+# version 1.0-1
+
+* retrieve ESRI's WKT version of CRS by `st_crs(id)$WKT1_ESRI`; #1690 
+
 # version 1.0-0
+
+* add `s2` to Imports:
 
 * add Dewey Dunnington to contributors
 
