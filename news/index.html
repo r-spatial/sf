@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0-0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0-1</span>
       </span>
     </div>
 
@@ -152,11 +152,20 @@
       <small>Source: <a href='https://github.com/r-spatial/sf/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="version-10-0" class="section level1">
-<h1 class="page-header" data-toc-text="1.0-0">
-<a href="#version-10-0" class="anchor"></a>version 1.0-0<small> Unreleased </small>
+    <div id="version-10-1" class="section level1">
+<h1 class="page-header" data-toc-text="1.0-1">
+<a href="#version-10-1" class="anchor"></a>version 1.0-1<small> Unreleased </small>
 </h1>
 <ul>
+<li>retrieve ESRI’s WKT version of CRS by <code>st_crs(id)$WKT1_ESRI</code>; <a href='https://github.com/r-spatial/sf/issues/1690'>#1690</a></li>
+</ul>
+</div>
+    <div id="version-10-0" class="section level1">
+<h1 class="page-header" data-toc-text="1.0-0">
+<a href="#version-10-0" class="anchor"></a>version 1.0-0<small> 2021-06-09 </small>
+</h1>
+<ul>
+<li><p>add <code>s2</code> to Imports:</p></li>
 <li><p>add Dewey Dunnington to contributors</p></li>
 <li><p><code><a href="../reference/s2.html">sf_use_s2()</a></code> prints a message when using s2 has been switched to on or off.</p></li>
 <li><p>use <code>s2</code> spherical geometry as default when coordinates are ellipsoidal. This can be switched off (defaulting to planar geometry, using GEOS, as in sf &lt; 1.0-0) by setting environment variable <code>_SF_USE_S2</code> to <code>false</code> before package <code>sf</code> is loaded, or by <code><a href="../reference/s2.html">sf_use_s2(FALSE)</a></code>; <a href='https://github.com/r-spatial/sf/issues/1649'>#1649</a></p></li>
