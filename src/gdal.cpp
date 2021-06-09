@@ -185,8 +185,8 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	if (srs == NULL)
 		Rcpp::stop("crs not found"); // #nocov
 
-	Rcpp::List out(13);
-	Rcpp::CharacterVector names(13);
+	Rcpp::List out(14);
+	Rcpp::CharacterVector names(14);
 	out(0) = Rcpp::NumericVector::create(srs->GetSemiMajor());
 	names(0) = "SemiMajor";
 
@@ -267,6 +267,16 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 		out(12) = "";
 #endif
 	names(12) = "ProjJson";
+
+	// WKT1_ESRI
+#if GDAL_VERSION_MAJOR >= 3
+	const char *options[3] = { "MULTILINE=YES", "FORMAT=WKT1_ESRI", NULL };
+	OGRErr err = srs->exportToWkt(&cp, options);
+	out(13) = Rcpp::CharacterVector::create(cp);
+#else
+	out(13) = "";
+#endif
+	names(13) = "WKT1_ESRI";
 
 	set_error_handler();
 
