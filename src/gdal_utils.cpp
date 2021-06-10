@@ -82,6 +82,8 @@ Rcpp::LogicalVector CPL_gdalwarp(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 
 	std::vector <char *> options_char = create_options(options, true);
 	GDALWarpAppOptions* opt = GDALWarpAppOptionsNew(options_char.data(), NULL);
+	if (opt == NULL)
+		Rcpp::stop("warp: options error");
 
 	if (! quiet) {
 		GDALWarpAppOptionsSetProgress(opt, GDALRProgress, NULL);
@@ -109,6 +111,8 @@ Rcpp::LogicalVector CPL_gdalrasterize(Rcpp::CharacterVector src, Rcpp::Character
 	std::vector <char *> options_char = create_options(options, true);
 	std::vector <char *> oo_char = create_options(oo, true); // open options
 	GDALRasterizeOptions* opt =  GDALRasterizeOptionsNew(options_char.data(), NULL);
+	if (opt == NULL)
+		Rcpp::stop("rasterize: options error");
 
 	if (! quiet)
 		GDALRasterizeOptionsSetProgress(opt, GDALRProgress, NULL);
@@ -143,6 +147,8 @@ Rcpp::LogicalVector CPL_gdaltranslate(Rcpp::CharacterVector src, Rcpp::Character
 	std::vector <char *> options_char = create_options(options, true);
 	std::vector <char *> oo_char = create_options(oo, true);
 	GDALTranslateOptions* opt =  GDALTranslateOptionsNew(options_char.data(), NULL);
+	if (opt == NULL)
+		Rcpp::stop("translate: options error");
 
 	if (! quiet)
 		GDALTranslateOptionsSetProgress(opt, GDALRProgress, NULL);
@@ -168,6 +174,8 @@ Rcpp::LogicalVector CPL_gdalvectortranslate(Rcpp::CharacterVector src, Rcpp::Cha
 	int err = 0;
 	std::vector <char *> options_char = create_options(options, true);
 	GDALVectorTranslateOptions* opt =  GDALVectorTranslateOptionsNew(options_char.data(), NULL);
+	if (opt == NULL)
+		Rcpp::stop("vectortranslate: options error");
 
 	if (! quiet)
 		GDALVectorTranslateOptionsSetProgress(opt, GDALRProgress, NULL);
@@ -196,6 +204,9 @@ Rcpp::LogicalVector CPL_gdalbuildvrt(Rcpp::CharacterVector src, Rcpp::CharacterV
 	int err = 0;
 	std::vector <char *> options_char = create_options(options, true);
 	GDALBuildVRTOptions* opt = GDALBuildVRTOptionsNew(options_char.data(), NULL);
+	if (opt == NULL)
+		Rcpp::stop("buildvrt: options error");
+
 	if (! quiet)
 		GDALBuildVRTOptionsSetProgress(opt, GDALRProgress, NULL);
 	GDALDatasetH result = NULL;
@@ -234,6 +245,8 @@ Rcpp::LogicalVector CPL_gdaldemprocessing(Rcpp::CharacterVector src, Rcpp::Chara
 	std::vector <char *> options_char = create_options(options, true);
 	std::vector <char *> oo_char = create_options(oo, true); // open options
 	GDALDEMProcessingOptions* opt =  GDALDEMProcessingOptionsNew(options_char.data(), NULL);
+	if (opt == NULL)
+		Rcpp::stop("demprocessing: options error");
 
 	if (! quiet)
 		GDALDEMProcessingOptionsSetProgress(opt, GDALRProgress, NULL);
@@ -263,6 +276,8 @@ Rcpp::LogicalVector CPL_gdalnearblack(Rcpp::CharacterVector src, Rcpp::Character
 	std::vector <char *> oo_char = create_options(oo, true); // open options
 	std::vector <char *> doo_char = create_options(doo, true); // open options
 	GDALNearblackOptions* opt =  GDALNearblackOptionsNew(options_char.data(), NULL);
+	if (opt == NULL)
+		Rcpp::stop("nearblack: options error");
 
 	if (! quiet)
 		GDALNearblackOptionsSetProgress(opt, GDALRProgress, NULL);
@@ -287,6 +302,8 @@ Rcpp::LogicalVector CPL_gdalgrid(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 	std::vector <char *> options_char = create_options(options, true);
 	std::vector <char *> oo_char = create_options(oo, true); // open options
 	GDALGridOptions* opt =  GDALGridOptionsNew(options_char.data(), NULL);
+	if (opt == NULL)
+		Rcpp::stop("grid: options error");
 
 	if (! quiet)
 		GDALGridOptionsSetProgress(opt, GDALRProgress, NULL);
@@ -332,6 +349,8 @@ Rcpp::LogicalVector CPL_gdalmdimtranslate(Rcpp::CharacterVector src, Rcpp::Chara
 	std::vector <char *> options_char = create_options(options, true);
 	std::vector <char *> oo_char = create_options(oo, true);
 	GDALMultiDimTranslateOptions* opt = GDALMultiDimTranslateOptionsNew(options_char.data(), NULL);
+	if (opt == NULL)
+		Rcpp::stop("mdimtranslate: options error");
 
 	if (! quiet)
 		GDALMultiDimTranslateOptionsSetProgress(opt, GDALRProgress, NULL);

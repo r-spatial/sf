@@ -185,8 +185,8 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	if (srs == NULL)
 		Rcpp::stop("crs not found"); // #nocov
 
-	Rcpp::List out(13);
-	Rcpp::CharacterVector names(13);
+	Rcpp::List out(14);
+	Rcpp::CharacterVector names(14);
 	out(0) = Rcpp::NumericVector::create(srs->GetSemiMajor());
 	names(0) = "SemiMajor";
 
@@ -267,6 +267,16 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 		out(12) = "";
 #endif
 	names(12) = "ProjJson";
+
+	// WKT1_ESRI
+#if GDAL_VERSION_MAJOR >= 3
+	const char *options[3] = { "MULTILINE=YES", "FORMAT=WKT1_ESRI", NULL };
+	OGRErr err = srs->exportToWkt(&cp, options);
+	out(13) = Rcpp::CharacterVector::create(cp);
+#else
+	out(13) = "";
+#endif
+	names(13) = "WKT1_ESRI";
 
 	set_error_handler();
 
@@ -560,6 +570,8 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 	}
 
 	Rcpp::List ret = sfc_from_ogr(g, true); // destroys g;
+	// how to return the target CRS when only a transformation pipeline is provided? Not by:
+	// ret.attr("crs") = create_crs(ct->GetTargetCS(), true);
 	ct->DestroyCT(ct);
 	if (dest)
 		dest->Release();

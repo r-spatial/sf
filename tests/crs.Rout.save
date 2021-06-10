@@ -1,5 +1,5 @@
 
-R version 4.0.4 (2021-02-15) -- "Lost Library Book"
+R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
 Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -177,7 +177,7 @@ GEOGCRS["WGS 84 (with axis order normalized for visualization)",
 > g = st_as_sfc("POLYGON ((-61.66957 10.69214, -61.565 10.75728, -61.37453 10.77654, -61.40721 10.60681, -61.66957 10.69214))")
 > d = st_as_sf(data.frame(id=1, geometry=g), crs=4326)
 > st_area(d)
-349128207 [m^2]
+350534486 [m^2]
 > st_area(st_transform(d, 2314))
 349124497 [m^2]
 > 
@@ -189,4 +189,4 @@ GEOGCRS["WGS 84 (with axis order normalized for visualization)",
 > 
 > proc.time()
    user  system elapsed 
-  1.807   0.131   1.972 
+  1.846   0.089   2.006 

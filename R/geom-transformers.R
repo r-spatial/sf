@@ -166,8 +166,7 @@ st_boundary.sfc = function(x)
 
 #' @export
 st_boundary.sf = function(x) {
-	st_geometry(x) <- st_boundary(st_geometry(x))
-	x
+	st_set_geometry(x, st_boundary(st_geometry(x)))
 }
 
 #' @name geos_unary
@@ -191,8 +190,7 @@ st_convex_hull.sfc = function(x)
 
 #' @export
 st_convex_hull.sf = function(x) {
-	st_geometry(x) <- st_convex_hull(st_geometry(x))
-	x
+	st_set_geometry(x, st_convex_hull(st_geometry(x)))
 }
 
 #' @name geos_unary
@@ -229,8 +227,7 @@ st_simplify.sfc = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
 
 #' @export
 st_simplify.sf = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
-	st_geometry(x) <- st_simplify(st_geometry(x), preserveTopology, dTolerance)
-	x
+	st_set_geometry(x, st_simplify(st_geometry(x), preserveTopology, dTolerance))
 }
 
 #' @name geos_unary
@@ -357,8 +354,7 @@ st_voronoi.sfc = function(x, envelope = st_polygon(), dTolerance = 0.0, bOnlyEdg
 
 #' @export
 st_voronoi.sf = function(x, envelope = st_polygon(), dTolerance = 0.0, bOnlyEdges = FALSE) {
-	st_geometry(x) <- st_voronoi(st_geometry(x), st_sfc(envelope), dTolerance, bOnlyEdges)
-	x
+	st_set_geometry(x, st_voronoi(st_geometry(x), st_sfc(envelope), dTolerance, bOnlyEdges))
 }
 
 #' @name geos_unary
@@ -382,8 +378,7 @@ st_polygonize.sfc = function(x) {
 
 #' @export
 st_polygonize.sf = function(x) {
-	st_geometry(x) <- st_polygonize(st_geometry(x))
-	x
+	st_set_geometry(x, st_polygonize(st_geometry(x)))
 }
 
 #' @name geos_unary
@@ -407,8 +402,7 @@ st_line_merge.sfc = function(x) {
 
 #' @export
 st_line_merge.sf = function(x) {
-	st_geometry(x) <- st_line_merge(st_geometry(x))
-	x
+	st_set_geometry(x, st_line_merge(st_geometry(x)))
 }
 
 #' @name geos_unary
@@ -585,8 +579,7 @@ st_segmentize.sfc	= function(x, dfMaxLength, ...) {
 
 #' @export
 st_segmentize.sf = function(x, dfMaxLength, ...) {
-	st_geometry(x) <- st_segmentize(st_geometry(x), dfMaxLength, ...)
-	x
+	st_set_geometry(x, st_segmentize(st_geometry(x), dfMaxLength, ...))
 }
 
 #' Combine or union feature geometries
@@ -678,7 +671,7 @@ get_first_sfg = function(x) {
 #' @export
 #' @return The intersection, difference or symmetric difference between two sets of geometries.
 #' The returned object has the same class as that of the first argument (\code{x}) with the non-empty geometries resulting from applying the operation to all geometry pairs in \code{x} and \code{y}. In case \code{x} is of class \code{sf}, the matching attributes of the original object(s) are added. The \code{sfc} geometry list-column returned carries an attribute \code{idx}, which is an \code{n}-by-2 matrix with every row the index of the corresponding entries of \code{x} and \code{y}, respectively.
-#' @details When using GEOS and not using s2, a spatial index is built on argument \code{x}; see \url{https://www.r-spatial.org/r/2017/06/22/spatial-index.html}. The reference for the STR tree algorithm is: Leutenegger, Scott T., Mario A. Lopez, and Jeffrey Edgington. "STR: A simple and efficient algorithm for R-tree packing." Data Engineering, 1997. Proceedings. 13th international conference on. IEEE, 1997. For the pdf, search Google Scholar.
+#' @details When using GEOS and not using s2, a spatial index is built on argument \code{x}; see \url{https://r-spatial.org/r/2017/06/22/spatial-index.html}. The reference for the STR tree algorithm is: Leutenegger, Scott T., Mario A. Lopez, and Jeffrey Edgington. "STR: A simple and efficient algorithm for R-tree packing." Data Engineering, 1997. Proceedings. 13th international conference on. IEEE, 1997. For the pdf, search Google Scholar.
 #' @seealso \link{st_union} for the union of simple features collections; \link{intersect} and \link{setdiff} for the base R set operations.
 #' @export
 #' @note To find whether pairs of simple feature geometries intersect, use
@@ -868,17 +861,31 @@ st_union.sfg = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 
 #' @export
 st_union.sfc = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
+	ll = isTRUE(st_is_longlat(x))
 	if (missing(y)) { # unary union, possibly by_feature:
-		ll = isTRUE(st_is_longlat(x))
-		if (ll && sf_use_s2() && !by_feature)
-			st_as_sfc(s2::s2_union_agg(x, ...), crs = st_crs(x))
-		else {
+		if (ll && sf_use_s2()) { 
+			if (! by_feature) { # see https://github.com/r-spatial/s2/issues/97 :
+				if (is_coverage)
+					st_as_sfc(s2::s2_coverage_union_agg(x, ...), crs = st_crs(x))
+				else
+					st_as_sfc(s2::s2_union_agg(x, ...), crs = st_crs(x)) 
+			} else
+				st_as_sfc(s2::s2_union(x, ...), crs = st_crs(x)) 
+		} else {
 			if (ll)
 				message_longlat("st_union")
 			st_sfc(CPL_geos_union(st_geometry(x), by_feature, is_coverage))
 		}
-	} else
-		geos_op2_geom("union", x, y)
+	} else {
+		stopifnot(st_crs(x) == st_crs(y))
+		if (ll && sf_use_s2())
+			st_as_sfc(s2::s2_union(x, y, ...), crs = st_crs(x)) 
+		else {
+			if (ll)
+				message_longlat("st_union")
+			geos_op2_geom("union", x, y)
+		}
+	}
 }
 
 #' @export

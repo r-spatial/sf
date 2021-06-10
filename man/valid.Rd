@@ -8,6 +8,7 @@
 \alias{st_is_valid.sfg}
 \alias{st_make_valid}
 \alias{st_make_valid.sfg}
+\alias{st_make_valid.sfc}
 \title{Check validity or make an invalid geometry valid}
 \usage{
 st_is_valid(x, ...)
@@ -18,21 +19,32 @@ st_is_valid(x, ...)
 
 \method{st_is_valid}{sfg}(x, ...)
 
-st_make_valid(x)
+st_make_valid(x, ...)
 
-\method{st_make_valid}{sfg}(x)
+\method{st_make_valid}{sfg}(x, ...)
+
+\method{st_make_valid}{sfc}(
+  x,
+  ...,
+  oriented = FALSE,
+  s2_options = s2::s2_options(snap = s2::s2_snap_precision(1e+07))
+)
 }
 \arguments{
 \item{x}{object of class \code{sfg}, \code{sfg} or \code{sf}}
 
-\item{...}{passed on to sfc method}
+\item{...}{ignored}
 
 \item{NA_on_exception}{logical; if TRUE, for polygons that would otherwise raise a GEOS error (exception, e.g. for a POLYGON having more than zero but less than 4 points, or a LINESTRING having one point) return an \code{NA} rather than raising an error, and suppress warning messages (e.g. about self-intersection); if FALSE, regular GEOS errors and warnings will be emitted.}
 
 \item{reason}{logical; if \code{TRUE}, return a character with, for each geometry, the reason for invalidity, \code{NA} on exception, or \code{"Valid Geometry"} otherwise.}
+
+\item{oriented}{logical; only relevant if \code{st_is_longlat(x)} is \code{TRUE}; see \link{s2}}
+
+\item{s2_options}{only relevant if \code{st_is_longlat(x)} is \code{TRUE}; options for \link[s2]{s2_rebuild}, see \link[s2]{s2_options} and Details.}
 }
 \value{
-\code{st_is_valid} returns a logical vector indicating for each geometries of \code{x} whether it is valid.
+\code{st_is_valid} returns a logical vector indicating for each geometries of \code{x} whether it is valid. \code{st_make_valid} returns an object with a topologically valid geometry.
 
 Object of the same class as \code{x}
 }
@@ -40,7 +52,9 @@ Object of the same class as \code{x}
 Checks whether a geometry is valid, or makes an invalid geometry valid
 }
 \details{
-\code{st_make_valid} uses the \code{lwgeom_makevalid} method also used by the PostGIS command \code{ST_makevalid} if the GEOS version linked to is smaller than 3.8.0, and otherwise the version shipped in GEOS.
+For projected geometries, \code{st_make_valid} uses the \code{lwgeom_makevalid} method also used by the PostGIS command \code{ST_makevalid} if the GEOS version linked to is smaller than 3.8.0, and otherwise the version shipped in GEOS; for geometries having ellipsoidal coordinates \code{s2::s2_rebuild} is being used.
+
+if \code{s2_options} is not specified and \code{x} has a non-zero precision set, then this precision value will be used as the value in \code{s2_snap_precision}, passed on to \code{s2_options}, rather than the 1e7 default.
 }
 \examples{
 p1 = st_as_sfc("POLYGON((0 0, 0 10, 10 0, 10 10, 0 0))")

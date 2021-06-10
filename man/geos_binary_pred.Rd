@@ -77,7 +77,7 @@ Geometric binary predicates on pairs of simple feature geometry sets
 \details{
 If \code{prepared} is \code{TRUE}, and \code{x} contains POINT geometries and \code{y} contains polygons, then the polygon geometries are prepared, rather than the points.
 
-For most predicates, a spatial index is built on argument \code{x}; see \url{https://www.r-spatial.org/r/2017/06/22/spatial-index.html}.
+For most predicates, a spatial index is built on argument \code{x}; see \url{https://r-spatial.org/r/2017/06/22/spatial-index.html}.
 Specifically, \code{st_intersects}, \code{st_disjoint}, \code{st_touches} \code{st_crosses}, \code{st_within}, \code{st_contains}, \code{st_contains_properly}, \code{st_overlaps}, \code{st_equals}, \code{st_covers} and \code{st_covered_by} all build spatial indexes for more efficient geometry calculations. \code{st_relate}, \code{st_equals_exact}, and do not; \code{st_is_within_distance} uses a spatial index for geographic coordinates when \code{sf_use_s2()} is true.
 
 If \code{y} is missing, `st_predicate(x, x)` is effectively called, and a square matrix is returned with diagonal elements `st_predicate(x[i], x[i])`.

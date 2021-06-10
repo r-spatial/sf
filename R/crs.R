@@ -297,16 +297,19 @@ crs_parameters = function(x, with_units = TRUE) {
 }
 
 epsg = function(x) {
-	if(is.na(x)) return(NA)
-	if(grepl("^EPSG:", x[["input"]])) {
-		return(as.integer(gsub("^EPSG:(\\d+)\\b.*$", "\\1", x[["input"]])))
-	}
-	crs_parameters(x, with_units = FALSE)[["epsg"]]
+	if (is.na(x))
+		NA_integer_
+	else if (grepl("^EPSG:", x[["input"]]))
+		as.integer(gsub("^EPSG:(\\d+)\\b.*$", "\\1", x[["input"]]))
+	else
+		crs_parameters(x, with_units = FALSE)[["epsg"]]
 }
 
 proj4string = function(x) {
-	if(is.na(x)) return(NA)
-	crs_parameters(x, with_units = FALSE)[["proj4string"]]
+	if (is.na(x))
+		NA_character_
+	else
+		crs_parameters(x, with_units = FALSE)[["proj4string"]]
 }
 
 

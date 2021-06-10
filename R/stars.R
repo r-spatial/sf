@@ -308,3 +308,20 @@ gdal_rasterize = function(sf, x, gt, file, driver = "GTiff", options = character
 gdal_extract = function(f, pts, bilinear = FALSE) {
 	CPL_extract(f, pts, as.logical(bilinear))
 }
+
+#' @name gdal
+#' @param file file name
+#' @param array_name array name
+#' @param options open options
+#' @export
+gdal_read_mdim = function(file, array_name = character(0), options = character(0)) {
+	read_mdim(file, array_name, options)
+}
+
+#' @name gdal
+#' @param dimension_values list with dimension values
+#' @param units character; units names (udunits conform) corresponding to dimension_values
+#' @export
+gdal_write_mdim = function(x, file, dimension_values, units) {
+	write_mdim(x, file, dimension_values, units)
+}

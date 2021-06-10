@@ -24,6 +24,7 @@ setOldClass(c("sfc_MULTILINESTRING", "sfc"))
 setOldClass(c("sfc_POLYGON", "sfc"))
 setOldClass(c("sfc_MULTIPOLYGON", "sfc"))
 setOldClass(c("sfc_GEOMETRY", "sfc"))
+setOldClass(c("sfc_GEOMETRYCOLLECTION", "sfc"))
 setOldClass("sfg")
 setOldClass("crs")
 
@@ -37,7 +38,7 @@ pathGrob <- NULL
 		}
 	} # nocov end
 	load_gdal() 
-	assign(".sf.use_s2", Sys.getenv("_SF_USE_S2") == "true", envir=.sf_cache)
+	assign(".sf.use_s2", Sys.getenv("_SF_USE_S2") != "false", envir=.sf_cache)
 }
 
 .onUnload = function(libname, pkgname) {
@@ -55,6 +56,8 @@ pathGrob <- NULL
 			"compiled against:", CPL_geos_version(FALSE, TRUE)))
 		packageStartupMessage("It is probably a good idea to reinstall sf, and maybe rgeos and rgdal too")
 	} # nocov end
+	if (! get(".sf.use_s2", envir = .sf_cache))
+		packageStartupMessage("Spherical geometry (s2) switched off")
 }
 
 #' Provide the external dependencies versions of the libraries linked to sf

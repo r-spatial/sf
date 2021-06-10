@@ -1,5 +1,5 @@
 
-R version 4.0.5 (2021-03-31) -- "Shake and Throw"
+R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
 Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -108,11 +108,9 @@ MULTIPOLYGON (((-81.47276 36.23436, -81.54084 3...
 > ncbb = st_as_sfc(st_bbox(nc))
 > g = st_make_grid(ncbb)
 > x = st_intersection(nc, g)
-although coordinates are longitude/latitude, st_intersection assumes that they are planar
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > x = st_intersection(g, nc)
-although coordinates are longitude/latitude, st_intersection assumes that they are planar
 > 
 > ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 + st_linestring(rbind(c(0,0),c(10,0))))
@@ -132,19 +130,17 @@ MULTIPOINT ((0.2986488 0), (2.48417 0), (2.5678...
 > g = st_make_grid(ncbb, n = c(20,10))
 > 
 > a1 = st_interpolate_aw(nc["BIR74"], g, FALSE)
-although coordinates are longitude/latitude, st_intersection assumes that they are planar
 Warning message:
 In st_interpolate_aw.sf(nc["BIR74"], g, FALSE) :
   st_interpolate_aw assumes attributes are constant or uniform over areas of x
 > sum(a1$BIR74) / sum(nc$BIR74) # not close to one: property is assumed spatially intensive
-[1] 1.436169
+[1] 1.176919
 > a2 = st_interpolate_aw(nc["BIR74"], g, extensive = TRUE)
-although coordinates are longitude/latitude, st_intersection assumes that they are planar
 Warning message:
 In st_interpolate_aw.sf(nc["BIR74"], g, extensive = TRUE) :
   st_interpolate_aw assumes attributes are constant or uniform over areas of x
 > sum(a2$BIR74) / sum(nc$BIR74)
-[1] 1.000013
+[1] 1.016055
 > 
 > # missing x:
 > g = st_make_grid(offset = c(0,0), cellsize = c(1,1), n = c(10,10))
@@ -284,7 +280,7 @@ Error in CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern,  :
 > st_crs(p) = 4326
 > st_distance(p, p[c(2,3,1)], by_element = TRUE)
 Units: [m]
-[1] 110574.4 110575.1 221149.5
+[1] 111195.1 111195.1 222390.2
 > p = st_transform(p, 3587)
 > st_distance(p, p[c(2,3,1)], by_element = TRUE)
 Units: [m]
@@ -329,7 +325,6 @@ CRS:           NA
 > 
 > # print.sgbp:
 > (lst = st_disjoint(nc, nc))
-although coordinates are longitude/latitude, st_intersects assumes that they are planar
 Sparse geometry binary predicate list of length 100, where the
 predicate was `disjoint'
 first 10 elements:
@@ -477,9 +472,9 @@ LINESTRING (0.1707107 0.1707107, 0.8292893 0.82...
 > nc = read_sf(system.file("gpkg/nc.gpkg", package="sf"))
 > plot(st_geometry(nc))
 > ls = try(st_nearest_points(nc[1,], nc))
-although coordinates are longitude/latitude, st_nearest_points assumes that they are planar
 > # plot(ls, col = 'red', add = TRUE)
 > pts = st_cast(ls, "POINT") # gives all start & end points
+There were 50 or more warnings (use warnings() to see the first 50)
 > # starting, "from" points, corresponding to x:
 > plot(pts[seq(1, 200, 2)], add = TRUE, col = 'blue')
 > # ending, "to" points, corresponding to y:
@@ -592,4 +587,4 @@ CRS:           NA
 > 
 > proc.time()
    user  system elapsed 
-  3.239   0.072   3.311 
+  9.213   0.107   9.309 

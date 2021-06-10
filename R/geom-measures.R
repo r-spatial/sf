@@ -36,11 +36,9 @@ st_area = function(x, ...) UseMethod("st_area")
 #' @export
 st_area.sfc = function(x, ...) {
 	if (isTRUE(st_is_longlat(x))) {
-		if (sf_use_s2()) {
-			if (! requireNamespace("s2", quietly = TRUE))
-				stop("package s2 required, please install it first")
+		if (sf_use_s2())
 			units::set_units(s2::s2_area(x, ...), "m^2", mode = "standard")
-		} else {
+		else {
 			if (! requireNamespace("lwgeom", quietly = TRUE))
 				stop("package lwgeom required, please install it first")
 			lwgeom::st_geod_area(x)
@@ -86,11 +84,9 @@ st_length = function(x, ...) {
 	x = st_geometry(x)
 
 	if (isTRUE(st_is_longlat(x))) {
-		if (sf_use_s2()) {
-			if (! requireNamespace("s2", quietly = TRUE))
-				stop("package s2 required, please install it first")
+		if (sf_use_s2())
 			set_units(s2::s2_length(x, ...), "m", mode = "standard")
-		} else {
+		else {
 			if (! requireNamespace("lwgeom", quietly = TRUE))
 				stop("package lwgeom required, please install it first")
 			lwgeom::st_geod_length(x)
@@ -148,16 +144,12 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE,
 
 	if (isTRUE(st_is_longlat(x)) && which == "Great Circle") {
 		if (sf_use_s2()) {
-			if (! requireNamespace("s2", quietly = TRUE))
-				stop("package s2 required, please install it first")
 			ret = if (by_element)
 					s2::s2_distance(x, y, ...)
 				else
 					s2::s2_distance_matrix(x, y, ...)
 			set_units(ret, "m", mode = "standard")
 		} else { # lwgeom:
-			if (! requireNamespace("lwgeom", quietly = TRUE))
-				stop("lwgeom required: install first?")
 			if (which != "Great Circle")
 				stop("for non-great circle distances, data should be projected; see st_transform()")
 			units(tolerance) = as_units("m")
