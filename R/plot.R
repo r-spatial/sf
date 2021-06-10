@@ -187,10 +187,10 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 							v0 = values[!is.na(values)]
 							n.unq = length(unique(v0))
 							breaks = if (! all(is.na(values)) && n.unq > 1)
-								classInt::classIntervals(v0, min(nbreaks, n.unq),
-									breaks, warnSmallN = FALSE)$brks
-							else
-								range(values, na.rm = TRUE) # lowest and highest!
+									classInt::classIntervals(v0, min(nbreaks, n.unq),
+										breaks, warnSmallN = FALSE)$brks
+								else
+									range(values, na.rm = TRUE) # lowest and highest!
 						}
 						# this is necessary if breaks were specified either as character or as numeric
 						# "pretty" takes nbreaks as advice only:

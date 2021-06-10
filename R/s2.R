@@ -14,26 +14,21 @@ sf_use_s2 = function(use_s2) {
 	ret_val = get(".sf.use_s2", envir = .sf_cache)
 	if (! missing(use_s2)) {
 		stopifnot(is.logical(use_s2), length(use_s2)==1, !is.na(use_s2))
-		if (use_s2) {
-			if (!requireNamespace("s2", quietly = TRUE))
-				stop("package s2 not available: install it first?")
-			if (utils::packageVersion("s2") <= "1.0.0")
-				stop("package s2 insufficient version (<= 1.0.0): install it first?")
-		}
-		assign(".sf.use_s2", use_s2, envir=.sf_cache)
+		if (use_s2 && !requireNamespace("s2", quietly = TRUE))
+			stop("package s2 not available: install it first?")
+		if (ret_val != use_s2)
+			cat(paste0("Spherical geometry (s2) switched ", ifelse(use_s2, "on", "off"), "\n"))
+		assign(".sf.use_s2", use_s2, envir = .sf_cache)
 		invisible(ret_val)
 	} else
 		ret_val
 }
-
 
 #' @name s2
 #' @export
 #' @param endian integer; 0 or 1: defaults to the endian of the native machine
 st_as_sfc.s2_geography = function(x, ..., crs = st_crs(4326),
 		endian = match(.Platform$endian, c("big", "little")) - 1L) {
-	if (! requireNamespace("s2", quietly = TRUE))
-		stop('package s2 required, please install it first')
 	st_cast(st_as_sfc(s2::s2_as_binary(x, endian = endian), ..., crs = crs))
 }
 
@@ -45,8 +40,6 @@ st_as_sf.s2_geography = function(x, ..., crs = st_crs(4326)) {
 
 # dynamically exported in tidyverse.R
 as_s2_geography.sfg <- function(x, ..., oriented = FALSE) {
-	if (! requireNamespace("s2", quietly = TRUE))
-		stop('package s2 required, please install it first')
 	b = structure(list(st_as_binary(x)), class = "WKB")
 	s2::as_s2_geography(b, ..., oriented = oriented)
 }
@@ -92,15 +85,17 @@ st_as_s2.sf = function(x, ...) st_as_s2(st_geometry(x), ...)
 #' cover more than half of the globe are inverted; if \code{TRUE}, no reversal
 #' takes place and it is assumed that the inside of the polygon is to the
 #' left of the polygon's path.
+#' @param rebuild logical; call \link[s2]{s2_rebuild} on the geometry (think of this as a \code{st_make_valid} on the sphere)
 #' @export
-st_as_s2.sfc = function(x, ..., oriented = FALSE) {
-	if (! requireNamespace("s2", quietly = TRUE))
-		stop('package s2 required, please install it first')
+st_as_s2.sfc = function(x, ..., oriented = FALSE, rebuild = FALSE) {
 	if (!is.na(st_crs(x)) && !st_is_longlat(x))
 		x = st_transform(x, ifelse(st_axis_order(), "OGC:CRS84", "EPSG:4326"))
 	if (length(x) && nchar(class(x[[1]])[1]) > 2) { # Z, M, ZM:
 		message("st_as_s2(): dropping Z and/or M coordinate")
 		x = st_zm(x)
 	}
-	s2::as_s2_geography(st_as_binary(x), ..., oriented = oriented)
+	if (rebuild)
+		s2::s2_rebuild(s2::as_s2_geography(st_as_binary(x), ..., oriented = oriented, check = FALSE))
+	else
+		s2::as_s2_geography(st_as_binary(x), ..., oriented = oriented)
 }

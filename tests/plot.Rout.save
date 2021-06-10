@@ -1,6 +1,6 @@
 
-R version 4.0.2 (2020-06-22) -- "Taking Off Again"
-Copyright (C) 2020 The R Foundation for Statistical Computing
+R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
+Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -105,9 +105,7 @@ plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all
 Warning messages:
 1: In st_centroid.sf(nc) :
   st_centroid assumes attributes are constant over geometries of x
-2: In st_centroid.sfc(st_geometry(x), of_largest_polygon = of_largest_polygon) :
-  st_centroid does not give correct centroids for longitude/latitude data
-3: In plot.sf(st_centroid(nc), add = TRUE, col = 1) :
+2: In plot.sf(st_centroid(nc), add = TRUE, col = 1) :
   ignoring all but the first attribute
 > nc %>% 
 +   select(geometry) %>% 
@@ -170,4 +168,4 @@ plotting the first 10 out of 15 attributes; use max.plot = 15 to plot all
 > 
 > proc.time()
    user  system elapsed 
-  4.064   0.083   4.138 
+  5.220   0.169   5.379 

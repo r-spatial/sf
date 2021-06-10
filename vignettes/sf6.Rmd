@@ -29,7 +29,7 @@ reference systems, maintained by the International Association
 of Oil \& Gass Producers (IOGP). "EPSG" stands for the authority,
 e.g. "EPSG:4326" stands for spatial reference system with ID 4326
 as it is maintained by the EPSG authority. The website for the EPSG
-registry is https://epsg.org/ .
+registry is found at the epsg.org domain.
 
 # How does `sf` deal with secondary geometry columns?
 

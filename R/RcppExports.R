@@ -245,6 +245,14 @@ CPL_raw_to_hex <- function(raw) {
     .Call('_sf_CPL_raw_to_hex', PACKAGE = 'sf', raw)
 }
 
+read_mdim <- function(file, array_names, oo) {
+    .Call('_sf_read_mdim', PACKAGE = 'sf', file, array_names, oo)
+}
+
+write_mdim <- function(x, file, dimensions, units) {
+    .Call('_sf_write_mdim', PACKAGE = 'sf', x, file, dimensions, units)
+}
+
 opp_sfc <- function(geom, value, mult, crs) {
     .Call('_sf_opp_sfc', PACKAGE = 'sf', geom, value, mult, crs)
 }

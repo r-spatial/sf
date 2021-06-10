@@ -41,8 +41,6 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 	longlat = inherits(x, "s2geography") || isTRUE(st_is_longlat(x))
 	if (longlat && sf_use_s2() && op %in% c("intersects", "contains", "within", 
 			"covers", "covered_by", "disjoint", "equals", "touches")) {
-		if (!requireNamespace("s2", quietly = TRUE))
-			stop("package s2 required, please install it first")
 		fn = get(paste0("s2_", op, "_matrix"), envir = getNamespace("s2")) # get op function
 		lst = fn(x, y, s2::s2_options(model = s2_model, ...)) # call function
 		id = if (is.null(row.names(x)))
@@ -116,7 +114,7 @@ st_relate	= function(x, y, pattern = NA_character_, sparse = !is.na(pattern)) {
 #' @param prepared logical; prepare geometry for x, before looping over y? See Details.
 #' @details If \code{prepared} is \code{TRUE}, and \code{x} contains POINT geometries and \code{y} contains polygons, then the polygon geometries are prepared, rather than the points.
 #' @return If \code{sparse=FALSE}, \code{st_predicate} (with \code{predicate} e.g. "intersects") returns a dense logical matrix with element \code{i,j} \code{TRUE} when \code{predicate(x[i], y[j])} (e.g., when geometry of feature i and j intersect); if \code{sparse=TRUE}, an object of class \code{\link{sgbp}} with a sparse list representation of the same matrix, with list element \code{i} an integer vector with all indices j for which \code{predicate(x[i],y[j])} is \code{TRUE} (and hence a zero-length integer vector if none of them is \code{TRUE}). From the dense matrix, one can find out if one or more elements intersect by \code{apply(mat, 1, any)}, and from the sparse list by \code{lengths(lst) > 0}, see examples below.
-#' @details For most predicates, a spatial index is built on argument \code{x}; see \url{https://www.r-spatial.org/r/2017/06/22/spatial-index.html}.
+#' @details For most predicates, a spatial index is built on argument \code{x}; see \url{https://r-spatial.org/r/2017/06/22/spatial-index.html}.
 #' Specifically, \code{st_intersects}, \code{st_disjoint}, \code{st_touches} \code{st_crosses}, \code{st_within}, \code{st_contains}, \code{st_contains_properly}, \code{st_overlaps}, \code{st_equals}, \code{st_covers} and \code{st_covered_by} all build spatial indexes for more efficient geometry calculations. \code{st_relate}, \code{st_equals_exact}, and do not; \code{st_is_within_distance} uses a spatial index for geographic coordinates when \code{sf_use_s2()} is true.
 #'
 #' If \code{y} is missing, `st_predicate(x, x)` is effectively called, and a square matrix is returned with diagonal elements `st_predicate(x[i], x[i])`.
@@ -244,8 +242,6 @@ st_is_within_distance = function(x, y = x, dist, sparse = TRUE, ...) {
 	ret = if (isTRUE(st_is_longlat(x))) {
 			units(dist) = as_units("m") # might convert
 			r = if (sf_use_s2()) {
-				if (!requireNamespace("s2", quietly = TRUE))
-					stop("package s2 required, please install it first")
 				if (inherits(dist, "units"))
 					dist = drop_units(dist)
 				s2::s2_dwithin_matrix(x, y, dist, ...)
