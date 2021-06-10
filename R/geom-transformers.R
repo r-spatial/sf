@@ -96,8 +96,6 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30,
 #		if (!missing(nQuadSegs) || !missing(endCapStyle) || !missing(joinStyle) ||
 #				!missing(mitreLimit) || !missing(singleSide))
 #			warning("all bufer style parameters are ignored; set st_use_s2(FALSE) first to use them")
-		if (! requireNamespace("s2", quietly = TRUE))
-			stop("package s2 required, please install it first")
 		if (inherits(dist, "units")) {
 			if (!inherits(try(units(dist) <- as_units("rad"), silent = TRUE), "try-error"))
 				return(st_as_sfc(s2::s2_buffer_cells(x, dist, radius = 1, ...),
@@ -211,8 +209,6 @@ st_simplify.sfc = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
 	if (ll && sf_use_s2()) {
 		if (!missing(preserveTopology))
 			warning("argument preserveTopology is ignored")
-		if (! requireNamespace("s2", quietly = TRUE))
-			stop("package s2 required, please install it first")
 		st_as_sfc(s2::s2_simplify(x, dTolerance), crs = st_crs(x))
 	} else {
 		stopifnot(mode(preserveTopology) == 'logical')
@@ -441,11 +437,9 @@ st_centroid.sfc = function(x, ..., of_largest_polygon = FALSE) {
 			x[multi] = largest_ring(x[multi])
 	}
 	longlat = isTRUE(st_is_longlat(x))
-	if (longlat && sf_use_s2()) {
-		if (! requireNamespace("s2", quietly = TRUE))
-			stop("package s2 required, please install it first")
+	if (longlat && sf_use_s2())
 		st_as_sfc(s2::s2_centroid(x), crs = st_crs(x))
-	} else { 
+	else { 
 		if (longlat)
 			warning("st_centroid does not give correct centroids for longitude/latitude data")
 		st_sfc(CPL_geos_op("centroid", x, numeric(0), integer(0), numeric(0), logical(0)))
