@@ -633,8 +633,6 @@ geos_op2_geom = function(op, x, y, s2_model = "semi-open", ...) {
 	y = st_geometry(y)
 	longlat = isTRUE(st_is_longlat(x))
 	if (longlat && sf_use_s2()) {
-		if (! requireNamespace("s2", quietly = TRUE))
-			stop("package s2 required, please install it first")
 		fn = switch(op, intersection = s2::s2_intersection,
 				difference = s2::s2_difference,
 				sym_difference = s2::s2_sym_difference,
@@ -736,7 +734,7 @@ st_intersection.sf = function(x, y, ...) {
 		x[[ sf_column ]] = structure(geom, idx = NULL)
 		st_sf(x)
 	} else
-		geos_op2_df(x, y, geos_op2_geom("intersection", x, y))
+		geos_op2_df(x, y, geos_op2_geom("intersection", x, y, ...))
 }
 
 #' @name geos_binary_ops
@@ -778,7 +776,7 @@ st_difference.sf = function(x, y, ...) {
 		x[[ sf_column ]] = structure(geom, idx = NULL)
 		st_sf(x)
 	} else
-		geos_op2_df(x, y, geos_op2_geom("difference", x, y))
+		geos_op2_df(x, y, geos_op2_geom("difference", x, y, ...))
 }
 
 #' @name geos_binary_ops
@@ -883,7 +881,7 @@ st_union.sfc = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 		else {
 			if (ll)
 				message_longlat("st_union")
-			geos_op2_geom("union", x, y)
+			geos_op2_geom("union", x, y, ...)
 		}
 	}
 }
@@ -897,7 +895,7 @@ st_union.sf = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 		else
 			geom
 	} else
-		geos_op2_df(x, y, geos_op2_geom("union", x, y))
+		geos_op2_df(x, y, geos_op2_geom("union", x, y, ...))
 }
 
 #' Sample points on a linear geometry
