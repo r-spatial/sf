@@ -239,7 +239,7 @@ st_triangulate.sfg = function(x, dTolerance = 0.0, bOnlyEdges = FALSE)
 
 #' @export
 st_triangulate.sfc = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
-	if (CPL_geos_version() >= "3.4.0") {
+	if (compareVersion(CPL_geos_version(), "3.4.0") > -1) { # >= ; see https://github.com/r-spatial/sf/issues/1653
 		if (isTRUE(st_is_longlat(x)))
 			warning("st_triangulate does not correctly triangulate longitude/latitude data")
 		st_sfc(CPL_geos_op("triangulate", x, numeric(0), integer(0),
@@ -278,7 +278,7 @@ st_inscribed_circle.sfg = function(x, dTolerance, ...) {
 
 #' @export
 st_inscribed_circle.sfc = function(x, dTolerance = sqrt(st_area(st_set_crs(x, NA_crs_)))/1000, ..., nQuadSegs = 30) {
-	if (CPL_geos_version() >= "3.9.0") {
+	if (compareVersion(CPL_geos_version(), "3.9.0") > -1) { # >=
 		if (isTRUE(st_is_longlat(x)))
 			warning("st_inscribed_circle does not work correctly for longitude/latitude data")
 		nQ = rep(nQuadSegs, length.out = length(x))
