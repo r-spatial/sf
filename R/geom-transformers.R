@@ -96,8 +96,6 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30,
 #		if (!missing(nQuadSegs) || !missing(endCapStyle) || !missing(joinStyle) ||
 #				!missing(mitreLimit) || !missing(singleSide))
 #			warning("all bufer style parameters are ignored; set st_use_s2(FALSE) first to use them")
-		if (! requireNamespace("s2", quietly = TRUE))
-			stop("package s2 required, please install it first")
 		if (inherits(dist, "units")) {
 			if (!inherits(try(units(dist) <- as_units("rad"), silent = TRUE), "try-error"))
 				return(st_as_sfc(s2::s2_buffer_cells(x, dist, radius = 1, ...),
@@ -211,8 +209,6 @@ st_simplify.sfc = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
 	if (ll && sf_use_s2()) {
 		if (!missing(preserveTopology))
 			warning("argument preserveTopology is ignored")
-		if (! requireNamespace("s2", quietly = TRUE))
-			stop("package s2 required, please install it first")
 		st_as_sfc(s2::s2_simplify(x, dTolerance), crs = st_crs(x))
 	} else {
 		stopifnot(mode(preserveTopology) == 'logical')
@@ -243,7 +239,7 @@ st_triangulate.sfg = function(x, dTolerance = 0.0, bOnlyEdges = FALSE)
 
 #' @export
 st_triangulate.sfc = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
-	if (CPL_geos_version() >= "3.4.0") {
+	if (compareVersion(CPL_geos_version(), "3.4.0") > -1) { # >= ; see https://github.com/r-spatial/sf/issues/1653
 		if (isTRUE(st_is_longlat(x)))
 			warning("st_triangulate does not correctly triangulate longitude/latitude data")
 		st_sfc(CPL_geos_op("triangulate", x, numeric(0), integer(0),
@@ -282,7 +278,7 @@ st_inscribed_circle.sfg = function(x, dTolerance, ...) {
 
 #' @export
 st_inscribed_circle.sfc = function(x, dTolerance = sqrt(st_area(st_set_crs(x, NA_crs_)))/1000, ..., nQuadSegs = 30) {
-	if (CPL_geos_version() >= "3.9.0") {
+	if (compareVersion(CPL_geos_version(), "3.9.0") > -1) { # >=
 		if (isTRUE(st_is_longlat(x)))
 			warning("st_inscribed_circle does not work correctly for longitude/latitude data")
 		nQ = rep(nQuadSegs, length.out = length(x))
@@ -441,11 +437,9 @@ st_centroid.sfc = function(x, ..., of_largest_polygon = FALSE) {
 			x[multi] = largest_ring(x[multi])
 	}
 	longlat = isTRUE(st_is_longlat(x))
-	if (longlat && sf_use_s2()) {
-		if (! requireNamespace("s2", quietly = TRUE))
-			stop("package s2 required, please install it first")
+	if (longlat && sf_use_s2())
 		st_as_sfc(s2::s2_centroid(x), crs = st_crs(x))
-	} else { 
+	else { 
 		if (longlat)
 			warning("st_centroid does not give correct centroids for longitude/latitude data")
 		st_sfc(CPL_geos_op("centroid", x, numeric(0), integer(0), numeric(0), logical(0)))
@@ -633,8 +627,6 @@ geos_op2_geom = function(op, x, y, s2_model = "semi-open", ...) {
 	y = st_geometry(y)
 	longlat = isTRUE(st_is_longlat(x))
 	if (longlat && sf_use_s2()) {
-		if (! requireNamespace("s2", quietly = TRUE))
-			stop("package s2 required, please install it first")
 		fn = switch(op, intersection = s2::s2_intersection,
 				difference = s2::s2_difference,
 				sym_difference = s2::s2_sym_difference,
@@ -736,7 +728,7 @@ st_intersection.sf = function(x, y, ...) {
 		x[[ sf_column ]] = structure(geom, idx = NULL)
 		st_sf(x)
 	} else
-		geos_op2_df(x, y, geos_op2_geom("intersection", x, y))
+		geos_op2_df(x, y, geos_op2_geom("intersection", x, y, ...))
 }
 
 #' @name geos_binary_ops
@@ -778,7 +770,7 @@ st_difference.sf = function(x, y, ...) {
 		x[[ sf_column ]] = structure(geom, idx = NULL)
 		st_sf(x)
 	} else
-		geos_op2_df(x, y, geos_op2_geom("difference", x, y))
+		geos_op2_df(x, y, geos_op2_geom("difference", x, y, ...))
 }
 
 #' @name geos_binary_ops
@@ -883,7 +875,7 @@ st_union.sfc = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 		else {
 			if (ll)
 				message_longlat("st_union")
-			geos_op2_geom("union", x, y)
+			geos_op2_geom("union", x, y, ...)
 		}
 	}
 }
@@ -897,7 +889,7 @@ st_union.sf = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 		else
 			geom
 	} else
-		geos_op2_df(x, y, geos_op2_geom("union", x, y))
+		geos_op2_df(x, y, geos_op2_geom("union", x, y, ...))
 }
 
 #' Sample points on a linear geometry

@@ -211,9 +211,14 @@ make_crs = function(x) {
 	if (!is.na(start_crs) && !is.na(end_crs) && start_crs != end_crs)
 		warning("st_crs<- : replacing crs does not reproject data; use st_transform for that", call. = FALSE)
 
-	attr(x, "crs") = end_crs
-	x
+	structure(x, crs = end_crs)
 }
+
+#' @export
+`st_crs<-.bbox` = function(x, value) {
+	structure(x, crs = make_crs(value))
+}
+
 
 #' @name st_crs
 #' @examples
