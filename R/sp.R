@@ -340,8 +340,8 @@ CRS_from_crs = function(from) {
 		stop("package sp required, please install it first")
 	if (is.na(from))
 		sp::CRS(NA_character_)
-	else if (CPL_proj_version() >= "6.0.0" && CPL_gdal_version() >= "3.0.0")
-		sp::CRS(SRS_string = from$wkt)
+	else if (CPL_proj_version() >= "6.0.0" && CPL_gdal_version() >= "3.0.0")		sp::CRS(projargs = from$proj4string, SRS_string = from$wkt,
+                    from_sf = TRUE)
 	else
 		sp::CRS(from$proj4string)
 }
