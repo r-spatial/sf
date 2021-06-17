@@ -340,8 +340,17 @@ CRS_from_crs = function(from) {
 		stop("package sp required, please install it first")
 	if (is.na(from))
 		sp::CRS(NA_character_)
-	else if (CPL_proj_version() >= "6.0.0" && CPL_gdal_version() >= "3.0.0")		sp::CRS(projargs = from$proj4string, SRS_string = from$wkt,
-                    from_sf = TRUE)
-	else
+	else if (CPL_proj_version() >= "6.0.0" &&
+               CPL_gdal_version() >= "3.0.0") {
+               nm <- "CRS"
+               attr(nm, "package") <- "sp"
+# See ?new: "Note that the character string passed from a generating
+# function includes the package name as an attribute"
+               obj <- new(nm, projargs=from$proj4string)
+               comment(obj) <- from$wkt
+               return(obj)
+#		sp::CRS(projargs = from$proj4string, SRS_string = from$wkt,
+#                    from_sf = TRUE)
+	} else
 		sp::CRS(from$proj4string)
 }
