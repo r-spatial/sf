@@ -1,5 +1,7 @@
 # version 1.0-1
 
+* `crs` (sf) to `CRS` (sp) conversion no longer needs validation by `rgdal`; https://github.com/edzer/sp/issues/107
+
 * retrieve ESRI's WKT version of CRS by `st_crs(id)$WKT1_ESRI`; #1690 
 
 # version 1.0-0
