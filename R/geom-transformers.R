@@ -262,7 +262,7 @@ st_triangulate.sf = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 #' \code{nQuadSegs} controls the number of points per quadrant to approximate the circle.
 #' \code{st_inscribed_circle} requires GEOS version 3.9 or above
 #' @examples
-#' if (sf_extSoftVersion()["GEOS"] >= "3.9.0") {
+#' if (compareVersion(CPL_geos_version(), "3.9.0") > -1) {
 #'   nc_t = st_transform(nc, 'EPSG:2264')
 #'   x = st_inscribed_circle(st_geometry(nc_t))
 #'   plot(st_geometry(nc_t), asp = 1, col = grey(.9))
@@ -309,7 +309,7 @@ st_inscribed_circle.sf = function(x, dTolerance, ...) {
 #' set.seed(1)
 #' x = st_multipoint(matrix(runif(10),,2))
 #' box = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))))
-#' if (sf_extSoftVersion()["GEOS"] >= "3.5.0") {
+#' if (compareVersion(CPL_geos_version(), "3.5.0") > -1) {
 #'  v = st_sfc(st_voronoi(x, st_sfc(box)))
 #'  plot(v, col = 0, border = 1, axes = TRUE)
 #'  plot(box, add = TRUE, col = 0, border = 1) # a larger box is returned, as documented
@@ -339,7 +339,7 @@ st_voronoi.sfg = function(x, envelope = st_polygon(), dTolerance = 0.0, bOnlyEdg
 
 #' @export
 st_voronoi.sfc = function(x, envelope = st_polygon(), dTolerance = 0.0, bOnlyEdges = FALSE) {
-	if (sf_extSoftVersion()["GEOS"] >= "3.5.0") {
+	if (compareVersion(CPL_geos_version(), "3.5.0") > -1) {
 		if (isTRUE(st_is_longlat(x)))
 			warning("st_voronoi does not correctly triangulate longitude/latitude data")
 		st_sfc(CPL_geos_voronoi(x, st_sfc(envelope), dTolerance = dTolerance,
@@ -489,7 +489,7 @@ st_point_on_surface.sf = function(x) {
 #' @export
 #' @details \code{st_reverse} reverses the nodes in a line
 #' @examples
-#' if (sf_extSoftVersion()["GEOS"] >= "3.7.0") {
+#' if (compareVersion(CPL_geos_version(), "3.7.0") > -1) {
 #'   st_reverse(st_linestring(rbind(c(1,1), c(2,2), c(3,3))))
 #' }
 #nocov start
