@@ -3766,7 +3766,7 @@ if test  -n "$proj_lib_path"  ; then
 
 else
   if test "${proj_config_ok}" = yes; then
-    PROJ_LIB_PATH=`${PROJ_CONFIG} --libs --static`
+    PROJ_LIB_PATH=`${PROJ_CONFIG} --libs`
     PROJ_LIBS="${PROJ_LIB_PATH} ${INPKG_LIBS}"
 
 	proj_version=`${PROJ_CONFIG} --modversion`
