@@ -183,32 +183,28 @@ capability to read/create datasets through the VSI*L API. <a href='https://gdal.
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>st_drivers</span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;                          name
-#&gt; ESRIC                   ESRIC
-#&gt; FITS                     FITS
 #&gt; PCIDSK                 PCIDSK
 #&gt; netCDF                 netCDF
 #&gt; PDS4                     PDS4
-#&gt; VICAR                   VICAR
 #&gt; JP2OpenJPEG       JP2OpenJPEG
 #&gt; PDF                       PDF
 #&gt; MBTiles               MBTiles
-#&gt; BAG                       BAG
 #&gt; EEDA                     EEDA
-#&gt; OGCAPI                 OGCAPI
 #&gt; ESRI Shapefile ESRI Shapefile
 #&gt; MapInfo File     MapInfo File
 #&gt; UK .NTF               UK .NTF
-#&gt; LVBAG                   LVBAG
 #&gt; OGR_SDTS             OGR_SDTS
 #&gt; S57                       S57
 #&gt; DGN                       DGN
 #&gt; OGR_VRT               OGR_VRT
 #&gt; REC                       REC
 #&gt; Memory                 Memory
+#&gt; BNA                       BNA
 #&gt; CSV                       CSV
 #&gt; NAS                       NAS
 #&gt; GML                       GML
 #&gt; GPX                       GPX
+#&gt; LIBKML                 LIBKML
 #&gt; KML                       KML
 #&gt; GeoJSON               GeoJSON
 #&gt; GeoJSONSeq         GeoJSONSeq
@@ -224,11 +220,13 @@ capability to read/create datasets through the VSI*L API. <a href='https://gdal.
 #&gt; WAsP                     WAsP
 #&gt; PGeo                     PGeo
 #&gt; MSSQLSpatial     MSSQLSpatial
+#&gt; OGR_OGDI             OGR_OGDI
 #&gt; PostgreSQL         PostgreSQL
+#&gt; MySQL                   MySQL
 #&gt; OpenFileGDB       OpenFileGDB
+#&gt; XPlane                 XPlane
 #&gt; DXF                       DXF
 #&gt; CAD                       CAD
-#&gt; FlatGeobuf         FlatGeobuf
 #&gt; Geoconcept         Geoconcept
 #&gt; GeoRSS                 GeoRSS
 #&gt; GPSTrackMaker   GPSTrackMaker
@@ -236,20 +234,28 @@ capability to read/create datasets through the VSI*L API. <a href='https://gdal.
 #&gt; PGDUMP                 PGDUMP
 #&gt; OSM                       OSM
 #&gt; GPSBabel             GPSBabel
+#&gt; SUA                       SUA
+#&gt; OpenAir               OpenAir
 #&gt; OGR_PDS               OGR_PDS
 #&gt; WFS                       WFS
-#&gt; OAPIF                   OAPIF
+#&gt; WFS3                     WFS3
+#&gt; SOSI                     SOSI
+#&gt; HTF                       HTF
+#&gt; AeronavFAA         AeronavFAA
 #&gt; Geomedia             Geomedia
 #&gt; EDIGEO                 EDIGEO
+#&gt; GFT                       GFT
 #&gt; SVG                       SVG
 #&gt; CouchDB               CouchDB
 #&gt; Cloudant             Cloudant
 #&gt; Idrisi                 Idrisi
 #&gt; ARCGEN                 ARCGEN
+#&gt; SEGUKOOA             SEGUKOOA
+#&gt; SEGY                     SEGY
 #&gt; XLS                       XLS
 #&gt; ODS                       ODS
 #&gt; XLSX                     XLSX
-#&gt; Elasticsearch   Elasticsearch
+#&gt; ElasticSearch   ElasticSearch
 #&gt; Walk                     Walk
 #&gt; Carto                   Carto
 #&gt; AmigoCloud         AmigoCloud
@@ -261,39 +267,34 @@ capability to read/create datasets through the VSI*L API. <a href='https://gdal.
 #&gt; VDV                       VDV
 #&gt; GMLAS                   GMLAS
 #&gt; MVT                       MVT
-#&gt; NGW                       NGW
-#&gt; MapML                   MapML
 #&gt; TIGER                   TIGER
 #&gt; AVCBin                 AVCBin
 #&gt; AVCE00                 AVCE00
+#&gt; NGW                       NGW
 #&gt; HTTP                     HTTP
 #&gt;                                                                    long_name
-#&gt; ESRIC                                                     Esri Compact Cache
-#&gt; FITS                                         Flexible Image Transport System
 #&gt; PCIDSK                                                  PCIDSK Database File
 #&gt; netCDF                                            Network Common Data Format
 #&gt; PDS4                                            NASA Planetary Data System 4
-#&gt; VICAR                                                        MIPL VICAR file
 #&gt; JP2OpenJPEG                       JPEG-2000 driver based on OpenJPEG library
 #&gt; PDF                                                           Geospatial PDF
 #&gt; MBTiles                                                              MBTiles
-#&gt; BAG                                               Bathymetry Attributed Grid
 #&gt; EEDA                                                   Earth Engine Data API
-#&gt; OGCAPI                                                                OGCAPI
 #&gt; ESRI Shapefile                                                ESRI Shapefile
 #&gt; MapInfo File                                                    MapInfo File
 #&gt; UK .NTF                                                              UK .NTF
-#&gt; LVBAG                                            Kadaster LV BAG Extract 2.0
 #&gt; OGR_SDTS                                                                SDTS
 #&gt; S57                                                           IHO S-57 (ENC)
 #&gt; DGN                                                         Microstation DGN
 #&gt; OGR_VRT                                             VRT - Virtual Datasource
 #&gt; REC                                                            EPIInfo .REC 
 #&gt; Memory                                                                Memory
+#&gt; BNA                                                                Atlas BNA
 #&gt; CSV                                             Comma Separated Value (.csv)
 #&gt; NAS                                                              NAS - ALKIS
 #&gt; GML                                          Geography Markup Language (GML)
 #&gt; GPX                                                                      GPX
+#&gt; LIBKML                                      Keyhole Markup Language (LIBKML)
 #&gt; KML                                            Keyhole Markup Language (KML)
 #&gt; GeoJSON                                                              GeoJSON
 #&gt; GeoJSONSeq                                                  GeoJSON Sequence
@@ -309,11 +310,13 @@ capability to read/create datasets through the VSI*L API. <a href='https://gdal.
 #&gt; WAsP                                                        WAsP .map format
 #&gt; PGeo                                               ESRI Personal GeoDatabase
 #&gt; MSSQLSpatial                           Microsoft SQL Server Spatial Database
+#&gt; OGR_OGDI                                       OGDI Vectors (VPF, VMAP, DCW)
 #&gt; PostgreSQL                                                PostgreSQL/PostGIS
+#&gt; MySQL                                                                  MySQL
 #&gt; OpenFileGDB                                                     ESRI FileGDB
+#&gt; XPlane                                  X-Plane/Flightgear aeronautical data
 #&gt; DXF                                                              AutoCAD DXF
 #&gt; CAD                                                           AutoCAD Driver
-#&gt; FlatGeobuf                                                        FlatGeobuf
 #&gt; Geoconcept                                                        Geoconcept
 #&gt; GeoRSS                                                                GeoRSS
 #&gt; GPSTrackMaker                                                  GPSTrackMaker
@@ -321,20 +324,28 @@ capability to read/create datasets through the VSI*L API. <a href='https://gdal.
 #&gt; PGDUMP                                                   PostgreSQL SQL dump
 #&gt; OSM                                                OpenStreetMap XML and PBF
 #&gt; GPSBabel                                                            GPSBabel
+#&gt; SUA                          Tim Newport-Peace's Special Use Airspace Format
+#&gt; OpenAir                                                              OpenAir
 #&gt; OGR_PDS                                         Planetary Data Systems TABLE
 #&gt; WFS                                            OGC WFS (Web Feature Service)
-#&gt; OAPIF                                                     OGC API - Features
+#&gt; WFS3                                  OGC WFS 3 client (Web Feature Service)
+#&gt; SOSI                                                 Norwegian SOSI Standard
+#&gt; HTF                                             Hydrographic Transfer Vector
+#&gt; AeronavFAA                                                       Aeronav FAA
 #&gt; Geomedia                                                       Geomedia .mdb
 #&gt; EDIGEO                                         French EDIGEO exchange format
+#&gt; GFT                                                     Google Fusion Tables
 #&gt; SVG                                                 Scalable Vector Graphics
 #&gt; CouchDB                                                   CouchDB / GeoCouch
 #&gt; Cloudant                                                  Cloudant / CouchDB
 #&gt; Idrisi                                                  Idrisi Vector (.vct)
 #&gt; ARCGEN                                                     Arc/Info Generate
+#&gt; SEGUKOOA                                                SEG-P1 / UKOOA P1/90
+#&gt; SEGY                                                                   SEG-Y
 #&gt; XLS                                                          MS Excel format
 #&gt; ODS                     Open Document/ LibreOffice / OpenOffice Spreadsheet 
 #&gt; XLSX                                          MS Office Open XML spreadsheet
-#&gt; Elasticsearch                                                 Elastic Search
+#&gt; ElasticSearch                                                 Elastic Search
 #&gt; Walk                                                                    Walk
 #&gt; Carto                                                                  Carto
 #&gt; AmigoCloud                                                        AmigoCloud
@@ -346,39 +357,34 @@ capability to read/create datasets through the VSI*L API. <a href='https://gdal.
 #&gt; VDV                                      VDV-451/VDV-452/INTREST Data Format
 #&gt; GMLAS          Geography Markup Language (GML) driven by application schemas
 #&gt; MVT                                                      Mapbox Vector Tiles
-#&gt; NGW                                                              NextGIS Web
-#&gt; MapML                                                                  MapML
 #&gt; TIGER                                                 U.S. Census TIGER/Line
 #&gt; AVCBin                                              Arc/Info Binary Coverage
 #&gt; AVCE00                                         Arc/Info E00 (ASCII) Coverage
+#&gt; NGW                                                              NextGIS Web
 #&gt; HTTP                                                   HTTP Fetching Wrapper
 #&gt;                write  copy is_raster is_vector   vsi
-#&gt; ESRIC          FALSE FALSE      TRUE      TRUE  TRUE
-#&gt; FITS            TRUE FALSE      TRUE      TRUE FALSE
 #&gt; PCIDSK          TRUE FALSE      TRUE      TRUE  TRUE
-#&gt; netCDF          TRUE  TRUE      TRUE      TRUE FALSE
+#&gt; netCDF          TRUE  TRUE      TRUE      TRUE  TRUE
 #&gt; PDS4            TRUE  TRUE      TRUE      TRUE  TRUE
-#&gt; VICAR           TRUE  TRUE      TRUE      TRUE  TRUE
 #&gt; JP2OpenJPEG    FALSE  TRUE      TRUE      TRUE  TRUE
 #&gt; PDF             TRUE  TRUE      TRUE      TRUE  TRUE
 #&gt; MBTiles         TRUE  TRUE      TRUE      TRUE  TRUE
-#&gt; BAG             TRUE  TRUE      TRUE      TRUE  TRUE
 #&gt; EEDA           FALSE FALSE     FALSE      TRUE FALSE
-#&gt; OGCAPI         FALSE FALSE      TRUE      TRUE  TRUE
 #&gt; ESRI Shapefile  TRUE FALSE     FALSE      TRUE  TRUE
 #&gt; MapInfo File    TRUE FALSE     FALSE      TRUE  TRUE
 #&gt; UK .NTF        FALSE FALSE     FALSE      TRUE  TRUE
-#&gt; LVBAG          FALSE FALSE     FALSE      TRUE  TRUE
 #&gt; OGR_SDTS       FALSE FALSE     FALSE      TRUE  TRUE
 #&gt; S57             TRUE FALSE     FALSE      TRUE  TRUE
 #&gt; DGN             TRUE FALSE     FALSE      TRUE  TRUE
 #&gt; OGR_VRT        FALSE FALSE     FALSE      TRUE  TRUE
 #&gt; REC            FALSE FALSE     FALSE      TRUE FALSE
 #&gt; Memory          TRUE FALSE     FALSE      TRUE FALSE
+#&gt; BNA             TRUE FALSE     FALSE      TRUE  TRUE
 #&gt; CSV             TRUE FALSE     FALSE      TRUE  TRUE
 #&gt; NAS            FALSE FALSE     FALSE      TRUE  TRUE
 #&gt; GML             TRUE FALSE     FALSE      TRUE  TRUE
 #&gt; GPX             TRUE FALSE     FALSE      TRUE  TRUE
+#&gt; LIBKML          TRUE FALSE     FALSE      TRUE  TRUE
 #&gt; KML             TRUE FALSE     FALSE      TRUE  TRUE
 #&gt; GeoJSON         TRUE FALSE     FALSE      TRUE  TRUE
 #&gt; GeoJSONSeq      TRUE FALSE     FALSE      TRUE  TRUE
@@ -394,11 +400,13 @@ capability to read/create datasets through the VSI*L API. <a href='https://gdal.
 #&gt; WAsP            TRUE FALSE     FALSE      TRUE  TRUE
 #&gt; PGeo           FALSE FALSE     FALSE      TRUE FALSE
 #&gt; MSSQLSpatial    TRUE FALSE     FALSE      TRUE FALSE
+#&gt; OGR_OGDI       FALSE FALSE     FALSE      TRUE FALSE
 #&gt; PostgreSQL      TRUE FALSE     FALSE      TRUE FALSE
+#&gt; MySQL           TRUE FALSE     FALSE      TRUE FALSE
 #&gt; OpenFileGDB    FALSE FALSE     FALSE      TRUE  TRUE
+#&gt; XPlane         FALSE FALSE     FALSE      TRUE  TRUE
 #&gt; DXF             TRUE FALSE     FALSE      TRUE  TRUE
 #&gt; CAD            FALSE FALSE      TRUE      TRUE  TRUE
-#&gt; FlatGeobuf      TRUE FALSE     FALSE      TRUE  TRUE
 #&gt; Geoconcept      TRUE FALSE     FALSE      TRUE  TRUE
 #&gt; GeoRSS          TRUE FALSE     FALSE      TRUE  TRUE
 #&gt; GPSTrackMaker   TRUE FALSE     FALSE      TRUE  TRUE
@@ -406,20 +414,28 @@ capability to read/create datasets through the VSI*L API. <a href='https://gdal.
 #&gt; PGDUMP          TRUE FALSE     FALSE      TRUE  TRUE
 #&gt; OSM            FALSE FALSE     FALSE      TRUE  TRUE
 #&gt; GPSBabel        TRUE FALSE     FALSE      TRUE FALSE
+#&gt; SUA            FALSE FALSE     FALSE      TRUE  TRUE
+#&gt; OpenAir        FALSE FALSE     FALSE      TRUE  TRUE
 #&gt; OGR_PDS        FALSE FALSE     FALSE      TRUE  TRUE
 #&gt; WFS            FALSE FALSE     FALSE      TRUE  TRUE
-#&gt; OAPIF          FALSE FALSE     FALSE      TRUE FALSE
+#&gt; WFS3           FALSE FALSE     FALSE      TRUE FALSE
+#&gt; SOSI           FALSE FALSE     FALSE      TRUE FALSE
+#&gt; HTF            FALSE FALSE     FALSE      TRUE  TRUE
+#&gt; AeronavFAA     FALSE FALSE     FALSE      TRUE  TRUE
 #&gt; Geomedia       FALSE FALSE     FALSE      TRUE FALSE
 #&gt; EDIGEO         FALSE FALSE     FALSE      TRUE  TRUE
+#&gt; GFT             TRUE FALSE     FALSE      TRUE FALSE
 #&gt; SVG            FALSE FALSE     FALSE      TRUE  TRUE
 #&gt; CouchDB         TRUE FALSE     FALSE      TRUE FALSE
 #&gt; Cloudant        TRUE FALSE     FALSE      TRUE FALSE
 #&gt; Idrisi         FALSE FALSE     FALSE      TRUE  TRUE
 #&gt; ARCGEN         FALSE FALSE     FALSE      TRUE  TRUE
+#&gt; SEGUKOOA       FALSE FALSE     FALSE      TRUE  TRUE
+#&gt; SEGY           FALSE FALSE     FALSE      TRUE  TRUE
 #&gt; XLS            FALSE FALSE     FALSE      TRUE FALSE
 #&gt; ODS             TRUE FALSE     FALSE      TRUE  TRUE
 #&gt; XLSX            TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; Elasticsearch   TRUE FALSE     FALSE      TRUE FALSE
+#&gt; ElasticSearch   TRUE FALSE     FALSE      TRUE FALSE
 #&gt; Walk           FALSE FALSE     FALSE      TRUE FALSE
 #&gt; Carto           TRUE FALSE     FALSE      TRUE FALSE
 #&gt; AmigoCloud      TRUE FALSE     FALSE      TRUE FALSE
@@ -431,11 +447,10 @@ capability to read/create datasets through the VSI*L API. <a href='https://gdal.
 #&gt; VDV             TRUE FALSE     FALSE      TRUE  TRUE
 #&gt; GMLAS          FALSE  TRUE     FALSE      TRUE  TRUE
 #&gt; MVT             TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; NGW             TRUE  TRUE      TRUE      TRUE FALSE
-#&gt; MapML           TRUE FALSE     FALSE      TRUE  TRUE
 #&gt; TIGER           TRUE FALSE     FALSE      TRUE  TRUE
 #&gt; AVCBin         FALSE FALSE     FALSE      TRUE  TRUE
 #&gt; AVCE00         FALSE FALSE     FALSE      TRUE  TRUE
+#&gt; NGW             TRUE  TRUE      TRUE      TRUE FALSE
 #&gt; HTTP           FALSE FALSE      TRUE      TRUE FALSE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

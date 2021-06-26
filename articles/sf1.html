@@ -278,10 +278,10 @@
 <p>As we usually do not work with geometries of single simple features, but with datasets consisting of sets of features with attributes, the two are put together in <code>sf</code> (simple feature) objects. The following command reads the <code>nc</code> dataset from a file that is contained in the <code>sf</code> package:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span>
-<span class="co">## Linking to GEOS 3.9.1, GDAL 3.3.0, PROJ 8.0.1</span>
+<span class="co">## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1</span>
 <span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">## Reading layer `nc' from data source </span>
-<span class="co">##   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpB6q6p7/temp_libpath2ee56afc233e/sf/shape/nc.shp' </span>
+<span class="co">##   `/tmp/Rtmpbmtdf7/temp_libpath41232793e5fa/sf/shape/nc.shp' </span>
 <span class="co">##   using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Geometry type: MULTIPOLYGON</span>
@@ -599,7 +599,7 @@
 <code class="sourceCode R"><span class="va">filename</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>
 <span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">filename</span><span class="op">)</span>
 <span class="co">## Reading layer `nc' from data source </span>
-<span class="co">##   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpB6q6p7/temp_libpath2ee56afc233e/sf/shape/nc.shp' </span>
+<span class="co">##   `/tmp/Rtmpbmtdf7/temp_libpath41232793e5fa/sf/shape/nc.shp' </span>
 <span class="co">##   using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Geometry type: MULTIPOLYGON</span>
@@ -701,9 +701,9 @@
 <code class="sourceCode R"><span class="va">nc.web_mercator</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">nc</span>, <span class="fl">3857</span><span class="op">)</span>
 <span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc.web_mercator</span><span class="op">)</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span>
 <span class="co">##          [,1]    [,2]</span>
-<span class="co">## [1,] -8463267 4377507</span>
-<span class="co">## [2,] -8460094 4377498</span>
-<span class="co">## [3,] -8450437 4375541</span></code></pre></div>
+<span class="co">## [1,] -8463267 4377519</span>
+<span class="co">## [2,] -8460094 4377510</span>
+<span class="co">## [3,] -8450437 4375553</span></code></pre></div>
 </div>
 <div id="conversion-including-to-and-from-sp" class="section level2">
 <h2 class="hasAnchor">
@@ -765,9 +765,9 @@
 <span class="fu"><a href="../reference/geos_measures.html">st_distance</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">4</span>,<span class="fl">22</span><span class="op">)</span>,<span class="op">]</span>, <span class="va">x</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">33</span>,<span class="fl">55</span>,<span class="fl">56</span><span class="op">)</span>,<span class="op">]</span><span class="op">)</span>
 <span class="co">## Units: [m]</span>
 <span class="co">##           [,1]     [,2]      [,3]     [,4]</span>
-<span class="co">## [1,]      0.00 312176.2 128338.51 475608.8</span>
-<span class="co">## [2,] 440548.35 114938.1 590417.79      0.0</span>
-<span class="co">## [3,]  18943.74 352708.6  78754.75 517511.6</span>
+<span class="co">## [1,]      0.00 312184.9 128341.85 475623.3</span>
+<span class="co">## [2,] 440561.15 114939.7 590434.80      0.0</span>
+<span class="co">## [3,]  18944.03 352719.1  78756.89 517527.8</span>
 <span class="fu"><a href="../reference/st_relate.html">st_relate</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="op">]</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="op">]</span><span class="op">)</span>
 <span class="co">## although coordinates are longitude/latitude, st_relate assumes that they are planar</span>
 <span class="co">##      [,1]        [,2]        [,3]        [,4]       </span>
@@ -817,7 +817,7 @@
 <span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span><span class="op">(</span><span class="st">"intersecting two polygons:"</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">b</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span>
 <span class="op">(</span><span class="va">i</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/geos_binary_ops.html">st_intersection</a></span><span class="op">(</span><span class="va">a</span>,<span class="va">b</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## GEOMETRYCOLLECTION (POLYGON ((7 0, 7 -0.5, 6 -0.5, 5.5 0, 7 0)), LINESTRING (4 0, 3 0), POINT (1 0))</span>
+<span class="co">## GEOMETRYCOLLECTION (POINT (1 0), LINESTRING (4 0, 3 0), POLYGON ((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5 0)))</span>
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">a</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/title.html">title</a></span><span class="op">(</span><span class="st">"GEOMETRYCOLLECTION"</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">b</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span>
@@ -885,7 +885,7 @@
         CRESS_ID <span class="op">=</span> <span class="st">"identity"</span>, BIR74 <span class="op">=</span> <span class="st">"aggregate"</span>, SID74 <span class="op">=</span> <span class="st">"aggregate"</span>, NWBIR74 <span class="op">=</span> <span class="st">"aggregate"</span>,
         BIR79 <span class="op">=</span> <span class="st">"aggregate"</span>, SID79 <span class="op">=</span> <span class="st">"aggregate"</span>, NWBIR79 <span class="op">=</span> <span class="st">"aggregate"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">## Reading layer `nc' from data source </span>
-<span class="co">##   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpB6q6p7/temp_libpath2ee56afc233e/sf/shape/nc.shp' </span>
+<span class="co">##   `/tmp/Rtmpbmtdf7/temp_libpath41232793e5fa/sf/shape/nc.shp' </span>
 <span class="co">##   using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity</span>
