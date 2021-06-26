@@ -157,21 +157,24 @@ GEOGCRS["WGS 84",
     ID["EPSG",4326]]
 > y = as(y0, "CRS")
 > cat(sp::wkt(y), "\n")
-GEOGCRS["WGS 84 (with axis order normalized for visualization)",
+GEOGCRS["WGS 84",
     DATUM["World Geodetic System 1984",
         ELLIPSOID["WGS 84",6378137,298.257223563,
             LENGTHUNIT["metre",1]]],
     PRIMEM["Greenwich",0,
         ANGLEUNIT["degree",0.0174532925199433]],
     CS[ellipsoidal,2],
-        AXIS["geodetic longitude (Lon)",east,
-            ORDER[1],
-            ANGLEUNIT["degree",0.0174532925199433,
-                ID["EPSG",9122]]],
         AXIS["geodetic latitude (Lat)",north,
+            ORDER[1],
+            ANGLEUNIT["degree",0.0174532925199433]],
+        AXIS["geodetic longitude (Lon)",east,
             ORDER[2],
-            ANGLEUNIT["degree",0.0174532925199433,
-                ID["EPSG",9122]]]] 
+            ANGLEUNIT["degree",0.0174532925199433]],
+    USAGE[
+        SCOPE["Horizontal component of 3D system."],
+        AREA["World."],
+        BBOX[-90,-180,90,180]],
+    ID["EPSG",4326]] 
 > 
 > # https://github.com/r-spatial/sf/issues/1170
 > g = st_as_sfc("POLYGON ((-61.66957 10.69214, -61.565 10.75728, -61.37453 10.77654, -61.40721 10.60681, -61.66957 10.69214))")
@@ -189,4 +192,4 @@ GEOGCRS["WGS 84 (with axis order normalized for visualization)",
 > 
 > proc.time()
    user  system elapsed 
-  1.846   0.089   2.006 
+  0.996   0.049   1.037 

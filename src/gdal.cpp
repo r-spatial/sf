@@ -271,8 +271,10 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	// WKT1_ESRI
 #if GDAL_VERSION_MAJOR >= 3
 	const char *options[3] = { "MULTILINE=YES", "FORMAT=WKT1_ESRI", NULL };
-	OGRErr err = srs->exportToWkt(&cp, options);
-	out(13) = Rcpp::CharacterVector::create(cp);
+	if (srs->exportToWkt(&cp, options) != OGRERR_NONE)
+		out(13) = Rcpp::CharacterVector::create(NA_STRING);
+	else
+		out(13) = Rcpp::CharacterVector::create(cp);
 #else
 	out(13) = "";
 #endif
