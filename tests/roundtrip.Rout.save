@@ -1,5 +1,5 @@
 
-R version 4.0.5 (2021-03-31) -- "Shake and Throw"
+R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
 Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -166,10 +166,8 @@ Dimension:     XY
 Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 Geodetic CRS:  NAD27
 > all.equal(nc, st_as_sf(as(nc, "Spatial")))
-[1] "Names: 1 string mismatch"                                                               
-[2] "Attributes: < Component \"sf_column\": 1 string mismatch >"                             
-[3] "Component 15: Attributes: < Component \"crs\": Component \"input\": 1 string mismatch >"
-[4] "Component 15: Attributes: < Component \"crs\": Component \"wkt\": 1 string mismatch >"  
+[1] "Names: 1 string mismatch"                                  
+[2] "Attributes: < Component \"sf_column\": 1 string mismatch >"
 > st_crs(nc) == st_crs(st_as_sf(as(nc, "Spatial")))
 [1] TRUE
 > 
@@ -178,4 +176,4 @@ Geodetic CRS:  NAD27
 > 
 > proc.time()
    user  system elapsed 
-  3.888   0.059   3.940 
+  5.092   0.088   5.170 

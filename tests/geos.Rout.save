@@ -134,13 +134,13 @@ Warning message:
 In st_interpolate_aw.sf(nc["BIR74"], g, FALSE) :
   st_interpolate_aw assumes attributes are constant or uniform over areas of x
 > sum(a1$BIR74) / sum(nc$BIR74) # not close to one: property is assumed spatially intensive
-[1] 1.176919
+[1] 1.436123
 > a2 = st_interpolate_aw(nc["BIR74"], g, extensive = TRUE)
 Warning message:
 In st_interpolate_aw.sf(nc["BIR74"], g, extensive = TRUE) :
   st_interpolate_aw assumes attributes are constant or uniform over areas of x
 > sum(a2$BIR74) / sum(nc$BIR74)
-[1] 1.016055
+[1] 1
 > 
 > # missing x:
 > g = st_make_grid(offset = c(0,0), cellsize = c(1,1), n = c(10,10))
@@ -587,4 +587,4 @@ CRS:           NA
 > 
 > proc.time()
    user  system elapsed 
-  9.213   0.107   9.309 
+ 10.400   0.088  10.488 
