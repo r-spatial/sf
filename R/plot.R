@@ -674,6 +674,8 @@ sf.colors = function (n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorica
 # return list with "m" matrix, "key.pos", "widths" and "heights" fields
 # if key.pos = -1, it will be a return value, "optimally" placed
 	asp = diff(bb[c(2,4)])/diff(bb[c(1,3)])
+	if (!is.finite(asp)) # 0/0
+		asp = 1
 	if (isTRUE(st_is_longlat(bb)))
 		asp = asp / cos(mean(bb[c(2,4)]) * pi /180)
 	if (is.null(mfrow)) {
