@@ -171,7 +171,7 @@ nc = st_read(system.file("shape/nc.shp", package="sf"))
 nc_g = st_geometry(nc)
 plot(st_convex_hull(nc_g))
 plot(nc_g, border = grey(.5), add = TRUE)
-if (sf_extSoftVersion()["GEOS"] >= "3.9.0") {
+if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.9.0") > -1) {
   nc_t = st_transform(nc, 'EPSG:2264')
   x = st_inscribed_circle(st_geometry(nc_t))
   plot(st_geometry(nc_t), asp = 1, col = grey(.9))
@@ -180,7 +180,7 @@ if (sf_extSoftVersion()["GEOS"] >= "3.9.0") {
 set.seed(1)
 x = st_multipoint(matrix(runif(10),,2))
 box = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))))
-if (sf_extSoftVersion()["GEOS"] >= "3.5.0") {
+if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.5.0") > -1) {
  v = st_sfc(st_voronoi(x, st_sfc(box)))
  plot(v, col = 0, border = 1, axes = TRUE)
  plot(box, add = TRUE, col = 0, border = 1) # a larger box is returned, as documented
@@ -213,7 +213,7 @@ plot(st_centroid(mp), add = TRUE, col = 'red') # centroid of combined geometry
 plot(st_centroid(mp, of_largest_polygon = TRUE), add = TRUE, col = 'blue', pch = 3)
 plot(nc_g, axes = TRUE)
 plot(st_point_on_surface(nc_g), add = TRUE, pch = 3, col = 'red')
-if (sf_extSoftVersion()["GEOS"] >= "3.7.0") {
+if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.7.0") > -1) {
   st_reverse(st_linestring(rbind(c(1,1), c(2,2), c(3,3))))
 }
 (l = st_linestring(rbind(c(0,0), c(1,1), c(0,1), c(1,0), c(0,0))))
