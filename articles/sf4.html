@@ -127,10 +127,10 @@
 <p>Features are represented by records in an <code>sf</code> object, and have feature attributes (all non-geometry fields) and feature geometry. Since <code>sf</code> objects are a subclass of <code>data.frame</code> or <code>tbl_df</code>, operations on feature attributes work identical to how they work on <code>data.frame</code>s, e.g.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span>
-<span class="co">## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1</span>
+<span class="co">## Linking to GEOS 3.9.1, GDAL 3.3.0, PROJ 8.0.1</span>
 <span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">## Reading layer `nc' from data source </span>
-<span class="co">##   `/tmp/RtmpDMBkVl/temp_libpath40f22cee84f4/sf/shape/nc.shp' </span>
+<span class="co">##   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpQCiiIf/temp_libpath2ed274295f63/sf/shape/nc.shp' </span>
 <span class="co">##   using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Geometry type: MULTIPOLYGON</span>
@@ -142,12 +142,12 @@
 <span class="co">## Simple feature collection with 1 feature and 14 fields</span>
 <span class="co">## Geometry type: MULTIPOLYGON</span>
 <span class="co">## Dimension:     XY</span>
-<span class="co">## Bounding box:  xmin: 1193283 ymin: 913341.9 xmax: 1340555 ymax: 1044158</span>
+<span class="co">## Bounding box:  xmin: 1193283 ymin: 913326.4 xmax: 1340553 ymax: 1044143</span>
 <span class="co">## Projected CRS: NAD83 / North Carolina (ftUS)</span>
 <span class="co">##    AREA PERIMETER CNTY_ CNTY_ID NAME  FIPS FIPSNO CRESS_ID BIR74 SID74 NWBIR74</span>
 <span class="co">## 1 0.114     1.442  1825    1825 Ashe 37009  37009        5  1091     1      10</span>
 <span class="co">##   BIR79 SID79 NWBIR79                       geometry</span>
-<span class="co">## 1  1364     0      19 MULTIPOLYGON (((1270814 913...</span></code></pre></div>
+<span class="co">## 1  1364     0      19 MULTIPOLYGON (((1270813 913...</span></code></pre></div>
 <p>prints the first record.</p>
 <p>Many of the tidyverse/dplyr verbs have methods for <code>sf</code> objects. This means that given that both <code>sf</code> and <code>dplyr</code> are loaded, manipulations such as selecting a single attribute will return an <code>sf</code> object:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -164,11 +164,11 @@
 <span class="co">## Simple feature collection with 2 features and 1 field</span>
 <span class="co">## Geometry type: MULTIPOLYGON</span>
 <span class="co">## Dimension:     XY</span>
-<span class="co">## Bounding box:  xmin: 1193283 ymin: 913341.9 xmax: 1441003 ymax: 1044158</span>
+<span class="co">## Bounding box:  xmin: 1193283 ymin: 913326.4 xmax: 1441000 ymax: 1044143</span>
 <span class="co">## Projected CRS: NAD83 / North Carolina (ftUS)</span>
 <span class="co">##   NWBIR74                       geometry</span>
-<span class="co">## 1      10 MULTIPOLYGON (((1270814 913...</span>
-<span class="co">## 2      10 MULTIPOLYGON (((1340555 959...</span></code></pre></div>
+<span class="co">## 1      10 MULTIPOLYGON (((1270813 913...</span>
+<span class="co">## 2      10 MULTIPOLYGON (((1340553 959...</span></code></pre></div>
 <p>which implies that the geometry is sticky, and gets added automatically. If we want to drop geometry, we can coerce to <code>data.frame</code> first, this drops geometry list-columns:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">nc</span> <span class="op">%&gt;%</span> <span class="va">as.data.frame</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">NWBIR74</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>
@@ -184,10 +184,10 @@
 <span class="co">## Simple feature collection with 1 feature and 1 field</span>
 <span class="co">## Geometry type: MULTIPOLYGON</span>
 <span class="co">## Dimension:     XY</span>
-<span class="co">## Bounding box:  xmin: 1193283 ymin: 913341.9 xmax: 1340555 ymax: 1044158</span>
+<span class="co">## Bounding box:  xmin: 1193283 ymin: 913326.4 xmax: 1340553 ymax: 1044143</span>
 <span class="co">## Projected CRS: NAD83 / North Carolina (ftUS)</span>
 <span class="co">##   NWBIR74                       geometry</span>
-<span class="co">## 1      10 MULTIPOLYGON (((1270814 913...</span></code></pre></div>
+<span class="co">## 1      10 MULTIPOLYGON (((1270813 913...</span></code></pre></div>
 <p>and use the <code>drop</code> argument to drop geometries:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>, <span class="st">"NWBIR74"</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">]</span>
@@ -203,7 +203,7 @@
 <span class="co">## Simple feature collection with 4 features and 14 fields</span>
 <span class="co">## Geometry type: MULTIPOLYGON</span>
 <span class="co">## Dimension:     XY</span>
-<span class="co">## Bounding box:  xmin: 1142157 ymin: 823092 xmax: 1448920 ymax: 1044158</span>
+<span class="co">## Bounding box:  xmin: 1142157 ymin: 823077.4 xmax: 1448917 ymax: 1044143</span>
 <span class="co">## Projected CRS: NAD83 / North Carolina (ftUS)</span>
 <span class="co">##     AREA PERIMETER CNTY_ CNTY_ID      NAME  FIPS FIPSNO CRESS_ID BIR74 SID74</span>
 <span class="co">## 1  0.114     1.442  1825    1825      Ashe 37009  37009        5  1091     1</span>
@@ -211,10 +211,10 @@
 <span class="co">## 18 0.199     1.984  1874    1874    Wilkes 37193  37193       97  3146     4</span>
 <span class="co">## 19 0.081     1.288  1880    1880   Watauga 37189  37189       95  1323     1</span>
 <span class="co">##    NWBIR74 BIR79 SID79 NWBIR79                       geometry</span>
-<span class="co">## 1       10  1364     0      19 MULTIPOLYGON (((1270814 913...</span>
-<span class="co">## 2       10   542     3      12 MULTIPOLYGON (((1340555 959...</span>
-<span class="co">## 18     200  3725     7     222 MULTIPOLYGON (((1402677 837...</span>
-<span class="co">## 19      17  1775     1      33 MULTIPOLYGON (((1171158 868...</span></code></pre></div>
+<span class="co">## 1       10  1364     0      19 MULTIPOLYGON (((1270813 913...</span>
+<span class="co">## 2       10   542     3      12 MULTIPOLYGON (((1340553 959...</span>
+<span class="co">## 18     200  3725     7     222 MULTIPOLYGON (((1402673 837...</span>
+<span class="co">## 19      17  1775     1      33 MULTIPOLYGON (((1171157 868...</span></code></pre></div>
 <p>we see that in the result set <code>Ashe</code> is included, as the default value for argument <code>op</code> in <code>[.sf</code> is <code>st_intersects</code>, and <code>Ashe</code> intersects with itself. We could exclude self-intersection by using predicate <code>st_touches</code> (overlapping features don’t touch):</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Ashe</span> <span class="op">=</span> <span class="va">nc</span><span class="op">[</span><span class="va">nc</span><span class="op">$</span><span class="va">NAME</span> <span class="op">==</span> <span class="st">"Ashe"</span>,<span class="op">]</span>
@@ -222,32 +222,32 @@
 <span class="co">## Simple feature collection with 3 features and 14 fields</span>
 <span class="co">## Geometry type: MULTIPOLYGON</span>
 <span class="co">## Dimension:     XY</span>
-<span class="co">## Bounding box:  xmin: 1142157 ymin: 823092 xmax: 1448920 ymax: 1035641</span>
+<span class="co">## Bounding box:  xmin: 1142157 ymin: 823077.4 xmax: 1448917 ymax: 1035625</span>
 <span class="co">## Projected CRS: NAD83 / North Carolina (ftUS)</span>
 <span class="co">##     AREA PERIMETER CNTY_ CNTY_ID      NAME  FIPS FIPSNO CRESS_ID BIR74 SID74</span>
 <span class="co">## 2  0.061     1.231  1827    1827 Alleghany 37005  37005        3   487     0</span>
 <span class="co">## 18 0.199     1.984  1874    1874    Wilkes 37193  37193       97  3146     4</span>
 <span class="co">## 19 0.081     1.288  1880    1880   Watauga 37189  37189       95  1323     1</span>
 <span class="co">##    NWBIR74 BIR79 SID79 NWBIR79                       geometry</span>
-<span class="co">## 2       10   542     3      12 MULTIPOLYGON (((1340555 959...</span>
-<span class="co">## 18     200  3725     7     222 MULTIPOLYGON (((1402677 837...</span>
-<span class="co">## 19      17  1775     1      33 MULTIPOLYGON (((1171158 868...</span></code></pre></div>
+<span class="co">## 2       10   542     3      12 MULTIPOLYGON (((1340553 959...</span>
+<span class="co">## 18     200  3725     7     222 MULTIPOLYGON (((1402673 837...</span>
+<span class="co">## 19      17  1775     1      33 MULTIPOLYGON (((1171157 868...</span></code></pre></div>
 <p>using <code>dplyr</code>, we can do the same by calling the predicate directly:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">nc</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lengths.html">lengths</a></span><span class="op">(</span><span class="fu"><a href="../reference/geos_binary_pred.html">st_touches</a></span><span class="op">(</span><span class="va">.</span>, <span class="va">Ashe</span><span class="op">)</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>
 <span class="co">## Simple feature collection with 3 features and 14 fields</span>
 <span class="co">## Geometry type: MULTIPOLYGON</span>
 <span class="co">## Dimension:     XY</span>
-<span class="co">## Bounding box:  xmin: 1142157 ymin: 823092 xmax: 1448920 ymax: 1035641</span>
+<span class="co">## Bounding box:  xmin: 1142157 ymin: 823077.4 xmax: 1448917 ymax: 1035625</span>
 <span class="co">## Projected CRS: NAD83 / North Carolina (ftUS)</span>
 <span class="co">##    AREA PERIMETER CNTY_ CNTY_ID      NAME  FIPS FIPSNO CRESS_ID BIR74 SID74</span>
 <span class="co">## 1 0.061     1.231  1827    1827 Alleghany 37005  37005        3   487     0</span>
 <span class="co">## 2 0.199     1.984  1874    1874    Wilkes 37193  37193       97  3146     4</span>
 <span class="co">## 3 0.081     1.288  1880    1880   Watauga 37189  37189       95  1323     1</span>
 <span class="co">##   NWBIR74 BIR79 SID79 NWBIR79                       geometry</span>
-<span class="co">## 1      10   542     3      12 MULTIPOLYGON (((1340555 959...</span>
-<span class="co">## 2     200  3725     7     222 MULTIPOLYGON (((1402677 837...</span>
-<span class="co">## 3      17  1775     1      33 MULTIPOLYGON (((1171158 868...</span></code></pre></div>
+<span class="co">## 1      10   542     3      12 MULTIPOLYGON (((1340553 959...</span>
+<span class="co">## 2     200  3725     7     222 MULTIPOLYGON (((1402673 837...</span>
+<span class="co">## 3      17  1775     1      33 MULTIPOLYGON (((1171157 868...</span></code></pre></div>
 </div>
 <div id="aggregating-or-summarizing-feature-sets" class="section level2">
 <h2 class="hasAnchor">
@@ -259,11 +259,11 @@
 <span class="co">## Simple feature collection with 2 features and 1 field</span>
 <span class="co">## Geometry type: GEOMETRY</span>
 <span class="co">## Dimension:     XY</span>
-<span class="co">## Bounding box:  xmin: 406262.2 ymin: 48374.87 xmax: 3052887 ymax: 1044158</span>
+<span class="co">## Bounding box:  xmin: 406265 ymin: 48359.7 xmax: 3052877 ymax: 1044143</span>
 <span class="co">## Projected CRS: NAD83 / North Carolina (ftUS)</span>
 <span class="co">##         frac74                       geometry</span>
-<span class="co">## 1 0.0020406588 MULTIPOLYGON (((2314396 161...</span>
-<span class="co">## 2 0.0009922276 POLYGON ((1402677 837742.5,...</span>
+<span class="co">## 1 0.0020406588 MULTIPOLYGON (((1865542 316...</span>
+<span class="co">## 2 0.0009922276 POLYGON ((1372051 837036.9,...</span>
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">a</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html">grey</a></span><span class="op">(</span><span class="fl">.8</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html">grey</a></span><span class="op">(</span><span class="fl">.5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">Ashe</span><span class="op">)</span>, border <span class="op">=</span> <span class="st">'#ff8888'</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
 <p><img src="sf4_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
