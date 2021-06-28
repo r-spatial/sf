@@ -99,7 +99,7 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 #' @param keep_NA logical; if \code{TRUE}, return all features in \code{to}, if \code{FALSE} return only those with non-NA values (but with \code{row.names} the index corresponding to the feature in \code{to})
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
-#' g = st_make_grid(nc, n = c(20,10))
+#' g = st_make_grid(nc, n = c(10, 5))
 #' a1 = st_interpolate_aw(nc["BIR74"], g, extensive = FALSE)
 #' sum(a1$BIR74) / sum(nc$BIR74) # not close to one: property is assumed spatially intensive
 #' a2 = st_interpolate_aw(nc["BIR74"], g, extensive = TRUE)
