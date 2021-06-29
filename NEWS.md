@@ -1,3 +1,5 @@
+# version 1.0-2
+
 # version 1.0-1
 
 * fix regression in `st_intersection()`: when using s2 attributes were assigned wrongly; #1704
