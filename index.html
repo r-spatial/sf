@@ -42,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0-1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0-2</span>
       </span>
     </div>
 
@@ -120,14 +120,14 @@
 <ul>
 <li>represents simple features as records in a <code>data.frame</code> or <code>tibble</code> with a geometry list-column</li>
 <li>represents natively in R all 17 simple feature types for all dimensions (XY, XYZ, XYM, XYZM)</li>
-<li>interfaces to <a href="https://trac.osgeo.org/geos">GEOS</a> to support geometrical operations including the <a href="https://en.wikipedia.org/wiki/DE-9IM">DE9-IM</a>
-</li>
+<li>interfaces to <a href="https://trac.osgeo.org/geos">GEOS</a> for geometrical operations on projected coordinates, and to <a href="https://s2geometry.io/">s2geometry</a> for geometrical operations on ellipsoidal coordinates</li>
 <li>interfaces to <a href="http://www.gdal.org/">GDAL</a>, supporting all driver options, <code>Date</code> and <code>POSIXct</code> and list-columns</li>
-<li>interfaces to <a href="http://proj.org/">PRØJ</a> for coordinate reference system conversions and transformations</li>
+<li>interfaces to <a href="http://proj.org/">PRØJ</a> for coordinate reference system conversion and transformation</li>
 <li>uses <a href="https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary">well-known-binary</a> serialisations written in C++/Rcpp for fast I/O with GDAL and GEOS</li>
 <li>reads from and writes to spatial databases such as <a href="http://postgis.net/">PostGIS</a> using <a href="https://cran.r-project.org/web/packages/DBI/index.html">DBI</a>
 </li>
-<li>is extended by pkg <a href="https://github.com/r-spatial/lwgeom/">lwgeom</a> for further liblwgeom/PostGIS functions, including some spherical geometry functions</li>
+<li>is extended by <a href="https://github.com/r-spatial/lwgeom/">lwgeom</a> for selected liblwgeom/PostGIS functions</li>
+<li>is extended by <a href="https://github.com/r-spatial/stars/">stars</a> for raster data, and raster or vector data cubes (spatial time series)</li>
 </ul>
 <p><a href="https://gist.github.com/edzer/442d74a5775abcd5068cf3e73b23687b"><img align="left" src="https://user-images.githubusercontent.com/520851/50280460-e35c1880-044c-11e9-9ed7-cc46754e49db.jpg"></a></p>
 <p>(Illustration (c) by <a href="https://twitter.com/allison_horst/status/1071456081308614656">Allison Horst</a>)</p>
