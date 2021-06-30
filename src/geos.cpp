@@ -153,20 +153,23 @@ std::vector<GeomPtr> geometries_from_sfc(GEOSContextHandle_t hGEOSCtxt, Rcpp::Li
 	if (cls[0] == "XYM" || cls[0] == "XYZM")
 		Rcpp::stop("GEOS does not support XYM or XYZM geometries; use st_zm() to drop M\n"); // #nocov
 
-	// xxx
+#ifdef HAVE_390
 	double precision = sfc.attr("precision");
 	bool set_precision = precision != 0.0;
 	if (set_precision)
 		precision = 1/precision;
 	sfc.attr("precision") = 0.0; // so that CPL_write_wkb doesn't do the rounding;
+#endif
 	Rcpp::List wkblst = CPL_write_wkb(sfc, true);
 	std::vector<GeomPtr> g(sfc.size());
 	GEOSWKBReader *wkb_reader = GEOSWKBReader_create_r(hGEOSCtxt);
 	for (int i = 0; i < sfc.size(); i++) {
 		Rcpp::RawVector r = wkblst[i];
 		g[i] = geos_ptr(GEOSWKBReader_read_r(hGEOSCtxt, wkb_reader, &(r[0]), r.size()), hGEOSCtxt);
+#ifdef HAVE_390
 		if (set_precision)
 			g[i] = geos_ptr(GEOSGeom_setPrecision_r(hGEOSCtxt, g[i].get(), precision, 0), hGEOSCtxt);
+#endif
 	}
 	GEOSWKBReader_destroy_r(hGEOSCtxt, wkb_reader);
 	return g;

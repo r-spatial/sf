@@ -585,6 +585,39 @@ CRS:           NA
   a                       geom
 1 2 LINESTRING (3 3, 2 2, 1 1)
 > 
+> p = st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0))))
+> y = st_sfc(p)
+> x = st_sfc(p + 1.001)
+> 
+> x %>% st_set_precision(0) %>% st_intersects(y)
+Sparse geometry binary predicate list of length 1, where the predicate
+was `intersects'
+ 1: (empty)
+> x %>% st_set_precision(10000) %>% st_intersects(y)
+Sparse geometry binary predicate list of length 1, where the predicate
+was `intersects'
+ 1: (empty)
+> x %>% st_set_precision(1000) %>% st_intersects(y)
+Sparse geometry binary predicate list of length 1, where the predicate
+was `intersects'
+ 1: (empty)
+> x %>% st_set_precision(501) %>% st_intersects(y) # no
+Sparse geometry binary predicate list of length 1, where the predicate
+was `intersects'
+ 1: (empty)
+> x %>% st_set_precision(500) %>% st_intersects(y) # yes
+Sparse geometry binary predicate list of length 1, where the predicate
+was `intersects'
+ 1: 1
+> x %>% st_set_precision(100) %>% st_intersects(y)
+Sparse geometry binary predicate list of length 1, where the predicate
+was `intersects'
+ 1: 1
+> x %>% st_set_precision(10) %>% st_intersects(y)
+Sparse geometry binary predicate list of length 1, where the predicate
+was `intersects'
+ 1: 1
+> 
 > proc.time()
    user  system elapsed 
- 10.400   0.088  10.488 
+ 10.031   0.077  10.102 

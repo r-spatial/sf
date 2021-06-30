@@ -264,3 +264,15 @@ if (sf_extSoftVersion()["GEOS"] >= "3.7.0") {
 	print(st_reverse(st_sfc(ls)))
 	print(st_reverse(st_sf(a = 2, geom = st_sfc(ls))))
 }
+
+p = st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0))))
+y = st_sfc(p)
+x = st_sfc(p + 1.001)
+
+x %>% st_set_precision(0) %>% st_intersects(y)
+x %>% st_set_precision(10000) %>% st_intersects(y)
+x %>% st_set_precision(1000) %>% st_intersects(y)
+x %>% st_set_precision(501) %>% st_intersects(y) # no
+x %>% st_set_precision(500) %>% st_intersects(y) # yes
+x %>% st_set_precision(100) %>% st_intersects(y)
+x %>% st_set_precision(10) %>% st_intersects(y)

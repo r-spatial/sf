@@ -1,5 +1,7 @@
 # version 1.0-2
 
+* GEOS (>= 3.9.0) operations use `GEOSGeom_setPrecision_r` to set precision of geometries; #1535
+
 * `st_read()` with specified `query` ignores argument `layers`, and warns if it is given; #1444
 
 # version 1.0-1
