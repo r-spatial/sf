@@ -506,7 +506,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		Rcpp::stop("Cannot open %s; The file doesn't seem to exist.", datasource);
 	}
 
-	if (layer.size() == 0) { // no layer specified
+	if (layer.size() == 0 && Rcpp::CharacterVector::is_na(query[0])) { // no layer specified
 		switch (poDS->GetLayerCount()) {
 			case 0: { // error:
 				Rcpp::stop("No layers in datasource.");
@@ -536,6 +536,8 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 		poLayer = poDS->ExecuteSQL(query[0], NULL, NULL);
 		if (poLayer == NULL)
 			Rcpp::stop("Query execution failed, cannot open layer.\n"); // #nocov
+		if (layer.size())
+			Rcpp::warning("argument layer is ignored when query is specified\n"); // #nocov
 	} else
 		poLayer = 	poDS->GetLayerByName(layer[0]);
 	if (poLayer == NULL) {
@@ -561,7 +563,10 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	}
 
 	if (! quiet) {
-		Rcpp::Rcout << "Reading layer `" << layer[0] << "' from data source ";
+		if (! Rcpp::CharacterVector::is_na(query[0]))
+			Rcpp::Rcout << "Reading query `" << query[0] << "' from data source ";
+		else
+			Rcpp::Rcout << "Reading layer `" << layer[0] << "' from data source ";
 		if (LENGTH(datasource[0]) > (width - (34 + LENGTH(layer[0]))))
 			Rcpp::Rcout << std::endl << "  ";
 		Rcpp::Rcout << "`" << datasource[0] << "' ";
