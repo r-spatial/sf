@@ -1,5 +1,9 @@
 # version 1.0-2
 
+* old-style `crs` objects created with sf < 0.9-0 generate a message, and will cause a warning in the future.
+
+* if `st_crs()` is called with a WKT2 as text input, its `input` field will be replaced with the CRS name (if it has one).
+
 * GEOS (>= 3.9.0) operations use `GEOSGeom_setPrecision_r` to set precision of geometries; #1535
 
 * `st_read()` with specified `query` ignores argument `layers`, and warns if it is given; #1444

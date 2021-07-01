@@ -42,7 +42,9 @@ Ops.crs <- function(e1, e2) {
 #' @details The *crs functions create, get, set or replace the \code{crs} attribute
 #' of a simple feature geometry list-column. This attribute is of class \code{crs},
 #' and is a list consisting of \code{input} (user input, e.g. "EPSG:4326" or "WGS84"
-#' or a proj4string), and \code{wkt}, an automatically generated wkt representation of the crs.
+#' or a proj4string), and \code{wkt}, an automatically generated wkt2 representation of the crs.
+#' If \code{x} is identical to the wkt2 representation, and the CRS has a name, this name
+#' is used for the \code{input} field.
 #'
 #' Comparison of two objects of class \code{crs} uses the GDAL function
 #' \code{OGRSpatialReference::IsSame}.
@@ -72,13 +74,16 @@ st_crs.character = function(x, ...) {
 		crs = make_crs(x)
 		if (is.na(crs))
 			stop(paste("invalid crs:", x))
+		# if we input wkt2, and CRS has a name, use it:
+		if (identical(x, crs$wkt) && !identical(crs$Name, "unknown"))
+			crs$input = crs$Name
 		crs
 	}
 }
 
 fix_crs = function(x) {
 	if (all(c("epsg", "proj4string") %in% names(x))) {
-		# warning("old-style crs object detected; please recreate object with a modern sf::st_crs()")
+		message("old-style crs object detected; please recreate object with a recent sf::st_crs()")
 		x = unclass(x)
 		if (!is.na(x$epsg))
 			st_crs(x$epsg)
