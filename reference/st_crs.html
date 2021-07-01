@@ -255,7 +255,9 @@ argument, or (invisibly) the previous value if it is being set.</p>
     <p>The *crs functions create, get, set or replace the <code>crs</code> attribute
 of a simple feature geometry list-column. This attribute is of class <code>crs</code>,
 and is a list consisting of <code>input</code> (user input, e.g. "EPSG:4326" or "WGS84"
-or a proj4string), and <code>wkt</code>, an automatically generated wkt representation of the crs.</p>
+or a proj4string), and <code>wkt</code>, an automatically generated wkt2 representation of the crs.
+If <code>x</code> is identical to the wkt2 representation, and the CRS has a name, this name
+is used for the <code>input</code> field.</p>
 <p>Comparison of two objects of class <code>crs</code> uses the GDAL function
 <code>OGRSpatialReference::IsSame</code>.</p>
 <p>In case a coordinate reference system is replaced, no transformation takes

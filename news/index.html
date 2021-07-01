@@ -157,6 +157,8 @@
 <a href="#version-10-2" class="anchor"></a>version 1.0-2<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>old-style <code>crs</code> objects created with sf &lt; 0.9-0 generate a message, and will cause a warning in the future.</p></li>
+<li><p>if <code><a href="../reference/st_crs.html">st_crs()</a></code> is called with a WKT2 as text input, its <code>input</code> field will be replaced with the CRS name (if it has one).</p></li>
 <li><p>GEOS (&gt;= 3.9.0) operations use <code>GEOSGeom_setPrecision_r</code> to set precision of geometries; <a href='https://github.com/r-spatial/sf/issues/1535'>#1535</a></p></li>
 <li><p><code><a href="../reference/st_read.html">st_read()</a></code> with specified <code>query</code> ignores argument <code>layers</code>, and warns if it is given; <a href='https://github.com/r-spatial/sf/issues/1444'>#1444</a></p></li>
 </ul>
