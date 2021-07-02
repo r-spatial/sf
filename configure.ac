@@ -390,7 +390,7 @@ if test [ -n "$proj_lib_path" ] ; then
     AC_SUBST([PROJ_LIBS], ["-L${proj_lib_path} ${INPKG_LIBS} -lproj"])
 else
   if test "${proj_config_ok}" = yes; then
-    if [ `uname` = "Darwin" ]; then
+    if test `uname` = "Darwin"; then
       PROJ_LIB_PATH=`${PROJ_CONFIG} --libs --static`
     else
       PROJ_LIB_PATH=`${PROJ_CONFIG} --libs`
