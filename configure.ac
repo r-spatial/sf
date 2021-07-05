@@ -25,7 +25,7 @@ else
     if test [$RVER_MAJOR -lt 3] -o [$RVER_MAJOR -eq 3 -a $RVER_MINOR -lt 3]; then
         AC_MSG_ERROR([sf is not compatible with R versions before 3.3.0])
     else
-        if test [$RVER_MINOR -eq 3]; then
+        if test [$RVER_MAJOR -eq 3 -a $RVER_MINOR -eq 3]; then
             CXX11=`"${RBIN}" CMD config CXX1X`
             CXX11STD=`"${RBIN}" CMD config CXX1XSTD`
         else
@@ -390,7 +390,7 @@ if test [ -n "$proj_lib_path" ] ; then
     AC_SUBST([PROJ_LIBS], ["-L${proj_lib_path} ${INPKG_LIBS} -lproj"])
 else
   if test "${proj_config_ok}" = yes; then
-    if [ `uname` = "Darwin" ]; then
+    if test `uname` = "Darwin"; then
       PROJ_LIB_PATH=`${PROJ_CONFIG} --libs --static`
     else
       PROJ_LIB_PATH=`${PROJ_CONFIG} --libs`
