@@ -1,5 +1,9 @@
 # version 1.0-2
 
+* `rbind.sf` preserves primary geometry column; #1717
+
+* `configure` constrains using `--static` to `Darwin` platform; #1702, #1712, #1713
+
 * old-style `crs` objects created with sf < 0.9-0 generate a message, and will cause a warning in the future.
 
 * when `st_crs()` is called with a WKT2 as text input, its `input` field will be replaced with the CRS name (if it has one).
