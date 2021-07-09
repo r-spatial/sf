@@ -567,10 +567,15 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 			Rcpp::Rcout << "Reading query `" << query[0] << "' from data source ";
 		else
 			Rcpp::Rcout << "Reading layer `" << layer[0] << "' from data source ";
-		if (LENGTH(datasource[0]) > (width - (34 + LENGTH(layer[0]))))
-			Rcpp::Rcout << std::endl << "  ";
+		// if (LENGTH(datasource[0]) > (width - (34 + LENGTH(layer[0]))))
+		Rcpp::String ds(datasource(0));
+		if (layer.size()) { 
+			Rcpp::String la(layer(0));
+			if (strlen(ds.get_cstring()) > (width - (34 + strlen(la.get_cstring()))))
+				Rcpp::Rcout << std::endl << "  ";
+		}
 		Rcpp::Rcout << "`" << datasource[0] << "' ";
-		if (LENGTH(datasource[0]) > (width - 25))
+		if (strlen(ds.get_cstring()) > (width - 25))
 			Rcpp::Rcout << std::endl << "  ";
 		Rcpp::Rcout << "using driver `" << poDS->GetDriverName() << "'" << std::endl;                       // #nocov
 	}
