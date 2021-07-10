@@ -251,7 +251,7 @@ read_sf <- function(..., quiet = TRUE, stringsAsFactors = FALSE, as_tibble = TRU
 }
 
 clean_columns = function(obj, factorsAsCharacter) {
-	permitted = c("character", "integer", "numeric", "Date", "POSIXct", "logical")
+	permitted = c("character", "integer", "numeric", "Date", "POSIXct", "logical", "list")
 	for (i in seq_along(obj)) {
 		if (is.factor(obj[[i]])) {
 			obj[[i]] = if (factorsAsCharacter)
@@ -279,6 +279,11 @@ clean_columns = function(obj, factorsAsCharacter) {
 		# nocov end
 	}
 	colclasses = vapply(obj, function(x) permitted[ which(inherits(x, permitted, which = TRUE) > 0)[1] ] , "")
+	# check that list columns contain raw vectors:
+	for (lc in which(colclasses == "list")) {
+		if (!all(sapply(obj[[lc]], inherits, "raw")))
+			stop("list columns are only allowed with raw vector contents")
+	}
 	structure(obj, colclasses = colclasses)
 }
 
