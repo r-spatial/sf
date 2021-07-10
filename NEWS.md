@@ -1,5 +1,7 @@
 # version 1.0-2
 
+* a `pivot_longer` method is added for `sf` objects (the `data.frame` method works, but raises a warning)
+
 * `rbind.sf` preserves primary geometry column; #1717
 
 * `configure` constrains using `--static` to `Darwin` platform; #1702, #1712, #1713

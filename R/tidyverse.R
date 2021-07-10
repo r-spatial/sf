@@ -325,6 +325,16 @@ gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, fac
 		sf_column_name = attr(data, "sf_column"))
 }
 
+pivot_longer.sf <- function (data, cols, names_to = "name", names_prefix = NULL,
+		names_sep = NULL, names_pattern = NULL, names_ptypes = list(),
+		names_transform = list(), names_repair = "check_unique",
+		values_to = "value", values_drop_na = FALSE, values_ptypes = list(),
+		values_transform = list(), ...) {
+	sf_column_name = attr(data, "sf_column")
+	data = as.data.frame(data)
+	st_as_sf(NextMethod(), sf_column_name = sf_column_name)
+}
+
 
 #' @name tidyverse
 #' @param fill see original function docs
@@ -510,6 +520,7 @@ register_all_s3_methods = function() {
 	register_s3_method("dplyr", "transmute", "sf")
 	register_s3_method("dplyr", "ungroup", "sf")
 	register_s3_method("tidyr", "gather", "sf")
+	register_s3_method("tidyr", "pivot_longer", "sf")
 	register_s3_method("tidyr", "spread", "sf")
 	register_s3_method("tidyr", "nest", "sf")
 	register_s3_method("tidyr", "separate", "sf")
