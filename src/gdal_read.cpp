@@ -54,6 +54,7 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, bool int64
 			case OFTRealList:
 			case OFTIntegerList:
 			case OFTInteger64List:
+			case OFTBinary:
 				out[i] = Rcpp::List(n_features);
 				break;
 			case OFTString:
@@ -368,6 +369,17 @@ Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
 						}
 						lv[i] = nv;
 					}
+					}
+					break;
+				case OFTBinary: {
+					Rcpp::List lv;
+					lv = out[iField];
+					int n;
+					const GByte *bl = poFeature->GetFieldAsBinary(iField, &n);
+					Rcpp::RawVector rv(n);
+					for (int j = 0; j < rv.size(); j++)
+						rv[j] = bl[j];
+					lv[i] = rv;
 					}
 					break;
 				default: // break through: anything else to be converted to string?
