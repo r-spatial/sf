@@ -8,18 +8,15 @@
 #		st_cast(p0, "POLYGON")
 # }
 
-check_spatstat <- function(pkg, X = NULL){
-  if(!requireNamespace(pkg, quietly = TRUE)){
-    stop("package ", pkg, " required, please install it (or the full spatstat package) first")
-  } else{
-    spst_ver <- try(packageVersion("spatstat"), silent = TRUE)
-    if(!inherits(spst_ver, "try-error") && spst_ver < 2.0-0){
-      stop("You have an old version of spatstat installed which is incompatible with ", pkg, 
-           ". Please update spatstat (or uninstall it).")
-    }
-  }
-  if (!is.null(X) && isTRUE(st_is_longlat(X)))
-    stop("Only projected coordinates may be converted to spatstat class objects", call. = FALSE)
+check_spatstat <- function(pkg, X = NULL) {
+	if (!requireNamespace(pkg, quietly = TRUE))
+		stop("package ", pkg, " required, please install it (or the full spatstat package) first")
+	spst_ver <- try(packageVersion("spatstat"), silent = TRUE)
+	if (!inherits(spst_ver, "try-error") && spst_ver < 2.0-0)
+		stop("You have an old version of spatstat installed which is incompatible with ", pkg, 
+			". Please update spatstat (or uninstall it).")
+	if (!is.null(X) && isTRUE(st_is_longlat(X)))
+		stop("Only projected coordinates may be converted to spatstat class objects", call. = FALSE)
 }
 
 #' @name st_as_sf
@@ -31,31 +28,31 @@ check_spatstat <- function(pkg, X = NULL){
 #'   g[st_is(g, "POINT"),]
 #' }
 st_as_sf.ppp = function(x, ...) {
-  check_spatstat("spatstat.geom")
-  # window:
-  win = st_sf(label = "window", geom = st_as_sfc(spatstat.geom::as.owin(x)))
+	check_spatstat("spatstat.geom")
+	# window:
+	win = st_sf(label = "window", geom = st_as_sfc(spatstat.geom::as.owin(x)))
 
-  # points:
-  m = as.matrix(data.frame(x$x, x$y))
-  pointwork = st_sfc(lapply(seq_len(NROW(m)), function(i) st_point(m[i,])))
-  points_sf = st_sf(label = rep("point", NROW(m)), geom = pointwork)
+	# points:
+	m = as.matrix(data.frame(x$x, x$y))
+	pointwork = st_sfc(lapply(seq_len(NROW(m)), function(i) st_point(m[i,])))
+	points_sf = st_sf(label = rep("point", NROW(m)), geom = pointwork)
 
-  # merge window and points:
-  ret = rbind(win, points_sf)
-  if (spatstat.geom::is.marked(x)) {
-	# add marks:
-    m = data.frame(mark = spatstat.geom::marks(x))
-	cbind.sf(m[c(NA, seq_len(nrow(m))), , drop=FALSE], ret)
-  } else
-  	ret
+	# merge window and points:
+	ret = rbind(win, points_sf)
+	if (spatstat.geom::is.marked(x)) {
+		# add marks:
+		m = data.frame(mark = spatstat.geom::marks(x))
+		cbind.sf(m[c(NA, seq_len(nrow(m))), , drop = FALSE], ret)
+	} else
+		ret
 }
 
 #' @name st_as_sf
 #' @export
 st_as_sf.psp = function(x, ...) {
-  check_spatstat("spatstat.geom")
+	check_spatstat("spatstat.geom")
 	# line segments:
- 	m = as.matrix(x$ends)
+	m = as.matrix(x$ends)
 	lst1 = lapply(seq_len(NROW(m)), function(i) st_linestring(matrix(m[i,], 2, byrow = TRUE)))
 
 	# window:
@@ -92,7 +89,7 @@ st_as_sfc.psp <- function(x, ...) {
 #'  plot(st_as_sf(chicago)[-1,"label"])
 #' }
 st_as_sf.lpp = function(x, ...) {
-  check_spatstat("spatstat.linnet")
+	check_spatstat("spatstat.linnet")
 	# lines, polygon:
 	linework_sf = st_as_sf(spatstat.geom::as.psp(spatstat.geom::domain(x)))
 	# points:
@@ -107,7 +104,7 @@ st_as_sf.lpp = function(x, ...) {
 # as.ppp etc methods: from maptools/pkg/R/spatstat1.R
 
 as.ppp.sfc = function(X) {
-  check_spatstat("spatstat.geom", X)
+	check_spatstat("spatstat.geom", X)
 	d = st_dimension(X)
 	if (d[1] == 2 && all(d[-1] == 0)) {
 		W = spatstat.geom::as.owin(X[1])
@@ -124,7 +121,7 @@ as.ppp.sfc = function(X) {
 }
 
 as.ppp.sf = function(X) {
-  check_spatstat("spatstat.geom", X)
+	check_spatstat("spatstat.geom", X)
 	pp = spatstat.geom::as.ppp(st_geometry(X))
 	if (st_dimension(X[1,]) == 2)
 		X = X[-1,]
@@ -139,7 +136,7 @@ as.ppp.sf = function(X) {
 }
 
 as.owin.POLYGON = function(W, ..., fatal, check_polygons = TRUE) {
-  check_spatstat("spatstat.geom", W)
+	check_spatstat("spatstat.geom", W)
 	if (check_polygons)
 		W = check_ring_dir(W)
 	bb = st_bbox(W)
@@ -147,7 +144,7 @@ as.owin.POLYGON = function(W, ..., fatal, check_polygons = TRUE) {
 }
 
 as.owin.MULTIPOLYGON = function(W, ..., fatal, check_polygons = TRUE) {
-  check_spatstat("spatstat.geom", W)
+	check_spatstat("spatstat.geom", W)
 	if (check_polygons)
 		W = check_ring_dir(W)
 	bb = st_bbox(W)
@@ -185,8 +182,8 @@ as.owin.sf = function(W, ...) {
 #' @export
 st_as_sfc.owin = function(x, ...) {
 # FROM: methods for coercion to Spatial Polygons by Adrian Baddeley, pkg maptools
-  check_spatstat("spatstat.geom")
-  x <- spatstat.geom::as.polygonal(x)
+	check_spatstat("spatstat.geom")
+	x <- spatstat.geom::as.polygonal(x)
 	closering <- function(df) { df[c(seq(nrow(df)), 1), ] }
 	pieces <- lapply(x$bdry,
 		function(p) st_polygon(list(closering(cbind(p$x,p$y)))))
@@ -213,8 +210,8 @@ st_as_sf.owin = function(x, ...) {
 
 #' @export
 st_as_sfc.tess <- function(x, ...) {
-  check_spatstat("spatstat.geom")
-  stopifnot(spatstat.geom::is.tess(x))
+	check_spatstat("spatstat.geom")
+	stopifnot(spatstat.geom::is.tess(x))
 	y <- spatstat.geom::tiles(x)
 	nam <- names(y)
 	z <- list()
@@ -224,14 +221,14 @@ st_as_sfc.tess <- function(x, ...) {
 			warning(paste("tile", i, "defective\n", as.character(zi)))
 		else
 			z[[i]] <- zi
-    }
+	}
 	do.call(c, z)
 }
 
 # methods for 'as.psp' for sp classes by Adrian Baddeley
 as.psp.LINESTRING <- function(from, ..., window=NULL, marks=NULL, fatal) {
-  check_spatstat("spatstat.geom")
-  xy <- unclass(from)
+	check_spatstat("spatstat.geom")
+	xy <- unclass(from)
 	df <- as.data.frame(cbind(xy[-nrow(xy), , drop=FALSE], xy[-1, , drop=FALSE]))
 	if (is.null(window)) {
 		xrange <- range(xy[,1])
@@ -242,9 +239,9 @@ as.psp.LINESTRING <- function(from, ..., window=NULL, marks=NULL, fatal) {
 }
 
 as.psp.MULTILINESTRING <- function(from, ..., window=NULL, marks=NULL, fatal) {
-  check_spatstat("spatstat.geom")
-  y <- lapply(from, as.psp.LINESTRING, window=window)
-    z <- do.call(spatstat.geom::superimpose,c(y,list(W=window)))
+	check_spatstat("spatstat.geom")
+	y <- lapply(from, as.psp.LINESTRING, window=window)
+	z <- do.call(spatstat.geom::superimpose,c(y,list(W=window)))
 	if(!is.null(marks))
 		spatstat.geom::setmarks(z, marks)
 	else
@@ -252,16 +249,16 @@ as.psp.MULTILINESTRING <- function(from, ..., window=NULL, marks=NULL, fatal) {
 }
 
 as.psp.sfc_MULTILINESTRING <- function(from, ..., window=NULL, marks=NULL,
-                                 characterMarks=FALSE, fatal) {
-  check_spatstat("spatstat.geom", from)
-  
+			characterMarks=FALSE, fatal) {
+
+	check_spatstat("spatstat.geom", from)
 	if(is.null(window)) {
 		bb = st_bbox(from)
 		window = spatstat.geom::owin(bb[c("xmin", "xmax")], bb[c("ymin", "ymax")]) 
 	}
 	lin <- unclass(from)
 	y <- lapply(lin, as.psp.MULTILINESTRING, window=window)
-    z <- do.call(spatstat.geom::superimpose, c(y, list(W = window)))
+	z <- do.call(spatstat.geom::superimpose, c(y, list(W = window)))
 	if(!is.null(marks))
 		spatstat.geom::setmarks(z, marks)
 	else
@@ -273,8 +270,8 @@ as.psp.sfc = function(from, ...) {
 }
 
 as.psp.sf <- function(from, ..., window=NULL, marks=NULL, fatal) {
-  check_spatstat("spatstat.geom", from)
-  
+	check_spatstat("spatstat.geom", from)
+
 	y <- st_geometry(from)
 	if (!inherits(y, "sfc_MULTILINESTRING"))
 		stop("geometries should be of type LINESTRING")
