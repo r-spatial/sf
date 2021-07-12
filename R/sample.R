@@ -135,9 +135,8 @@ st_poly_sample = function(x, size, ..., type = "random",
 		x = lapply(suppressWarnings(st_cast(st_geometry(x), "POLYGON")), st_sfc, crs = st_crs(x))
 		a = sapply(x, st_area)
 		ret = mapply(st_poly_sample, x, size = size * a / sum_a, type = type, ...)
-		return(do.call(c, ret))
-	}
-	if (type %in% c("hexagonal", "regular", "random")) {
+		do.call(c, ret)
+	} else if (type %in% c("hexagonal", "regular", "random")) {
 
 		if (isTRUE(st_is_longlat(x))) {
 			if (type == "regular")
@@ -160,28 +159,28 @@ st_poly_sample = function(x, size, ..., type = "random",
 		bb = st_bbox(x)
 
 		pts = if (type == "hexagonal") {
-			dx = sqrt(a0 / size / (sqrt(3)/2))
-			hex_grid_points(x, pt = offset, dx = dx)
-		} else if (type == "regular") {
-			dx = as.numeric(sqrt(a0 / size))
-			offset = c((offset[1] - bb["xmin"]) %% dx,
-				(offset[2] - bb["ymin"]) %% dx) + bb[c("xmin", "ymin")]
-			n = c(round((bb["xmax"] - offset[1])/dx), round((bb["ymax"] - offset[2])/dx))
-			st_make_grid(x, cellsize = c(dx, dx), offset = offset, n = n, what = "corners")
-		} else if (type == "random") {
-			lon = runif(size, bb[1], bb[3])
-			lat = if (isTRUE(st_is_longlat(x))) { # sampling on the sphere:
-				toRad = pi/180
-				lat0 = (sin(bb[2] * toRad) + 1)/2
-				lat1 = (sin(bb[4] * toRad) + 1)/2
-				y = runif(size, lat0, lat1)
-				asin(2 * y - 1) / toRad # http://mathworld.wolfram.com/SpherePointPicking.html
-			} else
-				runif(size, bb[2], bb[4])
-			m = cbind(lon, lat)
-			st_sfc(lapply(seq_len(nrow(m)), function(i) st_point(m[i,])), crs = st_crs(x))
-		}
-		pts[x]
+				dx = sqrt(a0 / size / (sqrt(3)/2))
+				hex_grid_points(x, pt = offset, dx = dx)
+			} else if (type == "regular") {
+				dx = as.numeric(sqrt(a0 / size))
+				offset = c((offset[1] - bb["xmin"]) %% dx,
+					(offset[2] - bb["ymin"]) %% dx) + bb[c("xmin", "ymin")]
+				n = c(round((bb["xmax"] - offset[1])/dx), round((bb["ymax"] - offset[2])/dx))
+				st_make_grid(x, cellsize = c(dx, dx), offset = offset, n = n, what = "corners")
+			} else if (type == "random") {
+				lon = runif(size, bb[1], bb[3])
+				lat = if (isTRUE(st_is_longlat(x))) { # sampling on the sphere:
+					toRad = pi/180
+					lat0 = (sin(bb[2] * toRad) + 1)/2
+					lat1 = (sin(bb[4] * toRad) + 1)/2
+					y = runif(size, lat0, lat1)
+					asin(2 * y - 1) / toRad # http://mathworld.wolfram.com/SpherePointPicking.html
+				} else
+					runif(size, bb[2], bb[4])
+				m = cbind(lon, lat)
+				st_sfc(lapply(seq_len(nrow(m)), function(i) st_point(m[i,])), crs = st_crs(x))
+			}
+		pts[x] # cut out x from bbox
 	} else { # try to go into spatstat
 		if (!requireNamespace("spatstat.core", quietly = TRUE))
 			stop("package spatstat.core required, please install it (or the full spatstat package) first")
