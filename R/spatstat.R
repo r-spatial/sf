@@ -41,7 +41,7 @@ st_as_sf.ppp = function(x, ...) {
 	ret = rbind(win, points_sf)
 	if (spatstat.geom::is.marked(x)) {
 		# add marks:
-		m = data.frame(mark = spatstat.geom::marks(x))
+		m = as.data.frame(spatstat.geom::marks(x))
 		cbind.sf(m[c(NA, seq_len(nrow(m))), , drop = FALSE], ret)
 	} else
 		ret
@@ -61,7 +61,7 @@ st_as_sf.psp = function(x, ...) {
 	label = c("window", rep("segment", NROW(m)))
 	ret = st_sf(label = label, geom = st_sfc(c(list(win), lst1)))
 	if (spatstat.geom::is.marked(x)) { # add marks:
-		m = data.frame(mark = spatstat.geom::marks(x))
+		m = as.data.frame(spatstat.geom::marks(x))
 		cbind.sf(m[c(NA, seq_len(nrow(m))), , drop = FALSE], ret)
 	} else
 		ret
