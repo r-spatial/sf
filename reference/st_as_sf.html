@@ -407,17 +407,17 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 #&gt; Bounding box:  xmin: 580797.3 ymin: 675238.7 xmax: 584945.3 ymax: 678313.5
 #&gt; CRS:           NA
 #&gt; First 10 features:
-#&gt;    label group season       date                      geom
-#&gt; 2  point major    dry 2006-01-06 POINT (582518.4 676886.2)
-#&gt; 3  point major    dry 2006-01-10   POINT (581823 677422.7)
-#&gt; 4  point major    dry 2006-01-15   POINT (582131 676937.9)
-#&gt; 5  point major    dry 2006-01-24   POINT (582111.9 677420)
-#&gt; 6  point minor    dry 2006-01-27 POINT (582585.1 677509.7)
-#&gt; 7  point major    dry 2006-01-28 POINT (582302.3 677521.6)
-#&gt; 8  point major    dry 2006-02-01 POINT (583167.2 676730.5)
-#&gt; 9  point major    dry 2006-02-03 POINT (583584.5 677207.1)
-#&gt; 10 point major    dry 2006-02-13 POINT (583117.8 676850.3)
-#&gt; 11 point major    dry 2006-02-15 POINT (582902.8 676724.1)</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='http://spatstat.org/'>spatstat.linnet</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+#&gt;    mark.group mark.season  mark.date label                      geom
+#&gt; 1       major         dry 2006-01-06 point POINT (582518.4 676886.2)
+#&gt; 2       major         dry 2006-01-10 point   POINT (581823 677422.7)
+#&gt; 3       major         dry 2006-01-15 point   POINT (582131 676937.9)
+#&gt; 4       major         dry 2006-01-24 point   POINT (582111.9 677420)
+#&gt; 5       minor         dry 2006-01-27 point POINT (582585.1 677509.7)
+#&gt; 6       major         dry 2006-01-28 point POINT (582302.3 677521.6)
+#&gt; 7       major         dry 2006-02-01 point POINT (583167.2 676730.5)
+#&gt; 8       major         dry 2006-02-03 point POINT (583584.5 677207.1)
+#&gt; 9       major         dry 2006-02-13 point POINT (583117.8 676850.3)
+#&gt; 10      major         dry 2006-02-15 point POINT (582902.8 676724.1)</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='http://spatstat.org/'>spatstat.linnet</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
  <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>chicago</span><span class='op'>)</span>
  <span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>chicago</span><span class='op'>)</span><span class='op'>[</span><span class='st'>"label"</span><span class='op'>]</span><span class='op'>)</span>
  <span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>chicago</span><span class='op'>)</span><span class='op'>[</span><span class='op'>-</span><span class='fl'>1</span>,<span class='st'>"label"</span><span class='op'>]</span><span class='op'>)</span>
