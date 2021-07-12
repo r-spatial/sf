@@ -19,7 +19,7 @@ check_spatstat <- function(pkg, X = NULL){
     }
   }
   if (!is.null(X) && isTRUE(st_is_longlat(X)))
-    stop("Only projected coordinates may be converted to spatstat class objects")
+    stop("Only projected coordinates may be converted to spatstat class objects", call. = FALSE)
 }
 
 #' @name st_as_sf
@@ -44,12 +44,11 @@ st_as_sf.ppp = function(x, ...) {
   ret = rbind(win, points_sf)
   if (spatstat.geom::is.marked(x)) {
 	# add marks:
-    m = as.data.frame(spatstat.geom::marks(x))
-	cbind.sf(ret, m[c(NA, seq_len(nrow(m))),])
+    m = data.frame(mark = spatstat.geom::marks(x))
+	cbind.sf(m[c(NA, seq_len(nrow(m))), , drop=FALSE], ret)
   } else
   	ret
 }
-
 
 #' @name st_as_sf
 #' @export
@@ -65,8 +64,8 @@ st_as_sf.psp = function(x, ...) {
 	label = c("window", rep("segment", NROW(m)))
 	ret = st_sf(label = label, geom = st_sfc(c(list(win), lst1)))
 	if (spatstat.geom::is.marked(x)) { # add marks:
-		m = as.data.frame(spatstat.geom::marks(x))
-		cbind.sf(ret, m[c(NA, seq_len(nrow(m))),])
+		m = data.frame(mark = spatstat.geom::marks(x))
+		cbind.sf(m[c(NA, seq_len(nrow(m))), , drop = FALSE], ret)
 	} else
 		ret
 }
