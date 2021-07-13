@@ -1,14 +1,16 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 # minimal docker file to get sp and sf running on ubunty 16.04 image,
 # using gdal/geos/proj from ppa:ubuntugis/ubuntugis-unstable
 
 MAINTAINER "edzerpebesma" edzer.pebesma@uni-muenster.de
 
-RUN apt-get update && apt-get install -y software-properties-common
+RUN apt-get update && apt-get install -y software-properties-common dirmngr
 RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
-RUN echo "deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran40/" >> /etc/apt/sources.list
+
+# add the R 4.0 repo from CRAN -- adjust 'focal' to 'groovy' or 'bionic' as needed
+RUN add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
 
 RUN apt-key  adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
 
@@ -36,8 +38,8 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	tk-dev \
 	wget
 
+#libv8-3.14-dev \
 RUN apt-get install -y \
-	libv8-3.14-dev \
 	libjq-dev \
 	libprotobuf-dev \
 	libxml2-dev \
@@ -62,9 +64,9 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	libtiff5-dev
 
 #RUN git clone --depth 1 https://github.com/OSGeo/PROJ.git
-RUN wget http://download.osgeo.org/proj/proj-7.2.0.tar.gz
-RUN tar zxvf proj-7.2.0.tar.gz
-RUN cd proj-7.2.0 \
+RUN wget http://download.osgeo.org/proj/proj-8.0.1.tar.gz
+RUN tar zxvf proj-8.0.1.tar.gz
+RUN cd proj-8.0.1 \
   && ls -l \
   && mkdir build \
   && cd build \
@@ -84,8 +86,8 @@ RUN cd proj-7.2.0 \
 # GDAL:
 
 # https://download.osgeo.org/gdal/3.1.0/gdal-3.1.0rc2.tar.gz
-ENV GDAL_VERSION 3.2.0
-ENV GDAL_VERSION_NAME 3.2.0
+ENV GDAL_VERSION 3.3.0
+ENV GDAL_VERSION_NAME 3.3.0
 
 RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
@@ -106,7 +108,7 @@ RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME
 #  && ldconfig
 
 # GEOS:
-ENV GEOS_VERSION 3.9.0
+ENV GEOS_VERSION 3.9.1
 
 RUN wget http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
   && bzip2 -d geos-*bz2 \
@@ -151,6 +153,7 @@ RUN Rscript -e 'install.packages("rgdal", repos="http://R-Forge.R-project.org")'
 # after rgdal:
 RUN Rscript -e 'install.packages(c("XML"))'
 RUN Rscript -e 'install.packages(c("tmaptools", "tmap", "mapview", "s2"))'
+RUN Rscript -e 'install.packages(c("terra"))'
 
 RUN (cd sf; git pull)
 RUN R CMD build --no-build-vignettes --no-manual sf

@@ -47,6 +47,14 @@ st_as_sf.ppp = function(x, ...) {
 		ret
 }
 
+#' @export
+st_as_sf.ppplist = function(x, ...) {
+	w = st_geometry(st_as_sf(x[[1]]))[1]
+	sim = st_sfc(lapply(x, function(p) do.call(c, st_geometry(st_as_sf(p))[-1])))
+	st_sf(label = c("window", names(x)), geom = c(w, sim))
+}
+
+
 #' @name st_as_sf
 #' @export
 st_as_sf.psp = function(x, ...) {
@@ -103,19 +111,21 @@ st_as_sf.lpp = function(x, ...) {
 
 # as.ppp etc methods: from maptools/pkg/R/spatstat1.R
 
-as.ppp.sfc = function(X) {
+as.ppp.sfc = function(X, W = NULL, ...) {
 	check_spatstat("spatstat.geom", X)
 	d = st_dimension(X)
-	if (d[1] == 2 && all(d[-1] == 0)) {
-		W = spatstat.geom::as.owin(X[1])
-		X = X[-1]
-		check = TRUE
-	} else if (all(d == 0)) { # no window in first feature geometry:
-		bb <- st_bbox(X)
-		W = spatstat.geom::owin(bb[c("xmin", "xmax")], bb[c("ymin", "ymax")])
-		check = FALSE
-	} else
-		stop("sfc object does not consist of points, or a window followed by points")
+	if (is.null(W)) {
+		if (d[1] == 2 && all(d[-1] == 0)) {
+			W = spatstat.geom::as.owin(X[1])
+			X = X[-1]
+			check = TRUE
+		} else if (all(d == 0)) { # no window in first feature geometry:
+			bb <- st_bbox(X)
+			W = spatstat.geom::owin(bb[c("xmin", "xmax")], bb[c("ymin", "ymax")])
+			check = FALSE
+		} else
+			stop("sfc object does not consist of points, or a window followed by points")
+	}
 	cc = st_coordinates(X)
 	spatstat.geom::ppp(cc[,1], cc[,2], window = W, marks = NULL, check = check)
 }
