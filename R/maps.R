@@ -47,11 +47,15 @@ map2pol = function(xyList, ID) {
 }
 
 map2lin = function(xyList, ID) {
-	# group into MULTIPOLYGON:
+	# group into MULTILINESTRING:
 	uID = unique(ID)
 	ret = vector("list", length(uID))
-	for (g in seq_along(uID))
-		ret[[g]] = st_multilinestring(xyList[ uID[g] == ID ])
+	for (g in seq_along(uID)) {
+               x = xyList[uID[g] == ID]
+               x = x[!sapply(x, is.null)]
+               ret[[g]] = st_multilinestring(x)
+        }
+#		ret[[g]] = st_multilinestring(xyList[ uID[g] == ID ])
 	st_sfc(ret)
 }
 
