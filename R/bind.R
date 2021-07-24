@@ -18,8 +18,12 @@
 rbind.sf = function(..., deparse.level = 1) {
 	dots = list(...)
 	dots = dots[!sapply(dots, is.null)]
+	nr = sapply(dots, nrow)
+	sf_column = if (any(nr > 0))
+			attr(dots[[ which(nr > 0)[1] ]], "sf_column")
+		else
+			NULL
 	crs0 = st_crs(dots[[1]])
-	sf_column = attr(dots[[1]], "sf_column")
 	if (length(dots) > 1L) { # check all crs are equal...
 		equal_crs = vapply(dots[-1L], function(x) st_crs(x) == crs0, TRUE)
 		if (!all(equal_crs))
