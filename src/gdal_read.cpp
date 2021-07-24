@@ -587,7 +587,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 				Rcpp::Rcout << std::endl << "  ";
 		}
 		Rcpp::Rcout << "`" << datasource[0] << "' ";
-		if (strlen(ds.get_cstring()) > (width - 25))
+		if (((int) strlen(ds.get_cstring())) > (width - 25))
 			Rcpp::Rcout << std::endl << "  ";
 		Rcpp::Rcout << "using driver `" << poDS->GetDriverName() << "'" << std::endl;                       // #nocov
 	}

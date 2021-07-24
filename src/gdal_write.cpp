@@ -141,7 +141,9 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 						(int) rd[3], (int) rd[2], (int) rd[1],
 						(float) rd[0], 100); // nTZFlag 0: unkown; 1: local; 100: GMT
 				} break;
-			case OFTBinary: {
+			case OFTBinary: 
+#if GDAL_VERSION_NUM > 3000000
+				{
 				Rcpp::List lv;
 				lv = obj[j];
 				Rcpp::RawVector rv;
@@ -154,6 +156,7 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 					poFeature->SetField(j, size, ptr);
 				}
 				} break;
+#endif
 			default:
 				// we should never get here! // #nocov start
 				Rcpp::Rcout << "field with unsupported type ignored" << std::endl; 
