@@ -23,7 +23,7 @@ This vignette describes how simple features, i.e. records that come with a geome
 * summarising feature sets
 * joining two feature sets based on feature geometry
 
-Features are represented by records in an `sf` object, and have feature attributes (all non-geometry fields) and feature geometry. Since `sf` objects are a subclass of `data.frame` or `tbl_df`, operations on feature attributes work identical to how they work on `data.frame`s, e.g.
+Features are represented by records in an `sf` object, and have feature attributes (all non-geometry fields) and feature geometry. Since `sf` objects are a subclass of `data.frame` or `tbl_df`, operations on feature attributes work identically to how they work on `data.frame`s, e.g.
 
 ```{r}
 library(sf)
@@ -33,7 +33,7 @@ nc[1,]
 ``` 
 prints the first record.
 
-Many of the tidyverse/dplyr verbs have methods for `sf` objects. This means that given that both `sf` and `dplyr` are loaded, manipulations such as selecting a single attribute will return an `sf` object:
+Many of the tidyverse/dplyr verbs have methods for `sf` objects. This means that if both `sf` and `dplyr` are loaded, manipulations such as selecting a single attribute will return an `sf` object:
 ```{r}
 library(dplyr)
 nc %>% select(NWBIR74) %>% head(2)
@@ -60,19 +60,19 @@ Ashe = nc[nc$NAME == "Ashe",]
 class(Ashe)
 nc[Ashe,]
 ```
-we see that in the result set `Ashe` is included, as the default value for argument `op` in `[.sf` is `st_intersects`, and `Ashe` intersects with itself. We could exclude self-intersection by using predicate `st_touches` (overlapping features don't touch):
+We see that in the result set `Ashe` is included, as the default value for argument `op` in `[.sf` is `st_intersects`, and `Ashe` intersects with itself. We could exclude self-intersection by using predicate `st_touches` (overlapping features don't touch):
 ```{r}
 Ashe = nc[nc$NAME == "Ashe",]
 nc[Ashe, op = st_touches]
 ```
-using `dplyr`, we can do the same by calling the predicate directly:
+Using `dplyr`, we can do the same by calling the predicate directly:
 ```{r}
 nc %>% filter(lengths(st_touches(., Ashe)) > 0)
 ```
 
 ## Aggregating or summarizing feature sets
 
-Suppose we want to compare the 1974 fraction of SID (sudden infant death) of the counties that intersect with `Ashe` to the remaining ones. We can do this by
+Suppose we want to compare the 1974 fraction of SID (sudden infant death) of the counties that intersect with `Ashe` to the remaining ones. We can do this by:
 ```{r}
 a <- aggregate(nc[, c("SID74", "BIR74")], list(Ashe_nb = lengths(st_intersects(nc, Ashe)) > 0), sum)
 (a <- a %>% mutate(frac74 = SID74 / BIR74) %>% select(frac74))
@@ -82,7 +82,7 @@ plot(st_geometry(Ashe), border = '#ff8888', add = TRUE, lwd = 2)
 
 ## Joining two feature sets based on attributes
 
-The usual join verbs base R (`merge`) and of dplyr (`left_join`, etc) work for `sf` objects as well; the joining takes place on attributes (ignoring geometries). In case of no matching geometry, an empty geometry is substituted. The second argument should be a `data.frame` (or similar), not an `sf` object:
+The usual join verbs of base R (`merge`) and of dplyr (`left_join`, etc) work for `sf` objects as well; the joining takes place on attributes (ignoring geometries). In case of no matching geometry, an empty geometry is substituted. The second argument should be a `data.frame` (or similar), not an `sf` object:
 
 ```{r}
 x = st_sf(a = 1:2, geom = st_sfc(st_point(c(0,0)), st_point(c(1,1))))
@@ -114,7 +114,7 @@ st_join(y, x)
 
 and the geometry retained is that of the first argument.
 
-The spatial join predicate can be controlled with any function compatible to `st_intersects` (the default), e.g.
+The spatial join predicate can be controlled with any function compatible with `st_intersects` (the default), e.g.
 
 ```{r}
 st_join(x, y, join = st_covers) # no matching y records: points don't cover circles

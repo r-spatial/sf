@@ -39,7 +39,7 @@ For single geometries, `st_cast` will
 3. convert from MULTIXX to XX if MULTIXX does not have length one, but it will warn about the loss of information
 4. convert GEOMETRYCOLLECTION of length one to its component if 
 
-Examples of the first three types are
+Examples of the first three types are:
 ```{r}
 library(sf)
 suppressPackageStartupMessages(library(dplyr))
@@ -47,7 +47,7 @@ st_point(c(1,1)) %>% st_cast("MULTIPOINT")
 st_multipoint(rbind(c(1,1))) %>% st_cast("POINT")
 st_multipoint(rbind(c(1,1),c(2,2))) %>% st_cast("POINT")
 ```
-Examples of the fourth type are
+Examples of the fourth type are:
 ```{r}
 st_geometrycollection(list(st_point(c(1,1)))) %>% st_cast("POINT")
 ```
@@ -64,7 +64,7 @@ class(st_geometry(st_read(shp, quiet = TRUE, type = 1)))
 
 This option is handled by the GDAL library; in case of failure to convert to the target type, the original types are returned, which in this case is a mix of `POLYGON` and `MULTIPOLYGON` geometries, leading to a `GEOMETRY` as superclass. When we try to read multipolygons as polygons, all secondary rings of multipolygons get lost. 
 
-When functions return objects with mixed geometry type (`GEOMETRY`), downstream functions such as `st_write` may have difficulty handling them. For some of these cases, `st_cast` may help modifying their type.  For sets of geometry objects (`sfc`) and simple feature sets (`sf), `st_cast` can be used by specifying the target type, or without specifying it. 
+When functions return objects with mixed geometry type (`GEOMETRY`), downstream functions such as `st_write` may have difficulty handling them. For some of these cases, `st_cast` may help modify their type.  For sets of geometry objects (`sfc`) and simple feature sets (`sf), `st_cast` can be used by specifying the target type, or without specifying it. 
 
 ```{r}
 ls <- st_linestring(rbind(c(0,0),c(1,1),c(2,1)))
@@ -142,7 +142,7 @@ s2 = s
 st_crs(s2) <- "+proj=longlat +datum=WGS84"
 all.equal(s1, s2)
 ```
-an alternative, more pipe-friendly version of `st_crs<-` is 
+An alternative, more pipe-friendly version of `st_crs<-` is 
 ```{r}
 s1 %>% st_set_crs(4326)
 ```
@@ -150,7 +150,7 @@ s1 %>% st_set_crs(4326)
 ### Coordinate reference system transformations
 
 If we change the coordinate reference system from one non-missing
-value into another non-missing value, the crs is is changed without
+value into another non-missing value, the CRS is is changed without
 modifying any coordinates, but a warning is issued that this
 did not reproject values:
 ```{r}
@@ -158,7 +158,7 @@ s3 <- s1 %>% st_set_crs(4326) %>% st_set_crs(3857)
 ```
 A cleaner way to do this that better expresses intention and does
 not generate this warning is to first wipe the CRS by assigning it 
-a missing value, and then setting it to the intended value.
+a missing value, and then set it to the intended value.
 ```{r}
 s3 <- s1  %>% st_set_crs(NA) %>% st_set_crs(3857)
 ```
@@ -173,8 +173,8 @@ for which we see that coordinates are actually modified (projected).
 ## Geometrical operations
 
 All geometrical operations `st_op(x)` or `st_op2(x,y)` work
-both for `sf` objects as well as `sfc` objects `x` and `y`; since
-the operations work on the geometries, the non-geometries parts of
+both for `sf` objects and for `sfc` objects `x` and `y`; since
+the operations work on the geometries, the non-geometry parts of
 an `sf` object are simply discarded. Also, all binary operations
 `st_op2(x,y)` called with a single argument, as `st_op2(x)`, are
 handled as `st_op2(x,x)`.
@@ -310,6 +310,7 @@ plot(x)
 plot(y, add = TRUE)
 plot(st_intersection(st_union(x),st_union(y)), add = TRUE, col = 'red')
 ```
+
 Note that the function `st_intersects` returns a logical matrix indicating whether each geometry pair intersects (see the previous section in this vignette).
 
 To get _everything but_ the intersection, use `st_difference` or `st_sym_difference`:
@@ -346,7 +347,7 @@ plot(pol.seg, col = 'grey')
 points(pol.seg[[1]])
 ```
 
-Function `st_polygonize` polygonizes a multilinestring, as far as the points form a closed polygon:
+Function `st_polygonize` polygonizes a multilinestring, as long as the points form a closed polygon:
 ```{r,fig=TRUE}
 par(mfrow=c(1,2),mar=c(0,0,1,0))
 mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
