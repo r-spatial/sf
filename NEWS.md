@@ -1,3 +1,5 @@
+# version 1.0-3
+
 # version 1.0-2
 
 * `st_read()` and `st_write()` using GDAL handle binary attributes (OFTBinary fields) ; #1721
