@@ -136,7 +136,7 @@
 <a href="#blogs-presentations-vignettes-sp-sf-wiki" class="anchor"></a>Blogs, presentations, vignettes, sp-sf wiki</h3>
 <ul>
 <li>an open access <a href="https://journal.r-project.org/archive/2018/RJ-2018-009/index.html">R Journal article</a> summarizes the package</li>
-<li>package vignettes: <a href="https://r-spatial.github.io/sf/articles/sf1.html">first</a>, <a href="https://r-spatial.github.io/sf/articles/sf2.html">second</a>, <a href="https://r-spatial.github.io/sf/articles/sf3.html">third</a>, <a href="https://r-spatial.github.io/sf/articles/sf4.html">forth</a>, <a href="https://r-spatial.github.io/sf/articles/sf5.html">fifth</a>, <a href="https://r-spatial.github.io/sf/articles/sf6.html">sixth</a>
+<li>package vignettes: <a href="https://r-spatial.github.io/sf/articles/sf1.html">first</a>, <a href="https://r-spatial.github.io/sf/articles/sf2.html">second</a>, <a href="https://r-spatial.github.io/sf/articles/sf3.html">third</a>, <a href="https://r-spatial.github.io/sf/articles/sf4.html">fourth</a>, <a href="https://r-spatial.github.io/sf/articles/sf5.html">fifth</a>, <a href="https://r-spatial.github.io/sf/articles/sf6.html">sixth</a>, <a href="https://r-spatial.github.io/sf/articles/sf7.html">seventh</a>
 </li>
 <li>blog posts: <a href="http://r-spatial.org/r/2016/02/15/simple-features-for-r.html">first</a>, <a href="http://r-spatial.org/r/2016/07/18/sf2.html">second</a>, <a href="http://r-spatial.org/r/2016/11/02/sfcran.html">third</a>, <a href="http://r-spatial.org/r/2017/01/12/newssf.html">fourth</a>
 </li>
@@ -160,20 +160,20 @@
 <p>Install either from CRAN with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"sf"</span><span class="op">)</span></code></pre></div>
-<p>this will install binary packages on Windows and MacOS, unless you configured R such that it tries to install source packages; in that case, see below.</p>
-<p>Install development versions from github with</p>
+<p>This will install binary packages on Windows and MacOS, unless you configured R such that it tries to install source packages; in that case, see below.</p>
+<p>Install development versions from GitHub with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">devtools</span><span class="op">)</span>
 <span class="fu">install_github</span><span class="op">(</span><span class="st">"r-spatial/sf"</span><span class="op">)</span></code></pre></div>
 <div id="windows" class="section level3">
 <h3 class="hasAnchor">
 <a href="#windows" class="anchor"></a>Windows</h3>
-<p>Installing sf from source works under windows when <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> is installed. This downloads the system requirements from <a href="https://github.com/rwinlib/">rwinlib</a>.</p>
+<p>Installing sf from source works under Windows when <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> is installed. This downloads the system requirements from <a href="https://github.com/rwinlib/">rwinlib</a>.</p>
 </div>
 <div id="macos" class="section level3">
 <h3 class="hasAnchor">
 <a href="#macos" class="anchor"></a>MacOS</h3>
-<p>The easiest way to install <code>gdal</code> is using Homebrew. Recent versions of homebrew include a full-featured up-to-date <a href="https://github.com/Homebrew/homebrew-core/blob/master/Formula/gdal.rb">gdal formula</a>, which installs <code>proj</code> and <code>gdal</code> at the same time:</p>
+<p>The easiest way to install <code>gdal</code> is using Homebrew. Recent versions of Homebrew include a full-featured up-to-date <a href="https://github.com/Homebrew/homebrew-core/blob/master/Formula/gdal.rb">gdal formula</a>, which installs <code>proj</code> and <code>gdal</code> at the same time:</p>
 <pre><code>brew install pkg-config
 brew install gdal</code></pre>
 <p>Once gdal is installed, you will be able to install <code>sf</code> package from source in R. With the current version of <code>proj</code> (<code>7.0.0</code>) on homebrew, installation requires additional configuration:</p>
@@ -183,11 +183,11 @@ brew install gdal</code></pre>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">devtools</span><span class="op">)</span>
 <span class="fu">install_github</span><span class="op">(</span><span class="st">"r-spatial/sf"</span>, configure.args <span class="op">=</span> <span class="st">"--with-proj-lib=/usr/local/lib/"</span><span class="op">)</span></code></pre></div>
-<p>If you are using <code>sf</code> and <code>rgdal</code> together it is necessary to install <code>rgdal</code> from source using this configuration:</p>
+<p>If you are using <code>sf</code> and <code>rgdal</code> together, it is necessary to install <code>rgdal</code> from source using this configuration:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"rgdal"</span>, configure.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"--with-proj-lib=/usr/local/lib/"</span>, <span class="st">"--with-proj-include=/usr/local/include/"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>Alternatively <a href="https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html">these instructions</a> explain how to install gdal using kyngchaos frameworks.</p>
-<p>For Mac OS 11 Big Sur source install instruction see <a href="https://github.com/r-spatial/sf/issues/1536#issuecomment-727342736">here</a></p>
+<p>Alternatively, <a href="https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html">these instructions</a> explain how to install gdal using kyngchaos frameworks.</p>
+<p>For Mac OS 11 Big Sur source install instruction, see <a href="https://github.com/r-spatial/sf/issues/1536#issuecomment-727342736">here</a></p>
 </div>
 <div id="linux" class="section level3">
 <h3 class="hasAnchor">
@@ -203,7 +203,7 @@ brew install gdal</code></pre>
 <span id="cb8-2"><a href="#cb8-2"></a><span class="fu">sudo</span> apt-get update</span>
 <span id="cb8-3"><a href="#cb8-3"></a><span class="fu">sudo</span> apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev </span></code></pre></div>
 <p>Adding this PPA is required for installing <code>sf</code> on older versions of Ubuntu (e.g. Xenial).</p>
-<p>Another option, for advanced users, is to install dependencies from source; see e.g. an older <a href="https://github.com/r-spatial/sf/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml">travis</a> config file for hints.</p>
+<p>Another option, for advanced users, is to install dependencies from source; see e.g. an older <a href="https://github.com/r-spatial/sf/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml">Travis</a> config file for hints.</p>
 </div>
 <div id="fedora" class="section level4">
 <h4 class="hasAnchor">
@@ -214,7 +214,7 @@ brew install gdal</code></pre>
 <div id="arch" class="section level4">
 <h4 class="hasAnchor">
 <a href="#arch" class="anchor"></a>Arch</h4>
-<p>Get gdal, proj and geos from the main repos and udunits from the AUR:</p>
+<p>Get gdal, proj and geos from the main repos, and udunits from the AUR:</p>
 <pre><code>pacman -S gdal proj geos
 yay/pacaur/yaourt/whatever -S udunits</code></pre>
 </div>
@@ -227,7 +227,7 @@ yay/pacaur/yaourt/whatever -S udunits</code></pre>
 <div id="multiple-gdal-geos-andor-proj-versions-on-your-system" class="section level3">
 <h3 class="hasAnchor">
 <a href="#multiple-gdal-geos-andor-proj-versions-on-your-system" class="anchor"></a>Multiple GDAL, GEOS and/or PROJ versions on your system</h3>
-<p>In case you use dynamic linking (installation from source) and have multiple versions of these libraries installed (e.g. one from ubuntugis-unstable, another installed from source in <code>/usr/local/lib</code>) then this will in general not work, even when setting <code>LD_LIBRARY_PATH</code> manually. See <a href="https://github.com/r-spatial/sf/issues/844">here</a> for the reason why.</p>
+<p>If you use dynamic linking (installation from source) and have multiple versions of these libraries installed (e.g. one from ubuntugis-unstable, another installed from source in <code>/usr/local/lib</code>) then this will in general not work, even when setting <code>LD_LIBRARY_PATH</code> manually. See <a href="https://github.com/r-spatial/sf/issues/844">here</a> for the reason why.</p>
 </div>
 <div id="lwgeom" class="section level3">
 <h3 class="hasAnchor">
