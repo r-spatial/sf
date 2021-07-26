@@ -18,7 +18,7 @@
 rbind.sf = function(..., deparse.level = 1) {
 	dots = list(...)
 	dots = dots[!sapply(dots, is.null)]
-	nr = sapply(dots, nrow)
+	nr = sapply(dots, NROW)
 	sf_column = if (any(nr > 0))
 			attr(dots[[ which(nr > 0)[1] ]], "sf_column")
 		else
