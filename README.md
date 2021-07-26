@@ -31,7 +31,7 @@ A package that provides [simple features access](https://en.wikipedia.org/wiki/S
 ### Blogs, presentations, vignettes, sp-sf wiki
 
 * an open access [R Journal article](https://journal.r-project.org/archive/2018/RJ-2018-009/index.html) summarizes the package
-* package vignettes: [first](https://r-spatial.github.io/sf/articles/sf1.html), [second](https://r-spatial.github.io/sf/articles/sf2.html), [third](https://r-spatial.github.io/sf/articles/sf3.html), [forth](https://r-spatial.github.io/sf/articles/sf4.html), [fifth](https://r-spatial.github.io/sf/articles/sf5.html), [sixth](https://r-spatial.github.io/sf/articles/sf6.html)
+* package vignettes: [first](https://r-spatial.github.io/sf/articles/sf1.html), [second](https://r-spatial.github.io/sf/articles/sf2.html), [third](https://r-spatial.github.io/sf/articles/sf3.html), [fourth](https://r-spatial.github.io/sf/articles/sf4.html), [fifth](https://r-spatial.github.io/sf/articles/sf5.html), [sixth](https://r-spatial.github.io/sf/articles/sf6.html), [seventh](https://r-spatial.github.io/sf/articles/sf7.html)
 * blog posts: [first](http://r-spatial.org/r/2016/02/15/simple-features-for-r.html), [second](http://r-spatial.org/r/2016/07/18/sf2.html), [third](http://r-spatial.org/r/2016/11/02/sfcran.html), [fourth](http://r-spatial.org/r/2017/01/12/newssf.html)
 * the original R Consortium ISC [proposal](PROPOSAL.md), the R Consortium [blog post](https://www.r-consortium.org/blog/2017/01/03/simple-features-now-on-cran)
 * presentations: [rstudio::conf 2018](https://edzer.github.io/rstudio_conf/#1) ([video](https://www.rstudio.com/resources/videos/tidy-spatial-data-analysis/)), [UseR! 2016](http://pebesma.staff.ifgi.de/pebesma_sfr.pdf)
@@ -48,9 +48,9 @@ Install either from CRAN with:
 ```r
 install.packages("sf")
 ```
-this will install binary packages on Windows and MacOS, unless you configured R such that it tries to install source packages; in that case, see below.
+This will install binary packages on Windows and MacOS, unless you configured R such that it tries to install source packages; in that case, see below.
 
-Install development versions from github with
+Install development versions from GitHub with:
 ```r
 library(devtools)
 install_github("r-spatial/sf")
@@ -58,11 +58,11 @@ install_github("r-spatial/sf")
 
 ### Windows
 
-Installing sf from source works under windows when [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is installed. This downloads the system requirements from [rwinlib](https://github.com/rwinlib/). 
+Installing sf from source works under Windows when [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is installed. This downloads the system requirements from [rwinlib](https://github.com/rwinlib/). 
 
 ### MacOS
 
-The easiest way to install `gdal` is using Homebrew. Recent versions of homebrew include a full-featured up-to-date [gdal formula](https://github.com/Homebrew/homebrew-core/blob/master/Formula/gdal.rb), which installs `proj` and `gdal` at the same time:
+The easiest way to install `gdal` is using Homebrew. Recent versions of Homebrew include a full-featured up-to-date [gdal formula](https://github.com/Homebrew/homebrew-core/blob/master/Formula/gdal.rb), which installs `proj` and `gdal` at the same time:
 
 ```
 brew install pkg-config
@@ -82,15 +82,15 @@ library(devtools)
 install_github("r-spatial/sf", configure.args = "--with-proj-lib=/usr/local/lib/")
 ```
 
-If you are using `sf` and `rgdal` together it is necessary to install `rgdal` from source using this configuration:
+If you are using `sf` and `rgdal` together, it is necessary to install `rgdal` from source using this configuration:
 
 ```r
 install.packages("rgdal", configure.args = c("--with-proj-lib=/usr/local/lib/", "--with-proj-include=/usr/local/include/"))
 ```
 
-Alternatively [these instructions](https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html) explain how to install gdal using kyngchaos frameworks.
+Alternatively, [these instructions](https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html) explain how to install gdal using kyngchaos frameworks.
 
-For Mac OS 11 Big Sur source install instruction see [here](https://github.com/r-spatial/sf/issues/1536#issuecomment-727342736)
+For Mac OS 11 Big Sur source install instruction, see [here](https://github.com/r-spatial/sf/issues/1536#issuecomment-727342736)
 
 ### Linux
 
@@ -114,7 +114,7 @@ sudo apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev
 
 Adding this PPA is required for installing `sf` on older versions of Ubuntu (e.g. Xenial).
 
-Another option, for advanced users, is to install dependencies from source; see e.g. an older [travis](https://github.com/r-spatial/sf/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml) config file for hints.
+Another option, for advanced users, is to install dependencies from source; see e.g. an older [Travis](https://github.com/r-spatial/sf/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml) config file for hints.
 
 #### Fedora
 The following command installs all required dependencies:
@@ -124,7 +124,7 @@ sudo dnf install gdal-devel proj-devel proj-epsg proj-nad geos-devel sqlite-deve
 
 #### Arch
 
-Get gdal, proj and geos from the main repos and udunits from the AUR:
+Get gdal, proj and geos from the main repos, and udunits from the AUR:
 
 ```
 pacman -S gdal proj geos
@@ -136,7 +136,7 @@ To install on Debian, the [rocker geospatial](https://github.com/rocker-org/geos
 
 ### Multiple GDAL, GEOS and/or PROJ versions on your system
 
-In case you use dynamic linking (installation from source) and have multiple versions of these libraries installed (e.g. one from ubuntugis-unstable, another installed from source in `/usr/local/lib`) then this will in general not work, even when setting `LD_LIBRARY_PATH` manually. See [here](https://github.com/r-spatial/sf/issues/844) for the reason why. 
+If you use dynamic linking (installation from source) and have multiple versions of these libraries installed (e.g. one from ubuntugis-unstable, another installed from source in `/usr/local/lib`) then this will in general not work, even when setting `LD_LIBRARY_PATH` manually. See [here](https://github.com/r-spatial/sf/issues/844) for the reason why. 
 
 ### lwgeom
 
