@@ -37,7 +37,7 @@ or one of the \code{spatstat} methods such as \code{Thomas} for calling \code{sp
 
 \item{warn_if_not_integer}{logical; if \code{FALSE} then no warning is emitted if \code{size} is not an integer}
 
-\item{by_polygon}{logical; for \code{MULTIPOLYGON} geometries, should the effort be split by \code{POLYGON}? See https://github.com/r-spatial/sf/issues/1480https://github.com/r-spatial/sf/issues/1480
+\item{by_polygon}{logical; for \code{MULTIPOLYGON} geometries, should the effort be split by \code{POLYGON}? See https://github.com/r-spatial/sf/issues/1480
 the same as specified by \code{size}? \code{TRUE} by default. Only applies to polygons, and
 when \code{type = "random"}.}
 }
