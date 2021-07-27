@@ -22,7 +22,7 @@ st_sample = function(x, size, ...) UseMethod("st_sample")
 #' @param type character; indicates the spatial sampling type; one of \code{random}, \code{hexagonal} (triangular really), \code{regular},
 #' or one of the \code{spatstat} methods such as \code{Thomas} for calling \code{spatstat.core::rThomas} (see Details).
 #' @param exact logical; should the length of output be exactly
-#' @param by_polygon logical; for \code{MULTIPOLYGON} geometries, should the effort be split by \code{POLYGON}? See https://github.com/r-spatial/sf/issues/1480https://github.com/r-spatial/sf/issues/1480
+#' @param by_polygon logical; for \code{MULTIPOLYGON} geometries, should the effort be split by \code{POLYGON}? See https://github.com/r-spatial/sf/issues/1480
 #' the same as specified by \code{size}? \code{TRUE} by default. Only applies to polygons, and
 #' when \code{type = "random"}.
 #' @return an \code{sfc} object containing the sampled \code{POINT} geometries
