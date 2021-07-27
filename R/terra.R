@@ -14,12 +14,14 @@ st_as_sf.SpatVector = function(x, ..., hex = TRUE) {
 st_crs.SpatRaster = function(x, ...) {
 	if (!requireNamespace("terra", quietly = TRUE))
 		stop("package terra required, please install it first") # nocov
-	st_crs(terra::crs(x))
+	string = terra::crs(x)
+	if (string == "") st_crs(NA) else st_crs(string)
 }
 
 #' @export
 st_crs.SpatVector = function(x, ...) {
 	if (!requireNamespace("terra", quietly = TRUE))
 		stop("package terra required, please install it first") # nocov
-	st_crs(terra::crs(x))
+	string = terra::crs(x)
+	if (string == "") st_crs(NA) else st_crs(string)
 }
