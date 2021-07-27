@@ -119,7 +119,7 @@ Another option, for advanced users, is to install dependencies from source; see 
 #### Fedora
 The following command installs all required dependencies:
 ```sh
-sudo dnf install gdal-devel proj-devel proj-epsg proj-nad geos-devel sqlite-devel udunits2-devel
+sudo dnf install gdal-devel proj-devel geos-devel sqlite-devel udunits2-devel
 ```
 
 #### Arch
