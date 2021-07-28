@@ -185,7 +185,7 @@
     </tr>
     <tr>
       <th>...</th>
-      <td><p>ignored</p></td>
+      <td><p>passed on to <a href='https://r-spatial.github.io/s2/reference/s2_is_collection.html'>s2_distance</a> or <a href='https://r-spatial.github.io/s2/reference/s2_closest_feature.html'>s2_distance_matrix</a></p></td>
     </tr>
     <tr>
       <th>y</th>
@@ -221,7 +221,7 @@
 <p>If <code>by_element</code> is <code>FALSE</code> <code>st_distance</code> returns a dense numeric matrix of dimension length(x) by length(y); otherwise it returns a numeric vector of length <code>x</code> or <code>y</code>, the shorter one being recycled. Distances involving empty geometries are <code>NA</code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>great circle distance calculations use function <code>geod_inverse</code> from PROJ; see Karney, Charles FF, 2013, Algorithms for geodesics, Journal of Geodesy 87(1), 43--55</p>
+    <p>great circle distance calculations use by default spherical distances (<a href='https://r-spatial.github.io/s2/reference/s2_is_collection.html'>s2_distance</a> or <a href='https://r-spatial.github.io/s2/reference/s2_closest_feature.html'>s2_distance_matrix</a>); if <code><a href='s2.html'>sf_use_s2()</a></code> is <code>FALSE</code>, ellipsoidal distances are computed using <a href='https://rdrr.io/pkg/lwgeom/man/geod.html'>st_geod_distance</a> which uses function <code>geod_inverse</code> from GeographicLib (part of PROJ); see Karney, Charles FF, 2013, Algorithms for geodesics, Journal of Geodesy 87(1), 43--55</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='geos_query.html'>st_dimension</a>, <a href='st_cast.html'>st_cast</a> to convert geometry types</p></div>
