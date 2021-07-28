@@ -28,7 +28,7 @@ st_distance(
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
-\item{...}{ignored}
+\item{...}{passed on to \link[s2]{s2_distance} or \link[s2]{s2_distance_matrix}}
 
 \item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}}
 
@@ -55,7 +55,7 @@ If \code{by_element} is \code{FALSE} \code{st_distance} returns a dense numeric 
 Compute Euclidian or great circle distance between pairs of geometries; compute, the area or the length of a set of geometries.
 }
 \details{
-great circle distance calculations use function \code{geod_inverse} from PROJ; see Karney, Charles FF, 2013, Algorithms for geodesics, Journal of Geodesy 87(1), 43--55
+great circle distance calculations use by default spherical distances (\link[s2]{s2_distance} or \link[s2]{s2_distance_matrix}); if \code{sf_use_s2()} is \code{FALSE}, ellipsoidal distances are computed using \link[lwgeom]{st_geod_distance} which uses function \code{geod_inverse} from GeographicLib (part of PROJ); see Karney, Charles FF, 2013, Algorithms for geodesics, Journal of Geodesy 87(1), 43--55
 }
 \examples{
 b0 = st_polygon(list(rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))))
