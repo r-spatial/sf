@@ -431,7 +431,7 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 		# check arguments
 		cl <- as.list(match.call())[-1L]
 		if ("overwrite" %in% names(cl)) {
-			stop("Argument `overwite` in `st_write()` is deprecated, use `delete_layer` instead.", call. = FALSE)
+			stop("Argument `overwrite` in `st_write()` is deprecated, use `delete_layer` instead.", call. = FALSE)
 		}
 
 		check_append_delete(append, delete_layer)
