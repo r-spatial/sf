@@ -13,6 +13,7 @@ Rcpp::LogicalVector CPL_proj_h(bool b = false) {
 
 #if defined(HAVE_PROJ_H) && !defined(ACCEPT_USE_OF_DEPRECATED_PROJ_API_H) // new api
 # include <proj.h>
+#endif
 
 #if PROJ_VERSION_MAJOR > 7
 # define HAVE_71
