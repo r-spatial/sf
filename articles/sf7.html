@@ -377,32 +377,32 @@
   <span class="va">uk_buffer_sf</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">uk_projected</span>, dist <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span>
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.070   0.005   0.076</span>
+<span class="co">##   0.068   0.005   0.073</span>
 <span class="co"># sf way with few than the 30 segments in the buffer</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="op">{</span>
   <span class="va">uk_projected</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">uk_sfc</span>, <span class="fl">27700</span><span class="op">)</span>
   <span class="va">uk_buffer_sf2</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">uk_projected</span>, dist <span class="op">=</span> <span class="fl">20000</span>, nQuadSegs <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span>
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.037   0.001   0.038</span>
+<span class="co">##   0.036   0.001   0.037</span>
 <span class="co"># s2 with default cell size</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="op">{</span>
   <span class="va">uk_buffer</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span>
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.029   0.000   0.029</span>
+<span class="co">##   0.031   0.001   0.032</span>
 <span class="co"># s2 with 10000 cells</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="op">{</span>
   <span class="va">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span>, max_cells <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span>
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.275   0.002   0.278</span>
+<span class="co">##   0.283   0.002   0.285</span>
 <span class="co"># s2 with 100 cells</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="op">{</span>
   <span class="va">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span>, max_cells <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span>
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.003   0.000   0.003</span></code></pre></div>
+<span class="co">##   0.004   0.000   0.004</span></code></pre></div>
 <p>The result of the previous benchmarks emphasise the point that there are trade-offs between geographic resolution and computational resources, something that web developers working on geographic services such as Google Maps understand well. In this case the default setting of 1000 cells, which runs slightly faster than the default transform -&gt; buffer workflow, is probably appropriate given the low resolution of the input geometry representing the UK.</p>
 </div>
 <div id="st_buffer-or-st_is_within_distance" class="section level2">
