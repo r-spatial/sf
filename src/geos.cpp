@@ -550,14 +550,19 @@ Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = tru
 			(GEOSMessageHandler_r) __countErrorHandler, (void *) &notice);
 #endif
 	}
-	std::vector<GeomPtr> gmv = geometries_from_sfc(hGEOSCtxt, sfc, NULL); // where notice might be set!
-	Rcpp::LogicalVector out(gmv.size());
+	Rcpp::LogicalVector out(sfc.size());
 	for (int i = 0; i < out.length(); i++) {
-		int ret = GEOSisValid_r(hGEOSCtxt, gmv[i].get());
+		// get geometry i:
+		Rcpp::List geom_i = Rcpp::List::create(sfc[i]);
+		geom_i.attr("precision") = sfc.attr("precision");
+		geom_i.attr("class") = sfc.attr("class");
+		std::vector<GeomPtr> gmv = geometries_from_sfc(hGEOSCtxt, geom_i, NULL); // where notice might be set!
+		int ret = GEOSisValid_r(hGEOSCtxt, gmv[0].get());
 		if (NA_on_exception && (ret == 2 || notice != 0))
 			out[i] = NA_LOGICAL; // no need to set notice back here, as we only consider 1 geometry #nocov
 		else
 			out[i] = chk_(ret);
+		notice = 0; // reset.
 	}
 #ifdef HAVE350
 	GEOSContext_setNoticeHandler_r(hGEOSCtxt, __warningHandler);
