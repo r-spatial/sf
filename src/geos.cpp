@@ -568,7 +568,7 @@ Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = tru
 			out[i] = NA_LOGICAL; // no need to set notice back here, as we only consider 1 geometry #nocov
 		else
 			out[i] = chk_(ret);
-		notice = 0; // reset.
+		notice = 0; // reset notice.
 	}
 #ifdef HAVE350
 	GEOSContext_setNoticeHandler_r(hGEOSCtxt, __warningHandler);
