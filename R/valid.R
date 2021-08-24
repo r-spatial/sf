@@ -23,18 +23,12 @@ st_is_valid.sfc = function(x, ..., NA_on_exception = TRUE, reason = FALSE) {
 		if (NA_on_exception) {
 			ret = rep(NA_character_, length(x))
 			not_na = !is.na(st_is_valid(x, reason = FALSE))
-			ret[not_na] = CPL_geos_is_valid_reason(x)
+			ret[not_na] = CPL_geos_is_valid_reason(x[not_na])
 			ret
 		} else
 			CPL_geos_is_valid_reason(x)
-	} else if (! NA_on_exception) {
+	} else
 		CPL_geos_is_valid(x, as.logical(NA_on_exception))
-	} else {
-		ret = vector("logical", length(x))
-		for (i in seq_along(x))
-			ret[i] = CPL_geos_is_valid(x[i], as.logical(NA_on_exception))
-		ret
-	}
 }
 
 #' @export

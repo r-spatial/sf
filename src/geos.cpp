@@ -556,6 +556,12 @@ Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = tru
 		Rcpp::List geom_i = Rcpp::List::create(sfc[i]);
 		geom_i.attr("precision") = sfc.attr("precision");
 		geom_i.attr("class") = sfc.attr("class");
+		geom_i.attr("crs") = sfc.attr("crs");
+		SEXP classes = sfc.attr("classes");
+		if (classes != R_NilValue) {
+			Rcpp::CharacterVector cl = sfc.attr("classes");
+			geom_i.attr("classes") = cl[i];
+		}
 		std::vector<GeomPtr> gmv = geometries_from_sfc(hGEOSCtxt, geom_i, NULL); // where notice might be set!
 		int ret = GEOSisValid_r(hGEOSCtxt, gmv[0].get());
 		if (NA_on_exception && (ret == 2 || notice != 0))
