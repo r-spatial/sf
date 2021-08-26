@@ -1,5 +1,9 @@
 # version 1.0-3
 
+* fix `st_cast()` for `GEOMETRYCOLLECTIONS` containing empty geometries; #1767
+
+* fix `st_is_valid()` for bogus polygons and projected coordinates; #1666, #1760; #1761
+
 # version 1.0-2
 
 * `st_read()` and `st_write()` using GDAL handle binary attributes (OFTBinary fields) ; #1721
