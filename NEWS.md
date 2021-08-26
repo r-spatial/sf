@@ -1,5 +1,7 @@
 # version 1.0-3
 
+* add coerce from `sgbp` to `sparseMatrix`; #1750
+
 * fix `st_cast()` for `GEOMETRYCOLLECTIONS` containing empty geometries; #1767
 
 * fix `st_is_valid()` for bogus polygons and projected coordinates; #1666, #1760; #1761

@@ -80,3 +80,12 @@ Ops.sgbp = function(e1, e2) {
 as.data.frame.sgbp = function(x, ...) {
 	data.frame(row.id = rep(seq_along(x), lengths(x)), col.id = unlist(x))
 }
+
+setOldClass("sgbp")
+
+setAs("sgbp", "sparseMatrix", function(from) {
+	if (! requireNamespace("Matrix", quietly = TRUE))
+		stop("package Matrix required, please install it first")
+	idx = as.data.frame(from)
+	Matrix::sparseMatrix(i = idx$row.id, j = idx$col.id, x = 1)
+})

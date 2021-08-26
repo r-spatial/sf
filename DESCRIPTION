@@ -80,6 +80,7 @@ Suggests:
     lwgeom (>= 0.2-1),
     maps,
     mapview,
+    Matrix,
     microbenchmark,
     odbc,
     pillar,

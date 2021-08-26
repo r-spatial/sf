@@ -3,6 +3,7 @@ context("sf: geos tests")
 skip_if_not_installed("rgeos")
 
 test_that("st_relate works", {
+  skip_if_not_installed("sp")
   r1 = st_relate(st_sfc(st_point(c(0,0))), st_sfc(st_linestring(rbind(c(0,0),c(1,1)))))
   library(sp)
   p = SpatialPoints(matrix(0,1,2))
@@ -85,9 +86,6 @@ test_that("st_area() works on GEOMETRY in longlat (#131)", {
   expect_equal(st_area(w), 1:2)
   expect_silent(st_area(st_set_crs(w, 4326))) # outcome might depend on backend used: lwgeom if proj.4 < 490, else proj.4
 })
-
-
-
 
 nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 pnc <- st_transform(nc[4:6, ], "+proj=laea +lon_0=-90")
