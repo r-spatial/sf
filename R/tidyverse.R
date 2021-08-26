@@ -293,8 +293,12 @@ distinct.sf <- function(.data, ..., .keep_all = FALSE) {
 		stop("rlang required: install first?")
 
 	.data = dplyr::distinct(.data, ..., .keep_all = .keep_all)
-	.data[[ sf_column ]] = geom[ .data[[ sf_column ]] ]
-	st_as_sf(.data, sf_column_name = sf_column)
+	if (is.null(.data[[ sf_column ]]))
+		.data
+	else {
+		.data[[ sf_column ]] = geom[ .data[[ sf_column ]] ]
+		st_as_sf(.data, sf_column_name = sf_column)
+	}
 }
 
 ## tidyr methods:
