@@ -1,6 +1,6 @@
 # version 1.0-3
 
-* add coerce from `sgbp` to `sparseMatrix`; #1750
+* add coerce method from `sgbp` to `sparseMatrix`; #1750
 
 * fix `st_cast()` for `GEOMETRYCOLLECTIONS` containing empty geometries; #1767
 
