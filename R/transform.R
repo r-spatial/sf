@@ -96,6 +96,7 @@ st_transform.sfc = function(x, crs = st_crs(x), ...,
 	} else 
 		stopifnot(length(pipeline) == 1)
 
+	crs_input = crs
 	crs = make_crs(crs)
 
 	# FIXME: check for wkt here too WKT TODO:
@@ -111,7 +112,7 @@ st_transform.sfc = function(x, crs = st_crs(x), ...,
 
 	if (length(pipeline)) {
 		if (!crs_missing && !is.na(crs)) { # verify pipeline is a legitimate option:
-			if (!pipeline[1] %in% sf_proj_pipelines(st_crs(x), crs)$definition)
+			if (!pipeline[1] %in% sf_proj_pipelines(st_crs(x), crs_input)$definition)
 				warning("pipeline not found in PROJ-suggested candidate transformations")
 		} else
 			crs = NA_crs_  # to avoid st_crs(x) is crs of the returned object
