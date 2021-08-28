@@ -188,6 +188,11 @@ ggplot() +
 
 Package `mapview` creates interactive maps in html pages, using package `leaflet` as a workhorse. Extensive examples are found [here](https://r-spatial.github.io/mapview/).
 
+```{r echo=FALSE, eval=TRUE}
+library(mapview)
+mapviewOptions(fgb = FALSE)
+```
+
 ```{r, eval = FALSE}
 library(mapview)
 mapviewOptions(fgb = FALSE)
