@@ -3,23 +3,12 @@
 \name{s2}
 \alias{s2}
 \alias{sf_use_s2}
-\alias{st_as_sfc.s2_geography}
-\alias{st_as_sf.s2_geography}
 \alias{st_as_s2}
 \alias{st_as_s2.sf}
 \alias{st_as_s2.sfc}
 \title{functions for spherical geometry, using s2 package}
 \usage{
 sf_use_s2(use_s2)
-
-\method{st_as_sfc}{s2_geography}(
-  x,
-  ...,
-  crs = st_crs(4326),
-  endian = match(.Platform$endian, c("big", "little")) - 1L
-)
-
-\method{st_as_sf}{s2_geography}(x, ..., crs = st_crs(4326))
 
 st_as_s2(x, ...)
 
@@ -35,16 +24,14 @@ for geographical coordinate operations}
 
 \item{...}{passed on}
 
-\item{crs}{coordinate reference system; object of class \code{crs}}
-
-\item{endian}{integer; 0 or 1: defaults to the endian of the native machine}
-
 \item{oriented}{logical; if \code{FALSE}, polygons that
 cover more than half of the globe are inverted; if \code{TRUE}, no reversal
 takes place and it is assumed that the inside of the polygon is to the
 left of the polygon's path.}
 
 \item{rebuild}{logical; call \link[s2]{s2_rebuild} on the geometry (think of this as a \code{st_make_valid} on the sphere)}
+
+\item{crs}{coordinate reference system; object of class \code{crs}}
 }
 \value{
 \code{sf_use_s2} returns the value of this variable before (re)setting it,

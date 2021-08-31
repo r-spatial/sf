@@ -24,7 +24,7 @@ sf_use_s2 = function(use_s2) {
 		ret_val
 }
 
-#' @name s2
+#' @name st_as_sfc
 #' @export
 #' @param endian integer; 0 or 1: defaults to the endian of the native machine
 st_as_sfc.s2_geography = function(x, ..., crs = st_crs(4326),
@@ -32,7 +32,7 @@ st_as_sfc.s2_geography = function(x, ..., crs = st_crs(4326),
 	st_cast(st_as_sfc(s2::s2_as_binary(x, endian = endian), ..., crs = crs))
 }
 
-#' @name s2
+#' @name st_as_sf
 #' @export
 st_as_sf.s2_geography = function(x, ..., crs = st_crs(4326)) {
 	st_sf(geometry = st_as_sfc(x, ..., crs = crs))
