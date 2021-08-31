@@ -285,12 +285,15 @@ summary(as.vector(d1)-as.vector(d2))
 # Predicates
 
 All unary and binary predicates are available in `s2`, except for
-`st_relate` with a pattern. In addition, when using the `s2` predicates
+`st_relate` with a pattern. In addition, when using the `s2` predicates,
+depending on the `s2_model`, intersections with neighbours are only reported
+when `s2_model` is `closed` (the default):
 ```{r}
 sf_use_s2(FALSE)
 st_intersects(nc[1:3,], nc[1:3,]) # self-intersections + neighbours
 st_intersects(nc[1:3,], nc[1:3,], s2_model = "semi-open") # only self-intersections
 ```
+
 
 # Transformations
 
