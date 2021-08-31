@@ -150,7 +150,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Convert foreign geometry object to an sfc object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/db.R'><code>R/db.R</code></a>, <a href='https://github.com/r-spatial/sf/blob/master/R/sfc.R'><code>R/sfc.R</code></a>, <a href='https://github.com/r-spatial/sf/blob/master/R/wkb.R'><code>R/wkb.R</code></a>, and 3 more</small>
+    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/db.R'><code>R/db.R</code></a>, <a href='https://github.com/r-spatial/sf/blob/master/R/sfc.R'><code>R/sfc.R</code></a>, <a href='https://github.com/r-spatial/sf/blob/master/R/wkb.R'><code>R/wkb.R</code></a>, and 4 more</small>
     <div class="hidden name"><code>st_as_sfc.Rd</code></div>
     </div>
 
@@ -214,7 +214,15 @@
 <span class='fu'>st_as_sfc</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span>, precision <span class='op'>=</span> <span class='fl'>0</span>, forceMulti <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
 <span class='co'># S3 method for map</span>
-<span class='fu'>st_as_sfc</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'>st_as_sfc</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for s2_geography</span>
+<span class='fu'>st_as_sfc</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>...</span>,
+  crs <span class='op'>=</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span><span class='op'>(</span><span class='fl'>4326</span><span class='op'>)</span>,
+  endian <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/match.html'>match</a></span><span class='op'>(</span><span class='va'>.Platform</span><span class='op'>$</span><span class='va'>endian</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"big"</span>, <span class='st'>"little"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>-</span> <span class='fl'>1L</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -241,7 +249,7 @@
     </tr>
     <tr>
       <th>crs</th>
-      <td><p>integer or character; coordinate reference system for the</p></td>
+      <td><p>coordinate reference system to be assigned; object of class <code>crs</code></p></td>
     </tr>
     <tr>
       <th>GeoJSON</th>
@@ -255,6 +263,10 @@ geometry, see <code><a href='st_crs.html'>st_crs()</a></code></p></td>
     <tr>
       <th>forceMulti</th>
       <td><p>logical; if <code>TRUE</code>, force coercion into <code>MULTIPOLYGON</code> or <code>MULTILINE</code> objects, else autodetect</p></td>
+    </tr>
+    <tr>
+      <th>endian</th>
+      <td><p>integer; 0 or 1: defaults to the endian of the native machine</p></td>
     </tr>
     </table>
 

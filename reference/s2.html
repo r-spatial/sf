@@ -160,17 +160,6 @@
 
     <pre class="usage"><span class='fu'>sf_use_s2</span><span class='op'>(</span><span class='va'>use_s2</span><span class='op'>)</span>
 
-<span class='co'># S3 method for s2_geography</span>
-<span class='fu'><a href='st_as_sfc.html'>st_as_sfc</a></span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  <span class='va'>...</span>,
-  crs <span class='op'>=</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span><span class='op'>(</span><span class='fl'>4326</span><span class='op'>)</span>,
-  endian <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/match.html'>match</a></span><span class='op'>(</span><span class='va'>.Platform</span><span class='op'>$</span><span class='va'>endian</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"big"</span>, <span class='st'>"little"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>-</span> <span class='fl'>1L</span>
-<span class='op'>)</span>
-
-<span class='co'># S3 method for s2_geography</span>
-<span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span>, crs <span class='op'>=</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span><span class='op'>(</span><span class='fl'>4326</span><span class='op'>)</span><span class='op'>)</span>
-
 <span class='fu'>st_as_s2</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for sf</span>
@@ -194,14 +183,6 @@ for geographical coordinate operations</p></td>
     <tr>
       <th>...</th>
       <td><p>passed on</p></td>
-    </tr>
-    <tr>
-      <th>crs</th>
-      <td><p>coordinate reference system; object of class <code>crs</code></p></td>
-    </tr>
-    <tr>
-      <th>endian</th>
-      <td><p>integer; 0 or 1: defaults to the endian of the native machine</p></td>
     </tr>
     <tr>
       <th>oriented</th>

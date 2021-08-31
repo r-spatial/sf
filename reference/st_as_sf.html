@@ -150,7 +150,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Convert foreign object to an sf object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/sf.R'><code>R/sf.R</code></a>, <a href='https://github.com/r-spatial/sf/blob/master/R/sp.R'><code>R/sp.R</code></a>, <a href='https://github.com/r-spatial/sf/blob/master/R/maps.R'><code>R/maps.R</code></a>, and 1 more</small>
+    <small class="dont-index">Source: <a href='https://github.com/r-spatial/sf/blob/master/R/sf.R'><code>R/sf.R</code></a>, <a href='https://github.com/r-spatial/sf/blob/master/R/sp.R'><code>R/sp.R</code></a>, <a href='https://github.com/r-spatial/sf/blob/master/R/maps.R'><code>R/maps.R</code></a>, and 2 more</small>
     <div class="hidden name"><code>st_as_sf.Rd</code></div>
     </div>
 
@@ -192,7 +192,10 @@
 <span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for lpp</span>
-<span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for s2_geography</span>
+<span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span>, crs <span class='op'>=</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span><span class='op'>(</span><span class='fl'>4326</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -241,6 +244,10 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
     <tr>
       <th>group</th>
       <td><p>logical; if <code>TRUE</code>, group id labels from <a href='https://rdrr.io/pkg/maps/man/map.html'>map</a> by their prefix before <code><a href='https://rdrr.io/r/base/Colon.html'>:</a></code></p></td>
+    </tr>
+    <tr>
+      <th>crs</th>
+      <td><p>coordinate reference system to be assigned; object of class <code>crs</code></p></td>
     </tr>
     </table>
 

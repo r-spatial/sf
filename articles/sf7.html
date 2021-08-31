@@ -121,7 +121,7 @@
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
-<p>This vignette describes what spherical geometry implies, and how package <code>sf</code> uses the s2geometry library (<a href="https://s2geometry.io" class="uri">https://s2geometry.io</a>) for geometrical measures, predicates and transformations. The code in this vignette only run if <code>s2</code> has been installed, e.g. with</p>
+<p>This vignette describes what spherical geometry implies, and how package <code>sf</code> uses the s2geometry library (<a href="https://s2geometry.io" class="uri">https://s2geometry.io</a>) for geometrical measures, predicates and transformations. The code in this vignette only runs if <code>s2</code> has been installed, e.g. with</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"s2"</span><span class="op">)</span></code></pre></div>
 <p>and is available. After <code>sf</code> has been attached, you can check if <code>s2</code> is available as follows:</p>
@@ -160,7 +160,7 @@
 <li>a considerable speed increase for some functions</li>
 <li>no computations on the ellipsoid (which are considered more accurate, but are also slower)</li>
 </ul>
-<p>The <code>s2</code> package is really a wrapper around the C++ <a href="https://s2geometry.io">s2geometry</a> library which was written by Google, and which is used in many of its products (e.g. Google Maps, Google Earth Engine, Bigquery GIS) and has been translated in several programming other languages.</p>
+<p>The <code>s2</code> package is really a wrapper around the C++ <a href="https://s2geometry.io">s2geometry</a> library which was written by Google, and which is used in many of its products (e.g. Google Maps, Google Earth Engine, Bigquery GIS) and has been translated in several other programming languages.</p>
 </div>
 <div id="fundamental-differences" class="section level1">
 <h1 class="hasAnchor">
@@ -252,7 +252,7 @@
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">## [1] TRUE</span></code></pre></div>
-<p>then we can switch it of (and use GEOS) by</p>
+<p>then we can switch it off (and use GEOS) by</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span>
 <span class="co">## Spherical geometry (s2) switched off</span></code></pre></div>
@@ -326,7 +326,7 @@
 <div id="predicates" class="section level1">
 <h1 class="hasAnchor">
 <a href="#predicates" class="anchor"></a>Predicates</h1>
-<p>All unary and binary predicates are available in <code>s2</code>, except for <code>st_relate</code> with a pattern. In addition, when using the <code>s2</code> predicates</p>
+<p>All unary and binary predicates are available in <code>s2</code>, except for <code>st_relate</code> with a pattern. In addition, when using the <code>s2</code> predicates, depending on the <code>s2_model</code>, intersections with neighbours are only reported when <code>s2_model</code> is <code>closed</code> (the default):</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span>
 <span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span><span class="op">)</span> <span class="co"># self-intersections + neighbours</span>
@@ -347,7 +347,7 @@
 <div id="transformations" class="section level1">
 <h1 class="hasAnchor">
 <a href="#transformations" class="anchor"></a>Transformations</h1>
-<p><code>st_intersection</code>, <code>st_union</code>, <code>st_difference</code> and <code>st_sym_difference</code> are available as <code>s2</code> equivalents. N-ary instersection and difference are not (yet) present; cascaded union is present; unioning by feature does not work with <code>s2</code>.</p>
+<p><code>st_intersection</code>, <code>st_union</code>, <code>st_difference</code> and <code>st_sym_difference</code> are available as <code>s2</code> equivalents. N-ary intersection and difference are not (yet) present; cascaded union is present; unioning by feature does not work with <code>s2</code>.</p>
 <div id="buffers" class="section level2">
 <h2 class="hasAnchor">
 <a href="#buffers" class="anchor"></a>Buffers</h2>
@@ -377,32 +377,32 @@
   <span class="va">uk_buffer_sf</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">uk_projected</span>, dist <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span>
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.071   0.005   0.076</span>
+<span class="co">##   0.073   0.006   0.079</span>
 <span class="co"># sf way with few than the 30 segments in the buffer</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="op">{</span>
   <span class="va">uk_projected</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">uk_sfc</span>, <span class="fl">27700</span><span class="op">)</span>
   <span class="va">uk_buffer_sf2</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">uk_projected</span>, dist <span class="op">=</span> <span class="fl">20000</span>, nQuadSegs <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span>
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.036   0.001   0.037</span>
+<span class="co">##   0.037   0.001   0.039</span>
 <span class="co"># s2 with default cell size</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="op">{</span>
   <span class="va">uk_buffer</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span>
 <span class="co">##    user  system elapsed </span>
-<span class="co">##    0.03    0.00    0.03</span>
+<span class="co">##   0.031   0.000   0.031</span>
 <span class="co"># s2 with 10000 cells</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="op">{</span>
   <span class="va">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span>, max_cells <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span>
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.284   0.002   0.285</span>
+<span class="co">##   0.288   0.003   0.291</span>
 <span class="co"># s2 with 100 cells</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="op">{</span>
   <span class="va">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span>, max_cells <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span>
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.004   0.000   0.004</span></code></pre></div>
+<span class="co">##   0.004   0.000   0.003</span></code></pre></div>
 <p>The result of the previous benchmarks emphasise the point that there are trade-offs between geographic resolution and computational resources, something that web developers working on geographic services such as Google Maps understand well. In this case the default setting of 1000 cells, which runs slightly faster than the default transform -&gt; buffer workflow, is probably appropriate given the low resolution of the input geometry representing the UK.</p>
 </div>
 <div id="st_buffer-or-st_is_within_distance" class="section level2">
