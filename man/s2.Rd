@@ -30,8 +30,6 @@ takes place and it is assumed that the inside of the polygon is to the
 left of the polygon's path.}
 
 \item{rebuild}{logical; call \link[s2]{s2_rebuild} on the geometry (think of this as a \code{st_make_valid} on the sphere)}
-
-\item{crs}{coordinate reference system; object of class \code{crs}}
 }
 \value{
 \code{sf_use_s2} returns the value of this variable before (re)setting it,

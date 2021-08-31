@@ -66,6 +66,8 @@ there is more than one and \code{sf_column_name} is \code{NULL}, the first one i
 \item{fill}{logical; the value for \code{fill} that was used in the call to \link[maps]{map}.}
 
 \item{group}{logical; if \code{TRUE}, group id labels from \link[maps]{map} by their prefix before \code{:}}
+
+\item{crs}{coordinate reference system to be assigned; object of class \code{crs}}
 }
 \description{
 Convert foreign object to an sf object

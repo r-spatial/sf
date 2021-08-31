@@ -3,7 +3,6 @@
 # https://github.com/r-spatial/s2
 
 #' @export
-#' @param crs coordinate reference system; object of class \code{crs}
 #' @param ... passed on
 #' @param use_s2 logical; if \code{TRUE}, use the s2 spherical geometry package
 #' for geographical coordinate operations
@@ -26,6 +25,7 @@ sf_use_s2 = function(use_s2) {
 
 #' @name st_as_sfc
 #' @export
+#' @param crs coordinate reference system to be assigned; object of class \code{crs}
 #' @param endian integer; 0 or 1: defaults to the endian of the native machine
 st_as_sfc.s2_geography = function(x, ..., crs = st_crs(4326),
 		endian = match(.Platform$endian, c("big", "little")) - 1L) {
@@ -33,6 +33,7 @@ st_as_sfc.s2_geography = function(x, ..., crs = st_crs(4326),
 }
 
 #' @name st_as_sf
+#' @param crs coordinate reference system to be assigned; object of class \code{crs}
 #' @export
 st_as_sf.s2_geography = function(x, ..., crs = st_crs(4326)) {
 	st_sf(geometry = st_as_sfc(x, ..., crs = crs))

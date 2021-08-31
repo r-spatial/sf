@@ -82,7 +82,7 @@ st_as_sfc(x, ...)
 
 \item{pureR}{logical; if TRUE, use only R code, if FALSE, use compiled (C++) code; use TRUE when the endian-ness of the binary differs from the host machine (\code{.Platform$endian}).}
 
-\item{crs}{integer or character; coordinate reference system for the}
+\item{crs}{coordinate reference system to be assigned; object of class \code{crs}}
 
 \item{GeoJSON}{logical; if \code{TRUE}, try to read geometries from GeoJSON text strings
 geometry, see \code{\link[=st_crs]{st_crs()}}}
