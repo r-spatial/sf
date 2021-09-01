@@ -459,6 +459,10 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 	if (write_geometries <- inherits(obj, "sf")) {
 		geom = st_geometry(obj)
 		obj[[attr(obj, "sf_column")]] = NULL
+		if (driver == "GPKG" && is.na(st_crs(geom))) {
+			message('writing GPKG: substituting LOCAL_CS["Undefined Cartesian SRS"] for missing CRS')
+			st_crs(geom) = st_crs("LOCAL_CS[\"Undefined cartesian SRS\"]")
+		}
 	} else { # create fake geometries:
 		v = vector("list", nrow(obj))
 		v[seq_len(nrow(obj))] = list(st_point())

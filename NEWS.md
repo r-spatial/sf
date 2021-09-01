@@ -1,5 +1,7 @@
 # version 1.0-3
 
+* when writing objects with `NA` as CRS to GeoPackage, assign "Unknown Cartesian CRS" first - this is in line with using Cartesian geometry operations for objects with `NA` as CRS; #1776
+
 * add coerce method from `sgbp` to `sparseMatrix`; #1750
 
 * fix `st_cast()` for `GEOMETRYCOLLECTIONS` containing empty geometries; #1767
