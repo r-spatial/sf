@@ -86,8 +86,8 @@ RUN cd proj-8.0.1 \
 # GDAL:
 
 # https://download.osgeo.org/gdal/3.1.0/gdal-3.1.0rc2.tar.gz
-ENV GDAL_VERSION 3.3.0
-ENV GDAL_VERSION_NAME 3.3.0
+ENV GDAL_VERSION 3.3.2rc3
+ENV GDAL_VERSION_NAME 3.3.2rc3
 
 RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
