@@ -461,7 +461,7 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 		obj[[attr(obj, "sf_column")]] = NULL
 		if (driver == "GPKG" && is.na(st_crs(geom))) {
 			message('writing GPKG: substituting LOCAL_CS["Undefined Cartesian SRS"] for missing CRS')
-			st_crs(geom) = st_crs("LOCAL_CS[\"Undefined cartesian SRS\"]")
+			st_crs(geom) = st_crs("LOCAL_CS[\"Undefined Cartesian SRS\"]")
 		}
 	} else { # create fake geometries:
 		v = vector("list", nrow(obj))
