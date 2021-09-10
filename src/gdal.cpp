@@ -555,7 +555,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 		if (dest)
 			dest->Release(); // #nocov start
 		sfc_from_ogr(g, true); // to destroy g
-		Rcpp::stop("OGRCreateCoordinateTransformation() returned NULL: PROJ available?"); // #nocov end
+		Rcpp::stop("OGRCreateCoordinateTransformation(): transformation not available"); // #nocov end
 	}
 	for (size_t i = 0; i < g.size(); i++) {
 		CPLPushErrorHandler(CPLQuietErrorHandler);
