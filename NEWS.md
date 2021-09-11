@@ -1,5 +1,7 @@
 # version 1.0-3
 
+* `st_as_grob()` methods for `sfc_*` objects correctly handle empty geometries; #1789 with help from Hiroaki Yutani
+
 * when writing objects with `NA` as CRS to GeoPackage, assign "Unknown Cartesian CRS" first - this is in line with using Cartesian geometry operations for objects with `NA` as CRS; #1776
 
 * add coerce method from `sgbp` to `sparseMatrix`; #1750

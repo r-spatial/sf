@@ -139,7 +139,7 @@ st_viewport = function(x, ..., bbox = st_bbox(x), asp) {
 
 #' @export
 st_as_grob.sfc_POINT <- function(x, pch = 1, size = unit(1, "char"), default.units = "native", name = NULL, gp = gpar(), vp = NULL, ...) {
-	if (any(is_e <- st_is_empty(x)) && length(gp$fill) == length(x)) {
+	if (any(is_e <- st_is_empty(x))) {
 		gp = gp[!is_e]
 		x = x[!is_e]
 	}
@@ -149,7 +149,7 @@ st_as_grob.sfc_POINT <- function(x, pch = 1, size = unit(1, "char"), default.uni
 #' @export
 #' @importFrom grid gpar
 st_as_grob.sfc_MULTIPOINT <- function(x, pch = 1, size = unit(1, "char"), default.units = "native", name = NULL, gp = gpar(), vp = NULL, ...) {
-	if (any(is_e <- st_is_empty(x)) && length(gp$fill) == length(x)) {
+	if (any(is_e <- st_is_empty(x))) {
 		gp = gp[!is_e]
 		x = x[!is_e]
 	}
@@ -163,7 +163,7 @@ st_as_grob.sfc_MULTIPOINT <- function(x, pch = 1, size = unit(1, "char"), defaul
 }
 #' @export
 st_as_grob.sfc_LINESTRING <- function(x, arrow = NULL, default.units = "native", name = NULL, gp = gpar(), vp = NULL, ...) {
-	if (any(is_e <- st_is_empty(x)) && length(gp$fill) == length(x)) {
+	if (any(is_e <- st_is_empty(x))) {
 		gp = gp[!is_e]
 		x = x[!is_e]
 	}
@@ -174,7 +174,7 @@ st_as_grob.sfc_LINESTRING <- function(x, arrow = NULL, default.units = "native",
 }
 #' @export
 st_as_grob.sfc_MULTILINESTRING <- function(x, arrow = NULL, default.units = "native", name = NULL, gp = gpar(), vp = NULL, ...) {
-	if (any(is_e <- st_is_empty(x)) && length(gp$fill) == length(x)) {
+	if (any(is_e <- st_is_empty(x))) {
 		gp = gp[!is_e]
 		x = x[!is_e]
 	}
@@ -192,7 +192,7 @@ st_as_grob.sfc_POLYGON <- function(x, rule = "evenodd", default.units = "native"
 	if (utils::packageVersion("grid") < "3.6") {
 		return(scalar_grobs(x, rule = rule, default.units = default.units, name = name, gp = gp, vp = vp, ...)) # nocov
 	}
-	if (any(is_e <- st_is_empty(x)) && length(gp$fill) == length(x)) {
+	if (any(is_e <- st_is_empty(x))) {
 		gp = gp[!is_e]
 		x = x[!is_e]
 	}
@@ -209,7 +209,7 @@ st_as_grob.sfc_MULTIPOLYGON <- function(x, rule = "evenodd", default.units = "na
 	if (utils::packageVersion("grid") < "3.6") {
 		return(scalar_grobs(x, rule = rule, default.units = default.units, name = name, gp = gp, vp = vp, ...)) # nocov
 	}
-	if (any(is_e <- st_is_empty(x)) && length(gp$fill) == length(x)) {
+	if (any(is_e <- st_is_empty(x))) {
 		gp = gp[!is_e]
 		x = x[!is_e]
 	}
@@ -251,10 +251,10 @@ st_as_grob.sfc <- function(x, pch = 1, size = unit(1, "char"), arrow = NULL, gp 
 			}
 		}
 	}
-	if (class(x)[1] %in% c('sfc_MULTIPOINT', 'sfc_MULTILINESTRING', 'sfc_MULTIPOLYGON')) {
-		return(st_as_grob(x, pch = pch, size = size, arrow = arrow, gp = gp, ...))
-	}
-	scalar_grobs(x, pch, size, arrow, gp, ...)
+	if (class(x)[1] %in% c('sfc_MULTIPOINT', 'sfc_MULTILINESTRING', 'sfc_MULTIPOLYGON'))
+		st_as_grob(x, pch = pch, size = size, arrow = arrow, gp = gp, ...)
+	else
+		scalar_grobs(x, pch, size, arrow, gp, ...)
 }
 
 scalar_grobs <- function(x, pch = 1, size = unit(1, "char"), arrow = NULL, gp = gpar(), ...) {
