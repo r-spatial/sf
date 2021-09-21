@@ -1,5 +1,5 @@
 
-R version 4.0.5 (2021-03-31) -- "Shake and Throw"
+R version 4.1.1 (2021-08-10) -- "Kick Things"
 Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -160,9 +160,11 @@ Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  
 > 
 > geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2)))
 > st_write(geom, "geom.gpkg")
+writing GPKG: substituting LOCAL_CS["Undefined Cartesian SRS"] for missing CRS
 Writing layer `geom' to data source `geom.gpkg' using driver `GPKG'
 Writing 2 features with 0 fields and geometry type Unknown (any).
 > st_write(geom, "geom1.gpkg", layer = "foo")
+writing GPKG: substituting LOCAL_CS["Undefined Cartesian SRS"] for missing CRS
 Writing layer `foo' to data source `geom1.gpkg' using driver `GPKG'
 Writing 2 features with 0 fields and geometry type Unknown (any).
 > 
@@ -183,11 +185,12 @@ Writing 2 features with 0 fields and geometry type Unknown (any).
 +  y = st_read("x2.gpkg", quiet = TRUE)
 +  print(y)
 + }
+writing GPKG: substituting LOCAL_CS["Undefined Cartesian SRS"] for missing CRS
 Simple feature collection with 5 features and 4 fields
 Geometry type: POINT
 Dimension:     XY
 Bounding box:  xmin: 1 ymin: 1 xmax: 5 ymax: 5
-CRS:           NA
+Projected CRS: Undefined Cartesian SRS
      a    b          c                   d        geom
 1    0    a 2001-01-01 2001-01-01 00:00:00 POINT (1 1)
 2    1    b       <NA>                <NA> POINT (2 2)
@@ -368,4 +371,4 @@ Error in CPL_read_ogr(dsn, layer, query, as.character(options), quiet,  :
 > 
 > proc.time()
    user  system elapsed 
-  1.483   0.056   1.530 
+  1.394   0.068   1.457 

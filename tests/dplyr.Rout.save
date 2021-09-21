@@ -1,5 +1,5 @@
 
-R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
+R version 4.1.1 (2021-08-10) -- "Kick Things"
 Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -87,13 +87,13 @@ Geometry type: MULTIPOLYGON
 Dimension:     XY
 Bounding box:  xmin: -9386880 ymin: 4012991 xmax: -8399788 ymax: 4382079
 Projected CRS: WGS 84 / Pseudo-Mercator
-# A tibble: 4 x 3
-  area_cl    `mean(AREA)`                                               geometry
-  <fct>             <dbl>                                     <MULTIPOLYGON [m]>
-1 (0,0.1]          0.0760 (((-9349959 4195534, -9351260 4199567, -9354263 42037…
-2 (0.1,0.12]       0.112  (((-9355589 4200996, -9354263 4203717, -9351260 41995…
-3 (0.12,0.1…       0.134  (((-9302071 4171499, -9311146 4181234, -9311292 41833…
-4 (0.15,0.2…       0.190  (((-9173717 4227806, -9181049 4224455, -9186013 42243…
+# A tibble: 4 × 3
+  area_cl     `mean(AREA)`                                              geometry
+  <fct>              <dbl>                                    <MULTIPOLYGON [m]>
+1 (0,0.1]           0.0760 (((-9349959 4195534, -9351260 4199567, -9354263 4203…
+2 (0.1,0.12]        0.112  (((-9355589 4200996, -9354263 4203717, -9351260 4199…
+3 (0.12,0.15]       0.134  (((-9302071 4171499, -9311146 4181234, -9311292 4183…
+4 (0.15,0.25]       0.190  (((-9173717 4227806, -9181049 4224455, -9186013 4224…
 > nc.g %>% summarize(mean(AREA)) %>% plot(col = 3:6/7)
 > 
 > library(tidyr)
@@ -119,7 +119,7 @@ Geometry type: MULTIPOLYGON
 Dimension:     XY
 Bounding box:  xmin: -8802506 ymin: 4012991 xmax: -8492268 ymax: 4166167
 Projected CRS: WGS 84 / Pseudo-Mercator
-# A tibble: 6 x 4
+# A tibble: 6 × 4
     row                                                     geometry VAR     SID
   <int>                                           <MULTIPOLYGON [m]> <chr> <dbl>
 1    95 (((-8588146 4131923, -8589850 4133303, -8589356 4135198, -8… SID79     4
@@ -134,7 +134,7 @@ Geometry type: MULTIPOLYGON
 Dimension:     XY
 Bounding box:  xmin: -9099356 ymin: 4310668 xmax: -8434988 ymax: 4382079
 Projected CRS: WGS 84 / Pseudo-Mercator
-# A tibble: 6 x 4
+# A tibble: 6 × 4
     row                                                     geometry SID74 SID79
   <int>                                           <MULTIPOLYGON [m]> <dbl> <dbl>
 1     1 (((-9069486 4332934, -9077066 4338201, -9079419 4338351, -9…     1     0
@@ -149,7 +149,7 @@ Geometry type: MULTIPOLYGON
 Dimension:     XY
 Bounding box:  xmin: -9099356 ymin: 4310668 xmax: -8434988 ymax: 4382079
 Projected CRS: WGS 84 / Pseudo-Mercator
-# A tibble: 6 x 4
+# A tibble: 6 × 4
                                                       geometry   row SID74 SID79
                                             <MULTIPOLYGON [m]> <int> <dbl> <dbl>
 1 (((-9069486 4332934, -9077066 4338201, -9079419 4338351, -9…     1     1     0
@@ -193,7 +193,7 @@ Geometry type: MULTIPOLYGON
 Dimension:     XY
 Bounding box:  xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
 Projected CRS: NAD83 / North Carolina
-# A tibble: 1 x 2
+# A tibble: 1 × 2
   `mean(dens)`                                                          geometry
   [person/m^2]                                                <MULTIPOLYGON [m]>
 1   0.00000259 (((446521.1 133561, 441668.6 140459.3, 436812.5 146953.9, 433885…
@@ -203,7 +203,7 @@ Geometry type: MULTIPOLYGON
 Dimension:     XY
 Bounding box:  xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
 Projected CRS: NAD83 / North Carolina
-# A tibble: 1 x 2
+# A tibble: 1 × 2
   `mean(new_dens)`                                                      geometry
       [person/m^2]                                            <MULTIPOLYGON [m]>
 1       0.00000259 (((154399.2 148898.9, 142569.6 149407.8, 123829 150481.4, 12…
@@ -215,7 +215,7 @@ Geometry type: MULTIPOLYGON
 Dimension:     XY
 Bounding box:  xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
 Projected CRS: NAD83 / North Carolina
-# A tibble: 1 x 2
+# A tibble: 1 × 2
   `sum(area * dens)`                                                    geometry
             [person]                                          <MULTIPOLYGON [m]>
 1             329962 (((446521.1 133561, 441668.6 140459.3, 436812.5 146953.9, …
@@ -225,10 +225,10 @@ Geometry type: MULTIPOLYGON
 Dimension:     XY
 Bounding box:  xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
 Projected CRS: NAD83 / North Carolina
-# A tibble: 1 x 2
-  `sum(A * new_dens…                                                    geometry
-            [person]                                          <MULTIPOLYGON [m]>
-1             329962 (((154399.2 148898.9, 142569.6 149407.8, 123829 150481.4, …
+# A tibble: 1 × 2
+  `sum(A * new_dens)`                                                   geometry
+             [person]                                         <MULTIPOLYGON [m]>
+1              329962 (((154399.2 148898.9, 142569.6 149407.8, 123829 150481.4,…
 > 
 > conn = system.file("gpkg/nc.gpkg", package = "sf")
 > 
@@ -284,4 +284,4 @@ First 10 features:
 > 
 > proc.time()
    user  system elapsed 
-  2.566   0.076   2.656 
+  2.660   0.056   2.743 
