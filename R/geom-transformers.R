@@ -282,7 +282,7 @@ st_triangulate.sf = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 
 #' @name geos_unary
 #' @export
-#' @details \code{st_inscribed_circle} returns the maximum inscribed circle for polygon geometries.
+#' @details \code{st_inscribed_circle} returns the maximum inscribed circle for polygon geometries. 
 #' For \code{st_inscribed_circle}, if \code{nQuadSegs} is 0 a 2-point LINESTRING is returned with the
 #' center point and a boundary point of every circle, otherwise a circle (buffer) is returned where
 #' \code{nQuadSegs} controls the number of points per quadrant to approximate the circle.
@@ -315,7 +315,7 @@ st_inscribed_circle.sfc = function(x, dTolerance = sqrt(st_area(st_set_crs(x, NA
 			pts = st_cast(ret, "POINT")
 			idx = seq(1, length(pts) * 2, by = 2)
 			ret = st_buffer(pts[idx], st_length(st_set_crs(ret, NA_crs_)), nQuadSegs = nQuadSegs)
-		}
+		} 
 		ret
 	} else
 		stop("for st_inscribed_circle, GEOS version 3.9.0 or higher is required")
@@ -465,7 +465,7 @@ st_centroid.sfc = function(x, ..., of_largest_polygon = FALSE) {
 	longlat = isTRUE(st_is_longlat(x))
 	if (longlat && sf_use_s2())
 		st_as_sfc(s2::s2_centroid(x), crs = st_crs(x))
-	else {
+	else { 
 		if (longlat)
 			warning("st_centroid does not give correct centroids for longitude/latitude data")
 		st_sfc(CPL_geos_op("centroid", x, numeric(0), integer(0), numeric(0), logical(0)))
@@ -881,14 +881,14 @@ st_union.sfg = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 st_union.sfc = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 	ll = isTRUE(st_is_longlat(x))
 	if (missing(y)) { # unary union, possibly by_feature:
-		if (ll && sf_use_s2()) {
+		if (ll && sf_use_s2()) { 
 			if (! by_feature) { # see https://github.com/r-spatial/s2/issues/97 :
 				if (is_coverage)
 					st_as_sfc(s2::s2_coverage_union_agg(x, ...), crs = st_crs(x))
 				else
-					st_as_sfc(s2::s2_union_agg(x, ...), crs = st_crs(x))
+					st_as_sfc(s2::s2_union_agg(x, ...), crs = st_crs(x)) 
 			} else
-				st_as_sfc(s2::s2_union(x, ...), crs = st_crs(x))
+				st_as_sfc(s2::s2_union(x, ...), crs = st_crs(x)) 
 		} else {
 			if (ll)
 				message_longlat("st_union")
@@ -897,7 +897,7 @@ st_union.sfc = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 	} else {
 		stopifnot(st_crs(x) == st_crs(y))
 		if (ll && sf_use_s2())
-			st_as_sfc(s2::s2_union(x, y, ...), crs = st_crs(x))
+			st_as_sfc(s2::s2_union(x, y, ...), crs = st_crs(x)) 
 		else {
 			if (ll)
 				message_longlat("st_union")
