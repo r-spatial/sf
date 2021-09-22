@@ -194,23 +194,49 @@ st_convex_hull.sf = function(x) {
 #' @name geos_unary
 #' @export
 #' @details \code{st_simplify} simplifies lines by removing vertices
-#' @param preserveTopology logical; carry out topology preserving simplification? May be specified for each, or for all feature geometries. Note that topology is preserved only for single feature geometries, not for sets of them.
-#' @param dTolerance numeric; tolerance parameter, specified for all or for each feature geometry.
-st_simplify = function(x, preserveTopology = FALSE, dTolerance = 0.0)
+#' @param preserveTopology logical; carry out topology preserving
+#'   simplification? May be specified for each, or for all feature geometries.
+#'   Note that topology is preserved only for single feature geometries, not for
+#'   sets of them. Ignored when the input data is specified with long-lat
+#'   coordinates and \code{sf_use_s2()} returns \code{TRUE} since, in that case,
+#'   \code{st_simplify} implicitly calls \code{s2::s2_simplify} which always
+#'   preserve topology (per single feature).
+#' @param dTolerance numeric; tolerance parameter, specified for all or for each
+#'   feature geometry. If you run \code{st_simplify}, the input data is
+#'   specified with long-lat coordinates and \code{sf_use_s2()} returns
+#'   \code{TRUE}, then the value of \code{dTolerance} must be specified in
+#'   meters.
+#' @examples
+#'
+#' # st_simplify examples:
+#' op = par(mfrow = c(2, 3), mar = rep(0, 4))
+#' plot(nc_g[1])
+#' plot(st_simplify(nc_g[1], dTolerance = 1e3)) # 1000m
+#' plot(st_simplify(nc_g[1], dTolerance = 5e3)) # 5000m
+#' nc_g_planar = st_transform(nc_g, 2264) # planar coordinates, US foot
+#' plot(nc_g_planar[1])
+#' plot(st_simplify(nc_g_planar[1], dTolerance = 1e3)) # 1000 foot
+#' plot(st_simplify(nc_g_planar[1], dTolerance = 5e3)) # 5000 foot
+#' par(op)
+#'
+st_simplify = function(x, preserveTopology, dTolerance = 0.0)
 	UseMethod("st_simplify")
 
 #' @export
-st_simplify.sfg = function(x, preserveTopology = FALSE, dTolerance = 0.0)
+st_simplify.sfg = function(x, preserveTopology, dTolerance = 0.0)
 	get_first_sfg(st_simplify(st_sfc(x), preserveTopology, dTolerance = dTolerance))
 
 #' @export
-st_simplify.sfc = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
+st_simplify.sfc = function(x, preserveTopology, dTolerance = 0.0) {
 	ll = isTRUE(st_is_longlat(x))
 	if (ll && sf_use_s2()) {
 		if (!missing(preserveTopology))
 			warning("argument preserveTopology is ignored")
 		st_as_sfc(s2::s2_simplify(x, dTolerance), crs = st_crs(x))
 	} else {
+		if (missing(preserveTopology)) {
+			preserveTopology = FALSE
+		}
 		stopifnot(mode(preserveTopology) == 'logical')
 		if (ll)
 			warning("st_simplify does not correctly simplify longitude/latitude data, dTolerance needs to be in decimal degrees")
@@ -222,7 +248,7 @@ st_simplify.sfc = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
 }
 
 #' @export
-st_simplify.sf = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
+st_simplify.sf = function(x, preserveTopology, dTolerance = 0.0) {
 	st_set_geometry(x, st_simplify(st_geometry(x), preserveTopology, dTolerance))
 }
 
@@ -256,7 +282,7 @@ st_triangulate.sf = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 
 #' @name geos_unary
 #' @export
-#' @details \code{st_inscribed_circle} returns the maximum inscribed circle for polygon geometries. 
+#' @details \code{st_inscribed_circle} returns the maximum inscribed circle for polygon geometries.
 #' For \code{st_inscribed_circle}, if \code{nQuadSegs} is 0 a 2-point LINESTRING is returned with the
 #' center point and a boundary point of every circle, otherwise a circle (buffer) is returned where
 #' \code{nQuadSegs} controls the number of points per quadrant to approximate the circle.
@@ -289,7 +315,7 @@ st_inscribed_circle.sfc = function(x, dTolerance = sqrt(st_area(st_set_crs(x, NA
 			pts = st_cast(ret, "POINT")
 			idx = seq(1, length(pts) * 2, by = 2)
 			ret = st_buffer(pts[idx], st_length(st_set_crs(ret, NA_crs_)), nQuadSegs = nQuadSegs)
-		} 
+		}
 		ret
 	} else
 		stop("for st_inscribed_circle, GEOS version 3.9.0 or higher is required")
@@ -439,7 +465,7 @@ st_centroid.sfc = function(x, ..., of_largest_polygon = FALSE) {
 	longlat = isTRUE(st_is_longlat(x))
 	if (longlat && sf_use_s2())
 		st_as_sfc(s2::s2_centroid(x), crs = st_crs(x))
-	else { 
+	else {
 		if (longlat)
 			warning("st_centroid does not give correct centroids for longitude/latitude data")
 		st_sfc(CPL_geos_op("centroid", x, numeric(0), integer(0), numeric(0), logical(0)))
@@ -855,14 +881,14 @@ st_union.sfg = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 st_union.sfc = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 	ll = isTRUE(st_is_longlat(x))
 	if (missing(y)) { # unary union, possibly by_feature:
-		if (ll && sf_use_s2()) { 
+		if (ll && sf_use_s2()) {
 			if (! by_feature) { # see https://github.com/r-spatial/s2/issues/97 :
 				if (is_coverage)
 					st_as_sfc(s2::s2_coverage_union_agg(x, ...), crs = st_crs(x))
 				else
-					st_as_sfc(s2::s2_union_agg(x, ...), crs = st_crs(x)) 
+					st_as_sfc(s2::s2_union_agg(x, ...), crs = st_crs(x))
 			} else
-				st_as_sfc(s2::s2_union(x, ...), crs = st_crs(x)) 
+				st_as_sfc(s2::s2_union(x, ...), crs = st_crs(x))
 		} else {
 			if (ll)
 				message_longlat("st_union")
@@ -871,7 +897,7 @@ st_union.sfc = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 	} else {
 		stopifnot(st_crs(x) == st_crs(y))
 		if (ll && sf_use_s2())
-			st_as_sfc(s2::s2_union(x, y, ...), crs = st_crs(x)) 
+			st_as_sfc(s2::s2_union(x, y, ...), crs = st_crs(x))
 		else {
 			if (ll)
 				message_longlat("st_union")
