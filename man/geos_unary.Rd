@@ -33,7 +33,7 @@ st_boundary(x)
 
 st_convex_hull(x)
 
-st_simplify(x, preserveTopology = FALSE, dTolerance = 0)
+st_simplify(x, preserveTopology, dTolerance = 0)
 
 st_triangulate(x, dTolerance = 0, bOnlyEdges = FALSE)
 
@@ -75,9 +75,19 @@ in which case negative \code{dist} values give buffers on the right-hand side, p
 
 \item{...}{ignored}
 
-\item{preserveTopology}{logical; carry out topology preserving simplification? May be specified for each, or for all feature geometries. Note that topology is preserved only for single feature geometries, not for sets of them.}
+\item{preserveTopology}{logical; carry out topology preserving
+simplification? May be specified for each, or for all feature geometries.
+Note that topology is preserved only for single feature geometries, not for
+sets of them. Ignored when the input data is specified with long-lat
+coordinates and \code{sf_use_s2()} returns \code{TRUE} since, in that case,
+\code{st_simplify} implicitly calls \code{s2::s2_simplify} which always
+preserve topology (per single feature).}
 
-\item{dTolerance}{numeric; tolerance parameter, specified for all or for each feature geometry.}
+\item{dTolerance}{numeric; tolerance parameter, specified for all or for each
+feature geometry. If you run \code{st_simplify}, the input data is
+specified with long-lat coordinates and \code{sf_use_s2()} returns
+\code{TRUE}, then the value of \code{dTolerance} must be specified in
+meters.}
 
 \item{bOnlyEdges}{logical; if TRUE, return lines, else return polygons}
 
@@ -107,7 +117,7 @@ See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.ht
 
 \code{st_triangulate} triangulates set of points (not constrained). \code{st_triangulate} requires GEOS version 3.4 or above
 
-\code{st_inscribed_circle} returns the maximum inscribed circle for polygon geometries. 
+\code{st_inscribed_circle} returns the maximum inscribed circle for polygon geometries.
 For \code{st_inscribed_circle}, if \code{nQuadSegs} is 0 a 2-point LINESTRING is returned with the
 center point and a boundary point of every circle, otherwise a circle (buffer) is returned where
 \code{nQuadSegs} controls the number of points per quadrant to approximate the circle.
@@ -171,6 +181,18 @@ nc = st_read(system.file("shape/nc.shp", package="sf"))
 nc_g = st_geometry(nc)
 plot(st_convex_hull(nc_g))
 plot(nc_g, border = grey(.5), add = TRUE)
+
+# st_simplify examples:
+op = par(mfrow = c(2, 3), mar = rep(0, 4))
+plot(nc_g[1])
+plot(st_simplify(nc_g[1], dTolerance = 1e3)) # 1000m
+plot(st_simplify(nc_g[1], dTolerance = 5e3)) # 5000m
+nc_g_planar = st_transform(nc_g, 2264) # planar coordinates, US foot
+plot(nc_g_planar[1])
+plot(st_simplify(nc_g_planar[1], dTolerance = 1e3)) # 1000 foot
+plot(st_simplify(nc_g_planar[1], dTolerance = 5e3)) # 5000 foot
+par(op)
+
 if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.9.0") > -1) {
   nc_t = st_transform(nc, 'EPSG:2264')
   x = st_inscribed_circle(st_geometry(nc_t))
