@@ -230,7 +230,7 @@ st_simplify.sfg = function(x, preserveTopology, dTolerance = 0.0)
 st_simplify.sfc = function(x, preserveTopology, dTolerance = 0.0) {
 	ll = isTRUE(st_is_longlat(x))
 	if (ll && sf_use_s2()) {
-		if (!missing(preserveTopology))
+		if (!missing(preserveTopology) && isFALSE(preserveTopology))
 			warning("argument preserveTopology is ignored")
 		st_as_sfc(s2::s2_simplify(x, dTolerance), crs = st_crs(x))
 	} else {
