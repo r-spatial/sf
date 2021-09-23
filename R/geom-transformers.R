@@ -193,24 +193,52 @@ st_convex_hull.sf = function(x) {
 
 #' @name geos_unary
 #' @export
-#' @details \code{st_simplify} simplifies lines by removing vertices
-#' @param preserveTopology logical; carry out topology preserving simplification? May be specified for each, or for all feature geometries. Note that topology is preserved only for single feature geometries, not for sets of them.
-#' @param dTolerance numeric; tolerance parameter, specified for all or for each feature geometry.
-st_simplify = function(x, preserveTopology = FALSE, dTolerance = 0.0)
+#' @details \code{st_simplify} simplifies lines by removing vertices. 
+#' @param preserveTopology logical; carry out topology preserving
+#'   simplification? May be specified for each, or for all feature geometries.
+#'   Note that topology is preserved only for single feature geometries, not for
+#'   sets of them. If not specified (i.e. the default), then it is internally
+#'   set equal to \code{FALSE} when the input data is specified with projected
+#'   coordinates or \code{sf_use_s2()} returns \code{FALSE}. Ignored in all the
+#'   other cases (with a warning when set equal to \code{FALSE}) since the
+#'   function implicitly calls \code{s2::s2_simplify} which always preserve
+#'   topological relationships (per single feature).
+#' @param dTolerance numeric; tolerance parameter, specified for all or for each
+#'   feature geometry. If you run \code{st_simplify}, the input data is
+#'   specified with long-lat coordinates and \code{sf_use_s2()} returns
+#'   \code{TRUE}, then the value of \code{dTolerance} must be specified in
+#'   meters.
+#' @examples
+#'
+#' # st_simplify examples:
+#' op = par(mfrow = c(2, 3), mar = rep(0, 4))
+#' plot(nc_g[1])
+#' plot(st_simplify(nc_g[1], dTolerance = 1e3)) # 1000m
+#' plot(st_simplify(nc_g[1], dTolerance = 5e3)) # 5000m
+#' nc_g_planar = st_transform(nc_g, 2264) # planar coordinates, US foot
+#' plot(nc_g_planar[1])
+#' plot(st_simplify(nc_g_planar[1], dTolerance = 1e3)) # 1000 foot
+#' plot(st_simplify(nc_g_planar[1], dTolerance = 5e3)) # 5000 foot
+#' par(op)
+#'
+st_simplify = function(x, preserveTopology, dTolerance = 0.0)
 	UseMethod("st_simplify")
 
 #' @export
-st_simplify.sfg = function(x, preserveTopology = FALSE, dTolerance = 0.0)
+st_simplify.sfg = function(x, preserveTopology, dTolerance = 0.0)
 	get_first_sfg(st_simplify(st_sfc(x), preserveTopology, dTolerance = dTolerance))
 
 #' @export
-st_simplify.sfc = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
+st_simplify.sfc = function(x, preserveTopology, dTolerance = 0.0) {
 	ll = isTRUE(st_is_longlat(x))
 	if (ll && sf_use_s2()) {
-		if (!missing(preserveTopology))
-			warning("argument preserveTopology is ignored")
+		if (!missing(preserveTopology) && isFALSE(preserveTopology))
+			warning("argument preserveTopology cannot be set to FALSE when working with ellipsoidal coordinates since the algorithm behind st_simplify always preserves topological relationships")
 		st_as_sfc(s2::s2_simplify(x, dTolerance), crs = st_crs(x))
 	} else {
+		if (missing(preserveTopology)) {
+			preserveTopology = FALSE
+		}
 		stopifnot(mode(preserveTopology) == 'logical')
 		if (ll)
 			warning("st_simplify does not correctly simplify longitude/latitude data, dTolerance needs to be in decimal degrees")
@@ -222,7 +250,7 @@ st_simplify.sfc = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
 }
 
 #' @export
-st_simplify.sf = function(x, preserveTopology = FALSE, dTolerance = 0.0) {
+st_simplify.sf = function(x, preserveTopology, dTolerance = 0.0) {
 	st_set_geometry(x, st_simplify(st_geometry(x), preserveTopology, dTolerance))
 }
 
