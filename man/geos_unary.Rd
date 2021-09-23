@@ -78,10 +78,12 @@ in which case negative \code{dist} values give buffers on the right-hand side, p
 \item{preserveTopology}{logical; carry out topology preserving
 simplification? May be specified for each, or for all feature geometries.
 Note that topology is preserved only for single feature geometries, not for
-sets of them. Ignored when the input data is specified with long-lat
-coordinates and \code{sf_use_s2()} returns \code{TRUE} since, in that case,
-\code{st_simplify} implicitly calls \code{s2::s2_simplify} which always
-preserve topology (per single feature).}
+sets of them. If not specified (i.e. the default), then it is internally
+set equal to \code{FALSE} when the input data is specified with projected
+coordinates or \code{sf_use_s2()} returns \code{FALSE}. Ignored in all the
+other cases (with a warning when set equal to \code{FALSE}) since the
+function implicitly calls \code{s2::s2_simplify} which always preserve
+topological relationships (per single feature).}
 
 \item{dTolerance}{numeric; tolerance parameter, specified for all or for each
 feature geometry. If you run \code{st_simplify}, the input data is
@@ -113,11 +115,11 @@ See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.ht
 
 \code{st_convex_hull} creates the convex hull of a set of points
 
-\code{st_simplify} simplifies lines by removing vertices
+\code{st_simplify} simplifies lines by removing vertices.
 
 \code{st_triangulate} triangulates set of points (not constrained). \code{st_triangulate} requires GEOS version 3.4 or above
 
-\code{st_inscribed_circle} returns the maximum inscribed circle for polygon geometries.
+\code{st_inscribed_circle} returns the maximum inscribed circle for polygon geometries. 
 For \code{st_inscribed_circle}, if \code{nQuadSegs} is 0 a 2-point LINESTRING is returned with the
 center point and a boundary point of every circle, otherwise a circle (buffer) is returned where
 \code{nQuadSegs} controls the number of points per quadrant to approximate the circle.

@@ -193,14 +193,16 @@ st_convex_hull.sf = function(x) {
 
 #' @name geos_unary
 #' @export
-#' @details \code{st_simplify} simplifies lines by removing vertices
+#' @details \code{st_simplify} simplifies lines by removing vertices. 
 #' @param preserveTopology logical; carry out topology preserving
 #'   simplification? May be specified for each, or for all feature geometries.
 #'   Note that topology is preserved only for single feature geometries, not for
-#'   sets of them. Ignored when the input data is specified with long-lat
-#'   coordinates and \code{sf_use_s2()} returns \code{TRUE} since, in that case,
-#'   \code{st_simplify} implicitly calls \code{s2::s2_simplify} which always
-#'   preserve topology (per single feature).
+#'   sets of them. If not specified (i.e. the default), then it is internally
+#'   set equal to \code{FALSE} when the input data is specified with projected
+#'   coordinates or \code{sf_use_s2()} returns \code{FALSE}. Ignored in all the
+#'   other cases (with a warning when set equal to \code{FALSE}) since the
+#'   function implicitly calls \code{s2::s2_simplify} which always preserve
+#'   topological relationships (per single feature).
 #' @param dTolerance numeric; tolerance parameter, specified for all or for each
 #'   feature geometry. If you run \code{st_simplify}, the input data is
 #'   specified with long-lat coordinates and \code{sf_use_s2()} returns
@@ -230,8 +232,8 @@ st_simplify.sfg = function(x, preserveTopology, dTolerance = 0.0)
 st_simplify.sfc = function(x, preserveTopology, dTolerance = 0.0) {
 	ll = isTRUE(st_is_longlat(x))
 	if (ll && sf_use_s2()) {
-		if (!missing(preserveTopology))
-			warning("argument preserveTopology is ignored")
+		if (!missing(preserveTopology) && isFALSE(preserveTopology))
+			warning("argument preserveTopology cannot be set to FALSE when working with ellipsoidal coordinates since the algorithm behind st_simplify always preserves topological relationships")
 		st_as_sfc(s2::s2_simplify(x, dTolerance), crs = st_crs(x))
 	} else {
 		if (missing(preserveTopology)) {
