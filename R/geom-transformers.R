@@ -9,22 +9,28 @@
 #' @param dist numeric; buffer distance for all, or for each of the elements in \code{x}; in case
 #' \code{dist} is a \code{units} object, it should be convertible to \code{arc_degree} if
 #' \code{x} has geographic coordinates, and to \code{st_crs(x)$units} otherwise
-#' @param nQuadSegs integer; number of segments per quadrant (fourth of a circle), for all or per-feature
-#' @param endCapStyle character; style of line ends, one of 'ROUND', 'FLAT', 'SQUARE'
-#' @param joinStyle character; style of line joins, one of 'ROUND', 'MITRE', 'BEVEL'
-#' @param mitreLimit numeric; limit of extension for a join if \code{joinStyle} 'MITRE' is used (default 1.0, minimum 0.0)
+#' @param nQuadSegs integer; number of segments per quadrant (fourth of a circle), for all or per-feature. 
+#' Ignored by default if \code{st_is_longlat(x) == TRUE}, only used if \code{st_use_s2(FALSE)}.
+#' @param endCapStyle character; style of line ends, one of 'ROUND', 'FLAT', 'SQUARE'. 
+#' Ignored by default if \code{st_is_longlat(x) == TRUE}, only used if \code{st_use_s2(FALSE)}.
+#' @param joinStyle character; style of line joins, one of 'ROUND', 'MITRE', 'BEVEL'. 
+#' Ignored by default if \code{st_is_longlat(x) == TRUE}, only used if \code{st_use_s2(FALSE)}.
+#' @param mitreLimit numeric; limit of extension for a join if \code{joinStyle} 'MITRE' is used (default 1.0, minimum 0.0). 
+#' Ignored by default if \code{st_is_longlat(x) == TRUE}, only used if \code{st_use_s2(FALSE)}.
 #' @param singleSide logical; if \code{TRUE}, single-sided buffers are returned for linear geometries,
 #' in which case negative \code{dist} values give buffers on the right-hand side, positive on the left.
-#' @param ... passed on to \code{s2_buffer_cells}
+#' Ignored by default if \code{st_is_longlat(x) == TRUE}, only used if \code{st_use_s2(FALSE)}.
+#' @param ... passed on to \code{s2_buffer_cells} 
 #' @return an object of the same class of \code{x}, with manipulated geometry.
 #' @export
-#' @details \code{st_buffer} computes a buffer around this geometry/each geometry. If any of \code{endCapStyle},
-#' \code{joinStyle}, or \code{mitreLimit} are set to non-default values ('ROUND', 'ROUND', 1.0 respectively) then
-#' the underlying 'buffer with style' GEOS function is used.
+#' @details \code{st_buffer} computes a buffer around this geometry/each geometry. If \code{st_use_s2(FALSE)} and 
+#' any of \code{endCapStyle}, \code{joinStyle}, or \code{mitreLimit} are set to non-default values ('ROUND', 'ROUND', 1.0 respectively) 
+#' then the underlying 'buffer with style' GEOS function is used.
 #' See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.html} for details.
 #' @examples
 #'
 #' ## st_buffer, style options (taken from rgeos gBuffer)
+#' st_use_s2(FALSE) # otherwise style proprties are ignored
 #' l1 = st_as_sfc("LINESTRING(0 0,1 5,4 5,5 2,8 2,9 4,4 6.5)")
 #' op = par(mfrow=c(2,3))
 #' plot(st_buffer(l1, dist = 1, endCapStyle="ROUND"), reset = FALSE, main = "endCapStyle: ROUND")
@@ -93,9 +99,9 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30,
 						 singleSide = FALSE, ...) {
 	longlat = isTRUE(st_is_longlat(x))
 	if (longlat && sf_use_s2()) {
-#		if (!missing(nQuadSegs) || !missing(endCapStyle) || !missing(joinStyle) ||
-#				!missing(mitreLimit) || !missing(singleSide))
-#			warning("all bufer style parameters are ignored; set st_use_s2(FALSE) first to use them")
+		if (!missing(nQuadSegs) || !missing(endCapStyle) || !missing(joinStyle) ||
+				!missing(mitreLimit) || !missing(singleSide))
+			warning("all buffer style parameters are ignored; set st_use_s2(FALSE) first to use them")
 		if (inherits(dist, "units")) {
 			if (!inherits(try(units(dist) <- as_units("rad"), silent = TRUE), "try-error"))
 				return(st_as_sfc(s2::s2_buffer_cells(x, dist, radius = 1, ...),

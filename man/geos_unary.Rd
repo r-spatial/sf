@@ -62,16 +62,21 @@ st_segmentize(x, dfMaxLength, ...)
 \code{dist} is a \code{units} object, it should be convertible to \code{arc_degree} if
 \code{x} has geographic coordinates, and to \code{st_crs(x)$units} otherwise}
 
-\item{nQuadSegs}{integer; number of segments per quadrant (fourth of a circle), for all or per-feature}
+\item{nQuadSegs}{integer; number of segments per quadrant (fourth of a circle), for all or per-feature. 
+Ignored by default if \code{st_is_longlat(x) == TRUE}, only used if \code{st_use_s2(FALSE)}.}
 
-\item{endCapStyle}{character; style of line ends, one of 'ROUND', 'FLAT', 'SQUARE'}
+\item{endCapStyle}{character; style of line ends, one of 'ROUND', 'FLAT', 'SQUARE'. 
+Ignored by default if \code{st_is_longlat(x) == TRUE}, only used if \code{st_use_s2(FALSE)}.}
 
-\item{joinStyle}{character; style of line joins, one of 'ROUND', 'MITRE', 'BEVEL'}
+\item{joinStyle}{character; style of line joins, one of 'ROUND', 'MITRE', 'BEVEL'. 
+Ignored by default if \code{st_is_longlat(x) == TRUE}, only used if \code{st_use_s2(FALSE)}.}
 
-\item{mitreLimit}{numeric; limit of extension for a join if \code{joinStyle} 'MITRE' is used (default 1.0, minimum 0.0)}
+\item{mitreLimit}{numeric; limit of extension for a join if \code{joinStyle} 'MITRE' is used (default 1.0, minimum 0.0). 
+Ignored by default if \code{st_is_longlat(x) == TRUE}, only used if \code{st_use_s2(FALSE)}.}
 
 \item{singleSide}{logical; if \code{TRUE}, single-sided buffers are returned for linear geometries,
-in which case negative \code{dist} values give buffers on the right-hand side, positive on the left.}
+in which case negative \code{dist} values give buffers on the right-hand side, positive on the left.
+Ignored by default if \code{st_is_longlat(x) == TRUE}, only used if \code{st_use_s2(FALSE)}.}
 
 \item{...}{ignored}
 
@@ -106,9 +111,9 @@ an object of the same class of \code{x}, with manipulated geometry.
 Geometric unary operations on simple feature geometries. These are all generics, with methods for \code{sfg}, \code{sfc} and \code{sf} objects, returning an object of the same class. All operations work on a per-feature basis, ignoring all other features.
 }
 \details{
-\code{st_buffer} computes a buffer around this geometry/each geometry. If any of \code{endCapStyle},
-\code{joinStyle}, or \code{mitreLimit} are set to non-default values ('ROUND', 'ROUND', 1.0 respectively) then
-the underlying 'buffer with style' GEOS function is used.
+\code{st_buffer} computes a buffer around this geometry/each geometry. If \code{st_use_s2(FALSE)} and 
+any of \code{endCapStyle}, \code{joinStyle}, or \code{mitreLimit} are set to non-default values ('ROUND', 'ROUND', 1.0 respectively) 
+then the underlying 'buffer with style' GEOS function is used.
 See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.html} for details.
 
 \code{st_boundary} returns the boundary of a geometry
@@ -144,6 +149,7 @@ center point and a boundary point of every circle, otherwise a circle (buffer) i
 \examples{
 
 ## st_buffer, style options (taken from rgeos gBuffer)
+st_use_s2(FALSE) # otherwise style proprties are ignored
 l1 = st_as_sfc("LINESTRING(0 0,1 5,4 5,5 2,8 2,9 4,4 6.5)")
 op = par(mfrow=c(2,3))
 plot(st_buffer(l1, dist = 1, endCapStyle="ROUND"), reset = FALSE, main = "endCapStyle: ROUND")

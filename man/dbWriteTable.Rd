@@ -32,17 +32,12 @@
 \arguments{
 \item{conn}{DBIObject}
 
-\item{name}{
-   character vector of names (table names, fields, keywords).
-}
+\item{name}{A character string specifying the unquoted DBMS table name,
+or the result of a call to \code{\link[DBI:dbQuoteIdentifier]{dbQuoteIdentifier()}}.}
 
-\item{value}{
-   a data.frame.
-}
+\item{value}{a \link{data.frame} (or coercible to data.frame).}
 
-\item{...}{
-   placeholder for future use.
-}
+\item{...}{Other parameters passed on to methods.}
 
 \item{row.names}{Add a \code{row.name} column, or a vector of length \code{nrow(obj)}
 containing row.names; default \code{FALSE}.}
