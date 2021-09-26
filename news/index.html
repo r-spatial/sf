@@ -157,6 +157,7 @@
 <a href="#version-10-3" class="anchor"></a>version 1.0-3<small> Unreleased </small>
 </h1>
 <ul>
+<li><p><code>crs</code> objects have a <code>$srid</code> method to extract the SRID (as “authority:identifier”); <a href='https://github.com/r-spatial/sf/issues/1804'>#1804</a></p></li>
 <li><p><code><a href="../reference/st_as_grob.html">st_as_grob()</a></code> methods for <code>sfc_*</code> objects correctly handle empty geometries; <a href='https://github.com/r-spatial/sf/issues/1789'>#1789</a> with help from Hiroaki Yutani</p></li>
 <li><p>when writing objects with <code>NA</code> as CRS to GeoPackage, assign “Unknown Cartesian CRS” first - this is in line with using Cartesian geometry operations for objects with <code>NA</code> as CRS; <a href='https://github.com/r-spatial/sf/issues/1776'>#1776</a></p></li>
 <li><p>add coerce method from <code>sgbp</code> to <code>sparseMatrix</code>; <a href='https://github.com/r-spatial/sf/issues/1750'>#1750</a></p></li>
