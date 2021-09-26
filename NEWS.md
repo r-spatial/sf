@@ -1,6 +1,6 @@
 # version 1.0-3
 
-* `crs` objects have a `$srid` method to extract the SRID (as "authority:identifier"); #1804
+* `crs` objects have a `$srid` method to extract the SRID (as authority "name:code"); #1804
 
 * `st_as_grob()` methods for `sfc_*` objects correctly handle empty geometries; #1789 with help from Hiroaki Yutani
 
