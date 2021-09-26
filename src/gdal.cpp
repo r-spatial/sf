@@ -185,8 +185,8 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	if (srs == NULL)
 		Rcpp::stop("crs not found"); // #nocov
 
-	Rcpp::List out(14);
-	Rcpp::CharacterVector names(14);
+	Rcpp::List out(15);
+	Rcpp::CharacterVector names(15);
 	out(0) = Rcpp::NumericVector::create(srs->GetSemiMajor());
 	names(0) = "SemiMajor";
 
@@ -279,6 +279,16 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	out(13) = "";
 #endif
 	names(13) = "WKT1_ESRI";
+
+	// srid
+	if (srs->GetAuthorityCode(NULL) != NULL) {
+		char str[100];
+		sprintf(str, "%s:%s", srs->GetAuthorityName(NULL), srs->GetAuthorityCode(NULL));
+		Rcpp::CharacterVector v = str;
+		out(14) = v;
+	} else
+		out(14) = Rcpp::CharacterVector::create(NA_STRING);
+	names(14) = "srid";
 
 	set_error_handler();
 
