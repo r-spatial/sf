@@ -281,9 +281,10 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	names(13) = "WKT1_ESRI";
 
 	// srid
-	if (srs->GetAuthorityCode(NULL) != NULL) {
-		char str[100];
-		sprintf(str, "%s:%s", srs->GetAuthorityName(NULL), srs->GetAuthorityCode(NULL));
+	if (srs->GetAuthorityName(NULL) != NULL && srs->GetAuthorityCode(NULL) != NULL) {
+		char str[101];
+		snprintf(str, (size_t) 100, "%s:%s",
+			srs->GetAuthorityName(NULL), srs->GetAuthorityCode(NULL));
 		Rcpp::CharacterVector v = str;
 		out(14) = v;
 	} else
