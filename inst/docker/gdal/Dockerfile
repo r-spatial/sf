@@ -63,6 +63,21 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	cmake \
 	libtiff5-dev
 
+# GEOS:
+ENV GEOS_VERSION 3.10.0beta2
+
+RUN wget http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
+  && bzip2 -d geos-*bz2 \
+  && tar xf geos*tar \
+  && cd geos* \
+  && mkdir build \
+  && cd build \
+  && cmake .. \
+  && make \
+  && make install \
+  && cd ../.. \
+  && ldconfig
+
 #RUN git clone --depth 1 https://github.com/OSGeo/PROJ.git
 RUN wget http://download.osgeo.org/proj/proj-8.0.1.tar.gz
 RUN tar zxvf proj-8.0.1.tar.gz
@@ -107,19 +122,6 @@ RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME
 #  && cd .. \
 #  && ldconfig
 
-# GEOS:
-ENV GEOS_VERSION 3.9.1
-
-RUN wget http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
-  && bzip2 -d geos-*bz2 \
-  && tar xf geos*tar \
-  && cd geos* \
-  && ./configure \
-  && make \
-  && make install \
-  && cd .. \
-  && ldconfig
-
 # RUN svn  checkout svn://scm.r-forge.r-project.org/svnroot/rgdal/
 # RUN R CMD build rgdal/pkg --no-build-vignettes
 # RUN R CMD INSTALL rgdal_*.tar.gz 
@@ -157,7 +159,7 @@ RUN Rscript -e 'install.packages(c("terra"))'
 
 RUN (cd sf; git pull)
 RUN R CMD build --no-build-vignettes --no-manual sf
-RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
+#RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
 #RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
 
 #RUN Rscript -e 'install.packages("starsdata", repos="http://gis-bigdata.uni-muenster.de/pebesma/")'
