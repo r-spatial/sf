@@ -134,38 +134,18 @@ RUN git clone --depth 10 https://github.com/r-spatial/stars.git
 #RUN git config --global user.email "edzer.pebesma@uni-muenster.de"
 
 RUN R CMD build --no-build-vignettes --no-manual lwgeom
-RUN (cd sf; git pull)
 RUN R CMD build --no-build-vignettes --no-manual sf
 # RUN pkg-config proj --modversion
 RUN R CMD INSTALL sf
 RUN R CMD INSTALL lwgeom
-RUN R CMD build --no-build-vignettes --no-manual stars
 RUN R CMD INSTALL stars
 
+RUN Rscript -e 'install.packages(c("XML", "tmaptools", "tmap", "mapview", "s2", "terra", "PCICt", "RNetCDF", "future.apply", "ggforce", "ggthemes", "gstat", "ncmeta", "pbapply", "plm", "spacetime", "xts", "zoo", "tidync", "ncdfgeom", "cubelyr", "clue"))'
 
-#RUN svn  checkout svn://scm.r-forge.r-project.org/svnroot/rgdal/
-# or:
-# svn checkout svn+ssh://edzer@scm.r-forge.r-project.org/svnroot/rgdal/
-#RUN R CMD build rgdal/pkg --no-build-vignettes
-#RUN R CMD INSTALL rgdal_*.tar.gz 
-#RUN R CMD check --no-vignettes --no-manual rgdal_*.tar.gz 
-#RUN Rscript -e 'install.packages(c("stars", "tmap"), repos = "https://cloud.r-project.org")'
-
-RUN Rscript -e 'install.packages("rgdal", repos="http://R-Forge.R-project.org")'
-# after rgdal:
-RUN Rscript -e 'install.packages(c("XML"))'
-RUN Rscript -e 'install.packages(c("tmaptools", "tmap", "mapview", "s2"))'
-RUN Rscript -e 'install.packages(c("terra"))'
-
-RUN (cd sf; git pull)
 RUN R CMD build --no-build-vignettes --no-manual sf
-#RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
-#RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
+RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
+RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
 
 #RUN Rscript -e 'install.packages("starsdata", repos="http://gis-bigdata.uni-muenster.de/pebesma/")'
-#RUN Rscript -e 'install.packages(c("PCICt", "RNetCDF", "future.apply", "ggforce", "ggthemes", "gstat", "ncmeta", "pbapply", "plm", "spacetime", "xts", "zoo"))'
-#RUN Rscript -e 'install.packages(c("tidync", "ncdfgeom", "cubelyr"))'
-#RUN echo echo
-#RUN (cd stars; git pull)
-#RUN R CMD build --no-manual stars
-#RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
+RUN R CMD build --no-manual stars
+RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
