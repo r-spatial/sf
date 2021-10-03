@@ -576,7 +576,7 @@ Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = tru
 		}
 		std::vector<GeomPtr> gmv = geometries_from_sfc(hGEOSCtxt, geom_i, NULL, false); // where notice might be set!
 		int ret;
-		if (gmv[i].get() == NULL)
+		if (gmv[0].get() == NULL)
 			ret = 2;
 		else
 			ret = GEOSisValid_r(hGEOSCtxt, gmv[0].get());
