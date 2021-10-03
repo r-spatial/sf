@@ -48,6 +48,8 @@ typedef char (* log_prfn)(GEOSContextHandle_t, const GEOSPreparedGeometry *,
 	const GEOSGeometry *);
 typedef GEOSGeom (* geom_fn)(GEOSContextHandle_t, const GEOSGeom, const GEOSGeom);
 
+static int notice = 0; // global var to silently catch notice of illegal geoms, e.g. non-closed rings
+
 void cb(void *item, void *userdata) { // callback function for tree selection
 	std::vector<size_t> *ret = (std::vector<size_t> *) userdata;
 	ret->push_back(*((size_t *) item));
@@ -139,7 +141,7 @@ static std::vector<GEOSGeometry*> to_raw(std::vector<GeomPtr> & g) {
 	return raw;
 }
 
-std::vector<GeomPtr> geometries_from_sfc(GEOSContextHandle_t hGEOSCtxt, Rcpp::List sfc, int *dim = NULL) {
+std::vector<GeomPtr> geometries_from_sfc(GEOSContextHandle_t hGEOSCtxt, Rcpp::List sfc, int *dim = NULL, bool stop_on_NULL = true) {
 
 	Rcpp::List sfc_cls = get_dim_sfc(sfc);
 	Rcpp::CharacterVector cls = sfc_cls["_cls"];
@@ -166,8 +168,14 @@ std::vector<GeomPtr> geometries_from_sfc(GEOSContextHandle_t hGEOSCtxt, Rcpp::Li
 	for (int i = 0; i < sfc.size(); i++) {
 		Rcpp::RawVector r = wkblst[i];
 		g[i] = geos_ptr(GEOSWKBReader_read_r(hGEOSCtxt, wkb_reader, &(r[0]), r.size()), hGEOSCtxt);
+		if (g[i].get() == NULL) {
+			if (stop_on_NULL) {
+				Rcpp::Rcout << "While converting geometry of record: " << i << " to GEOS:" << std::endl;
+				Rcpp::stop("Illegal geometry found: fix manually, or filter out using st_is_valid() and is.na()\n");
+			}
+		}
 #ifdef HAVE_390
-		if (set_precision)
+		else if (set_precision)
 			g[i] = geos_ptr(GEOSGeom_setPrecision_r(hGEOSCtxt, g[i].get(), precision, 0), hGEOSCtxt);
 #endif
 	}
@@ -499,15 +507,19 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 Rcpp::CharacterVector CPL_geos_is_valid_reason(Rcpp::List sfc) {
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 
-	std::vector<GeomPtr> gmv = geometries_from_sfc(hGEOSCtxt, sfc, NULL);
+	std::vector<GeomPtr> gmv = geometries_from_sfc(hGEOSCtxt, sfc, NULL, false);
 	Rcpp::CharacterVector out(gmv.size());
 	for (int i = 0; i < out.length(); i++) {
-		char *buf = GEOSisValidReason_r(hGEOSCtxt, gmv[i].get());
-		if (buf == NULL)
-			out[i] = NA_STRING; // #nocov
+		if (gmv[i].get() == NULL)
+			out[i] = NA_STRING;
 		else {
-			out[i] = buf;
-			GEOSFree_r(hGEOSCtxt, buf);
+			char *buf = GEOSisValidReason_r(hGEOSCtxt, gmv[i].get());
+			if (buf == NULL)
+				out[i] = NA_STRING; // #nocov
+			else {
+				out[i] = buf;
+				GEOSFree_r(hGEOSCtxt, buf);
+			}
 		}
 	}
 	CPL_geos_finish(hGEOSCtxt);
@@ -537,7 +549,7 @@ Rcpp::List CPL_geos_make_valid(Rcpp::List sfc) {
 Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = true) {
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 
-	int notice = 0;
+	notice = 0;
 	if (NA_on_exception) {
 /*
 		if (sfc.size() > 1)
@@ -562,8 +574,12 @@ Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = tru
 			Rcpp::CharacterVector cl = sfc.attr("classes");
 			geom_i.attr("classes") = cl[i];
 		}
-		std::vector<GeomPtr> gmv = geometries_from_sfc(hGEOSCtxt, geom_i, NULL); // where notice might be set!
-		int ret = GEOSisValid_r(hGEOSCtxt, gmv[0].get());
+		std::vector<GeomPtr> gmv = geometries_from_sfc(hGEOSCtxt, geom_i, NULL, false); // where notice might be set!
+		int ret;
+		if (gmv[i].get() == NULL)
+			ret = 2;
+		else
+			ret = GEOSisValid_r(hGEOSCtxt, gmv[0].get());
 		if (NA_on_exception && (ret == 2 || notice != 0))
 			out[i] = NA_LOGICAL; // no need to set notice back here, as we only consider 1 geometry #nocov
 		else
@@ -1139,7 +1155,7 @@ Rcpp::List CPL_nary_intersection(Rcpp::List sfc) {
 	std::vector<GeomPtr> out;
 	int errors = 0;
 #ifdef HAVE350
-	int notice = 0;
+	notice = 0;
 	GEOSContext_setNoticeMessageHandler_r(hGEOSCtxt,
 		(GEOSMessageHandler_r) __emptyNoticeHandler, (void *) &notice);
 	GEOSContext_setErrorMessageHandler_r(hGEOSCtxt,
@@ -1206,6 +1222,7 @@ Rcpp::List CPL_nary_intersection(Rcpp::List sfc) {
 #ifdef HAVE350
 	if (notice > 0)
 		Rcpp::warning("one or more notices ignored");
+	notice = 0;
 	GEOSContext_setNoticeHandler_r(hGEOSCtxt, __warningHandler);
 	GEOSContext_setErrorHandler_r(hGEOSCtxt, __errorHandler);
 #endif
