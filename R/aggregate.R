@@ -134,7 +134,9 @@ st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE) {
 	x_st = st_set_geometry(x, NULL)[idx[,1],, drop=FALSE]   # create st table, remove geom
 	if (any(!sapply(x_st, is.numeric)))
 		stop("x contains non-numeric column(s)")
-	area_i = st_area(i)
+	area_i = try(st_area(i), silent = TRUE)
+	if (inherits(area_i, "try-error"))
+		area_i <- st_area(st_make_valid(i)) # work-around for https://github.com/r-spatial/sf/issues/1810
 	x_st$...area_st = unclass(area_i)
 
 	x_st = if (extensive) {
