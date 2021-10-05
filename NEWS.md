@@ -1,6 +1,6 @@
 # version 1.0-3
 
-* address changes in how GEOS 3.10.0 handles illegal geometries (e.g., non-closed rings); #1807
+* cope with how GEOS >= 3.10.0 handles illegal geometries (e.g., non-closed rings); #1807
 
 * `crs` objects have a `$srid` method to extract the SRID (as authority "name:code"); #1804
 
