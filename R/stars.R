@@ -121,13 +121,15 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 	yd = x[[ xy_names[2] ]]
 	cc = if (!is.na(xd$offset) && !is.na(yd$offset)) {
 		xy = if (as_points) # grid cell centres:
-			expand.grid(x = seq(xd$from, xd$to) - 0.5, y = seq(yd$from, yd$to) - 0.5)
-		else # grid corners: from 0 to n
-			expand.grid(x = seq(xd$from - 1, xd$to), y = seq(yd$from - 1, yd$to))
+				expand.grid(x = seq(xd$from, xd$to) - 0.5, y = seq(yd$from, yd$to) - 0.5)
+			else # grid corners: from 0 to n
+				expand.grid(x = seq(xd$from - 1, xd$to), y = seq(yd$from - 1, yd$to))
 		xy_from_colrow(as.matrix(xy), geotransform)
 	} else if (is.null(xd$values) || is.null(yd$values)) { # only one of [xd|yd] has $values:
 		if (!requireNamespace("stars", quietly = TRUE)) # nocov start
 			stop("stars required: install that first")
+		if (! as_points)
+			stop("st_as_sfc(): mixed regular and rectilinear dimensions only supported if as_points = TRUE")
 		as.matrix(st_coordinates(x)) # nocov end
 	} else { # both xd and yd have $values:
 		expand = function(x) { # might fail on the poles or dateline
