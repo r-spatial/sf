@@ -188,14 +188,10 @@ ggplot() +
 
 Package `mapview` creates interactive maps in html pages, using package `leaflet` as a workhorse. Extensive examples are found [here](https://r-spatial.github.io/mapview/).
 
-```{r echo=FALSE, eval=TRUE}
-library(mapview)
-mapviewOptions(fgb = FALSE)
-```
-
+An example is obtained by
 ```{r, eval = FALSE}
 library(mapview)
-mapviewOptions(fgb = FALSE)
+mapviewOptions(fgb = FALSE) # needed when creating web pages
 mapview(nc["BIR74"], col.regions = sf.colors(10), fgb = FALSE)
 ```
 
@@ -211,13 +207,17 @@ qtm(nc)
 ```
 
 `tmap` also has interactive leaflet maps:
-```{r}
+```{r,eval=FALSE}
 tmap_mode("view")
 tm_shape(nc) + tm_fill("BIR74", palette = sf.colors(5))
 ```
 
 Replotting the last map in non-interactive mode is as simple as:
-```{r}
+```{r,eval=FALSE}
 ttm()
 tmap_last()
 ```
+
+A draft version of the book _Elegant and informative maps
+with tmap_ by Martijn Tennekes and Jakub Nowosad is found at
+https://r-tmap.github.io/
