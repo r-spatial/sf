@@ -238,10 +238,12 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 						key.length = key.length, logz = logz, ...)
 			}
 			# plot the map:
-			mar = c(1, 1, 1.2, 1)
-			if (isTRUE(dots$axes))
-				mar[1:2] = 2.1
-			par(mar = mar)
+			if (!isTRUE(dots$add)) {
+				mar = c(1, 1, 1.2, 1)
+				if (isTRUE(dots$axes))
+					mar[1:2] = 2.1
+				par(mar = mar)
+			}
 			if (col_missing)
 				plot(st_geometry(x), col = col, xlim = xlim, ylim = ylim, ...)
 			else
