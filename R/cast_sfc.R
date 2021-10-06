@@ -122,7 +122,7 @@ st_cast_sfc_default = function(x) {
 			x <- lapply(x, function(x) if (inherits(x, "POLYGON")) POLYGON2MULTIPOLYGON(x) else x)
 			class(x) <- c("sfc_MULTIPOLYGON", "sfc")
 		}
-	} else if (cls == "GEOMETRYCOLLECTION") {
+	} else if (cls == "GEOMETRYCOLLECTION" && all(lengths(x))) { # https://github.com/r-spatial/sf/issues/1767
 		ids = get_lengths(x)
 		x <- do.call(st_sfc, unlist(x, recursive = FALSE))
 	}
