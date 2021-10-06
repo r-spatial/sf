@@ -66,7 +66,7 @@ Imports:
     grid,
     magrittr,
     Rcpp (>= 0.12.18),
-    s2 (>= 1.0.5),
+    s2 (>= 1.0.7),
     stats,
     tools,
     units (>= 0.6-0),
