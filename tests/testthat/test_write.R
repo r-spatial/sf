@@ -45,7 +45,7 @@ test_that("delete and update work (#304)", {
   gpkg <- tempfile(fileext = ".gpkg")
   shp <- tempfile(fileext = ".shp")
 
-  x <- st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2))))
+  x <- st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2)), crs = 'EPSG:3857'))
   expect_error(st_write(x, gpkg, layer = c("a", "b"), driver = "GPKG", quiet = TRUE)) # error
   expect_error(st_write(x, gpkg,  driver = "foo", quiet = TRUE)) # error
   expect_warning(st_write(x, gpkg, update = NA, quiet = TRUE), "deprecated")
