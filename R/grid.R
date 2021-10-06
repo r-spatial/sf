@@ -147,7 +147,8 @@ st_as_grob.sfc_POINT <- function(x, pch = 1, size = unit(1, "char"), default.uni
 		x <- matrix(unlist(x, use.names = FALSE), ncol = length(x))
 		pointsGrob(x[1, ], x[2, ], pch = pch, size = size,
 				   default.units = default.units, name = name, gp = gp, vp = vp)
-	}
+	} else
+		nullGrob()
 }
 #' @export
 #' @importFrom grid gpar
@@ -165,7 +166,8 @@ st_as_grob.sfc_MULTIPOINT <- function(x, pch = 1, size = unit(1, "char"), defaul
 		x <- do.call(rbind, x)
 		pointsGrob(x[, 1], x[, 2], pch = pch, size = size, 
 				   default.units = default.units, name = name, gp = gp, vp = vp)
-	}
+	} else
+		nullGrob()
 }
 #' @export
 st_as_grob.sfc_LINESTRING <- function(x, arrow = NULL, default.units = "native", name = NULL, gp = gpar(), vp = NULL, ...) {
@@ -179,7 +181,8 @@ st_as_grob.sfc_LINESTRING <- function(x, arrow = NULL, default.units = "native",
 		x <- do.call(rbind, x)
 		polylineGrob(x[, 1], x[, 2], id.lengths = n_points, arrow = arrow, 
 					 default.units = default.units, name = name, gp = gp, vp = vp)
-	}
+	} else
+		nullGrob()
 }
 #' @export
 st_as_grob.sfc_MULTILINESTRING <- function(x, arrow = NULL, default.units = "native", name = NULL, gp = gpar(), vp = NULL, ...) {
@@ -197,7 +200,8 @@ st_as_grob.sfc_MULTILINESTRING <- function(x, arrow = NULL, default.units = "nat
 		x <- do.call(rbind, x)
 		polylineGrob(x[, 1], x[, 2], id.lengths = n_points, arrow = arrow, 
 					 default.units = default.units, name = name, gp = gp, vp = vp)
-	}
+	} else
+		nullGrob()
 }
 #' @export
 st_as_grob.sfc_POLYGON <- function(x, rule = "evenodd", default.units = "native", name = NULL, gp = gpar(), vp = NULL, ...) {
@@ -217,7 +221,8 @@ st_as_grob.sfc_POLYGON <- function(x, rule = "evenodd", default.units = "native"
 		x <- do.call(rbind, x)
 		pathGrob(x[, 1], x[, 2], id.lengths = n_points, pathId.lengths = n_paths, 
 				 rule = rule, default.units = default.units, name = name, gp = gp, vp = vp) # nocov end
-	}
+	} else
+		nullGrob()
 }
 #' @export
 st_as_grob.sfc_MULTIPOLYGON <- function(x, rule = "evenodd", default.units = "native", name = NULL, gp = gpar(), vp = NULL, ...) {
@@ -240,7 +245,8 @@ st_as_grob.sfc_MULTIPOLYGON <- function(x, rule = "evenodd", default.units = "na
 		x <- do.call(rbind, x)
 		pathGrob(x[, 1], x[, 2], id.lengths = n_points, pathId.lengths = n_paths, 
 				 rule = rule, default.units = default.units, name = name, gp = gp, vp = vp) # nocov end
-	}
+	} else
+		nullGrob()
 }
 #' @export
 st_as_grob.sfc_CIRCULARSTRING <- function(x, ...) {
