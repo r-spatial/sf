@@ -1,3 +1,7 @@
+# version 1.0-4
+
+* fix memory leak in `WKT1_ESRI` retrieval; #1690
+
 # version 1.0-3
 
 * cope with how GEOS >= 3.10.0 handles illegal geometries (e.g., non-closed rings); #1807
