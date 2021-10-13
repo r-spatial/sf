@@ -649,7 +649,7 @@ geos_op2_df = function(x, y, geoms) {
 # after checking identical crs,
 # call geos_op2 function op on x and y:
 # DE-9IM compliant should use model = "closed", more robust seems:
-geos_op2_geom = function(op, x, y, s2_model = "semi-open", ...) {
+geos_op2_geom = function(op, x, y, model = "semi-open", ...) {
 	stopifnot(st_crs(x) == st_crs(y))
 	x = st_geometry(x)
 	y = st_geometry(y)
@@ -660,7 +660,7 @@ geos_op2_geom = function(op, x, y, s2_model = "semi-open", ...) {
 				sym_difference = s2::s2_sym_difference,
 				union = s2::s2_union, stop("invalid operator"))
 		# to be optimized -- this doesn't index on y:
-		lst = structure(unlist(lapply(y, function(yy) fn(x, yy, s2::s2_options(model = s2_model, ...))),
+		lst = structure(unlist(lapply(y, function(yy) fn(x, yy, s2::s2_options(model = model, ...))),
 			recursive = FALSE), class = "s2_geography")
 		e = s2::s2_is_empty(lst)
 		idx = cbind(rep(seq_along(x), length(y)), rep(seq_along(y), each = length(x)))
