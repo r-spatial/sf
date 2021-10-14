@@ -696,6 +696,8 @@ get_first_sfg = function(x) {
 #' @export
 #' @note To find whether pairs of simple feature geometries intersect, use
 #' the function \code{\link{st_intersects}} instead of \code{st_intersection}.
+#'
+#' When using GEOS and not using s2 polygons contain their boundary. When using s2 this is determined by the \code{model} defaults of \link[s2]{s2_options}, which can be overriden via the ... argument, e.g. \code{model = "closed"} to force DE-9IM compliant behaviour of polygons (and reproduce GEOS results).
 #' @examples
 #' set.seed(131)
 #' library(sf)
