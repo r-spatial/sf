@@ -27,7 +27,7 @@ st_crosses(x, y, sparse = TRUE, prepared = TRUE, ...)
 
 st_within(x, y, sparse = TRUE, prepared = TRUE, ...)
 
-st_contains(x, y, sparse = TRUE, prepared = TRUE, ..., s2_model = "open")
+st_contains(x, y, sparse = TRUE, prepared = TRUE, ..., model = "open")
 
 st_contains_properly(x, y, sparse = TRUE, prepared = TRUE, ...)
 
@@ -35,16 +35,9 @@ st_overlaps(x, y, sparse = TRUE, prepared = TRUE, ...)
 
 st_equals(x, y, sparse = TRUE, prepared = FALSE, ...)
 
-st_covers(x, y, sparse = TRUE, prepared = TRUE, ..., s2_model = "closed")
+st_covers(x, y, sparse = TRUE, prepared = TRUE, ..., model = "closed")
 
-st_covered_by(
-  x,
-  y = x,
-  sparse = TRUE,
-  prepared = TRUE,
-  ...,
-  s2_model = "closed"
-)
+st_covered_by(x, y = x, sparse = TRUE, prepared = TRUE, ..., model = "closed")
 
 st_equals_exact(x, y, par, sparse = TRUE, prepared = FALSE, ...)
 
@@ -61,7 +54,7 @@ st_is_within_distance(x, y = x, dist, sparse = TRUE, ...)
 
 \item{prepared}{logical; prepare geometry for x, before looping over y? See Details.}
 
-\item{s2_model}{character; polygon/polyline model; one of 
+\item{model}{character; polygon/polyline model; one of
 "open", "semi-open" or "closed"; see Details.}
 
 \item{par}{numeric; parameter used for "equals_exact" (margin);}
@@ -84,7 +77,7 @@ If \code{y} is missing, `st_predicate(x, x)` is effectively called, and a square
 
 Sparse geometry binary predicate (\code{\link{sgbp}}) lists have the following attributes: \code{region.id} with the \code{row.names} of \code{x} (if any, else \code{1:n}), \code{ncol} with the number of features in \code{y}, and \code{predicate} with the name of the predicate used.
 
-for \code{s2_model}, see https://github.com/r-spatial/s2/issues/32
+for \code{model}, see https://github.com/r-spatial/s2/issues/32
 
 `st_contains_properly(A,B)` is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A.
 
