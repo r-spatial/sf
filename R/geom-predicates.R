@@ -33,16 +33,16 @@ is_symmetric = function(operation, pattern) {
 
 # returning matrix, distance or relation string -- the work horse is:
 st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
-		sparse = TRUE, prepared = FALSE, s2_model = "closed", ...) {
+		sparse = TRUE, prepared = FALSE, model = "closed", ...) {
 	if (missing(y))
 		y = x
 	else if (inherits(x, c("sf", "sfc")) && inherits(y, c("sf", "sfc")))
 		stopifnot(st_crs(x) == st_crs(y))
 	longlat = inherits(x, "s2geography") || isTRUE(st_is_longlat(x))
-	if (longlat && sf_use_s2() && op %in% c("intersects", "contains", "within", 
+	if (longlat && sf_use_s2() && op %in% c("intersects", "contains", "within",
 			"covers", "covered_by", "disjoint", "equals", "touches")) {
 		fn = get(paste0("s2_", op, "_matrix"), envir = getNamespace("s2")) # get op function
-		lst = fn(x, y, s2::s2_options(model = s2_model, ...)) # call function
+		lst = fn(x, y, s2::s2_options(model = model, ...)) # call function
 		id = if (is.null(row.names(x)))
 				as.character(seq_along(lst))
 			else
@@ -177,16 +177,16 @@ st_crosses		= function(x, y, sparse = TRUE, prepared = TRUE, ...)
 
 #' @name geos_binary_pred
 #' @export
-st_within		= function(x, y, sparse = TRUE, prepared = TRUE, ...)
+st_within	= function(x, y, sparse = TRUE, prepared = TRUE, ...)
 	st_geos_binop("within", x, y, sparse = sparse, prepared = prepared, ...)
 
 #' @name geos_binary_pred
-#' @param s2_model character; polygon/polyline model; one of 
+#' @param model character; polygon/polyline model; one of
 #' "open", "semi-open" or "closed"; see Details.
-#' @details for \code{s2_model}, see https://github.com/r-spatial/s2/issues/32
+#' @details for \code{model}, see https://github.com/r-spatial/s2/issues/32
 #' @export
-st_contains		= function(x, y, sparse = TRUE, prepared = TRUE, ..., s2_model = "open")
-	st_geos_binop("contains", x, y, sparse = sparse, prepared = prepared, ..., s2_model = s2_model)
+st_contains	= function(x, y, sparse = TRUE, prepared = TRUE, ..., model = "open")
+	st_geos_binop("contains", x, y, sparse = sparse, prepared = prepared, ..., model = model)
 
 #' @name geos_binary_pred
 #' @export
@@ -214,13 +214,13 @@ st_equals		= function(x, y, sparse = TRUE, prepared = FALSE, ...) {
 
 #' @name geos_binary_pred
 #' @export
-st_covers		= function(x, y, sparse = TRUE, prepared = TRUE, ..., s2_model = "closed")
-	st_geos_binop("covers", x, y, sparse = sparse, prepared = prepared, ..., s2_model = s2_model)
+st_covers = function(x, y, sparse = TRUE, prepared = TRUE, ..., model = "closed")
+	st_geos_binop("covers", x, y, sparse = sparse, prepared = prepared, ..., model = model)
 
 
 #' @name geos_binary_pred
 #' @export
-st_covered_by	= function(x, y = x, sparse = TRUE, prepared = TRUE, ..., s2_model = "closed")
+st_covered_by = function(x, y = x, sparse = TRUE, prepared = TRUE, ..., model = "closed")
 	st_geos_binop("covered_by", x, y, sparse = sparse, prepared = prepared, ...)
 
 
