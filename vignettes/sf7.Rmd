@@ -297,7 +297,7 @@ All unary and binary predicates are available in `s2`, except for
 depending on the `model`, intersections with neighbours are only reported
 when `model` is `closed` (the default):
 ```{r}
-sf_use_s2(FALSE)
+sf_use_s2(TRUE)
 st_intersects(nc[1:3,], nc[1:3,]) # self-intersections + neighbours
 st_intersects(nc[1:3,], nc[1:3,], model = "semi-open") # only self-intersections
 ```
