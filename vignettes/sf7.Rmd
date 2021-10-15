@@ -299,6 +299,7 @@ when `s2_model` is `closed` (the default):
 ```{r}
 sf_use_s2(FALSE)
 st_intersects(nc[1:3,], nc[1:3,]) # self-intersections + neighbours
+sf_use_s2(TRUE)
 st_intersects(nc[1:3,], nc[1:3,], s2_model = "semi-open") # only self-intersections
 ```
 
