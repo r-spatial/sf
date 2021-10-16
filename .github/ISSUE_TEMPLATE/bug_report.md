@@ -18,5 +18,5 @@ Could you please provide a minimal reproducible example?
 Add any other context about the problem here.
 
 <details>
-Paste the output of your `sessionInfo()`
+Paste the output of your `sessionInfo()` and `sf::sf_extSoftVersion()`
 </details>
