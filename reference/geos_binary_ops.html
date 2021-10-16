@@ -217,6 +217,7 @@ an <code>"idx"</code> attribute with the orginal index for returned geometries.<
 
     <p>To find whether pairs of simple feature geometries intersect, use
 the function <code><a href='geos_binary_pred.html'>st_intersects</a></code> instead of <code>st_intersection</code>.</p>
+<p>When using GEOS and not using s2 polygons contain their boundary. When using s2 this is determined by the <code>model</code> defaults of <a href='https://r-spatial.github.io/s2/reference/s2_options.html'>s2_options</a>, which can be overriden via the ... argument, e.g. <code>model = "closed"</code> to force DE-9IM compliant behaviour of polygons (and reproduce GEOS results).</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='geos_combine.html'>st_union</a> for the union of simple features collections; <a href='https://generics.r-lib.org/reference/setops.html'>intersect</a> and <a href='https://generics.r-lib.org/reference/setops.html'>setdiff</a> for the base R set operations.</p></div>

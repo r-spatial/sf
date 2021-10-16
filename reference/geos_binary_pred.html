@@ -168,7 +168,7 @@
 
 <span class='fu'>st_within</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, sparse <span class='op'>=</span> <span class='cn'>TRUE</span>, prepared <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>st_contains</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, sparse <span class='op'>=</span> <span class='cn'>TRUE</span>, prepared <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span>, s2_model <span class='op'>=</span> <span class='st'>"open"</span><span class='op'>)</span>
+<span class='fu'>st_contains</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, sparse <span class='op'>=</span> <span class='cn'>TRUE</span>, prepared <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span>, model <span class='op'>=</span> <span class='st'>"open"</span><span class='op'>)</span>
 
 <span class='fu'>st_contains_properly</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, sparse <span class='op'>=</span> <span class='cn'>TRUE</span>, prepared <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
@@ -176,16 +176,9 @@
 
 <span class='fu'>st_equals</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, sparse <span class='op'>=</span> <span class='cn'>TRUE</span>, prepared <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='fu'>st_covers</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, sparse <span class='op'>=</span> <span class='cn'>TRUE</span>, prepared <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span>, s2_model <span class='op'>=</span> <span class='st'>"closed"</span><span class='op'>)</span>
+<span class='fu'>st_covers</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, sparse <span class='op'>=</span> <span class='cn'>TRUE</span>, prepared <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span>, model <span class='op'>=</span> <span class='st'>"closed"</span><span class='op'>)</span>
 
-<span class='fu'>st_covered_by</span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  y <span class='op'>=</span> <span class='va'>x</span>,
-  sparse <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  prepared <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  <span class='va'>...</span>,
-  s2_model <span class='op'>=</span> <span class='st'>"closed"</span>
-<span class='op'>)</span>
+<span class='fu'>st_covered_by</span><span class='op'>(</span><span class='va'>x</span>, y <span class='op'>=</span> <span class='va'>x</span>, sparse <span class='op'>=</span> <span class='cn'>TRUE</span>, prepared <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span>, model <span class='op'>=</span> <span class='st'>"closed"</span><span class='op'>)</span>
 
 <span class='fu'>st_equals_exact</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, <span class='va'>par</span>, sparse <span class='op'>=</span> <span class='cn'>TRUE</span>, prepared <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span>
 
@@ -215,8 +208,8 @@
       <td><p>logical; prepare geometry for x, before looping over y? See Details.</p></td>
     </tr>
     <tr>
-      <th>s2_model</th>
-      <td><p>character; polygon/polyline model; one of 
+      <th>model</th>
+      <td><p>character; polygon/polyline model; one of
 "open", "semi-open" or "closed"; see Details.</p></td>
     </tr>
     <tr>
@@ -239,7 +232,7 @@
 Specifically, <code>st_intersects</code>, <code>st_disjoint</code>, <code>st_touches</code> <code>st_crosses</code>, <code>st_within</code>, <code>st_contains</code>, <code>st_contains_properly</code>, <code>st_overlaps</code>, <code>st_equals</code>, <code>st_covers</code> and <code>st_covered_by</code> all build spatial indexes for more efficient geometry calculations. <code>st_relate</code>, <code>st_equals_exact</code>, and do not; <code>st_is_within_distance</code> uses a spatial index for geographic coordinates when <code><a href='s2.html'>sf_use_s2()</a></code> is true.</p>
 <p>If <code>y</code> is missing, `st_predicate(x, x)` is effectively called, and a square matrix is returned with diagonal elements `st_predicate(x[i], x[i])`.</p>
 <p>Sparse geometry binary predicate (<code><a href='sgbp.html'>sgbp</a></code>) lists have the following attributes: <code>region.id</code> with the <code>row.names</code> of <code>x</code> (if any, else <code>1:n</code>), <code>ncol</code> with the number of features in <code>y</code>, and <code>predicate</code> with the name of the predicate used.</p>
-<p>for <code>s2_model</code>, see https://github.com/r-spatial/s2/issues/32</p>
+<p>for <code>model</code>, see https://github.com/r-spatial/s2/issues/32</p>
 <p>`st_contains_properly(A,B)` is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A.</p>
 <p>See also <a href='st_relate.html'>st_relate</a> and <a href='https://en.wikipedia.org/wiki/DE-9IM'>https://en.wikipedia.org/wiki/DE-9IM</a> for a more detailed description of the underlying algorithms.</p>
 <p><code>st_equals_exact</code> returns true for two geometries of the same type and their vertices corresponding by index are equal up to a specified tolerance.</p>
