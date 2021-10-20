@@ -112,6 +112,8 @@ Google, and which is used in many of its products (e.g. Google
 Maps, Google Earth Engine, Bigquery GIS) and has been translated
 in several other programming languages.
 
+With projected coordinates `sf` continues to work in $R^2$ as before.
+
 # Fundamental differences
 
 Compared to geometry on $R^2$, and DE9-IM, the `s2` package brings a
