@@ -96,7 +96,8 @@ and whether it is
 * a straight line, cutting through the Earth's surface, or
 * a curved line following the Earth's surface
 
-Starting with `sf` version 1.0, `sf` uses the new package `s2`
+Starting with `sf` version 1.0, if you provide a spatial object in a
+geographical coordinate reference system, `sf` uses the new package `s2`
 (Dunnington, Pebesma, Rubak 2020) for spherical geometry, which
 has functions for computing pretty much all measures, predicates
 and transformations _on the sphere_. This means:
