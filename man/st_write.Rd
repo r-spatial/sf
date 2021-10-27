@@ -6,6 +6,7 @@
 \alias{st_write.sf}
 \alias{st_write.data.frame}
 \alias{write_sf}
+\alias{st_delete}
 \title{Write simple features object to file or database}
 \usage{
 st_write(obj, dsn, layer, ...)
@@ -32,6 +33,13 @@ st_write(obj, dsn, layer, ...)
 \method{st_write}{data.frame}(obj, dsn, layer = NULL, ...)
 
 write_sf(..., quiet = TRUE, append = FALSE, delete_layer = !append)
+
+st_delete(
+  dsn,
+  layer = character(0),
+  driver = guess_driver_can_write(dsn),
+  quiet = FALSE
+)
 }
 \arguments{
 \item{obj}{object of class \code{sf} or \code{sfc}}
@@ -102,6 +110,9 @@ raise warnings or errors or fail silently.
 When deleting layers or data sources is not successful, no error is emitted.
 \code{delete_dsn} and \code{delete_layer} should be
 handled with care; the former may erase complete directories or databases.
+
+st_delete deletes layer(s) in a data source, or a data source if layers are 
+omitted; it returns TRUE on success, FALSE on failure, invisibly.
 }
 \examples{
 nc = st_read(system.file("shape/nc.shp", package="sf"))

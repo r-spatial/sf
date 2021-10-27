@@ -718,3 +718,11 @@ check_append_delete <- function(append, delete) {
 		stop("`delete_layer` and `append` cannot both be `TRUE`", call. = FALSE)
 	}
 }
+
+#' @name st_write
+#' @export
+#' @details st_delete deletes layer(s) in a data source, or a data source if layers are 
+#' omitted; it returns TRUE on success, FALSE on failure, invisibly.
+st_delete = function(dsn, layer = character(0), driver = guess_driver_can_write(dsn), quiet = FALSE) {
+	invisible(CPL_delete_ogr(dsn, layer, driver, quiet) == 0)
+}

@@ -382,3 +382,83 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 	}
 	return 0; // all O.K.
 }
+
+// delete a data source, or one or more layers within a data source
+// [[Rcpp::export]]
+int CPL_delete_ogr(Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer,
+	Rcpp::CharacterVector driver, bool quiet = true) {
+
+	// init:
+	if (driver.size() != 1 || dsn.size() != 1)
+		Rcpp::stop("argument dsn or driver not of length 1.\n");
+
+	/* GDALAllRegister(); -- has been done during .onLoad() */
+	// get driver:
+	GDALDriver *poDriver = GetGDALDriverManager()->GetDriverByName(driver[0]);
+	if (poDriver == NULL) {
+		Rcpp::Rcout << "driver `" << driver[0] << "' not available." << std::endl;
+		Rcpp::stop("Driver not available.\n");
+	}
+
+	// delete data source:
+	if (layer.size() == 0) {
+		if (poDriver->Delete(dsn[0]) != CE_None)
+			Rcpp::Rcout << "Deleting source `" << dsn[0] << "' failed" << std::endl;
+		else if (! quiet)
+			Rcpp::Rcout << "Deleting source `" << dsn[0] << "' using driver `" << driver[0] << "'" << std::endl;
+		return 0;
+	} 
+
+	// delete layer(s):
+
+	// data set:
+	GDALDataset *poDS = (GDALDataset *) GDALOpenEx(dsn[0], GDAL_OF_VECTOR | GDAL_OF_UPDATE, NULL, NULL, NULL); 
+	if (poDS == NULL) {
+		Rcpp::Rcout << "Data source `" << dsn[0] << "' not found" << std::endl;
+		return 1;
+	}
+
+	bool can_do_transaction = (poDS->TestCapability(ODsCTransactions) == TRUE); // can?
+	bool transaction = false;
+	if (can_do_transaction) { // try to start transaction:
+		unset_error_handler();
+		transaction = (poDS->StartTransaction() == OGRERR_NONE); // do?
+		set_error_handler();
+		if (! transaction) { // failed: #nocov start
+			GDALClose(poDS);
+			Rcpp::Rcout << "On data source `" << dsn[0] << "' cannot start transaction" << std::endl;
+			return 1; // transaction failed!
+		} // #nocov end
+	}
+
+	for (int i = 0; i < layer.size(); i++) { // reverse loop order if inefficient?
+		// find & delete layer:
+		bool deleted = false;
+		for (int iLayer = 0; iLayer < poDS->GetLayerCount(); iLayer++) {
+			OGRLayer *poLayer = poDS->GetLayer(iLayer);
+			if (poLayer != NULL && EQUAL(poLayer->GetName(), layer[i])) {
+				OGRErr err = poDS->DeleteLayer(iLayer);
+				if (! quiet) {
+					if (err == OGRERR_UNSUPPORTED_OPERATION)
+						Rcpp::Rcout << "Deleting layer not supported by driver `" << driver[0] << "'"  // #nocov
+							<< std::endl; // #nocov
+					else  {
+						Rcpp::Rcout << "Deleting layer `" << layer[0] << "' using driver `" << 
+							driver[0] << "'" << std::endl;
+					}
+				}
+				deleted = (err == OGRERR_NONE);
+				// break; -- breaks which loop?
+			}
+		}
+		if (! deleted)
+			Rcpp::Rcout << "Deleting layer `" << layer[0] << "' failed" << std::endl;
+	}
+	if (transaction && poDS->CommitTransaction() != OGRERR_NONE) { // #nocov start
+		poDS->RollbackTransaction();
+		Rcpp::Rcout << "CommitTransaction() failed." << std::endl; 
+		return 1;
+	} // #nocov end
+	GDALClose(poDS);
+	return 0;
+}

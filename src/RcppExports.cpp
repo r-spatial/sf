@@ -543,6 +543,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_delete_ogr
+int CPL_delete_ogr(Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer, Rcpp::CharacterVector driver, bool quiet);
+RcppExport SEXP _sf_CPL_delete_ogr(SEXP dsnSEXP, SEXP layerSEXP, SEXP driverSEXP, SEXP quietSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type dsn(dsnSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type layer(layerSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type driver(driverSEXP);
+    Rcpp::traits::input_parameter< bool >::type quiet(quietSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_delete_ogr(dsn, layer, driver, quiet));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_geos_binop
 Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double par, std::string pattern, bool prepared);
 RcppExport SEXP _sf_CPL_geos_binop(SEXP sfc0SEXP, SEXP sfc1SEXP, SEXP opSEXP, SEXP parSEXP, SEXP patternSEXP, SEXP preparedSEXP) {
@@ -1320,6 +1334,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_gdalmdimtranslate", (DL_FUNC) &_sf_CPL_gdalmdimtranslate, 5},
     {"_sf_CPL_gdal_warper", (DL_FUNC) &_sf_CPL_gdal_warper, 6},
     {"_sf_CPL_write_ogr", (DL_FUNC) &_sf_CPL_write_ogr, 16},
+    {"_sf_CPL_delete_ogr", (DL_FUNC) &_sf_CPL_delete_ogr, 4},
     {"_sf_CPL_geos_binop", (DL_FUNC) &_sf_CPL_geos_binop, 6},
     {"_sf_CPL_geos_is_valid_reason", (DL_FUNC) &_sf_CPL_geos_is_valid_reason, 1},
     {"_sf_CPL_geos_make_valid", (DL_FUNC) &_sf_CPL_geos_make_valid, 1},

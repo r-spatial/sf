@@ -161,6 +161,10 @@ CPL_write_ogr <- function(obj, dsn, layer, driver, dco, lco, geom, dim, fids, Co
     .Call('_sf_CPL_write_ogr', PACKAGE = 'sf', obj, dsn, layer, driver, dco, lco, geom, dim, fids, ConfigOptions, quiet, append, delete_dsn, delete_layer, write_geometries, width)
 }
 
+CPL_delete_ogr <- function(dsn, layer, driver, quiet = TRUE) {
+    .Call('_sf_CPL_delete_ogr', PACKAGE = 'sf', dsn, layer, driver, quiet)
+}
+
 CPL_geos_binop <- function(sfc0, sfc1, op, par = 0.0, pattern = "", prepared = FALSE) {
     .Call('_sf_CPL_geos_binop', PACKAGE = 'sf', sfc0, sfc1, op, par, pattern, prepared)
 }
