@@ -191,20 +191,23 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>A simple feature geometry list-column is a list of class
-<code><a href='https://rdrr.io/r/base/c.html'>c("stc_TYPE", "sfc")</a></code> which most often contains objects of identical type;
+<code>c("stc_TYPE", "sfc")</code> which most often contains objects of identical type;
 in case of a mix of types or an empty set, <code>TYPE</code> is set to the
 superclass <code>GEOMETRY</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>pt1</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>pt2</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>(</span><span class='va'>sfc</span> <span class='op'>=</span> <span class='fu'>st_sfc</span><span class='op'>(</span><span class='va'>pt1</span>, <span class='va'>pt2</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Geometry set for 2 features 
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 0 ymin: 1 xmax: 1 ymax: 1
-#&gt; CRS:           NA</div><div class='output co'>#&gt; <span class='message'>POINT (0 1)</span></div><div class='output co'>#&gt; <span class='message'>POINT (1 1)</span></div><div class='input'><span class='va'>d</span> <span class='op'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>a<span class='op'>=</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, geom<span class='op'>=</span><span class='va'>sfc</span><span class='op'>)</span><span class='op'>)</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>pt1</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pt2</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>(</span><span class='va'>sfc</span> <span class='op'>=</span> <span class='fu'>st_sfc</span><span class='op'>(</span><span class='va'>pt1</span>, <span class='va'>pt2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry set for 2 features </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 0 ymin: 1 xmax: 1 ymax: 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (0 1)</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (1 1)</span>
+<span class='r-in'><span class='va'>d</span> <span class='op'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>a<span class='op'>=</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, geom<span class='op'>=</span><span class='va'>sfc</span><span class='op'>)</span><span class='op'>)</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

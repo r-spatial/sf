@@ -186,23 +186,28 @@
     <p>Only combinations <code>drop=TRUE</code>, <code>what = "ZM"</code>, and <code>drop=FALSE</code>, <code>what="Z"</code> are supported so far. In case <code>add=TRUE</code>, <code>x</code> should have <code>XY</code> geometry, and zero values are added for <code>Z</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>st_zm</span><span class='op'>(</span><span class='fu'><a href='st.html'>st_linestring</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>32</span>,<span class='fl'>8</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>LINESTRING (1 9, 2 10, 3 11, 4 12, 5 13, 6 14, 7 15, 8 16)</span></div><div class='input'><span class='va'>x</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_linestring</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>32</span>,<span class='fl'>8</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_linestring</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>8</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>st_zm</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Geometry set for 2 features 
-#&gt; Geometry type: LINESTRING
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 1 ymin: 3 xmax: 8 ymax: 16
-#&gt; CRS:           NA</div><div class='output co'>#&gt; <span class='message'>LINESTRING (1 9, 2 10, 3 11, 4 12, 5 13, 6 14, ...</span></div><div class='output co'>#&gt; <span class='message'>LINESTRING (1 3, 2 4)</span></div><div class='input'><span class='va'>a</span> <span class='op'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, geom<span class='op'>=</span><span class='va'>x</span><span class='op'>)</span>
-<span class='fu'>st_zm</span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Simple feature collection with 2 features and 1 field
-#&gt; Geometry type: LINESTRING
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 1 ymin: 3 xmax: 8 ymax: 16
-#&gt; CRS:           NA
-#&gt;   a                           geom
-#&gt; 1 1 LINESTRING (1 9, 2 10, 3 11...
-#&gt; 2 2          LINESTRING (1 3, 2 4)</div></pre>
+    <pre class="examples"><span class='r-in'><span class='fu'>st_zm</span><span class='op'>(</span><span class='fu'><a href='st.html'>st_linestring</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>32</span>,<span class='fl'>8</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> LINESTRING (1 9, 2 10, 3 11, 4 12, 5 13, 6 14, 7 15, 8 16)</span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_linestring</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>32</span>,<span class='fl'>8</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_linestring</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>8</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>st_zm</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry set for 2 features </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: LINESTRING</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 1 ymin: 3 xmax: 8 ymax: 16</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> LINESTRING (1 9, 2 10, 3 11, 4 12, 5 13, 6 14, ...</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> LINESTRING (1 3, 2 4)</span>
+<span class='r-in'><span class='va'>a</span> <span class='op'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, geom<span class='op'>=</span><span class='va'>x</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>st_zm</span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 2 features and 1 field</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: LINESTRING</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 1 ymin: 3 xmax: 8 ymax: 16</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   a                           geom</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 1 LINESTRING (1 9, 2 10, 3 11...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 2          LINESTRING (1 3, 2 4)</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

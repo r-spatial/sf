@@ -253,12 +253,14 @@ returned has a class <code>z_range</code></p>
     <p><code>NA_z_range_</code> represents the missing value for a <code>z_range</code> object</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>a</span> <span class='op'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, geom <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>, crs <span class='op'>=</span> <span class='fl'>4326</span><span class='op'>)</span>
-<span class='fu'>st_z_range</span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; zmin zmax 
-#&gt;    2    3 </div><div class='input'><span class='fu'>st_z_range</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>zmin <span class='op'>=</span> <span class='fl'>16.1</span>, zmax <span class='op'>=</span> <span class='fl'>16.6</span><span class='op'>)</span>, crs <span class='op'>=</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span><span class='op'>(</span><span class='fl'>4326</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; zmin zmax 
-#&gt; 16.1 16.6 </div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>a</span> <span class='op'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, geom <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>, crs <span class='op'>=</span> <span class='fl'>4326</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>st_z_range</span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> zmin zmax </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    2    3 </span>
+<span class='r-in'><span class='fu'>st_z_range</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>zmin <span class='op'>=</span> <span class='fl'>16.1</span>, zmax <span class='op'>=</span> <span class='fl'>16.6</span><span class='op'>)</span>, crs <span class='op'>=</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span><span class='op'>(</span><span class='fl'>4326</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> zmin zmax </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 16.1 16.6 </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

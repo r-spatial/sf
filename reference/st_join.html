@@ -237,80 +237,91 @@ see also <a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_
 </ul><p>A left join returns all records of the <code>x</code> object with <code>y</code> fields for non-matched records filled with <code>NA</code> values; an inner join returns only records that spatially match.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>a</span> <span class='op'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>,
- geom <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>,<span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>b</span> <span class='op'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>11</span><span class='op'>:</span><span class='fl'>14</span>,
- geom <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>,<span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>,<span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>st_join</span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Simple feature collection with 4 features and 2 fields
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 1 ymin: 1 xmax: 3 ymax: 3
-#&gt; CRS:           NA
-#&gt;     a.x a.y        geom
-#&gt; 1     1  NA POINT (1 1)
-#&gt; 2     2  12 POINT (2 2)
-#&gt; 2.1   2  13 POINT (2 2)
-#&gt; 3     3  14 POINT (3 3)</div><div class='input'><span class='fu'>st_join</span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span>, left <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Simple feature collection with 3 features and 2 fields
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 2 ymin: 2 xmax: 3 ymax: 3
-#&gt; CRS:           NA
-#&gt;     a.x a.y        geom
-#&gt; 2     2  12 POINT (2 2)
-#&gt; 2.1   2  13 POINT (2 2)
-#&gt; 3     3  14 POINT (3 3)</div><div class='input'><span class='co'># two ways to aggregate y's attribute values outcome over x's geometries:</span>
-<span class='fu'>st_join</span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='aggregate.sf.html'>aggregate</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>.</span><span class='op'>$</span><span class='va'>a.x</span><span class='op'>)</span>, <span class='va'>mean</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Simple feature collection with 3 features and 3 fields
-#&gt; Attribute-geometry relationship: 0 constant, 2 aggregate, 1 identity
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 1 ymin: 1 xmax: 3 ymax: 3
-#&gt; CRS:           NA
-#&gt;   Group.1 a.x  a.y    geometry
-#&gt; 1       1   1   NA POINT (1 1)
-#&gt; 2       2   2 12.5 POINT (2 2)
-#&gt; 3       3   3 14.0 POINT (3 3)</div><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span>
-<span class='fu'>st_join</span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>a.x</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='tidyverse.html'>summarise</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>a.y</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Simple feature collection with 3 features and 2 fields
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 1 ymin: 1 xmax: 3 ymax: 3
-#&gt; CRS:           NA</div><div class='output co'>#&gt; <span class='message'>Registered S3 method overwritten by 'cli':</span>
-#&gt; <span class='message'>  method     from         </span>
-#&gt; <span class='message'>  print.boxx spatstat.geom</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 3 × 3</span>
-#&gt;     a.x `mean(a.y)`    geom
-#&gt;   <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;POINT&gt;</span>
-#&gt; <span style='color: #BCBCBC;'>1</span>     1        <span style='color: #BB0000;'>NA</span>     (1 1)
-#&gt; <span style='color: #BCBCBC;'>2</span>     2        12.5   (2 2)
-#&gt; <span style='color: #BCBCBC;'>3</span>     3        14     (3 3)</div><div class='input'><span class='co'># example of largest = TRUE:</span>
-<span class='va'>nc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='st_transform.html'>st_transform</a></span><span class='op'>(</span><span class='fu'><a href='st_read.html'>st_read</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"shape/nc.shp"</span>, package<span class='op'>=</span><span class='st'>"sf"</span><span class='op'>)</span><span class='op'>)</span>, <span class='fl'>2264</span><span class='op'>)</span>                
-</div><div class='output co'>#&gt; Reading layer `nc' from data source 
-#&gt;   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp5QplII/temp_libpathabcb5d341f7c/sf/shape/nc.shp' 
-#&gt;   using driver `ESRI Shapefile'
-#&gt; Simple feature collection with 100 features and 14 fields
-#&gt; Geometry type: MULTIPOLYGON
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-#&gt; Geodetic CRS:  NAD27</div><div class='input'><span class='va'>gr</span> <span class='op'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>
-    label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, <span class='va'>LETTERS</span><span class='op'>[</span><span class='fl'>10</span><span class='op'>:</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span><span class='op'>[</span>,<span class='fl'>2</span><span class='op'>:</span><span class='fl'>1</span><span class='op'>]</span>, <span class='fl'>1</span>, <span class='va'>paste0</span>, collapse <span class='op'>=</span> <span class='st'>" "</span><span class='op'>)</span>,
-    geom <span class='op'>=</span> <span class='fu'><a href='st_make_grid.html'>st_make_grid</a></span><span class='op'>(</span><span class='fu'><a href='st_as_sfc.html'>st_as_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st_bbox.html'>st_bbox</a></span><span class='op'>(</span><span class='va'>nc</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>gr</span><span class='op'>$</span><span class='va'>col</span> <span class='op'>=</span> <span class='fu'><a href='plot.html'>sf.colors</a></span><span class='op'>(</span><span class='fl'>10</span>, categorical <span class='op'>=</span> <span class='cn'>TRUE</span>, alpha <span class='op'>=</span> <span class='fl'>.3</span><span class='op'>)</span>
-<span class='co'># cut, to check, NA's work out:</span>
-<span class='va'>gr</span> <span class='op'>=</span> <span class='va'>gr</span><span class='op'>[</span><span class='op'>-</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span>,<span class='op'>]</span>
-<span class='va'>nc_j</span> <span class='op'>&lt;-</span> <span class='fu'>st_join</span><span class='op'>(</span><span class='va'>nc</span>, <span class='va'>gr</span>, largest <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: attribute variables are assumed to be spatially constant throughout all geometries</span></div><div class='input'><span class='co'># the two datasets:</span>
-<span class='va'>opar</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfrow <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>1</span><span class='op'>)</span>, mar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='fu'><a href='st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>nc_j</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='fu'><a href='st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>gr</span><span class='op'>)</span>, add <span class='op'>=</span> <span class='cn'>TRUE</span>, col <span class='op'>=</span> <span class='va'>gr</span><span class='op'>$</span><span class='va'>col</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/pkg/sp/man/gridlines.html'>text</a></span><span class='op'>(</span><span class='fu'><a href='st_coordinates.html'>st_coordinates</a></span><span class='op'>(</span><span class='fu'><a href='geos_unary.html'>st_centroid</a></span><span class='op'>(</span><span class='va'>gr</span><span class='op'>)</span><span class='op'>)</span>, labels <span class='op'>=</span> <span class='va'>gr</span><span class='op'>$</span><span class='va'>label</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: st_centroid assumes attributes are constant over geometries of x</span></div><div class='input'><span class='co'># the joined dataset:</span>
-<span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='fu'><a href='st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>nc_j</span><span class='op'>)</span>, border <span class='op'>=</span> <span class='st'>'black'</span>, col <span class='op'>=</span> <span class='va'>nc_j</span><span class='op'>$</span><span class='va'>col</span><span class='op'>)</span>
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/sp/man/gridlines.html'>text</a></span><span class='op'>(</span><span class='fu'><a href='st_coordinates.html'>st_coordinates</a></span><span class='op'>(</span><span class='fu'><a href='geos_unary.html'>st_centroid</a></span><span class='op'>(</span><span class='va'>nc_j</span><span class='op'>)</span><span class='op'>)</span>, labels <span class='op'>=</span> <span class='va'>nc_j</span><span class='op'>$</span><span class='va'>label</span>, cex <span class='op'>=</span> <span class='fl'>.8</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: st_centroid assumes attributes are constant over geometries of x</span></div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='fu'><a href='st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>gr</span><span class='op'>)</span>, border <span class='op'>=</span> <span class='st'>'green'</span>, add <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='img'><img src='st_join-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span><span class='va'>opar</span><span class='op'>)</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>a</span> <span class='op'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>,</span>
+<span class='r-in'> geom <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>,<span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>b</span> <span class='op'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>11</span><span class='op'>:</span><span class='fl'>14</span>,</span>
+<span class='r-in'> geom <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>,<span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>,<span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>st_join</span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 4 features and 2 fields</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 1 ymin: 1 xmax: 3 ymax: 3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     a.x a.y        geom</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1     1  NA POINT (1 1)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2     2  12 POINT (2 2)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2.1   2  13 POINT (2 2)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3     3  14 POINT (3 3)</span>
+<span class='r-in'><span class='fu'>st_join</span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span>, left <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 3 features and 2 fields</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 2 ymin: 2 xmax: 3 ymax: 3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     a.x a.y        geom</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2     2  12 POINT (2 2)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2.1   2  13 POINT (2 2)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3     3  14 POINT (3 3)</span>
+<span class='r-in'><span class='co'># two ways to aggregate y's attribute values outcome over x's geometries:</span></span>
+<span class='r-in'><span class='fu'>st_join</span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='aggregate.sf.html'>aggregate</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>.</span><span class='op'>$</span><span class='va'>a.x</span><span class='op'>)</span>, <span class='va'>mean</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 3 features and 3 fields</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Attribute-geometry relationship: 0 constant, 2 aggregate, 1 identity</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 1 ymin: 1 xmax: 3 ymax: 3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Group.1 a.x  a.y    geometry</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1       1   1   NA POINT (1 1)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2       2   2 12.5 POINT (2 2)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3       3   3 14.0 POINT (3 3)</span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>st_join</span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>a.x</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='tidyverse.html'>summarise</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>a.y</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 3 features and 2 fields</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 1 ymin: 1 xmax: 3 ymax: 3</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Registered S3 method overwritten by 'cli':</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   method     from         </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>   print.boxx spatstat.geom</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 3 × 3</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     a.x `mean(a.y)`    geom</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;POINT&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span>     1        <span style='color: #BB0000;'>NA</span>     (1 1)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span>     2        12.5   (2 2)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>3</span>     3        14     (3 3)</span>
+<span class='r-in'><span class='co'># example of largest = TRUE:</span></span>
+<span class='r-in'><span class='va'>nc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='st_transform.html'>st_transform</a></span><span class='op'>(</span><span class='fu'><a href='st_read.html'>st_read</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"shape/nc.shp"</span>, package<span class='op'>=</span><span class='st'>"sf"</span><span class='op'>)</span><span class='op'>)</span>, <span class='fl'>2264</span><span class='op'>)</span>                </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Reading layer `nc' from data source </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpX0LqXV/temp_libpath129693bb07ae7/sf/shape/nc.shp' </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   using driver `ESRI Shapefile'</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: MULTIPOLYGON</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  NAD27</span>
+<span class='r-in'><span class='va'>gr</span> <span class='op'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span></span>
+<span class='r-in'>    label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/expand.grid.html'>expand.grid</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, <span class='va'>LETTERS</span><span class='op'>[</span><span class='fl'>10</span><span class='op'>:</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span><span class='op'>[</span>,<span class='fl'>2</span><span class='op'>:</span><span class='fl'>1</span><span class='op'>]</span>, <span class='fl'>1</span>, <span class='va'>paste0</span>, collapse <span class='op'>=</span> <span class='st'>" "</span><span class='op'>)</span>,</span>
+<span class='r-in'>    geom <span class='op'>=</span> <span class='fu'><a href='st_make_grid.html'>st_make_grid</a></span><span class='op'>(</span><span class='fu'><a href='st_as_sfc.html'>st_as_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st_bbox.html'>st_bbox</a></span><span class='op'>(</span><span class='va'>nc</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>gr</span><span class='op'>$</span><span class='va'>col</span> <span class='op'>=</span> <span class='fu'><a href='plot.html'>sf.colors</a></span><span class='op'>(</span><span class='fl'>10</span>, categorical <span class='op'>=</span> <span class='cn'>TRUE</span>, alpha <span class='op'>=</span> <span class='fl'>.3</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># cut, to check, NA's work out:</span></span>
+<span class='r-in'><span class='va'>gr</span> <span class='op'>=</span> <span class='va'>gr</span><span class='op'>[</span><span class='op'>-</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>30</span><span class='op'>)</span>,<span class='op'>]</span></span>
+<span class='r-in'><span class='va'>nc_j</span> <span class='op'>&lt;-</span> <span class='fu'>st_join</span><span class='op'>(</span><span class='va'>nc</span>, <span class='va'>gr</span>, largest <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>attribute variables are assumed to be spatially constant throughout all geometries</span>
+<span class='r-in'><span class='co'># the two datasets:</span></span>
+<span class='r-in'><span class='va'>opar</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span>mfrow <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>,<span class='fl'>1</span><span class='op'>)</span>, mar <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='fu'><a href='st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>nc_j</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='fu'><a href='st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>gr</span><span class='op'>)</span>, add <span class='op'>=</span> <span class='cn'>TRUE</span>, col <span class='op'>=</span> <span class='va'>gr</span><span class='op'>$</span><span class='va'>col</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span><span class='op'>(</span><span class='fu'><a href='st_coordinates.html'>st_coordinates</a></span><span class='op'>(</span><span class='fu'><a href='geos_unary.html'>st_centroid</a></span><span class='op'>(</span><span class='va'>gr</span><span class='op'>)</span><span class='op'>)</span>, labels <span class='op'>=</span> <span class='va'>gr</span><span class='op'>$</span><span class='va'>label</span><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>st_centroid assumes attributes are constant over geometries of x</span>
+<span class='r-in'><span class='co'># the joined dataset:</span></span>
+<span class='r-in'><span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='fu'><a href='st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>nc_j</span><span class='op'>)</span>, border <span class='op'>=</span> <span class='st'>'black'</span>, col <span class='op'>=</span> <span class='va'>nc_j</span><span class='op'>$</span><span class='va'>col</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/text.html'>text</a></span><span class='op'>(</span><span class='fu'><a href='st_coordinates.html'>st_coordinates</a></span><span class='op'>(</span><span class='fu'><a href='geos_unary.html'>st_centroid</a></span><span class='op'>(</span><span class='va'>nc_j</span><span class='op'>)</span><span class='op'>)</span>, labels <span class='op'>=</span> <span class='va'>nc_j</span><span class='op'>$</span><span class='va'>label</span>, cex <span class='op'>=</span> <span class='fl'>.8</span><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>st_centroid assumes attributes are constant over geometries of x</span>
+<span class='r-in'><span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='fu'><a href='st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>gr</span><span class='op'>)</span>, border <span class='op'>=</span> <span class='st'>'green'</span>, add <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='st_join-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/par.html'>par</a></span><span class='op'>(</span><span class='va'>opar</span><span class='op'>)</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

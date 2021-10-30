@@ -202,9 +202,11 @@
 PostGIS and other simple features implementations for addition of SRID to a WKT string.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>st_as_text</span><span class='op'>(</span><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "POINT (1 2)"</div><div class='input'><span class='fu'>st_as_text</span><span class='op'>(</span><span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>90</span>,<span class='fl'>40</span><span class='op'>)</span><span class='op'>)</span>, crs <span class='op'>=</span> <span class='fl'>4326</span><span class='op'>)</span>, EWKT <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "SRID=4326;POINT (-90 40)"</div></pre>
+    <pre class="examples"><span class='r-in'><span class='fu'>st_as_text</span><span class='op'>(</span><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "POINT (1 2)"</span>
+<span class='r-in'><span class='fu'>st_as_text</span><span class='op'>(</span><span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>90</span>,<span class='fl'>40</span><span class='op'>)</span><span class='op'>)</span>, crs <span class='op'>=</span> <span class='fl'>4326</span><span class='op'>)</span>, EWKT <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "SRID=4326;POINT (-90 40)"</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

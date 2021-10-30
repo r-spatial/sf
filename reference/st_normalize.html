@@ -174,7 +174,7 @@ the input, but other domains can be used as well</p>
     <tr>
       <th>domain</th>
       <td><p>The domain <code>x</code> should be normalized from as a length 4
-vector of the form <code><a href='https://rdrr.io/r/base/c.html'>c(xmin, ymin, xmax, ymax)</a></code>. Defaults to the
+vector of the form <code>c(xmin, ymin, xmax, ymax)</code>. Defaults to the
 bounding box of <code>x</code></p></td>
     </tr>
     <tr>
@@ -185,21 +185,26 @@ bounding box of <code>x</code></p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>p1</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>7</span>,<span class='fl'>52</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>st_normalize</span><span class='op'>(</span><span class='va'>p1</span>, domain <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>POINT (0.7 0.52)</span></div><div class='input'>
-<span class='va'>p2</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>30</span>,<span class='fl'>20</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>sfc</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>p1</span>, <span class='va'>p2</span>, crs <span class='op'>=</span> <span class='fl'>4326</span><span class='op'>)</span>
-<span class='va'>sfc</span>
-</div><div class='output co'>#&gt; Geometry set for 2 features 
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: -30 ymin: 20 xmax: 7 ymax: 52
-#&gt; Geodetic CRS:  WGS 84</div><div class='output co'>#&gt; <span class='message'>POINT (7 52)</span></div><div class='output co'>#&gt; <span class='message'>POINT (-30 20)</span></div><div class='input'><span class='va'>sfc_norm</span> <span class='op'>&lt;-</span> <span class='fu'>st_normalize</span><span class='op'>(</span><span class='va'>sfc</span><span class='op'>)</span>
-<span class='fu'><a href='st_bbox.html'>st_bbox</a></span><span class='op'>(</span><span class='va'>sfc_norm</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; xmin ymin xmax ymax 
-#&gt;    0    0    1    1 </div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>p1</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>7</span>,<span class='fl'>52</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>st_normalize</span><span class='op'>(</span><span class='va'>p1</span>, domain <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (0.7 0.52)</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>p2</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>30</span>,<span class='fl'>20</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>sfc</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>p1</span>, <span class='va'>p2</span>, crs <span class='op'>=</span> <span class='fl'>4326</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>sfc</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry set for 2 features </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -30 ymin: 20 xmax: 7 ymax: 52</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (7 52)</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (-30 20)</span>
+<span class='r-in'><span class='va'>sfc_norm</span> <span class='op'>&lt;-</span> <span class='fu'>st_normalize</span><span class='op'>(</span><span class='va'>sfc</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='st_bbox.html'>st_bbox</a></span><span class='op'>(</span><span class='va'>sfc_norm</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xmin ymin xmax ymax </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    0    0    1    1 </span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

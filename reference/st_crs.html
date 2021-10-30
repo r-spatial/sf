@@ -263,7 +263,7 @@ is used for the <code>input</code> field.</p>
 <p>In case a coordinate reference system is replaced, no transformation takes
 place and a warning is raised to stress this.</p>
 <p><code>NA_crs_</code> is the <code>crs</code> object with missing values for <code>input</code> and <code>wkt</code>.</p>
-<p>the <code><a href='https://rdrr.io/r/base/Extract.html'>$</a></code> method for <code>crs</code> objects retrieves named elements
+<p>the <code>$</code> method for <code>crs</code> objects retrieves named elements
 using the GDAL interface; named elements include
 <code>"SemiMajor"</code>, <code>"SemiMinor"</code>, <code>"InvFlattening"</code>, <code>"IsGeographic"</code>,
 <code>"units_gdal"</code>, <code>"IsVertical"</code>, <code>"WktPretty"</code>, <code>"Wkt"</code>,
@@ -280,45 +280,63 @@ when data are read, or have to be written, with coordinates in authority complia
 The return value is the current state of this (<code>FALSE</code>, by default).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>sfc</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>sf</span> <span class='op'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, geom <span class='op'>=</span> <span class='va'>sfc</span><span class='op'>)</span>
-<span class='fu'>st_crs</span><span class='op'>(</span><span class='va'>sf</span><span class='op'>)</span> <span class='op'>=</span> <span class='fl'>4326</span>
-<span class='fu'><a href='st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>sf</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Geometry set for 2 features 
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1
-#&gt; Geodetic CRS:  WGS 84</div><div class='output co'>#&gt; <span class='message'>POINT (0 0)</span></div><div class='output co'>#&gt; <span class='message'>POINT (1 1)</span></div><div class='input'><span class='va'>sfc</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>st_crs</span><span class='op'>(</span><span class='va'>sfc</span><span class='op'>)</span> <span class='op'>=</span> <span class='fl'>4326</span>
-<span class='va'>sfc</span>
-</div><div class='output co'>#&gt; Geometry set for 2 features 
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1
-#&gt; Geodetic CRS:  WGS 84</div><div class='output co'>#&gt; <span class='message'>POINT (0 0)</span></div><div class='output co'>#&gt; <span class='message'>POINT (1 1)</span></div><div class='input'><span class='va'>sfc</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span>
-<span class='va'>x</span> <span class='op'>=</span> <span class='va'>sfc</span> <span class='op'>%&gt;%</span> <span class='fu'>st_set_crs</span><span class='op'>(</span><span class='fl'>4326</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='st_transform.html'>st_transform</a></span><span class='op'>(</span><span class='fl'>3857</span><span class='op'>)</span>
-<span class='va'>x</span>
-</div><div class='output co'>#&gt; Geometry set for 2 features 
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 0 ymin: 0 xmax: 111319.5 ymax: 111325.1
-#&gt; Projected CRS: WGS 84 / Pseudo-Mercator</div><div class='output co'>#&gt; <span class='message'>POINT (0 0)</span></div><div class='output co'>#&gt; <span class='message'>POINT (111319.5 111325.1)</span></div><div class='input'><span class='fu'>st_crs</span><span class='op'>(</span><span class='st'>"EPSG:3857"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>input</span>
-</div><div class='output co'>#&gt; [1] "EPSG:3857"</div><div class='input'><span class='fu'>st_crs</span><span class='op'>(</span><span class='fl'>3857</span><span class='op'>)</span><span class='op'>$</span><span class='va'>proj4string</span>
-</div><div class='output co'>#&gt; [1] "+proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs"</div><div class='input'><span class='fu'>st_crs</span><span class='op'>(</span><span class='fl'>3857</span><span class='op'>)</span><span class='op'>$</span><span class='va'>b</span>     <span class='co'># numeric</span>
-</div><div class='output co'>#&gt; [1] 6378137</div><div class='input'><span class='fu'>st_crs</span><span class='op'>(</span><span class='fl'>3857</span><span class='op'>)</span><span class='op'>$</span><span class='va'>units</span> <span class='co'># character</span>
-</div><div class='output co'>#&gt; [1] "m"</div><div class='input'><span class='va'>pt</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>60</span><span class='op'>)</span><span class='op'>)</span>, crs <span class='op'>=</span> <span class='fl'>4326</span><span class='op'>)</span>
-<span class='co'># st_axis_order() only has effect in GDAL &gt;= 2.5.0:</span>
-<span class='fu'>st_axis_order</span><span class='op'>(</span><span class='op'>)</span> <span class='co'># query default: FALSE means interpret pt as (longitude latitude)</span>
-</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='st_transform.html'>st_transform</a></span><span class='op'>(</span><span class='va'>pt</span>, <span class='fl'>3857</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>
-</div><div class='output co'>#&gt; <span class='message'>POINT (0 8399738)</span></div><div class='input'><span class='va'>old_value</span> <span class='op'>=</span> <span class='cn'>FALSE</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='sf_extSoftVersion.html'>sf_extSoftVersion</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>[</span><span class='st'>"GDAL"</span><span class='op'>]</span> <span class='op'>&gt;=</span> <span class='st'>"2.5.0"</span><span class='op'>)</span>
-   <span class='op'>(</span><span class='va'>old_value</span> <span class='op'>=</span> <span class='fu'>st_axis_order</span><span class='op'>(</span><span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='co'># now interpret pt as (latitude longitude), as EPSG:4326 prescribes:</span>
-<span class='fu'>st_axis_order</span><span class='op'>(</span><span class='op'>)</span> <span class='co'># query current value</span>
-</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'><a href='st_transform.html'>st_transform</a></span><span class='op'>(</span><span class='va'>pt</span>, <span class='fl'>3857</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span>
-</div><div class='output co'>#&gt; <span class='message'>POINT (6679169 0)</span></div><div class='input'><span class='fu'>st_axis_order</span><span class='op'>(</span><span class='va'>old_value</span><span class='op'>)</span> <span class='co'># set back to old value</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>sfc</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>sf</span> <span class='op'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, geom <span class='op'>=</span> <span class='va'>sfc</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>st_crs</span><span class='op'>(</span><span class='va'>sf</span><span class='op'>)</span> <span class='op'>=</span> <span class='fl'>4326</span></span>
+<span class='r-in'><span class='fu'><a href='st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>sf</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry set for 2 features </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (0 0)</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (1 1)</span>
+<span class='r-in'><span class='va'>sfc</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>st_crs</span><span class='op'>(</span><span class='va'>sfc</span><span class='op'>)</span> <span class='op'>=</span> <span class='fl'>4326</span></span>
+<span class='r-in'><span class='va'>sfc</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry set for 2 features </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (0 0)</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (1 1)</span>
+<span class='r-in'><span class='va'>sfc</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>=</span> <span class='va'>sfc</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>st_set_crs</span><span class='op'>(</span><span class='fl'>4326</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='st_transform.html'>st_transform</a></span><span class='op'>(</span><span class='fl'>3857</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry set for 2 features </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 0 ymin: 0 xmax: 111319.5 ymax: 111325.1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Projected CRS: WGS 84 / Pseudo-Mercator</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (0 0)</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (111319.5 111325.1)</span>
+<span class='r-in'><span class='fu'>st_crs</span><span class='op'>(</span><span class='st'>"EPSG:3857"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>input</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "EPSG:3857"</span>
+<span class='r-in'><span class='fu'>st_crs</span><span class='op'>(</span><span class='fl'>3857</span><span class='op'>)</span><span class='op'>$</span><span class='va'>proj4string</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "+proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs"</span>
+<span class='r-in'><span class='fu'>st_crs</span><span class='op'>(</span><span class='fl'>3857</span><span class='op'>)</span><span class='op'>$</span><span class='va'>b</span>     <span class='co'># numeric</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 6378137</span>
+<span class='r-in'><span class='fu'>st_crs</span><span class='op'>(</span><span class='fl'>3857</span><span class='op'>)</span><span class='op'>$</span><span class='va'>units</span> <span class='co'># character</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "m"</span>
+<span class='r-in'><span class='va'>pt</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>60</span><span class='op'>)</span><span class='op'>)</span>, crs <span class='op'>=</span> <span class='fl'>4326</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># st_axis_order() only has effect in GDAL &gt;= 2.5.0:</span></span>
+<span class='r-in'><span class='fu'>st_axis_order</span><span class='op'>(</span><span class='op'>)</span> <span class='co'># query default: FALSE means interpret pt as (longitude latitude)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
+<span class='r-in'><span class='fu'><a href='st_transform.html'>st_transform</a></span><span class='op'>(</span><span class='va'>pt</span>, <span class='fl'>3857</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (0 8399738)</span>
+<span class='r-in'><span class='va'>old_value</span> <span class='op'>=</span> <span class='cn'>FALSE</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='sf_extSoftVersion.html'>sf_extSoftVersion</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>[</span><span class='st'>"GDAL"</span><span class='op'>]</span> <span class='op'>&gt;=</span> <span class='st'>"2.5.0"</span><span class='op'>)</span></span>
+<span class='r-in'>   <span class='op'>(</span><span class='va'>old_value</span> <span class='op'>=</span> <span class='fu'>st_axis_order</span><span class='op'>(</span><span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
+<span class='r-in'><span class='co'># now interpret pt as (latitude longitude), as EPSG:4326 prescribes:</span></span>
+<span class='r-in'><span class='fu'>st_axis_order</span><span class='op'>(</span><span class='op'>)</span> <span class='co'># query current value</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-in'><span class='fu'><a href='st_transform.html'>st_transform</a></span><span class='op'>(</span><span class='va'>pt</span>, <span class='fl'>3857</span><span class='op'>)</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (6679169 0)</span>
+<span class='r-in'><span class='fu'>st_axis_order</span><span class='op'>(</span><span class='va'>old_value</span><span class='op'>)</span> <span class='co'># set back to old value</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

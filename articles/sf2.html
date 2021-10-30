@@ -140,10 +140,10 @@
 <span class="co">## Linking to GEOS 3.9.1, GDAL 3.3.2, PROJ 8.1.1</span>
 <span class="va">fname</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>
 <span class="va">fname</span>
-<span class="co">## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp5QplII/temp_libpathabcb5d341f7c/sf/shape/nc.shp"</span>
+<span class="co">## [1] "/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpX0LqXV/temp_libpath129693bb07ae7/sf/shape/nc.shp"</span>
 <span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">fname</span><span class="op">)</span>
 <span class="co">## Reading layer `nc' from data source </span>
-<span class="co">##   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp5QplII/temp_libpathabcb5d341f7c/sf/shape/nc.shp' </span>
+<span class="co">##   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpX0LqXV/temp_libpath129693bb07ae7/sf/shape/nc.shp' </span>
 <span class="co">##   using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Geometry type: MULTIPOLYGON</span>
@@ -191,7 +191,7 @@
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/options.html">options</a></span><span class="op">(</span>stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">fname</span><span class="op">)</span>
 <span class="co">## Reading layer `nc' from data source </span>
-<span class="co">##   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp5QplII/temp_libpathabcb5d341f7c/sf/shape/nc.shp' </span>
+<span class="co">##   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpX0LqXV/temp_libpath129693bb07ae7/sf/shape/nc.shp' </span>
 <span class="co">##   using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Geometry type: MULTIPOLYGON</span>
@@ -383,16 +383,16 @@
 <p>Package <code>sf</code> supports reading and writing from and to spatial databases using the <code>DBI</code> interface. So far, testing has mainly be done with <code>PostGIS</code>, other databases might work but may also need more work. An example of reading is:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tomoakin/RPostgreSQL">RPostgreSQL</a></span><span class="op">)</span> 
-<span class="va">conn</span> <span class="op">=</span> <span class="fu">dbConnect</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/RPostgreSQL/man/PostgreSQL.html">PostgreSQL</a></span><span class="op">(</span><span class="op">)</span>, dbname <span class="op">=</span> <span class="st">"postgis"</span><span class="op">)</span> 
+<span class="va">conn</span> <span class="op">=</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/RPostgreSQL/man/PostgreSQL.html">PostgreSQL</a></span><span class="op">(</span><span class="op">)</span>, dbname <span class="op">=</span> <span class="st">"postgis"</span><span class="op">)</span> 
 <span class="va">meuse</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">conn</span>, <span class="st">"meuse"</span><span class="op">)</span>
 <span class="va">meuse_1_3</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">conn</span>, query <span class="op">=</span> <span class="st">"select * from meuse limit 3;"</span><span class="op">)</span> 
-<span class="fu">dbDisconnect</span><span class="op">(</span><span class="va">conn</span><span class="op">)</span> </code></pre></div>
+<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html">dbDisconnect</a></span><span class="op">(</span><span class="va">conn</span><span class="op">)</span> </code></pre></div>
 <p>We see here that in the second example a query is given. This query may contain spatial predicates, which could be a way to work through massive spatial datasets in R without having to read them completely in memory.</p>
 <p>Similarly, tables can be written:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">conn</span> <span class="op">=</span> <span class="fu">dbConnect</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/RPostgreSQL/man/PostgreSQL.html">PostgreSQL</a></span><span class="op">(</span><span class="op">)</span>, dbname <span class="op">=</span> <span class="st">"postgis"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">conn</span> <span class="op">=</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/RPostgreSQL/man/PostgreSQL.html">PostgreSQL</a></span><span class="op">(</span><span class="op">)</span>, dbname <span class="op">=</span> <span class="st">"postgis"</span><span class="op">)</span>
 <span class="fu"><a href="../reference/st_write.html">st_write</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">meuse</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu">dbDisconnect</span><span class="op">(</span><span class="va">conn</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html">dbDisconnect</a></span><span class="op">(</span><span class="va">conn</span><span class="op">)</span></code></pre></div>
 <p>Here, the default table (layer) name is taken from the object name (<code>meuse</code>). Argument <code>drop</code> informs to drop (remove) the table before writing; logical argument <code>binary</code> determines whether to use well-known binary or well-known text when writing the geometry (where well-known binary is faster and lossless).</p>
 </div>
 <div id="conversion-to-other-formats-wkt-wkb-sp" class="section level2">

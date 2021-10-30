@@ -281,7 +281,7 @@
 <span class="co">## Linking to GEOS 3.9.1, GDAL 3.3.2, PROJ 8.1.1</span>
 <span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">## Reading layer `nc' from data source </span>
-<span class="co">##   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp5QplII/temp_libpathabcb5d341f7c/sf/shape/nc.shp' </span>
+<span class="co">##   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpX0LqXV/temp_libpath129693bb07ae7/sf/shape/nc.shp' </span>
 <span class="co">##   using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Geometry type: MULTIPOLYGON</span>
@@ -461,7 +461,7 @@
 <div id="mixed-geometry-types" class="section level2">
 <h2 class="hasAnchor">
 <a href="#mixed-geometry-types" class="anchor"></a>Mixed geometry types</h2>
-<p>The class of <code>nc_geom</code> is <code><a href="https://rdrr.io/r/base/c.html">c("sfc_MULTIPOLYGON", "sfc")</a></code>: <code>sfc</code> is shared with all geometry types, and <code>sfc_TYPE</code> with <code>TYPE</code> indicating the type of the particular geometry at hand.</p>
+<p>The class of <code>nc_geom</code> is <code>c("sfc_MULTIPOLYGON", "sfc")</code>: <code>sfc</code> is shared with all geometry types, and <code>sfc_TYPE</code> with <code>TYPE</code> indicating the type of the particular geometry at hand.</p>
 <p>There are two “special” types: <code>GEOMETRYCOLLECTION</code>, and <code>GEOMETRY</code>. <code>GEOMETRYCOLLECTION</code> indicates that each of the geometries may contain a mix of geometry types, as in</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">mix</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_geometrycollection</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
@@ -599,7 +599,7 @@
 <code class="sourceCode R"><span class="va">filename</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>
 <span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">filename</span><span class="op">)</span>
 <span class="co">## Reading layer `nc' from data source </span>
-<span class="co">##   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp5QplII/temp_libpathabcb5d341f7c/sf/shape/nc.shp' </span>
+<span class="co">##   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpX0LqXV/temp_libpath129693bb07ae7/sf/shape/nc.shp' </span>
 <span class="co">##   using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Geometry type: MULTIPOLYGON</span>
@@ -632,7 +632,7 @@
 <p>where the <code>PG:</code> string indicates this concerns the PostGIS driver, followed by database name, and possibly port and user credentials. When the <code>layer</code> and <code>driver</code> arguments are not specified, <code>st_read</code> tries to guess them from the datasource, or else simply reads the first layer, giving a warning in case there are more.</p>
 <p><code>st_read</code> typically reads the coordinate reference system as <code>proj4string</code>, but not the EPSG (SRID). GDAL cannot retrieve SRID (EPSG code) from <code>proj4string</code> strings, and, when needed, it has to be set by the user. See also the section on <a href="#crs">coordinate reference systems</a>.</p>
 <p><code><a href="../reference/st_drivers.html">st_drivers()</a></code> returns a <code>data.frame</code> listing available drivers, and their metadata: names, whether a driver can write, and whether it is a raster and/or vector driver. All drivers can read. Reading of some common data formats is illustrated below:</p>
-<p><code><a href="../reference/st_layers.html">st_layers(dsn)</a></code> lists the layers present in data source <code>dsn</code>, and gives the number of fields, features and geometry type for each layer:</p>
+<p><code>st_layers(dsn)</code> lists the layers present in data source <code>dsn</code>, and gives the number of fields, features and geometry type for each layer:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/st_layers.html">st_layers</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"osm/overpass.osm"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">## Driver: OSM </span>
@@ -710,7 +710,7 @@
 <a href="#conversion-including-to-and-from-sp" class="anchor"></a>Conversion, including to and from sp</h2>
 <p><code>sf</code> objects and objects deriving from <code>Spatial</code> (package <code>sp</code>) can be coerced both ways:</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">showMethods</span><span class="op">(</span><span class="st">"coerce"</span>, classes <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/methods/showMethods.html">showMethods</a></span><span class="op">(</span><span class="st">"coerce"</span>, classes <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span>
 <span class="co">## Function: coerce (package methods)</span>
 <span class="co">## from="sf", to="Spatial"</span>
 <span class="co">## from="Spatial", to="sf"</span>
@@ -885,7 +885,7 @@
         CRESS_ID <span class="op">=</span> <span class="st">"identity"</span>, BIR74 <span class="op">=</span> <span class="st">"aggregate"</span>, SID74 <span class="op">=</span> <span class="st">"aggregate"</span>, NWBIR74 <span class="op">=</span> <span class="st">"aggregate"</span>,
         BIR79 <span class="op">=</span> <span class="st">"aggregate"</span>, SID79 <span class="op">=</span> <span class="st">"aggregate"</span>, NWBIR79 <span class="op">=</span> <span class="st">"aggregate"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">## Reading layer `nc' from data source </span>
-<span class="co">##   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp5QplII/temp_libpathabcb5d341f7c/sf/shape/nc.shp' </span>
+<span class="co">##   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpX0LqXV/temp_libpath129693bb07ae7/sf/shape/nc.shp' </span>
 <span class="co">##   using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity</span>

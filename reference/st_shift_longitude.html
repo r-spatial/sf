@@ -193,32 +193,39 @@
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>## sfc</span>
-<span class='va'>pt1</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>170</span>, <span class='fl'>50</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>pt2</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>170</span>, <span class='fl'>50</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>(</span><span class='va'>sfc</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>pt1</span>, <span class='va'>pt2</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Geometry set for 2 features 
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: -170 ymin: 50 xmax: 170 ymax: 50
-#&gt; CRS:           NA</div><div class='output co'>#&gt; <span class='message'>POINT (-170 50)</span></div><div class='output co'>#&gt; <span class='message'>POINT (170 50)</span></div><div class='input'><span class='va'>sfc</span> <span class='op'>=</span> <span class='fu'><a href='st_crs.html'>st_set_crs</a></span><span class='op'>(</span><span class='va'>sfc</span>, <span class='fl'>4326</span><span class='op'>)</span>
-<span class='fu'>st_shift_longitude</span><span class='op'>(</span><span class='va'>sfc</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Geometry set for 2 features 
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 170 ymin: 50 xmax: 190 ymax: 50
-#&gt; Geodetic CRS:  WGS 84</div><div class='output co'>#&gt; <span class='message'>POINT (190 50)</span></div><div class='output co'>#&gt; <span class='message'>POINT (170 50)</span></div><div class='input'>
-<span class='co'>## sf</span>
-<span class='va'>d</span> <span class='op'>=</span> <span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, geometry <span class='op'>=</span> <span class='va'>sfc</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>st_shift_longitude</span><span class='op'>(</span><span class='va'>d</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Simple feature collection with 2 features and 1 field
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 170 ymin: 50 xmax: 190 ymax: 50
-#&gt; Geodetic CRS:  WGS 84
-#&gt;   id       geometry
-#&gt; 1  1 POINT (190 50)
-#&gt; 2  2 POINT (170 50)</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'>## sfc</span></span>
+<span class='r-in'><span class='va'>pt1</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>170</span>, <span class='fl'>50</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pt2</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>170</span>, <span class='fl'>50</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>(</span><span class='va'>sfc</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>pt1</span>, <span class='va'>pt2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry set for 2 features </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -170 ymin: 50 xmax: 170 ymax: 50</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (-170 50)</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (170 50)</span>
+<span class='r-in'><span class='va'>sfc</span> <span class='op'>=</span> <span class='fu'><a href='st_crs.html'>st_set_crs</a></span><span class='op'>(</span><span class='va'>sfc</span>, <span class='fl'>4326</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>st_shift_longitude</span><span class='op'>(</span><span class='va'>sfc</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry set for 2 features </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 170 ymin: 50 xmax: 190 ymax: 50</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (190 50)</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (170 50)</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## sf</span></span>
+<span class='r-in'><span class='va'>d</span> <span class='op'>=</span> <span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, geometry <span class='op'>=</span> <span class='va'>sfc</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>st_shift_longitude</span><span class='op'>(</span><span class='va'>d</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 2 features and 1 field</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 170 ymin: 50 xmax: 190 ymax: 50</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   id       geometry</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1  1 POINT (190 50)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2  2 POINT (170 50)</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

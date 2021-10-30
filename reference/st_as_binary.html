@@ -225,28 +225,36 @@
 <p>For the precision model used, see also <a href='https://locationtech.github.io/jts/javadoc/org/locationtech/jts/geom/PrecisionModel.html'>https://locationtech.github.io/jts/javadoc/org/locationtech/jts/geom/PrecisionModel.html</a>. There, it is written that: ``... to specify 3 decimal places of precision, use a scale factor of 1000. To specify -3 decimal places of precision (i.e. rounding to the nearest 1000), use a scale factor of 0.001.''. Note that ALL coordinates, so also Z or M values (if present) are affected.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># examples of setting precision:</span>
-<span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>/</span><span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>/</span><span class='fl'>6</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span>precision <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='va'>st_as_binary</span> <span class='op'>%&gt;%</span> <span class='va'>st_as_sfc</span>
-</div><div class='output co'>#&gt; Geometry set for 1 feature 
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 0.333 ymin: 0.167 xmax: 0.333 ymax: 0.167
-#&gt; CRS:           NA</div><div class='output co'>#&gt; <span class='message'>POINT (0.333 0.167)</span></div><div class='input'><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>/</span><span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>/</span><span class='fl'>6</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span>precision <span class='op'>=</span>  <span class='fl'>100</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='va'>st_as_binary</span> <span class='op'>%&gt;%</span> <span class='va'>st_as_sfc</span>
-</div><div class='output co'>#&gt; Geometry set for 1 feature 
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 0.33 ymin: 0.17 xmax: 0.33 ymax: 0.17
-#&gt; CRS:           NA</div><div class='output co'>#&gt; <span class='message'>POINT (0.33 0.17)</span></div><div class='input'><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fl'>1e6</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>/</span><span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>/</span><span class='fl'>6</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span>precision <span class='op'>=</span> <span class='fl'>0.01</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='va'>st_as_binary</span> <span class='op'>%&gt;%</span> <span class='va'>st_as_sfc</span>
-</div><div class='output co'>#&gt; Geometry set for 1 feature 
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 333300 ymin: 166700 xmax: 333300 ymax: 166700
-#&gt; CRS:           NA</div><div class='output co'>#&gt; <span class='message'>POINT (333300 166700)</span></div><div class='input'><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fl'>1e6</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>/</span><span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>/</span><span class='fl'>6</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span>precision <span class='op'>=</span> <span class='fl'>0.001</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='va'>st_as_binary</span> <span class='op'>%&gt;%</span> <span class='va'>st_as_sfc</span>
-</div><div class='output co'>#&gt; Geometry set for 1 feature 
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 333000 ymin: 167000 xmax: 333000 ymax: 167000
-#&gt; CRS:           NA</div><div class='output co'>#&gt; <span class='message'>POINT (333000 167000)</span></div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># examples of setting precision:</span></span>
+<span class='r-in'><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>/</span><span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>/</span><span class='fl'>6</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span>precision <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>st_as_binary</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>st_as_sfc</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry set for 1 feature </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 0.333 ymin: 0.167 xmax: 0.333 ymax: 0.167</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (0.333 0.167)</span>
+<span class='r-in'><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>/</span><span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>/</span><span class='fl'>6</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span>precision <span class='op'>=</span>  <span class='fl'>100</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>st_as_binary</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>st_as_sfc</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry set for 1 feature </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 0.33 ymin: 0.17 xmax: 0.33 ymax: 0.17</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (0.33 0.17)</span>
+<span class='r-in'><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fl'>1e6</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>/</span><span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>/</span><span class='fl'>6</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span>precision <span class='op'>=</span> <span class='fl'>0.01</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>st_as_binary</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>st_as_sfc</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry set for 1 feature </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 333300 ymin: 166700 xmax: 333300 ymax: 166700</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (333300 166700)</span>
+<span class='r-in'><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fl'>1e6</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>/</span><span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>/</span><span class='fl'>6</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span>precision <span class='op'>=</span> <span class='fl'>0.001</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>st_as_binary</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='va'>st_as_sfc</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry set for 1 feature </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 333000 ymin: 167000 xmax: 333000 ymax: 167000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (333000 167000)</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

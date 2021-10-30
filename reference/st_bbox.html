@@ -268,17 +268,21 @@ methods for <code>bbox</code> objects to generate a polygon around the four boun
     <p><code>NA_bbox_</code> represents the missing value for a <code>bbox</code> object</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>a</span> <span class='op'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, geom <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>:</span><span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>, crs <span class='op'>=</span> <span class='fl'>4326</span><span class='op'>)</span>
-<span class='fu'>st_bbox</span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; xmin ymin xmax ymax 
-#&gt;    0    1    1    2 </div><div class='input'><span class='fu'><a href='st_as_sfc.html'>st_as_sfc</a></span><span class='op'>(</span><span class='fu'>st_bbox</span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Geometry set for 1 feature 
-#&gt; Geometry type: POLYGON
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 0 ymin: 1 xmax: 1 ymax: 2
-#&gt; Geodetic CRS:  WGS 84</div><div class='output co'>#&gt; <span class='message'>POLYGON ((0 1, 1 1, 1 2, 0 2, 0 1))</span></div><div class='input'><span class='fu'>st_bbox</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>xmin <span class='op'>=</span> <span class='fl'>16.1</span>, xmax <span class='op'>=</span> <span class='fl'>16.6</span>, ymax <span class='op'>=</span> <span class='fl'>48.6</span>, ymin <span class='op'>=</span> <span class='fl'>47.9</span><span class='op'>)</span>, crs <span class='op'>=</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span><span class='op'>(</span><span class='fl'>4326</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; xmin ymin xmax ymax 
-#&gt; 16.1 47.9 16.6 48.6 </div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>a</span> <span class='op'>=</span> <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, geom <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>:</span><span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>, crs <span class='op'>=</span> <span class='fl'>4326</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>st_bbox</span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xmin ymin xmax ymax </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    0    1    1    2 </span>
+<span class='r-in'><span class='fu'><a href='st_as_sfc.html'>st_as_sfc</a></span><span class='op'>(</span><span class='fu'>st_bbox</span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry set for 1 feature </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POLYGON</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 0 ymin: 1 xmax: 1 ymax: 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geodetic CRS:  WGS 84</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POLYGON ((0 1, 1 1, 1 2, 0 2, 0 1))</span>
+<span class='r-in'><span class='fu'>st_bbox</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>xmin <span class='op'>=</span> <span class='fl'>16.1</span>, xmax <span class='op'>=</span> <span class='fl'>16.6</span>, ymax <span class='op'>=</span> <span class='fl'>48.6</span>, ymin <span class='op'>=</span> <span class='fl'>47.9</span><span class='op'>)</span>, crs <span class='op'>=</span> <span class='fu'><a href='st_crs.html'>st_crs</a></span><span class='op'>(</span><span class='fl'>4326</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xmin ymin xmax ymax </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 16.1 47.9 16.6 48.6 </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

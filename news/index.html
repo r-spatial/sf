@@ -207,10 +207,10 @@
 <li><p>add <code>s2</code> to Imports:</p></li>
 <li><p>add Dewey Dunnington to contributors</p></li>
 <li><p><code><a href="../reference/s2.html">sf_use_s2()</a></code> prints a message when using s2 has been switched to on or off.</p></li>
-<li><p>use <code>s2</code> spherical geometry as default when coordinates are ellipsoidal. This can be switched off (defaulting to planar geometry, using GEOS, as in sf &lt; 1.0-0) by setting environment variable <code>_SF_USE_S2</code> to <code>false</code> before package <code>sf</code> is loaded, or by <code><a href="../reference/s2.html">sf_use_s2(FALSE)</a></code>; <a href='https://github.com/r-spatial/sf/issues/1649'>#1649</a></p></li>
+<li><p>use <code>s2</code> spherical geometry as default when coordinates are ellipsoidal. This can be switched off (defaulting to planar geometry, using GEOS, as in sf &lt; 1.0-0) by setting environment variable <code>_SF_USE_S2</code> to <code>false</code> before package <code>sf</code> is loaded, or by <code>sf_use_s2(FALSE)</code>; <a href='https://github.com/r-spatial/sf/issues/1649'>#1649</a></p></li>
 <li><p><code><a href="../reference/st_nearest_feature.html">st_nearest_feature()</a></code> with missing <code>y</code> returns nearest features in the remaining set of <code>x</code>; <a href="https://github.com/r-spatial/s2/issues/111" class="uri">https://github.com/r-spatial/s2/issues/111</a></p></li>
 <li><p><code><a href="../reference/st_write.html">st_write()</a></code> gains an argument <code>config_options</code> to set GDAL config options; <a href='https://github.com/r-spatial/sf/issues/1618'>#1618</a></p></li>
-<li><p>fix regression in <code><a href="../reference/sf_project.html">sf_project(..., keep = TRUE)</a></code>; <a href='https://github.com/r-spatial/sf/issues/1635'>#1635</a></p></li>
+<li><p>fix regression in <code>sf_project(..., keep = TRUE)</code>; <a href='https://github.com/r-spatial/sf/issues/1635'>#1635</a></p></li>
 </ul>
 </div>
     <div id="version-09-8" class="section level1">
@@ -260,7 +260,7 @@
 <li><p><code><a href="../reference/st_sample.html">st_sample()</a></code> accepts non-integer sample sizes, with a (suppressable) warning and handles values of sizes that would round to zero; <a href='https://github.com/r-spatial/sf/issues/1480'>#1480</a></p></li>
 <li><p><code><a href="../reference/gdal_utils.html">gdal_utils()</a></code> adds utils <code>mdiminfo</code> and <code>mdimtranslate</code> (requires GDAL &gt;= 3.1)</p></li>
 <li><p><code><a href="../reference/geos_combine.html">st_union()</a></code> gains an argument <code>is_coverage</code>, which, when set to <code>TRUE</code>, leads to much faster unioning in case features form a coverage (polygons don’t overlap); <a href='https://github.com/r-spatial/sf/issues/1462'>#1462</a> by Don Baston</p></li>
-<li><p>fix <code><a href="../reference/gdal_utils.html">gdal_utils("translate")</a></code> locking input file; <a href='https://github.com/r-spatial/sf/issues/1452'>#1452</a></p></li>
+<li><p>fix <code>gdal_utils("translate")</code> locking input file; <a href='https://github.com/r-spatial/sf/issues/1452'>#1452</a></p></li>
 <li><p><code><a href="../reference/st_make_grid.html">st_make_grid()</a></code> no longer selects cells intersecting with <code>x</code>; <a href='https://github.com/r-spatial/sf/issues/1447'>#1447</a></p></li>
 <li><p>use <code><a href="https://r-spatial.github.io/s2/reference/s2_closest_feature.html">s2::s2_dwithin_matrix()</a></code> in <code><a href="../reference/geos_binary_pred.html">st_is_within_distance()</a></code>; <a href='https://github.com/r-spatial/sf/issues/1367'>#1367</a></p></li>
 </ul>
@@ -270,7 +270,7 @@
 <a href="#version-09-5" class="anchor"></a>version 0.9-5<small> 2020-07-14 </small>
 </h1>
 <ul>
-<li><p>Only when package <code>s2</code> &gt;= 1.0.1 is available: support for spherical geometry operators (predicates, transformers, measures, nearest point/feature) for geographic coordinates in package <code>s2</code> is now by default switched off, and can be switched on by <code><a href="../reference/s2.html">sf_use_s2(TRUE)</a></code>; see <a href="https://www.r-spatial.org/r/2020/06/17/s2.html" class="uri">https://www.r-spatial.org/r/2020/06/17/s2.html</a> and vignette sf7. It is planned to be switched on by default in sf 1.0-0.</p></li>
+<li><p>Only when package <code>s2</code> &gt;= 1.0.1 is available: support for spherical geometry operators (predicates, transformers, measures, nearest point/feature) for geographic coordinates in package <code>s2</code> is now by default switched off, and can be switched on by <code>sf_use_s2(TRUE)</code>; see <a href="https://www.r-spatial.org/r/2020/06/17/s2.html" class="uri">https://www.r-spatial.org/r/2020/06/17/s2.html</a> and vignette sf7. It is planned to be switched on by default in sf 1.0-0.</p></li>
 <li><p>drop Z and/or M coordinate in <code><a href="../reference/s2.html">st_as_s2()</a></code>, with message</p></li>
 <li><p>geometry predicates and transformers gain an … argument to pass <code><a href="https://r-spatial.github.io/s2/reference/s2_options.html">s2::s2_options()</a></code></p></li>
 <li><p><code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code> now ensures the geometry column sticks to the back rather than the front of the data frame; <a href='https://github.com/r-spatial/sf/issues/1425'>#1425</a></p></li>
@@ -305,12 +305,12 @@
 <a href="#version-09-2" class="anchor"></a>version 0.9-2<small> 2020-04-14 </small>
 </h1>
 <ul>
-<li><p><code><a href="../reference/st_crs.html">st_axis_order(TRUE)</a></code> gives and error if GDAL has version &lt; 2.5.0</p></li>
+<li><p><code>st_axis_order(TRUE)</code> gives and error if GDAL has version &lt; 2.5.0</p></li>
 <li><p>loading PROJ units <code>link</code>, <code>us_in</code>, <code>ind_yd</code>, <code>ind_ft</code>, and <code>ind_ch</code> into the udunits database is no longer done at package load time, but when function <code><a href="../reference/sf_project.html">sf_add_proj_units()</a></code> is called.</p></li>
 <li><p>fix line sampling for small densities; <a href='https://github.com/r-spatial/sf/issues/1365'>#1365</a></p></li>
 <li><p><code><a href="../reference/sf_project.html">sf_project()</a></code> handles <code>crs</code> objects when PROJ version is below 6 using proj.4 string representations.</p></li>
 <li><p>avoid using <code>isFALSE</code> in <code><a href="../reference/st_write.html">st_write()</a></code>; <a href='https://github.com/r-spatial/sf/issues/1342'>#1342</a></p></li>
-<li><p>fix regression in <code><a href="../reference/gdal_utils.html">gdal_utils("translate", ...)</a></code>; <a href='https://github.com/r-spatial/sf/issues/1339'>#1339</a></p></li>
+<li><p>fix regression in <code>gdal_utils("translate", ...)</code>; <a href='https://github.com/r-spatial/sf/issues/1339'>#1339</a></p></li>
 </ul>
 </div>
     <div id="version-09-1" class="section level1">
@@ -331,7 +331,7 @@
 </h1>
 <ul>
 <li><p>see r-spatial blog post: <a href="https://www.r-spatial.org/r/2020/03/17/wkt.html" class="uri">https://www.r-spatial.org/r/2020/03/17/wkt.html</a></p></li>
-<li><p>modify <code>crs</code> objects to reflect our post-proj4string world (<a href='https://github.com/r-spatial/sf/issues/1146'>#1146</a>; <a href='https://github.com/r-spatial/sf/issues/1225'>#1225</a>): crs objects contain two fields, <code>input</code> with the user input (if any), and <code>wkt</code> with a well-known-text (or WKT2) representation of the coordinate reference system. <code>crs</code> objects have a <code><a href="https://rdrr.io/r/base/Extract.html">$</a></code> method to dynamically retrieve the <code>epsg</code> (integer) or <code>proj4string</code> representation, using e.g. <code>x$epsg</code>.</p></li>
+<li><p>modify <code>crs</code> objects to reflect our post-proj4string world (<a href='https://github.com/r-spatial/sf/issues/1146'>#1146</a>; <a href='https://github.com/r-spatial/sf/issues/1225'>#1225</a>): crs objects contain two fields, <code>input</code> with the user input (if any), and <code>wkt</code> with a well-known-text (or WKT2) representation of the coordinate reference system. <code>crs</code> objects have a <code>$</code> method to dynamically retrieve the <code>epsg</code> (integer) or <code>proj4string</code> representation, using e.g. <code>x$epsg</code>.</p></li>
 <li><p>support for PostGIS 3 using WKT and the new-style <code>crs</code> objects; <a href='https://github.com/r-spatial/sf/issues/1234'>#1234</a>, <a href='https://github.com/r-spatial/sf/issues/1303'>#1303</a>, <a href='https://github.com/r-spatial/sf/issues/1308'>#1308</a> by <a href='https://github.com/etiennebr'>@etiennebr</a></p></li>
 <li><p><code><a href="../reference/sf-defunct.html">st_write_db()</a></code> and <code><a href="../reference/sf-defunct.html">st_read_db()</a></code> are defunct. Use <code>st_write</code> and <code>st_read</code> instead.</p></li>
 <li><p><code><a href="../reference/st_write.html">st_write()</a></code> uses <code>append</code>, replacing (and deprecating) argument <code>update</code>; <code>st_write</code> fails when a layer already exists and <code>append</code> has not been set explicitly to <code>TRUE</code> (append) or <code>FALSE</code> (overwrite); <a href='https://github.com/r-spatial/sf/issues/1266'>#1266</a></p></li>
@@ -382,7 +382,7 @@
 <li><p>rather than replacing, <code><a href="../reference/st_write.html">st_write()</a></code> and <code><a href="../reference/st_write.html">write_sf()</a></code> append to an existing layer if <code>update=TRUE</code>; <a href='https://github.com/r-spatial/sf/issues/1126'>#1126</a></p></li>
 <li><p>improve plotting of <code>POSIXct</code> and <code>Date</code> attributes (<code>Date</code> requiring classInt &gt;= 0.4-2)</p></li>
 <li><p><code>NULL</code> geometries read by GDAL are returned as empty geometries; <a href='https://github.com/r-spatial/sf/issues/1119'>#1119</a></p></li>
-<li><p><code><a href="../reference/gdal_utils.html">gdal_utils('rasterize', ...)</a></code> accepts non-existing destinations, defined by e.g. resolution and extent options (see <a href='https://github.com/r-spatial/sf/issues/1116'>#1116</a> for an example), and overwrites if needed (see <a href='https://github.com/r-spatial/sf/issues/1136'>#1136</a> for an example)</p></li>
+<li><p><code>gdal_utils('rasterize', ...)</code> accepts non-existing destinations, defined by e.g. resolution and extent options (see <a href='https://github.com/r-spatial/sf/issues/1116'>#1116</a> for an example), and overwrites if needed (see <a href='https://github.com/r-spatial/sf/issues/1136'>#1136</a> for an example)</p></li>
 <li><p>add Dan Baston as contributor; <a href='https://github.com/r-spatial/sf/issues/1120'>#1120</a> and many others</p></li>
 <li><p>in addition to <code>NULL</code>, <code><a href="../reference/sfc.html">st_sfc()</a></code> also converts <code>NA</code> values into empty geometries; <a href='https://github.com/r-spatial/sf/issues/1114'>#1114</a>.</p></li>
 <li><p><code><a href="../reference/st_join.html">st_join()</a></code> is a generic</p></li>
@@ -410,7 +410,7 @@
 <a href="#version-07-5" class="anchor"></a>version 0.7-5<small> 2019-07-03 </small>
 </h1>
 <ul>
-<li><p><code><a href="../reference/as.html">as(x, "Spatial")</a></code> gives a proper error message on empty geometries; <a href='https://github.com/r-spatial/sf/issues/1093'>#1093</a></p></li>
+<li><p><code>as(x, "Spatial")</code> gives a proper error message on empty geometries; <a href='https://github.com/r-spatial/sf/issues/1093'>#1093</a></p></li>
 <li><p><code><a href="../reference/st_cast.html">st_cast()</a></code> takes care of empty polygons; <a href='https://github.com/r-spatial/sf/issues/1094'>#1094</a></p></li>
 <li><p><code>st_nearest_*</code> functions warn in case they are used with geographic coordinates; <a href='https://github.com/r-spatial/sf/issues/1081'>#1081</a></p></li>
 <li><p><code><a href="../reference/geos_combine.html">st_union()</a></code> no longer segfaults on zero row <code>sf</code> objects; <a href='https://github.com/r-spatial/sf/issues/1077'>#1077</a></p></li>
@@ -426,9 +426,9 @@
 </h1>
 <ul>
 <li><p>add example on how voronoi polygons can be tied back to the points they contain; <a href='https://github.com/r-spatial/sf/issues/1030'>#1030</a></p></li>
-<li><p><code><a href="../reference/geos_binary_ops.html">st_difference(x, y)</a></code>, with <code>x</code> an <code>sfc</code> with zero feature geometries, returns <code>x</code>; <a href='https://github.com/r-spatial/sf/issues/1024'>#1024</a></p></li>
+<li><p><code>st_difference(x, y)</code>, with <code>x</code> an <code>sfc</code> with zero feature geometries, returns <code>x</code>; <a href='https://github.com/r-spatial/sf/issues/1024'>#1024</a></p></li>
 <li><p>don’t reset (base) plot device when <code>add = TRUE</code></p></li>
-<li><p><code><a href="https://rdrr.io/r/base/Comparison.html">==</a></code> and <code><a href="https://rdrr.io/r/base/Comparison.html">!=</a></code> return <code>NA</code> when one of the operands is an empty geometry; <a href='https://github.com/r-spatial/sf/issues/1013'>#1013</a></p></li>
+<li><p><code>==</code> and <code>!=</code> return <code>NA</code> when one of the operands is an empty geometry; <a href='https://github.com/r-spatial/sf/issues/1013'>#1013</a></p></li>
 <li><p><code><a href="../reference/geos_binary_pred.html">st_intersects()</a></code> is a generic</p></li>
 <li><p>drop requiring <code>proj_api.h</code> in favor of <code>proj.h</code>, this enables compatibility to PROJ 6.0.0 and GDAL 2.5.0-dev; <a href='https://github.com/r-spatial/sf/issues/988'>#988</a></p></li>
 <li><p>fix regression in binary predicates introduced in <a href='https://github.com/r-spatial/sf/issues/855'>#855</a>; <a href='https://github.com/r-spatial/sf/issues/999'>#999</a> reported by Barry Rowlingson</p></li>
@@ -491,7 +491,7 @@
 </h1>
 <ul>
 <li><p><code><a href="../reference/geos_measures.html">st_area()</a></code> is a generic; <a href="https://github.com/r-spatial/stars/issues/32" class="uri">https://github.com/r-spatial/stars/issues/32</a></p></li>
-<li><p><code><a href="../reference/st_write.html">st_write()</a></code> resolves <code><a href="https://rdrr.io/r/base/tilde.html">~</a></code> correctly; <a href='https://github.com/r-spatial/sf/issues/456'>#456</a></p></li>
+<li><p><code><a href="../reference/st_write.html">st_write()</a></code> resolves <code>~</code> correctly; <a href='https://github.com/r-spatial/sf/issues/456'>#456</a></p></li>
 <li><p>read and write feature IDs as sfc list column names; <a href='https://github.com/r-spatial/sf/issues/812'>#812</a></p></li>
 <li><p><code><a href="../reference/geos_unary.html">st_centroid()</a></code> works for empty geometries, returning an empty point <a href='https://github.com/r-spatial/sf/issues/769'>#769</a></p></li>
 <li><p>add <code><a href="../reference/st_nearest_points.html">st_nearest_points()</a></code>, to obtain the (<code>LINESTRING</code> connecting the) two nearest points for pairs of geometries; <a href='https://github.com/r-spatial/sf/issues/788'>#788</a></p></li>
@@ -513,7 +513,7 @@
 <li><p>move dependency <code>RPostgreSQL</code> from Imports: back to Suggests:</p></li>
 <li><p><code>st_centroid.sf()</code> and <code>st_point_on_surface.sf</code> also warn if attributes are not constant over geometries.</p></li>
 <li><p><code><a href="../reference/tidyverse.html">summarise()</a></code> allows the user to define geometries for summaries; <a href='https://github.com/r-spatial/sf/issues/714'>#714</a>, by Kirill Mueller</p></li>
-<li><p><code><a href="../reference/plot.html">plot.sf()</a></code> emits a warning if <code>col</code> does not have length 1 or <code><a href="https://rdrr.io/r/base/nrow.html">nrow(x)</a></code>, and requires <code>pal</code> (rather than <code>col</code>) to set a palette for factors.</p></li>
+<li><p><code><a href="../reference/plot.html">plot.sf()</a></code> emits a warning if <code>col</code> does not have length 1 or <code>nrow(x)</code>, and requires <code>pal</code> (rather than <code>col</code>) to set a palette for factors.</p></li>
 <li><p><code><a href="../reference/plot.html">plot.sf()</a></code> provides control over legend keys using <code>key.length</code> and <code>key.width</code>, decrease default key length; <a href='https://github.com/r-spatial/sf/issues/731'>#731</a></p></li>
 <li><p><code>sgbp</code> objects receive an <code>as.data.frame</code> method; <a href='https://github.com/r-spatial/sf/issues/715'>#715</a></p></li>
 </ul>
@@ -542,7 +542,7 @@
 </h1>
 <ul>
 <li><p>method <code><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct()</a></code> works; <a href='https://github.com/r-spatial/sf/issues/669'>#669</a>, <a href='https://github.com/r-spatial/sf/issues/672'>#672</a></p></li>
-<li><p><code><a href="https://rdrr.io/r/base/Arithmetic.html">+</a></code>, <code><a href="https://rdrr.io/r/base/Arithmetic.html">-</a></code>, <code><a href="https://rdrr.io/r/base/Arithmetic.html">*</a></code> and <code><a href="https://rdrr.io/r/base/Arithmetic.html">/</a></code> for pairs of geometries (<code>sfg</code>, <code>sfc</code>) return geometric union, difference, intersection and symmetric difference, respectively.</p></li>
+<li><p><code>+</code>, <code>-</code>, <code>*</code> and <code>/</code> for pairs of geometries (<code>sfg</code>, <code>sfc</code>) return geometric union, difference, intersection and symmetric difference, respectively.</p></li>
 <li><p><code><a href="../reference/st_cast.html">st_cast()</a></code> from <code>MULTIPOLYGON</code> to <code>MULTILINESTRING</code> should work properly; <a href='https://github.com/r-spatial/sf/issues/660'>#660</a></p></li>
 <li><p>all Rcpp interfaces needed by package <code>stars</code> have been moved into <code>sf</code>; pkg <code>stars</code> is R-only, and only <code>sf</code> needs linking to GDAL.</p></li>
 <li><p><code><a href="../reference/gdal_utils.html">gdal_utils()</a></code> interfaces the 9 gdal utils using the C++ API</p></li>
@@ -561,7 +561,7 @@
 </h1>
 <ul>
 <li><p>add <code>pillar</code> to Imports: to provide method for printing WKT geometries in tibbles</p></li>
-<li><p><code>st_as_text</code>, and subsequently <code>format</code> and <code>print</code>, use argument <code>digits</code> (or <code><a href="https://rdrr.io/r/base/options.html">options(digits = n)</a></code>) to control the number of digits used for printing coordinates; default is <code><a href="https://rdrr.io/r/base/options.html">options("digits")</a></code>, which is typically 7.</p></li>
+<li><p><code>st_as_text</code>, and subsequently <code>format</code> and <code>print</code>, use argument <code>digits</code> (or <code>options(digits = n)</code>) to control the number of digits used for printing coordinates; default is <code>options("digits")</code>, which is typically 7.</p></li>
 <li><p><code>st_is_within_distance</code> works with geographic coordinates</p></li>
 <li><p><code>st_cast</code> from <code>MULTIPOLYGON</code> to <code>MULTILINESTRING</code> no longer changes the number of features/feature geometries, but conversion from <code>MULTIPOLYGON</code> to <code>LINESTRING</code> (typically) does; <a href='https://github.com/r-spatial/sf/issues/596'>#596</a></p></li>
 <li><p><code>st_distance</code> for long/lat geographic coordinates uses <code>lwgeom</code>, accepting all geometry types; argument <code>dist_fun</code> is deprecated as a consequence, and distance calculations are different from those in sf versions 0.5-5 or earlier; <a href='https://github.com/r-spatial/sf/issues/593'>#593</a></p></li>
@@ -570,7 +570,7 @@
 <li><p>if present, add units of attribute to default plot title; <a href='https://github.com/r-spatial/sf/issues/591'>#591</a></p></li>
 <li><p>add <code>unnest</code> method, which depends on <code>tidyr</code> &gt; 0.7-2; <a href='https://github.com/r-spatial/sf/issues/570'>#570</a> PR by <a href='https://github.com/karldw'>@karldw</a></p></li>
 <li><p>add <code>largest</code> option to <code>st_join</code> to get largest intersection match only; <a href='https://github.com/r-spatial/sf/issues/547'>#547</a>, by <a href='https://github.com/tiernanmartin'>@tiernanmartin</a></p></li>
-<li><p>change default maximum number of feature to print to 10, controllable by <code><a href="https://rdrr.io/r/base/options.html">options(sf_max_print)</a></code>; <a href='https://github.com/r-spatial/sf/issues/556'>#556</a></p></li>
+<li><p>change default maximum number of feature to print to 10, controllable by <code>options(sf_max_print)</code>; <a href='https://github.com/r-spatial/sf/issues/556'>#556</a></p></li>
 <li><p>add <code>Hausdorff</code> (and <code>Frechet</code> for those with GEOS 3.7.0) as options to <code>st_distance</code>; add <code>par</code> for densified versions</p></li>
 <li><p>add <code>st_snap</code>, for snapping geometries to other geometries, within a tolerance</p></li>
 <li><p>make <code>st_wrap_dateline</code> a generic, with methods for <code>sf</code>, <code>sfc</code> and <code>sfg</code>; <a href='https://github.com/r-spatial/sf/issues/541'>#541</a></p></li>
@@ -589,7 +589,7 @@
 <li><p>add vignettes 5: plotting sf objects and 6: miscellaneous; <a href='https://github.com/r-spatial/sf/issues/324'>#324</a></p></li>
 <li><p>add (default) color key to <code>plot.sf</code> if single map is plotted, contributed by <a href='https://github.com/hughjonesd'>@hughjonesd</a>; <a href='https://github.com/r-spatial/sf/issues/528'>#528</a></p></li>
 <li><p><code>st_as_sfc</code> can read EWKT; <a href='https://github.com/r-spatial/sf/issues/530'>#530</a></p></li>
-<li><p>argument <code>max.plot</code> takes its default from <code><a href="https://rdrr.io/r/base/options.html">options(sf_max.plot=n)</a></code>, if present; <a href='https://github.com/r-spatial/sf/issues/516'>#516</a></p></li>
+<li><p>argument <code>max.plot</code> takes its default from <code>options(sf_max.plot=n)</code>, if present; <a href='https://github.com/r-spatial/sf/issues/516'>#516</a></p></li>
 <li><p><code>plot.sf</code> gets an arguments <code>pal</code> to specify a color palette function; <a href='https://github.com/r-spatial/sf/issues/526'>#526</a></p></li>
 <li><p><code>plot.sf</code> gets arguments <code>breaks</code> and <code>nbreaks</code>; add support for <code><a href="https://r-spatial.github.io/classInt/reference/classIntervals.html">classInt::classIntervals</a></code> styles for finding class intervals (using <code>breaks</code>)</p></li>
 <li><p>add <code>st_as_sf</code> methods for <code>ppp</code>, <code>lpp</code> and <code>psp</code> objects from spatstat.</p></li>
@@ -666,7 +666,7 @@
 <li><p>make <code>[.sf</code> for selections including <code>NA</code> values like <code>x[c(1,NA,2)]</code>; <a href='https://github.com/r-spatial/sf/issues/403'>#403</a></p></li>
 <li><p>add a <code>[&lt;-</code> method for <code>sfc</code> objects; automatically replaces <code>NULL</code> with an empty geometry; <a href='https://github.com/r-spatial/sf/issues/411'>#411</a></p></li>
 <li><p>add <code><a href="../reference/geos_unary.html">st_point_on_surface()</a></code> to return a point that is guaranteed to be on the surface (standard compliance)</p></li>
-<li><p><code>read_sf</code> returns an sf-tibble, an object of class <code><a href="https://rdrr.io/r/base/c.html">c("sf", "tbl_df", "tbl", "data.frame")</a></code></p></li>
+<li><p><code>read_sf</code> returns an sf-tibble, an object of class <code>c("sf", "tbl_df", "tbl", "data.frame")</code></p></li>
 <li><p>work around for <code><a href="https://dplyr.tidyverse.org/reference/filter.html">dplyr::filter</a></code> not dispatching geometry column subsetting to <code>sf::[.sfc</code></p></li>
 <li><p>allow <code>units</code> object as <code>dist</code> argument to <code>st_buffer</code>; these must be convertable to <code>arc_degree</code> for geographic, and to a length unit for non-geographic data; <a href='https://github.com/r-spatial/sf/issues/399'>#399</a></p></li>
 <li><p>prevent gdal from crashing when trying to <code>st_transform</code> an empty geometry; <a href='https://github.com/r-spatial/sf/issues/398'>#398</a></p></li>
@@ -699,7 +699,7 @@
 <li><p>improve <code>configure</code> logic to deal with libraries installed in custom locations; <a href='https://github.com/r-spatial/sf/issues/335'>#335</a></p></li>
 <li><p>fix bug where <code>geom_sf</code> wouldn’t deal with Z and/or M geoms; <a href='https://github.com/r-spatial/sf/issues/373'>#373</a></p></li>
 <li><p>return more conveniently typed empty geoms; <a href='https://github.com/r-spatial/sf/issues/372'>#372</a></p></li>
-<li><p>fix subsetting with <code><a href="https://rdrr.io/r/base/Extract.html">[</a></code> of <code>sf</code> using <code>drop = TRUE</code>, <a href='https://github.com/r-spatial/sf/issues/370'>#370</a></p></li>
+<li><p>fix subsetting with <code>[</code> of <code>sf</code> using <code>drop = TRUE</code>, <a href='https://github.com/r-spatial/sf/issues/370'>#370</a></p></li>
 <li><p>in addition to <code>m</code>, allow <code>rad</code> units to <code>st_segmentize</code></p></li>
 <li><p>add example how to <code>st_read</code> GeoJSON from a string; <a href='https://github.com/r-spatial/sf/issues/185'>#185</a></p></li>
 <li><p>add <code>separate_.sf</code> method</p></li>
@@ -736,7 +736,7 @@
 <li><p>add a <code>nest_</code> method for <code>sf</code> objects</p></li>
 <li><p><code>st_relate</code> gets a <code>pattern</code> parameter, same as <code><a href="https://rdrr.io/pkg/rgeos/man/pred-binary-gRelate.html">rgeos::gRelate</a></code>; add examples to get rook and queen neighbour lists using this; <a href='https://github.com/r-spatial/sf/issues/234'>#234</a></p></li>
 <li><p>support for direct reading of spatialite and sqlite geometry wkb blobs</p></li>
-<li><p>build proper support for <code>cbind</code> and <code>rbind</code> methods for <code>sf</code>, which work (as documented) when <em>all</em> arguments are of class <code>sf</code>; <code><a href="https://dplyr.tidyverse.org/reference/bind.html">dplyr::bind_cols</a></code> or <code><a href="../reference/sf.html">st_sf(data.frame(sf, df))</a></code> work for binding <code>data.frame</code>s to an <code>sf</code> object.</p></li>
+<li><p>build proper support for <code>cbind</code> and <code>rbind</code> methods for <code>sf</code>, which work (as documented) when <em>all</em> arguments are of class <code>sf</code>; <code><a href="https://dplyr.tidyverse.org/reference/bind.html">dplyr::bind_cols</a></code> or <code>st_sf(data.frame(sf, df))</code> work for binding <code>data.frame</code>s to an <code>sf</code> object.</p></li>
 <li><p><code><a href="../reference/geos_unary.html">st_segmentize()</a></code> and <code><a href="../reference/st_line_sample.html">st_line_sample()</a></code> accept units arguments</p></li>
 <li><p>document problem reading shapefiles from USB drives on OSX; <a href='https://github.com/r-spatial/sf/issues/252'>#252</a></p></li>
 <li><p>improve docs of <code>st_is_valid</code> and <code>st_make_valid</code>; <a href='https://github.com/r-spatial/sf/issues/296'>#296</a></p></li>

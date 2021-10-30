@@ -181,262 +181,263 @@ readable, and which may be written. The field <code>vsi</code> refers to the dri
 capability to read/create datasets through the VSI*L API. <a href='https://gdal.org/drivers/vector/index.html'>See GDAL website for additional details on driver support</a>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>st_drivers</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                          name
-#&gt; ESRIC                   ESRIC
-#&gt; FITS                     FITS
-#&gt; PCIDSK                 PCIDSK
-#&gt; netCDF                 netCDF
-#&gt; PDS4                     PDS4
-#&gt; VICAR                   VICAR
-#&gt; JP2OpenJPEG       JP2OpenJPEG
-#&gt; PDF                       PDF
-#&gt; MBTiles               MBTiles
-#&gt; BAG                       BAG
-#&gt; EEDA                     EEDA
-#&gt; OGCAPI                 OGCAPI
-#&gt; ESRI Shapefile ESRI Shapefile
-#&gt; MapInfo File     MapInfo File
-#&gt; UK .NTF               UK .NTF
-#&gt; LVBAG                   LVBAG
-#&gt; OGR_SDTS             OGR_SDTS
-#&gt; S57                       S57
-#&gt; DGN                       DGN
-#&gt; OGR_VRT               OGR_VRT
-#&gt; REC                       REC
-#&gt; Memory                 Memory
-#&gt; CSV                       CSV
-#&gt; NAS                       NAS
-#&gt; GML                       GML
-#&gt; GPX                       GPX
-#&gt; KML                       KML
-#&gt; GeoJSON               GeoJSON
-#&gt; GeoJSONSeq         GeoJSONSeq
-#&gt; ESRIJSON             ESRIJSON
-#&gt; TopoJSON             TopoJSON
-#&gt; Interlis 1         Interlis 1
-#&gt; Interlis 2         Interlis 2
-#&gt; OGR_GMT               OGR_GMT
-#&gt; GPKG                     GPKG
-#&gt; SQLite                 SQLite
-#&gt; OGR_DODS             OGR_DODS
-#&gt; ODBC                     ODBC
-#&gt; WAsP                     WAsP
-#&gt; PGeo                     PGeo
-#&gt; MSSQLSpatial     MSSQLSpatial
-#&gt; PostgreSQL         PostgreSQL
-#&gt; OpenFileGDB       OpenFileGDB
-#&gt; DXF                       DXF
-#&gt; CAD                       CAD
-#&gt; FlatGeobuf         FlatGeobuf
-#&gt; Geoconcept         Geoconcept
-#&gt; GeoRSS                 GeoRSS
-#&gt; GPSTrackMaker   GPSTrackMaker
-#&gt; VFK                       VFK
-#&gt; PGDUMP                 PGDUMP
-#&gt; OSM                       OSM
-#&gt; GPSBabel             GPSBabel
-#&gt; OGR_PDS               OGR_PDS
-#&gt; WFS                       WFS
-#&gt; OAPIF                   OAPIF
-#&gt; Geomedia             Geomedia
-#&gt; EDIGEO                 EDIGEO
-#&gt; SVG                       SVG
-#&gt; CouchDB               CouchDB
-#&gt; Cloudant             Cloudant
-#&gt; Idrisi                 Idrisi
-#&gt; ARCGEN                 ARCGEN
-#&gt; XLS                       XLS
-#&gt; ODS                       ODS
-#&gt; XLSX                     XLSX
-#&gt; Elasticsearch   Elasticsearch
-#&gt; Walk                     Walk
-#&gt; Carto                   Carto
-#&gt; AmigoCloud         AmigoCloud
-#&gt; SXF                       SXF
-#&gt; Selafin               Selafin
-#&gt; JML                       JML
-#&gt; PLSCENES             PLSCENES
-#&gt; CSW                       CSW
-#&gt; VDV                       VDV
-#&gt; GMLAS                   GMLAS
-#&gt; MVT                       MVT
-#&gt; NGW                       NGW
-#&gt; MapML                   MapML
-#&gt; TIGER                   TIGER
-#&gt; AVCBin                 AVCBin
-#&gt; AVCE00                 AVCE00
-#&gt; HTTP                     HTTP
-#&gt;                                                                    long_name
-#&gt; ESRIC                                                     Esri Compact Cache
-#&gt; FITS                                         Flexible Image Transport System
-#&gt; PCIDSK                                                  PCIDSK Database File
-#&gt; netCDF                                            Network Common Data Format
-#&gt; PDS4                                            NASA Planetary Data System 4
-#&gt; VICAR                                                        MIPL VICAR file
-#&gt; JP2OpenJPEG                       JPEG-2000 driver based on OpenJPEG library
-#&gt; PDF                                                           Geospatial PDF
-#&gt; MBTiles                                                              MBTiles
-#&gt; BAG                                               Bathymetry Attributed Grid
-#&gt; EEDA                                                   Earth Engine Data API
-#&gt; OGCAPI                                                                OGCAPI
-#&gt; ESRI Shapefile                                                ESRI Shapefile
-#&gt; MapInfo File                                                    MapInfo File
-#&gt; UK .NTF                                                              UK .NTF
-#&gt; LVBAG                                            Kadaster LV BAG Extract 2.0
-#&gt; OGR_SDTS                                                                SDTS
-#&gt; S57                                                           IHO S-57 (ENC)
-#&gt; DGN                                                         Microstation DGN
-#&gt; OGR_VRT                                             VRT - Virtual Datasource
-#&gt; REC                                                            EPIInfo .REC 
-#&gt; Memory                                                                Memory
-#&gt; CSV                                             Comma Separated Value (.csv)
-#&gt; NAS                                                              NAS - ALKIS
-#&gt; GML                                          Geography Markup Language (GML)
-#&gt; GPX                                                                      GPX
-#&gt; KML                                            Keyhole Markup Language (KML)
-#&gt; GeoJSON                                                              GeoJSON
-#&gt; GeoJSONSeq                                                  GeoJSON Sequence
-#&gt; ESRIJSON                                                            ESRIJSON
-#&gt; TopoJSON                                                            TopoJSON
-#&gt; Interlis 1                                                        Interlis 1
-#&gt; Interlis 2                                                        Interlis 2
-#&gt; OGR_GMT                                             GMT ASCII Vectors (.gmt)
-#&gt; GPKG                                                              GeoPackage
-#&gt; SQLite                                                   SQLite / Spatialite
-#&gt; OGR_DODS                                                            OGR_DODS
-#&gt; ODBC                                                                    ODBC
-#&gt; WAsP                                                        WAsP .map format
-#&gt; PGeo                                               ESRI Personal GeoDatabase
-#&gt; MSSQLSpatial                           Microsoft SQL Server Spatial Database
-#&gt; PostgreSQL                                                PostgreSQL/PostGIS
-#&gt; OpenFileGDB                                                     ESRI FileGDB
-#&gt; DXF                                                              AutoCAD DXF
-#&gt; CAD                                                           AutoCAD Driver
-#&gt; FlatGeobuf                                                        FlatGeobuf
-#&gt; Geoconcept                                                        Geoconcept
-#&gt; GeoRSS                                                                GeoRSS
-#&gt; GPSTrackMaker                                                  GPSTrackMaker
-#&gt; VFK                                     Czech Cadastral Exchange Data Format
-#&gt; PGDUMP                                                   PostgreSQL SQL dump
-#&gt; OSM                                                OpenStreetMap XML and PBF
-#&gt; GPSBabel                                                            GPSBabel
-#&gt; OGR_PDS                                         Planetary Data Systems TABLE
-#&gt; WFS                                            OGC WFS (Web Feature Service)
-#&gt; OAPIF                                                     OGC API - Features
-#&gt; Geomedia                                                       Geomedia .mdb
-#&gt; EDIGEO                                         French EDIGEO exchange format
-#&gt; SVG                                                 Scalable Vector Graphics
-#&gt; CouchDB                                                   CouchDB / GeoCouch
-#&gt; Cloudant                                                  Cloudant / CouchDB
-#&gt; Idrisi                                                  Idrisi Vector (.vct)
-#&gt; ARCGEN                                                     Arc/Info Generate
-#&gt; XLS                                                          MS Excel format
-#&gt; ODS                     Open Document/ LibreOffice / OpenOffice Spreadsheet 
-#&gt; XLSX                                          MS Office Open XML spreadsheet
-#&gt; Elasticsearch                                                 Elastic Search
-#&gt; Walk                                                                    Walk
-#&gt; Carto                                                                  Carto
-#&gt; AmigoCloud                                                        AmigoCloud
-#&gt; SXF                                              Storage and eXchange Format
-#&gt; Selafin                                                              Selafin
-#&gt; JML                                                             OpenJUMP JML
-#&gt; PLSCENES                                              Planet Labs Scenes API
-#&gt; CSW                                   OGC CSW (Catalog  Service for the Web)
-#&gt; VDV                                      VDV-451/VDV-452/INTREST Data Format
-#&gt; GMLAS          Geography Markup Language (GML) driven by application schemas
-#&gt; MVT                                                      Mapbox Vector Tiles
-#&gt; NGW                                                              NextGIS Web
-#&gt; MapML                                                                  MapML
-#&gt; TIGER                                                 U.S. Census TIGER/Line
-#&gt; AVCBin                                              Arc/Info Binary Coverage
-#&gt; AVCE00                                         Arc/Info E00 (ASCII) Coverage
-#&gt; HTTP                                                   HTTP Fetching Wrapper
-#&gt;                write  copy is_raster is_vector   vsi
-#&gt; ESRIC          FALSE FALSE      TRUE      TRUE  TRUE
-#&gt; FITS            TRUE FALSE      TRUE      TRUE FALSE
-#&gt; PCIDSK          TRUE FALSE      TRUE      TRUE  TRUE
-#&gt; netCDF          TRUE  TRUE      TRUE      TRUE FALSE
-#&gt; PDS4            TRUE  TRUE      TRUE      TRUE  TRUE
-#&gt; VICAR           TRUE  TRUE      TRUE      TRUE  TRUE
-#&gt; JP2OpenJPEG    FALSE  TRUE      TRUE      TRUE  TRUE
-#&gt; PDF             TRUE  TRUE      TRUE      TRUE  TRUE
-#&gt; MBTiles         TRUE  TRUE      TRUE      TRUE  TRUE
-#&gt; BAG             TRUE  TRUE      TRUE      TRUE  TRUE
-#&gt; EEDA           FALSE FALSE     FALSE      TRUE FALSE
-#&gt; OGCAPI         FALSE FALSE      TRUE      TRUE  TRUE
-#&gt; ESRI Shapefile  TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; MapInfo File    TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; UK .NTF        FALSE FALSE     FALSE      TRUE  TRUE
-#&gt; LVBAG          FALSE FALSE     FALSE      TRUE  TRUE
-#&gt; OGR_SDTS       FALSE FALSE     FALSE      TRUE  TRUE
-#&gt; S57             TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; DGN             TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; OGR_VRT        FALSE FALSE     FALSE      TRUE  TRUE
-#&gt; REC            FALSE FALSE     FALSE      TRUE FALSE
-#&gt; Memory          TRUE FALSE     FALSE      TRUE FALSE
-#&gt; CSV             TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; NAS            FALSE FALSE     FALSE      TRUE  TRUE
-#&gt; GML             TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; GPX             TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; KML             TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; GeoJSON         TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; GeoJSONSeq      TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; ESRIJSON       FALSE FALSE     FALSE      TRUE  TRUE
-#&gt; TopoJSON       FALSE FALSE     FALSE      TRUE  TRUE
-#&gt; Interlis 1      TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; Interlis 2      TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; OGR_GMT         TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; GPKG            TRUE  TRUE      TRUE      TRUE  TRUE
-#&gt; SQLite          TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; OGR_DODS       FALSE FALSE     FALSE      TRUE FALSE
-#&gt; ODBC            TRUE FALSE     FALSE      TRUE FALSE
-#&gt; WAsP            TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; PGeo           FALSE FALSE     FALSE      TRUE FALSE
-#&gt; MSSQLSpatial    TRUE FALSE     FALSE      TRUE FALSE
-#&gt; PostgreSQL      TRUE FALSE     FALSE      TRUE FALSE
-#&gt; OpenFileGDB    FALSE FALSE     FALSE      TRUE  TRUE
-#&gt; DXF             TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; CAD            FALSE FALSE      TRUE      TRUE  TRUE
-#&gt; FlatGeobuf      TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; Geoconcept      TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; GeoRSS          TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; GPSTrackMaker   TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; VFK            FALSE FALSE     FALSE      TRUE FALSE
-#&gt; PGDUMP          TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; OSM            FALSE FALSE     FALSE      TRUE  TRUE
-#&gt; GPSBabel        TRUE FALSE     FALSE      TRUE FALSE
-#&gt; OGR_PDS        FALSE FALSE     FALSE      TRUE  TRUE
-#&gt; WFS            FALSE FALSE     FALSE      TRUE  TRUE
-#&gt; OAPIF          FALSE FALSE     FALSE      TRUE FALSE
-#&gt; Geomedia       FALSE FALSE     FALSE      TRUE FALSE
-#&gt; EDIGEO         FALSE FALSE     FALSE      TRUE  TRUE
-#&gt; SVG            FALSE FALSE     FALSE      TRUE  TRUE
-#&gt; CouchDB         TRUE FALSE     FALSE      TRUE FALSE
-#&gt; Cloudant        TRUE FALSE     FALSE      TRUE FALSE
-#&gt; Idrisi         FALSE FALSE     FALSE      TRUE  TRUE
-#&gt; ARCGEN         FALSE FALSE     FALSE      TRUE  TRUE
-#&gt; XLS            FALSE FALSE     FALSE      TRUE FALSE
-#&gt; ODS             TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; XLSX            TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; Elasticsearch   TRUE FALSE     FALSE      TRUE FALSE
-#&gt; Walk           FALSE FALSE     FALSE      TRUE FALSE
-#&gt; Carto           TRUE FALSE     FALSE      TRUE FALSE
-#&gt; AmigoCloud      TRUE FALSE     FALSE      TRUE FALSE
-#&gt; SXF            FALSE FALSE     FALSE      TRUE  TRUE
-#&gt; Selafin         TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; JML             TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; PLSCENES       FALSE FALSE      TRUE      TRUE FALSE
-#&gt; CSW            FALSE FALSE     FALSE      TRUE FALSE
-#&gt; VDV             TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; GMLAS          FALSE  TRUE     FALSE      TRUE  TRUE
-#&gt; MVT             TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; NGW             TRUE  TRUE      TRUE      TRUE FALSE
-#&gt; MapML           TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; TIGER           TRUE FALSE     FALSE      TRUE  TRUE
-#&gt; AVCBin         FALSE FALSE     FALSE      TRUE  TRUE
-#&gt; AVCE00         FALSE FALSE     FALSE      TRUE  TRUE
-#&gt; HTTP           FALSE FALSE      TRUE      TRUE FALSE</div></pre>
+    <pre class="examples"><span class='r-in'><span class='fu'>st_drivers</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                          name</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ESRIC                   ESRIC</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> FITS                     FITS</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PCIDSK                 PCIDSK</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> netCDF                 netCDF</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PDS4                     PDS4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> VICAR                   VICAR</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> JP2OpenJPEG       JP2OpenJPEG</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PDF                       PDF</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MBTiles               MBTiles</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BAG                       BAG</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> EEDA                     EEDA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OGCAPI                 OGCAPI</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ESRI Shapefile ESRI Shapefile</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MapInfo File     MapInfo File</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> UK .NTF               UK .NTF</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> LVBAG                   LVBAG</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OGR_SDTS             OGR_SDTS</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> S57                       S57</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> DGN                       DGN</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OGR_VRT               OGR_VRT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> REC                       REC</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Memory                 Memory</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CSV                       CSV</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> NAS                       NAS</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GML                       GML</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GPX                       GPX</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> KML                       KML</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GeoJSON               GeoJSON</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GeoJSONSeq         GeoJSONSeq</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ESRIJSON             ESRIJSON</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> TopoJSON             TopoJSON</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Interlis 1         Interlis 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Interlis 2         Interlis 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OGR_GMT               OGR_GMT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GPKG                     GPKG</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SQLite                 SQLite</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OGR_DODS             OGR_DODS</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ODBC                     ODBC</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> WAsP                     WAsP</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PGeo                     PGeo</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MSSQLSpatial     MSSQLSpatial</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PostgreSQL         PostgreSQL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OpenFileGDB       OpenFileGDB</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> DXF                       DXF</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CAD                       CAD</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> FlatGeobuf         FlatGeobuf</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geoconcept         Geoconcept</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GeoRSS                 GeoRSS</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GPSTrackMaker   GPSTrackMaker</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> VFK                       VFK</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PGDUMP                 PGDUMP</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OSM                       OSM</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GPSBabel             GPSBabel</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OGR_PDS               OGR_PDS</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> WFS                       WFS</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OAPIF                   OAPIF</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geomedia             Geomedia</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> EDIGEO                 EDIGEO</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SVG                       SVG</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CouchDB               CouchDB</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Cloudant             Cloudant</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Idrisi                 Idrisi</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ARCGEN                 ARCGEN</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> XLS                       XLS</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ODS                       ODS</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> XLSX                     XLSX</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Elasticsearch   Elasticsearch</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Walk                     Walk</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Carto                   Carto</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AmigoCloud         AmigoCloud</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SXF                       SXF</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Selafin               Selafin</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> JML                       JML</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PLSCENES             PLSCENES</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CSW                       CSW</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> VDV                       VDV</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GMLAS                   GMLAS</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MVT                       MVT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> NGW                       NGW</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MapML                   MapML</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> TIGER                   TIGER</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AVCBin                 AVCBin</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AVCE00                 AVCE00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> HTTP                     HTTP</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                                                    long_name</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ESRIC                                                     Esri Compact Cache</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> FITS                                         Flexible Image Transport System</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PCIDSK                                                  PCIDSK Database File</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> netCDF                                            Network Common Data Format</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PDS4                                            NASA Planetary Data System 4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> VICAR                                                        MIPL VICAR file</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> JP2OpenJPEG                       JPEG-2000 driver based on OpenJPEG library</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PDF                                                           Geospatial PDF</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MBTiles                                                              MBTiles</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BAG                                               Bathymetry Attributed Grid</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> EEDA                                                   Earth Engine Data API</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OGCAPI                                                                OGCAPI</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ESRI Shapefile                                                ESRI Shapefile</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MapInfo File                                                    MapInfo File</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> UK .NTF                                                              UK .NTF</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> LVBAG                                            Kadaster LV BAG Extract 2.0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OGR_SDTS                                                                SDTS</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> S57                                                           IHO S-57 (ENC)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> DGN                                                         Microstation DGN</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OGR_VRT                                             VRT - Virtual Datasource</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> REC                                                            EPIInfo .REC </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Memory                                                                Memory</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CSV                                             Comma Separated Value (.csv)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> NAS                                                              NAS - ALKIS</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GML                                          Geography Markup Language (GML)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GPX                                                                      GPX</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> KML                                            Keyhole Markup Language (KML)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GeoJSON                                                              GeoJSON</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GeoJSONSeq                                                  GeoJSON Sequence</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ESRIJSON                                                            ESRIJSON</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> TopoJSON                                                            TopoJSON</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Interlis 1                                                        Interlis 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Interlis 2                                                        Interlis 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OGR_GMT                                             GMT ASCII Vectors (.gmt)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GPKG                                                              GeoPackage</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SQLite                                                   SQLite / Spatialite</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OGR_DODS                                                            OGR_DODS</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ODBC                                                                    ODBC</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> WAsP                                                        WAsP .map format</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PGeo                                               ESRI Personal GeoDatabase</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MSSQLSpatial                           Microsoft SQL Server Spatial Database</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PostgreSQL                                                PostgreSQL/PostGIS</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OpenFileGDB                                                     ESRI FileGDB</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> DXF                                                              AutoCAD DXF</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CAD                                                           AutoCAD Driver</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> FlatGeobuf                                                        FlatGeobuf</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geoconcept                                                        Geoconcept</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GeoRSS                                                                GeoRSS</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GPSTrackMaker                                                  GPSTrackMaker</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> VFK                                     Czech Cadastral Exchange Data Format</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PGDUMP                                                   PostgreSQL SQL dump</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OSM                                                OpenStreetMap XML and PBF</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GPSBabel                                                            GPSBabel</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OGR_PDS                                         Planetary Data Systems TABLE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> WFS                                            OGC WFS (Web Feature Service)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OAPIF                                                     OGC API - Features</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geomedia                                                       Geomedia .mdb</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> EDIGEO                                         French EDIGEO exchange format</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SVG                                                 Scalable Vector Graphics</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CouchDB                                                   CouchDB / GeoCouch</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Cloudant                                                  Cloudant / CouchDB</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Idrisi                                                  Idrisi Vector (.vct)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ARCGEN                                                     Arc/Info Generate</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> XLS                                                          MS Excel format</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ODS                     Open Document/ LibreOffice / OpenOffice Spreadsheet </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> XLSX                                          MS Office Open XML spreadsheet</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Elasticsearch                                                 Elastic Search</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Walk                                                                    Walk</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Carto                                                                  Carto</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AmigoCloud                                                        AmigoCloud</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SXF                                              Storage and eXchange Format</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Selafin                                                              Selafin</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> JML                                                             OpenJUMP JML</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PLSCENES                                              Planet Labs Scenes API</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CSW                                   OGC CSW (Catalog  Service for the Web)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> VDV                                      VDV-451/VDV-452/INTREST Data Format</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GMLAS          Geography Markup Language (GML) driven by application schemas</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MVT                                                      Mapbox Vector Tiles</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> NGW                                                              NextGIS Web</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MapML                                                                  MapML</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> TIGER                                                 U.S. Census TIGER/Line</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AVCBin                                              Arc/Info Binary Coverage</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AVCE00                                         Arc/Info E00 (ASCII) Coverage</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> HTTP                                                   HTTP Fetching Wrapper</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                write  copy is_raster is_vector   vsi</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ESRIC          FALSE FALSE      TRUE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> FITS            TRUE FALSE      TRUE      TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PCIDSK          TRUE FALSE      TRUE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> netCDF          TRUE  TRUE      TRUE      TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PDS4            TRUE  TRUE      TRUE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> VICAR           TRUE  TRUE      TRUE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> JP2OpenJPEG    FALSE  TRUE      TRUE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PDF             TRUE  TRUE      TRUE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MBTiles         TRUE  TRUE      TRUE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> BAG             TRUE  TRUE      TRUE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> EEDA           FALSE FALSE     FALSE      TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OGCAPI         FALSE FALSE      TRUE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ESRI Shapefile  TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MapInfo File    TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> UK .NTF        FALSE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> LVBAG          FALSE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OGR_SDTS       FALSE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> S57             TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> DGN             TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OGR_VRT        FALSE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> REC            FALSE FALSE     FALSE      TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Memory          TRUE FALSE     FALSE      TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CSV             TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> NAS            FALSE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GML             TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GPX             TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> KML             TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GeoJSON         TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GeoJSONSeq      TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ESRIJSON       FALSE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> TopoJSON       FALSE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Interlis 1      TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Interlis 2      TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OGR_GMT         TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GPKG            TRUE  TRUE      TRUE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SQLite          TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OGR_DODS       FALSE FALSE     FALSE      TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ODBC            TRUE FALSE     FALSE      TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> WAsP            TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PGeo           FALSE FALSE     FALSE      TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MSSQLSpatial    TRUE FALSE     FALSE      TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PostgreSQL      TRUE FALSE     FALSE      TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OpenFileGDB    FALSE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> DXF             TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CAD            FALSE FALSE      TRUE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> FlatGeobuf      TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geoconcept      TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GeoRSS          TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GPSTrackMaker   TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> VFK            FALSE FALSE     FALSE      TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PGDUMP          TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OSM            FALSE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GPSBabel        TRUE FALSE     FALSE      TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OGR_PDS        FALSE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> WFS            FALSE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> OAPIF          FALSE FALSE     FALSE      TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geomedia       FALSE FALSE     FALSE      TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> EDIGEO         FALSE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SVG            FALSE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CouchDB         TRUE FALSE     FALSE      TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Cloudant        TRUE FALSE     FALSE      TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Idrisi         FALSE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ARCGEN         FALSE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> XLS            FALSE FALSE     FALSE      TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ODS             TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> XLSX            TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Elasticsearch   TRUE FALSE     FALSE      TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Walk           FALSE FALSE     FALSE      TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Carto           TRUE FALSE     FALSE      TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AmigoCloud      TRUE FALSE     FALSE      TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SXF            FALSE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Selafin         TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> JML             TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> PLSCENES       FALSE FALSE      TRUE      TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CSW            FALSE FALSE     FALSE      TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> VDV             TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GMLAS          FALSE  TRUE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MVT             TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> NGW             TRUE  TRUE      TRUE      TRUE FALSE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MapML           TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> TIGER           TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AVCBin         FALSE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AVCE00         FALSE FALSE     FALSE      TRUE  TRUE</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> HTTP           FALSE FALSE      TRUE      TRUE FALSE</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

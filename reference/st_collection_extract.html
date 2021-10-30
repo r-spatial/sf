@@ -219,108 +219,130 @@ into an <code>sfc</code> object of the relevant type. If any subgeometries in th
 input are MULTI, then all of the subgeometries in the output will be MULTI.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>pt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>ls</span> <span class='op'>&lt;-</span> <span class='fu'><a href='st.html'>st_linestring</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>4</span>, <span class='fl'>3</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>poly1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='st.html'>st_polygon</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5.5</span>, <span class='fl'>7</span>, <span class='fl'>7</span>, <span class='fl'>6</span>, <span class='fl'>5.5</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='op'>-</span><span class='fl'>0.5</span>, <span class='op'>-</span><span class='fl'>0.5</span>, <span class='fl'>0</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>poly2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='st.html'>st_polygon</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>6.6</span>, <span class='fl'>8</span>, <span class='fl'>8</span>, <span class='fl'>7</span>, <span class='fl'>6.6</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1.5</span>, <span class='fl'>1.5</span>, <span class='fl'>1</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>multipoly</span> <span class='op'>&lt;-</span> <span class='fu'><a href='st.html'>st_multipolygon</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>poly1</span>, <span class='va'>poly2</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>i</span> <span class='op'>&lt;-</span> <span class='fu'><a href='st.html'>st_geometrycollection</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>pt</span>, <span class='va'>ls</span>, <span class='va'>poly1</span>, <span class='va'>poly2</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>j</span> <span class='op'>&lt;-</span> <span class='fu'><a href='st.html'>st_geometrycollection</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>pt</span>, <span class='va'>ls</span>, <span class='va'>poly1</span>, <span class='va'>poly2</span>, <span class='va'>multipoly</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='fu'>st_collection_extract</span><span class='op'>(</span><span class='va'>i</span>, <span class='st'>"POLYGON"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Geometry set for 2 features 
-#&gt; Geometry type: POLYGON
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 5.5 ymin: -0.5 xmax: 8 ymax: 1.5
-#&gt; CRS:           NA</div><div class='output co'>#&gt; <span class='message'>POLYGON ((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5 0))</span></div><div class='output co'>#&gt; <span class='message'>POLYGON ((6.6 1, 8 1, 8 1.5, 7 1.5, 6.6 1))</span></div><div class='input'><span class='fu'>st_collection_extract</span><span class='op'>(</span><span class='va'>i</span>, <span class='st'>"POINT"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>POINT (1 0)</span></div><div class='input'><span class='fu'>st_collection_extract</span><span class='op'>(</span><span class='va'>i</span>, <span class='st'>"LINESTRING"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>LINESTRING (4 0, 3 0)</span></div><div class='input'>
-<span class='co'>## A GEOMETRYCOLLECTION</span>
-<span class='va'>aa</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>a<span class='op'>=</span><span class='fl'>1</span>, geom <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>i</span><span class='op'>)</span><span class='op'>)</span>,
-      <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>a<span class='op'>=</span><span class='fl'>2</span>, geom <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>j</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='co'>## With sf objects</span>
-<span class='fu'>st_collection_extract</span><span class='op'>(</span><span class='va'>aa</span>, <span class='st'>"POLYGON"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Simple feature collection with 5 features and 1 field
-#&gt; Geometry type: MULTIPOLYGON
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 5.5 ymin: -0.5 xmax: 8 ymax: 1.5
-#&gt; CRS:           NA
-#&gt;     a                           geom
-#&gt; 1.2 1 MULTIPOLYGON (((5.5 0, 7 0,...
-#&gt; 1.3 1 MULTIPOLYGON (((6.6 1, 8 1,...
-#&gt; 2.2 2 MULTIPOLYGON (((5.5 0, 7 0,...
-#&gt; 2.3 2 MULTIPOLYGON (((6.6 1, 8 1,...
-#&gt; 2.4 2 MULTIPOLYGON (((5.5 0, 7 0,...</div><div class='input'><span class='fu'>st_collection_extract</span><span class='op'>(</span><span class='va'>aa</span>, <span class='st'>"LINESTRING"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Simple feature collection with 2 features and 1 field
-#&gt; Geometry type: LINESTRING
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 3 ymin: 0 xmax: 4 ymax: 0
-#&gt; CRS:           NA
-#&gt;     a                  geom
-#&gt; 1.1 1 LINESTRING (4 0, 3 0)
-#&gt; 2.1 2 LINESTRING (4 0, 3 0)</div><div class='input'><span class='fu'>st_collection_extract</span><span class='op'>(</span><span class='va'>aa</span>, <span class='st'>"POINT"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Simple feature collection with 2 features and 1 field
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 1 ymin: 0 xmax: 1 ymax: 0
-#&gt; CRS:           NA
-#&gt;   a        geom
-#&gt; 1 1 POINT (1 0)
-#&gt; 2 2 POINT (1 0)</div><div class='input'>
-<span class='co'>## With sfc objects</span>
-<span class='fu'>st_collection_extract</span><span class='op'>(</span><span class='fu'><a href='st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>aa</span><span class='op'>)</span>, <span class='st'>"POLYGON"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Geometry set for 5 features 
-#&gt; Geometry type: MULTIPOLYGON
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 5.5 ymin: -0.5 xmax: 8 ymax: 1.5
-#&gt; CRS:           NA</div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON (((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON (((6.6 1, 8 1, 8 1.5, 7 1.5, 6.6 1)))</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON (((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5...</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON (((6.6 1, 8 1, 8 1.5, 7 1.5, 6.6 1)))</span></div><div class='output co'>#&gt; <span class='message'>MULTIPOLYGON (((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5...</span></div><div class='input'><span class='fu'>st_collection_extract</span><span class='op'>(</span><span class='fu'><a href='st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>aa</span><span class='op'>)</span>, <span class='st'>"LINESTRING"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Geometry set for 2 features 
-#&gt; Geometry type: LINESTRING
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 3 ymin: 0 xmax: 4 ymax: 0
-#&gt; CRS:           NA</div><div class='output co'>#&gt; <span class='message'>LINESTRING (4 0, 3 0)</span></div><div class='output co'>#&gt; <span class='message'>LINESTRING (4 0, 3 0)</span></div><div class='input'><span class='fu'>st_collection_extract</span><span class='op'>(</span><span class='fu'><a href='st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>aa</span><span class='op'>)</span>, <span class='st'>"POINT"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Geometry set for 2 features 
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 1 ymin: 0 xmax: 1 ymax: 0
-#&gt; CRS:           NA</div><div class='output co'>#&gt; <span class='message'>POINT (1 0)</span></div><div class='output co'>#&gt; <span class='message'>POINT (1 0)</span></div><div class='input'>
-<span class='co'>## A GEOMETRY of single types</span>
-<span class='va'>bb</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span>
-  <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span>, geom <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>pt</span><span class='op'>)</span><span class='op'>)</span>,
-  <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>2</span>, geom <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>ls</span><span class='op'>)</span><span class='op'>)</span>,
-  <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>3</span>, geom <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>poly1</span><span class='op'>)</span><span class='op'>)</span>,
-  <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>4</span>, geom <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>multipoly</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>)</span>
-
-<span class='fu'>st_collection_extract</span><span class='op'>(</span><span class='va'>bb</span>, <span class='st'>"POLYGON"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Simple feature collection with 2 features and 1 field
-#&gt; Geometry type: MULTIPOLYGON
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 5.5 ymin: -0.5 xmax: 8 ymax: 1.5
-#&gt; CRS:           NA
-#&gt;   a                           geom
-#&gt; 3 3 MULTIPOLYGON (((5.5 0, 7 0,...
-#&gt; 4 4 MULTIPOLYGON (((5.5 0, 7 0,...</div><div class='input'>
-<span class='co'>## A GEOMETRY of mixed single types and GEOMETRYCOLLECTIONS</span>
-<span class='va'>cc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>aa</span>, <span class='va'>bb</span><span class='op'>)</span>
-
-<span class='fu'>st_collection_extract</span><span class='op'>(</span><span class='va'>cc</span>, <span class='st'>"POLYGON"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Simple feature collection with 7 features and 1 field
-#&gt; Geometry type: MULTIPOLYGON
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 5.5 ymin: -0.5 xmax: 8 ymax: 1.5
-#&gt; CRS:           NA
-#&gt;     a                           geom
-#&gt; 1.2 1 MULTIPOLYGON (((5.5 0, 7 0,...
-#&gt; 1.3 1 MULTIPOLYGON (((6.6 1, 8 1,...
-#&gt; 2.2 2 MULTIPOLYGON (((5.5 0, 7 0,...
-#&gt; 2.3 2 MULTIPOLYGON (((6.6 1, 8 1,...
-#&gt; 2.4 2 MULTIPOLYGON (((5.5 0, 7 0,...
-#&gt; 5   3 MULTIPOLYGON (((5.5 0, 7 0,...
-#&gt; 6   4 MULTIPOLYGON (((5.5 0, 7 0,...</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>pt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>ls</span> <span class='op'>&lt;-</span> <span class='fu'><a href='st.html'>st_linestring</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>4</span>, <span class='fl'>3</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>poly1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='st.html'>st_polygon</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5.5</span>, <span class='fl'>7</span>, <span class='fl'>7</span>, <span class='fl'>6</span>, <span class='fl'>5.5</span>, <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='op'>-</span><span class='fl'>0.5</span>, <span class='op'>-</span><span class='fl'>0.5</span>, <span class='fl'>0</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>poly2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='st.html'>st_polygon</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>6.6</span>, <span class='fl'>8</span>, <span class='fl'>8</span>, <span class='fl'>7</span>, <span class='fl'>6.6</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1.5</span>, <span class='fl'>1.5</span>, <span class='fl'>1</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>multipoly</span> <span class='op'>&lt;-</span> <span class='fu'><a href='st.html'>st_multipolygon</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>poly1</span>, <span class='va'>poly2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>i</span> <span class='op'>&lt;-</span> <span class='fu'><a href='st.html'>st_geometrycollection</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>pt</span>, <span class='va'>ls</span>, <span class='va'>poly1</span>, <span class='va'>poly2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>j</span> <span class='op'>&lt;-</span> <span class='fu'><a href='st.html'>st_geometrycollection</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>pt</span>, <span class='va'>ls</span>, <span class='va'>poly1</span>, <span class='va'>poly2</span>, <span class='va'>multipoly</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>st_collection_extract</span><span class='op'>(</span><span class='va'>i</span>, <span class='st'>"POLYGON"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry set for 2 features </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POLYGON</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 5.5 ymin: -0.5 xmax: 8 ymax: 1.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POLYGON ((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5 0))</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POLYGON ((6.6 1, 8 1, 8 1.5, 7 1.5, 6.6 1))</span>
+<span class='r-in'><span class='fu'>st_collection_extract</span><span class='op'>(</span><span class='va'>i</span>, <span class='st'>"POINT"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (1 0)</span>
+<span class='r-in'><span class='fu'>st_collection_extract</span><span class='op'>(</span><span class='va'>i</span>, <span class='st'>"LINESTRING"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> LINESTRING (4 0, 3 0)</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## A GEOMETRYCOLLECTION</span></span>
+<span class='r-in'><span class='va'>aa</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>a<span class='op'>=</span><span class='fl'>1</span>, geom <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>i</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>      <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>a<span class='op'>=</span><span class='fl'>2</span>, geom <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>j</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## With sf objects</span></span>
+<span class='r-in'><span class='fu'>st_collection_extract</span><span class='op'>(</span><span class='va'>aa</span>, <span class='st'>"POLYGON"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 5 features and 1 field</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: MULTIPOLYGON</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 5.5 ymin: -0.5 xmax: 8 ymax: 1.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     a                           geom</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1.2 1 MULTIPOLYGON (((5.5 0, 7 0,...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1.3 1 MULTIPOLYGON (((6.6 1, 8 1,...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2.2 2 MULTIPOLYGON (((5.5 0, 7 0,...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2.3 2 MULTIPOLYGON (((6.6 1, 8 1,...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2.4 2 MULTIPOLYGON (((5.5 0, 7 0,...</span>
+<span class='r-in'><span class='fu'>st_collection_extract</span><span class='op'>(</span><span class='va'>aa</span>, <span class='st'>"LINESTRING"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 2 features and 1 field</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: LINESTRING</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 3 ymin: 0 xmax: 4 ymax: 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     a                  geom</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1.1 1 LINESTRING (4 0, 3 0)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2.1 2 LINESTRING (4 0, 3 0)</span>
+<span class='r-in'><span class='fu'>st_collection_extract</span><span class='op'>(</span><span class='va'>aa</span>, <span class='st'>"POINT"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 2 features and 1 field</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 1 ymin: 0 xmax: 1 ymax: 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   a        geom</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 1 POINT (1 0)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 2 POINT (1 0)</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## With sfc objects</span></span>
+<span class='r-in'><span class='fu'>st_collection_extract</span><span class='op'>(</span><span class='fu'><a href='st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>aa</span><span class='op'>)</span>, <span class='st'>"POLYGON"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry set for 5 features </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: MULTIPOLYGON</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 5.5 ymin: -0.5 xmax: 8 ymax: 1.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> MULTIPOLYGON (((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5...</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> MULTIPOLYGON (((6.6 1, 8 1, 8 1.5, 7 1.5, 6.6 1)))</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> MULTIPOLYGON (((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5...</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> MULTIPOLYGON (((6.6 1, 8 1, 8 1.5, 7 1.5, 6.6 1)))</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> MULTIPOLYGON (((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5...</span>
+<span class='r-in'><span class='fu'>st_collection_extract</span><span class='op'>(</span><span class='fu'><a href='st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>aa</span><span class='op'>)</span>, <span class='st'>"LINESTRING"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry set for 2 features </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: LINESTRING</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 3 ymin: 0 xmax: 4 ymax: 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> LINESTRING (4 0, 3 0)</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> LINESTRING (4 0, 3 0)</span>
+<span class='r-in'><span class='fu'>st_collection_extract</span><span class='op'>(</span><span class='fu'><a href='st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>aa</span><span class='op'>)</span>, <span class='st'>"POINT"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry set for 2 features </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 1 ymin: 0 xmax: 1 ymax: 0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (1 0)</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (1 0)</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## A GEOMETRY of single types</span></span>
+<span class='r-in'><span class='va'>bb</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span>, geom <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>pt</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>2</span>, geom <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>ls</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>3</span>, geom <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>poly1</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='sf.html'>st_sf</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>4</span>, geom <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>multipoly</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>st_collection_extract</span><span class='op'>(</span><span class='va'>bb</span>, <span class='st'>"POLYGON"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 2 features and 1 field</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: MULTIPOLYGON</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 5.5 ymin: -0.5 xmax: 8 ymax: 1.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   a                           geom</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 3 MULTIPOLYGON (((5.5 0, 7 0,...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 4 MULTIPOLYGON (((5.5 0, 7 0,...</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'>## A GEOMETRY of mixed single types and GEOMETRYCOLLECTIONS</span></span>
+<span class='r-in'><span class='va'>cc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>aa</span>, <span class='va'>bb</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>st_collection_extract</span><span class='op'>(</span><span class='va'>cc</span>, <span class='st'>"POLYGON"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 7 features and 1 field</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: MULTIPOLYGON</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 5.5 ymin: -0.5 xmax: 8 ymax: 1.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     a                           geom</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1.2 1 MULTIPOLYGON (((5.5 0, 7 0,...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1.3 1 MULTIPOLYGON (((6.6 1, 8 1,...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2.2 2 MULTIPOLYGON (((5.5 0, 7 0,...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2.3 2 MULTIPOLYGON (((6.6 1, 8 1,...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2.4 2 MULTIPOLYGON (((5.5 0, 7 0,...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5   3 MULTIPOLYGON (((5.5 0, 7 0,...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6   4 MULTIPOLYGON (((5.5 0, 7 0,...</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

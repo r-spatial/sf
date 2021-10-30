@@ -178,7 +178,7 @@
     </tr>
     <tr>
       <th>by</th>
-      <td><p>either a list of grouping vectors with length equal to <code><a href='https://rdrr.io/r/base/nrow.html'>nrow(x)</a></code> (see <a href='https://rdrr.io/r/stats/aggregate.html'>aggregate</a>), or an object of class <code>sf</code> or <code>sfc</code> with geometries that are used to generate groupings, using the binary predicate specified by the argument <code>join</code></p></td>
+      <td><p>either a list of grouping vectors with length equal to <code>nrow(x)</code> (see <a href='https://rdrr.io/r/stats/aggregate.html'>aggregate</a>), or an object of class <code>sf</code> or <code>sfc</code> with geometries that are used to generate groupings, using the binary predicate specified by the argument <code>join</code></p></td>
     </tr>
     <tr>
       <th>FUN</th>
@@ -204,68 +204,75 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>an <code>sf</code> object with aggregated attributes and geometries; additional grouping variables having the names of <code><a href='https://rdrr.io/r/base/names.html'>names(ids)</a></code> or are named <code>Group.i</code> for <code>ids[[i]]</code>; see <a href='https://rdrr.io/r/stats/aggregate.html'>aggregate</a>.</p>
+    <p>an <code>sf</code> object with aggregated attributes and geometries; additional grouping variables having the names of <code>names(ids)</code> or are named <code>Group.i</code> for <code>ids[[i]]</code>; see <a href='https://rdrr.io/r/stats/aggregate.html'>aggregate</a>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>In case <code>do_union</code> is <code>FALSE</code>, <code>aggregate</code> will simply combine geometries using <a href='st.html'>c.sfg</a>. When polygons sharing a boundary are combined, this leads to geometries that are invalid; see <a href='https://github.com/r-spatial/sf/issues/681'>https://github.com/r-spatial/sf/issues/681</a>.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>Does not work using the formula notation involving <code><a href='https://rdrr.io/r/base/tilde.html'>~</a></code> defined in <a href='https://rdrr.io/r/stats/aggregate.html'>aggregate</a>.</p>
+    <p>Does not work using the formula notation involving <code>~</code> defined in <a href='https://rdrr.io/r/stats/aggregate.html'>aggregate</a>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>m1</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>m2</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>pol</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_polygon</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>m1</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_polygon</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>m2</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1985</span><span class='op'>)</span>
-<span class='va'>d</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>15</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>p</span> <span class='op'>=</span> <span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>d</span>, coords <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span>
-<span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='va'>pol</span><span class='op'>)</span>
-</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='va'>p</span>, add <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='img'><img src='aggregate.sf-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='op'>(</span><span class='va'>p_ag1</span> <span class='op'>=</span> <span class='fu'>aggregate</span><span class='op'>(</span><span class='va'>p</span>, <span class='va'>pol</span>, <span class='va'>mean</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Simple feature collection with 2 features and 1 field
-#&gt; Geometry type: POLYGON
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1
-#&gt; CRS:           NA
-#&gt;          X3                       geometry
-#&gt; 1 0.5951766 POLYGON ((0 0, 0 1, 1 1, 0 0))
-#&gt; 2 0.2997908 POLYGON ((0 0, 1 0, 1 1, 0 0))</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='va'>p_ag1</span><span class='op'>)</span> <span class='co'># geometry same as pol</span>
-</div><div class='input'><span class='co'># works when x overlaps multiple objects in 'by':</span>
-<span class='va'>p_buff</span> <span class='op'>=</span> <span class='fu'><a href='geos_unary.html'>st_buffer</a></span><span class='op'>(</span><span class='va'>p</span>, <span class='fl'>0.2</span><span class='op'>)</span>
-<span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='va'>p_buff</span>, add <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='img'><img src='aggregate.sf-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='op'>(</span><span class='va'>p_ag2</span> <span class='op'>=</span> <span class='fu'>aggregate</span><span class='op'>(</span><span class='va'>p_buff</span>, <span class='va'>pol</span>, <span class='va'>mean</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># increased mean of second</span>
-</div><div class='output co'>#&gt; Simple feature collection with 2 features and 1 field
-#&gt; Geometry type: POLYGON
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1
-#&gt; CRS:           NA
-#&gt;          X3                       geometry
-#&gt; 1 0.5951766 POLYGON ((0 0, 0 1, 1 1, 0 0))
-#&gt; 2 0.5958297 POLYGON ((0 0, 1 0, 1 1, 0 0))</div><div class='input'><span class='co'># with non-matching features</span>
-<span class='va'>m3</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='op'>-</span><span class='fl'>0.1</span>, <span class='fl'>0</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0.1</span>, <span class='fl'>0.1</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>pol</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_polygon</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>m3</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_polygon</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>m1</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_polygon</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>m2</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>(</span><span class='va'>p_ag3</span> <span class='op'>=</span> <span class='fu'>aggregate</span><span class='op'>(</span><span class='va'>p</span>, <span class='va'>pol</span>, <span class='va'>mean</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Simple feature collection with 3 features and 1 field
-#&gt; Geometry type: POLYGON
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: -0.1 ymin: 0 xmax: 1 ymax: 1
-#&gt; CRS:           NA
-#&gt;          X3                       geometry
-#&gt; 1        NA POLYGON ((0 0, 0 0.1, -0.1 ...
-#&gt; 2 0.5951766 POLYGON ((0 0, 0 1, 1 1, 0 0))
-#&gt; 3 0.2997908 POLYGON ((0 0, 1 0, 1 1, 0 0))</div><div class='input'><span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='va'>p_ag3</span><span class='op'>)</span>
-</div><div class='img'><img src='aggregate.sf-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># In case we need to pass an argument to the join function:</span>
-<span class='op'>(</span><span class='va'>p_ag4</span> <span class='op'>=</span> <span class='fu'>aggregate</span><span class='op'>(</span><span class='va'>p</span>, <span class='va'>pol</span>, <span class='va'>mean</span>, 
-     join <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span> <span class='fu'><a href='geos_binary_pred.html'>st_is_within_distance</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, dist <span class='op'>=</span> <span class='fl'>0.3</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Simple feature collection with 3 features and 1 field
-#&gt; Geometry type: POLYGON
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: -0.1 ymin: 0 xmax: 1 ymax: 1
-#&gt; CRS:           NA
-#&gt;          X3                       geometry
-#&gt; 1        NA POLYGON ((0 0, 0 0.1, -0.1 ...
-#&gt; 2 0.5951766 POLYGON ((0 0, 0 1, 1 1, 0 0))
-#&gt; 3 0.5999887 POLYGON ((0 0, 1 0, 1 1, 0 0))</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>m1</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>m2</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pol</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_polygon</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>m1</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_polygon</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>m2</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1985</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>d</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fl'>15</span><span class='op'>)</span>, ncol <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>p</span> <span class='op'>=</span> <span class='fu'><a href='st_as_sf.html'>st_as_sf</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>d</span>, coords <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='va'>pol</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='va'>p</span>, add <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='aggregate.sf-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='op'>(</span><span class='va'>p_ag1</span> <span class='op'>=</span> <span class='fu'>aggregate</span><span class='op'>(</span><span class='va'>p</span>, <span class='va'>pol</span>, <span class='va'>mean</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 2 features and 1 field</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POLYGON</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          X3                       geometry</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 0.5951766 POLYGON ((0 0, 0 1, 1 1, 0 0))</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 0.2997908 POLYGON ((0 0, 1 0, 1 1, 0 0))</span>
+<span class='r-in'><span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='va'>p_ag1</span><span class='op'>)</span> <span class='co'># geometry same as pol</span></span>
+<span class='r-in'><span class='co'># works when x overlaps multiple objects in 'by':</span></span>
+<span class='r-in'><span class='va'>p_buff</span> <span class='op'>=</span> <span class='fu'><a href='geos_unary.html'>st_buffer</a></span><span class='op'>(</span><span class='va'>p</span>, <span class='fl'>0.2</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='va'>p_buff</span>, add <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='aggregate.sf-2.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='op'>(</span><span class='va'>p_ag2</span> <span class='op'>=</span> <span class='fu'>aggregate</span><span class='op'>(</span><span class='va'>p_buff</span>, <span class='va'>pol</span>, <span class='va'>mean</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># increased mean of second</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 2 features and 1 field</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POLYGON</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          X3                       geometry</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 0.5951766 POLYGON ((0 0, 0 1, 1 1, 0 0))</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 0.5958297 POLYGON ((0 0, 1 0, 1 1, 0 0))</span>
+<span class='r-in'><span class='co'># with non-matching features</span></span>
+<span class='r-in'><span class='va'>m3</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='op'>-</span><span class='fl'>0.1</span>, <span class='fl'>0</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0.1</span>, <span class='fl'>0.1</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pol</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='fu'><a href='st.html'>st_polygon</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>m3</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_polygon</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>m1</span><span class='op'>)</span><span class='op'>)</span>, <span class='fu'><a href='st.html'>st_polygon</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>m2</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>(</span><span class='va'>p_ag3</span> <span class='op'>=</span> <span class='fu'>aggregate</span><span class='op'>(</span><span class='va'>p</span>, <span class='va'>pol</span>, <span class='va'>mean</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 3 features and 1 field</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POLYGON</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -0.1 ymin: 0 xmax: 1 ymax: 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          X3                       geometry</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1        NA POLYGON ((0 0, 0 0.1, -0.1 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 0.5951766 POLYGON ((0 0, 0 1, 1 1, 0 0))</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 0.2997908 POLYGON ((0 0, 1 0, 1 1, 0 0))</span>
+<span class='r-in'><span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='va'>p_ag3</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='aggregate.sf-3.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='co'># In case we need to pass an argument to the join function:</span></span>
+<span class='r-in'><span class='op'>(</span><span class='va'>p_ag4</span> <span class='op'>=</span> <span class='fu'>aggregate</span><span class='op'>(</span><span class='va'>p</span>, <span class='va'>pol</span>, <span class='va'>mean</span>, </span>
+<span class='r-in'>     join <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span><span class='op'>)</span> <span class='fu'><a href='geos_binary_pred.html'>st_is_within_distance</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, dist <span class='op'>=</span> <span class='fl'>0.3</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 3 features and 1 field</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POLYGON</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: -0.1 ymin: 0 xmax: 1 ymax: 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          X3                       geometry</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1        NA POLYGON ((0 0, 0 0.1, -0.1 ...</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 0.5951766 POLYGON ((0 0, 0 1, 1 1, 0 0))</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 0.5999887 POLYGON ((0 0, 1 0, 1 1, 0 0))</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

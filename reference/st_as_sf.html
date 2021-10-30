@@ -243,7 +243,7 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
     </tr>
     <tr>
       <th>group</th>
-      <td><p>logical; if <code>TRUE</code>, group id labels from <a href='https://rdrr.io/pkg/maps/man/map.html'>map</a> by their prefix before <code><a href='https://rdrr.io/r/base/Colon.html'>:</a></code></p></td>
+      <td><p>logical; if <code>TRUE</code>, group id labels from <a href='https://rdrr.io/pkg/maps/man/map.html'>map</a> by their prefix before <code>:</code></p></td>
     </tr>
     <tr>
       <th>crs</th>
@@ -256,185 +256,214 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
     <p>setting argument <code>wkt</code> annihilates the use of argument <code>coords</code>. If <code>x</code> contains a column called "geometry", <code>coords</code> will result in overwriting of this column by the <a href='sfc.html'>sfc</a> geometry list-column.  Setting <code>wkt</code> will replace this column with the geometry list-column, unless <code>remove_coordinates</code> is <code>FALSE</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>pt1</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>pt2</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>pt1</span>, <span class='va'>pt2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Geometry set for 2 features 
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 0 ymin: 1 xmax: 1 ymax: 1
-#&gt; CRS:           NA</div><div class='output co'>#&gt; <span class='message'>POINT (0 1)</span></div><div class='output co'>#&gt; <span class='message'>POINT (1 1)</span></div><div class='input'><span class='va'>d</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span>
-<span class='va'>d</span><span class='op'>$</span><span class='va'>geom</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>pt1</span>, <span class='va'>pt2</span><span class='op'>)</span>
-<span class='va'>df</span> <span class='op'>=</span> <span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>d</span><span class='op'>)</span>
-<span class='va'>d</span><span class='op'>$</span><span class='va'>geom</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"POINT(0 0)"</span>, <span class='st'>"POINT(0 1)"</span><span class='op'>)</span>
-<span class='va'>df</span> <span class='op'>=</span> <span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>d</span>, wkt <span class='op'>=</span> <span class='st'>"geom"</span><span class='op'>)</span>
-<span class='va'>d</span><span class='op'>$</span><span class='va'>geom2</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>pt1</span>, <span class='va'>pt2</span><span class='op'>)</span>
-<span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>d</span><span class='op'>)</span> <span class='co'># should warn</span>
-</div><div class='output co'>#&gt; Simple feature collection with 2 features and 2 fields
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 0 ymin: 1 xmax: 1 ymax: 1
-#&gt; CRS:           NA
-#&gt;   a       geom       geom2
-#&gt; 1 1 POINT(0 0) POINT (0 1)
-#&gt; 2 2 POINT(0 1) POINT (1 1)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>meuse</span>, package <span class='op'>=</span> <span class='st'>"sp"</span><span class='op'>)</span>
-<span class='va'>meuse_sf</span> <span class='op'>=</span> <span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>meuse</span>, coords <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"x"</span>, <span class='st'>"y"</span><span class='op'>)</span>, crs <span class='op'>=</span> <span class='fl'>28992</span>, agr <span class='op'>=</span> <span class='st'>"constant"</span><span class='op'>)</span>
-<span class='va'>meuse_sf</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>,<span class='op'>]</span>
-</div><div class='output co'>#&gt; Simple feature collection with 3 features and 12 fields
-#&gt; Attribute-geometry relationship: 12 constant, 0 aggregate, 0 identity
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 181025 ymin: 333537 xmax: 181165 ymax: 333611
-#&gt; Projected CRS: Amersfoort / RD New
-#&gt;   cadmium copper lead zinc  elev       dist   om ffreq soil lime landuse dist.m
-#&gt; 1    11.7     85  299 1022 7.909 0.00135803 13.6     1    1    1      Ah     50
-#&gt; 2     8.6     81  277 1141 6.983 0.01222430 14.0     1    1    1      Ah     30
-#&gt; 3     6.5     68  199  640 7.800 0.10302900 13.0     1    1    1      Ah    150
-#&gt;                geometry
-#&gt; 1 POINT (181072 333611)
-#&gt; 2 POINT (181025 333558)
-#&gt; 3 POINT (181165 333537)</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>meuse_sf</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;     cadmium           copper            lead            zinc       
-#&gt;  Min.   : 0.200   Min.   : 14.00   Min.   : 37.0   Min.   : 113.0  
-#&gt;  1st Qu.: 0.800   1st Qu.: 23.00   1st Qu.: 72.5   1st Qu.: 198.0  
-#&gt;  Median : 2.100   Median : 31.00   Median :123.0   Median : 326.0  
-#&gt;  Mean   : 3.246   Mean   : 40.32   Mean   :153.4   Mean   : 469.7  
-#&gt;  3rd Qu.: 3.850   3rd Qu.: 49.50   3rd Qu.:207.0   3rd Qu.: 674.5  
-#&gt;  Max.   :18.100   Max.   :128.00   Max.   :654.0   Max.   :1839.0  
-#&gt;                                                                    
-#&gt;       elev             dist               om         ffreq  soil   lime   
-#&gt;  Min.   : 5.180   Min.   :0.00000   Min.   : 1.000   1:84   1:97   0:111  
-#&gt;  1st Qu.: 7.546   1st Qu.:0.07569   1st Qu.: 5.300   2:48   2:46   1: 44  
-#&gt;  Median : 8.180   Median :0.21184   Median : 6.900   3:23   3:12          
-#&gt;  Mean   : 8.165   Mean   :0.24002   Mean   : 7.478                        
-#&gt;  3rd Qu.: 8.955   3rd Qu.:0.36407   3rd Qu.: 9.000                        
-#&gt;  Max.   :10.520   Max.   :0.88039   Max.   :17.000                        
-#&gt;                                     NA's   :2                             
-#&gt;     landuse       dist.m                geometry  
-#&gt;  W      :50   Min.   :  10.0   POINT        :155  
-#&gt;  Ah     :39   1st Qu.:  80.0   epsg:28992   :  0  
-#&gt;  Am     :22   Median : 270.0   +proj=ster...:  0  
-#&gt;  Fw     :10   Mean   : 290.3                      
-#&gt;  Ab     : 8   3rd Qu.: 450.0                      
-#&gt;  (Other):25   Max.   :1000.0                      
-#&gt;  NA's   : 1                                       </div><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/edzer/sp/'>sp</a></span><span class='op'>)</span>
-<span class='va'>x</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>1</span>,<span class='op'>-</span><span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='op'>-</span><span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>1</span>,<span class='op'>-</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>x1</span> <span class='op'>=</span> <span class='fl'>0.1</span> <span class='op'>*</span> <span class='va'>x</span> <span class='op'>+</span> <span class='fl'>0.1</span>
-<span class='va'>x2</span> <span class='op'>=</span> <span class='fl'>0.1</span> <span class='op'>*</span> <span class='va'>x</span> <span class='op'>+</span> <span class='fl'>0.4</span>
-<span class='va'>x3</span> <span class='op'>=</span> <span class='fl'>0.1</span> <span class='op'>*</span> <span class='va'>x</span> <span class='op'>+</span> <span class='fl'>0.7</span>
-<span class='va'>y</span> <span class='op'>=</span> <span class='va'>x</span> <span class='op'>+</span> <span class='fl'>3</span>
-<span class='va'>y1</span> <span class='op'>=</span> <span class='va'>x1</span> <span class='op'>+</span> <span class='fl'>3</span>
-<span class='va'>y3</span> <span class='op'>=</span> <span class='va'>x3</span> <span class='op'>+</span> <span class='fl'>3</span>
-<span class='va'>m</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>0</span><span class='op'>)</span>, <span class='fl'>5</span>, <span class='fl'>2</span>, byrow <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='va'>z</span> <span class='op'>=</span> <span class='va'>x</span> <span class='op'>+</span> <span class='va'>m</span>
-<span class='va'>z1</span> <span class='op'>=</span> <span class='va'>x1</span> <span class='op'>+</span> <span class='va'>m</span>
-<span class='va'>z2</span> <span class='op'>=</span> <span class='va'>x2</span> <span class='op'>+</span> <span class='va'>m</span>
-<span class='va'>z3</span> <span class='op'>=</span> <span class='va'>x3</span> <span class='op'>+</span> <span class='va'>m</span>
-<span class='va'>p1</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygons</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span> <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>[</span><span class='fl'>5</span><span class='op'>:</span><span class='fl'>1</span>,<span class='op'>]</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>x2</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>x3</span><span class='op'>)</span>,
-   <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>[</span><span class='fl'>5</span><span class='op'>:</span><span class='fl'>1</span>,<span class='op'>]</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>y1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>x1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>y3</span><span class='op'>)</span><span class='op'>)</span>, <span class='st'>"ID1"</span><span class='op'>)</span>
-<span class='va'>p2</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygons</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span> <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>z</span><span class='op'>[</span><span class='fl'>5</span><span class='op'>:</span><span class='fl'>1</span>,<span class='op'>]</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>z2</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>z3</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>z1</span><span class='op'>)</span><span class='op'>)</span>,
-  <span class='st'>"ID2"</span><span class='op'>)</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://r-forge.r-project.org/projects/rgeos/'>"rgeos"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>r</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/rgeos/man/comment-functions.html'>createSPComment</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>SpatialPolygons</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>p1</span>,<span class='va'>p2</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span><span class='op'>(</span><span class='va'>r</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span><span class='op'>(</span><span class='va'>r</span><span class='op'>@</span><span class='va'>polygons</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/scan.html'>scan</a></span><span class='op'>(</span>text <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span><span class='op'>(</span><span class='va'>r</span><span class='op'>@</span><span class='va'>polygons</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>, quiet <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-  <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://r-spatial.github.io/sf/'>sf</a></span><span class='op'>)</span>
-  <span class='va'>a</span> <span class='op'>=</span> <span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>r</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: rgeos</span></div><div class='output co'>#&gt; <span class='message'>rgeos version: 0.5-8, (SVN revision 679)</span>
-#&gt; <span class='message'> GEOS runtime version: 3.8.1-CAPI-1.13.3 </span>
-#&gt; <span class='message'> Please note that rgeos will be retired by the end of 2023,</span>
-#&gt; <span class='message'>plan transition to sf functions using GEOS at your earliest convenience.</span>
-#&gt; <span class='message'> Linking to sp version: 1.4-5 </span>
-#&gt; <span class='message'> Polygon checking: TRUE </span></div><div class='output co'>#&gt;          geometry
-#&gt;  MULTIPOLYGON:2  
-#&gt;  epsg:NA     :0  </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/demo.html'>demo</a></span><span class='op'>(</span><span class='va'>meuse</span>, ask <span class='op'>=</span> <span class='cn'>FALSE</span>, echo <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: Discarded datum Unknown based on Bessel 1841 ellipsoid in Proj4 definition,</span>
-#&gt; <span class='warning'> but +towgs84= values preserved</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>meuse</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;     cadmium           copper            lead            zinc       
-#&gt;  Min.   : 0.200   Min.   : 14.00   Min.   : 37.0   Min.   : 113.0  
-#&gt;  1st Qu.: 0.800   1st Qu.: 23.00   1st Qu.: 72.5   1st Qu.: 198.0  
-#&gt;  Median : 2.100   Median : 31.00   Median :123.0   Median : 326.0  
-#&gt;  Mean   : 3.246   Mean   : 40.32   Mean   :153.4   Mean   : 469.7  
-#&gt;  3rd Qu.: 3.850   3rd Qu.: 49.50   3rd Qu.:207.0   3rd Qu.: 674.5  
-#&gt;  Max.   :18.100   Max.   :128.00   Max.   :654.0   Max.   :1839.0  
-#&gt;                                                                    
-#&gt;       elev             dist               om         ffreq  soil   lime   
-#&gt;  Min.   : 5.180   Min.   :0.00000   Min.   : 1.000   1:84   1:97   0:111  
-#&gt;  1st Qu.: 7.546   1st Qu.:0.07569   1st Qu.: 5.300   2:48   2:46   1: 44  
-#&gt;  Median : 8.180   Median :0.21184   Median : 6.900   3:23   3:12          
-#&gt;  Mean   : 8.165   Mean   :0.24002   Mean   : 7.478                        
-#&gt;  3rd Qu.: 8.955   3rd Qu.:0.36407   3rd Qu.: 9.000                        
-#&gt;  Max.   :10.520   Max.   :0.88039   Max.   :17.000                        
-#&gt;                                     NA's   :2                             
-#&gt;     landuse       dist.m                geometry  
-#&gt;  W      :50   Min.   :  10.0   POINT        :155  
-#&gt;  Ah     :39   1st Qu.:  80.0   epsg:NA      :  0  
-#&gt;  Am     :22   Median : 270.0   +proj=ster...:  0  
-#&gt;  Fw     :10   Mean   : 290.3                      
-#&gt;  Ab     : 8   3rd Qu.: 450.0                      
-#&gt;  (Other):25   Max.   :1000.0                      
-#&gt;  NA's   : 1                                       </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>meuse.grid</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;      part.a           part.b            dist        soil     ffreq   
-#&gt;  Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   1:1665   1: 779  
-#&gt;  1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.1193   2:1084   2:1335  
-#&gt;  Median :0.0000   Median :1.0000   Median :0.2715   3: 354   3: 989  
-#&gt;  Mean   :0.3986   Mean   :0.6014   Mean   :0.2971                    
-#&gt;  3rd Qu.:1.0000   3rd Qu.:1.0000   3rd Qu.:0.4402                    
-#&gt;  Max.   :1.0000   Max.   :1.0000   Max.   :0.9926                    
-#&gt;           geometry   
-#&gt;  POINT        :3103  
-#&gt;  epsg:NA      :   0  
-#&gt;  +proj=ster...:   0  
-#&gt;                      
-#&gt;                      
-#&gt;                      </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>meuse.area</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;           geometry
-#&gt;  POLYGON      :1  
-#&gt;  epsg:NA      :0  
-#&gt;  +proj=ster...:0  </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>meuse.riv</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;           geometry
-#&gt;  POLYGON      :1  
-#&gt;  epsg:NA      :0  
-#&gt;  +proj=ster...:0  </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'>st_as_sf</span><span class='op'>(</span><span class='fu'><a href='as.html'>as</a></span><span class='op'>(</span><span class='va'>meuse.riv</span>, <span class='st'>"SpatialLines"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;           geometry
-#&gt;  LINESTRING   :1  
-#&gt;  epsg:NA      :0  
-#&gt;  +proj=ster...:0  </div><div class='input'><span class='va'>pol.grd</span> <span class='op'>=</span> <span class='fu'><a href='as.html'>as</a></span><span class='op'>(</span><span class='va'>meuse.grid</span>, <span class='st'>"SpatialPolygonsDataFrame"</span><span class='op'>)</span>
-<span class='co'># summary(st_as_sf(pol.grd))</span>
-<span class='co'># summary(st_as_sf(as(pol.grd, "SpatialLinesDataFrame")))</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='http://spatstat.org/'>spatstat.geom</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>g</span> <span class='op'>=</span> <span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>gorillas</span><span class='op'>)</span>
-  <span class='co'># select only the points:</span>
-  <span class='va'>g</span><span class='op'>[</span><span class='fu'><a href='st_is.html'>st_is</a></span><span class='op'>(</span><span class='va'>g</span>, <span class='st'>"POINT"</span><span class='op'>)</span>,<span class='op'>]</span>
-<span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: spatstat.geom</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: spatstat.data</span></div><div class='output co'>#&gt; <span class='message'>spatstat.geom 2.3-0</span></div><div class='output co'>#&gt; Simple feature collection with 647 features and 4 fields
-#&gt; Geometry type: POINT
-#&gt; Dimension:     XY
-#&gt; Bounding box:  xmin: 580797.3 ymin: 675238.7 xmax: 584945.3 ymax: 678313.5
-#&gt; CRS:           NA
-#&gt; First 10 features:
-#&gt;    group season       date label                      geom
-#&gt; 1  major    dry 2006-01-06 point POINT (582518.4 676886.2)
-#&gt; 2  major    dry 2006-01-10 point   POINT (581823 677422.7)
-#&gt; 3  major    dry 2006-01-15 point   POINT (582131 676937.9)
-#&gt; 4  major    dry 2006-01-24 point   POINT (582111.9 677420)
-#&gt; 5  minor    dry 2006-01-27 point POINT (582585.1 677509.7)
-#&gt; 6  major    dry 2006-01-28 point POINT (582302.3 677521.6)
-#&gt; 7  major    dry 2006-02-01 point POINT (583167.2 676730.5)
-#&gt; 8  major    dry 2006-02-03 point POINT (583584.5 677207.1)
-#&gt; 9  major    dry 2006-02-13 point POINT (583117.8 676850.3)
-#&gt; 10 major    dry 2006-02-15 point POINT (582902.8 676724.1)</div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='http://spatstat.org/'>spatstat.linnet</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
- <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>chicago</span><span class='op'>)</span>
- <span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>chicago</span><span class='op'>)</span><span class='op'>[</span><span class='st'>"label"</span><span class='op'>]</span><span class='op'>)</span>
- <span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>chicago</span><span class='op'>)</span><span class='op'>[</span><span class='op'>-</span><span class='fl'>1</span>,<span class='st'>"label"</span><span class='op'>]</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: spatstat.linnet</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: spatstat.core</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: nlme</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘nlme’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:dplyr’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    collapse</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: rpart</span></div><div class='output co'>#&gt; <span class='message'>spatstat.core 2.3-0</span></div><div class='output co'>#&gt; <span class='message'>spatstat.linnet 2.3-0</span></div><div class='img'><img src='st_as_sf-1.png' alt='' width='700' height='433' /></div><div class='img'><img src='st_as_sf-2.png' alt='' width='700' height='433' /></div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>pt1</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pt2</span> <span class='op'>=</span> <span class='fu'><a href='st.html'>st_point</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>pt1</span>, <span class='va'>pt2</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry set for 2 features </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 0 ymin: 1 xmax: 1 ymax: 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (0 1)</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> POINT (1 1)</span>
+<span class='r-in'><span class='va'>d</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>d</span><span class='op'>$</span><span class='va'>geom</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>pt1</span>, <span class='va'>pt2</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>df</span> <span class='op'>=</span> <span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>d</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>d</span><span class='op'>$</span><span class='va'>geom</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"POINT(0 0)"</span>, <span class='st'>"POINT(0 1)"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>df</span> <span class='op'>=</span> <span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>d</span>, wkt <span class='op'>=</span> <span class='st'>"geom"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>d</span><span class='op'>$</span><span class='va'>geom2</span> <span class='op'>=</span> <span class='fu'><a href='sfc.html'>st_sfc</a></span><span class='op'>(</span><span class='va'>pt1</span>, <span class='va'>pt2</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>d</span><span class='op'>)</span> <span class='co'># should warn</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 2 features and 2 fields</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 0 ymin: 1 xmax: 1 ymax: 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   a       geom       geom2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 1 POINT(0 0) POINT (0 1)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 2 POINT(0 1) POINT (1 1)</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>meuse</span>, package <span class='op'>=</span> <span class='st'>"sp"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>meuse_sf</span> <span class='op'>=</span> <span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>meuse</span>, coords <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"x"</span>, <span class='st'>"y"</span><span class='op'>)</span>, crs <span class='op'>=</span> <span class='fl'>28992</span>, agr <span class='op'>=</span> <span class='st'>"constant"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>meuse_sf</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>,<span class='op'>]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 3 features and 12 fields</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Attribute-geometry relationship: 12 constant, 0 aggregate, 0 identity</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 181025 ymin: 333537 xmax: 181165 ymax: 333611</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Projected CRS: Amersfoort / RD New</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   cadmium copper lead zinc  elev       dist   om ffreq soil lime landuse dist.m</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1    11.7     85  299 1022 7.909 0.00135803 13.6     1    1    1      Ah     50</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2     8.6     81  277 1141 6.983 0.01222430 14.0     1    1    1      Ah     30</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3     6.5     68  199  640 7.800 0.10302900 13.0     1    1    1      Ah    150</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                geometry</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 POINT (181072 333611)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 POINT (181025 333558)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 POINT (181165 333537)</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>meuse_sf</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     cadmium           copper            lead            zinc       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Min.   : 0.200   Min.   : 14.00   Min.   : 37.0   Min.   : 113.0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  1st Qu.: 0.800   1st Qu.: 23.00   1st Qu.: 72.5   1st Qu.: 198.0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Median : 2.100   Median : 31.00   Median :123.0   Median : 326.0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Mean   : 3.246   Mean   : 40.32   Mean   :153.4   Mean   : 469.7  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  3rd Qu.: 3.850   3rd Qu.: 49.50   3rd Qu.:207.0   3rd Qu.: 674.5  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Max.   :18.100   Max.   :128.00   Max.   :654.0   Max.   :1839.0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                                                    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       elev             dist               om         ffreq  soil   lime   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Min.   : 5.180   Min.   :0.00000   Min.   : 1.000   1:84   1:97   0:111  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  1st Qu.: 7.546   1st Qu.:0.07569   1st Qu.: 5.300   2:48   2:46   1: 44  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Median : 8.180   Median :0.21184   Median : 6.900   3:23   3:12          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Mean   : 8.165   Mean   :0.24002   Mean   : 7.478                        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  3rd Qu.: 8.955   3rd Qu.:0.36407   3rd Qu.: 9.000                        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Max.   :10.520   Max.   :0.88039   Max.   :17.000                        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                     NA's   :2                             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     landuse       dist.m                geometry  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  W      :50   Min.   :  10.0   POINT        :155  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Ah     :39   1st Qu.:  80.0   epsg:28992   :  0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Am     :22   Median : 270.0   +proj=ster...:  0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Fw     :10   Mean   : 290.3                      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Ab     : 8   3rd Qu.: 450.0                      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  (Other):25   Max.   :1000.0                      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  NA's   : 1                                       </span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/edzer/sp/'>sp</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>1</span>,<span class='op'>-</span><span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='op'>-</span><span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>1</span>,<span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>1</span>,<span class='op'>-</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x1</span> <span class='op'>=</span> <span class='fl'>0.1</span> <span class='op'>*</span> <span class='va'>x</span> <span class='op'>+</span> <span class='fl'>0.1</span></span>
+<span class='r-in'><span class='va'>x2</span> <span class='op'>=</span> <span class='fl'>0.1</span> <span class='op'>*</span> <span class='va'>x</span> <span class='op'>+</span> <span class='fl'>0.4</span></span>
+<span class='r-in'><span class='va'>x3</span> <span class='op'>=</span> <span class='fl'>0.1</span> <span class='op'>*</span> <span class='va'>x</span> <span class='op'>+</span> <span class='fl'>0.7</span></span>
+<span class='r-in'><span class='va'>y</span> <span class='op'>=</span> <span class='va'>x</span> <span class='op'>+</span> <span class='fl'>3</span></span>
+<span class='r-in'><span class='va'>y1</span> <span class='op'>=</span> <span class='va'>x1</span> <span class='op'>+</span> <span class='fl'>3</span></span>
+<span class='r-in'><span class='va'>y3</span> <span class='op'>=</span> <span class='va'>x3</span> <span class='op'>+</span> <span class='fl'>3</span></span>
+<span class='r-in'><span class='va'>m</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>0</span><span class='op'>)</span>, <span class='fl'>5</span>, <span class='fl'>2</span>, byrow <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>z</span> <span class='op'>=</span> <span class='va'>x</span> <span class='op'>+</span> <span class='va'>m</span></span>
+<span class='r-in'><span class='va'>z1</span> <span class='op'>=</span> <span class='va'>x1</span> <span class='op'>+</span> <span class='va'>m</span></span>
+<span class='r-in'><span class='va'>z2</span> <span class='op'>=</span> <span class='va'>x2</span> <span class='op'>+</span> <span class='va'>m</span></span>
+<span class='r-in'><span class='va'>z3</span> <span class='op'>=</span> <span class='va'>x3</span> <span class='op'>+</span> <span class='va'>m</span></span>
+<span class='r-in'><span class='va'>p1</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygons</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span> <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>[</span><span class='fl'>5</span><span class='op'>:</span><span class='fl'>1</span>,<span class='op'>]</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>x2</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>x3</span><span class='op'>)</span>,</span>
+<span class='r-in'>   <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>[</span><span class='fl'>5</span><span class='op'>:</span><span class='fl'>1</span>,<span class='op'>]</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>y1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>x1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>y3</span><span class='op'>)</span><span class='op'>)</span>, <span class='st'>"ID1"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>p2</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygons</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span> <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>z</span><span class='op'>[</span><span class='fl'>5</span><span class='op'>:</span><span class='fl'>1</span>,<span class='op'>]</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>z2</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>z3</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>Polygon</a></span><span class='op'>(</span><span class='va'>z1</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='st'>"ID2"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://r-forge.r-project.org/projects/rgeos/'>"rgeos"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>  <span class='va'>r</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/rgeos/man/comment-functions.html'>createSPComment</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/sp/man/SpatialPolygons.html'>SpatialPolygons</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>p1</span>,<span class='va'>p2</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span><span class='op'>(</span><span class='va'>r</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span><span class='op'>(</span><span class='va'>r</span><span class='op'>@</span><span class='va'>polygons</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/scan.html'>scan</a></span><span class='op'>(</span>text <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/comment.html'>comment</a></span><span class='op'>(</span><span class='va'>r</span><span class='op'>@</span><span class='va'>polygons</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>, quiet <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://r-spatial.github.io/sf/'>sf</a></span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='va'>a</span> <span class='op'>=</span> <span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>r</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: rgeos</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> rgeos version: 0.5-8, (SVN revision 679)</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>  GEOS runtime version: 3.8.1-CAPI-1.13.3 </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>  Please note that rgeos will be retired by the end of 2023,</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> plan transition to sf functions using GEOS at your earliest convenience.</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>  Linking to sp version: 1.4-5 </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>  Polygon checking: TRUE </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          geometry</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  MULTIPOLYGON:2  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  epsg:NA     :0  </span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/demo.html'>demo</a></span><span class='op'>(</span><span class='va'>meuse</span>, ask <span class='op'>=</span> <span class='cn'>FALSE</span>, echo <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>Discarded datum Unknown based on Bessel 1841 ellipsoid in Proj4 definition,</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span>  but +towgs84= values preserved</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>meuse</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     cadmium           copper            lead            zinc       </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Min.   : 0.200   Min.   : 14.00   Min.   : 37.0   Min.   : 113.0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  1st Qu.: 0.800   1st Qu.: 23.00   1st Qu.: 72.5   1st Qu.: 198.0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Median : 2.100   Median : 31.00   Median :123.0   Median : 326.0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Mean   : 3.246   Mean   : 40.32   Mean   :153.4   Mean   : 469.7  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  3rd Qu.: 3.850   3rd Qu.: 49.50   3rd Qu.:207.0   3rd Qu.: 674.5  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Max.   :18.100   Max.   :128.00   Max.   :654.0   Max.   :1839.0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                                                    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       elev             dist               om         ffreq  soil   lime   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Min.   : 5.180   Min.   :0.00000   Min.   : 1.000   1:84   1:97   0:111  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  1st Qu.: 7.546   1st Qu.:0.07569   1st Qu.: 5.300   2:48   2:46   1: 44  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Median : 8.180   Median :0.21184   Median : 6.900   3:23   3:12          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Mean   : 8.165   Mean   :0.24002   Mean   : 7.478                        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  3rd Qu.: 8.955   3rd Qu.:0.36407   3rd Qu.: 9.000                        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Max.   :10.520   Max.   :0.88039   Max.   :17.000                        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                     NA's   :2                             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     landuse       dist.m                geometry  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  W      :50   Min.   :  10.0   POINT        :155  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Ah     :39   1st Qu.:  80.0   epsg:NA      :  0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Am     :22   Median : 270.0   +proj=ster...:  0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Fw     :10   Mean   : 290.3                      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Ab     : 8   3rd Qu.: 450.0                      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  (Other):25   Max.   :1000.0                      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  NA's   : 1                                       </span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>meuse.grid</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      part.a           part.b            dist        soil     ffreq   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   1:1665   1: 779  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.1193   2:1084   2:1335  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Median :0.0000   Median :1.0000   Median :0.2715   3: 354   3: 989  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Mean   :0.3986   Mean   :0.6014   Mean   :0.2971                    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  3rd Qu.:1.0000   3rd Qu.:1.0000   3rd Qu.:0.4402                    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Max.   :1.0000   Max.   :1.0000   Max.   :0.9926                    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           geometry   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  POINT        :3103  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  epsg:NA      :   0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  +proj=ster...:   0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                      </span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>meuse.area</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           geometry</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  POLYGON      :1  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  epsg:NA      :0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  +proj=ster...:0  </span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>meuse.riv</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           geometry</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  POLYGON      :1  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  epsg:NA      :0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  +proj=ster...:0  </span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='fu'>st_as_sf</span><span class='op'>(</span><span class='fu'><a href='as.html'>as</a></span><span class='op'>(</span><span class='va'>meuse.riv</span>, <span class='st'>"SpatialLines"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>           geometry</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  LINESTRING   :1  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  epsg:NA      :0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  +proj=ster...:0  </span>
+<span class='r-in'><span class='va'>pol.grd</span> <span class='op'>=</span> <span class='fu'><a href='as.html'>as</a></span><span class='op'>(</span><span class='va'>meuse.grid</span>, <span class='st'>"SpatialPolygonsDataFrame"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># summary(st_as_sf(pol.grd))</span></span>
+<span class='r-in'><span class='co'># summary(st_as_sf(as(pol.grd, "SpatialLinesDataFrame")))</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='http://spatstat.org/'>spatstat.geom</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>  <span class='va'>g</span> <span class='op'>=</span> <span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>gorillas</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='co'># select only the points:</span></span>
+<span class='r-in'>  <span class='va'>g</span><span class='op'>[</span><span class='fu'><a href='st_is.html'>st_is</a></span><span class='op'>(</span><span class='va'>g</span>, <span class='st'>"POINT"</span><span class='op'>)</span>,<span class='op'>]</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: spatstat.geom</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: spatstat.data</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> spatstat.geom 2.3-0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 647 features and 4 fields</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: POINT</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dimension:     XY</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Bounding box:  xmin: 580797.3 ymin: 675238.7 xmax: 584945.3 ymax: 678313.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS:           NA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> First 10 features:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    group season       date label                      geom</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1  major    dry 2006-01-06 point POINT (582518.4 676886.2)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2  major    dry 2006-01-10 point   POINT (581823 677422.7)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3  major    dry 2006-01-15 point   POINT (582131 676937.9)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4  major    dry 2006-01-24 point   POINT (582111.9 677420)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5  minor    dry 2006-01-27 point POINT (582585.1 677509.7)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6  major    dry 2006-01-28 point POINT (582302.3 677521.6)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7  major    dry 2006-02-01 point POINT (583167.2 676730.5)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8  major    dry 2006-02-03 point POINT (583584.5 677207.1)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9  major    dry 2006-02-13 point POINT (583117.8 676850.3)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10 major    dry 2006-02-15 point POINT (582902.8 676724.1)</span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='http://spatstat.org/'>spatstat.linnet</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'> <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>chicago</span><span class='op'>)</span></span>
+<span class='r-in'> <span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>chicago</span><span class='op'>)</span><span class='op'>[</span><span class='st'>"label"</span><span class='op'>]</span><span class='op'>)</span></span>
+<span class='r-in'> <span class='fu'><a href='plot.html'>plot</a></span><span class='op'>(</span><span class='fu'>st_as_sf</span><span class='op'>(</span><span class='va'>chicago</span><span class='op'>)</span><span class='op'>[</span><span class='op'>-</span><span class='fl'>1</span>,<span class='st'>"label"</span><span class='op'>]</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: spatstat.linnet</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: spatstat.core</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: nlme</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Attaching package: ‘nlme’</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> The following object is masked from ‘package:dplyr’:</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     collapse</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: rpart</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> spatstat.core 2.3-0</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> spatstat.linnet 2.3-0</span>
+<span class='r-plt img'><img src='st_as_sf-1.png' alt='' width='700' height='433' /></span>
+<span class='r-plt img'><img src='st_as_sf-2.png' alt='' width='700' height='433' /></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

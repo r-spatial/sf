@@ -337,7 +337,7 @@ Plot sf object</p>
     </tr>
     <tr>
       <th>max.plot</th>
-      <td><p>integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overriden by setting the global option <code>sf_max.plot</code>, e.g. <code><a href='https://rdrr.io/r/base/options.html'>options(sf_max.plot=2)</a></code></p></td>
+      <td><p>integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overriden by setting the global option <code>sf_max.plot</code>, e.g. <code>options(sf_max.plot=2)</code></p></td>
     </tr>
     <tr>
       <th>key.pos</th>
@@ -381,7 +381,7 @@ Plot sf object</p>
     </tr>
     <tr>
       <th>col</th>
-      <td><p>color for plotting features; if <code><a href='https://rdrr.io/r/base/length.html'>length(col)</a></code> does not equal 1 or <code><a href='https://rdrr.io/r/base/nrow.html'>nrow(x)</a></code>, a warning is emitted that colors will be recycled. Specifying <code>col</code> suppresses plotting the legend key.</p></td>
+      <td><p>color for plotting features; if <code>length(col)</code> does not equal 1 or <code>nrow(x)</code>, a warning is emitted that colors will be recycled. Specifying <code>col</code> suppresses plotting the legend key.</p></td>
     </tr>
     <tr>
       <th>bg</th>
@@ -450,7 +450,7 @@ in each direction (bottom, left, top, right)</p></td>
     </tr>
     <tr>
       <th>graticule</th>
-      <td><p>logical, or object of class <code>crs</code> (e.g., <code><a href='st_crs.html'>st_crs(4326)</a></code> for a WGS84 graticule), or object created by <a href='st_graticule.html'>st_graticule</a>; <code>TRUE</code> will give the WGS84 graticule
+      <td><p>logical, or object of class <code>crs</code> (e.g., <code>st_crs(4326)</code> for a WGS84 graticule), or object created by <a href='st_graticule.html'>st_graticule</a>; <code>TRUE</code> will give the WGS84 graticule
 or object returned by <a href='st_graticule.html'>st_graticule</a></p></td>
     </tr>
     <tr>
@@ -487,7 +487,7 @@ to control color, lines or symbols.</p>
 <p>parameter <code>at</code> can be set to specify where labels are placed along the key; see examples.</p>
 <p><code>plot_sf</code> sets up the plotting area, axes, graticule, or webmap background; it
 is called by all <code>plot</code> methods before anything is drawn.</p>
-<p>The argument <code>setParUsrBB</code> may be used to pass the logical value <code>TRUE</code> to functions within <code>plot.Spatial</code>. When set to <code>TRUE</code>, par(&#8220;usr&#8221;) will be overwritten with <code><a href='https://rdrr.io/r/base/c.html'>c(xlim, ylim)</a></code>, which defaults to the bounding box of the spatial object. This is only needed in the particular context of graphic output to a specified device with given width and height, to be matched to the spatial object, when using par(&#8220;xaxs&#8221;) and par(&#8220;yaxs&#8221;) in addition to <code><a href='https://rdrr.io/r/graphics/par.html'>par(mar=c(0,0,0,0))</a></code>.</p>
+<p>The argument <code>setParUsrBB</code> may be used to pass the logical value <code>TRUE</code> to functions within <code>plot.Spatial</code>. When set to <code>TRUE</code>, par(&#8220;usr&#8221;) will be overwritten with <code>c(xlim, ylim)</code>, which defaults to the bounding box of the spatial object. This is only needed in the particular context of graphic output to a specified device with given width and height, to be matched to the spatial object, when using par(&#8220;xaxs&#8221;) and par(&#8220;yaxs&#8221;) in addition to <code>par(mar=c(0,0,0,0))</code>.</p>
 <p>The default aspect for map plots is 1; if however data are not
 projected (coordinates are long/lat), the aspect is by default set to
 1/cos(My * pi/180) with My the y coordinate of the middle of the map
@@ -497,28 +497,35 @@ implies an <a href='https://en.wikipedia.org/wiki/Equirectangular_projection'>Eq
 If categorical is <code>TRUE</code>, default colors are from <a href='https://colorbrewer2.org/'>https://colorbrewer2.org/</a> (if n &lt; 9, Set2, else Set3).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>nc</span> <span class='op'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"gpkg/nc.gpkg"</span>, package<span class='op'>=</span><span class='st'>"sf"</span><span class='op'>)</span>, quiet <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='co'># plot single attribute, auto-legend:</span>
-<span class='fu'>plot</span><span class='op'>(</span><span class='va'>nc</span><span class='op'>[</span><span class='st'>"SID74"</span><span class='op'>]</span><span class='op'>)</span>
-</div><div class='img'><img src='plot-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># plot multiple:</span>
-<span class='fu'>plot</span><span class='op'>(</span><span class='va'>nc</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"SID74"</span>, <span class='st'>"SID79"</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span> <span class='co'># better use ggplot2::geom_sf to facet and get a single legend!</span>
-</div><div class='img'><img src='plot-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># adding to a plot of an sf object only works when using reset=FALSE in the first plot:</span>
-<span class='fu'>plot</span><span class='op'>(</span><span class='va'>nc</span><span class='op'>[</span><span class='st'>"SID74"</span><span class='op'>]</span>, reset <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='input'><span class='fu'>plot</span><span class='op'>(</span><span class='fu'><a href='geos_unary.html'>st_centroid</a></span><span class='op'>(</span><span class='fu'><a href='st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>nc</span><span class='op'>)</span><span class='op'>)</span>, add <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='img'><img src='plot-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># log10 z-scale:</span>
-<span class='fu'>plot</span><span class='op'>(</span><span class='va'>nc</span><span class='op'>[</span><span class='st'>"SID74"</span><span class='op'>]</span>, logz <span class='op'>=</span> <span class='cn'>TRUE</span>, breaks <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>.5</span>,<span class='fl'>1</span>,<span class='fl'>1.5</span>,<span class='fl'>2</span><span class='op'>)</span>, at <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>.5</span>,<span class='fl'>1</span>,<span class='fl'>1.5</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='img'><img src='plot-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># and we need to reset the plotting device after that, e.g. by</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/layout.html'>layout</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>
-<span class='co'># when plotting only geometries, the reset=FALSE is not needed:</span>
-<span class='fu'>plot</span><span class='op'>(</span><span class='fu'><a href='st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>nc</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='input'><span class='fu'>plot</span><span class='op'>(</span><span class='fu'><a href='st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>nc</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, col <span class='op'>=</span> <span class='st'>'red'</span>, add <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='img'><img src='plot-5.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># add a custom legend to an arbitray plot:</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/layout.html'>layout</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, widths <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fu'><a href='https://rdrr.io/r/graphics/layout.html'>lcm</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>plot</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>
-<span class='fu'><a href='stars.html'>.image_scale</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, col <span class='op'>=</span> <span class='fu'>sf.colors</span><span class='op'>(</span><span class='fl'>9</span><span class='op'>)</span>, key.length <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/graphics/layout.html'>lcm</a></span><span class='op'>(</span><span class='fl'>8</span><span class='op'>)</span>, key.pos <span class='op'>=</span> <span class='fl'>4</span>, at <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>)</span>
-</div><div class='img'><img src='plot-6.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>sf.colors</span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] "#0000B3FF" "#0400FFFF" "#4500FFFF" "#8500FFFF" "#C527D8FF" "#FF50AFFF"
-#&gt;  [7] "#FF7A85FF" "#FFA35CFF" "#FFCC33FF" "#FFF50AFF"</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>nc</span> <span class='op'>=</span> <span class='fu'><a href='st_read.html'>st_read</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"gpkg/nc.gpkg"</span>, package<span class='op'>=</span><span class='st'>"sf"</span><span class='op'>)</span>, quiet <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># plot single attribute, auto-legend:</span></span>
+<span class='r-in'><span class='fu'>plot</span><span class='op'>(</span><span class='va'>nc</span><span class='op'>[</span><span class='st'>"SID74"</span><span class='op'>]</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='plot-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='co'># plot multiple:</span></span>
+<span class='r-in'><span class='fu'>plot</span><span class='op'>(</span><span class='va'>nc</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"SID74"</span>, <span class='st'>"SID79"</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span> <span class='co'># better use ggplot2::geom_sf to facet and get a single legend!</span></span>
+<span class='r-plt img'><img src='plot-2.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='co'># adding to a plot of an sf object only works when using reset=FALSE in the first plot:</span></span>
+<span class='r-in'><span class='fu'>plot</span><span class='op'>(</span><span class='va'>nc</span><span class='op'>[</span><span class='st'>"SID74"</span><span class='op'>]</span>, reset <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>plot</span><span class='op'>(</span><span class='fu'><a href='geos_unary.html'>st_centroid</a></span><span class='op'>(</span><span class='fu'><a href='st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>nc</span><span class='op'>)</span><span class='op'>)</span>, add <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='plot-3.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='co'># log10 z-scale:</span></span>
+<span class='r-in'><span class='fu'>plot</span><span class='op'>(</span><span class='va'>nc</span><span class='op'>[</span><span class='st'>"SID74"</span><span class='op'>]</span>, logz <span class='op'>=</span> <span class='cn'>TRUE</span>, breaks <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>.5</span>,<span class='fl'>1</span>,<span class='fl'>1.5</span>,<span class='fl'>2</span><span class='op'>)</span>, at <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>.5</span>,<span class='fl'>1</span>,<span class='fl'>1.5</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='plot-4.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='co'># and we need to reset the plotting device after that, e.g. by</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/layout.html'>layout</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># when plotting only geometries, the reset=FALSE is not needed:</span></span>
+<span class='r-in'><span class='fu'>plot</span><span class='op'>(</span><span class='fu'><a href='st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>nc</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>plot</span><span class='op'>(</span><span class='fu'><a href='st_geometry.html'>st_geometry</a></span><span class='op'>(</span><span class='va'>nc</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, col <span class='op'>=</span> <span class='st'>'red'</span>, add <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='plot-5.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='co'># add a custom legend to an arbitray plot:</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/layout.html'>layout</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, ncol <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>, widths <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fu'><a href='https://rdrr.io/r/graphics/layout.html'>lcm</a></span><span class='op'>(</span><span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>plot</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='stars.html'>.image_scale</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>, col <span class='op'>=</span> <span class='fu'>sf.colors</span><span class='op'>(</span><span class='fl'>9</span><span class='op'>)</span>, key.length <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/graphics/layout.html'>lcm</a></span><span class='op'>(</span><span class='fl'>8</span><span class='op'>)</span>, key.pos <span class='op'>=</span> <span class='fl'>4</span>, at <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='plot-6.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='fu'>sf.colors</span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [1] "#0000B3FF" "#0400FFFF" "#4500FFFF" "#8500FFFF" "#C527D8FF" "#FF50AFFF"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  [7] "#FF7A85FF" "#FFA35CFF" "#FFCC33FF" "#FFF50AFF"</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
