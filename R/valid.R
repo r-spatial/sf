@@ -80,7 +80,7 @@ st_make_valid.sfc = function(x, ..., oriented = FALSE, s2_options = s2::s2_optio
 			s2_options = s2::s2_options(snap = s2::s2_snap_precision(st_precision(x)))
 		s2 = s2::s2_rebuild(s2, s2_options)
 		st_as_sfc(s2, crs = crs)
-	} else if (sf_extSoftVersion()["GEOS"] < "3.8.0") {
+	} else if (as.package_version(sf_extSoftVersion()["GEOS"]) < "3.8.0") {
 		if (!requireNamespace("lwgeom", quietly = TRUE))
 			stop("package lwgeom required, please install it first") # nocov
 		st_sfc(lwgeom::lwgeom_make_valid(x), crs = crs)
