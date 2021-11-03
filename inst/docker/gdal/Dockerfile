@@ -55,7 +55,7 @@ RUN apt-get install -y \
 
 RUN locale-gen en_US.UTF-8
 
-ENV PROJ_VERSION=7.1.0
+#ENV PROJ_VERSION=7.1.0
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
@@ -79,9 +79,9 @@ RUN wget http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
   && ldconfig
 
 #RUN git clone --depth 1 https://github.com/OSGeo/PROJ.git
-RUN wget http://download.osgeo.org/proj/proj-8.0.1.tar.gz
-RUN tar zxvf proj-8.0.1.tar.gz
-RUN cd proj-8.0.1 \
+RUN wget http://download.osgeo.org/proj/proj-8.2.0.tar.gz
+RUN tar zxvf proj-8.2.0.tar.gz
+RUN cd proj-8.2.0 \
   && ls -l \
   && mkdir build \
   && cd build \
@@ -101,8 +101,8 @@ RUN cd proj-8.0.1 \
 # GDAL:
 
 # https://download.osgeo.org/gdal/3.1.0/gdal-3.1.0rc2.tar.gz
-ENV GDAL_VERSION 3.3.2rc3
-ENV GDAL_VERSION_NAME 3.3.2rc3
+ENV GDAL_VERSION 3.4.0
+ENV GDAL_VERSION_NAME 3.4.0rc2
 
 RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
@@ -126,7 +126,7 @@ RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME
 # RUN R CMD build rgdal/pkg --no-build-vignettes
 # RUN R CMD INSTALL rgdal_*.tar.gz 
 
-RUN Rscript -e 'install.packages(c("sp", "rgeos", "rgdal", "RPostgreSQL", "RSQLite", "testthat", "knitr", "tidyr", "geosphere", "maptools", "maps", "microbenchmark", "raster", "dplyr", "tibble", "units", "DBI",  "covr", "protolite", "tmap", "mapview", "odbc", "pool", "rmarkdown", "RPostgres","spatstat", "stars"))'
+RUN Rscript -e 'install.packages(c("sp", "rgeos", "rgdal", "RPostgreSQL", "RSQLite", "testthat", "knitr", "tidyr", "geosphere", "maptools", "maps", "microbenchmark", "raster", "dplyr", "tibble", "units", "DBI",  "covr", "protolite", "tmap", "mapview", "odbc", "pool", "rmarkdown", "RPostgres","spatstat", "stars", "XML", "tmaptools", "tmap", "terra", "PCICt", "RNetCDF", "future.apply", "ggforce", "ggthemes", "gstat", "ncmeta", "pbapply", "plm", "spacetime", "xts", "zoo", "tidync", "ncdfgeom", "cubelyr", "clue"))'
 
 RUN git clone --depth 10 https://github.com/r-spatial/sf.git
 RUN git clone --depth 10 https://github.com/r-spatial/lwgeom.git
@@ -140,7 +140,6 @@ RUN R CMD INSTALL sf
 RUN R CMD INSTALL lwgeom
 RUN R CMD INSTALL stars
 
-RUN Rscript -e 'install.packages(c("XML", "tmaptools", "tmap", "mapview", "s2", "terra", "PCICt", "RNetCDF", "future.apply", "ggforce", "ggthemes", "gstat", "ncmeta", "pbapply", "plm", "spacetime", "xts", "zoo", "tidync", "ncdfgeom", "cubelyr", "clue"))'
 
 RUN R CMD build --no-build-vignettes --no-manual sf
 RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
