@@ -96,7 +96,8 @@ and whether it is
 * a straight line, cutting through the Earth's surface, or
 * a curved line following the Earth's surface
 
-Starting with `sf` version 1.0, `sf` uses the new package `s2`
+Starting with `sf` version 1.0, if you provide a spatial object in a
+geographical coordinate reference system, `sf` uses the new package `s2`
 (Dunnington, Pebesma, Rubak 2020) for spherical geometry, which
 has functions for computing pretty much all measures, predicates
 and transformations _on the sphere_. This means:
@@ -110,6 +111,8 @@ The `s2` package is really a wrapper around the C++
 Google, and which is used in many of its products (e.g. Google
 Maps, Google Earth Engine, Bigquery GIS) and has been translated
 in several other programming languages.
+
+With projected coordinates `sf` continues to work in $R^2$ as before.
 
 # Fundamental differences
 
