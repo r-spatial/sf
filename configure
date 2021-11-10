@@ -624,6 +624,7 @@ LIBOBJS
 GEOS_CONFIG
 PROJ_LIBS
 PROJ_CPPFLAGS
+SQLITE3_LIBS
 EGREP
 GREP
 CPP
@@ -656,7 +657,6 @@ infodir
 docdir
 oldincludedir
 includedir
-runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -682,6 +682,7 @@ enable_option_checking
 with_gdal_config
 with_data_copy
 with_proj_data
+with_sqlite3_lib
 with_proj_include
 with_proj_api
 with_proj_lib
@@ -735,7 +736,6 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
-runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE}'
@@ -988,15 +988,6 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
-  -runstatedir | --runstatedir | --runstatedi | --runstated \
-  | --runstate | --runstat | --runsta | --runst | --runs \
-  | --run | --ru | --r)
-    ac_prev=runstatedir ;;
-  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
-  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
-  | --run=* | --ru=* | --r=*)
-    runstatedir=$ac_optarg ;;
-
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1134,7 +1125,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir runstatedir
+		libdir localedir mandir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1287,7 +1278,6 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
-  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -1319,6 +1309,8 @@ Optional Packages:
   --with-data-copy=yes/no local copy of data directories in package, default
                           no
   --with-proj-data=DIR    location of PROJ data directory
+  --with-sqlite3-lib=LIB_PATH
+                          the location of sqlite3 libraries
   --with-proj-include=DIR location of proj header files
   --with-proj-api=yes/no  use the deprecated proj_api.h even when PROJ 6 is
                           available; default no
@@ -3648,6 +3640,19 @@ rm -fr errors.txt gdal_proj.cpp gdal_proj
 $as_echo "$as_me: GDAL: ${GDAL_VERSION}" >&6;}
 
 
+# sqlite3
+
+# Check whether --with-sqlite3-lib was given.
+if test "${with_sqlite3_lib+set}" = set; then :
+  withval=$with_sqlite3_lib; sqlite3_lib_path=$withval
+fi
+
+if test  -n "$sqlite3_lib_path"  ; then
+    SQLITE3_LIBS="-L${sqlite3_lib_path}"
+
+fi
+
+
 #
 # PROJ
 #
@@ -3860,7 +3865,7 @@ _EOCONF
   #AC_CHECK_LIB(proj,proj_context_create,,proj6ok=no)
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking PROJ: checking whether PROJ and sqlite3 are available for linking:" >&5
 $as_echo_n "checking PROJ: checking whether PROJ and sqlite3 are available for linking:... " >&6; }
-  ${CXX} ${CPPFLAGS} -o proj_conf_test proj_conf_test.cpp ${LIBS} -lsqlite3 2> errors.txt
+  ${CXX} ${CPPFLAGS} -o proj_conf_test proj_conf_test.cpp ${LIBS} $SQLITE3_LIBS -lsqlite3 2> errors.txt
   if test `echo $?` -ne 0 ; then
     proj6ok=no
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
