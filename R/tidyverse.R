@@ -334,9 +334,33 @@ pivot_longer.sf <- function (data, cols, names_to = "name", names_prefix = NULL,
 		names_transform = list(), names_repair = "check_unique",
 		values_to = "value", values_drop_na = FALSE, values_ptypes = list(),
 		values_transform = list(), ...) {
-	sf_column_name = attr(data, "sf_column")
-	data = as.data.frame(data)
-	st_as_sf(NextMethod(), sf_column_name = sf_column_name)
+
+  sf_column_name = attr(data, "sf_column")
+  data = as.data.frame(data)
+
+# instead of:
+#	st_as_sf(NextMethod(), sf_column_name = sf_column_name)
+# we avoid NextMethod(); for the reason
+# see https://github.com/tidyverse/tidyr/issues/1171:
+  if (!requireNamespace("tidyr", quietly = TRUE))
+    stop("tidyr required: install first?")
+  out <- tidyr::pivot_longer(
+    data = data, 
+    cols = {{ cols }},
+    names_to = names_to, 
+    names_prefix = names_prefix,
+    names_sep = names_sep, 
+    names_pattern = names_pattern, 
+    names_ptypes = names_ptypes,
+    names_transform = names_transform, 
+    names_repair = names_repair,
+    values_to = values_to, 
+    values_drop_na = values_drop_na, 
+    values_ptypes = values_ptypes,
+    values_transform = values_transform, 
+    ...
+  )
+  st_as_sf(out, sf_column_name = sf_column_name)
 }
 
 
@@ -358,7 +382,7 @@ spread.sf <- function(data, key, value, fill = NA, convert = FALSE, drop = TRUE,
 	value = rlang::enquo(value)
 
 	class(data) <- setdiff(class(data), "sf")
-    st_as_sf(tidyr::spread(data, !!key, !!value, fill = fill, convert = convert,
+	st_as_sf(tidyr::spread(data, !!key, !!value, fill = fill, convert = convert,
 		drop = drop, sep = sep), sf_column_name = attr(data, "sf_column"))
 }
 
