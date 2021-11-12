@@ -252,7 +252,7 @@ In st_voronoi.sfc(st_geometry(x), st_sfc(envelope), dTolerance,  :
 <div id="switching-between-s2-and-geos" class="section level1">
 <h1 class="hasAnchor">
 <a href="#switching-between-s2-and-geos" class="anchor"></a>Switching between S2 and GEOS</h1>
-<p>The two-dimensional <span class="math inline">\(R^2\)</span> library that was formerly used by <code>sf</code> is <a href="https://trac.osgeo.org/geos/">GEOS</a>, and <code>sf</code> can be instrumented to use GEOS or <code>sf</code>. First we will ask if <code>s2</code> is being used by default:</p>
+<p>The two-dimensional <span class="math inline">\(R^2\)</span> library that was formerly used by <code>sf</code> is <a href="https://trac.osgeo.org/geos/">GEOS</a>, and <code>sf</code> can be instrumented to use GEOS or <code>s2</code>. First we will ask if <code>s2</code> is being used by default:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">## [1] TRUE</span></code></pre></div>
@@ -381,26 +381,26 @@ In st_voronoi.sfc(st_geometry(x), st_sfc(envelope), dTolerance,  :
   <span class="va">uk_buffer_sf</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">uk_projected</span>, dist <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span>
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.066   0.006   0.072</span>
+<span class="co">##   0.071   0.006   0.079</span>
 <span class="co"># sf way with few than the 30 segments in the buffer</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="op">{</span>
   <span class="va">uk_projected</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">uk_sfc</span>, <span class="fl">27700</span><span class="op">)</span>
   <span class="va">uk_buffer_sf2</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">uk_projected</span>, dist <span class="op">=</span> <span class="fl">20000</span>, nQuadSegs <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span>
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.034   0.001   0.036</span>
+<span class="co">##   0.036   0.002   0.036</span>
 <span class="co"># s2 with default cell size</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="op">{</span>
   <span class="va">uk_buffer</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span>
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.029   0.000   0.028</span>
+<span class="co">##   0.029   0.000   0.029</span>
 <span class="co"># s2 with 10000 cells</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="op">{</span>
   <span class="va">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span>, max_cells <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span>
 <span class="op">}</span><span class="op">)</span>
 <span class="co">##    user  system elapsed </span>
-<span class="co">##   0.266   0.001   0.268</span>
+<span class="co">##   0.273   0.002   0.277</span>
 <span class="co"># s2 with 100 cells</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span><span class="op">(</span><span class="op">{</span>
   <span class="va">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span>, max_cells <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
