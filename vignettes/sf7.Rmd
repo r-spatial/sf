@@ -239,7 +239,7 @@ region covers (crosses) the antimeridian.
 
 The two-dimensional $R^2$ library that was formerly used by `sf` is
 [GEOS](https://trac.osgeo.org/geos/), and `sf` can be instrumented to
-use GEOS or `sf`. First we will ask if `s2` is being used by default:
+use GEOS or `s2`. First we will ask if `s2` is being used by default:
 ```{r}
 sf_use_s2()
 ```
