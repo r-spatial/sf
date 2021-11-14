@@ -82,7 +82,7 @@ sp objects to sf and sfc with as(x, &quot;sf&quot;)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0-4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0-5</span>
       </span>
     </div>
 
@@ -196,7 +196,7 @@ Other geometries must be two-dimensional (<code>XY</code>). Dimensions can be dr
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='r-in'><span class='va'>nc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='st_read.html'>st_read</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"shape/nc.shp"</span>, package<span class='op'>=</span><span class='st'>"sf"</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Reading layer `nc' from data source </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpKtqMWK/temp_libpathc6de646fdf52/sf/shape/nc.shp' </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpMvowve/temp_libpath4979b19eb02/sf/shape/nc.shp' </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Geometry type: MULTIPOLYGON</span>
@@ -6399,7 +6399,23 @@ Other geometries must be two-dimensional (<code>XY</code>). Dimensions can be dr
 <span class='r-out co'><span class='r-pr'>#&gt;</span> y  33.88199  36.58965</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Slot "proj4string":</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> CRS arguments: +proj=longlat +datum=NAD27 +no_defs </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Coordinate Reference System:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Deprecated Proj.4 representation: +proj=longlat +datum=NAD27 +no_defs </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> WKT2 2019 representation:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GEOGCRS["NAD27",</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     DATUM["North American Datum 1927",</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         ELLIPSOID["Clarke 1866",6378206.4,294.978698213898,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             LENGTHUNIT["metre",1]]],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     PRIMEM["Greenwich",0,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         ANGLEUNIT["degree",0.0174532925199433]],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     CS[ellipsoidal,2],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         AXIS["latitude",north,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             ORDER[1],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             ANGLEUNIT["degree",0.0174532925199433]],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         AXIS["longitude",east,</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             ORDER[2],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             ANGLEUNIT["degree",0.0174532925199433]],</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     ID["EPSG",4267]] </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-in'><span class='co'># back to sf</span></span>
 <span class='r-in'><span class='fu'>as</span><span class='op'>(</span><span class='va'>spdf</span>, <span class='st'>"sf"</span><span class='op'>)</span></span>
