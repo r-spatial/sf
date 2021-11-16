@@ -82,7 +82,7 @@ library(sf)
 
 ## _although coordinates are longitude/latitude, xxx assumes that they are planar_
 
-Most (but not all) of the geometry calculating routines used by `sf` come from the [GEOS](https://trac.osgeo.org/geos/) library. This library considers coordinates in a two-dimensional, flat, Euclidean space. For longitude latitude data, this is not the case. A simple example is a polygon enclosing the North pole, which should include the pole:
+Most (but not all) of the geometry calculating routines used by `sf` come from the [GEOS](https://libgeos.org) library. This library considers coordinates in a two-dimensional, flat, Euclidean space. For longitude latitude data, this is not the case. A simple example is a polygon enclosing the North pole, which should include the pole:
 ```{r}
 polygon = st_sfc(st_polygon(list(rbind(c(0,80), c(120,80), c(240,80), c(0,80)))), 
 		crs = 4326)
