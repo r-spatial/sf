@@ -96,7 +96,7 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 
 	ret = switch(util,
 			info = CPL_gdalinfo(source, options, oo),
-			warp = CPL_gdalwarp(source, destination, options, oo, doo),
+			warp = CPL_gdalwarp(source, destination, options, oo, doo, quiet, "-overwrite" %in% options),
 			warper = CPL_gdal_warper(source, destination, as.integer(resampling_method(options)),
 				oo, doo, quiet), # nocov
 			rasterize = {  # nocov start

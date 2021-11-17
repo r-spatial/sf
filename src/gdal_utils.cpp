@@ -68,7 +68,7 @@ Rcpp::CharacterVector CPL_gdalinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVec
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdalwarp(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
 		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo,
-		bool quiet = true) {
+		bool quiet = true, bool overwrite = false) {
 
 	int err = 0;
 
@@ -90,6 +90,10 @@ Rcpp::LogicalVector CPL_gdalwarp(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 #if GDAL_VERSION_NUM >= 2030000
 		GDALWarpAppOptionsSetQuiet(opt, 0);
 #endif
+	}
+	if (overwrite && dst_ds != NULL) {
+		GDALClose(dst_ds);
+		dst_ds = NULL;
 	}
 	GDALDatasetH result = GDALWarp(dst_ds == NULL ? (const char *) dst[0] : NULL, dst_ds, 
 		src.size(), src_pt.data(), opt, &err);

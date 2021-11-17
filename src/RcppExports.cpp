@@ -347,8 +347,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_gdalwarp
-Rcpp::LogicalVector CPL_gdalwarp(Rcpp::CharacterVector src, Rcpp::CharacterVector dst, Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo, bool quiet);
-RcppExport SEXP _sf_CPL_gdalwarp(SEXP srcSEXP, SEXP dstSEXP, SEXP optionsSEXP, SEXP ooSEXP, SEXP dooSEXP, SEXP quietSEXP) {
+Rcpp::LogicalVector CPL_gdalwarp(Rcpp::CharacterVector src, Rcpp::CharacterVector dst, Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo, bool quiet, bool overwrite);
+RcppExport SEXP _sf_CPL_gdalwarp(SEXP srcSEXP, SEXP dstSEXP, SEXP optionsSEXP, SEXP ooSEXP, SEXP dooSEXP, SEXP quietSEXP, SEXP overwriteSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -358,7 +358,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type oo(ooSEXP);
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type doo(dooSEXP);
     Rcpp::traits::input_parameter< bool >::type quiet(quietSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_gdalwarp(src, dst, options, oo, doo, quiet));
+    Rcpp::traits::input_parameter< bool >::type overwrite(overwriteSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_gdalwarp(src, dst, options, oo, doo, quiet, overwrite));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1322,7 +1323,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_get_layers", (DL_FUNC) &_sf_CPL_get_layers, 3},
     {"_sf_CPL_read_ogr", (DL_FUNC) &_sf_CPL_read_ogr, 14},
     {"_sf_CPL_gdalinfo", (DL_FUNC) &_sf_CPL_gdalinfo, 3},
-    {"_sf_CPL_gdalwarp", (DL_FUNC) &_sf_CPL_gdalwarp, 6},
+    {"_sf_CPL_gdalwarp", (DL_FUNC) &_sf_CPL_gdalwarp, 7},
     {"_sf_CPL_gdalrasterize", (DL_FUNC) &_sf_CPL_gdalrasterize, 7},
     {"_sf_CPL_gdaltranslate", (DL_FUNC) &_sf_CPL_gdaltranslate, 5},
     {"_sf_CPL_gdalvectortranslate", (DL_FUNC) &_sf_CPL_gdalvectortranslate, 6},
