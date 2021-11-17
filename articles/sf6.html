@@ -133,7 +133,7 @@
 <span class="co">## Linking to GEOS 3.10.1, GDAL 3.3.3, PROJ 8.1.1</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/demo.html">demo</a></span><span class="op">(</span><span class="va">nc</span>, ask <span class="op">=</span> <span class="cn">FALSE</span>, echo <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="co">## Reading layer `nc.gpkg' from data source </span>
-<span class="co">##   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpPye6cs/temp_libpath12aa36f230858/sf/gpkg/nc.gpkg' </span>
+<span class="co">##   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpkdqVBB/temp_libpath103cc562bd9d0/sf/gpkg/nc.gpkg' </span>
 <span class="co">##   using driver `GPKG'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity</span>
@@ -191,7 +191,7 @@
 <h2 class="hasAnchor">
 <a href="#although-coordinates-are-longitudelatitude-xxx-assumes-that-they-are-planar" class="anchor"></a><em>although coordinates are longitude/latitude, xxx assumes that they are planar</em>
 </h2>
-<p>Most (but not all) of the geometry calculating routines used by <code>sf</code> come from the <a href="https://trac.osgeo.org/geos/">GEOS</a> library. This library considers coordinates in a two-dimensional, flat, Euclidean space. For longitude latitude data, this is not the case. A simple example is a polygon enclosing the North pole, which should include the pole:</p>
+<p>Most (but not all) of the geometry calculating routines used by <code>sf</code> come from the <a href="https://libgeos.org">GEOS</a> library. This library considers coordinates in a two-dimensional, flat, Euclidean space. For longitude latitude data, this is not the case. A simple example is a polygon enclosing the North pole, which should include the pole:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">polygon</span> <span class="op">=</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">80</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">120</span>,<span class="fl">80</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">240</span>,<span class="fl">80</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">80</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, 
         crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span>
