@@ -16,7 +16,7 @@ A package that provides [simple features access](https://en.wikipedia.org/wiki/S
 
 * represents simple features as records in a `data.frame` or `tibble` with a geometry list-column
 * represents natively in R all 17 simple feature types for all dimensions (XY, XYZ, XYM, XYZM)
-* interfaces to [GEOS](https://trac.osgeo.org/geos) for geometrical operations on projected coordinates, and to [s2geometry](https://s2geometry.io/) for geometrical operations on ellipsoidal coordinates
+* interfaces to [GEOS](https://libgeos.org) for geometrical operations on projected coordinates, and to [s2geometry](https://s2geometry.io/) for geometrical operations on ellipsoidal coordinates
 * interfaces to [GDAL](http://www.gdal.org/), supporting all driver options, `Date` and `POSIXct` and list-columns
 * interfaces to [PRØJ](http://proj.org/) for coordinate reference system conversion and transformation
 * uses [well-known-binary](https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary) serialisations written in C++/Rcpp for fast I/O with GDAL and GEOS 
