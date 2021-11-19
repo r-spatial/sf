@@ -433,7 +433,6 @@ int CPL_delete_ogr(Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer,
 
 	for (int i = 0; i < layer.size(); i++) { // reverse loop order if inefficient?
 		// find & delete layer:
-		bool deleted = false;
 		for (int iLayer = 0; iLayer < poDS->GetLayerCount(); iLayer++) {
 			OGRLayer *poLayer = poDS->GetLayer(iLayer);
 			if (poLayer != NULL && EQUAL(poLayer->GetName(), layer[i])) {
@@ -447,12 +446,10 @@ int CPL_delete_ogr(Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer,
 							driver[0] << "'" << std::endl;
 					}
 				}
-				deleted = (err == OGRERR_NONE);
-				// break; -- breaks which loop?
+				if (err != OGRERR_NONE);
+					Rcpp::Rcout << "Deleting layer `" << layer[i] << "' failed" << std::endl;
 			}
 		}
-		if (! deleted)
-			Rcpp::Rcout << "Deleting layer `" << layer[0] << "' failed" << std::endl;
 	}
 	if (transaction && poDS->CommitTransaction() != OGRERR_NONE) { // #nocov start
 		poDS->RollbackTransaction();
