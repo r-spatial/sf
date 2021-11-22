@@ -165,7 +165,7 @@ NumericVector read_gdal_data(GDALDataset *poDataset,
 		if (has_offset)
 			offset = poBand->GetOffset(NULL);
 		units[i] = poBand->GetUnitType();
-		// if (! NumericVector::is_na(nodatavalue[0]) || has_offset || has_scale) { 
+		// if (! NumericVector::is_na(nodatavalue[0]) || has_offset || has_scale) {
 		// outcommented because of NaN handling, https://github.com/r-spatial/stars/issues/333
 		for (R_xlen_t j = i * (((R_xlen_t) nBufXSize) * nBufYSize); // start of band i
 				j < (i + 1) * (((R_xlen_t) nBufXSize) * nBufYSize); // end of band i
@@ -641,7 +641,7 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 	return;
 }
 
-double get_bilinear(GDALRasterBand *poBand, double Pixel, double Line, 
+double get_bilinear(GDALRasterBand *poBand, double Pixel, double Line,
 						int iPixel, int iLine, double RasterXSize, double RasterYSize,
 						int na_set, double na_value) {
 
@@ -700,6 +700,8 @@ NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy, bool interpol
 	}
 
 	NumericMatrix ret(xy.nrow(), poDataset->GetRasterCount());
+	int xsize = poDataset->GetRasterXSize();
+	int ysize = poDataset->GetRasterYSize();
 
 	double gt[6];
 	poDataset->GetGeoTransform(gt);
@@ -726,16 +728,13 @@ NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy, bool interpol
 			int iPixel = static_cast<int>(floor( Pixel ));
 			int iLine  = static_cast<int>(floor( Line ));
 			double pixel;
-			if (iPixel < 0 || iLine < 0 ||
-					iPixel >= poDataset->GetRasterXSize() ||
-					iLine  >= poDataset->GetRasterYSize()) // outside bbox:
+			if (iPixel < 0 || iLine < 0 || iPixel >= xsize || iLine >= ysize) // outside bbox:
 				pixel = NA_REAL;
 			else { // read pixel:
 				if (interpolate)
 					// stop("interpolate not implemented");
 					pixel = get_bilinear(poBand, Pixel, Line, iPixel, iLine,
-						poDataset->GetRasterXSize(), poDataset->GetRasterYSize(),
-						nodata_set, nodata);
+						xsize, ysize, nodata_set, nodata);
 				else if (GDALRasterIO(poBand, GF_Read, iPixel, iLine, 1, 1,
 						&pixel, 1, 1, GDT_CFloat64, 0, 0) != CE_None)
 					stop("Error reading!");
