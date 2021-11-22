@@ -381,7 +381,7 @@ st_sf = function(..., agr = NA_agr_, row.names,
 				agr[ix] = NA
 		}
 	}
-	x = structure(NextMethod(), class = c("sf", setdiff(class(x), "sf")))
+	x = structure(NextMethod(), class = class(x))
 	if (! setting_geom)
 		st_agr(x) = agr
 	x
