@@ -1,5 +1,7 @@
 # version 1.0-5
 
+* `st_sample()` using regular sampling for ellipsoidal coordinates "works" as if coordinates were Cartesian; #1837
+
 # version 1.0-4
 
 * new function `st_delete()` deletes a data source, or layer(s) within a data source; #1828

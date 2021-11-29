@@ -139,8 +139,10 @@ st_poly_sample = function(x, size, ..., type = "random",
 	} else if (type %in% c("hexagonal", "regular", "random")) {
 
 		if (isTRUE(st_is_longlat(x))) {
-			if (type == "regular")
+			if (type == "regular") {
 				message_longlat("st_sample")
+				x = st_set_crs(x, NA)
+			}
 			if (type == "hexagonal")
 				stop("hexagonal sampling on geographic coordinates not supported; consider projecting first")
 		}
