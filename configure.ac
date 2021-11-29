@@ -307,6 +307,15 @@ rm -fr errors.txt gdal_proj.cpp gdal_proj
 AC_MSG_NOTICE([GDAL: ${GDAL_VERSION}])
 
 
+# sqlite3
+AC_ARG_WITH([sqlite3-lib],
+    AS_HELP_STRING([--with-sqlite3-lib=LIB_PATH],[the location of sqlite3 libraries]),
+               [sqlite3_lib_path=$withval])
+if test [ -n "$sqlite3_lib_path" ] ; then
+    AC_SUBST([SQLITE3_LIBS], ["-L${sqlite3_lib_path}"])
+fi
+
+
 #
 # PROJ
 #
@@ -429,7 +438,7 @@ int main() {
 _EOCONF]
   #AC_CHECK_LIB(proj,proj_context_create,,proj6ok=no)
   AC_MSG_CHECKING(PROJ: checking whether PROJ and sqlite3 are available for linking:)
-  ${CXX} ${CPPFLAGS} -o proj_conf_test proj_conf_test.cpp ${LIBS} -lsqlite3 2> errors.txt
+  ${CXX} ${CPPFLAGS} -o proj_conf_test proj_conf_test.cpp ${LIBS} $SQLITE3_LIBS -lsqlite3 2> errors.txt
   if test `echo $?` -ne 0 ; then
     proj6ok=no
     AC_MSG_RESULT(no)
