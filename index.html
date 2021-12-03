@@ -30,6 +30,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -42,18 +44,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0-5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0-5</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -93,7 +89,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/r-spatial/sf/">
+  <a href="https://github.com/r-spatial/sf/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -111,208 +107,196 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-
-<div id="simple-features-for-r" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#simple-features-for-r" class="anchor"></a>Simple Features for R</h1></div>
-<p><a href="https://gist.github.com/edzer/f461a3a95570c4ab7edf3125c2f19d20"><img align="right" src="https://user-images.githubusercontent.com/520851/34887433-ce1d130e-f7c6-11e7-83fc-d60ad4fae6bd.gif"></a></p>
-<p>A package that provides <a href="https://en.wikipedia.org/wiki/Simple_Features">simple features access</a> for R. Package sf:</p>
+<p><a href="https://github.com/r-spatial/sf/actions" class="external-link"><img src="https://github.com/r-spatial/sf/workflows/tic/badge.svg?branch=master" alt="tic"></a> <a href="https://github.com/r-spatial/sf/actions" class="external-link"><img src="https://github.com/r-spatial/sf/workflows/tic-db/badge.svg?branch=master" alt="tic-db"></a> <a href="https://codecov.io/github/r-spatial/sf?branch=master" class="external-link"><img src="https://img.shields.io/codecov/c/github/r-spatial/sf/master.svg" alt="Coverage Status"></a> <a href="http://www.gnu.org/licenses/gpl-2.0.html" class="external-link"><img src="http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat" alt="License"></a> <a href="https://cran.r-project.org/package=sf" class="external-link"><img src="http://www.r-pkg.org/badges/version/sf" alt="CRAN"></a> <a href="https://cran.r-project.org/web/checks/check_results_sf.html" class="external-link"><img src="https://cranchecks.info/badges/worst/sf" alt="cran checks"></a> <a href="http://www.r-pkg.org/pkg/sf" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/sf?color=brightgreen" alt="Downloads"></a> <a href="https://CRAN.R-project.org/package=sf" class="external-link"><img src="https://tinyverse.netlify.com/badge/sf" alt="status"></a> <!-- badges: end --> # Simple Features for R</p>
+<p><a href="https://gist.github.com/edzer/f461a3a95570c4ab7edf3125c2f19d20" class="external-link"><img align="right" src="https://user-images.githubusercontent.com/520851/34887433-ce1d130e-f7c6-11e7-83fc-d60ad4fae6bd.gif"></a></p>
+<p>A package that provides <a href="https://en.wikipedia.org/wiki/Simple_Features" class="external-link">simple features access</a> for R. Package sf:</p>
 <ul>
 <li>represents simple features as records in a <code>data.frame</code> or <code>tibble</code> with a geometry list-column</li>
 <li>represents natively in R all 17 simple feature types for all dimensions (XY, XYZ, XYM, XYZM)</li>
-<li>interfaces to <a href="https://libgeos.org">GEOS</a> for geometrical operations on projected coordinates, and to <a href="https://s2geometry.io/">s2geometry</a> for geometrical operations on ellipsoidal coordinates</li>
-<li>interfaces to <a href="http://www.gdal.org/">GDAL</a>, supporting all driver options, <code>Date</code> and <code>POSIXct</code> and list-columns</li>
-<li>interfaces to <a href="http://proj.org/">PRØJ</a> for coordinate reference system conversion and transformation</li>
-<li>uses <a href="https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary">well-known-binary</a> serialisations written in C++/Rcpp for fast I/O with GDAL and GEOS</li>
-<li>reads from and writes to spatial databases such as <a href="http://postgis.net/">PostGIS</a> using <a href="https://cran.r-project.org/web/packages/DBI/index.html">DBI</a>
+<li>interfaces to <a href="https://libgeos.org" class="external-link">GEOS</a> for geometrical operations on projected coordinates, and to <a href="https://s2geometry.io/" class="external-link">s2geometry</a> for geometrical operations on ellipsoidal coordinates</li>
+<li>interfaces to <a href="http://www.gdal.org/" class="external-link">GDAL</a>, supporting all driver options, <code>Date</code> and <code>POSIXct</code> and list-columns</li>
+<li>interfaces to <a href="http://proj.org/" class="external-link">PRØJ</a> for coordinate reference system conversion and transformation</li>
+<li>uses <a href="https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary" class="external-link">well-known-binary</a> serialisations written in C++/Rcpp for fast I/O with GDAL and GEOS</li>
+<li>reads from and writes to spatial databases such as <a href="http://postgis.net/" class="external-link">PostGIS</a> using <a href="https://cran.r-project.org/web/packages/DBI/index.html" class="external-link">DBI</a>
 </li>
-<li>is extended by <a href="https://github.com/r-spatial/lwgeom/">lwgeom</a> for selected liblwgeom/PostGIS functions</li>
-<li>is extended by <a href="https://github.com/r-spatial/stars/">stars</a> for raster data, and raster or vector data cubes (spatial time series)</li>
+<li>is extended by <a href="https://github.com/r-spatial/lwgeom/" class="external-link">lwgeom</a> for selected liblwgeom/PostGIS functions</li>
+<li>is extended by <a href="https://github.com/r-spatial/stars/" class="external-link">stars</a> for raster data, and raster or vector data cubes (spatial time series)</li>
 </ul>
-<p><a href="https://gist.github.com/edzer/442d74a5775abcd5068cf3e73b23687b"><img align="left" src="https://user-images.githubusercontent.com/520851/50280460-e35c1880-044c-11e9-9ed7-cc46754e49db.jpg"></a></p>
-<p>(Illustration (c) by <a href="https://twitter.com/allison_horst/status/1071456081308614656">Allison Horst</a>)</p>
-<div id="blogs-presentations-vignettes-sp-sf-wiki" class="section level3">
-<h3 class="hasAnchor">
-<a href="#blogs-presentations-vignettes-sp-sf-wiki" class="anchor"></a>Blogs, presentations, vignettes, sp-sf wiki</h3>
+<p><a href="https://gist.github.com/edzer/442d74a5775abcd5068cf3e73b23687b" class="external-link"><img align="left" src="https://user-images.githubusercontent.com/520851/50280460-e35c1880-044c-11e9-9ed7-cc46754e49db.jpg"></a></p>
+<p>(Illustration (c) by <a href="https://twitter.com/allison_horst/status/1071456081308614656" class="external-link">Allison Horst</a>)</p>
+<div class="section level3">
+<h3 id="blogs-presentations-vignettes-sp-sf-wiki">Blogs, presentations, vignettes, sp-sf wiki<a class="anchor" aria-label="anchor" href="#blogs-presentations-vignettes-sp-sf-wiki"></a>
+</h3>
 <ul>
-<li>an open access <a href="https://journal.r-project.org/archive/2018/RJ-2018-009/index.html">R Journal article</a> summarizes the package</li>
-<li>package vignettes: <a href="https://r-spatial.github.io/sf/articles/sf1.html">first</a>, <a href="https://r-spatial.github.io/sf/articles/sf2.html">second</a>, <a href="https://r-spatial.github.io/sf/articles/sf3.html">third</a>, <a href="https://r-spatial.github.io/sf/articles/sf4.html">fourth</a>, <a href="https://r-spatial.github.io/sf/articles/sf5.html">fifth</a>, <a href="https://r-spatial.github.io/sf/articles/sf6.html">sixth</a>, <a href="https://r-spatial.github.io/sf/articles/sf7.html">seventh</a>
+<li>an open access <a href="https://journal.r-project.org/archive/2018/RJ-2018-009/index.html" class="external-link">R Journal article</a> summarizes the package</li>
+<li>package vignettes: <a href="https://r-spatial.github.io/sf/articles/sf1.html" class="external-link">first</a>, <a href="https://r-spatial.github.io/sf/articles/sf2.html" class="external-link">second</a>, <a href="https://r-spatial.github.io/sf/articles/sf3.html" class="external-link">third</a>, <a href="https://r-spatial.github.io/sf/articles/sf4.html" class="external-link">fourth</a>, <a href="https://r-spatial.github.io/sf/articles/sf5.html" class="external-link">fifth</a>, <a href="https://r-spatial.github.io/sf/articles/sf6.html" class="external-link">sixth</a>, <a href="https://r-spatial.github.io/sf/articles/sf7.html" class="external-link">seventh</a>
 </li>
-<li>blog posts: <a href="http://r-spatial.org/r/2016/02/15/simple-features-for-r.html">first</a>, <a href="http://r-spatial.org/r/2016/07/18/sf2.html">second</a>, <a href="http://r-spatial.org/r/2016/11/02/sfcran.html">third</a>, <a href="http://r-spatial.org/r/2017/01/12/newssf.html">fourth</a>
+<li>blog posts: <a href="http://r-spatial.org/r/2016/02/15/simple-features-for-r.html" class="external-link">first</a>, <a href="http://r-spatial.org/r/2016/07/18/sf2.html" class="external-link">second</a>, <a href="http://r-spatial.org/r/2016/11/02/sfcran.html" class="external-link">third</a>, <a href="http://r-spatial.org/r/2017/01/12/newssf.html" class="external-link">fourth</a>
 </li>
-<li>the original R Consortium ISC <a href="PROPOSAL.html">proposal</a>, the R Consortium <a href="https://www.r-consortium.org/blog/2017/01/03/simple-features-now-on-cran">blog post</a>
+<li>the original R Consortium ISC <a href="PROPOSAL.html">proposal</a>, the R Consortium <a href="https://www.r-consortium.org/blog/2017/01/03/simple-features-now-on-cran" class="external-link">blog post</a>
 </li>
-<li>presentations: <a href="https://edzer.github.io/rstudio_conf/#1">rstudio::conf 2018</a> (<a href="https://www.rstudio.com/resources/videos/tidy-spatial-data-analysis/">video</a>), <a href="http://pebesma.staff.ifgi.de/pebesma_sfr.pdf">UseR! 2016</a>
+<li>presentations: <a href="https://edzer.github.io/rstudio_conf/#1" class="external-link">rstudio::conf 2018</a> (<a href="https://www.rstudio.com/resources/videos/tidy-spatial-data-analysis/" class="external-link">video</a>), <a href="http://pebesma.staff.ifgi.de/pebesma_sfr.pdf" class="external-link">UseR! 2016</a>
 </li>
-<li>wiki page describing <a href="https://github.com/r-spatial/sf/wiki/Migrating">sp-sf migration</a>
+<li>wiki page describing <a href="https://github.com/r-spatial/sf/wiki/Migrating" class="external-link">sp-sf migration</a>
 </li>
 </ul>
 </div>
-<div id="cheatsheet" class="section level2">
-<h2 class="hasAnchor">
-<a href="#cheatsheet" class="anchor"></a>Cheatsheet</h2>
-<p><a href="https://creativecommons.org/licenses/by/4.0/">CC 4.0</a> BY <a href="http://github.com/ryangarnett">Ryan Garnett</a></p>
-<p><a href="https://github.com/rstudio/cheatsheets/blob/master/sf.pdf"><img src="https://raw.githubusercontent.com/rstudio/cheatsheets/master/pngs/sf.png"></a></p>
+<div class="section level2">
+<h2 id="cheatsheet">Cheatsheet<a class="anchor" aria-label="anchor" href="#cheatsheet"></a>
+</h2>
+<p><a href="https://creativecommons.org/licenses/by/4.0/" class="external-link">CC 4.0</a> BY <a href="http://github.com/ryangarnett" class="external-link">Ryan Garnett</a></p>
+<p><a href="https://github.com/rstudio/cheatsheets/blob/master/sf.pdf" class="external-link"><img src="https://raw.githubusercontent.com/rstudio/cheatsheets/master/pngs/sf.png"></a></p>
 </div>
-<div id="installing" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installing" class="anchor"></a>Installing</h2>
+<div class="section level2">
+<h2 id="installing">Installing<a class="anchor" aria-label="anchor" href="#installing"></a>
+</h2>
 <p>Install either from CRAN with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"sf"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"sf"</span><span class="op">)</span></code></pre></div>
 <p>This will install binary packages on Windows and MacOS, unless you configured R such that it tries to install source packages; in that case, see below.</p>
 <p>Install development versions from GitHub with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/">devtools</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span>
 <span class="fu">install_github</span><span class="op">(</span><span class="st">"r-spatial/sf"</span><span class="op">)</span></code></pre></div>
-<div id="windows" class="section level3">
-<h3 class="hasAnchor">
-<a href="#windows" class="anchor"></a>Windows</h3>
-<p>Installing sf from source works under Windows when <a href="https://cran.r-project.org/bin/windows/Rtools/">Rtools</a> is installed. This downloads the system requirements from <a href="https://github.com/rwinlib/">rwinlib</a>.</p>
+<div class="section level3">
+<h3 id="windows">Windows<a class="anchor" aria-label="anchor" href="#windows"></a>
+</h3>
+<p>Installing sf from source works under Windows when <a href="https://cran.r-project.org/bin/windows/Rtools/" class="external-link">Rtools</a> is installed. This downloads the system requirements from <a href="https://github.com/rwinlib/" class="external-link">rwinlib</a>.</p>
 </div>
-<div id="macos" class="section level3">
-<h3 class="hasAnchor">
-<a href="#macos" class="anchor"></a>MacOS</h3>
-<p>The easiest way to install <code>gdal</code> is using Homebrew. Recent versions of Homebrew include a full-featured up-to-date <a href="https://github.com/Homebrew/homebrew-core/blob/master/Formula/gdal.rb">gdal formula</a>, which installs <code>proj</code> and <code>gdal</code> at the same time:</p>
+<div class="section level3">
+<h3 id="macos">MacOS<a class="anchor" aria-label="anchor" href="#macos"></a>
+</h3>
+<p>The easiest way to install <code>gdal</code> is using Homebrew. Recent versions of Homebrew include a full-featured up-to-date <a href="https://github.com/Homebrew/homebrew-core/blob/master/Formula/gdal.rb" class="external-link">gdal formula</a>, which installs <code>proj</code> and <code>gdal</code> at the same time:</p>
 <pre><code>brew install pkg-config
 brew install gdal</code></pre>
 <p>Once gdal is installed, you will be able to install <code>sf</code> package from source in R. With the current version of <code>proj</code> (<code>7.0.0</code>) on homebrew, installation requires additional configuration:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"sf"</span>, configure.args <span class="op">=</span> <span class="st">"--with-proj-lib=/usr/local/lib/"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"sf"</span>, configure.args <span class="op">=</span> <span class="st">"--with-proj-lib=/usr/local/lib/"</span><span class="op">)</span></code></pre></div>
 <p>Or the development version:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/">devtools</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span>
 <span class="fu">install_github</span><span class="op">(</span><span class="st">"r-spatial/sf"</span>, configure.args <span class="op">=</span> <span class="st">"--with-proj-lib=/usr/local/lib/"</span><span class="op">)</span></code></pre></div>
 <p>If you are using <code>sf</code> and <code>rgdal</code> together, it is necessary to install <code>rgdal</code> from source using this configuration:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"rgdal"</span>, configure.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"--with-proj-lib=/usr/local/lib/"</span>, <span class="st">"--with-proj-include=/usr/local/include/"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>Alternatively, <a href="https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html">these instructions</a> explain how to install gdal using kyngchaos frameworks.</p>
-<p>For Mac OS 11 Big Sur source install instruction, see <a href="https://github.com/r-spatial/sf/issues/1536#issuecomment-727342736">here</a></p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"rgdal"</span>, configure.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"--with-proj-lib=/usr/local/lib/"</span>, <span class="st">"--with-proj-include=/usr/local/include/"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>Alternatively, <a href="https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html" class="external-link">these instructions</a> explain how to install gdal using kyngchaos frameworks.</p>
+<p>For Mac OS 11 Big Sur source install instruction, see <a href="https://github.com/r-spatial/sf/issues/1536#issuecomment-727342736" class="external-link">here</a></p>
 </div>
-<div id="linux" class="section level3">
-<h3 class="hasAnchor">
-<a href="#linux" class="anchor"></a>Linux</h3>
+<div class="section level3">
+<h3 id="linux">Linux<a class="anchor" aria-label="anchor" href="#linux"></a>
+</h3>
 <p>For Unix-alikes, GDAL (&gt;= 2.0.1), GEOS (&gt;= 3.4.0) and Proj.4 (&gt;= 4.8.0) are required.</p>
-<div id="ubuntu" class="section level4">
-<h4 class="hasAnchor">
-<a href="#ubuntu" class="anchor"></a>Ubuntu</h4>
+<div class="section level4">
+<h4 id="ubuntu">Ubuntu<a class="anchor" aria-label="anchor" href="#ubuntu"></a>
+</h4>
 <p>Dependencies for recent versions of Ubuntu (18.04 and later) are available in the official repositories; you can install them with:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="ex">apt-get</span> -y update <span class="kw">&amp;&amp;</span> <span class="ex">apt-get</span> install -y  libudunits2-dev libgdal-dev libgeos-dev libproj-dev</span></code></pre></div>
-<p>However, to get more up-to-date versions of dependencies such as GDAL, we recommend adding the <a href="http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/">ubuntugis-unstable</a> PPA to the package repositories and installing them as follows:</p>
+<p>However, to get more up-to-date versions of dependencies such as GDAL, we recommend adding the <a href="http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/" class="external-link">ubuntugis-unstable</a> PPA to the package repositories and installing them as follows:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">sudo</span> add-apt-repository ppa:ubuntugis/ubuntugis-unstable</span>
 <span id="cb8-2"><a href="#cb8-2"></a><span class="fu">sudo</span> apt-get update</span>
 <span id="cb8-3"><a href="#cb8-3"></a><span class="fu">sudo</span> apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev </span></code></pre></div>
 <p>Adding this PPA is required for installing <code>sf</code> on older versions of Ubuntu (e.g. Xenial).</p>
-<p>Another option, for advanced users, is to install dependencies from source; see e.g. an older <a href="https://github.com/r-spatial/sf/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml">Travis</a> config file for hints.</p>
+<p>Another option, for advanced users, is to install dependencies from source; see e.g. an older <a href="https://github.com/r-spatial/sf/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml" class="external-link">Travis</a> config file for hints.</p>
 </div>
-<div id="fedora" class="section level4">
-<h4 class="hasAnchor">
-<a href="#fedora" class="anchor"></a>Fedora</h4>
+<div class="section level4">
+<h4 id="fedora">Fedora<a class="anchor" aria-label="anchor" href="#fedora"></a>
+</h4>
 <p>The following command installs all required dependencies:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">sudo</span> dnf install gdal-devel proj-devel geos-devel sqlite-devel udunits2-devel</span></code></pre></div>
 </div>
-<div id="arch" class="section level4">
-<h4 class="hasAnchor">
-<a href="#arch" class="anchor"></a>Arch</h4>
+<div class="section level4">
+<h4 id="arch">Arch<a class="anchor" aria-label="anchor" href="#arch"></a>
+</h4>
 <p>Get gdal, proj and geos from the main repos, and udunits from the AUR:</p>
 <pre><code>pacman -S gdal proj geos
 yay/pacaur/yaourt/whatever -S udunits</code></pre>
 </div>
-<div id="other" class="section level4">
-<h4 class="hasAnchor">
-<a href="#other" class="anchor"></a>Other</h4>
-<p>To install on Debian, the <a href="https://github.com/rocker-org/geospatial">rocker geospatial</a> Dockerfiles may be helpful. Ubuntu Dockerfiles are found <a href="https://github.com/r-spatial/sf/tree/master/inst/docker">here</a>.</p>
+<div class="section level4">
+<h4 id="other">Other<a class="anchor" aria-label="anchor" href="#other"></a>
+</h4>
+<p>To install on Debian, the <a href="https://github.com/rocker-org/geospatial" class="external-link">rocker geospatial</a> Dockerfiles may be helpful. Ubuntu Dockerfiles are found <a href="https://github.com/r-spatial/sf/tree/master/inst/docker" class="external-link">here</a>.</p>
 </div>
 </div>
-<div id="multiple-gdal-geos-andor-proj-versions-on-your-system" class="section level3">
-<h3 class="hasAnchor">
-<a href="#multiple-gdal-geos-andor-proj-versions-on-your-system" class="anchor"></a>Multiple GDAL, GEOS and/or PROJ versions on your system</h3>
-<p>If you use dynamic linking (installation from source) and have multiple versions of these libraries installed (e.g. one from ubuntugis-unstable, another installed from source in <code>/usr/local/lib</code>) then this will in general not work, even when setting <code>LD_LIBRARY_PATH</code> manually. See <a href="https://github.com/r-spatial/sf/issues/844">here</a> for the reason why.</p>
+<div class="section level3">
+<h3 id="multiple-gdal-geos-andor-proj-versions-on-your-system">Multiple GDAL, GEOS and/or PROJ versions on your system<a class="anchor" aria-label="anchor" href="#multiple-gdal-geos-andor-proj-versions-on-your-system"></a>
+</h3>
+<p>If you use dynamic linking (installation from source) and have multiple versions of these libraries installed (e.g. one from ubuntugis-unstable, another installed from source in <code>/usr/local/lib</code>) then this will in general not work, even when setting <code>LD_LIBRARY_PATH</code> manually. See <a href="https://github.com/r-spatial/sf/issues/844" class="external-link">here</a> for the reason why.</p>
 </div>
-<div id="lwgeom" class="section level3">
-<h3 class="hasAnchor">
-<a href="#lwgeom" class="anchor"></a>lwgeom</h3>
-<p>Functions and methods that require <code>liblwgeom</code>, including <code>st_make_valid</code> and all spherical or ellipsoidal metrics (area, distances), have since sf 0.5-5 been moved to their own package, <a href="https://github.com/r-spatial/lwgeom">lwgeom</a>, which is also on <a href="https://cran.r-project.org/package=lwgeom">CRAN</a>.</p>
+<div class="section level3">
+<h3 id="lwgeom">lwgeom<a class="anchor" aria-label="anchor" href="#lwgeom"></a>
+</h3>
+<p>Functions and methods that require <code>liblwgeom</code>, including <code>st_make_valid</code> and all spherical or ellipsoidal metrics (area, distances), have since sf 0.5-5 been moved to their own package, <a href="https://github.com/r-spatial/lwgeom" class="external-link">lwgeom</a>, which is also on <a href="https://cran.r-project.org/package=lwgeom" class="external-link">CRAN</a>.</p>
 </div>
 </div>
-<div id="contributing" class="section level2">
-<h2 class="hasAnchor">
-<a href="#contributing" class="anchor"></a>Contributing</h2>
+<div class="section level2">
+<h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
+</h2>
 <ul>
 <li>Contributions of all sorts are most welcome, issues and pull requests are the preferred ways of sharing them.</li>
 <li>When contributing pull requests, please adhere to the package style (in package code use <code>=</code> rather than <code>&lt;-</code>; don’t change indentation; tab stops of 4 spaces are preferred)</li>
 <li>This project is released with a <a href="CONDUCT.html">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</li>
 </ul>
 </div>
-<div id="acknowledgment" class="section level2">
-<h2 class="hasAnchor">
-<a href="#acknowledgment" class="anchor"></a>Acknowledgment</h2>
-<p>This project gratefully acknowledges financial <a href="https://www.r-consortium.org/projects">support</a> from the</p>
-<p><a href="https://www.r-consortium.org/projects/awarded-projects"> <img src="https://www.r-consortium.org/wp-content/uploads/sites/13/2016/09/RConsortium_Horizontal_Pantone.png" width="300"></a> <!--
+<div class="section level2">
+<h2 id="acknowledgment">Acknowledgment<a class="anchor" aria-label="anchor" href="#acknowledgment"></a>
+</h2>
+<p>This project gratefully acknowledges financial <a href="https://www.r-consortium.org/projects" class="external-link">support</a> from the</p>
+<p><a href="https://www.r-consortium.org/projects/awarded-projects" class="external-link"> <img src="https://www.r-consortium.org/wp-content/uploads/sites/13/2016/09/RConsortium_Horizontal_Pantone.png" width="300"></a> <!--
 <img src="http://pebesma.staff.ifgi.de/RConsortium_Horizontal_Pantone.png" width="300">
 --></p>
-</div>
 </div>
 
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=sf">https://​cloud.r-project.org/​package=sf</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/r-spatial/sf/">https://​github.com/​r-spatial/​sf/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/r-spatial/sf/issues/">https://​github.com/​r-spatial/​sf/​issues/​</a>
-</li>
-</ul>
-</div>
-<div class="license">
-<h2>License</h2>
-<ul class="list-unstyled">
-<li>
-<a href="https://www.r-project.org/Licenses/GPL-2">GPL-2</a> | <a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a>
-</li>
-</ul>
-</div>
-<div class="citation">
-<h2>Citation</h2>
-<ul class="list-unstyled">
-<li><a href="authors.html">Citing sf</a></li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>Edzer Pebesma <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-8049-7069" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="https://cloud.r-project.org/package=sf" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/r-spatial/sf/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/r-spatial/sf/issues/" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="license">
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/r-spatial/sf/actions"><img src="https://github.com/r-spatial/sf/workflows/tic/badge.svg?branch=master" alt="tic"></a></li>
-<li><a href="https://github.com/r-spatial/sf/actions"><img src="https://github.com/r-spatial/sf/workflows/tic-db/badge.svg?branch=master" alt="tic-db"></a></li>
-<li><a href="https://codecov.io/github/r-spatial/sf?branch=master"><img src="https://img.shields.io/codecov/c/github/r-spatial/sf/master.svg" alt="Coverage Status"></a></li>
-<li><a href="http://www.gnu.org/licenses/gpl-2.0.html"><img src="http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat" alt="License"></a></li>
-<li><a href="https://cran.r-project.org/package=sf"><img src="http://www.r-pkg.org/badges/version/sf" alt="CRAN"></a></li>
-<li><a href="https://cran.r-project.org/web/checks/check_results_sf.html"><img src="https://cranchecks.info/badges/worst/sf" alt="cran checks"></a></li>
-<li><a href="http://www.r-pkg.org/pkg/sf"><img src="http://cranlogs.r-pkg.org/badges/sf?color=brightgreen" alt="Downloads"></a></li>
-<li><a href="https://CRAN.R-project.org/package=sf"><img src="https://tinyverse.netlify.com/badge/sf" alt="status"></a></li>
+<li>
+<a href="https://www.r-project.org/Licenses/GPL-2" class="external-link">GPL-2</a> | <a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a>
+</li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing sf</a></li>
+</ul>
 </div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>Edzer Pebesma <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-8049-7069" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html">More about authors...</a></li>
+</ul>
+</div>
+
+
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Edzer Pebesma.</p>
+  <p></p>
+<p>Developed by Edzer Pebesma.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.0.</p>
 </div>
 
       </footer>
@@ -320,6 +304,8 @@ yay/pacaur/yaourt/whatever -S udunits</code></pre>
 
   
 
+
+  
 
   </body>
 </html>
