@@ -251,7 +251,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">nc</span> <span class="op">=</span> <span class="fu">st_read</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmprgpseD/temp_libpath4ac0d8eb315/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpSuSzvD/temp_libpath49f8782c8125/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
@@ -292,7 +292,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
 <span class="r-in"><span class="co">## only two features by where clause</span></span>
 <span class="r-in"><span class="va">nc_sql</span> <span class="op">=</span> <span class="fu">st_read</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>,</span>
 <span class="r-in">                     query <span class="op">=</span> <span class="st">"SELECT NAME, SID74, FIPS FROM \"nc\" WHERE BIR74 &gt; 20000"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Reading query `SELECT NAME, SID74, FIPS FROM "nc" WHERE BIR74 &gt; 20000' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmprgpseD/temp_libpath4ac0d8eb315/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Reading query `SELECT NAME, SID74, FIPS FROM "nc" WHERE BIR74 &gt; 20000' from data source `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpSuSzvD/temp_libpath49f8782c8125/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 2 features and 3 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
