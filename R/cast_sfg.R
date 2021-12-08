@@ -139,7 +139,11 @@ st_cast.MULTIPOINT <- function(x, to, ...) {
 #' st_sfc(cast_all(pl))
 st_cast.POLYGON <- function(x, to, ...) {
   switch(to, 
-         MULTIPOLYGON = st_multipolygon(list(lapply(Paste0(x), ClosePol))),
+         MULTIPOLYGON = {
+			 if (length(x))
+				x = list(lapply(Paste0(x), ClosePol))
+			 st_multipolygon(x)
+		 },
          MULTILINESTRING = st_multilinestring(unclass(x)), 
          MULTIPOINT = st_multipoint(Tail1(unclass(x))[[1L]]), 
          POLYGON = x, 
