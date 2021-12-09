@@ -160,7 +160,7 @@ st_bbox.Spatial = function(obj, ...) {
 		stop("package sp required, please install it first")
 	bb = sp::bbox(obj)
 	structure(bb_wrap(c(bb[1,1],bb[2,1],bb[1,2],bb[2,2])),
-		crs = st_crs(sp::proj4string(obj)))
+		crs = st_crs(slot(obj, "proj4string"))
 }
 
 #' @name st_bbox
