@@ -402,7 +402,7 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 		append = NA, delete_dsn = FALSE, delete_layer = !is.na(append) && !append,
 		fid_column_name = NULL, config_options = character(0)) {
 
-	ret = obj
+	return_obj = ret = obj
 	if (!is.null(list(...)$update)) {
 		.Deprecated("append", old = "update") # deprecated at 0.9-0
 		if (is.na(append))
@@ -438,7 +438,7 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 		dbWriteTable(dsn, name = layer, value = obj,
 					 append = append, overwrite = delete_layer,
 					 factorsAsCharacter = factorsAsCharacter, ...)
-		return(invisible(obj))
+		return(invisible(return_obj))
 	} else if (!inherits(dsn, "character")) { # add methods for other dsn classes here...
 		stop(paste("no st_write method available for dsn of class", class(dsn)[1]))
 	}
@@ -509,7 +509,7 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 		if (!file.remove(tmp))
 			warning(paste("removing", tmp, "failed"))
 	} # nocov end
-	invisible(ret)
+	invisible(return_obj)
 }
 
 #' @name st_write
