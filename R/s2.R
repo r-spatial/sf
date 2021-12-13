@@ -6,16 +6,17 @@
 #' @param ... passed on
 #' @param use_s2 logical; if \code{TRUE}, use the s2 spherical geometry package
 #' for geographical coordinate operations
+#' @param quiet logical; suppress message if \code{TRUE}
 #' @name s2
 #' @return \code{sf_use_s2} returns the value of this variable before (re)setting it,
 #' invisibly if \code{use_s2} is not missing.
-sf_use_s2 = function(use_s2) {
+sf_use_s2 = function(use_s2, quiet = FALSE) {
 	ret_val = get(".sf.use_s2", envir = .sf_cache)
 	if (! missing(use_s2)) {
 		stopifnot(is.logical(use_s2), length(use_s2)==1, !is.na(use_s2))
 		if (use_s2 && !requireNamespace("s2", quietly = TRUE))
 			stop("package s2 not available: install it first?")
-		if (ret_val != use_s2)
+		if (ret_val != use_s2 & !quiet)
 			cat(paste0("Spherical geometry (s2) switched ", ifelse(use_s2, "on", "off"), "\n"))
 		assign(".sf.use_s2", use_s2, envir = .sf_cache)
 		invisible(ret_val)

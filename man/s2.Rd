@@ -8,7 +8,7 @@
 \alias{st_as_s2.sfc}
 \title{functions for spherical geometry, using s2 package}
 \usage{
-sf_use_s2(use_s2)
+sf_use_s2(use_s2, quiet = FALSE)
 
 st_as_s2(x, ...)
 
@@ -19,6 +19,8 @@ st_as_s2(x, ...)
 \arguments{
 \item{use_s2}{logical; if \code{TRUE}, use the s2 spherical geometry package
 for geographical coordinate operations}
+
+\item{quiet}{logical; suppress message if \code{TRUE}}
 
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
