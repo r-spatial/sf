@@ -47,7 +47,8 @@ pathGrob <- NULL
 
 .onAttach = function(libname, pkgname) {
 	m = paste0("Linking to GEOS ", strsplit(CPL_geos_version(TRUE), "-")[[1]][1],
-		", GDAL ", CPL_gdal_version(), ", PROJ ", CPL_proj_version())
+		", GDAL ", CPL_gdal_version(), ", PROJ ", CPL_proj_version(),
+		"; sf_use_s2() is ", sf_use_s2())
 	packageStartupMessage(m)
 	if (length(grep(CPL_geos_version(FALSE, TRUE), CPL_geos_version(TRUE))) != 1) { # nocov start
 		packageStartupMessage("WARNING: different compile-time and runtime versions for GEOS found:")
@@ -56,8 +57,6 @@ pathGrob <- NULL
 			"compiled against:", CPL_geos_version(FALSE, TRUE)))
 		packageStartupMessage("It is probably a good idea to reinstall sf, and maybe rgeos and rgdal too")
 	} # nocov end
-	if (! get(".sf.use_s2", envir = .sf_cache))
-		packageStartupMessage("Spherical geometry (s2) switched off")
 }
 
 #' Provide the external dependencies versions of the libraries linked to sf

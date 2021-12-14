@@ -1,5 +1,9 @@
 # version 1.0-5
 
+* package startup message reports status of `sf_use_s2()`; #1782
+
+* `sf_use_s2()` uses `message()` to report a change; #1782
+
 * `st_sample()` using regular sampling for ellipsoidal coordinates "works" as if coordinates were Cartesian; #1837
 
 # version 1.0-4
