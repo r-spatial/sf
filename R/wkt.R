@@ -75,9 +75,9 @@ prnt.GEOMETRYCOLLECTION = function(x, ..., EWKT = TRUE) {
 #' @param ... modifiers; in particular \code{digits} can be passed to control the number of digits used
 #' @name st_as_text
 #' @details The returned WKT representation of simple feature geometry conforms to the
-#' \href{https://www.ogc.org/standards/sfa}{simple features access} specification and extensions,
-#' \href{https://postgis.net/docs/using_postgis_dbmanagement.html#EWKB_EWKT}{known as EWKT}, supported by
-#' PostGIS and other simple features implementations for addition of SRID to a WKT string.
+#' \href{https://www.ogc.org/standards/sfa}{simple features access} specification and extensions
+#' (known as EWKT, supported by PostGIS and other simple features implementations for addition of 
+#' a SRID to a WKT string).
 #'
 #' @export
 st_as_text = function(x, ...) UseMethod("st_as_text")
