@@ -133,8 +133,7 @@ st_as_text.sfc = function(x, ..., EWKT = FALSE) {
 #' @md
 #' @details If `x` is a character vector, it should be a vector containing
 #' [well-known-text](https://www.ogc.org/standards/wkt-crs), or
-#' [Postgis EWKT](http://postgis.refractions.net/docs/using_postgis_dbmanagement.html#EWKB_EWKT) or
-#' GeoJSON representations of a single geometry for each vector element.
+#' Postgis EWKT or GeoJSON representations of a single geometry for each vector element.
 #' @param crs integer or character; coordinate reference system for the
 #' @param GeoJSON logical; if \code{TRUE}, try to read geometries from GeoJSON text strings
 #' geometry, see [st_crs()]
