@@ -1,5 +1,5 @@
 
-R version 4.1.1 (2021-08-10) -- "Kick Things"
+R version 4.1.2 (2021-11-01) -- "Bird Hippie"
 Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -85,15 +85,15 @@ plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all
 Simple feature collection with 4 features and 2 fields
 Geometry type: MULTIPOLYGON
 Dimension:     XY
-Bounding box:  xmin: -9386880 ymin: 4012991 xmax: -8399788 ymax: 4382079
+Bounding box:  xmin: -9386879 ymin: 4012985 xmax: -8399792 ymax: 4382074
 Projected CRS: WGS 84 / Pseudo-Mercator
 # A tibble: 4 × 3
   area_cl     `mean(AREA)`                                              geometry
   <fct>              <dbl>                                    <MULTIPOLYGON [m]>
-1 (0,0.1]           0.0760 (((-9349959 4195534, -9351260 4199567, -9354263 4203…
-2 (0.1,0.12]        0.112  (((-9355589 4200996, -9354263 4203717, -9351260 4199…
-3 (0.12,0.15]       0.134  (((-9302071 4171499, -9311146 4181234, -9311292 4183…
-4 (0.15,0.25]       0.190  (((-9173717 4227806, -9181049 4224455, -9186013 4224…
+1 (0,0.1]           0.0760 (((-8863447 4143472, -8857175 4151333, -8858837 4156…
+2 (0.1,0.12]        0.112  (((-9362142 4197316, -9355589 4201000, -9354262 4203…
+3 (0.12,0.15]       0.134  (((-9302072 4171501, -9311147 4181236, -9311293 4183…
+4 (0.15,0.25]       0.190  (((-8830723 4133011, -8832558 4137948, -8832096 4141…
 > nc.g %>% summarize(mean(AREA)) %>% plot(col = 3:6/7)
 > 
 > library(tidyr)
@@ -117,47 +117,47 @@ Projected CRS: WGS 84 / Pseudo-Mercator
 Simple feature collection with 6 features and 3 fields
 Geometry type: MULTIPOLYGON
 Dimension:     XY
-Bounding box:  xmin: -8802506 ymin: 4012991 xmax: -8492268 ymax: 4166167
+Bounding box:  xmin: -8802506 ymin: 4012985 xmax: -8492272 ymax: 4166159
 Projected CRS: WGS 84 / Pseudo-Mercator
 # A tibble: 6 × 4
     row                                                     geometry VAR     SID
   <int>                                           <MULTIPOLYGON [m]> <chr> <dbl>
-1    95 (((-8588146 4131923, -8589850 4133303, -8589356 4135198, -8… SID79     4
-2    96 (((-8711999 4081959, -8719511 4077863, -8731642 4078864, -8… SID79     5
-3    97 (((-8685774 4073056, -8697387 4077823, -8700120 4077570, -8… SID79     3
-4    98 (((-8755885 4021935, -8802506 4069795, -8798771 4071779, -8… SID79    17
-5    99 (((-8678517 4054264, -8679088 4061405, -8680136 4061550, -8… SID79     9
-6   100 (((-8755885 4021935, -8753548 4025868, -8753052 4030195, -8… SID79     6
+1    95 (((-8588149 4131915, -8589852 4133296, -8589358 4135190, -8… SID79     4
+2    96 (((-8712000 4081952, -8719512 4077857, -8731642 4078857, -8… SID79     5
+3    97 (((-8685776 4073050, -8697388 4077816, -8700121 4077563, -8… SID79     3
+4    98 (((-8755886 4021930, -8802506 4069789, -8798771 4071773, -8… SID79    17
+5    99 (((-8678518 4054258, -8679090 4061398, -8680138 4061543, -8… SID79     9
+6   100 (((-8755886 4021930, -8753548 4025863, -8753053 4030189, -8… SID79     6
 > nc.g %>% spread(VAR, SID) %>% head()
 Simple feature collection with 6 features and 3 fields
 Geometry type: MULTIPOLYGON
 Dimension:     XY
-Bounding box:  xmin: -9099356 ymin: 4310668 xmax: -8434988 ymax: 4382079
+Bounding box:  xmin: -9099356 ymin: 4310656 xmax: -8434990 ymax: 4382074
 Projected CRS: WGS 84 / Pseudo-Mercator
 # A tibble: 6 × 4
     row                                                     geometry SID74 SID79
   <int>                                           <MULTIPOLYGON [m]> <dbl> <dbl>
-1     1 (((-9069486 4332934, -9077066 4338201, -9079419 4338351, -9…     1     0
-2     2 (((-9043562 4351030, -9043652 4352973, -9046117 4356516, -9…     0     3
-3     3 (((-8956335 4334068, -8958566 4335747, -8965300 4336025, -8…     5     6
-4     4 (((-8461241 4344709, -8462173 4347214, -8463902 4346972, -8…     1     2
-5     5 (((-8595797 4333852, -8597683 4330212, -8604808 4329788, -8…     9     3
-6     6 (((-8543185 4332878, -8569416 4332369, -8570981 4333107, -8…     7     5
+1     1 (((-9069486 4332928, -9077065 4338195, -9079419 4338345, -9…     1     0
+2     2 (((-9043563 4351024, -9043652 4352966, -9046118 4356510, -9…     0     3
+3     3 (((-8956336 4334060, -8958567 4335740, -8965302 4336017, -8…     5     6
+4     4 (((-8461242 4344697, -8462174 4347203, -8463903 4346960, -8…     1     2
+5     5 (((-8595797 4333842, -8597684 4330201, -8604809 4329777, -8…     9     3
+6     6 (((-8543186 4332866, -8569416 4332359, -8570982 4333096, -8…     7     5
 > nc %>% select(SID74, SID79, geometry, row) %>% gather("VAR", "SID", -geometry, -row) %>% spread(VAR, SID) %>% head()
 Simple feature collection with 6 features and 3 fields
 Geometry type: MULTIPOLYGON
 Dimension:     XY
-Bounding box:  xmin: -9099356 ymin: 4310668 xmax: -8434988 ymax: 4382079
+Bounding box:  xmin: -9099356 ymin: 4310656 xmax: -8434990 ymax: 4382074
 Projected CRS: WGS 84 / Pseudo-Mercator
 # A tibble: 6 × 4
                                                       geometry   row SID74 SID79
                                             <MULTIPOLYGON [m]> <int> <dbl> <dbl>
-1 (((-9069486 4332934, -9077066 4338201, -9079419 4338351, -9…     1     1     0
-2 (((-9043562 4351030, -9043652 4352973, -9046117 4356516, -9…     2     0     3
-3 (((-8956335 4334068, -8958566 4335747, -8965300 4336025, -8…     3     5     6
-4 (((-8461241 4344709, -8462173 4347214, -8463902 4346972, -8…     4     1     2
-5 (((-8595797 4333852, -8597683 4330212, -8604808 4329788, -8…     5     9     3
-6 (((-8543185 4332878, -8569416 4332369, -8570981 4333107, -8…     6     7     5
+1 (((-9069486 4332928, -9077065 4338195, -9079419 4338345, -9…     1     1     0
+2 (((-9043563 4351024, -9043652 4352966, -9046118 4356510, -9…     2     0     3
+3 (((-8956336 4334060, -8958567 4335740, -8965302 4336017, -8…     3     5     6
+4 (((-8461242 4344697, -8462174 4347203, -8463903 4346960, -8…     4     1     2
+5 (((-8595797 4333842, -8597684 4330201, -8604809 4329777, -8…     5     9     3
+6 (((-8543186 4332866, -8569416 4332359, -8570982 4333096, -8…     6     7     5
 > 
 > # test st_set_crs in pipe:
 > sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
@@ -191,44 +191,44 @@ POINT (111319.5 111325.1)
 Simple feature collection with 1 feature and 1 field
 Geometry type: MULTIPOLYGON
 Dimension:     XY
-Bounding box:  xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
+Bounding box:  xmin: 123829.8 ymin: 14740.06 xmax: 930518.6 ymax: 318255.5
 Projected CRS: NAD83 / North Carolina
 # A tibble: 1 × 2
   `mean(dens)`                                                          geometry
   [person/m^2]                                                <MULTIPOLYGON [m]>
-1   0.00000259 (((446521.1 133561, 441668.6 140459.3, 436812.5 146953.9, 433885…
+1   0.00000259 (((138426.9 177702.5, 145549.4 177840.1, 151052 180560.3, 152246…
 > out %>% summarise(mean(new_dens))
 Simple feature collection with 1 feature and 1 field
 Geometry type: MULTIPOLYGON
 Dimension:     XY
-Bounding box:  xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
+Bounding box:  xmin: 123829.8 ymin: 14740.06 xmax: 930518.6 ymax: 318255.5
 Projected CRS: NAD83 / North Carolina
 # A tibble: 1 × 2
   `mean(new_dens)`                                                      geometry
       [person/m^2]                                            <MULTIPOLYGON [m]>
-1       0.00000259 (((154399.2 148898.9, 142569.6 149407.8, 123829 150481.4, 12…
+1       0.00000259 (((154399.6 148902.2, 142570.2 149411.2, 123829.8 150485.1, …
 > 
 > # total densities don't:
 > nc.merc %>% summarise(sum(area * dens))
 Simple feature collection with 1 feature and 1 field
 Geometry type: MULTIPOLYGON
 Dimension:     XY
-Bounding box:  xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
+Bounding box:  xmin: 123829.8 ymin: 14740.06 xmax: 930518.6 ymax: 318255.5
 Projected CRS: NAD83 / North Carolina
 # A tibble: 1 × 2
   `sum(area * dens)`                                                    geometry
             [person]                                          <MULTIPOLYGON [m]>
-1             329962 (((446521.1 133561, 441668.6 140459.3, 436812.5 146953.9, …
+1             329962 (((138426.9 177702.5, 145549.4 177840.1, 151052 180560.3, …
 > out %>% summarise(sum(A * new_dens))
 Simple feature collection with 1 feature and 1 field
 Geometry type: MULTIPOLYGON
 Dimension:     XY
-Bounding box:  xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
+Bounding box:  xmin: 123829.8 ymin: 14740.06 xmax: 930518.6 ymax: 318255.5
 Projected CRS: NAD83 / North Carolina
 # A tibble: 1 × 2
   `sum(A * new_dens)`                                                   geometry
              [person]                                         <MULTIPOLYGON [m]>
-1              329962 (((154399.2 148898.9, 142569.6 149407.8, 123829 150481.4,…
+1              329962 (((154399.6 148902.2, 142570.2 149411.2, 123829.8 150485.…
 > 
 > conn = system.file("gpkg/nc.gpkg", package = "sf")
 > 
@@ -284,4 +284,4 @@ First 10 features:
 > 
 > proc.time()
    user  system elapsed 
-  2.660   0.056   2.743 
+  2.253   0.070   2.322 

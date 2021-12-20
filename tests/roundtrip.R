@@ -52,7 +52,7 @@ summary(st_as_sf(as(meuse.riv, "SpatialLines")))
 summary(st_as_sf(pol.grd))
 summary(st_as_sf(as(pol.grd, "SpatialLinesDataFrame")))
 
-nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg")
+nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", quiet=TRUE)
 all.equal(nc, st_as_sf(as(nc, "Spatial")))
 st_crs(nc) == st_crs(st_as_sf(as(nc, "Spatial")))
 

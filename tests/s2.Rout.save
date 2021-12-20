@@ -1,5 +1,5 @@
 
-R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
+R version 4.1.2 (2021-11-01) -- "Bird Hippie"
 Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -16,7 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library(sf)
-Linking to GEOS 3.9.0, GDAL 3.2.1, PROJ 7.2.1
+Linking to GEOS 3.10.1, GDAL 3.4.0, PROJ 8.2.0; sf_use_s2() is TRUE
 > d = data.frame(z = 1:100, x = runif(100), y = runif(100))
 > n0 = st_as_sf(d, coords = c("x", "y"), crs = 4326)
 > n1 = st_transform(n0, 3857)
@@ -43,7 +43,6 @@ Linking to GEOS 3.9.0, GDAL 3.2.1, PROJ 7.2.1
 +   nf2 = st_nearest_feature(n1[1:50,], n1[51:100,])
 +   print(all.equal(nf1, nf2))
 + }
-[1] TRUE
 > 
 > set.seed(131)
 > n = 1000
@@ -66,4 +65,4 @@ Linking to GEOS 3.9.0, GDAL 3.2.1, PROJ 7.2.1
 > 
 > proc.time()
    user  system elapsed 
-  1.368   0.044   1.403 
+  1.069   0.042   1.105 

@@ -1,5 +1,5 @@
 
-R version 4.0.4 (2021-02-15) -- "Lost Library Book"
+R version 4.1.2 (2021-11-01) -- "Bird Hippie"
 Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -16,7 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > library(sf)
-Linking to GEOS 3.9.0, GDAL 3.2.1, PROJ 7.2.1
+Linking to GEOS 3.10.1, GDAL 3.4.0, PROJ 8.2.0; sf_use_s2() is TRUE
 > # aggregate
 > pl1 = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,0))))
 > pl2 = st_polygon(list(rbind(c(0,0),c(1,1),c(0,1),c(0,0))))
@@ -38,7 +38,7 @@ Dimension:     XY
 Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1
 CRS:           NA
   Group.1   a                       geometry
-1       1 1.5 POLYGON ((0 1, 1 1, 1 0, 0 ...
+1       1 1.5 POLYGON ((1 0, 0 0, 0 1, 1 ...
 > # expect_warning(st_cast(a, "POINT"))
 > demo(meuse_sf, echo = FALSE, ask = FALSE)
 > a = aggregate(meuse_sf, list(meuse_sf$soil), mean)
@@ -110,4 +110,4 @@ CRS:           NA
 > 
 > proc.time()
    user  system elapsed 
-  1.475   0.111   1.591 
+  0.568   0.041   0.603 

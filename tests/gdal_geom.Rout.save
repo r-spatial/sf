@@ -1,5 +1,5 @@
 
-R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
+R version 4.1.2 (2021-11-01) -- "Bird Hippie"
 Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -253,11 +253,11 @@ POINT Z (6378137 0 0)
 > 
 > cbind(st_area(nc_tr[1:5,]), a$AREA)
            [,1]  [,2]
-[1,] 1760244967 0.114
-[2,]  946435667 0.061
-[3,] 2202248253 0.143
-[4,] 1074351919 0.070
-[5,] 2352539533 0.153
+[1,] 1760230516 0.114
+[2,]  946417787 0.061
+[3,] 2202223078 0.143
+[4,] 1074332698 0.070
+[5,] 2352528086 0.153
 > 
 > st_area(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)))))
 [1] 1
@@ -331,4 +331,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-  1.512   0.046   1.547 
+  0.975   0.046   1.016 

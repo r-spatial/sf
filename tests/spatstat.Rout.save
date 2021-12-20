@@ -1,5 +1,5 @@
 
-R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
+R version 4.1.2 (2021-11-01) -- "Bird Hippie"
 Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -89,20 +89,20 @@ First 10 features:
 Simple feature collection with 51 features and 1 field
 Geometry type: GEOMETRY
 Dimension:     XY
-Bounding box:  xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
+Bounding box:  xmin: 123829.8 ymin: 14740.06 xmax: 930518.6 ymax: 318255.5
 CRS:           NA
 First 10 features:
     label                           geom
-1  window MULTIPOLYGON (((886136 3141...
-2   point      POINT (339121.3 257815.9)
-3   point      POINT (827443.1 246572.7)
-4   point          POINT (451340 207948)
-5   point      POINT (268749.6 203327.8)
-6   point      POINT (516677.7 198560.6)
-7   point        POINT (692368 238647.5)
-8   point        POINT (843281.2 287246)
-9   point        POINT (648479.4 235471)
-10  point      POINT (852595.8 267252.6)
+1  window MULTIPOLYGON (((886135.8 31...
+2   point      POINT (339121.1 257811.6)
+3   point      POINT (827440.4 246568.3)
+4   point      POINT (451339.2 207943.6)
+5   point      POINT (268749.7 203323.4)
+6   point      POINT (516676.5 198556.1)
+7   point        POINT (692366 238643.1)
+8   point      POINT (843278.5 287241.6)
+9   point      POINT (648477.7 235466.6)
+10  point        POINT (852593 267248.3)
 > 
 > # st_sample going the spatstat way
 > x <- sf::st_sfc(sf::st_polygon(list(rbind(c(0, 0), c(10, 0), c(10, 10), c(0, 0)))))
@@ -208,14 +208,7 @@ window: polygonal boundary
 enclosing rectangle: [-1, 1] x [1, 2] units
 > 
 > # as.owin.sf, as.owin.sfc_*
-> nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), check_ring_dir = TRUE)
-Reading layer `nc.gpkg' from data source 
-  `/home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg' using driver `GPKG'
-Simple feature collection with 100 features and 14 fields
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-Geodetic CRS:  NAD27
+> nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), check_ring_dir = TRUE, quiet=TRUE)
 > try(as.owin(nc)) # should be projected
 Error in as.owin.sfc_MULTIPOLYGON(st_cast(W, "MULTIPOLYGON"), ...) : 
   Only projected coordinates may be converted to spatstat class objects
@@ -302,4 +295,4 @@ LINESTRING (1 1, 2 0)
 > 
 > proc.time()
    user  system elapsed 
-  2.286   0.088   2.366 
+  1.884   0.099   1.982 

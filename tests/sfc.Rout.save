@@ -1,5 +1,5 @@
 
-R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
+R version 4.1.2 (2021-11-01) -- "Bird Hippie"
 Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -346,8 +346,8 @@ use `st_zm(...)` to coerce to XY dimensions
 > y = st_transform(x, 3857)
 > 
 > sf_extSoftVersion()[1:3]
-   GEOS    GDAL  proj.4 
-"3.9.0" "3.2.1" "7.2.1" 
+    GEOS     GDAL   proj.4 
+"3.10.1"  "3.4.0"  "8.2.0" 
 > 
 > # Ops.sfc:
 > ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))))
@@ -652,13 +652,7 @@ CRS:           NA
 2.1   2  13 POINT (2 2)
 3     3  14 POINT (3 3)
 > # st_join, largest = TRUE:
-> nc <- st_transform(st_read(system.file("shape/nc.shp", package="sf")), 2264)
-Reading layer `nc' from data source `/home/edzer/git/sf.Rcheck/sf/shape/nc.shp' using driver `ESRI Shapefile'
-Simple feature collection with 100 features and 14 fields
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-Geodetic CRS:  NAD27
+> nc <- st_transform(st_read(system.file("shape/nc.shp", package="sf"), quiet=TRUE), 2264)
 > gr = st_sf(
 +     label = apply(expand.grid(1:10, LETTERS[10:1])[,2:1], 1, paste0, collapse = " "),
 + 	geom = st_make_grid(st_as_sfc(st_bbox(nc))))
@@ -669,7 +663,7 @@ Geodetic CRS:  NAD27
 Simple feature collection with 100 features and 16 fields
 Geometry type: MULTIPOLYGON
 Dimension:     XY
-Bounding box:  xmin: 406262.2 ymin: 48374.87 xmax: 3052887 ymax: 1044158
+Bounding box:  xmin: 406265 ymin: 48359.7 xmax: 3052877 ymax: 1044143
 Projected CRS: NAD83 / North Carolina (ftUS)
 First 10 features:
     AREA PERIMETER CNTY_ CNTY_ID        NAME  FIPS FIPSNO CRESS_ID BIR74 SID74
@@ -684,16 +678,16 @@ First 10 features:
 9  0.118     1.421  1836    1836      Warren 37185  37185       93   968     4
 10 0.124     1.428  1837    1837      Stokes 37169  37169       85  1612     1
    NWBIR74 BIR79 SID79 NWBIR79 label       col                       geometry
-1       10  1364     0      19  A  4 #fb80724d MULTIPOLYGON (((1270814 913...
-2       10   542     3      12  A  4 #fb80724d MULTIPOLYGON (((1340555 959...
-3      208  3616     6     260  A  5 #80b1d34d MULTIPOLYGON (((1570591 910...
-4      123   830     2     145  A 10 #bc80bd4d MULTIPOLYGON (((2881208 948...
-5     1066  1606     3    1197  A  8 #fccde54d MULTIPOLYGON (((2525701 911...
-6      954  1838     5    1237  A  9 #d9d9d94d MULTIPOLYGON (((2665113 911...
-7      115   350     2     139  A 10 #bc80bd4d MULTIPOLYGON (((2881208 948...
-8      254   594     2     371  A  9 #d9d9d94d MULTIPOLYGON (((2717989 951...
-9      748  1190     2     844  A  8 #fccde54d MULTIPOLYGON (((2203890 914...
-10     160  2038     5     176  A  5 #80b1d34d MULTIPOLYGON (((1697624 911...
+1       10  1364     0      19  A  4 #fb80724d MULTIPOLYGON (((1270813 913...
+2       10   542     3      12  A  4 #fb80724d MULTIPOLYGON (((1340553 959...
+3      208  3616     6     260  A  5 #80b1d34d MULTIPOLYGON (((1570586 910...
+4      123   830     2     145  A 10 #bc80bd4d MULTIPOLYGON (((2881206 948...
+5     1066  1606     3    1197  A  8 #fccde54d MULTIPOLYGON (((2525700 911...
+6      954  1838     5    1237  A  9 #d9d9d94d MULTIPOLYGON (((2665112 911...
+7      115   350     2     139  A 10 #bc80bd4d MULTIPOLYGON (((2881206 948...
+8      254   594     2     371  A  9 #d9d9d94d MULTIPOLYGON (((2717988 951...
+9      748  1190     2     844  A  8 #fccde54d MULTIPOLYGON (((2203888 914...
+10     160  2038     5     176  A  5 #80b1d34d MULTIPOLYGON (((1697618 911...
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
@@ -777,14 +771,14 @@ MULTIPOINT EMPTY
 Geometry set for 30 features 
 Geometry type: POINT
 Dimension:     XY
-Bounding box:  xmin: 1216510 ymin: 935867 xmax: 1428880 ymax: 1031510
+Bounding box:  xmin: 1216510 ymin: 935852 xmax: 1428880 ymax: 1031490
 Projected CRS: NAD83 / North Carolina (ftUS)
 First 5 geometries:
-POINT (1264558 935867)
-POINT (1256623 949384)
-POINT (1222665 972639)
-POINT (1333530 968278)
-POINT (1310838 958645)
+POINT (1264558 935852)
+POINT (1256623 949369)
+POINT (1222665 972624)
+POINT (1333528 968263)
+POINT (1310837 958630)
 > # try with LINES, LongLat, should generate a warning:
 > nc[1:2,] %>% st_transform(4326) %>% st_cast("MULTILINESTRING") %>% st_sample(size = c(10,20))
 although coordinates are longitude/latitude, st_sample assumes that they are planar
@@ -792,10 +786,10 @@ although coordinates are longitude/latitude, st_sample assumes that they are pla
 Geometry set for 2 features 
 Geometry type: MULTIPOINT
 Dimension:     XY
-Bounding box:  xmin: -81.6893 ymin: 36.2492 xmax: -80.914 ymax: 36.5726
+Bounding box:  xmin: -81.6893 ymin: 36.2491 xmax: -80.914 ymax: 36.5726
 Geodetic CRS:  WGS 84
 MULTIPOINT ((-81.2401 36.3717), (-81.6893 36.36...
-MULTIPOINT ((-81.2629 36.4076), (-81.1374 36.56...
+MULTIPOINT ((-81.2629 36.4076), (-81.1375 36.56...
 > st_sample(ls, 80, type = "regular")
 Geometry set for 4 features  (with 1 geometry empty)
 Geometry type: MULTIPOINT
@@ -1033,14 +1027,14 @@ Geometry type: POLYGON
 Dimension:     XY
 Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1
 CRS:           NA
-POLYGON ((0 0.915082, 0.0169559 0.934935, 0.040...
+POLYGON ((0.983044 0.0650651, 0.959619 0.040380...
 > st_crop(pol, st_bbox(box))
 Geometry set for 1 feature 
 Geometry type: POLYGON
 Dimension:     XY
 Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1
 CRS:           NA
-POLYGON ((0 0.915082, 0.0169559 0.934935, 0.040...
+POLYGON ((0.983044 0.0650651, 0.959619 0.040380...
 > st_crop(pol_sf, box)
 Simple feature collection with 1 feature and 1 field
 Geometry type: POLYGON
@@ -1048,7 +1042,7 @@ Dimension:     XY
 Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1
 CRS:           NA
   a                           geom
-1 1 POLYGON ((0 0.915082, 0.016...
+1 1 POLYGON ((0.983044 0.065065...
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > st_crop(pol_sf, st_bbox(box))
@@ -1058,7 +1052,7 @@ Dimension:     XY
 Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1
 CRS:           NA
   a                           geom
-1 1 POLYGON ((0 0.915082, 0.016...
+1 1 POLYGON ((0.983044 0.065065...
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
@@ -1133,4 +1127,4 @@ CRS:           NA
 > 
 > proc.time()
    user  system elapsed 
-  5.121   0.097   5.210 
+  6.660   0.127   6.800 
