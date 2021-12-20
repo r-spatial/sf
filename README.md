@@ -8,6 +8,7 @@
 [![Downloads](http://cranlogs.r-pkg.org/badges/sf?color=brightgreen)](http://www.r-pkg.org/pkg/sf)
 [![status](https://tinyverse.netlify.com/badge/sf)](https://CRAN.R-project.org/package=sf)
 <!-- badges: end -->
+
 # Simple Features for R
 
 <a href="https://gist.github.com/edzer/f461a3a95570c4ab7edf3125c2f19d20"><img align="right" src="https://user-images.githubusercontent.com/520851/34887433-ce1d130e-f7c6-11e7-83fc-d60ad4fae6bd.gif" /></a>

@@ -101,8 +101,7 @@ When converting from WKB, the object \code{x} is either a character vector such 
 
 If \code{x} is a character vector, it should be a vector containing
 \href{https://www.ogc.org/standards/wkt-crs}{well-known-text}, or
-\href{http://postgis.refractions.net/docs/using_postgis_dbmanagement.html#EWKB_EWKT}{Postgis EWKT} or
-GeoJSON representations of a single geometry for each vector element.
+Postgis EWKT or GeoJSON representations of a single geometry for each vector element.
 
 If \code{x} is a \code{factor}, it is converted to \code{character}.
 }
