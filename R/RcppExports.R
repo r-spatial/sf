@@ -357,6 +357,10 @@ CPL_extract <- function(input, xy, interpolate = FALSE) {
     .Call('_sf_CPL_extract', PACKAGE = 'sf', input, xy, interpolate)
 }
 
+CPL_create <- function(file, nxy, value, wkt, xlim, ylim) {
+    invisible(.Call('_sf_CPL_create', PACKAGE = 'sf', file, nxy, value, wkt, xlim, ylim))
+}
+
 CPL_read_wkb <- function(wkb_list, EWKB = FALSE, spatialite = FALSE) {
     .Call('_sf_CPL_read_wkb', PACKAGE = 'sf', wkb_list, EWKB, spatialite)
 }

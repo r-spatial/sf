@@ -13,6 +13,7 @@
 \alias{gdal_extract}
 \alias{gdal_read_mdim}
 \alias{gdal_write_mdim}
+\alias{gdal_create}
 \title{functions to interact with gdal not meant to be called directly by users (but e.g. by stars::read_stars)}
 \usage{
 gdal_read(
@@ -71,6 +72,8 @@ gdal_extract(f, pts, bilinear = FALSE)
 gdal_read_mdim(file, array_name = character(0), options = character(0))
 
 gdal_write_mdim(x, file, dimension_values, units)
+
+gdal_create(f, nxy, values, crs, xlim, ylim)
 }
 \arguments{
 \item{x}{character vector, possibly of length larger than 1 when more than one raster is read}
@@ -117,7 +120,7 @@ gdal_write_mdim(x, file, dimension_values, units)
 
 \item{sf}{object of class \code{sf}}
 
-\item{f}{gdal raster data source filename}
+\item{f}{character; file name}
 
 \item{pts}{points matrix}
 
@@ -128,6 +131,16 @@ gdal_write_mdim(x, file, dimension_values, units)
 \item{dimension_values}{list with dimension values}
 
 \item{units}{character; units names (udunits conform) corresponding to dimension_values}
+
+\item{nxy}{integer vector of length 2}
+
+\item{values}{fill value}
+
+\item{crs}{object of class \code{crs}}
+
+\item{xlim}{numeric}
+
+\item{ylim}{numeric}
 }
 \value{
 object of class \code{crs}, see \link{st_crs}.

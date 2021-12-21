@@ -749,3 +749,39 @@ NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy, bool interpol
 	GDALClose(poDataset);
 	return ret;
 }
+
+// [[Rcpp::export]]
+void CPL_create(CharacterVector file, IntegerVector nxy, NumericVector value, CharacterVector wkt, 
+				NumericVector xlim, NumericVector ylim) {
+//
+// modified from gdal/apps/gdal_create.cpp:
+//
+	int nPixels = nxy[0], nLines = nxy[1];
+	GDALDatasetH hDS = GDALCreate(GDALGetDriverByName("GTiff"),
+                                   file[0], nPixels, nLines,
+                                   1, GDT_Byte, NULL);
+	OGRSpatialReference oSRS;
+	oSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+	if (oSRS.SetFromUserInput( wkt[0] ) != OGRERR_NONE) {
+		CPLError(CE_Failure, CPLE_AppDefined, "Failed to process SRS definition");
+		stop("CPL_create failed");
+	}
+	char* pszSRS = nullptr;
+	oSRS.exportToWkt( &pszSRS );
+	if( GDALSetProjection(hDS, pszSRS) != CE_None ) {
+		CPLFree(pszSRS);
+		GDALClose(hDS);
+		stop("CPL_create failed");
+	}
+	double adfGeoTransform[6];
+	adfGeoTransform[0] = xlim[0];
+	adfGeoTransform[1] = (xlim[1] - xlim[0]) / nPixels;
+	adfGeoTransform[2] = 0;
+	adfGeoTransform[3] = ylim[1];
+	adfGeoTransform[4] = 0;
+	adfGeoTransform[5] = (ylim[0] - ylim[1]) / nLines;
+	GDALSetGeoTransform(hDS, adfGeoTransform);
+	GDALFillRaster(GDALGetRasterBand(hDS, 1), value[0], 0);
+	CPLFree(pszSRS);
+	GDALClose(hDS);
+}
