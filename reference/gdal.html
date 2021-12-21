@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0-5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0-6</span>
       </span>
     </div>
 
@@ -136,7 +136,9 @@
 
 <span class="fu">gdal_read_mdim</span><span class="op">(</span><span class="va">file</span>, array_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span>
 
-<span class="fu">gdal_write_mdim</span><span class="op">(</span><span class="va">x</span>, <span class="va">file</span>, <span class="va">dimension_values</span>, <span class="va">units</span><span class="op">)</span></code></pre></div>
+<span class="fu">gdal_write_mdim</span><span class="op">(</span><span class="va">x</span>, <span class="va">file</span>, <span class="va">dimension_values</span>, <span class="va">units</span><span class="op">)</span>
+
+<span class="fu">gdal_create</span><span class="op">(</span><span class="va">f</span>, <span class="va">nxy</span>, <span class="va">values</span>, <span class="va">crs</span>, <span class="va">xlim</span>, <span class="va">ylim</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -186,7 +188,7 @@
 <dt>sf</dt>
 <dd><p>object of class <code>sf</code></p></dd>
 <dt>f</dt>
-<dd><p>gdal raster data source filename</p></dd>
+<dd><p>character; file name</p></dd>
 <dt>pts</dt>
 <dd><p>points matrix</p></dd>
 <dt>bilinear</dt>
@@ -197,6 +199,16 @@
 <dd><p>list with dimension values</p></dd>
 <dt>units</dt>
 <dd><p>character; units names (udunits conform) corresponding to dimension_values</p></dd>
+<dt>nxy</dt>
+<dd><p>integer vector of length 2</p></dd>
+<dt>values</dt>
+<dd><p>fill value</p></dd>
+<dt>crs</dt>
+<dd><p>object of class <code>crs</code></p></dd>
+<dt>xlim</dt>
+<dd><p>numeric</p></dd>
+<dt>ylim</dt>
+<dd><p>numeric</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
