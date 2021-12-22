@@ -364,6 +364,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	List attributeTables(bands.size());
 	CharacterVector descriptions(bands.size());
 	NumericMatrix ranges(bands.size(), 4);
+	IntegerMatrix blocksizes(bands.size(), 2);
 	for (int i = 0; i < bands.size(); i++) {
 		if ((poBand = poDataset->GetRasterBand(bands(i))) == NULL)
 			stop("trying to read a band that is not present");
@@ -384,6 +385,11 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		ranges(i, 1) = (double) set;
 		ranges(i, 2) = poBand->GetMaximum(&set);
 		ranges(i, 3) = (double) set;
+		int nBlockXSize = 0;
+		int nBlockYSize = 0;
+		poBand->GetBlockSize(&nBlockXSize, &nBlockYSize);
+		blocksizes(i, 0) = nBlockXSize;
+		blocksizes(i, 1) = nBlockYSize;
 	}
 
 	// get metadata items:
@@ -449,6 +455,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		_["attribute_tables"] = attributeTables,
 		_["color_tables"] = colorTables,
 		_["ranges"] = ranges,
+		_["blocksizes"] = blocksizes,
 		_["descriptions"] = descriptions,
 		_["default_geotransform"] = default_geotransform
 	);
