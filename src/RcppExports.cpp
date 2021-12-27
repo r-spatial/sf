@@ -1180,6 +1180,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_create
+void CPL_create(CharacterVector file, IntegerVector nxy, NumericVector value, CharacterVector wkt, NumericVector xlim, NumericVector ylim);
+RcppExport SEXP _sf_CPL_create(SEXP fileSEXP, SEXP nxySEXP, SEXP valueSEXP, SEXP wktSEXP, SEXP xlimSEXP, SEXP ylimSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< CharacterVector >::type file(fileSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type nxy(nxySEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type value(valueSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type wkt(wktSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type xlim(xlimSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type ylim(ylimSEXP);
+    CPL_create(file, nxy, value, wkt, xlim, ylim);
+    return R_NilValue;
+END_RCPP
+}
 // CPL_read_wkb
 Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB, bool spatialite);
 static SEXP _sf_CPL_read_wkb_try(SEXP wkb_listSEXP, SEXP EWKBSEXP, SEXP spatialiteSEXP) {
@@ -1384,6 +1399,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_read_gdal", (DL_FUNC) &_sf_CPL_read_gdal, 6},
     {"_sf_CPL_write_gdal", (DL_FUNC) &_sf_CPL_write_gdal, 12},
     {"_sf_CPL_extract", (DL_FUNC) &_sf_CPL_extract, 3},
+    {"_sf_CPL_create", (DL_FUNC) &_sf_CPL_create, 6},
     {"_sf_CPL_read_wkb", (DL_FUNC) &_sf_CPL_read_wkb, 3},
     {"_sf_CPL_write_wkb", (DL_FUNC) &_sf_CPL_write_wkb, 2},
     {"_sf_CPL_get_z_range", (DL_FUNC) &_sf_CPL_get_z_range, 2},

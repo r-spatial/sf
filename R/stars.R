@@ -327,3 +327,16 @@ gdal_read_mdim = function(file, array_name = character(0), options = character(0
 gdal_write_mdim = function(x, file, dimension_values, units) {
 	write_mdim(x, file, dimension_values, units)
 }
+
+#' @name gdal
+#' @param f character; file name
+#' @param nxy integer vector of length 2
+#' @param values fill value
+#' @param crs object of class \code{crs}
+#' @param xlim numeric
+#' @param ylim numeric
+#' @export
+gdal_create = function(f, nxy, values, crs, xlim, ylim) {
+	CPL_create(as.character(f), as.integer(nxy), as.double(values), crs$wkt, as.double(xlim), as.double(ylim))
+}
+
