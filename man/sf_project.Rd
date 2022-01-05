@@ -41,3 +41,6 @@ directly transform a set of coordinates
 \details{
 \code{sf_add_proj_units} loads the PROJ units `link`, `us_in`, `ind_yd`, `ind_ft`, and `ind_ch` into the udunits database, and returns \code{TRUE} invisibly on success.
 }
+\examples{
+sf_add_proj_units()
+}

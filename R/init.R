@@ -1,5 +1,5 @@
 #' @importFrom utils head object.size str tail packageVersion compareVersion
-#' @importFrom stats aggregate na.omit rbinom runif setNames
+#' @importFrom stats aggregate dist na.omit rbinom runif setNames
 #' @importFrom tools file_ext file_path_sans_ext
 #' @importFrom methods as new slot slotNames
 #' @importFrom grid convertHeight convertUnit convertWidth current.viewport linesGrob nullGrob pathGrob pointsGrob polylineGrob unit viewport
@@ -109,13 +109,15 @@ unload_gdal <- function() {
 #' @export
 #' @name sf_project
 #' @details \code{sf_add_proj_units} loads the PROJ units `link`, `us_in`, `ind_yd`, `ind_ft`, and `ind_ch` into the udunits database, and returns \code{TRUE} invisibly on success.
+#' @examples
+#' sf_add_proj_units()
 sf_add_proj_units = function() {
 	#nocov start
-	units::install_conversion_constant("m", "link", 0.201168)
-	units::install_conversion_constant("m", "us_in", 1./39.37)
-	units::install_conversion_constant("m", "ind_yd", 0.91439523)
-	units::install_conversion_constant("m", "ind_ft", 0.30479841)
-	units::install_conversion_constant("m", "ind_ch", 20.11669506)
+	units::install_unit("link", "0.201168 m")
+	units::install_unit("us_in", "1./39.37 m")
+	units::install_unit("ind_yd", "0.91439523 m")
+	units::install_unit("ind_ft", "0.30479841 m")
+	units::install_unit("ind_ch", "20.11669506 m")
 	invisible(TRUE)
 	#nocov end
 }
