@@ -58,6 +58,6 @@ st_area(d)
 st_area(st_transform(d, 2314))
 
 st_axis_order()
-if (sf_extSoftVersion()["GDAL"] >= "2.5.0")
+if (compareVersion(sf_extSoftVersion()["GDAL"], "2.5.0") > -1)
   st_axis_order(TRUE)
 st_axis_order(FALSE)

@@ -15,7 +15,7 @@ cp2 = st_transform(st_nearest_points(n1[1:50,], n1[51:100,], pairwise = TRUE), 4
 length(cp1)
 all.equal(cp1, cp2)
 
-if (sf_extSoftVersion()["GEOS"] >= "3.6.1") {
+if (compareVersion(sf_extSoftVersion()["GEOS"], "3.6.1") > -1) {
 # st_nearest_feature
   nf1 = st_nearest_feature(n0[1:50,], n0[51:100,])
   nf2 = st_nearest_feature(n1[1:50,], n1[51:100,])
