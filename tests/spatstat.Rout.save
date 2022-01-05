@@ -1,5 +1,5 @@
 
-R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
+R version 4.1.2 (2021-11-01) -- "Bird Hippie"
 Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -248,6 +248,48 @@ MULTIPOLYGON (((2 2, -2 2, -2 -2, 2 -2, 2 2), (...
 > plot(st_as_sfc(o), col = 'blue', main = 'st_as_sfc(o)')
 > plot(st_as_sf(o), col = 'blue', main = 'st_as_sf(o)')
 > 
+> data(japanesepines)
+> st_as_sf(japanesepines) # warns about multiplier
+Simple feature collection with 66 features and 1 field
+Geometry type: GEOMETRY
+Dimension:     XY
+Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1
+CRS:           NA
+First 10 features:
+    label                           geom
+1  window POLYGON ((0 0, 1 0, 1 1, 0 ...
+2   point              POINT (0.09 0.09)
+3   point              POINT (0.29 0.02)
+4   point              POINT (0.38 0.03)
+5   point              POINT (0.39 0.18)
+6   point              POINT (0.48 0.03)
+7   point              POINT (0.59 0.02)
+8   point              POINT (0.65 0.16)
+9   point              POINT (0.67 0.13)
+10  point              POINT (0.73 0.13)
+Warning message:
+In st_as_sfc.owin(spatstat.geom::as.owin(x)) :
+  The spatstat object has an measurement unit multiplier != 1. Consider rescaling before converting.
+> jp = rescale(japanesepines)
+> st_as_sf(jp) # No warning
+Simple feature collection with 66 features and 1 field
+Geometry type: GEOMETRY
+Dimension:     XY
+Bounding box:  xmin: 0 ymin: 0 xmax: 5.7 ymax: 5.7
+CRS:           NA
+First 10 features:
+    label                           geom
+1  window POLYGON ((0 0, 5.7 0, 5.7 5...
+2   point            POINT (0.513 0.513)
+3   point            POINT (1.653 0.114)
+4   point            POINT (2.166 0.171)
+5   point            POINT (2.223 1.026)
+6   point            POINT (2.736 0.171)
+7   point            POINT (3.363 0.114)
+8   point            POINT (3.705 0.912)
+9   point            POINT (3.819 0.741)
+10  point            POINT (4.161 0.741)
+> 
 > data(nztrees)
 > qNZ <- quadratcount(nztrees, nx=4, ny=3)
 > ts = as.tess(qNZ)
@@ -302,4 +344,4 @@ LINESTRING (1 1, 2 0)
 > 
 > proc.time()
    user  system elapsed 
-  2.286   0.088   2.366 
+  2.036   0.080   2.110 

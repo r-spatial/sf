@@ -1,5 +1,5 @@
 
-R version 4.1.1 (2021-08-10) -- "Kick Things"
+R version 4.1.2 (2021-11-01) -- "Bird Hippie"
 Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -90,10 +90,10 @@ Projected CRS: WGS 84 / Pseudo-Mercator
 # A tibble: 4 × 3
   area_cl     `mean(AREA)`                                              geometry
   <fct>              <dbl>                                    <MULTIPOLYGON [m]>
-1 (0,0.1]           0.0760 (((-9349959 4195534, -9351260 4199567, -9354263 4203…
-2 (0.1,0.12]        0.112  (((-9355589 4200996, -9354263 4203717, -9351260 4199…
+1 (0,0.1]           0.0760 (((-8863447 4143479, -8857175 4151339, -8858837 4156…
+2 (0.1,0.12]        0.112  (((-9362143 4197312, -9355589 4200996, -9354263 4203…
 3 (0.12,0.15]       0.134  (((-9302071 4171499, -9311146 4181234, -9311292 4183…
-4 (0.15,0.25]       0.190  (((-9173717 4227806, -9181049 4224455, -9186013 4224…
+4 (0.15,0.25]       0.190  (((-8830723 4133018, -8832558 4137955, -8832096 4141…
 > nc.g %>% summarize(mean(AREA)) %>% plot(col = 3:6/7)
 > 
 > library(tidyr)
@@ -196,7 +196,7 @@ Projected CRS: NAD83 / North Carolina
 # A tibble: 1 × 2
   `mean(dens)`                                                          geometry
   [person/m^2]                                                <MULTIPOLYGON [m]>
-1   0.00000259 (((446521.1 133561, 441668.6 140459.3, 436812.5 146953.9, 433885…
+1   0.00000259 (((138426 177699.3, 145548.6 177837.2, 151051.2 180557.6, 152246…
 > out %>% summarise(mean(new_dens))
 Simple feature collection with 1 feature and 1 field
 Geometry type: MULTIPOLYGON
@@ -218,7 +218,7 @@ Projected CRS: NAD83 / North Carolina
 # A tibble: 1 × 2
   `sum(area * dens)`                                                    geometry
             [person]                                          <MULTIPOLYGON [m]>
-1             329962 (((446521.1 133561, 441668.6 140459.3, 436812.5 146953.9, …
+1             329962 (((138426 177699.3, 145548.6 177837.2, 151051.2 180557.6, …
 > out %>% summarise(sum(A * new_dens))
 Simple feature collection with 1 feature and 1 field
 Geometry type: MULTIPOLYGON
@@ -284,4 +284,4 @@ First 10 features:
 > 
 > proc.time()
    user  system elapsed 
-  2.660   0.056   2.743 
+  2.796   0.072   2.862 
