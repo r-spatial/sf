@@ -193,6 +193,15 @@ as.owin.sf = function(W, ...) {
 st_as_sfc.owin = function(x, ...) {
 # FROM: methods for coercion to Spatial Polygons by Adrian Baddeley, pkg maptools
 	check_spatstat("spatstat.geom")
+	# Check internal spatstat multiplier:
+	mult <- x$units$multiplier
+	if(is.null(mult)){
+		mult <- 1
+	}
+	if(mult!=1){
+		warning("The spatstat object has an measurement unit multiplier != 1. Consider rescaling before converting.")
+	}
+	# Enforce polygonal format and proceed from there:
 	x <- spatstat.geom::as.polygonal(x)
 	closering <- function(df) { df[c(seq(nrow(df)), 1), ] }
 	pieces <- lapply(x$bdry,
