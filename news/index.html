@@ -77,7 +77,8 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.0-5" id="version-10-5">version 1.0-5<small>2021-12-17</small><a class="anchor" aria-label="anchor" href="#version-10-5"></a></h2>
-<ul><li><p>package startup message reports status of <code><a href="../reference/s2.html">sf_use_s2()</a></code>; <a href="https://github.com/r-spatial/sf/issues/1782" class="external-link">#1782</a></p></li>
+<ul><li><p>use <code><a href="https://rdrr.io/r/stats/dist.html" class="external-link">stats::dist</a></code> rather than GEOS for symmetric point-point Euclidian distance computation; <a href="https://github.com/r-spatial/sf/issues/1874" class="external-link">#1874</a></p></li>
+<li><p>package startup message reports status of <code><a href="../reference/s2.html">sf_use_s2()</a></code>; <a href="https://github.com/r-spatial/sf/issues/1782" class="external-link">#1782</a></p></li>
 <li><p><code><a href="../reference/s2.html">sf_use_s2()</a></code> uses <code><a href="https://rdrr.io/r/base/message.html" class="external-link">message()</a></code> to report a change; <a href="https://github.com/r-spatial/sf/issues/1782" class="external-link">#1782</a></p></li>
 <li><p><code><a href="../reference/st_sample.html">st_sample()</a></code> using regular sampling for ellipsoidal coordinates “works” as if coordinates were Cartesian; <a href="https://github.com/r-spatial/sf/issues/1837" class="external-link">#1837</a></p></li>
 </ul></div>
