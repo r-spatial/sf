@@ -70,7 +70,7 @@ g2 = st_make_grid(ncbb, 0.1, what = "points", square = FALSE)
 mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
 st_line_merge(mls)
 
-if (sf_extSoftVersion()["GEOS"] >= "3.5.0") {
+if (compareVersion(sf_extSoftVersion()["GEOS"], "3.5.0") > -1) {
  # voronoi:
  set.seed(1)
  x = st_multipoint(matrix(runif(10),,2))
@@ -258,7 +258,7 @@ sf:::is_symmetric(pattern = "010121021")
 
 st_intersects(st_point(0:1), st_point(2:3)) # sfg method
 
-if (sf_extSoftVersion()["GEOS"] >= "3.7.0") {
+if (compareVersion(sf_extSoftVersion()["GEOS"], "3.7.0") > -1) {
 	ls = st_linestring(rbind(c(1,1), c(2,2), c(3,3)))
 	print(st_reverse(ls))
 	print(st_reverse(st_sfc(ls)))
