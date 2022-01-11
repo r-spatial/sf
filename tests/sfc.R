@@ -172,7 +172,7 @@ b = st_sf(a = 11:14,
 st_join(a, b)
 st_join(a, b, left = FALSE)
 # st_join, largest = TRUE:
-nc <- st_transform(st_read(system.file("shape/nc.shp", package="sf")), 2264)
+nc <- st_transform(st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE), 2264)
 gr = st_sf(
     label = apply(expand.grid(1:10, LETTERS[10:1])[,2:1], 1, paste0, collapse = " "),
 	geom = st_make_grid(st_as_sfc(st_bbox(nc))))

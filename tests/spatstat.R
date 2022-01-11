@@ -58,7 +58,7 @@ sf = st_sf(a = 1:3, geom = p)
 as.ppp(p0)
 
 # as.owin.sf, as.owin.sfc_*
-nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), check_ring_dir = TRUE)
+nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), check_ring_dir = TRUE, quiet = TRUE)
 try(as.owin(nc)) # should be projected
 nc = st_transform(nc, 32119)
 plot(as.owin(nc), col = 'grey')

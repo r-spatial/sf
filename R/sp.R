@@ -145,9 +145,22 @@ st_as_sfc.SpatialLines = function(x, ..., precision = 0.0, forceMulti = FALSE) {
 st_as_sfc.SpatialPolygons = function(x, ..., precision = 0.0, forceMulti = FALSE) {
 	lst = if (forceMulti || any(sapply(x@polygons, function(x) moreThanOneOuterRing(x@Polygons)))) {
 		if (is.null(comment(x)) || comment(x) == "FALSE") {
-			if (!requireNamespace("rgeos", quietly = TRUE))
-				stop("package rgeos required for finding out which hole belongs to which exterior ring")
-			x = rgeos::createSPComment(x)
+#			if (!requireNamespace("rgeos", quietly = TRUE))
+#				stop("package rgeos required for finding out which hole belongs to which exterior ring")
+#			x = rgeos::createSPComment(x)
+			# https://github.com/r-spatial/sf/pull/1869/files/7f1921c9acc1000b92a81b3a0aa7126330d4ef12..cfa303c8fcdd0b9a7ea33eae402c1135bb8e50ba :
+			warning("no comment found showing which hole belongs to which exterior ring")
+			process_pl_comment <- function(pl) {
+				ID <- slot(pl, "ID")
+				crds <- lapply(slot(pl, "Polygons"), function(xx) slot(xx, "coords"))
+				raw <- st_sfc(st_polygon(crds))
+				val <- st_make_valid(raw)
+				res <- slot(as(val, "Spatial"), "polygons")[[1]]
+				slot(res, "ID") <- ID
+				res
+			}
+			slot(x, "polygons") <- lapply(slot(x, "polygons"), process_pl_comment)
+			comment(x) <- "TRUE"
 		}
 		lapply(x@polygons, function(y)
 			st_multipolygon(Polygons2MULTIPOLYGON(y@Polygons, comment(y))))
