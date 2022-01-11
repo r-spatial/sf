@@ -165,8 +165,7 @@ In spTransform(meuse.grid, CRS("+proj=longlat +ellps=WGS84 +no_defs")) :
 [1] TRUE
 > 
 > detach("package:sp")
-> unloadNamespace("rgeos")
 > 
 > proc.time()
    user  system elapsed 
-  3.792   0.064   3.848 
+  3.902   0.044   3.947 

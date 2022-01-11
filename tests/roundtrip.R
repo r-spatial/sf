@@ -57,4 +57,3 @@ all.equal(nc, st_as_sf(as(nc, "Spatial")))
 st_crs(nc) == st_crs(st_as_sf(as(nc, "Spatial")))
 
 detach("package:sp")
-unloadNamespace("rgeos")

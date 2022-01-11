@@ -107,15 +107,9 @@ p1 = Polygons(list( Polygon(x[5:1,]), Polygon(x2), Polygon(x3),
    Polygon(y[5:1,]), Polygon(y1), Polygon(x1), Polygon(y3)), "ID1")
 p2 = Polygons(list( Polygon(z[5:1,]), Polygon(z2), Polygon(z3), Polygon(z1)),
   "ID2")
-if (require("rgeos")) {
-  r = createSPComment(SpatialPolygons(list(p1,p2)))
-  comment(r)
-  comment(r@polygons[[1]])
-  scan(text = comment(r@polygons[[1]]), quiet = TRUE)
-  library(sf)
-  a = st_as_sf(r)
-  summary(a)
-}
+r = SpatialPolygons(list(p1,p2))
+a = suppressWarnings(st_as_sf(r))
+summary(a)
 demo(meuse, ask = FALSE, echo = FALSE)
 summary(st_as_sf(meuse))
 summary(st_as_sf(meuse.grid))

@@ -1,5 +1,7 @@
 # version 1.0-5
 
+* drop dependency on `rgeos`; #1869
+
 * use `stats::dist` rather than GEOS for symmetric point-point Euclidian distance computation; #1874
 
 * package startup message reports status of `sf_use_s2()`; #1782
