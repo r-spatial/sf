@@ -1,5 +1,5 @@
 
-R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
+R version 4.1.2 (2021-11-01) -- "Bird Hippie"
 Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -157,14 +157,7 @@ In spTransform(meuse.grid, CRS("+proj=longlat +ellps=WGS84 +no_defs")) :
                      
                      
 > 
-> nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg")
-Reading layer `nc.gpkg' from data source 
-  `/home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg' using driver `GPKG'
-Simple feature collection with 100 features and 14 fields
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-Geodetic CRS:  NAD27
+> nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", quiet = TRUE)
 > all.equal(nc, st_as_sf(as(nc, "Spatial")))
 [1] "Names: 1 string mismatch"                                  
 [2] "Attributes: < Component \"sf_column\": 1 string mismatch >"
@@ -176,4 +169,4 @@ Geodetic CRS:  NAD27
 > 
 > proc.time()
    user  system elapsed 
-  5.092   0.088   5.170 
+  3.792   0.064   3.848 

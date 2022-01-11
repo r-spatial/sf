@@ -208,14 +208,7 @@ window: polygonal boundary
 enclosing rectangle: [-1, 1] x [1, 2] units
 > 
 > # as.owin.sf, as.owin.sfc_*
-> nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), check_ring_dir = TRUE)
-Reading layer `nc.gpkg' from data source 
-  `/home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg' using driver `GPKG'
-Simple feature collection with 100 features and 14 fields
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-Geodetic CRS:  NAD27
+> nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), check_ring_dir = TRUE, quiet = TRUE)
 > try(as.owin(nc)) # should be projected
 Error in as.owin.sfc_MULTIPOLYGON(st_cast(W, "MULTIPOLYGON"), ...) : 
   Only projected coordinates may be converted to spatstat class objects
@@ -344,4 +337,4 @@ LINESTRING (1 1, 2 0)
 > 
 > proc.time()
    user  system elapsed 
-  2.036   0.080   2.110 
+  2.019   0.071   2.083 

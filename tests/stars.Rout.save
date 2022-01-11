@@ -1,5 +1,5 @@
 
-R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
+R version 4.1.2 (2021-11-01) -- "Bird Hippie"
 Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -139,14 +139,6 @@ POLYGON ((0.5 1.5, 0.5 2.5, 1.5 2.5, 1.5 1.5, 0...
 POLYGON ((0.5 2.5, 0.5 3.5, 1.5 3.5, 1.5 2.5, 0...
 POLYGON ((0.5 3.5, 0.5 4.5, 1.5 4.5, 1.5 3.5, 0...
 POLYGON ((1.5 0.5, 1.5 1.5, 2.5 1.5, 2.5 0.5, 1...
-Reading layer `nc.gpkg' from data source 
-  `/home/edzer/git/sf.Rcheck/sf/gpkg/nc.gpkg' using driver `GPKG'
-Simple feature collection with 100 features and 14 fields
-Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-Geodetic CRS:  NAD27
 stars object with 2 dimensions and 12 attributes
 attribute(s):
                 Min.   1st Qu.    Median         Mean   3rd Qu.      Max.  NA's
@@ -271,4 +263,4 @@ First 10 features:
 > 
 > proc.time()
    user  system elapsed 
-  1.810   0.093   1.896 
+  1.652   0.091   1.736 

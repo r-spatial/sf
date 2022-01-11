@@ -1,5 +1,5 @@
 
-R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
+R version 4.1.2 (2021-11-01) -- "Bird Hippie"
 Copyright (C) 2021 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -346,8 +346,8 @@ use `st_zm(...)` to coerce to XY dimensions
 > y = st_transform(x, 3857)
 > 
 > sf_extSoftVersion()[1:3]
-   GEOS    GDAL  proj.4 
-"3.9.0" "3.2.1" "7.2.1" 
+    GEOS     GDAL   proj.4 
+"3.10.1"  "3.4.0"  "8.2.0" 
 > 
 > # Ops.sfc:
 > ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))))
@@ -652,13 +652,7 @@ CRS:           NA
 2.1   2  13 POINT (2 2)
 3     3  14 POINT (3 3)
 > # st_join, largest = TRUE:
-> nc <- st_transform(st_read(system.file("shape/nc.shp", package="sf")), 2264)
-Reading layer `nc' from data source `/home/edzer/git/sf.Rcheck/sf/shape/nc.shp' using driver `ESRI Shapefile'
-Simple feature collection with 100 features and 14 fields
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-Geodetic CRS:  NAD27
+> nc <- st_transform(st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE), 2264)
 > gr = st_sf(
 +     label = apply(expand.grid(1:10, LETTERS[10:1])[,2:1], 1, paste0, collapse = " "),
 + 	geom = st_make_grid(st_as_sfc(st_bbox(nc))))
@@ -721,7 +715,6 @@ Geodetic CRS:  WGS 84
 > set.seed(131)
 > options(digits=6)
 > x = st_sfc(st_polygon(list(rbind(c(0,1),c(90,1),c(90,90),c(0,90),c(0,1)))), crs = st_crs(4326))
-> #if (sf_extSoftVersion()["proj.4"] >= "4.9.0")
 >   (p <- st_sample(x, 10))
 Geometry set for 10 features 
 Geometry type: POINT
@@ -876,6 +869,8 @@ The following object is masked from 'package:dplyr':
 
     select
 
+Warning message:
+multiple methods tables found for 'direction' 
 > suppressWarnings(st_bbox(raster(meuse.grid)))
   xmin   ymin   xmax   ymax 
 178440 329600 181560 333760 
@@ -1033,14 +1028,14 @@ Geometry type: POLYGON
 Dimension:     XY
 Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1
 CRS:           NA
-POLYGON ((0 0.915082, 0.0169559 0.934935, 0.040...
+POLYGON ((0.983044 0.0650651, 0.959619 0.040380...
 > st_crop(pol, st_bbox(box))
 Geometry set for 1 feature 
 Geometry type: POLYGON
 Dimension:     XY
 Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1
 CRS:           NA
-POLYGON ((0 0.915082, 0.0169559 0.934935, 0.040...
+POLYGON ((0.983044 0.0650651, 0.959619 0.040380...
 > st_crop(pol_sf, box)
 Simple feature collection with 1 feature and 1 field
 Geometry type: POLYGON
@@ -1048,7 +1043,7 @@ Dimension:     XY
 Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1
 CRS:           NA
   a                           geom
-1 1 POLYGON ((0 0.915082, 0.016...
+1 1 POLYGON ((0.983044 0.065065...
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > st_crop(pol_sf, st_bbox(box))
@@ -1058,7 +1053,7 @@ Dimension:     XY
 Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1
 CRS:           NA
   a                           geom
-1 1 POLYGON ((0 0.915082, 0.016...
+1 1 POLYGON ((0.983044 0.065065...
 Warning message:
 attribute variables are assumed to be spatially constant throughout all geometries 
 > 
@@ -1133,4 +1128,4 @@ CRS:           NA
 > 
 > proc.time()
    user  system elapsed 
-  5.121   0.097   5.210 
+  7.515   0.116   7.641 
