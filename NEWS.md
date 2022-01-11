@@ -1,5 +1,7 @@
 # version 1.0-5
 
+* use `stats::dist` rather than GEOS for symmetric point-point Euclidian distance computation; #1874
+
 * package startup message reports status of `sf_use_s2()`; #1782
 
 * `sf_use_s2()` uses `message()` to report a change; #1782

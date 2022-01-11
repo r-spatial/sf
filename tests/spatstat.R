@@ -81,6 +81,11 @@ st_as_sfc(o)
 plot(st_as_sfc(o), col = 'blue', main = 'st_as_sfc(o)')
 plot(st_as_sf(o), col = 'blue', main = 'st_as_sf(o)')
 
+data(japanesepines)
+st_as_sf(japanesepines) # warns about multiplier
+jp = rescale(japanesepines)
+st_as_sf(jp) # No warning
+
 data(nztrees)
 qNZ <- quadratcount(nztrees, nx=4, ny=3)
 ts = as.tess(qNZ)

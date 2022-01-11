@@ -131,9 +131,12 @@ message_longlat = function(caller) {
 st_distance = function(x, y, ..., dist_fun, by_element = FALSE, 
 		which = ifelse(isTRUE(st_is_longlat(x)), "Great Circle", "Euclidean"), 
 		par = 0.0, tolerance = 0.0) {
-	if (missing(y))
+
+	missing_y = FALSE
+	if (missing(y)) {
 		y = x
-	else
+		missing_y = TRUE
+	} else
 		stopifnot(st_crs(x) == st_crs(y))
 
 	if (! missing(dist_fun))
@@ -167,8 +170,12 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE,
 	} else {
 		d = if (by_element)
 				mapply(st_distance, x, y, by_element = FALSE, which = which, par = par)
-			else
-				CPL_geos_dist(x, y, which, par)
+			else {
+				if (missing_y && inherits(x, "sfc_POINT") && which == "Euclidean")
+					as.matrix(stats::dist(st_coordinates(x)))
+				else
+					CPL_geos_dist(x, y, which, par)
+			}
 		if (! is.na(st_crs(x)))
 			units(d) = crs_parameters(st_crs(x))$ud_unit
 		d

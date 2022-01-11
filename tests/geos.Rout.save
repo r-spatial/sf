@@ -159,7 +159,7 @@ In st_interpolate_aw.sf(nc["BIR74"], g, extensive = TRUE) :
 > st_line_merge(mls)
 LINESTRING (0 0, 1 1, 2 0)
 > 
-> if (sf_extSoftVersion()["GEOS"] >= "3.5.0") {
+> if (compareVersion(sf_extSoftVersion()["GEOS"], "3.5.0") > -1) {
 +  # voronoi:
 +  set.seed(1)
 +  x = st_multipoint(matrix(runif(10),,2))
@@ -561,7 +561,7 @@ Sparse geometry binary predicate list of length 1, where the predicate
 was `intersects'
  1: (empty)
 > 
-> if (sf_extSoftVersion()["GEOS"] >= "3.7.0") {
+> if (compareVersion(sf_extSoftVersion()["GEOS"], "3.7.0") > -1) {
 + 	ls = st_linestring(rbind(c(1,1), c(2,2), c(3,3)))
 + 	print(st_reverse(ls))
 + 	print(st_reverse(st_sfc(ls)))
@@ -603,4 +603,5 @@ was `intersects'
 > 
 > proc.time()
    user  system elapsed 
-  7.999   0.083   8.097 
+  9.517   0.071   9.582 
+
