@@ -197,7 +197,7 @@ more details.</p></dd>
 <dt>na.rm</dt>
 <dd><p>see original function docs</p></dd>
 <dt>convert</dt>
-<dd><p>see <a href="https://tidyr.tidyverse.org/reference/separate_rows.html" class="external-link">separate_rows</a></p></dd>
+<dd><p>see <a href="https://rdrr.io/pkg/tidyr/man/separate_rows.html" class="external-link">separate_rows</a></p></dd>
 <dt>factor_key</dt>
 <dd><p>see original function docs</p></dd>
 <dt>fill</dt>
@@ -205,7 +205,7 @@ more details.</p></dd>
 <dt>drop</dt>
 <dd><p>see original function docs</p></dd>
 <dt>sep</dt>
-<dd><p>see <a href="https://tidyr.tidyverse.org/reference/separate_rows.html" class="external-link">separate_rows</a></p></dd>
+<dd><p>see <a href="https://rdrr.io/pkg/tidyr/man/separate_rows.html" class="external-link">separate_rows</a></p></dd>
 <dt>tbl</dt>
 <dd><p>see original function docs</p></dd>
 <dt>size</dt>
@@ -217,15 +217,15 @@ more details.</p></dd>
 <dt>.env</dt>
 <dd><p>see original function docs</p></dd>
 <dt>col</dt>
-<dd><p>see <a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">separate</a></p></dd>
+<dd><p>see <a href="https://rdrr.io/pkg/tidyr/man/separate.html" class="external-link">separate</a></p></dd>
 <dt>into</dt>
-<dd><p>see <a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">separate</a></p></dd>
+<dd><p>see <a href="https://rdrr.io/pkg/tidyr/man/separate.html" class="external-link">separate</a></p></dd>
 <dt>remove</dt>
-<dd><p>see <a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">separate</a></p></dd>
+<dd><p>see <a href="https://rdrr.io/pkg/tidyr/man/separate.html" class="external-link">separate</a></p></dd>
 <dt>extra</dt>
-<dd><p>see <a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">separate</a></p></dd>
+<dd><p>see <a href="https://rdrr.io/pkg/tidyr/man/separate.html" class="external-link">separate</a></p></dd>
 <dt>.preserve</dt>
-<dd><p>see <a href="https://tidyr.tidyverse.org/reference/nest.html" class="external-link">unnest</a></p></dd>
+<dd><p>see <a href="https://rdrr.io/pkg/tidyr/man/nest.html" class="external-link">unnest</a></p></dd>
 <dt>y</dt>
 <dd><p>A pair of data frames, data frame extensions (e.g. a tibble), or
 lazy data frames (e.g. from dbplyr or dtplyr). See <em>Methods</em>, below, for
@@ -272,7 +272,7 @@ Should be a character vector of length 2.</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span class="r-in"><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpWk8OrI/temp_libpath47ef21007bd5/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmpStIYUE/temp_libpath476b75dc0f2c/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
@@ -339,7 +339,7 @@ Should be a character vector of length 2.</p></dd>
 <span class="r-in"><span class="va">nc</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span>, <span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 100</span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="va">nc</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">SID74</span>, <span class="va">SID79</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/gather.html" class="external-link">gather</a></span><span class="op">(</span><span class="st">"VAR"</span>, <span class="st">"SID"</span>, <span class="op">-</span><span class="va">geometry</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">nc</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">SID74</span>, <span class="va">SID79</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/tidyr/man/gather.html" class="external-link">gather</a></span><span class="op">(</span><span class="st">"VAR"</span>, <span class="st">"SID"</span>, <span class="op">-</span><span class="va">geometry</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      VAR                 SID                  geometry  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Length:200         Min.   : 0.000   MULTIPOLYGON :200  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Class :character   1st Qu.: 2.000   epsg:4267    :  0  </span>
@@ -350,8 +350,8 @@ Should be a character vector of length 2.</p></dd>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
 <span class="r-in"><span class="va">nc</span><span class="op">$</span><span class="va">row</span> <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span> <span class="co"># needed for spread to work</span></span>
 <span class="r-in"><span class="va">nc</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">SID74</span>, <span class="va">SID79</span>, <span class="va">geometry</span>, <span class="va">row</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/gather.html" class="external-link">gather</a></span><span class="op">(</span><span class="st">"VAR"</span>, <span class="st">"SID"</span>, <span class="op">-</span><span class="va">geometry</span>, <span class="op">-</span><span class="va">row</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/spread.html" class="external-link">spread</a></span><span class="op">(</span><span class="va">VAR</span>, <span class="va">SID</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/pkg/tidyr/man/gather.html" class="external-link">gather</a></span><span class="op">(</span><span class="st">"VAR"</span>, <span class="st">"SID"</span>, <span class="op">-</span><span class="va">geometry</span>, <span class="op">-</span><span class="va">row</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/pkg/tidyr/man/spread.html" class="external-link">spread</a></span><span class="op">(</span><span class="va">VAR</span>, <span class="va">SID</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 6 features and 3 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
