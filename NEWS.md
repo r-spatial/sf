@@ -1,6 +1,8 @@
 # version 1.0-5
 
-* drop dependency on `rgeos`; #1869
+* `st_make_grid()` speedup; #1579 thanks to Krzysztof Dyba
+
+* remove dependency on `rgeos`; #1869
 
 * use `stats::dist` rather than GEOS for symmetric point-point Euclidian distance computation; #1874
 
