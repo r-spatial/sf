@@ -1,6 +1,8 @@
 # version 1.0-6
 
-* `st_make_grid()` speedup; #1579 thanks to Krzysztof Dyba
+* for `sf` objects, the `st_as_sfc()` method is an alias for `st_geometry()`; #1882
+
+* `st_make_grid()` speeded up; #1579 thanks to Krzysztof Dyba
 
 * remove dependency on `rgeos`; #1869
 

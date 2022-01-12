@@ -175,6 +175,9 @@ st_set_geometry = function(x, value) {
 	x
 }
 
+#' @export
+st_as_sfc.sf = function(x, ...) st_geometry(x)
+
 list_column_to_sfc = function(x) {
 	if (is.list(x)) {
 		if (inherits(try(y <- st_as_sfc(x), silent = TRUE), "try-error"))
