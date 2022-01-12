@@ -1,10 +1,12 @@
-# version 1.0-5
+# version 1.0-6
 
 * `st_make_grid()` speedup; #1579 thanks to Krzysztof Dyba
 
 * remove dependency on `rgeos`; #1869
 
 * use `stats::dist` rather than GEOS for symmetric point-point Euclidian distance computation; #1874
+
+# version 1.0-5
 
 * package startup message reports status of `sf_use_s2()`; #1782
 
