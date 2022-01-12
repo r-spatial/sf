@@ -84,7 +84,7 @@ st_make_grid = function(x,
 		for (i in 1:nx)
 			for (j in 1:ny)
 				ret[[(j - 1) * nx + i]] = square(xc[i], yc[j], xc[i+1], yc[j+1])
-		ret
+		st_sfc(ret, crs = crs)
 	} else if (what == "centers") {
 		e = expand.grid(x = xc[-1] - 0.5 * diff(xc[1:2]), 
 						y = yc[-1] - 0.5 * diff(yc[1:2]), 
