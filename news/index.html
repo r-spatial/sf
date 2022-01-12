@@ -77,7 +77,9 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.0-5" id="version-10-5">version 1.0-5<small>2021-12-17</small><a class="anchor" aria-label="anchor" href="#version-10-5"></a></h2>
-<ul><li><p>use <code><a href="https://rdrr.io/r/stats/dist.html" class="external-link">stats::dist</a></code> rather than GEOS for symmetric point-point Euclidian distance computation; <a href="https://github.com/r-spatial/sf/issues/1874" class="external-link">#1874</a></p></li>
+<ul><li><p><code><a href="../reference/st_make_grid.html">st_make_grid()</a></code> speedup; <a href="https://github.com/r-spatial/sf/issues/1579" class="external-link">#1579</a> thanks to Krzysztof Dyba</p></li>
+<li><p>remove dependency on <code>rgeos</code>; <a href="https://github.com/r-spatial/sf/issues/1869" class="external-link">#1869</a></p></li>
+<li><p>use <code><a href="https://rdrr.io/r/stats/dist.html" class="external-link">stats::dist</a></code> rather than GEOS for symmetric point-point Euclidian distance computation; <a href="https://github.com/r-spatial/sf/issues/1874" class="external-link">#1874</a></p></li>
 <li><p>package startup message reports status of <code><a href="../reference/s2.html">sf_use_s2()</a></code>; <a href="https://github.com/r-spatial/sf/issues/1782" class="external-link">#1782</a></p></li>
 <li><p><code><a href="../reference/s2.html">sf_use_s2()</a></code> uses <code><a href="https://rdrr.io/r/base/message.html" class="external-link">message()</a></code> to report a change; <a href="https://github.com/r-spatial/sf/issues/1782" class="external-link">#1782</a></p></li>
 <li><p><code><a href="../reference/st_sample.html">st_sample()</a></code> using regular sampling for ellipsoidal coordinates “works” as if coordinates were Cartesian; <a href="https://github.com/r-spatial/sf/issues/1837" class="external-link">#1837</a></p></li>
@@ -409,7 +411,7 @@
 <li><p>add <code>print</code> method for <code>crs</code> objects; <a href="https://github.com/r-spatial/sf/issues/517" class="external-link">#517</a></p></li>
 <li><p><code>sf_extSoftVersion</code> reveals whether GDAL was linked to GEOS; <a href="https://github.com/r-spatial/sf/issues/510" class="external-link">#510</a></p></li>
 <li><p>better check input of <code>st_polygon</code>; <a href="https://github.com/r-spatial/sf/issues/514" class="external-link">#514</a></p></li>
-<li><p>add <code>st_node</code>, similar to <code><a href="https://rdrr.io/pkg/rgeos/man/topo-unary-gNode.html" class="external-link">rgeos::gNode</a></code></p></li>
+<li><p>add <code>st_node</code>, similar to <code>rgeos::gNode</code></p></li>
 <li><p>support for reading <code>OFTInteger64List</code> fields; <a href="https://github.com/r-spatial/sf/issues/508" class="external-link">#508</a></p></li>
 <li><p>sparse geometric binary predicate lists have a class, <code>sgbp</code>, and attributes <code>region.id</code> and <code>predicate</code>; <a href="https://github.com/r-spatial/sf/issues/234" class="external-link">#234</a>, <a href="https://github.com/r-spatial/sf/issues/524" class="external-link">#524</a></p></li>
 <li><p>prevent <code>st_split</code> from stopping the R session; <a href="https://github.com/r-spatial/sf/issues/492" class="external-link">#492</a></p></li>
@@ -518,7 +520,7 @@
 <li><p><code>summarise.sf</code> gains an argument <code>do_union</code> which determines whether to union the geometries for which a summary is given, or to <code>st_combine</code> them (not resolving boundaries); <a href="https://github.com/r-spatial/sf/issues/331" class="external-link">#331</a></p></li>
 <li><p>rename argument <code>union</code> of <code>aggregate.sf</code> into <code>do_union</code>, for consistency with <code>summarise</code>; <a href="https://github.com/r-spatial/sf/issues/331" class="external-link">#331</a></p></li>
 <li><p>add a <code>nest_</code> method for <code>sf</code> objects</p></li>
-<li><p><code>st_relate</code> gets a <code>pattern</code> parameter, same as <code><a href="https://rdrr.io/pkg/rgeos/man/pred-binary-gRelate.html" class="external-link">rgeos::gRelate</a></code>; add examples to get rook and queen neighbour lists using this; <a href="https://github.com/r-spatial/sf/issues/234" class="external-link">#234</a></p></li>
+<li><p><code>st_relate</code> gets a <code>pattern</code> parameter, same as <code>rgeos::gRelate</code>; add examples to get rook and queen neighbour lists using this; <a href="https://github.com/r-spatial/sf/issues/234" class="external-link">#234</a></p></li>
 <li><p>support for direct reading of spatialite and sqlite geometry wkb blobs</p></li>
 <li><p>build proper support for <code>cbind</code> and <code>rbind</code> methods for <code>sf</code>, which work (as documented) when <em>all</em> arguments are of class <code>sf</code>; <code><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">dplyr::bind_cols</a></code> or <code>st_sf(data.frame(sf, df))</code> work for binding <code>data.frame</code>s to an <code>sf</code> object.</p></li>
 <li><p><code><a href="../reference/geos_unary.html">st_segmentize()</a></code> and <code><a href="../reference/st_line_sample.html">st_line_sample()</a></code> accept units arguments</p></li>
