@@ -1,5 +1,7 @@
 # version 1.0-6
 
+* `st_geometry<-()` also allows to rename a geometry column in an `sf` object; #1890
+
 * for `sf` objects, the `st_as_sfc()` method is an alias for `st_geometry()`; #1882
 
 * `st_make_grid()` speeded up; #1579 thanks to Krzysztof Dyba
