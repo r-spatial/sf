@@ -86,7 +86,6 @@ Suggests:
     pillar,
     pool,
     raster,
-    rgdal,
     rlang,
     rmarkdown,
     RPostgres (>= 1.1.0),
