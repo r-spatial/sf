@@ -19,4 +19,5 @@ agr = c(AREA = "aggregate", PERIMETER = "aggregate", CNTY_ = "identity",
 		CRESS_ID = "identity", BIR74 = "aggregate", SID74 = "aggregate", NWBIR74 = "aggregate",
 		BIR79 = "aggregate", SID79 = "aggregate", NWBIR79  = "aggregate")
 
-nc = st_read(datasource, agr = agr, quiet=TRUE)
+nc = st_read(datasource, agr = agr, quiet = TRUE)
+

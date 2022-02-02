@@ -73,9 +73,9 @@ st_as_sf.sf = function(x, ...) x
 st_as_sf.sfc = function(x, ...) st_sf(x, ...)
 
 
-#' Get, set, or replace geometry from an sf object
+#' Get, set, replace or rename geometry from an sf object
 #'
-#' Get, set, or replace geometry from an sf object
+#' Get, set, replace or rename geometry from an sf object
 #' @param obj object of class \code{sf} or \code{sfc}
 #' @param ... ignored
 #' @return st_geometry returns an object of class \link{sfc}, a list-column with geometries
@@ -100,8 +100,8 @@ st_geometry.sfc = function(obj, ...) obj
 st_geometry.sfg = function(obj, ...) st_sfc(obj)
 
 #' @name st_geometry
-#' @param x object of class \code{data.frame}
-#' @param value object of class \code{sfc}, or \code{character}
+#' @param x object of class \code{data.frame} or \code{sf}
+#' @param value object of class \code{sfc}, or \code{character} to set, replace, or rename the geometry of \code{x}
 #' @export
 #' @return \code{st_geometry} returns an object of class \link{sfc}. Assigning geometry to a \code{data.frame} creates an \link{sf} object, assigning it to an \link{sf} object replaces the geometry list-column.
 #' @details when applied to a \code{data.frame} and when \code{value} is an object of class \code{sfc}, \code{st_set_geometry} and \code{st_geometry<-} will first check for the existence of an attribute \code{sf_column} and overwrite that, or else look for list-columns of class \code{sfc} and overwrite the first of that, or else write the geometry list-column to a column named \code{geometry}.  In case \code{value} is character and \code{x} is of class \code{sf}, the "active" geometry column is set to \code{x[[value]]}.
@@ -147,16 +147,16 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 #' @export
 `st_geometry<-.sf` = function(x, value) {
 	if (! is.null(value)) {
-		stopifnot(inherits(value, "sfc") || is.character(value))
+		stopifnot(is.character(value) || inherits(value, "sfc"))
 		if (inherits(value, "sfc"))
 			stopifnot(nrow(x) == length(value))
-		if (is.character(value))
-			stopifnot(inherits(x[[value]], "sfc"))
 	}
 
-	if (!is.null(value) && is.character(value)) # set flag to another column:
+	if (!is.null(value) && is.character(value)) { # set flag to another column:
+		if (!(value %in% names(x)))
+			names(x)[names(x) == attr(x, "sf_column")] = value
 		attr(x, "sf_column") <- value
-	else # replace, remove, or set list-column
+	} else # replace, remove, or set list-column
 		x[[attr(x, "sf_column")]] <- value
 
 	if (is.null(value))
@@ -174,6 +174,9 @@ st_set_geometry = function(x, value) {
 	st_geometry(x) = value
 	x
 }
+
+#' @export
+st_as_sfc.sf = function(x, ...) st_geometry(x)
 
 list_column_to_sfc = function(x) {
 	if (is.list(x)) {

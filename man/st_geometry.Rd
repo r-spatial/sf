@@ -8,7 +8,7 @@
 \alias{st_geometry<-}
 \alias{st_set_geometry}
 \alias{st_drop_geometry}
-\title{Get, set, or replace geometry from an sf object}
+\title{Get, set, replace or rename geometry from an sf object}
 \usage{
 \method{st_geometry}{sfc}(obj, ...)
 
@@ -31,9 +31,9 @@ st_drop_geometry(x)
 
 \item{...}{ignored}
 
-\item{x}{object of class \code{data.frame}}
+\item{x}{object of class \code{data.frame} or \code{sf}}
 
-\item{value}{object of class \code{sfc}, or \code{character}}
+\item{value}{object of class \code{sfc}, or \code{character} to set, replace, or rename the geometry of \code{x}}
 }
 \value{
 st_geometry returns an object of class \link{sfc}, a list-column with geometries
@@ -41,7 +41,7 @@ st_geometry returns an object of class \link{sfc}, a list-column with geometries
 \code{st_geometry} returns an object of class \link{sfc}. Assigning geometry to a \code{data.frame} creates an \link{sf} object, assigning it to an \link{sf} object replaces the geometry list-column.
 }
 \description{
-Get, set, or replace geometry from an sf object
+Get, set, replace or rename geometry from an sf object
 }
 \details{
 when applied to a \code{data.frame} and when \code{value} is an object of class \code{sfc}, \code{st_set_geometry} and \code{st_geometry<-} will first check for the existence of an attribute \code{sf_column} and overwrite that, or else look for list-columns of class \code{sfc} and overwrite the first of that, or else write the geometry list-column to a column named \code{geometry}.  In case \code{value} is character and \code{x} is of class \code{sf}, the "active" geometry column is set to \code{x[[value]]}.

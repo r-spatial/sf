@@ -1,7 +1,7 @@
 #' @importFrom utils head object.size str tail packageVersion compareVersion
 #' @importFrom stats aggregate dist na.omit rbinom runif setNames
 #' @importFrom tools file_ext file_path_sans_ext
-#' @importFrom methods as new slot slotNames
+#' @importFrom methods as new slot slotNames "slot<-"
 #' @importFrom grid convertHeight convertUnit convertWidth current.viewport linesGrob nullGrob pathGrob pointsGrob polylineGrob unit viewport
 #' @import graphics
 #' @importFrom grDevices dev.size rgb

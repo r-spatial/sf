@@ -37,7 +37,7 @@ Linking to GEOS 3.10.1, GDAL 3.4.0, PROJ 8.2.0; sf_use_s2() is TRUE
 > all.equal(cp1, cp2)
 [1] TRUE
 > 
-> if (sf_extSoftVersion()["GEOS"] >= "3.6.1") {
+> if (compareVersion(sf_extSoftVersion()["GEOS"], "3.6.1") > -1) {
 + # st_nearest_feature
 +   nf1 = st_nearest_feature(n0[1:50,], n0[51:100,])
 +   nf2 = st_nearest_feature(n1[1:50,], n1[51:100,])
@@ -65,4 +65,5 @@ Linking to GEOS 3.10.1, GDAL 3.4.0, PROJ 8.2.0; sf_use_s2() is TRUE
 > 
 > proc.time()
    user  system elapsed 
-  1.069   0.042   1.105 
+  1.239   0.044   1.275 
+

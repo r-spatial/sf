@@ -84,24 +84,18 @@ st_make_grid = function(x,
 		for (i in 1:nx)
 			for (j in 1:ny)
 				ret[[(j - 1) * nx + i]] = square(xc[i], yc[j], xc[i+1], yc[j+1])
+		st_sfc(ret, crs = crs)
 	} else if (what == "centers") {
-		ret = vector("list", nx * ny)
-		cent = function(x1, y1, x2, y2)
-			st_point(c( (x1+x2)/2, (y1+y2)/2 ))
-		for (i in 1:nx)
-			for (j in 1:ny)
-				ret[[(j - 1) * nx + i]] = cent(xc[i], yc[j], xc[i+1], yc[j+1])
+		e = expand.grid(x = xc[-1] - 0.5 * diff(xc[1:2]), 
+						y = yc[-1] - 0.5 * diff(yc[1:2]), 
+						KEEP.OUT.ATTRS = FALSE)
+		st_geometry(st_as_sf(e, coords = c("x", "y"), crs = crs))
 	} else if (what == "corners") {
-		ret = vector("list", (nx + 1) * (ny + 1))
-		for (i in 1:(nx + 1))
-			for (j in 1:(ny + 1))
-				ret[[(j - 1) * (nx + 1) + i]] = st_point(c(xc[i], yc[j]))
+		e = expand.grid(x = xc, y = yc, KEEP.OUT.ATTRS = FALSE)
+		st_geometry(st_as_sf(e, coords = c("x", "y"), crs = crs))
 	} else
 		stop("unknown value of `what'")
-
-	st_sfc(ret, crs = crs)
 }
-
 
 ### hex grid tesselation that
 ## - covers a bounding box st_bbox(obj)

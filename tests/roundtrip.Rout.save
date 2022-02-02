@@ -157,7 +157,7 @@ In spTransform(meuse.grid, CRS("+proj=longlat +ellps=WGS84 +no_defs")) :
                      
                      
 > 
-> nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", quiet=TRUE)
+> nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), "nc.gpkg", quiet = TRUE)
 > all.equal(nc, st_as_sf(as(nc, "Spatial")))
 [1] "Names: 1 string mismatch"                                  
 [2] "Attributes: < Component \"sf_column\": 1 string mismatch >"
@@ -165,8 +165,11 @@ In spTransform(meuse.grid, CRS("+proj=longlat +ellps=WGS84 +no_defs")) :
 [1] TRUE
 > 
 > detach("package:sp")
-> unloadNamespace("rgeos")
 > 
 > proc.time()
    user  system elapsed 
+<<<<<<< HEAD
   3.405   0.052   3.459 
+=======
+  3.902   0.044   3.947 
+>>>>>>> cc698f22f7fce70288b6efcaaef7f387cc204434

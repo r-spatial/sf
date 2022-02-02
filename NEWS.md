@@ -1,6 +1,16 @@
-# version 1.0-5
+# version 1.0-6
+
+* `st_geometry<-()` also allows to rename a geometry column in an `sf` object; #1890
+
+* for `sf` objects, the `st_as_sfc()` method is an alias for `st_geometry()`; #1882
+
+* `st_make_grid()` speeded up; #1579 thanks to Krzysztof Dyba
+
+* remove dependency on `rgeos`; #1869
 
 * use `stats::dist` rather than GEOS for symmetric point-point Euclidian distance computation; #1874
+
+# version 1.0-5
 
 * package startup message reports status of `sf_use_s2()`; #1782
 

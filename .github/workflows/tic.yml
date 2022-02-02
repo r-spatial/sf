@@ -95,7 +95,7 @@ jobs:
         run: |
           # conflicts with gfortran from r-lib/actions when linking gcc
           rm '/usr/local/bin/gfortran'
-          brew install pkg-config gdal proj geos
+          brew install pkg-config gdal proj geos sqlite3
 
       - name: "[Stage] [macOS] Install libgit2"
         if: runner.os == 'macOS'

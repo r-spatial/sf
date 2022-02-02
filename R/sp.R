@@ -40,15 +40,9 @@
 #'    Polygon(y[5:1,]), Polygon(y1), Polygon(x1), Polygon(y3)), "ID1")
 #' p2 = Polygons(list( Polygon(z[5:1,]), Polygon(z2), Polygon(z3), Polygon(z1)),
 #'   "ID2")
-#' if (require("rgeos")) {
-#'   r = createSPComment(SpatialPolygons(list(p1,p2)))
-#'   comment(r)
-#'   comment(r@polygons[[1]])
-#'   scan(text = comment(r@polygons[[1]]), quiet = TRUE)
-#'   library(sf)
-#'   a = st_as_sf(r)
-#'   summary(a)
-#' }
+#' r = SpatialPolygons(list(p1,p2))
+#' a = suppressWarnings(st_as_sf(r))
+#' summary(a)
 #' demo(meuse, ask = FALSE, echo = FALSE)
 #' summary(st_as_sf(meuse))
 #' summary(st_as_sf(meuse.grid))
@@ -145,21 +139,22 @@ st_as_sfc.SpatialLines = function(x, ..., precision = 0.0, forceMulti = FALSE) {
 st_as_sfc.SpatialPolygons = function(x, ..., precision = 0.0, forceMulti = FALSE) {
 	lst = if (forceMulti || any(sapply(x@polygons, function(x) moreThanOneOuterRing(x@Polygons)))) {
 		if (is.null(comment(x)) || comment(x) == "FALSE") {
-			warning("no comment found showing which hole belongs to which exterior ring")
-                        process_pl_comment <- function(pl) {
-                            ID <- slot(pl, "ID")
-                            crds <- lapply(slot(pl, "Polygons"), 
-                                function(xx) slot(xx, "coords"))
-                            raw <- st_sfc(st_polygon(crds))
-                            val <- st_make_valid(raw)
-                            res <- slot(as(val, "Spatial"), "polygons")[[1]]
-                            slot(res, "ID") <- ID
-                            res
-                        }
-                        slot(x, "polygons") <- lapply(slot(x, "polygons"),
-                            process_pl_comment)
-                        comment(x) <- "TRUE"
+#			if (!requireNamespace("rgeos", quietly = TRUE))
+#				stop("package rgeos required for finding out which hole belongs to which exterior ring")
 #			x = rgeos::createSPComment(x)
+			# https://github.com/r-spatial/sf/pull/1869/files/7f1921c9acc1000b92a81b3a0aa7126330d4ef12..cfa303c8fcdd0b9a7ea33eae402c1135bb8e50ba :
+			warning("no comment found showing which hole belongs to which exterior ring")
+			process_pl_comment <- function(pl) {
+				ID <- slot(pl, "ID")
+				crds <- lapply(slot(pl, "Polygons"), function(xx) slot(xx, "coords"))
+				raw <- st_sfc(st_polygon(crds))
+				val <- st_make_valid(raw)
+				res <- slot(as(val, "Spatial"), "polygons")[[1]]
+				slot(res, "ID") <- ID
+				res
+			}
+			slot(x, "polygons") <- lapply(slot(x, "polygons"), process_pl_comment)
+			comment(x) <- "TRUE"
 		}
 		lapply(x@polygons, function(y)
 			st_multipolygon(Polygons2MULTIPOLYGON(y@Polygons, comment(y))))
