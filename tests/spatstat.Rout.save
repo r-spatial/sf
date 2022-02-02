@@ -15,7 +15,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> suppressPackageStartupMessages(library(spatstat.core))
+> suppressPackageStartupMessages(library(spatstat.random))
 > suppressPackageStartupMessages(library(sf))
 > 
 > data(chicago)
@@ -108,7 +108,7 @@ First 10 features:
 > x <- sf::st_sfc(sf::st_polygon(list(rbind(c(0, 0), c(10, 0), c(10, 10), c(0, 0)))))
 > try(pts <- st_sample(x, type = "thomas"))
 Error in st_poly_sample(x, size = size, ..., type = type, by_polygon = by_polygon) : 
-  rthomas is not an exported function from spatstat.core.
+  rthomas is not an exported function from spatstat.random.
 > try(pts <- st_sample(x, kappa = 1, mu = 10, type = "Thomas"))
 Error in st_poly_sample(x, size = size, ..., type = type, by_polygon = by_polygon) : 
   The spatstat function rThomas did not return a valid result. Consult the help file.

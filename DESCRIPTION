@@ -95,7 +95,7 @@ Suggests:
     sp (>= 1.2-4),
     spatstat (>= 2.0-1),
     spatstat.geom, 
-    spatstat.core, 
+    spatstat.random, 
     spatstat.linnet, 
     spatstat.utils,
     stars (>= 0.2-0),
