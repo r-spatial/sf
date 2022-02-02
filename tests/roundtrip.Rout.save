@@ -168,8 +168,5 @@ In spTransform(meuse.grid, CRS("+proj=longlat +ellps=WGS84 +no_defs")) :
 > 
 > proc.time()
    user  system elapsed 
-<<<<<<< HEAD
-  3.405   0.052   3.459 
-=======
   3.902   0.044   3.947 
->>>>>>> cc698f22f7fce70288b6efcaaef7f387cc204434
+

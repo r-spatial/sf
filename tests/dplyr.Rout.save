@@ -90,17 +90,10 @@ Projected CRS: WGS 84 / Pseudo-Mercator
 # A tibble: 4 × 3
   area_cl     `mean(AREA)`                                              geometry
   <fct>              <dbl>                                    <MULTIPOLYGON [m]>
-<<<<<<< HEAD
-1 (0,0.1]           0.0760 (((-8863447 4143472, -8857175 4151333, -8858837 4156…
-2 (0.1,0.12]        0.112  (((-9362142 4197316, -9355589 4201000, -9354262 4203…
-3 (0.12,0.15]       0.134  (((-9302072 4171501, -9311147 4181236, -9311293 4183…
-4 (0.15,0.25]       0.190  (((-8830723 4133011, -8832558 4137948, -8832096 4141…
-=======
 1 (0,0.1]           0.0760 (((-8863447 4143479, -8857175 4151339, -8858837 4156…
 2 (0.1,0.12]        0.112  (((-9362143 4197312, -9355589 4200996, -9354263 4203…
 3 (0.12,0.15]       0.134  (((-9302071 4171499, -9311146 4181234, -9311292 4183…
 4 (0.15,0.25]       0.190  (((-8830723 4133018, -8832558 4137955, -8832096 4141…
->>>>>>> 9f4574bcbd0c4b4a3a71a65b4b75f9180d7034a2
 > nc.g %>% summarize(mean(AREA)) %>% plot(col = 3:6/7)
 > 
 > library(tidyr)
@@ -203,11 +196,7 @@ Projected CRS: NAD83 / North Carolina
 # A tibble: 1 × 2
   `mean(dens)`                                                          geometry
   [person/m^2]                                                <MULTIPOLYGON [m]>
-<<<<<<< HEAD
-1   0.00000259 (((138426.9 177702.5, 145549.4 177840.1, 151052 180560.3, 152246…
-=======
 1   0.00000259 (((138426 177699.3, 145548.6 177837.2, 151051.2 180557.6, 152246…
->>>>>>> 9f4574bcbd0c4b4a3a71a65b4b75f9180d7034a2
 > out %>% summarise(mean(new_dens))
 Simple feature collection with 1 feature and 1 field
 Geometry type: MULTIPOLYGON
@@ -229,11 +218,7 @@ Projected CRS: NAD83 / North Carolina
 # A tibble: 1 × 2
   `sum(area * dens)`                                                    geometry
             [person]                                          <MULTIPOLYGON [m]>
-<<<<<<< HEAD
-1             329962 (((138426.9 177702.5, 145549.4 177840.1, 151052 180560.3, …
-=======
 1             329962 (((138426 177699.3, 145548.6 177837.2, 151051.2 180557.6, …
->>>>>>> 9f4574bcbd0c4b4a3a71a65b4b75f9180d7034a2
 > out %>% summarise(sum(A * new_dens))
 Simple feature collection with 1 feature and 1 field
 Geometry type: MULTIPOLYGON

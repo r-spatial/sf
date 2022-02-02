@@ -263,8 +263,5 @@ First 10 features:
 > 
 > proc.time()
    user  system elapsed 
-<<<<<<< HEAD
-  1.446   0.072   1.513 
-=======
   1.652   0.091   1.736 
->>>>>>> cc698f22f7fce70288b6efcaaef7f387cc204434
+

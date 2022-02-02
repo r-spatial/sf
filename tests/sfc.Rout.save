@@ -1128,8 +1128,5 @@ CRS:           NA
 > 
 > proc.time()
    user  system elapsed 
-<<<<<<< HEAD
-  6.660   0.127   6.800 
-=======
   7.515   0.116   7.641 
->>>>>>> cc698f22f7fce70288b6efcaaef7f387cc204434
+

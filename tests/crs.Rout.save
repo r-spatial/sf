@@ -240,8 +240,5 @@ GEOGCRS["WGS 84",
 > 
 > proc.time()
    user  system elapsed 
-<<<<<<< HEAD
-  0.751   0.044   0.789 
-=======
   0.874   0.060   0.927 
->>>>>>> cc698f22f7fce70288b6efcaaef7f387cc204434
+
