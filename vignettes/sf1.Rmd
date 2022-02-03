@@ -489,7 +489,7 @@ write_sf(nc, "nc.shp") # silently overwrites
 The `dsn` and `layer` arguments to `st_read` and `st_write`
 denote a data source name and optionally a layer name.  Their exact
 interpretation as well as the options they support vary per driver,
-the [GDAL driver documentation](https://gdal.org/ogr_formats.html)
+the [GDAL driver documentation](https://gdal.org/drivers/vector/index.html)
 is best consulted for this.  For instance, a PostGIS table in
 database `postgis` might be read by
 
