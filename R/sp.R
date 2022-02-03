@@ -143,7 +143,8 @@ st_as_sfc.SpatialPolygons = function(x, ..., precision = 0.0, forceMulti = FALSE
 #				stop("package rgeos required for finding out which hole belongs to which exterior ring")
 #			x = rgeos::createSPComment(x)
 			# https://github.com/r-spatial/sf/pull/1869/files/7f1921c9acc1000b92a81b3a0aa7126330d4ef12..cfa303c8fcdd0b9a7ea33eae402c1135bb8e50ba :
-			warning("no comment found showing which hole belongs to which exterior ring")
+			# warning("no comment found showing which hole belongs to which exterior ring")
+			# (warning causes revdep problem in pkg amt)
 			process_pl_comment <- function(pl) {
 				ID <- slot(pl, "ID")
 				crds <- lapply(slot(pl, "Polygons"), function(xx) slot(xx, "coords"))
