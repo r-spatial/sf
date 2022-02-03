@@ -330,10 +330,10 @@ gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, fac
 }
 
 pivot_longer.sf <- function (data, cols, names_to = "name", names_prefix = NULL,
-		names_sep = NULL, names_pattern = NULL, names_ptypes = list(),
-		names_transform = list(), names_repair = "check_unique",
-		values_to = "value", values_drop_na = FALSE, values_ptypes = list(),
-		values_transform = list(), ...) {
+		names_sep = NULL, names_pattern = NULL, names_ptypes = NULL,
+		names_transform = NULL, names_repair = "check_unique",
+		values_to = "value", values_drop_na = FALSE, values_ptypes = NULL,
+		values_transform = NULL, ...) {
 
   sf_column_name = attr(data, "sf_column")
   data = as.data.frame(data)
@@ -345,19 +345,19 @@ pivot_longer.sf <- function (data, cols, names_to = "name", names_prefix = NULL,
   if (!requireNamespace("tidyr", quietly = TRUE))
     stop("tidyr required: install first?")
   out <- tidyr::pivot_longer(
-    data = data, 
+    data = data,
     cols = {{ cols }},
-    names_to = names_to, 
+    names_to = names_to,
     names_prefix = names_prefix,
-    names_sep = names_sep, 
-    names_pattern = names_pattern, 
+    names_sep = names_sep,
+    names_pattern = names_pattern,
     names_ptypes = names_ptypes,
-    names_transform = names_transform, 
+    names_transform = names_transform,
     names_repair = names_repair,
-    values_to = values_to, 
-    values_drop_na = values_drop_na, 
+    values_to = values_to,
+    values_drop_na = values_drop_na,
     values_ptypes = values_ptypes,
-    values_transform = values_transform, 
+    values_transform = values_transform,
     ...
   )
   st_as_sf(out, sf_column_name = sf_column_name)
