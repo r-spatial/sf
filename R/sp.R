@@ -346,16 +346,12 @@ setAs("crs", "CRS", function(from) CRS_from_crs(from))
 CRS_from_crs = function(from) {
 	if (! requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
-	if (is.na(from))
-		sp::CRS(NA_character_)
-	else if (CPL_proj_version() >= "6.0.0" && CPL_gdal_version() >= "3.0.0") {
-		# we don't use sp::CRS(SRS_string = from$wkt) as rgdal may not be available,
-		# which would break, and from$wkt has already been validated by GDAL:
-		nm <- "CRS"
-		attr(nm, "package") <- "sp" # See ?new:
-		obj <- new(nm, projargs = from$proj4string)
+	nm <- "CRS"
+	attr(nm, "package") <- "sp" # See ?new:
+	obj <- new(nm, projargs = from$proj4string)
+	if (!is.na(from$wkt) && CPL_proj_version() >= "6.0.0" && CPL_gdal_version() >= "3.0.0")
 		comment(obj) <- from$wkt
-		obj
-	} else
-		sp::CRS(from$proj4string)
+	obj
+	# we don't use sp::CRS(SRS_string = from$wkt) as rgdal may not be available,
+	# which would break, and from$wkt has already been validated by GDAL:
 }
