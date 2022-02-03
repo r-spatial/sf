@@ -150,6 +150,8 @@ st_as_sfc.SpatialPolygons = function(x, ..., precision = 0.0, forceMulti = FALSE
 				crds <- lapply(slot(pl, "Polygons"), function(xx) slot(xx, "coords"))
 				raw <- st_sfc(st_polygon(crds))
 				val <- st_make_valid(raw)
+				if (inherits(val, "sfc_GEOMETRYCOLLECTION"))
+					val = st_collection_extract(val, "POLYGON")
 				res <- slot(as(val, "Spatial"), "polygons")[[1]]
 				slot(res, "ID") <- ID
 				res
