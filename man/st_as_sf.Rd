@@ -73,7 +73,7 @@ there is more than one and \code{sf_column_name} is \code{NULL}, the first one i
 Convert foreign object to an sf object
 }
 \details{
-setting argument \code{wkt} annihilates the use of argument \code{coords}. If \code{x} contains a column called "geometry", \code{coords} will result in overwriting of this column by the \link{sfc} geometry list-column.  Setting \code{wkt} will replace this column with the geometry list-column, unless \code{remove_coordinates} is \code{FALSE}.
+setting argument \code{wkt} annihilates the use of argument \code{coords}. If \code{x} contains a column called "geometry", \code{coords} will result in overwriting of this column by the \link{sfc} geometry list-column.  Setting \code{wkt} will replace this column with the geometry list-column, unless \code{remove} is \code{FALSE}.
 }
 \examples{
 pt1 = st_point(c(0,1))
