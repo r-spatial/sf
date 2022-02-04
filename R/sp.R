@@ -143,12 +143,15 @@ st_as_sfc.SpatialPolygons = function(x, ..., precision = 0.0, forceMulti = FALSE
 #				stop("package rgeos required for finding out which hole belongs to which exterior ring")
 #			x = rgeos::createSPComment(x)
 			# https://github.com/r-spatial/sf/pull/1869/files/7f1921c9acc1000b92a81b3a0aa7126330d4ef12..cfa303c8fcdd0b9a7ea33eae402c1135bb8e50ba :
-			warning("no comment found showing which hole belongs to which exterior ring")
+			# warning("no comment found showing which hole belongs to which exterior ring")
+			# (warning causes revdep problem in pkg amt)
 			process_pl_comment <- function(pl) {
 				ID <- slot(pl, "ID")
 				crds <- lapply(slot(pl, "Polygons"), function(xx) slot(xx, "coords"))
 				raw <- st_sfc(st_polygon(crds))
 				val <- st_make_valid(raw)
+				if (inherits(val, "sfc_GEOMETRYCOLLECTION"))
+					val = st_collection_extract(val, "POLYGON")
 				res <- slot(as(val, "Spatial"), "polygons")[[1]]
 				slot(res, "ID") <- ID
 				res
@@ -345,23 +348,12 @@ setAs("crs", "CRS", function(from) CRS_from_crs(from))
 CRS_from_crs = function(from) {
 	if (! requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
-#	if (is.na(from))
-#		sp::CRS(NA_character_) 
-# avoid recursion when sp::CRS() calls sf::as(., "CRS")
-#	else 
-        nm <- "CRS"
-        attr(nm, "package") <- "sp" # See ?new:
-        obj <- new(nm, projargs = from$proj4string)
-        if (!is.na(from$wkt) && CPL_proj_version() >= "6.0.0" && 
-            CPL_gdal_version() >= "3.0.0") comment(obj) <- from$wkt
-        obj
-		# we don't use sp::CRS(SRS_string = from$wkt) as rgdal may not be available,
-		# which would break, and from$wkt has already been validated by GDAL:
-#		nm <- "CRS"
-#		attr(nm, "package") <- "sp" # See ?new:
-#		obj <- new(nm, projargs = from$proj4string)
-#		comment(obj) <- from$wkt
-#		obj
-#	} else
-#		sp::CRS(from$proj4string)
+	nm <- "CRS"
+	attr(nm, "package") <- "sp" # See ?new:
+	obj <- new(nm, projargs = from$proj4string)
+	if (!is.na(from$wkt) && CPL_proj_version() >= "6.0.0" && CPL_gdal_version() >= "3.0.0")
+		comment(obj) <- from$wkt
+	obj
+	# we don't use sp::CRS(SRS_string = from$wkt) as rgdal may not be available,
+	# which would break, and from$wkt has already been validated by GDAL:
 }

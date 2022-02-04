@@ -1,12 +1,14 @@
 # version 1.0-6
 
+* adapt to new `spatstat.random` package; #1892
+
 * `st_geometry<-()` also allows to rename a geometry column in an `sf` object; #1890
 
 * for `sf` objects, the `st_as_sfc()` method is an alias for `st_geometry()`; #1882
 
 * `st_make_grid()` speeded up; #1579 thanks to Krzysztof Dyba
 
-* remove dependency on `rgeos`; #1869
+* remove direct and indirect dependencies on `rgeos` and `rgdal`; #1869
 
 * use `stats::dist` rather than GEOS for symmetric point-point Euclidian distance computation; #1874
 

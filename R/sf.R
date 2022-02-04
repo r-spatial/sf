@@ -16,7 +16,7 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' @param sf_column_name character; name of the active list-column with simple feature geometries; in case
 #' there is more than one and \code{sf_column_name} is \code{NULL}, the first one is taken.
 #' @param ... passed on to \link{st_sf}, might included named arguments \code{crs} or \code{precision}
-#' @details setting argument \code{wkt} annihilates the use of argument \code{coords}. If \code{x} contains a column called "geometry", \code{coords} will result in overwriting of this column by the \link{sfc} geometry list-column.  Setting \code{wkt} will replace this column with the geometry list-column, unless \code{remove_coordinates} is \code{FALSE}.
+#' @details setting argument \code{wkt} annihilates the use of argument \code{coords}. If \code{x} contains a column called "geometry", \code{coords} will result in overwriting of this column by the \link{sfc} geometry list-column.  Setting \code{wkt} will replace this column with the geometry list-column, unless \code{remove} is \code{FALSE}.
 #'
 #' @examples
 #' pt1 = st_point(c(0,1))
@@ -179,7 +179,7 @@ st_set_geometry = function(x, value) {
 st_as_sfc.sf = function(x, ...) st_geometry(x)
 
 list_column_to_sfc = function(x) {
-	if (is.list(x)) {
+	if (is.list(x) && !inherits(x, "data.frame")) {
 		if (inherits(try(y <- st_as_sfc(x), silent = TRUE), "try-error"))
 			x
 		else
