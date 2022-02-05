@@ -768,7 +768,9 @@ void CPL_create(CharacterVector file, IntegerVector nxy, NumericVector value, Ch
                                    file[0], nPixels, nLines,
                                    1, GDT_Byte, NULL);
 	OGRSpatialReference oSRS;
+#if GDAL_VERSION_NUM >= 2050000
 	oSRS.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+#endif
 	if (oSRS.SetFromUserInput( wkt[0] ) != OGRERR_NONE) {
 		CPLError(CE_Failure, CPLE_AppDefined, "Failed to process SRS definition");
 		stop("CPL_create failed");

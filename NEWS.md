@@ -1,5 +1,7 @@
 # version 1.0-7
 
+* fix compile problems against GDAL < 2.5.0 introduced in 1.0-6; #1899
+
 # version 1.0-6
 
 * adapt to new `spatstat.random` package; #1892
