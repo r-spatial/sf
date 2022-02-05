@@ -1,3 +1,5 @@
+# version 1.0-7
+
 # version 1.0-6
 
 * adapt to new `spatstat.random` package; #1892
