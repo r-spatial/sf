@@ -66,6 +66,8 @@ alternative values for argument \code{join} are:
   \item any user-defined function of the same profile as the above
 }
 A left join returns all records of the \code{x} object with \code{y} fields for non-matched records filled with \code{NA} values; an inner join returns only records that spatially match.
+
+To replicate the results of \code{st_within(x, y)} you will need to use \code{st_join(x, y, join = "st_within", left = FALSE)}.
 }
 \examples{
 a = st_sf(a = 1:3,
