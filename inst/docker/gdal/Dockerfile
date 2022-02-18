@@ -79,9 +79,11 @@ RUN wget http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
   && ldconfig
 
 #RUN git clone --depth 1 https://github.com/OSGeo/PROJ.git
-RUN wget http://download.osgeo.org/proj/proj-8.2.0.tar.gz
-RUN tar zxvf proj-8.2.0.tar.gz
-RUN cd proj-8.2.0 \
+# https://download.osgeo.org/proj/proj-9.0.0RC1.tar.gz
+ENV PROJ_VERSION 9.0.0RC1
+RUN wget http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz
+RUN tar zxvf proj-${PROJ_VERSION}.tar.gz
+RUN cd proj* \
   && ls -l \
   && mkdir build \
   && cd build \
@@ -102,7 +104,7 @@ RUN cd proj-8.2.0 \
 
 # https://download.osgeo.org/gdal/3.1.0/gdal-3.1.0rc2.tar.gz
 ENV GDAL_VERSION 3.4.1
-ENV GDAL_VERSION_NAME 3.4.1rc1
+ENV GDAL_VERSION_NAME 3.4.1
 
 RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
