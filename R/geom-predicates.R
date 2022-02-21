@@ -33,7 +33,7 @@ is_symmetric = function(operation, pattern) {
 
 # returning matrix, distance or relation string -- the work horse is:
 st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
-		sparse = TRUE, prepared = FALSE, model = "closed", ...) {
+		sparse = TRUE, prepared = FALSE, model = "closed", ..., remove_self = FALSE) {
 	if (missing(y))
 		y = x
 	else if (inherits(x, c("sf", "sfc")) && inherits(y, c("sf", "sfc")))
@@ -47,7 +47,8 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 				as.character(seq_along(lst))
 			else
 				row.names(x)
-		sgbp(lst, predicate = op, region.id = id, ncol = length(st_geometry(y)), sparse)
+		sgbp(lst, predicate = op, region.id = id, ncol = length(st_geometry(y)), sparse,
+			remove_self = remove_self)
 	} else {
 		if (longlat && !(op %in% c("equals", "equals_exact")))
 			message_longlat(paste0("st_", op))
@@ -63,7 +64,8 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 						as.character(seq_along(ret))
 					else
 						row.names(x)
-				sgbp(ret, predicate = op, region.id = id, ncol = length(st_geometry(y)), sparse)
+				sgbp(ret, predicate = op, region.id = id, ncol = length(st_geometry(y)), sparse,
+					remove_self = remove_self)
 			} else # CPL_geos_binop returned a matrix, e.g. from op = "relate"
 				ret[[1]]
 		}
