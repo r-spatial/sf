@@ -1,6 +1,6 @@
 # version 1.0-7
 
-* geometric predicates return `sgbp` objects omitting self-intersections etc. by passing `remove_self = TRUE` to `...` (experimental, undocumented)
+* geometric predicates return `sgbp` objects omitting self-intersections etc. by passing `remove_self = TRUE` to `...` (experimental, undocumented); this simplifies identification (and removal) of duplicate geometries, e.g. by `st_equals(x, remove_self = TRUE) |> unlist()`
 
 * fix compile problems against GDAL < 2.5.0 introduced in 1.0-6; #1899
 

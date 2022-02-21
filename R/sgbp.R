@@ -7,7 +7,7 @@ sgbp = function(x, predicate, region.id, ncol, sparse = TRUE, remove_self = FALS
 	ret = structure(x,
 		predicate = predicate,
 		region.id = region.id,
-		self_removed = remove_self,
+		remove_self = remove_self,
 		ncol = ncol,
 		class = c("sgbp", "list"))
 	if (! sparse)
@@ -30,8 +30,8 @@ print.sgbp = function(x, ..., n = 10, max_nb = 10) {
 	n = min(length(x), n)
 	hd = paste0("Sparse geometry binary predicate list of length ", length(x), ", ",
 	 	"where the predicate was `", attr(x, "predicate"), "'")
-	if (attr(x, "self_removed"))
-		hd = paste0(hd, ", after self removed")
+	if (isTRUE(attr(x, "remove_self")))
+		hd = paste0(hd, ", with remove_self = TRUE")
 	cat(strwrap(hd), sep = "\n")
 	if (n < length(x))
 		cat("first ", n, " elements:\n", sep = "")
