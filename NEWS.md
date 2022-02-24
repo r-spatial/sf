@@ -2,7 +2,7 @@
 
 * `st_crs(x)$ud_unit` returns the unit of the coordinate reference system of `x`
 
-* geometric predicates return `sgbp` objects omitting self-intersections etc. by passing `remove_self = TRUE` and unique symmetric relationship by passing `retain_unique = TRUE` (to `...` if needed); this simplifies identification (and removal) of duplicate geometries, e.g. by `st_equals(x, retain_unique = TRUE) |> unlist() |> unique()`
+* geometric predicates return `sgbp` objects omitting self-intersections etc. by passing `remove_self = TRUE` and unique symmetric relationship by passing `retain_unique = TRUE` (to `...` if needed); this simplifies identification (and removal) of duplicate geometries, e.g. by `st_equals(x, retain_unique = TRUE) |> unlist() |> unique()`; #1893
 
 * fix compile problems against GDAL < 2.5.0 introduced in 1.0-6; #1899
 

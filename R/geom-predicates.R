@@ -218,14 +218,15 @@ st_overlaps		= function(x, y, sparse = TRUE, prepared = TRUE, ...)
 	st_geos_binop("overlaps", x, y, sparse = sparse, prepared = prepared, ...)
 
 #' @name geos_binary_pred
-#' @param retain_unique; logical, if TRUE (and y is missing) return only indexes of points larger than the current index; this can be used to select unique geometries, see examples. This argument can be used for all geometry predictates
-#' @param remove_self; logical, if TRUE (and y is missing) return only indexes of geometries different from the current index; this can be used to omit self-intersections; see examples. This argument can be used for all geometry predictates
+#' @param retain_unique logical; if TRUE (and y is missing) return only indexes of points larger than the current index; this can be used to select unique geometries, see examples. This argument can be used for all geometry predictates; see als \link{distinct.sf} to find records where geometries AND attributes are distinct.
+#' @param remove_self logical; if TRUE (and y is missing) return only indexes of geometries different from the current index; this can be used to omit self-intersections; see examples. This argument can be used for all geometry predictates
 #' @export
 st_equals		= function(x, y, sparse = TRUE, prepared = FALSE, ..., 
 							retain_unique = FALSE, remove_self = FALSE) {
 	if (prepared)
 		stop("prepared geometries not supported for st_equals")
-	st_geos_binop("equals", x, y, sparse = sparse, ..., retain_unique = retain_unique, remove_self = remove_self)
+	st_geos_binop("equals", x, y, sparse = sparse, ..., 
+				  retain_unique = retain_unique, remove_self = remove_self)
 }
 
 #' @name geos_binary_pred

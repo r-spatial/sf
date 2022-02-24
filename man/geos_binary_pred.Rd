@@ -65,13 +65,13 @@ st_is_within_distance(x, y = x, dist, sparse = TRUE, ...)
 \item{model}{character; polygon/polyline model; one of
 "open", "semi-open" or "closed"; see Details.}
 
+\item{retain_unique}{logical; if TRUE (and y is missing) return only indexes of points larger than the current index; this can be used to select unique geometries, see examples. This argument can be used for all geometry predictates; see als \link{distinct.sf} to find records where geometries AND attributes are distinct.}
+
+\item{remove_self}{logical; if TRUE (and y is missing) return only indexes of geometries different from the current index; this can be used to omit self-intersections; see examples. This argument can be used for all geometry predictates}
+
 \item{par}{numeric; parameter used for "equals_exact" (margin);}
 
 \item{dist}{distance threshold; geometry indexes with distances smaller or equal to this value are returned; numeric value or units value having distance units.}
-
-\item{retain_unique;}{logical, if TRUE (and y is missing) return only indexes of points larger than the current index; this can be used to select unique geometries, see examples. This argument can be used for all geometry predictates}
-
-\item{remove_self;}{logical, if TRUE (and y is missing) return only indexes of geometries different from the current index; this can be used to omit self-intersections; see examples. This argument can be used for all geometry predictates}
 }
 \value{
 If \code{sparse=FALSE}, \code{st_predicate} (with \code{predicate} e.g. "intersects") returns a dense logical matrix with element \code{i,j} \code{TRUE} when \code{predicate(x[i], y[j])} (e.g., when geometry of feature i and j intersect); if \code{sparse=TRUE}, an object of class \code{\link{sgbp}} with a sparse list representation of the same matrix, with list element \code{i} an integer vector with all indices j for which \code{predicate(x[i],y[j])} is \code{TRUE} (and hence a zero-length integer vector if none of them is \code{TRUE}). From the dense matrix, one can find out if one or more elements intersect by \code{apply(mat, 1, any)}, and from the sparse list by \code{lengths(lst) > 0}, see examples below.
