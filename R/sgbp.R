@@ -1,13 +1,18 @@
-sgbp = function(x, predicate, region.id, ncol, sparse = TRUE, remove_self = FALSE) {
-	if (remove_self) {
+sgbp = function(x, predicate, region.id, ncol, sparse = TRUE, remove_self = FALSE, 
+				retain_unique = FALSE) {
+	if (remove_self || retain_unique) {
 		if (length(x) != ncol)
-			stop("remove_self only works for square sparse matrices")
-		x = mapply(setdiff, x, seq_along(x), SIMPLIFY = FALSE)
+			stop("remove_self or retain_unique only work for square sparse matrices")
+		x = if (retain_unique) # (includes doing remove_self)
+				mapply(function(x, y) { x[x > y] }, x, seq_along(x), SIMPLIFY = FALSE)
+			else # remove_self 
+				mapply(setdiff, x, seq_along(x), SIMPLIFY = FALSE)
 	}
 	ret = structure(x,
 		predicate = predicate,
 		region.id = region.id,
 		remove_self = remove_self,
+		retain_unique = retain_unique,
 		ncol = ncol,
 		class = c("sgbp", "list"))
 	if (! sparse)
@@ -30,7 +35,9 @@ print.sgbp = function(x, ..., n = 10, max_nb = 10) {
 	n = min(length(x), n)
 	hd = paste0("Sparse geometry binary predicate list of length ", length(x), ", ",
 	 	"where the predicate was `", attr(x, "predicate"), "'")
-	if (isTRUE(attr(x, "remove_self")))
+	if (isTRUE(attr(x, "retain_unique")))
+		hd = paste0(hd, ", with retain_unique = TRUE")
+	else if (isTRUE(attr(x, "remove_self")))
 		hd = paste0(hd, ", with remove_self = TRUE")
 	cat(strwrap(hd), sep = "\n")
 	if (n < length(x))

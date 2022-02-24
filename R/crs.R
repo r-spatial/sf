@@ -385,7 +385,7 @@ is.na.crs = function(x) {
 	else if (is.numeric(name) || name %in% names(x))
 		x[[name]]
 	else {
-		p = crs_parameters(x, with_units = FALSE)
+		p = crs_parameters(x, with_units = (name == "ud_unit"))
 		if (name %in% names(p))
 			p[[name]]
 		else {

@@ -33,7 +33,15 @@ st_contains_properly(x, y, sparse = TRUE, prepared = TRUE, ...)
 
 st_overlaps(x, y, sparse = TRUE, prepared = TRUE, ...)
 
-st_equals(x, y, sparse = TRUE, prepared = FALSE, ...)
+st_equals(
+  x,
+  y,
+  sparse = TRUE,
+  prepared = FALSE,
+  ...,
+  retain_unique = FALSE,
+  remove_self = FALSE
+)
 
 st_covers(x, y, sparse = TRUE, prepared = TRUE, ..., model = "closed")
 
@@ -60,6 +68,10 @@ st_is_within_distance(x, y = x, dist, sparse = TRUE, ...)
 \item{par}{numeric; parameter used for "equals_exact" (margin);}
 
 \item{dist}{distance threshold; geometry indexes with distances smaller or equal to this value are returned; numeric value or units value having distance units.}
+
+\item{retain_unique;}{logical, if TRUE (and y is missing) return only indexes of points larger than the current index; this can be used to select unique geometries, see examples. This argument can be used for all geometry predictates}
+
+\item{remove_self;}{logical, if TRUE (and y is missing) return only indexes of geometries different from the current index; this can be used to omit self-intersections; see examples. This argument can be used for all geometry predictates}
 }
 \value{
 If \code{sparse=FALSE}, \code{st_predicate} (with \code{predicate} e.g. "intersects") returns a dense logical matrix with element \code{i,j} \code{TRUE} when \code{predicate(x[i], y[j])} (e.g., when geometry of feature i and j intersect); if \code{sparse=TRUE}, an object of class \code{\link{sgbp}} with a sparse list representation of the same matrix, with list element \code{i} an integer vector with all indices j for which \code{predicate(x[i],y[j])} is \code{TRUE} (and hence a zero-length integer vector if none of them is \code{TRUE}). From the dense matrix, one can find out if one or more elements intersect by \code{apply(mat, 1, any)}, and from the sparse list by \code{lengths(lst) > 0}, see examples below.
@@ -99,4 +111,13 @@ apply(mat, 1, any)
 lengths(lst) > 0
 # which points fall inside the first polygon?
 st_intersects(pol, pts)[[1]]
+# remove duplicate geometries:
+p1 = st_point(0:1)
+p2 = st_point(2:1)
+p = st_sf(a = letters[1:8], geom = st_sfc(p1, p1, p2, p1, p1, p2, p2, p1))
+st_equals(p)
+st_equals(p, remove_self = TRUE)
+(u = st_equals(p, retain_unique = TRUE))
+# retain the records with unique geometries:
+p[-unlist(u),]
 }

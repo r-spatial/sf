@@ -276,3 +276,12 @@ x %>% st_set_precision(501) %>% st_intersects(y) # no
 x %>% st_set_precision(500) %>% st_intersects(y) # yes
 x %>% st_set_precision(100) %>% st_intersects(y)
 x %>% st_set_precision(10) %>% st_intersects(y)
+
+p1 = st_point(0:1)
+p2 = st_point(2:1)
+p = st_sf(a = letters[1:8], geom = st_sfc(p1, p1, p2, p1, p1, p2, p2, p1))
+st_equals(p)
+st_equals(p, remove_self = TRUE)
+(u = st_equals(p, retain_unique = TRUE))
+# retain the records with unique geometries:
+p[-unlist(u),]
