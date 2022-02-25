@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0-6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0-7</span>
       </span>
     </div>
 
@@ -115,18 +115,18 @@
     
     
 <p>This vignette describes a number of issues that did not come up in the previous vignettes, and that may or may not be categorized as “frequently asked questions”. Readers are encouraged to provide entries for this vignette (as for the others).</p>
-<div class="section level1">
-<h1 id="what-is-this-epsg-code-all-about">What is this EPSG code all about?<a class="anchor" aria-label="anchor" href="#what-is-this-epsg-code-all-about"></a>
-</h1>
+<div class="section level2">
+<h2 id="what-is-this-epsg-code-all-about">What is this EPSG code all about?<a class="anchor" aria-label="anchor" href="#what-is-this-epsg-code-all-about"></a>
+</h2>
 <p>EPSG stands for a maintained, well-understood registry of spatial reference systems, maintained by the International Association of Oil &amp; Gass Producers (IOGP). “EPSG” stands for the authority, e.g. “EPSG:4326” stands for spatial reference system with ID 4326 as it is maintained by the EPSG authority. The website for the EPSG registry is found at the epsg.org domain.</p>
 </div>
-<div class="section level1">
-<h1 id="how-does-sf-deal-with-secondary-geometry-columns">How does <code>sf</code> deal with secondary geometry columns?<a class="anchor" aria-label="anchor" href="#how-does-sf-deal-with-secondary-geometry-columns"></a>
-</h1>
+<div class="section level2">
+<h2 id="how-does-sf-deal-with-secondary-geometry-columns">How does <code>sf</code> deal with secondary geometry columns?<a class="anchor" aria-label="anchor" href="#how-does-sf-deal-with-secondary-geometry-columns"></a>
+</h2>
 <p><code>sf</code> objects can have more than one geometry list-column, but always only one geometry column is considered <em>active</em>, and returned by <code>st_geometry</code>. When there are multiple geometry columns, the default <code>print</code> methods reports which one is active:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span>
-<span class="co">## Linking to GEOS 3.10.1, GDAL 3.3.3, PROJ 8.2.0; sf_use_s2() is TRUE</span>
+<span class="co">## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1; sf_use_s2() is TRUE</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/demo.html" class="external-link">demo</a></span><span class="op">(</span><span class="va">nc</span>, ask <span class="op">=</span> <span class="cn">FALSE</span>, echo <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="va">nc</span><span class="op">$</span><span class="va">geom2</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_centroid</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">nc</span>, n <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
@@ -156,14 +156,14 @@
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="sf6_files/figure-html/unnamed-chunk-3-2.png" width="700"></p>
 </div>
-<div class="section level1">
-<h1 id="does-st_simplify-preserve-topology">Does <code>st_simplify</code> preserve topology?<a class="anchor" aria-label="anchor" href="#does-st_simplify-preserve-topology"></a>
-</h1>
+<div class="section level2">
+<h2 id="does-st_simplify-preserve-topology">Does <code>st_simplify</code> preserve topology?<a class="anchor" aria-label="anchor" href="#does-st_simplify-preserve-topology"></a>
+</h2>
 <p><code>st_simplify</code> is a topology-preserving function, but does this on the level of individual feature geometries. That means, simply said, that after applying it, a polygon will still be a polygon. However when two features have a longer shared boundary, applying <code>st_simplify</code> to the object does not guarantee that in the resulting object these two polygons still have the same boundary in common, since the simplification is done independently, <em>for each feature geometry</em>.</p>
 </div>
-<div class="section level1">
-<h1 id="why-do-dplyr-verbs-not-work-for-sf-objects">Why do dplyr verbs not work for <code>sf</code> objects?<a class="anchor" aria-label="anchor" href="#why-do-dplyr-verbs-not-work-for-sf-objects"></a>
-</h1>
+<div class="section level2">
+<h2 id="why-do-dplyr-verbs-not-work-for-sf-objects">Why do dplyr verbs not work for <code>sf</code> objects?<a class="anchor" aria-label="anchor" href="#why-do-dplyr-verbs-not-work-for-sf-objects"></a>
+</h2>
 <p>They do! However, many developers like to write scripts that never load packages but address all functions by the <code>sf::</code> prefix, as in</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">i</span> <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span><span class="op">(</span><span class="va">sf1</span>, <span class="va">sf2</span><span class="op">)</span></code></pre></div>
@@ -171,13 +171,13 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level1">
-<h1 id="what-is-this-errorwarningmessage-about">What is this error/warning/message about?<a class="anchor" aria-label="anchor" href="#what-is-this-errorwarningmessage-about"></a>
-</h1>
 <div class="section level2">
-<h2 id="although-coordinates-are-longitudelatitude-xxx-assumes-that-they-are-planar">
-<em>although coordinates are longitude/latitude, xxx assumes that they are planar</em><a class="anchor" aria-label="anchor" href="#although-coordinates-are-longitudelatitude-xxx-assumes-that-they-are-planar"></a>
+<h2 id="what-is-this-errorwarningmessage-about">What is this error/warning/message about?<a class="anchor" aria-label="anchor" href="#what-is-this-errorwarningmessage-about"></a>
 </h2>
+<div class="section level3">
+<h3 id="although-coordinates-are-longitudelatitude-xxx-assumes-that-they-are-planar">
+<em>although coordinates are longitude/latitude, xxx assumes that they are planar</em><a class="anchor" aria-label="anchor" href="#although-coordinates-are-longitudelatitude-xxx-assumes-that-they-are-planar"></a>
+</h3>
 <p>Most (but not all) of the geometry calculating routines used by <code>sf</code> come from the <a href="https://libgeos.org" class="external-link">GEOS</a> library. This library considers coordinates in a two-dimensional, flat, Euclidean space. For longitude latitude data, this is not the case. A simple example is a polygon enclosing the North pole, which should include the pole:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">polygon</span> <span class="op">=</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">80</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">120</span>,<span class="fl">80</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">240</span>,<span class="fl">80</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">80</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, 
@@ -189,20 +189,20 @@
 <span class="co">##  1: 1</span></code></pre></div>
 <p>which gives a wrong result (no intersection).</p>
 </div>
-<div class="section level2">
-<h2 id="st_centroid-does-not-give-correct-centroids-for-longitudelatitude-data">
+<div class="section level3">
+<h3 id="st_centroid-does-not-give-correct-centroids-for-longitudelatitude-data">
 <em>st_centroid does not give correct centroids for longitude/latitude data</em><a class="anchor" aria-label="anchor" href="#st_centroid-does-not-give-correct-centroids-for-longitudelatitude-data"></a>
-</h2>
+</h3>
 <p>Similar to the above, centroids are computed assuming flat, 2D space:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/geos_unary.html">st_centroid</a></span><span class="op">(</span><span class="va">polygon</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
 <span class="co">## POINT (0 90)</span></code></pre></div>
 <p>where the centroid should have been the pole.</p>
 </div>
-<div class="section level2">
-<h2 id="dist-is-assumed-to-be-in-decimal-degrees-arc_degrees-">
+<div class="section level3">
+<h3 id="dist-is-assumed-to-be-in-decimal-degrees-arc_degrees-">
 <em>dist is assumed to be in decimal degrees (arc_degrees).</em><a class="anchor" aria-label="anchor" href="#dist-is-assumed-to-be-in-decimal-degrees-arc_degrees-"></a>
-</h2>
+</h3>
 <p>This message indicates that <code>sf</code> assumes a distance value is given in degrees. To avoid this message, pass a value with the right units:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pt</span> <span class="op">=</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span>
@@ -229,7 +229,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>

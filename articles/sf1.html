@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0-6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0-7</span>
       </span>
     </div>
 
@@ -126,15 +126,15 @@
 <li>discusses how they can be converted to and from sp objects</li>
 <li>shows how they can be used for meaningful spatial analysis</li>
 </ul>
-<div class="section level1">
-<h1 id="what-is-a-feature">What is a feature?<a class="anchor" aria-label="anchor" href="#what-is-a-feature"></a>
-</h1>
+<div class="section level2">
+<h2 id="what-is-a-feature">What is a feature?<a class="anchor" aria-label="anchor" href="#what-is-a-feature"></a>
+</h2>
 <p>A feature is thought of as a thing, or an object in the real world, such as a building or a tree. As is the case with objects, they often consist of other objects. This is the case with features too: a set of features can form a single feature. A forest stand can be a feature, a forest can be a feature, a city can be a feature. A satellite image pixel can be a feature, a complete image can be a feature too.</p>
 <p>Features have a <em>geometry</em> describing <em>where</em> on Earth the feature is located, and they have attributes, which describe other properties. The geometry of a tree can be the delineation of its crown, of its stem, or the point indicating its centre. Other properties may include its height, color, diameter at breast height at a particular date, and so on.</p>
 <p>The standard says: “<em>A simple feature is defined by the OpenGIS Abstract specification to have both spatial and non-spatial attributes. Spatial attributes are geometry valued, and simple features are based on 2D geometry with linear interpolation between vertices.</em>” We will see soon that the same standard will extend its coverage beyond 2D and beyond linear interpolation. Here, we take simple features as the data structures and operations described in the <a href="https://www.ogc.org/standards/sfa" class="external-link">standard</a>.</p>
-<div class="section level2">
-<h2 id="dimensions">Dimensions<a class="anchor" aria-label="anchor" href="#dimensions"></a>
-</h2>
+<div class="section level3">
+<h3 id="dimensions">Dimensions<a class="anchor" aria-label="anchor" href="#dimensions"></a>
+</h3>
 <p>All geometries are composed of points. Points are coordinates in a 2-, 3- or 4-dimensional space. All points in a geometry have the same dimensionality. In addition to X and Y coordinates, there are two optional additional dimensions:</p>
 <ul>
 <li>a Z coordinate, denoting altitude</li>
@@ -148,9 +148,9 @@
 <li>four-dimensional points as XYZM (the third axis is Z, fourth M)</li>
 </ol>
 </div>
-<div class="section level2">
-<h2 id="simple-feature-geometry-types">Simple feature geometry types<a class="anchor" aria-label="anchor" href="#simple-feature-geometry-types"></a>
-</h2>
+<div class="section level3">
+<h3 id="simple-feature-geometry-types">Simple feature geometry types<a class="anchor" aria-label="anchor" href="#simple-feature-geometry-types"></a>
+</h3>
 <p>The following seven simple feature types are the most common, and are for instance the only ones used for <a href="https://tools.ietf.org/html/rfc7946" class="external-link">GeoJSON</a>:</p>
 <table class="table">
 <colgroup>
@@ -248,15 +248,15 @@
 </table>
 <p>Note that <code>CIRCULASTRING</code>, <code>COMPOUNDCURVE</code> and <code>CURVEPOLYGON</code> are not described in the SFA standard, but in the <a href="https://www.iso.org/standard/38651.html" class="external-link">SQL-MM part 3 standard</a>. The descriptions above were copied from the <a href="http://postgis.net/docs/using_postgis_dbmanagement.html" class="external-link">PostGIS manual</a>.</p>
 </div>
-<div class="section level2">
-<h2 id="coordinate-reference-system">Coordinate reference system<a class="anchor" aria-label="anchor" href="#coordinate-reference-system"></a>
-</h2>
+<div class="section level3">
+<h3 id="coordinate-reference-system">Coordinate reference system<a class="anchor" aria-label="anchor" href="#coordinate-reference-system"></a>
+</h3>
 <p>Coordinates can only be placed on the Earth’s surface when their coordinate reference system (CRS) is known; this may be a spheroid CRS such as WGS84, a projected, two-dimensional (Cartesian) CRS such as a UTM zone or Web Mercator, or a CRS in three-dimensions, or including time. Similarly, M-coordinates need an attribute reference system, e.g. a <a href="https://CRAN.R-project.org/package=units" class="external-link">measurement unit</a>.</p>
 </div>
 </div>
-<div class="section level1">
-<h1 id="how-simple-features-in-r-are-organized">How simple features in R are organized<a class="anchor" aria-label="anchor" href="#how-simple-features-in-r-are-organized"></a>
-</h1>
+<div class="section level2">
+<h2 id="how-simple-features-in-r-are-organized">How simple features in R are organized<a class="anchor" aria-label="anchor" href="#how-simple-features-in-r-are-organized"></a>
+</h2>
 <p>Package <code>sf</code> represents simple features as native R objects. Similar to <a href="http://postgis.net/" class="external-link">PostGIS</a>, all functions and methods in <code>sf</code> that operate on spatial data are prefixed by <code>st_</code>, which refers to <em>spatial type</em>; this makes them easily findable by command-line completion. Simple features are implemented as R native data, using simple data structures (S3 classes, lists, matrix, vector). Typical use involves reading, manipulating and writing of sets of features, with attributes and geometries.</p>
 <p>As attributes are typically stored in <code>data.frame</code> objects (or the very similar <code>tbl_df</code>), we will also store feature geometries in a <code>data.frame</code> column. Since geometries are not single-valued, they are put in a list-column, a list of length equal to the number of records in the <code>data.frame</code>, with each list element holding the simple feature geometry of that feature. The three classes used to represent simple features are:</p>
 <ul>
@@ -268,16 +268,16 @@
 <code>sfg</code>, the feature geometry of an individual simple feature.</li>
 </ul>
 <p>We will now discuss each of these three classes.</p>
-<div class="section level2">
-<h2 id="sf-objects-with-simple-features">sf: objects with simple features<a class="anchor" aria-label="anchor" href="#sf-objects-with-simple-features"></a>
-</h2>
+<div class="section level3">
+<h3 id="sf-objects-with-simple-features">sf: objects with simple features<a class="anchor" aria-label="anchor" href="#sf-objects-with-simple-features"></a>
+</h3>
 <p>As we usually do not work with geometries of single simple features, but with datasets consisting of sets of features with attributes, the two are put together in <code>sf</code> (simple feature) objects. The following command reads the <code>nc</code> dataset from a file that is contained in the <code>sf</code> package:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span>
-<span class="co">## Linking to GEOS 3.10.1, GDAL 3.3.3, PROJ 8.2.0; sf_use_s2() is TRUE</span>
+<span class="co">## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1; sf_use_s2() is TRUE</span>
 <span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">## Reading layer `nc' from data source </span>
-<span class="co">##   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp3z3Bvs/temp_libpath1379263bfad27/sf/shape/nc.shp' </span>
+<span class="co">##   `/tmp/RtmpALLMR6/temp_libpath486c65ba4ab6/sf/shape/nc.shp' </span>
 <span class="co">##   using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Geometry type: MULTIPOLYGON</span>
@@ -315,23 +315,23 @@
 <span class="co">## [13] merge                 plot                  print                </span>
 <span class="co">## [16] rbind                 show                  slotsFromS3          </span>
 <span class="co">## [19] st_agr                st_agr&lt;-              st_area              </span>
-<span class="co">## [22] st_as_s2              st_as_sf              st_bbox              </span>
-<span class="co">## [25] st_boundary           st_buffer             st_cast              </span>
-<span class="co">## [28] st_centroid           st_collection_extract st_convex_hull       </span>
-<span class="co">## [31] st_coordinates        st_crop               st_crs               </span>
-<span class="co">## [34] st_crs&lt;-              st_difference         st_filter            </span>
-<span class="co">## [37] st_geometry           st_geometry&lt;-         st_inscribed_circle  </span>
-<span class="co">## [40] st_interpolate_aw     st_intersection       st_intersects        </span>
-<span class="co">## [43] st_is_valid           st_is                 st_join              </span>
-<span class="co">## [46] st_line_merge         st_m_range            st_make_valid        </span>
-<span class="co">## [49] st_nearest_points     st_node               st_normalize         </span>
-<span class="co">## [52] st_point_on_surface   st_polygonize         st_precision         </span>
-<span class="co">## [55] st_reverse            st_sample             st_segmentize        </span>
-<span class="co">## [58] st_set_precision      st_shift_longitude    st_simplify          </span>
-<span class="co">## [61] st_snap               st_sym_difference     st_transform         </span>
-<span class="co">## [64] st_triangulate        st_union              st_voronoi           </span>
-<span class="co">## [67] st_wrap_dateline      st_write              st_z_range           </span>
-<span class="co">## [70] st_zm                 transform            </span>
+<span class="co">## [22] st_as_s2              st_as_sf              st_as_sfc            </span>
+<span class="co">## [25] st_bbox               st_boundary           st_buffer            </span>
+<span class="co">## [28] st_cast               st_centroid           st_collection_extract</span>
+<span class="co">## [31] st_convex_hull        st_coordinates        st_crop              </span>
+<span class="co">## [34] st_crs                st_crs&lt;-              st_difference        </span>
+<span class="co">## [37] st_filter             st_geometry           st_geometry&lt;-        </span>
+<span class="co">## [40] st_inscribed_circle   st_interpolate_aw     st_intersection      </span>
+<span class="co">## [43] st_intersects         st_is_valid           st_is                </span>
+<span class="co">## [46] st_join               st_line_merge         st_m_range           </span>
+<span class="co">## [49] st_make_valid         st_nearest_points     st_node              </span>
+<span class="co">## [52] st_normalize          st_point_on_surface   st_polygonize        </span>
+<span class="co">## [55] st_precision          st_reverse            st_sample            </span>
+<span class="co">## [58] st_segmentize         st_set_precision      st_shift_longitude   </span>
+<span class="co">## [61] st_simplify           st_snap               st_sym_difference    </span>
+<span class="co">## [64] st_transform          st_triangulate        st_union             </span>
+<span class="co">## [67] st_voronoi            st_wrap_dateline      st_write             </span>
+<span class="co">## [70] st_z_range            st_zm                 transform            </span>
 <span class="co">## see '?methods' for accessing help and source code</span></code></pre></div>
 <p>It is also possible to create <code>data.frame</code> objects with geometry list-columns that are not of class <code>sf</code>, e.g. by</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -346,9 +346,9 @@
 </li>
 </ul>
 </div>
-<div class="section level2">
-<h2 id="sfc-simple-feature-geometry-list-column">sfc: simple feature geometry list-column<a class="anchor" aria-label="anchor" href="#sfc-simple-feature-geometry-list-column"></a>
-</h2>
+<div class="section level3">
+<h3 id="sfc-simple-feature-geometry-list-column">sfc: simple feature geometry list-column<a class="anchor" aria-label="anchor" href="#sfc-simple-feature-geometry-list-column"></a>
+</h3>
 <p>The column in the <code>sf</code> data.frame that contains the geometries is a list, of class <code>sfc</code>. We can retrieve the geometry list-column in this case by <code>nc$geom</code> or <code>nc[[15]]</code>, but the more general way uses <code>st_geometry</code>:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">nc_geom</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span>
@@ -454,9 +454,9 @@
 <span class="co">##      xmin      ymin      xmax      ymax </span>
 <span class="co">## -84.32385  33.88199 -75.45698  36.58965</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="mixed-geometry-types">Mixed geometry types<a class="anchor" aria-label="anchor" href="#mixed-geometry-types"></a>
-</h2>
+<div class="section level3">
+<h3 id="mixed-geometry-types">Mixed geometry types<a class="anchor" aria-label="anchor" href="#mixed-geometry-types"></a>
+</h3>
 <p>The class of <code>nc_geom</code> is <code>c("sfc_MULTIPOLYGON", "sfc")</code>: <code>sfc</code> is shared with all geometry types, and <code>sfc_TYPE</code> with <code>TYPE</code> indicating the type of the particular geometry at hand.</p>
 <p>There are two “special” types: <code>GEOMETRYCOLLECTION</code>, and <code>GEOMETRY</code>. <code>GEOMETRYCOLLECTION</code> indicates that each of the geometries may contain a mix of geometry types, as in</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
@@ -486,9 +486,9 @@
 <span class="co">## [1] "sfc_GEOMETRY" "sfc"</span></code></pre></div>
 <p>These two are fundamentally different: <code>GEOMETRY</code> is a superclass without instances, <code>GEOMETRYCOLLECTION</code> is a geometry instance. <code>GEOMETRY</code> list-columns occur when we read in a data source with a mix of geometry types. <code>GEOMETRYCOLLECTION</code> <em>is</em> a single feature’s geometry: the intersection of two feature polygons may consist of points, lines and polygons, see the example <a href="#geometrycollection">below</a>.</p>
 </div>
-<div class="section level2">
-<h2 id="sfg-simple-feature-geometry">sfg: simple feature geometry<a class="anchor" aria-label="anchor" href="#sfg-simple-feature-geometry"></a>
-</h2>
+<div class="section level3">
+<h3 id="sfg-simple-feature-geometry">sfg: simple feature geometry<a class="anchor" aria-label="anchor" href="#sfg-simple-feature-geometry"></a>
+</h3>
 <p>Simple feature geometry (<code>sfg</code>) objects carry the geometry for a single feature, e.g. a point, linestring or polygon.</p>
 <p>Simple feature geometries are implemented as R native data, using the following rules</p>
 <ol style="list-style-type: decimal">
@@ -549,12 +549,12 @@
 <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
 <span class="co">## [1] 0</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="wkb">Well-known text, well-known binary, precision<a class="anchor" aria-label="anchor" href="#wkb"></a>
-</h2>
 <div class="section level3">
-<h3 id="wkt-and-wkb">WKT and WKB<a class="anchor" aria-label="anchor" href="#wkt-and-wkb"></a>
+<h3 id="wkb">Well-known text, well-known binary, precision<a class="anchor" aria-label="anchor" href="#wkb"></a>
 </h3>
+<div class="section level4">
+<h4 id="wkt-and-wkb">WKT and WKB<a class="anchor" aria-label="anchor" href="#wkt-and-wkb"></a>
+</h4>
 <p>Well-known text (WKT) and well-known binary (WKB) are two encodings for simple feature geometries. Well-known text, e.g. seen in</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">10</span><span class="op">:</span><span class="fl">1</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span>
@@ -575,9 +575,9 @@
 <span class="co">## LINESTRING (10 5, 9 4, 8 3, 7 2, 6 1)</span></code></pre></div>
 <p>GDAL, GEOS, spatial databases and GIS read and write WKB which is fast and precise. Conversion between R native objects and WKB is done by package <code>sf</code> in compiled (C++/Rcpp) code, making this a reusable and fast route for I/O of simple feature geometries in R.</p>
 </div>
-<div class="section level3">
-<h3 id="precision">Precision<a class="anchor" aria-label="anchor" href="#precision"></a>
-</h3>
+<div class="section level4">
+<h4 id="precision">Precision<a class="anchor" aria-label="anchor" href="#precision"></a>
+</h4>
 <p>One of the attributes of a geometry list-column (<code>sfc</code>) is the <code>precision</code>: a double number that, when non-zero, causes some rounding during conversion to WKB, which might help certain geometrical operations succeed that would otherwise fail due to floating point representation. The model is that of GEOS, which copies from the Java Topology Suite (<a href="https://locationtech.github.io/jts/" class="external-link">JTS</a>), and works like this:</p>
 <ul>
 <li>if precision is zero (default, unspecified), nothing is modified</li>
@@ -587,15 +587,15 @@
 <p>For the precision model, see also <a href="https://locationtech.github.io/jts/javadoc/org/locationtech/jts/geom/PrecisionModel.html" class="external-link">here</a>, where it is written that: “… to specify 3 decimal places of precision, use a scale factor of 1000. To specify -3 decimal places of precision (i.e. rounding to the nearest 1000), use a scale factor of 0.001.” Note that all coordinates, so also <code>Z</code> or <code>M</code> values (if present) are affected. Choosing values for <code>precision</code> may require some experimenting.</p>
 </div>
 </div>
-<div class="section level2">
-<h2 id="reading-and-writing">Reading and writing<a class="anchor" aria-label="anchor" href="#reading-and-writing"></a>
-</h2>
+<div class="section level3">
+<h3 id="reading-and-writing">Reading and writing<a class="anchor" aria-label="anchor" href="#reading-and-writing"></a>
+</h3>
 <p>As we’ve seen above, reading spatial data from an external file can be done by</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">filename</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>
 <span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">filename</span><span class="op">)</span>
 <span class="co">## Reading layer `nc' from data source </span>
-<span class="co">##   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp3z3Bvs/temp_libpath1379263bfad27/sf/shape/nc.shp' </span>
+<span class="co">##   `/tmp/RtmpALLMR6/temp_libpath486c65ba4ab6/sf/shape/nc.shp' </span>
 <span class="co">##   using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Geometry type: MULTIPOLYGON</span>
@@ -619,10 +619,10 @@
 <p>or its quiet alternative that does this by default,</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/st_write.html">write_sf</a></span><span class="op">(</span><span class="va">nc</span>, <span class="st">"nc.shp"</span><span class="op">)</span> <span class="co"># silently overwrites</span></code></pre></div>
-<div class="section level3">
-<h3 id="driver-specific-options">Driver-specific options<a class="anchor" aria-label="anchor" href="#driver-specific-options"></a>
-</h3>
-<p>The <code>dsn</code> and <code>layer</code> arguments to <code>st_read</code> and <code>st_write</code> denote a data source name and optionally a layer name. Their exact interpretation as well as the options they support vary per driver, the <a href="https://gdal.org/ogr_formats.html" class="external-link">GDAL driver documentation</a> is best consulted for this. For instance, a PostGIS table in database <code>postgis</code> might be read by</p>
+<div class="section level4">
+<h4 id="driver-specific-options">Driver-specific options<a class="anchor" aria-label="anchor" href="#driver-specific-options"></a>
+</h4>
+<p>The <code>dsn</code> and <code>layer</code> arguments to <code>st_read</code> and <code>st_write</code> denote a data source name and optionally a layer name. Their exact interpretation as well as the options they support vary per driver, the <a href="https://gdal.org/drivers/vector/index.html" class="external-link">GDAL driver documentation</a> is best consulted for this. For instance, a PostGIS table in database <code>postgis</code> might be read by</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">meuse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"PG:dbname=postgis"</span>, <span class="st">"meuse"</span><span class="op">)</span></code></pre></div>
 <p>where the <code>PG:</code> string indicates this concerns the PostGIS driver, followed by database name, and possibly port and user credentials. When the <code>layer</code> and <code>driver</code> arguments are not specified, <code>st_read</code> tries to guess them from the datasource, or else simply reads the first layer, giving a warning in case there are more.</p>
@@ -667,9 +667,9 @@
 <span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="va">u_kml</span>, <span class="st">"bikeraces.kml"</span><span class="op">)</span>
 <span class="va">bikraces</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"bikeraces.kml"</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="crud">Create, read, update and delete<a class="anchor" aria-label="anchor" href="#crud"></a>
-</h3>
+<div class="section level4">
+<h4 id="crud">Create, read, update and delete<a class="anchor" aria-label="anchor" href="#crud"></a>
+</h4>
 <p>GDAL provides the <a href="https://en.wikipedia.org/wiki/Create,_read,_update_and_delete" class="external-link">crud</a> (create, read, update, delete) functions to persistent storage. <code>st_read</code> (or <code>read_sf</code>) are used for reading. <code>st_write</code> (or <code>write_sf</code>) creates, and has the following arguments to control update and delete:</p>
 <ul>
 <li>
@@ -680,15 +680,15 @@
 <code>delete_dsn=TRUE</code> causes <code>st_write</code> to delete the data source when present, before writing the layer in a newly created data source. No error is given when the data source does not exist. This option should be handled with care, as it may wipe complete directories or databases.</li>
 </ul>
 </div>
-<div class="section level3">
-<h3 id="connection-to-spatial-databases">Connection to spatial databases<a class="anchor" aria-label="anchor" href="#connection-to-spatial-databases"></a>
-</h3>
+<div class="section level4">
+<h4 id="connection-to-spatial-databases">Connection to spatial databases<a class="anchor" aria-label="anchor" href="#connection-to-spatial-databases"></a>
+</h4>
 <p>Read and write functions, <code><a href="../reference/st_read.html">st_read()</a></code> and <code><a href="../reference/st_write.html">st_write()</a></code>, can handle connections to spatial databases to read WKB or WKT directly without using GDAL. Although intended to use the DBI interface, current use and testing of these functions are limited to PostGIS.</p>
 </div>
 </div>
-<div class="section level2">
-<h2 id="crs">Coordinate reference systems and transformations<a class="anchor" aria-label="anchor" href="#crs"></a>
-</h2>
+<div class="section level3">
+<h3 id="crs">Coordinate reference systems and transformations<a class="anchor" aria-label="anchor" href="#crs"></a>
+</h3>
 <p>Coordinate reference systems (CRS) are like measurement units for coordinates: they specify which location on Earth a particular coordinate pair refers to. We saw above that <code>sfc</code> objects (geometry list-columns) have two attributes to store a CRS: <code>epsg</code> and <code>proj4string</code>. This implies that all geometries in a geometry list-column must have the same CRS. Both may be <code>NA</code>, e.g. in case the CRS is unknown, or when we work with local coordinate systems (e.g. inside a building, a body, or an abstract space).</p>
 <p><code>proj4string</code> is a generic, string-based description of a CRS, understood by the <a href="https://proj4.org/" class="external-link">PROJ</a> library. It defines projection types and (often) defines parameter values for particular projections, and hence can cover an infinite amount of different projections. This library (also used by GDAL) provides functions to convert or transform between different CRS. <code>epsg</code> is the integer ID for a particular, known CRS that can be resolved into a <code>proj4string</code>. Some <code>proj4string</code> values can resolved back into their corresponding <code>epsg</code> ID, but this does not always work.</p>
 <p>The importance of having <code>epsg</code> values stored with data besides <code>proj4string</code> values is that the <code>epsg</code> refers to particular, well-known CRS, whose parameters may change (improve) over time; fixing only the <code>proj4string</code> may remove the possibility to benefit from such improvements, and limit some of the provenance of datasets, but may help reproducibility.</p>
@@ -697,13 +697,13 @@
 <code class="sourceCode R"><span class="va">nc.web_mercator</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">nc</span>, <span class="fl">3857</span><span class="op">)</span>
 <span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc.web_mercator</span><span class="op">)</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span>
 <span class="co">##          [,1]    [,2]</span>
-<span class="co">## [1,] -8463267 4377507</span>
-<span class="co">## [2,] -8460094 4377498</span>
-<span class="co">## [3,] -8450437 4375541</span></code></pre></div>
+<span class="co">## [1,] -8463267 4377519</span>
+<span class="co">## [2,] -8460094 4377510</span>
+<span class="co">## [3,] -8450437 4375553</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="conversion-including-to-and-from-sp">Conversion, including to and from sp<a class="anchor" aria-label="anchor" href="#conversion-including-to-and-from-sp"></a>
-</h2>
+<div class="section level3">
+<h3 id="conversion-including-to-and-from-sp">Conversion, including to and from sp<a class="anchor" aria-label="anchor" href="#conversion-including-to-and-from-sp"></a>
+</h3>
 <p><code>sf</code> objects and objects deriving from <code>Spatial</code> (package <code>sp</code>) can be coerced both ways:</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/methods/showMethods.html" class="external-link">showMethods</a></span><span class="op">(</span><span class="st">"coerce"</span>, classes <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span>
@@ -723,10 +723,10 @@
 <span class="co">##  [7] st_as_sfc.map*                st_as_sfc.owin*              </span>
 <span class="co">##  [9] st_as_sfc.pq_geometry*        st_as_sfc.psp*               </span>
 <span class="co">## [11] st_as_sfc.raw*                st_as_sfc.s2_geography*      </span>
-<span class="co">## [13] st_as_sfc.SpatialLines*       st_as_sfc.SpatialMultiPoints*</span>
-<span class="co">## [15] st_as_sfc.SpatialPixels*      st_as_sfc.SpatialPoints*     </span>
-<span class="co">## [17] st_as_sfc.SpatialPolygons*    st_as_sfc.tess*              </span>
-<span class="co">## [19] st_as_sfc.WKB*               </span>
+<span class="co">## [13] st_as_sfc.sf*                 st_as_sfc.SpatialLines*      </span>
+<span class="co">## [15] st_as_sfc.SpatialMultiPoints* st_as_sfc.SpatialPixels*     </span>
+<span class="co">## [17] st_as_sfc.SpatialPoints*      st_as_sfc.SpatialPolygons*   </span>
+<span class="co">## [19] st_as_sfc.tess*               st_as_sfc.WKB*               </span>
 <span class="co">## see '?methods' for accessing help and source code</span>
 <span class="co"># anticipate that sp::CRS will expand proj4strings:</span>
 <span class="va">p4s</span> <span class="op">&lt;-</span> <span class="st">"+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"</span>
@@ -747,9 +747,9 @@
 <span class="co">## [4] "Component \"geometry\": Attributes: &lt; Component \"crs\": Component \"wkt\": 1 string mismatch &gt;"</span></code></pre></div>
 <p>As the <code>Spatial*</code> objects only support <code>MULTILINESTRING</code> and <code>MULTIPOLYGON</code>, <code>LINESTRING</code> and <code>POLYGON</code> geometries are automatically coerced into their <code>MULTI</code> form. When converting <code>Spatial*</code> into <code>sf</code>, if all geometries consist of a single <code>POLYGON</code> (possibly with holes), a <code>POLYGON</code> and otherwise all geometries are returned as <code>MULTIPOLYGON</code>: a mix of <code>POLYGON</code> and <code>MULTIPOLYGON</code> (such as common in shapefiles) is not created. Argument <code>forceMulti=TRUE</code> will override this, and create <code>MULTIPOLYGON</code>s in all cases. For <code>LINES</code> the situation is identical.</p>
 </div>
-<div class="section level2">
-<h2 id="geometrycollection">Geometrical operations<a class="anchor" aria-label="anchor" href="#geometrycollection"></a>
-</h2>
+<div class="section level3">
+<h3 id="geometrycollection">Geometrical operations<a class="anchor" aria-label="anchor" href="#geometrycollection"></a>
+</h3>
 <p>The standard for simple feature access defines a number of geometrical operations.</p>
 <p><code>st_is_valid</code> and <code>st_is_simple</code> return a boolean indicating whether a geometry is valid or simple.</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
@@ -761,9 +761,9 @@
 <span class="fu"><a href="../reference/geos_measures.html">st_distance</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">4</span>,<span class="fl">22</span><span class="op">)</span>,<span class="op">]</span>, <span class="va">x</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">33</span>,<span class="fl">55</span>,<span class="fl">56</span><span class="op">)</span>,<span class="op">]</span><span class="op">)</span>
 <span class="co">## Units: [m]</span>
 <span class="co">##           [,1]     [,2]      [,3]     [,4]</span>
-<span class="co">## [1,]      0.00 312176.2 128338.51 475608.8</span>
-<span class="co">## [2,] 440548.35 114938.1 590417.79      0.0</span>
-<span class="co">## [3,]  18943.74 352708.6  78754.75 517511.6</span>
+<span class="co">## [1,]      0.00 312184.9 128341.85 475623.3</span>
+<span class="co">## [2,] 440561.15 114939.7 590434.80      0.0</span>
+<span class="co">## [3,]  18944.03 352719.1  78756.89 517527.8</span>
 <span class="fu"><a href="../reference/st_relate.html">st_relate</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="op">]</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="op">]</span><span class="op">)</span>
 <span class="co">## although coordinates are longitude/latitude, st_relate assumes that they are planar</span>
 <span class="co">##      [,1]        [,2]        [,3]        [,4]       </span>
@@ -813,7 +813,7 @@
 <span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">"intersecting two polygons:"</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">b</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span>
 <span class="op">(</span><span class="va">i</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/geos_binary_ops.html">st_intersection</a></span><span class="op">(</span><span class="va">a</span>,<span class="va">b</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## GEOMETRYCOLLECTION (POLYGON ((7 0, 7 -0.5, 6 -0.5, 5.5 0, 7 0)), LINESTRING (4 0, 3 0), POINT (1 0))</span>
+<span class="co">## GEOMETRYCOLLECTION (POINT (1 0), LINESTRING (4 0, 3 0), POLYGON ((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5 0)))</span>
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">a</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">"GEOMETRYCOLLECTION"</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">b</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span>
@@ -822,9 +822,9 @@
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">opar</span><span class="op">)</span></code></pre></div>
 </div>
-<div class="section level2">
-<h2 id="non-simple-and-non-valid-geometries">Non-simple and non-valid geometries<a class="anchor" aria-label="anchor" href="#non-simple-and-non-valid-geometries"></a>
-</h2>
+<div class="section level3">
+<h3 id="non-simple-and-non-valid-geometries">Non-simple and non-valid geometries<a class="anchor" aria-label="anchor" href="#non-simple-and-non-valid-geometries"></a>
+</h3>
 <p>Non-simple geometries are for instance self-intersecting lines (left); non-valid geometries are for instance polygons with slivers (middle) or self-intersections (right).</p>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span>
@@ -838,9 +838,9 @@
 <p><img src="sf1_files/figure-html/unnamed-chunk-43-1.png" width="700"></p>
 </div>
 </div>
-<div class="section level1">
-<h1 id="units">Units<a class="anchor" aria-label="anchor" href="#units"></a>
-</h1>
+<div class="section level2">
+<h2 id="units">Units<a class="anchor" aria-label="anchor" href="#units"></a>
+</h2>
 <p>Where possible geometric operations such as <code><a href="../reference/geos_measures.html">st_distance()</a></code>, <code><a href="../reference/geos_measures.html">st_length()</a></code> and <code><a href="../reference/geos_measures.html">st_area()</a></code> report results with a units attribute appropriate for the CRS:</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/geos_measures.html">st_area</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span>
@@ -868,9 +868,9 @@
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span>
 <span class="co">## [1] 1137107793</span></code></pre></div>
 </div>
-<div class="section level1">
-<h1 id="how-attributes-relate-to-geometries">How attributes relate to geometries<a class="anchor" aria-label="anchor" href="#how-attributes-relate-to-geometries"></a>
-</h1>
+<div class="section level2">
+<h2 id="how-attributes-relate-to-geometries">How attributes relate to geometries<a class="anchor" aria-label="anchor" href="#how-attributes-relate-to-geometries"></a>
+</h2>
 <p>(This will eventually be the topic of a new vignette; now here to explain the last attribute of <code>sf</code> objects)</p>
 <p>The standard documents about simple features are very detailed about the geometric aspects of features, but say nearly nothing about attributes, except that their values should be understood in another reference system (their units of measurement, e.g. as implemented in the package <a href="https://CRAN.R-project.org/package=units" class="external-link"><strong>units</strong></a>). But there is more to it. For variables like air temperature, interpolation usually makes sense, for others like human body temperature it doesn’t. The difference is that air temperature is a field, which continues between sensors, where body temperature is an object property that doesn’t extend beyond the body – in spatial statistics bodies would be called a point pattern, their temperature the point marks. For geometries that have a non-zero size (positive length or area), attribute values may refer to the every sub-geometry (every point), or may summarize the geometry. For example, a state’s population density summarizes the whole state, and is not a meaningful estimate of population density for a give point inside the state without the context of the state. On the other hand, land use or geological maps give polygons with constant land use or geology, every point inside the polygon is of that class. Some properties are spatially <a href="https://en.wikipedia.org/wiki/Intensive_and_extensive_properties" class="external-link">extensive</a>, meaning that attributes would summed up when two geometries are merged: population is an example. Other properties are spatially intensive, and should be averaged, with population density the example.</p>
 <p>Simple feature objects of class <code>sf</code> have an <em>agr</em> attribute that points to the <em>attribute-geometry-relationship</em>, how attributes relate to their geometry. It can be defined at creation time:</p>
@@ -881,7 +881,7 @@
         CRESS_ID <span class="op">=</span> <span class="st">"identity"</span>, BIR74 <span class="op">=</span> <span class="st">"aggregate"</span>, SID74 <span class="op">=</span> <span class="st">"aggregate"</span>, NWBIR74 <span class="op">=</span> <span class="st">"aggregate"</span>,
         BIR79 <span class="op">=</span> <span class="st">"aggregate"</span>, SID79 <span class="op">=</span> <span class="st">"aggregate"</span>, NWBIR79 <span class="op">=</span> <span class="st">"aggregate"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">## Reading layer `nc' from data source </span>
-<span class="co">##   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp3z3Bvs/temp_libpath1379263bfad27/sf/shape/nc.shp' </span>
+<span class="co">##   `/tmp/RtmpALLMR6/temp_libpath486c65ba4ab6/sf/shape/nc.shp' </span>
 <span class="co">##   using driver `ESRI Shapefile'</span>
 <span class="co">## Simple feature collection with 100 features and 14 fields</span>
 <span class="co">## Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity</span>
@@ -959,7 +959,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>

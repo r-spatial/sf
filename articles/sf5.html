@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0-6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0-7</span>
       </span>
     </div>
 
@@ -115,16 +115,16 @@
     
     
 <p>This vignette describes the functions in <code>sf</code> that can help to plot simple features. It tries to be complete about the plot methods <code>sf</code> provides, and give examples and pointers to options to plot simple feature objects with other packages (mapview, tmap, ggplot2).</p>
-<div class="section level1">
-<h1 id="plot-methods-for-sf-and-sfc-objects">Plot methods for <code>sf</code> and <code>sfc</code> objects<a class="anchor" aria-label="anchor" href="#plot-methods-for-sf-and-sfc-objects"></a>
-</h1>
 <div class="section level2">
-<h2 id="geometry-only-sfc">Geometry only: <code>sfc</code><a class="anchor" aria-label="anchor" href="#geometry-only-sfc"></a>
+<h2 id="plot-methods-for-sf-and-sfc-objects">Plot methods for <code>sf</code> and <code>sfc</code> objects<a class="anchor" aria-label="anchor" href="#plot-methods-for-sf-and-sfc-objects"></a>
 </h2>
+<div class="section level3">
+<h3 id="geometry-only-sfc">Geometry only: <code>sfc</code><a class="anchor" aria-label="anchor" href="#geometry-only-sfc"></a>
+</h3>
 <p>Geometry list-columns (objects of class <code>sfc</code>, obtained by the <code>st_geometry</code> method) only show the geometry:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Linking to GEOS 3.10.1, GDAL 3.3.3, PROJ 8.2.0; sf_use_s2() is TRUE</span></code></pre>
+<pre><code><span class="co">## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1; sf_use_s2() is TRUE</span></code></pre>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/demo.html" class="external-link">demo</a></span><span class="op">(</span><span class="va">nc</span>, ask <span class="op">=</span> <span class="cn">FALSE</span>, echo <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span></code></pre></div>
@@ -140,9 +140,9 @@
 <p>and legends, titles and so on can be added afterwards. <code>border=NA</code> removes the polygon borders.</p>
 <p>As can be seen, the axes plotted are sensitive to the CRS, and in case of longitude/latitude coordinates, degree symbols and orientation are added if <code>axes = TRUE</code>.</p>
 </div>
-<div class="section level2">
-<h2 id="geometry-with-attributes-sf">Geometry with attributes: <code>sf</code><a class="anchor" aria-label="anchor" href="#geometry-with-attributes-sf"></a>
-</h2>
+<div class="section level3">
+<h3 id="geometry-with-attributes-sf">Geometry with attributes: <code>sf</code><a class="anchor" aria-label="anchor" href="#geometry-with-attributes-sf"></a>
+</h3>
 <p>The default plot of an <code>sf</code> object is a multi-plot of all attributes, up to a reasonable maximum:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span></code></pre></div>
@@ -160,9 +160,9 @@
 <p><img src="sf5_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 </div>
 </div>
-<div class="section level1">
-<h1 id="color-key-place-and-size">Color key place and size<a class="anchor" aria-label="anchor" href="#color-key-place-and-size"></a>
-</h1>
+<div class="section level2">
+<h2 id="color-key-place-and-size">Color key place and size<a class="anchor" aria-label="anchor" href="#color-key-place-and-size"></a>
+</h2>
 <p>In case a single attribute is selected, by default a color key is given the side of the plot where it leaves as much as possible room for the plotted map; for <code>nc</code> this is below:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="st">"AREA"</span><span class="op">]</span><span class="op">)</span></code></pre></div>
@@ -181,9 +181,9 @@
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="st">"f"</span><span class="op">]</span>, axes <span class="op">=</span> <span class="cn">TRUE</span>, key.pos <span class="op">=</span> <span class="fl">4</span>, pal <span class="op">=</span> <span class="fu"><a href="../reference/plot.html">sf.colors</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span>, key.width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">lcm</a></span><span class="op">(</span><span class="fl">4.5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="sf5_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 </div>
-<div class="section level1">
-<h1 id="class-intervals">Class intervals<a class="anchor" aria-label="anchor" href="#class-intervals"></a>
-</h1>
+<div class="section level2">
+<h2 id="class-intervals">Class intervals<a class="anchor" aria-label="anchor" href="#class-intervals"></a>
+</h2>
 <p>Color breaks (class intervals) can be controlled by plot arguments <code>breaks</code> and <code>nbreaks</code>. <code>nbreaks</code> specifies the number of breaks; <code>breaks</code> is either a vector with break values:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="st">"AREA"</span><span class="op">]</span>, breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">.05</span>,<span class="fl">.1</span>,<span class="fl">.15</span>,<span class="fl">.2</span>,<span class="fl">.25</span><span class="op">)</span><span class="op">)</span></code></pre></div>
@@ -193,9 +193,9 @@
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="st">"AREA"</span><span class="op">]</span>, breaks <span class="op">=</span> <span class="st">"jenks"</span><span class="op">)</span></code></pre></div>
 <p><img src="sf5_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
 </div>
-<div class="section level1">
-<h1 id="how-does-sf-project-geographic-coordinates">How does <code>sf</code> project geographic coordinates?<a class="anchor" aria-label="anchor" href="#how-does-sf-project-geographic-coordinates"></a>
-</h1>
+<div class="section level2">
+<h2 id="how-does-sf-project-geographic-coordinates">How does <code>sf</code> project geographic coordinates?<a class="anchor" aria-label="anchor" href="#how-does-sf-project-geographic-coordinates"></a>
+</h2>
 <p>Package <code>sf</code> plots projected maps in their native projection, meaning that easting and northing are mapped linearly to the x and y axis, keeping an aspect ratio of 1 (one unit east equals one unit north). For geographic data, where coordinates constitute degrees longitude and latitude, it chooses an <a href="https://en.wikipedia.org/wiki/Equirectangular_projection" class="external-link">equirectangular projection</a> (also called <em>equidistant circular</em>), where at the center of the plot (or of the bounding box) one unit north equals one unit east.</p>
 <p>Proj.4 also lets you project data to this projection, and the plot of</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
@@ -208,9 +208,9 @@
 <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">eqc</span><span class="op">)</span>, axes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p><img src="sf5_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
 </div>
-<div class="section level1">
-<h1 id="graticules">Graticules<a class="anchor" aria-label="anchor" href="#graticules"></a>
-</h1>
+<div class="section level2">
+<h2 id="graticules">Graticules<a class="anchor" aria-label="anchor" href="#graticules"></a>
+</h2>
 <p>Graticules are grid lines along equal longitude (meridians) or latitude (parallels) that, depending on the projection used, often plot as curved lines on a map, giving it reference in terms of longitude and latitude. The <code>sf</code> function <code>st_graticule</code> tries to create a graticule grid for arbitrary maps. As there are infinitely many projections, there are most likely many cases where it does not succeed in doing this well, and examples of these are welcomed as <a href="https://github.com/r-spatial/sf/issues" class="external-link">sf issues</a>.</p>
 <p>The following plot shows a graticule geometry on itself,</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
@@ -235,12 +235,12 @@
 <p><img src="sf5_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
 <p>which still doesn’t look great – completely controlling the plotting region of base plots is not easy.</p>
 </div>
-<div class="section level1">
-<h1 id="plotting-sf-objects-with-other-packages">Plotting sf objects with other packages<a class="anchor" aria-label="anchor" href="#plotting-sf-objects-with-other-packages"></a>
-</h1>
 <div class="section level2">
-<h2 id="grid-st_as_grob">grid: <code>st_as_grob</code><a class="anchor" aria-label="anchor" href="#grid-st_as_grob"></a>
+<h2 id="plotting-sf-objects-with-other-packages">Plotting sf objects with other packages<a class="anchor" aria-label="anchor" href="#plotting-sf-objects-with-other-packages"></a>
 </h2>
+<div class="section level3">
+<h3 id="grid-st_as_grob">grid: <code>st_as_grob</code><a class="anchor" aria-label="anchor" href="#grid-st_as_grob"></a>
+</h3>
 <p>Package <code>sf</code> provides a number of methods for <code>st_as_grob</code>:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/methods.html" class="external-link">methods</a></span><span class="op">(</span><span class="va">st_as_grob</span><span class="op">)</span></code></pre></div>
@@ -257,9 +257,9 @@
 <span class="co">## see '?methods' for accessing help and source code</span></code></pre>
 <p>which convert simple simple feature objects into <code>grob</code> (“graphics objects”) objects; <code>grob</code>s are the graphic primitives of the <code>grid</code> plotting package. These methods can be used by plotting packages that build on <code>grid</code>, such as <code>ggplot2</code> (which uses them in <code>geom_sf</code>) and <code>tmap</code>. In addition, <code>st_viewport</code> can be used to set up a grid viewport from an <code>sf</code> object, with an aspect ratio similar to that of <code>base::plot.sf</code>.</p>
 </div>
-<div class="section level2">
-<h2 id="ggplot2">ggplot2<a class="anchor" aria-label="anchor" href="#ggplot2"></a>
-</h2>
+<div class="section level3">
+<h3 id="ggplot2">ggplot2<a class="anchor" aria-label="anchor" href="#ggplot2"></a>
+</h3>
 <p>contains a geom specially for simple feature objects, with support for graticule white lines in the background using <code><a href="../reference/st_graticule.html">sf::st_graticule</a></code>. Support is currently good for polygons; for lines or points, your mileage may vary.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
@@ -291,9 +291,9 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fl">34</span><span class="op">:</span><span class="fl">36</span><span class="op">)</span></code></pre></div>
 <p><img src="sf5_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
 </div>
-<div class="section level2">
-<h2 id="mapview">mapview<a class="anchor" aria-label="anchor" href="#mapview"></a>
-</h2>
+<div class="section level3">
+<h3 id="mapview">mapview<a class="anchor" aria-label="anchor" href="#mapview"></a>
+</h3>
 <p>Package <code>mapview</code> creates interactive maps in html pages, using package <code>leaflet</code> as a workhorse. Extensive examples are found <a href="https://r-spatial.github.io/mapview/" class="external-link">here</a>.</p>
 <p>An example is obtained by</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
@@ -302,9 +302,9 @@
 <span class="fu"><a href="https://rdrr.io/pkg/mapview/man/mapView.html" class="external-link">mapview</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="st">"BIR74"</span><span class="op">]</span>, col.regions <span class="op">=</span> <span class="fu"><a href="../reference/plot.html">sf.colors</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span>, fgb <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <p>gives a map which is interactive: you can zoom and pan, and query features by clicking on them.</p>
 </div>
-<div class="section level2">
-<h2 id="tmap">tmap<a class="anchor" aria-label="anchor" href="#tmap"></a>
-</h2>
+<div class="section level3">
+<h3 id="tmap">tmap<a class="anchor" aria-label="anchor" href="#tmap"></a>
+</h3>
 <p>Package <code>tmap</code> is another package for plotting maps, with emphasis on production-ready maps.</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mtennekes/tmap" class="external-link">tmap</a></span><span class="op">)</span>
@@ -340,7 +340,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>

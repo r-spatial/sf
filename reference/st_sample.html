@@ -21,7 +21,7 @@ interfaced and do not use the size argument, see examples.'><meta property="og:i
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0-6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0-7</span>
       </span>
     </div>
 
@@ -119,7 +119,7 @@ interfaced and do not use the <code>size</code> argument, see examples.</p>
 <dd><p>passed on to <a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a> for <code>multipoint</code> sampling, or to <code>spatstat</code> functions for spatstat sampling types (see details)</p></dd>
 <dt>type</dt>
 <dd><p>character; indicates the spatial sampling type; one of <code>random</code>, <code>hexagonal</code> (triangular really), <code>regular</code>,
-or one of the <code>spatstat</code> methods such as <code>Thomas</code> for calling <code><a href="https://rdrr.io/pkg/spatstat.core/man/rThomas.html" class="external-link">spatstat.core::rThomas</a></code> (see Details).</p></dd>
+or one of the <code>spatstat</code> methods such as <code>Thomas</code> for calling <code><a href="https://rdrr.io/pkg/spatstat.random/man/rThomas.html" class="external-link">spatstat.random::rThomas</a></code> (see Details).</p></dd>
 <dt>exact</dt>
 <dd><p>logical; should the length of output be exactly</p></dd>
 <dt>warn_if_not_integer</dt>
@@ -143,14 +143,14 @@ of <code>x</code>.</p>
 <p>For <code>regular</code> or <code>hexagonal</code> sampling of polygons, the resulting size is only an approximation.</p>
 <p>As parameter called <code>offset</code> can be passed to control ("fix") regular or hexagonal sampling: for polygons a length 2 numeric vector (by default: a random point from <code>st_bbox(x)</code>); for lines use a number like <code>runif(1)</code>.</p>
 <p>Sampling methods from package <code>spatstat</code> are interfaced (see examples), and need their own parameters to be set. 
-For instance, to use <code><a href="https://rdrr.io/pkg/spatstat.core/man/rThomas.html" class="external-link">spatstat.core::rThomas()</a></code>, set <code>type = "Thomas"</code>.</p>
+For instance, to use <code><a href="https://rdrr.io/pkg/spatstat.random/man/rThomas.html" class="external-link">spatstat.random::rThomas()</a></code>, set <code>type = "Thomas"</code>.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp3z3Bvs/temp_libpath1379263bfad27/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpALLMR6/temp_libpath486c65ba4ab6/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
@@ -220,9 +220,9 @@ For instance, to use <code><a href="https://rdrr.io/pkg/spatstat.core/man/rThoma
 <span class="r-in"><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="fu">st_sample</span><span class="op">(</span><span class="va">ls</span>, <span class="fl">80</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-plt img"><img src="st_sample-6.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span class="co"># spatstat example:</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="http://spatstat.org/" class="external-link">spatstat.core</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="http://spatstat.org/" class="external-link">spatstat.random</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"> <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">10</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"> <span class="co"># for spatstat.core::rThomas(), set type = "Thomas":</span></span>
+<span class="r-in"> <span class="co"># for spatstat.random::rThomas(), set type = "Thomas":</span></span>
 <span class="r-in"> <span class="va">pts</span> <span class="op">&lt;-</span> <span class="fu">st_sample</span><span class="op">(</span><span class="va">x</span>, kappa <span class="op">=</span> <span class="fl">1</span>, mu <span class="op">=</span> <span class="fl">10</span>, scale <span class="op">=</span> <span class="fl">0.1</span>, type <span class="op">=</span> <span class="st">"Thomas"</span><span class="op">)</span> </span>
 <span class="r-in"><span class="op">}</span></span>
 </code></pre></div>
@@ -239,7 +239,7 @@ For instance, to use <code><a href="https://rdrr.io/pkg/spatstat.core/man/rThoma
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer></div>

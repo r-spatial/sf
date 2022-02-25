@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0-6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0-7</span>
       </span>
     </div>
 
@@ -97,7 +97,15 @@
 
 <span class="fu">st_overlaps</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, prepared <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
 
-<span class="fu">st_equals</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, prepared <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">st_equals</span><span class="op">(</span>
+  <span class="va">x</span>,
+  <span class="va">y</span>,
+  sparse <span class="op">=</span> <span class="cn">TRUE</span>,
+  prepared <span class="op">=</span> <span class="cn">FALSE</span>,
+  <span class="va">...</span>,
+  retain_unique <span class="op">=</span> <span class="cn">FALSE</span>,
+  remove_self <span class="op">=</span> <span class="cn">FALSE</span>
+<span class="op">)</span>
 
 <span class="fu">st_covers</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, prepared <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span>, model <span class="op">=</span> <span class="st">"closed"</span><span class="op">)</span>
 
@@ -123,6 +131,10 @@
 <dt>model</dt>
 <dd><p>character; polygon/polyline model; one of
 "open", "semi-open" or "closed"; see Details.</p></dd>
+<dt>retain_unique</dt>
+<dd><p>logical; if TRUE (and y is missing) return only indexes of points larger than the current index; this can be used to select unique geometries, see examples. This argument can be used for all geometry predictates; see als <a href="tidyverse.html">distinct.sf</a> to find records where geometries AND attributes are distinct.</p></dd>
+<dt>remove_self</dt>
+<dd><p>logical; if TRUE (and y is missing) return only indexes of geometries different from the current index; this can be used to omit self-intersections; see examples. This argument can be used for all geometry predictates</p></dd>
 <dt>par</dt>
 <dd><p>numeric; parameter used for "equals_exact" (margin);</p></dd>
 <dt>dist</dt>
@@ -173,6 +185,53 @@ the function <code><a href="geos_binary_ops.html">st_intersection</a></code> ins
 <span class="r-in"><span class="co"># which points fall inside the first polygon?</span></span>
 <span class="r-in"><span class="fu">st_intersects</span><span class="op">(</span><span class="va">pol</span>, <span class="va">pts</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1 2</span>
+<span class="r-in"><span class="co"># remove duplicate geometries:</span></span>
+<span class="r-in"><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">1</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">1</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="sf.html">st_sf</a></span><span class="op">(</span>a <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span>, geom <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p1</span>, <span class="va">p2</span>, <span class="va">p1</span>, <span class="va">p1</span>, <span class="va">p2</span>, <span class="va">p2</span>, <span class="va">p1</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">st_equals</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sparse geometry binary predicate list of length 8, where the predicate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> was `equals'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1: 1, 2, 4, 5, 8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2: 1, 2, 4, 5, 8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3: 3, 6, 7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4: 1, 2, 4, 5, 8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5: 1, 2, 4, 5, 8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6: 3, 6, 7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7: 3, 6, 7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8: 1, 2, 4, 5, 8</span>
+<span class="r-in"><span class="fu">st_equals</span><span class="op">(</span><span class="va">p</span>, remove_self <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sparse geometry binary predicate list of length 8, where the predicate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> was `equals', with remove_self = TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1: 2, 4, 5, 8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2: 1, 4, 5, 8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3: 6, 7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4: 1, 2, 5, 8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5: 1, 2, 4, 8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6: 3, 7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7: 3, 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8: 1, 2, 4, 5</span>
+<span class="r-in"><span class="op">(</span><span class="va">u</span> <span class="op">=</span> <span class="fu">st_equals</span><span class="op">(</span><span class="va">p</span>, retain_unique <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sparse geometry binary predicate list of length 8, where the predicate</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> was `equals', with retain_unique = TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1: 2, 4, 5, 8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  2: 4, 5, 8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3: 6, 7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  4: 5, 8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  5: 8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  6: 7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  7: (empty)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  8: (empty)</span>
+<span class="r-in"><span class="co"># retain the records with unique geometries:</span></span>
+<span class="r-in"><span class="va">p</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">u</span><span class="op">)</span>,<span class="op">]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 2 features and 1 field</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 0 ymin: 1 xmax: 2 ymax: 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CRS:           NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   a        geom</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 a POINT (0 1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 c POINT (2 1)</span>
 </code></pre></div>
     </div>
   </div>
@@ -187,7 +246,7 @@ the function <code><a href="geos_binary_ops.html">st_intersection</a></code> ins
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer></div>

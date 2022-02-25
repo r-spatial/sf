@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sf</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0-6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0-7</span>
       </span>
     </div>
 
@@ -76,9 +76,18 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="1.0-6" id="version-10-6">version 1.0-6<a class="anchor" aria-label="anchor" href="#version-10-6"></a></h2>
-<ul><li><p><code><a href="../reference/st_make_grid.html">st_make_grid()</a></code> speedup; <a href="https://github.com/r-spatial/sf/issues/1579" class="external-link">#1579</a> thanks to Krzysztof Dyba</p></li>
-<li><p>remove dependency on <code>rgeos</code>; <a href="https://github.com/r-spatial/sf/issues/1869" class="external-link">#1869</a></p></li>
+<h2 class="page-header" data-toc-text="1.0-7" id="version-10-7">version 1.0-7<a class="anchor" aria-label="anchor" href="#version-10-7"></a></h2>
+<ul><li><p><code>st_crs(x)$ud_unit</code> returns the unit of the coordinate reference system of <code>x</code></p></li>
+<li><p>geometric predicates return <code>sgbp</code> objects omitting self-intersections etc. by passing <code>remove_self = TRUE</code> and unique symmetric relationship by passing <code>retain_unique = TRUE</code> (to <code>...</code> if needed); this simplifies identification (and removal) of duplicate geometries, e.g. by <code>st_equals(x, retain_unique = TRUE) |&gt; unlist() |&gt; unique()</code>; <a href="https://github.com/r-spatial/sf/issues/1893" class="external-link">#1893</a></p></li>
+<li><p>fix compile problems against GDAL &lt; 2.5.0 introduced in 1.0-6; <a href="https://github.com/r-spatial/sf/issues/1899" class="external-link">#1899</a></p></li>
+</ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.0-6" id="version-10-6">version 1.0-6<small>2022-02-04</small><a class="anchor" aria-label="anchor" href="#version-10-6"></a></h2>
+<ul><li><p>adapt to new <code>spatstat.random</code> package; <a href="https://github.com/r-spatial/sf/issues/1892" class="external-link">#1892</a></p></li>
+<li><p><code>st_geometry&lt;-()</code> also allows to rename a geometry column in an <code>sf</code> object; <a href="https://github.com/r-spatial/sf/issues/1890" class="external-link">#1890</a></p></li>
+<li><p>for <code>sf</code> objects, the <code><a href="../reference/st_as_sfc.html">st_as_sfc()</a></code> method is an alias for <code><a href="../reference/st_geometry.html">st_geometry()</a></code>; <a href="https://github.com/r-spatial/sf/issues/1882" class="external-link">#1882</a></p></li>
+<li><p><code><a href="../reference/st_make_grid.html">st_make_grid()</a></code> speeded up; <a href="https://github.com/r-spatial/sf/issues/1579" class="external-link">#1579</a> thanks to Krzysztof Dyba</p></li>
+<li><p>remove direct and indirect dependencies on <code>rgeos</code> and <code>rgdal</code>; <a href="https://github.com/r-spatial/sf/issues/1869" class="external-link">#1869</a></p></li>
 <li><p>use <code><a href="https://rdrr.io/r/stats/dist.html" class="external-link">stats::dist</a></code> rather than GEOS for symmetric point-point Euclidian distance computation; <a href="https://github.com/r-spatial/sf/issues/1874" class="external-link">#1874</a></p></li>
 </ul></div>
     <div class="section level2">
@@ -567,7 +576,7 @@
 <li><p>import and export <code>magrittr::%&gt;%</code></p></li>
 <li><p>support ggplot’ing geometrycollections</p></li>
 <li><p>drop C++11 requirement, allowing build for older R versions</p></li>
-<li><p>add <code>st_proj_info</code>, modelled after <code><a href="http://rgdal.r-forge.r-project.org/reference/projInfo.html" class="external-link">rgdal::projInfo</a></code></p></li>
+<li><p>add <code>st_proj_info</code>, modelled after <code>rgdal::projInfo</code></p></li>
 <li><p>overwriting datasets with <code>st_write</code> is no longer allowed; update=TRUE appends to them, permitted the driver supports appending.</p></li>
 <li><p><code>st_write</code> gains an argument, <code>update</code>, which when <code>TRUE</code> will try to append to existing datasets (<a href="https://github.com/r-spatial/sf/issues/204" class="external-link">#204</a>)</p></li>
 <li><p>added list of corresponding function for migration from sp, rgdal and rgeos to sf at <a href="https://github.com/edzer/sfr/wiki/migrating" class="external-link uri">https://github.com/edzer/sfr/wiki/migrating</a></p></li>
@@ -629,7 +638,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer></div>
