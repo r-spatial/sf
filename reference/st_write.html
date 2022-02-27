@@ -197,7 +197,7 @@ omitted; it returns TRUE on success, FALSE on failure, invisibly.</p>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/Rtmp1N94xQ/temp_libpath1275f26801381/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpeJQzo0/temp_libpath127477fa8192f/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
@@ -206,24 +206,24 @@ omitted; it returns TRUE on success, FALSE on failure, invisibly.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  NAD27</span>
 <span class="r-in"><span class="fu">st_write</span><span class="op">(</span><span class="va">nc</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"/"</span>, <span class="st">"nc.shp"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Writing layer `nc' to data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/Rtmpr91crD/nc.shp' using driver `ESRI Shapefile'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpHbL3e6/nc.shp' using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Writing 100 features with 14 fields and geometry type Multi Polygon.</span>
 <span class="r-in"><span class="fu">st_write</span><span class="op">(</span><span class="va">nc</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"/"</span>, <span class="st">"nc.shp"</span><span class="op">)</span>, delete_layer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># overwrites</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Deleting layer `nc' using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Writing layer `nc' to data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/Rtmpr91crD/nc.shp' using driver `ESRI Shapefile'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpHbL3e6/nc.shp' using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Writing 100 features with 14 fields and geometry type Multi Polygon.</span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">meuse</span>, package <span class="op">=</span> <span class="st">"sp"</span><span class="op">)</span> <span class="co"># loads data.frame from sp</span></span>
 <span class="r-in"><span class="va">meuse_sf</span> <span class="op">=</span> <span class="fu"><a href="st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="va">meuse</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">28992</span><span class="op">)</span></span>
 <span class="r-in"><span class="co"># writes X and Y as columns:</span></span>
 <span class="r-in"><span class="fu">st_write</span><span class="op">(</span><span class="va">meuse_sf</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"/"</span>, <span class="st">"meuse.csv"</span><span class="op">)</span>, layer_options <span class="op">=</span> <span class="st">"GEOMETRY=AS_XY"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Writing layer `meuse' to data source `/tmp/Rtmpr91crD/meuse.csv' using driver `CSV'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Writing layer `meuse' to data source `/tmp/RtmpHbL3e6/meuse.csv' using driver `CSV'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> options:        GEOMETRY=AS_XY </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Writing 155 features with 12 fields and geometry type Point.</span>
 <span class="r-in"><span class="fu">st_write</span><span class="op">(</span><span class="va">meuse_sf</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"/"</span>, <span class="st">"meuse.csv"</span><span class="op">)</span>, layer_options <span class="op">=</span> <span class="st">"GEOMETRY=AS_WKT"</span>,</span>
 <span class="r-in">  delete_dsn<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="co"># overwrites</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Deleting source `/tmp/Rtmpr91crD/meuse.csv' using driver `CSV'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Writing layer `meuse' to data source `/tmp/Rtmpr91crD/meuse.csv' using driver `CSV'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Deleting source `/tmp/RtmpHbL3e6/meuse.csv' using driver `CSV'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Writing layer `meuse' to data source `/tmp/RtmpHbL3e6/meuse.csv' using driver `CSV'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> options:        GEOMETRY=AS_WKT </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Writing 155 features with 12 fields and geometry type Point.</span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
