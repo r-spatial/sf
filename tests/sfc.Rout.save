@@ -869,8 +869,6 @@ The following object is masked from 'package:dplyr':
 
     select
 
-Warning message:
-multiple methods tables found for 'direction' 
 > suppressWarnings(st_bbox(raster(meuse.grid)))
   xmin   ymin   xmax   ymax 
 178440 329600 181560 333760 
@@ -1128,4 +1126,4 @@ CRS:           NA
 > 
 > proc.time()
    user  system elapsed 
-  7.515   0.116   7.641 
+  8.306   0.136   8.435 
