@@ -446,7 +446,7 @@ int CPL_delete_ogr(Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer,
 							driver[0] << "'" << std::endl;
 					}
 				}
-				if (err != OGRERR_NONE);
+				if (err != OGRERR_NONE)
 					Rcpp::Rcout << "Deleting layer `" << layer[i] << "' failed" << std::endl;
 			}
 		}
