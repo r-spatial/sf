@@ -6,7 +6,7 @@
 
 * geometric predicates return `sgbp` objects omitting self-intersections etc. by passing `remove_self = TRUE` and unique symmetric relationship by passing `retain_unique = TRUE` (to `...` if needed); this simplifies identifying (and removing) duplicated geometries; duplicates are identified by e.g. by `st_equals(x, retain_unique = TRUE) |> unlist() |> unique()`; #1893
 
-* fix compile problems against GDAL < 2.5.0 introduced in 1.0-6; #1899
+* fix compile issue against GDAL < 2.5.0 introduced in 1.0-6; #1899
 
 # version 1.0-6
 
