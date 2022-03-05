@@ -80,7 +80,7 @@
 <ul><li><p><code><a href="../reference/st_geometry.html">st_drop_geometry()</a></code> is a generic; <a href="https://github.com/r-spatial/sf/issues/1914" class="external-link">#1914</a></p></li>
 <li><p><code>st_crs(x)$ud_unit</code> returns the unit of the coordinate reference system of <code>x</code></p></li>
 <li><p>geometric predicates return <code>sgbp</code> objects omitting self-intersections etc. by passing <code>remove_self = TRUE</code> and unique symmetric relationship by passing <code>retain_unique = TRUE</code> (to <code>...</code> if needed); this simplifies identifying (and removing) duplicated geometries; duplicates are identified by e.g. by <code>st_equals(x, retain_unique = TRUE) |&gt; unlist() |&gt; unique()</code>; <a href="https://github.com/r-spatial/sf/issues/1893" class="external-link">#1893</a></p></li>
-<li><p>fix compile problems against GDAL &lt; 2.5.0 introduced in 1.0-6; <a href="https://github.com/r-spatial/sf/issues/1899" class="external-link">#1899</a></p></li>
+<li><p>fix compile issue against GDAL &lt; 2.5.0 introduced in 1.0-6; <a href="https://github.com/r-spatial/sf/issues/1899" class="external-link">#1899</a></p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.0-6" id="version-10-6">version 1.0-6<small>2022-02-04</small><a class="anchor" aria-label="anchor" href="#version-10-6"></a></h2>
