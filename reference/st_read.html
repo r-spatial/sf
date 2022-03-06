@@ -105,7 +105,8 @@ Well-Know Binary geometries to sfc</p>
   check_ring_dir <span class="op">=</span> <span class="cn">FALSE</span>,
   fid_column_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
   drivers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  wkt_filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>
+  wkt_filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
+  optional <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span>
 
 <span class="fu">read_sf</span><span class="op">(</span><span class="va">...</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span>, as_tibble <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
@@ -184,6 +185,8 @@ clockwise, holes clockwise)</p></dd>
 <dd><p>character; limited set of driver short names to be tried (default: try all)</p></dd>
 <dt>wkt_filter</dt>
 <dd><p>character; WKT representation of a spatial filter (may be used as bounding box, selecting overlapping geometries); see examples</p></dd>
+<dt>optional</dt>
+<dd><p>logical; see <a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></p></dd>
 <dt>as_tibble</dt>
 <dd><p>logical; should the returned table be of class tibble or data.frame?</p></dd>
 <dt>EWKB</dt>
@@ -251,7 +254,8 @@ that reside in the same directory, only one of them having extension <code>.shp<
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">nc</span> <span class="op">=</span> <span class="fu">st_read</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpAORBmT/temp_libpath44054a171dd/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpUq2Fs4/temp_libpath43e063f4e142/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
@@ -291,7 +295,8 @@ that reside in the same directory, only one of them having extension <code>.shp<
 <span class="r-in"><span class="co">## only two features by where clause</span></span>
 <span class="r-in"><span class="va">nc_sql</span> <span class="op">=</span> <span class="fu">st_read</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>,</span>
 <span class="r-in">                     query <span class="op">=</span> <span class="st">"SELECT NAME, SID74, FIPS FROM \"nc\" WHERE BIR74 &gt; 20000"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Reading query `SELECT NAME, SID74, FIPS FROM "nc" WHERE BIR74 &gt; 20000' from data source `/tmp/RtmpAORBmT/temp_libpath44054a171dd/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Reading query `SELECT NAME, SID74, FIPS FROM "nc" WHERE BIR74 &gt; 20000' from data source `/tmp/RtmpUq2Fs4/temp_libpath43e063f4e142/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 2 features and 3 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
