@@ -142,7 +142,7 @@ st_read.default = function(dsn, layer, ...) {
 
 process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 		stringsAsFactors = ifelse(as_tibble, FALSE, sf_stringsAsFactors()), 
-		geometry_column = 1, as_tibble = FALSE) {
+		geometry_column = 1, as_tibble = FALSE, optional = FALSE) {
 
 	which.geom = which(vapply(x, function(f) inherits(f, "sfc"), TRUE))
 
@@ -156,7 +156,7 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 		x = if (!as_tibble) {
 				if (any(sapply(x, is.list)))
 					warning("list-column(s) present: in case of failure, try read_sf or as_tibble=TRUE") # nocov
-				as.data.frame(x , stringsAsFactors = stringsAsFactors)
+				as.data.frame(x , stringsAsFactors = stringsAsFactors, optional = optional)
 			} else
 				tibble::as_tibble(x)
 		return(x)
@@ -176,7 +176,8 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 		else
 			x <- data.frame(row.names = seq_along(geom[[1]]))
 	} else {
-		x <- as.data.frame(set_utf8(x[-c(lc.other, which.geom)]), stringsAsFactors = stringsAsFactors)
+		x <- as.data.frame(set_utf8(x[-c(lc.other, which.geom)]), stringsAsFactors = stringsAsFactors,
+			optional = optional)
 		if (as_tibble) {
 			# "sf" class is added later by `st_as_sf` (and sets all the attributes)
 			x <- tibble::new_tibble(x, nrow = nrow(x))
@@ -202,6 +203,7 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 #' @param fid_column_name character; name of column to write feature IDs to; defaults to not doing this
 #' @param drivers character; limited set of driver short names to be tried (default: try all)
 #' @param wkt_filter character; WKT representation of a spatial filter (may be used as bounding box, selecting overlapping geometries); see examples
+#' @param optional logical; see \link[base]{as.data.frame}
 #' @note The use of \code{system.file} in examples make sure that examples run regardless where R is installed:
 #' typical users will not use \code{system.file} but give the file name directly, either with full path or relative
 #' to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename
@@ -210,15 +212,14 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet = FALSE, geometry_column = 1L, 
 		type = 0, promote_to_multi = TRUE, stringsAsFactors = sf_stringsAsFactors(),
 		int64_as_string = FALSE, check_ring_dir = FALSE, fid_column_name = character(0),
-		drivers = character(0), wkt_filter = character(0)) {
+		drivers = character(0), wkt_filter = character(0), optional = FALSE) {
 
 	layer = if (missing(layer))
 		character(0)
 	else
 		enc2utf8(layer)
-	if (nchar(dsn) < 1) {
+	if (nchar(dsn) < 1)
 		stop("`dsn` must point to a source, not an empty string.", call. = FALSE)
-	}
 	dsn_exists = file.exists(dsn)
 	dsn_isdb = is_db_driver(dsn)
 	if (length(dsn) == 1 && dsn_exists && !dsn_isdb)
@@ -230,7 +231,8 @@ st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet 
 	x = CPL_read_ogr(dsn, layer, query, as.character(options), quiet, type, fid_column_name,
 		drivers, wkt_filter, promote_to_multi, int64_as_string, dsn_exists, dsn_isdb, getOption("width"))
 	process_cpl_read_ogr(x, quiet, check_ring_dir = check_ring_dir,
-		stringsAsFactors = stringsAsFactors, geometry_column = geometry_column, ...)
+		stringsAsFactors = stringsAsFactors, geometry_column = geometry_column, 
+		optional = optional, ...)
 }
 
 #' @name st_read
