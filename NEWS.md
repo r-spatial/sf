@@ -1,3 +1,7 @@
+# version 1.0-8
+
+* GPX files are autodetected by `st_read()`; #1917
+
 # version 1.0-7
 
 * `st_drop_geometry()` is a generic; #1914
