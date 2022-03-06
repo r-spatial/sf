@@ -678,6 +678,7 @@ extension_map <- list(
         "gmt" = "GMT",
         "gpkg" = "GPKG",
         "gps" = "GPSBabel",
+        "gpx" = "GPX",
         "gtm" = "GPSTrackMaker",
         "gxt" = "Geoconcept",
         "jml" = "JML",
