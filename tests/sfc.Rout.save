@@ -854,9 +854,6 @@ POINT (-0.0500922 0.992953)
 > # st_bbox:
 > library(sp)
 > demo(meuse, ask = FALSE, echo = FALSE)
-Warning message:
-In showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj = prefer_proj) :
-  Discarded datum Amersfoort in Proj4 definition
 > suppressWarnings(st_bbox(meuse))
   xmin   ymin   xmax   ymax 
 178605 329714 181390 333611 
@@ -1126,4 +1123,4 @@ CRS:           NA
 > 
 > proc.time()
    user  system elapsed 
-  8.306   0.136   8.435 
+  8.386   0.119   8.498 
