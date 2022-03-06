@@ -155,7 +155,7 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 			warning("no simple feature geometries present: returning a data.frame or tbl_df", call. = FALSE)
 		x = if (!as_tibble) {
 				if (any(sapply(x, is.list)))
-					warning("list-column(s) present: in case of failure, try read_sf or as_tibble=TRUE") # nocov
+					warning("list-column(s) present: in case of failure, try read_sf() or as_tibble=TRUE") # nocov
 				as.data.frame(x , stringsAsFactors = stringsAsFactors, optional = optional)
 			} else
 				tibble::as_tibble(x)
@@ -177,7 +177,7 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 			x <- data.frame(row.names = seq_along(geom[[1]]))
 	} else {
 		x <- as.data.frame(set_utf8(x[-c(lc.other, which.geom)]), stringsAsFactors = stringsAsFactors,
-			optional = optional)
+			optional = optional || as_tibble)
 		if (as_tibble) {
 			# "sf" class is added later by `st_as_sf` (and sets all the attributes)
 			x <- tibble::new_tibble(x, nrow = nrow(x))
@@ -203,7 +203,7 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 #' @param fid_column_name character; name of column to write feature IDs to; defaults to not doing this
 #' @param drivers character; limited set of driver short names to be tried (default: try all)
 #' @param wkt_filter character; WKT representation of a spatial filter (may be used as bounding box, selecting overlapping geometries); see examples
-#' @param optional logical; see \link[base]{as.data.frame}
+#' @param optional logical; passed to \link[base]{as.data.frame}; always \code{TRUE} when \code{as_tibble} is \code{TRUE}
 #' @note The use of \code{system.file} in examples make sure that examples run regardless where R is installed:
 #' typical users will not use \code{system.file} but give the file name directly, either with full path or relative
 #' to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename
