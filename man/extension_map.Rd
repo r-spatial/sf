@@ -5,7 +5,7 @@
 \alias{extension_map}
 \title{Map extension to driver}
 \format{
-An object of class \code{list} of length 25.
+An object of class \code{list} of length 26.
 }
 \usage{
 extension_map
