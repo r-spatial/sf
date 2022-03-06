@@ -1,5 +1,7 @@
 # version 1.0-8
 
+* `st_read()` gains an argument `optional` passed on to `as.data.frame` to avoid changing column names; #1916
+
 * GPX files are autodetected by `st_read()`; #1917
 
 # version 1.0-7
