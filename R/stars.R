@@ -212,8 +212,7 @@ gdal_metadata = function(file, domain_item = character(0), options = character(0
 split_strings = function(md, split = "=") {
 	splt = strsplit(md, split)
 	lst = lapply(splt, function(x) if (length(x) <= 1) NA_character_ else x[[2]])
-	structure(lst, names = sapply(splt, function(x) x[[1]]))
-	structure(lst, class = "gdal_metadata")
+	structure(lst, names = sapply(splt, function(x) x[[1]]), class = "gdal_metadata")
 }
 
 #' @param name logical; retrieve name of subdataset? If \code{FALSE}, retrieve description
