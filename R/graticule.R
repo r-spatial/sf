@@ -63,6 +63,10 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 	datum = st_crs(4326), ..., lon = NULL, lat = NULL, ndiscr = 100,
 	margin = 0.001)
 {
+	s2 = sf_use_s2()
+	on.exit(suppressMessages(sf_use_s2(s2)))
+	suppressMessages(sf_use_s2(FALSE))
+
 	if (missing(x)) {
 		crs = datum
 		if (is.null(lon))

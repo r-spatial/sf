@@ -1,5 +1,7 @@
 # version 1.0-8
 
+* restore `st_graticule()` behaviour to that of before using s2; https://github.com/tidyverse/ggplot2/issues/4571
+
 * `gdal_metadata()` sets metadata item names properly
 
 * `st_read()` gains an argument `optional` passed on to `as.data.frame` to avoid changing column names; #1916
