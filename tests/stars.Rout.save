@@ -1,6 +1,6 @@
 
-R version 4.1.2 (2021-11-01) -- "Bird Hippie"
-Copyright (C) 2021 The R Foundation for Statistical Computing
+R version 4.1.3 (2022-03-10) -- "One Push-Up"
+Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -27,7 +27,7 @@ Type 'q()' to quit R.
 Error in gdal_metadata(tif, "wrongDomain") : 
   domain_item[1] not found in available metadata domains
 > gdal_metadata(tif, c("IMAGE_STRUCTURE"))
-[[1]]
+$INTERLEAVE
 [1] "BAND"
 
 attr(,"class")
@@ -263,4 +263,4 @@ First 10 features:
 > 
 > proc.time()
    user  system elapsed 
-  1.652   0.091   1.736 
+  1.954   0.081   2.036 
