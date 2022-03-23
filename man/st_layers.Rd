@@ -2,7 +2,7 @@
 % Please edit documentation in R/read.R
 \name{st_layers}
 \alias{st_layers}
-\title{List layers in a datasource}
+\title{Return properties of layers in a datasource}
 \usage{
 st_layers(dsn, options = character(0), do_count = FALSE)
 }
@@ -14,6 +14,16 @@ folder, or contain the name and access credentials of a database)}
 
 \item{do_count}{logical; if TRUE, count the features by reading them, even if their count is not reported by the driver}
 }
+\value{
+list object of class \code{sf_layers} with elements 
+\describe{
+  \item{name}{name of the layer}
+  \item{geomtype}{list with for each layer the geometry types}
+  \item{features}{number of features (if reported; see \code{do_count})}
+  \item{fields}{number of fields}
+  \item{crs}{list with for each layer the \code{crs} object}
+}
+}
 \description{
-List layers in a datasource
+Return properties of layers in a datasource
 }

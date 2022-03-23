@@ -568,25 +568,35 @@ print.sf_layers = function(x, ...) {
 		cat("<none>\n") # nocov
 		invisible(x)    # nocov
 	} else {
+		crs = sapply(x$crs, function(crs) crs$input)
+		x$crs = crs
 		df = data.frame(unclass(x))
 		gt = if (n_gt > 1)
 				"geometry_types"
 			else
 				"geometry_type"
-		names(df) = c("layer_name", gt, "features", "fields")
+		names(df) = c("layer_name", gt, "features", "fields", "crs_name")
 		print(df)
 		invisible(df)
 	}
 }
 
-#' List layers in a datasource
+#' Return properties of layers in a datasource
 #'
-#' List layers in a datasource
+#' Return properties of layers in a datasource
 #' @param dsn data source name (interpretation varies by driver - for some drivers, \code{dsn} is a file name, but may also be a
 #' folder, or contain the name and access credentials of a database)
 #' @param options character; driver dependent dataset open options, multiple options supported.
 #' @param do_count logical; if TRUE, count the features by reading them, even if their count is not reported by the driver
 #' @name st_layers
+#' @return list object of class \code{sf_layers} with elements 
+#' \describe{
+#'   \item{name}{name of the layer}
+#'   \item{geomtype}{list with for each layer the geometry types}
+#'   \item{features}{number of features (if reported; see \code{do_count})}
+#'   \item{fields}{number of fields}
+#'   \item{crs}{list with for each layer the \code{crs} object}
+#' }
 #' @export
 st_layers = function(dsn, options = character(0), do_count = FALSE) {
 	if (missing(dsn))
