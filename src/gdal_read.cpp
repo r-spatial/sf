@@ -153,9 +153,11 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
 	Rcpp::List geomtype(poDS->GetLayerCount());
 	Rcpp::NumericVector field_count(poDS->GetLayerCount());
 	Rcpp::NumericVector feature_count(poDS->GetLayerCount());
+	Rcpp::List layer_crs(poDS->GetLayerCount());
 
 	for(int iLayer = 0; iLayer < poDS->GetLayerCount(); iLayer++) {
 		OGRLayer *poLayer = poDS->GetLayer(iLayer);
+		layer_crs[iLayer] = create_crs(poLayer->GetSpatialRef());
 		names(iLayer) = poLayer->GetName();
 		int nGeomFieldCount = poLayer->GetLayerDefn()->GetGeomFieldCount();
 		if (nGeomFieldCount == 0) {
@@ -180,14 +182,15 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
 			feature_count(iLayer) = count_features(poLayer);
 	}
 
-	Rcpp::List out(5);
+	Rcpp::List out(6);
 	out(0) = names;
 	out(1) = geomtype;
 	out(2) = poDS->GetDriverName();
 	out(3) = feature_count;
 	out(4) = field_count;
+	out(5) = layer_crs;
 	GDALClose(poDS); // close & destroys data source
-	out.attr("names") = Rcpp::CharacterVector::create("name", "geomtype", "driver", "features", "fields");
+	out.attr("names") = Rcpp::CharacterVector::create("name", "geomtype", "driver", "features", "fields", "crs");
 	out.attr("class") = Rcpp::CharacterVector::create("sf_layers");
 	return out;
 }
