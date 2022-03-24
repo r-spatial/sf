@@ -63,6 +63,39 @@ Rcpp::CharacterVector CPL_gdalinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVec
 	return ret;
 }
 
+// [[Rcpp::export]]
+Rcpp::LogicalVector CPL_gdaladdo(Rcpp::CharacterVector obj, Rcpp::CharacterVector method, 
+		Rcpp::IntegerVector overviews, Rcpp::IntegerVector bands, Rcpp::CharacterVector oo,
+		bool clean = false, bool read_only = false) {
+
+	/*
+	std::vector <char *> options_char = create_options(options, true);
+	GDALInfoOptions* opt = GDALInfoOptionsNew(options_char.data(), NULL);
+	*/
+	std::vector <char *> oo_char = create_options(oo, true); // open options
+
+	GDALDatasetH ds = GDALOpenEx((const char *) obj[0], 
+						read_only ? (GDAL_OF_RASTER | GA_ReadOnly) : (GDAL_OF_RASTER | GA_Update),
+						NULL, oo_char.data(), NULL);
+	if (ds == NULL)
+		Rcpp::stop(read_only ? "cannot open file for reading" : "cannot open file for writing");
+	if (clean) {
+		if (GDALBuildOverviews(ds, method[0], 0, nullptr,
+                               0, nullptr, GDALRProgress, nullptr) != CE_None) {
+			GDALClose(ds);
+			Rcpp::stop("error while cleaning overviews");
+		}
+	} else { // build overviews:
+		if (GDALBuildOverviews(ds, method[0], overviews.size(), overviews.size() ? &(overviews[0]) : NULL,
+						bands.size(), bands.size() ? &(bands[0]) : NULL, GDALRProgress, NULL) != CE_None) {
+			GDALClose(ds);
+			Rcpp::stop("error while building overviews");
+		}
+	}
+	GDALClose(ds);
+	return true;
+}
+
 // #nocov start
 
 // [[Rcpp::export]]

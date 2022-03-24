@@ -339,3 +339,20 @@ gdal_create = function(f, nxy, values, crs, xlim, ylim) {
 	CPL_create(as.character(f), as.integer(nxy), as.double(values), crs$wkt, as.double(xlim), as.double(ylim))
 }
 
+#' add overviews to a raster image
+#'
+#' add overviews to a raster image
+#' @param f character; file name
+#' @param method character; method to create overview
+#' @param overviews integer; overview levels
+#' @param layers integer; layers to create overviews for (default: all)
+#' @param options character; dataset opening options
+#' @param clean logical; if \code{TRUE} only remove overviews, do not add
+#' @param read_only logical; if \code{TRUE} add overviews to another file with extension \code{.ovr}
+#' @export
+gdal_addo = function(f, method = "NEAREST", overviews = c(2,4,8,16), layers = integer(0), 
+					 options = character(0), clean = FALSE, read_only = FALSE) {
+	stopifnot(length(method) == 1, is.character(method), is.numeric(overviews))
+	CPL_gdaladdo(f, method, as.integer(overviews), as.integer(layers), as.character(options), 
+				 as.logical(clean)[1], as.logical(read_only)[1])
+}
