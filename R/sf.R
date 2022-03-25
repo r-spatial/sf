@@ -451,9 +451,11 @@ as.data.frame.sf = function(x, ...) {
 #' @export
 #' @name st_geometry
 #' @details \code{st_drop_geometry} drops the geometry of its argument, and reclasses it accordingly
-st_drop_geometry = function(x) {
-	if (!inherits(x, "sf"))
-		stop("st_drop_geometry only works with objects of class sf")
+st_drop_geometry = function(x, ...) UseMethod("st_drop_geometry")
+
+#' @export
+#' @name st_geometry
+st_drop_geometry.sf = function(x, ...) {
 	st_set_geometry(x, NULL)
 }
 

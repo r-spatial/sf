@@ -8,6 +8,7 @@
 \alias{st_geometry<-}
 \alias{st_set_geometry}
 \alias{st_drop_geometry}
+\alias{st_drop_geometry.sf}
 \title{Get, set, replace or rename geometry from an sf object}
 \usage{
 \method{st_geometry}{sfc}(obj, ...)
@@ -24,7 +25,9 @@ st_geometry(x) <- value
 
 st_set_geometry(x, value)
 
-st_drop_geometry(x)
+st_drop_geometry(x, ...)
+
+\method{st_drop_geometry}{sf}(x, ...)
 }
 \arguments{
 \item{obj}{object of class \code{sf} or \code{sfc}}

@@ -212,8 +212,7 @@ gdal_metadata = function(file, domain_item = character(0), options = character(0
 split_strings = function(md, split = "=") {
 	splt = strsplit(md, split)
 	lst = lapply(splt, function(x) if (length(x) <= 1) NA_character_ else x[[2]])
-	structure(lst, names = sapply(splt, function(x) x[[1]]))
-	structure(lst, class = "gdal_metadata")
+	structure(lst, names = sapply(splt, function(x) x[[1]]), class = "gdal_metadata")
 }
 
 #' @param name logical; retrieve name of subdataset? If \code{FALSE}, retrieve description
@@ -340,3 +339,22 @@ gdal_create = function(f, nxy, values, crs, xlim, ylim) {
 	CPL_create(as.character(f), as.integer(nxy), as.double(values), crs$wkt, as.double(xlim), as.double(ylim))
 }
 
+#' add or remove overviews to/from a raster image
+#'
+#' add or remove overviews to/from a raster image
+#' @param file character; file name
+#' @param overviews integer; overview levels
+#' @param method character; method to create overview; one of: nearest, average, rms, gauss, cubic, cubicspline, lanczos, average_mp, average_magphase, mode
+#' @param layers integer; layers to create overviews for (default: all)
+#' @param options character; dataset opening options
+#' @param clean logical; if \code{TRUE} only remove overviews, do not add
+#' @param read_only logical; if \code{TRUE}, add overviews to another file with extension \code{.ovr} added to \code{f}
+#' @return \code{TRUE}, invisibly, on success
+#' @seealso \link{gdal_utils} for access to other gdal utilities that have a C API
+#' @export
+gdal_addo = function(file, overviews = c(2,4,8,16), method = "NEAREST", layers = integer(0), 
+					 options = character(0), clean = FALSE, read_only = FALSE) {
+	stopifnot(length(method) == 1, is.character(method), is.numeric(overviews))
+	invisible(CPL_gdaladdo(file, method, as.integer(overviews), as.integer(layers), as.character(options), 
+				 as.logical(clean)[1], as.logical(read_only)[1]))
+}

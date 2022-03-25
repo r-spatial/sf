@@ -15,7 +15,7 @@ st_nearest_feature(
 \arguments{
 \item{x}{object of class \code{sfg}, \code{sfc} or \code{sf}}
 
-\item{y}{object of class \code{sfg}, \code{sfc} or \code{sf}; if missing, features in code{x} will be compared to all remaining features in \code{x}.}
+\item{y}{object of class \code{sfg}, \code{sfc} or \code{sf}; if missing, features in \code{x} will be compared to all remaining features in \code{x}.}
 
 \item{...}{ignored}
 

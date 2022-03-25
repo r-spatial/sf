@@ -33,7 +33,8 @@ is_symmetric = function(operation, pattern) {
 
 # returning matrix, distance or relation string -- the work horse is:
 st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
-		sparse = TRUE, prepared = FALSE, model = "closed", ...) {
+		sparse = TRUE, prepared = FALSE, model = "closed", ..., 
+		remove_self = FALSE, retain_unique = FALSE) {
 	if (missing(y))
 		y = x
 	else if (inherits(x, c("sf", "sfc")) && inherits(y, c("sf", "sfc")))
@@ -47,7 +48,8 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 				as.character(seq_along(lst))
 			else
 				row.names(x)
-		sgbp(lst, predicate = op, region.id = id, ncol = length(st_geometry(y)), sparse)
+		sgbp(lst, predicate = op, region.id = id, ncol = length(st_geometry(y)), sparse,
+			remove_self = remove_self, retain_unique = retain_unique)
 	} else {
 		if (longlat && !(op %in% c("equals", "equals_exact")))
 			message_longlat(paste0("st_", op))
@@ -55,7 +57,8 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 				length(dx <- st_dimension(x)) && length(dy <- st_dimension(y)) &&
 				isTRUE(all(dx == 0)) && isTRUE(all(dy == 2))) {
 			t(st_geos_binop(op, y, x, par = par, pattern = pattern, sparse = sparse, 
-				prepared = prepared))
+				prepared = prepared, remove_self = remove_self, retain_unique = retain_unique,
+				...))
 		} else {
 			ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern, prepared)
 			if (length(ret) == 0 || is.null(dim(ret[[1]]))) {
@@ -63,7 +66,8 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 						as.character(seq_along(ret))
 					else
 						row.names(x)
-				sgbp(ret, predicate = op, region.id = id, ncol = length(st_geometry(y)), sparse)
+				sgbp(ret, predicate = op, region.id = id, ncol = length(st_geometry(y)), sparse,
+					remove_self = remove_self, retain_unique = retain_unique)
 			} else # CPL_geos_binop returned a matrix, e.g. from op = "relate"
 				ret[[1]]
 		}
@@ -134,6 +138,15 @@ st_relate	= function(x, y, pattern = NA_character_, sparse = !is.na(pattern)) {
 #' lengths(lst) > 0
 #' # which points fall inside the first polygon?
 #' st_intersects(pol, pts)[[1]]
+#' # remove duplicate geometries:
+#' p1 = st_point(0:1)
+#' p2 = st_point(2:1)
+#' p = st_sf(a = letters[1:8], geom = st_sfc(p1, p1, p2, p1, p1, p2, p2, p1))
+#' st_equals(p)
+#' st_equals(p, remove_self = TRUE)
+#' (u = st_equals(p, retain_unique = TRUE))
+#' # retain the records with unique geometries:
+#' p[-unlist(u),]
 #' @export
 st_intersects	= function(x, y, sparse = TRUE, ...) UseMethod("st_intersects")
 
@@ -205,11 +218,15 @@ st_overlaps		= function(x, y, sparse = TRUE, prepared = TRUE, ...)
 	st_geos_binop("overlaps", x, y, sparse = sparse, prepared = prepared, ...)
 
 #' @name geos_binary_pred
+#' @param retain_unique logical; if TRUE (and y is missing) return only indexes of points larger than the current index; this can be used to select unique geometries, see examples. This argument can be used for all geometry predictates; see als \link{distinct.sf} to find records where geometries AND attributes are distinct.
+#' @param remove_self logical; if TRUE (and y is missing) return only indexes of geometries different from the current index; this can be used to omit self-intersections; see examples. This argument can be used for all geometry predictates
 #' @export
-st_equals		= function(x, y, sparse = TRUE, prepared = FALSE, ...) {
+st_equals		= function(x, y, sparse = TRUE, prepared = FALSE, ..., 
+							retain_unique = FALSE, remove_self = FALSE) {
 	if (prepared)
 		stop("prepared geometries not supported for st_equals")
-	st_geos_binop("equals", x, y, sparse = sparse, ...)
+	st_geos_binop("equals", x, y, sparse = sparse, ..., 
+				  retain_unique = retain_unique, remove_self = remove_self)
 }
 
 #' @name geos_binary_pred
