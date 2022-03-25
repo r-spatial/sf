@@ -329,6 +329,20 @@ gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, fac
 		sf_column_name = attr(data, "sf_column"))
 }
 
+#' @name tidyverse
+#' @param data see original function docs
+#' @param cols see original function docs
+#' @param names_to see original function docs
+#' @param names_prefix see original function docs
+#' @param names_sep see original function docs
+#' @param names_pattern see original function docs
+#' @param names_ptypes see original function docs
+#' @param names_transform see original function docs
+#' @param names_repair see original function docs
+#' @param values_to see original function docs
+#' @param values_drop_na see original function docs
+#' @param values_ptypes see original function docs
+#' @param values_transform see original function docs
 pivot_longer.sf <- function (data, cols, names_to = "name", names_prefix = NULL,
 		names_sep = NULL, names_pattern = NULL, names_ptypes = NULL,
 		names_transform = NULL, names_repair = "check_unique",
@@ -362,6 +376,39 @@ pivot_longer.sf <- function (data, cols, names_to = "name", names_prefix = NULL,
   )
   st_as_sf(out, sf_column_name = sf_column_name)
 }
+
+# https://github.com/r-spatial/sf/issues/1915
+#' @name tidyverse
+#' @export
+#' @param id_cols see original function docs
+#' @param names_from see original function docs
+#' @param names_prefix see original function docs
+#' @param names_sep see original function docs
+#' @param names_glue see original function docs
+#' @param names_sort see original function docs
+#' @param names_repair see original function docs
+#' @param values_from see original function docs
+#' @param values_fill see original function docs
+#' @param values_fn see original function docs
+pivot_wider.sf = function(data,
+                          id_cols = NULL,
+                          names_from = name,
+                          names_prefix = "",
+                          names_sep = "_",
+                          names_glue = NULL,
+                          names_sort = FALSE,
+                          names_repair = "check_unique",
+                          values_from = value,
+                          values_fill = NULL,
+                          values_fn = NULL,
+                          ...) {
+
+	agr = st_agr(data)
+	sf_column_name = attr(data, "sf_column")
+	class(data) = setdiff(class(data), "sf")
+	sf:::.re_sf(NextMethod(), sf_column_name = sf_column_name, agr)
+}
+
 
 
 #' @name tidyverse

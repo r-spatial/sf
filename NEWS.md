@@ -1,5 +1,7 @@
 # version 1.0-8
 
+* `pivot_wider()` method added, by Henning Teickner; #1915
+
 * add `gdal_addo()` to add or remove overviews from raster images; #1921
 
 * `st_layers()` returns `crs` of each layer in a `crs` list of `crs` objects
