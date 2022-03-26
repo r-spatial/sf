@@ -27,7 +27,7 @@ gdal_addo(
 
 \item{clean}{logical; if \code{TRUE} only remove overviews, do not add}
 
-\item{read_only}{logical; if \code{TRUE}, add overviews to another file with extension \code{.ovr} added to \code{f}}
+\item{read_only}{logical; if \code{TRUE}, add overviews to another file with extension \code{.ovr} added to \code{file}}
 }
 \value{
 \code{TRUE}, invisibly, on success

@@ -75,5 +75,5 @@ st_read(in_file)
 }
 }
 \seealso{
-\link{gdal_addo} for adding overlays to a raste file
+\link{gdal_addo} for adding overlays to a raste file; \link{st_layers} to query geometry type(s) and crs from layers in a (vector) data source
 }

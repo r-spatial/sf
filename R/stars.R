@@ -348,7 +348,7 @@ gdal_create = function(f, nxy, values, crs, xlim, ylim) {
 #' @param layers integer; layers to create overviews for (default: all)
 #' @param options character; dataset opening options
 #' @param clean logical; if \code{TRUE} only remove overviews, do not add
-#' @param read_only logical; if \code{TRUE}, add overviews to another file with extension \code{.ovr} added to \code{f}
+#' @param read_only logical; if \code{TRUE}, add overviews to another file with extension \code{.ovr} added to \code{file}
 #' @return \code{TRUE}, invisibly, on success
 #' @seealso \link{gdal_utils} for access to other gdal utilities that have a C API
 #' @export
