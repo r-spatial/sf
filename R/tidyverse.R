@@ -392,13 +392,13 @@ pivot_longer.sf <- function (data, cols, names_to = "name", names_prefix = NULL,
 #' @param values_fn see original function docs
 pivot_wider.sf = function(data,
                           id_cols = NULL,
-                          names_from = name,
+                          names_from, # = name,
                           names_prefix = "",
                           names_sep = "_",
                           names_glue = NULL,
                           names_sort = FALSE,
                           names_repair = "check_unique",
-                          values_from = value,
+                          values_from, # = value,
                           values_fill = NULL,
                           values_fn = NULL,
                           ...) {
@@ -406,7 +406,7 @@ pivot_wider.sf = function(data,
 	agr = st_agr(data)
 	sf_column_name = attr(data, "sf_column")
 	class(data) = setdiff(class(data), "sf")
-	sf:::.re_sf(NextMethod(), sf_column_name = sf_column_name, agr)
+	.re_sf(NextMethod(), sf_column_name = sf_column_name, agr)
 }
 
 
@@ -596,6 +596,7 @@ register_all_s3_methods = function() {
 	register_s3_method("dplyr", "ungroup", "sf")
 	register_s3_method("tidyr", "gather", "sf")
 	register_s3_method("tidyr", "pivot_longer", "sf")
+	register_s3_method("tidyr", "pivot_wider", "sf")
 	register_s3_method("tidyr", "spread", "sf")
 	register_s3_method("tidyr", "nest", "sf")
 	register_s3_method("tidyr", "separate", "sf")

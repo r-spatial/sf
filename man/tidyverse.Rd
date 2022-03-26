@@ -88,13 +88,13 @@ pivot_longer.sf(
 pivot_wider.sf(
   data,
   id_cols = NULL,
-  names_from = name,
+  names_from,
   names_prefix = "",
   names_sep = "_",
   names_glue = NULL,
   names_sort = FALSE,
   names_repair = "check_unique",
-  values_from = value,
+  values_from,
   values_fill = NULL,
   values_fn = NULL,
   ...
