@@ -135,13 +135,13 @@
 <span class="fu">pivot_wider.sf</span><span class="op">(</span>
   <span class="va">data</span>,
   id_cols <span class="op">=</span> <span class="cn">NULL</span>,
-  names_from <span class="op">=</span> <span class="va">name</span>,
+  <span class="va">names_from</span>,
   names_prefix <span class="op">=</span> <span class="st">""</span>,
   names_sep <span class="op">=</span> <span class="st">"_"</span>,
   names_glue <span class="op">=</span> <span class="cn">NULL</span>,
   names_sort <span class="op">=</span> <span class="cn">FALSE</span>,
   names_repair <span class="op">=</span> <span class="st">"check_unique"</span>,
-  values_from <span class="op">=</span> <span class="va">value</span>,
+  <span class="va">values_from</span>,
   values_fill <span class="op">=</span> <span class="cn">NULL</span>,
   values_fn <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">...</span>
@@ -342,7 +342,7 @@ Should be a character vector of length 2.</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span class="r-in"><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpCRNJsp/temp_libpath12bffc8801e9/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpOwkDqs/temp_libpath47ec73f0a352/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
