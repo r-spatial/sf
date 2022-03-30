@@ -1,5 +1,7 @@
 # version 1.0-8
 
+* handle argument `xpd` in calls to `plot.sfc_POLYGON()` and `plot.sfc_MULTIPOLYGON()`
+
 * `pivot_wider()` method added, by Henning Teickner; #1915
 
 * add `gdal_addo()` to add or remove overviews from raster images; #1921

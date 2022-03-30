@@ -84,7 +84,8 @@ get_key_pos(x, ...)
   pch = NA,
   border = 1,
   add = FALSE,
-  rule = "evenodd"
+  rule = "evenodd",
+  xpd = par("xpd")
 )
 
 \method{plot}{sfc_MULTIPOLYGON}(
@@ -96,7 +97,8 @@ get_key_pos(x, ...)
   col = NA,
   border = 1,
   add = FALSE,
-  rule = "evenodd"
+  rule = "evenodd",
+  xpd = par("xpd")
 )
 
 \method{plot}{sfc_GEOMETRYCOLLECTION}(
@@ -203,6 +205,8 @@ sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE)
 \item{border}{color of polygon border(s)}
 
 \item{rule}{see \link[graphics]{polypath}; for \code{winding}, exterior ring direction should be opposite that of the holes; with \code{evenodd}, plotting is robust against misspecified ring directions}
+
+\item{xpd}{see \link[graphics]{par}; sets polygon clipping strategy; only implemented for POLYGON and MULTIPOLYGON}
 
 \item{asp}{see below, and see \link{par}}
 
