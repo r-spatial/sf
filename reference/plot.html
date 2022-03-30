@@ -156,7 +156,8 @@ Plot sf object</p>
   pch <span class="op">=</span> <span class="cn">NA</span>,
   border <span class="op">=</span> <span class="fl">1</span>,
   add <span class="op">=</span> <span class="cn">FALSE</span>,
-  rule <span class="op">=</span> <span class="st">"evenodd"</span>
+  rule <span class="op">=</span> <span class="st">"evenodd"</span>,
+  xpd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="st">"xpd"</span><span class="op">)</span>
 <span class="op">)</span>
 
 <span class="co"># S3 method for sfc_MULTIPOLYGON</span>
@@ -169,7 +170,8 @@ Plot sf object</p>
   col <span class="op">=</span> <span class="cn">NA</span>,
   border <span class="op">=</span> <span class="fl">1</span>,
   add <span class="op">=</span> <span class="cn">FALSE</span>,
-  rule <span class="op">=</span> <span class="st">"evenodd"</span>
+  rule <span class="op">=</span> <span class="st">"evenodd"</span>,
+  xpd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="st">"xpd"</span><span class="op">)</span>
 <span class="op">)</span>
 
 <span class="co"># S3 method for sfc_GEOMETRYCOLLECTION</span>
@@ -282,6 +284,8 @@ Plot sf object</p>
 <dd><p>color of polygon border(s)</p></dd>
 <dt>rule</dt>
 <dd><p>see <a href="https://rdrr.io/r/graphics/polypath.html" class="external-link">polypath</a>; for <code>winding</code>, exterior ring direction should be opposite that of the holes; with <code>evenodd</code>, plotting is robust against misspecified ring directions</p></dd>
+<dt>xpd</dt>
+<dd><p>see <a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a>; sets polygon clipping strategy; only implemented for POLYGON and MULTIPOLYGON</p></dd>
 <dt>asp</dt>
 <dd><p>see below, and see <a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></p></dd>
 <dt>axes</dt>
