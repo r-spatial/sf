@@ -129,30 +129,30 @@ test_that("bind_rows() returns type of first input", {
 	out = bind_rows(data.frame(x = 1), sf2)
 	exp = data_frame(
 		x = c(1, 2),
-		z = st_sfc(NA, st_point(2:3))
+		z = st_sfc(st_point(), st_point(2:3))
 	)
 	expect_identical(out, exp)
 
 	out = bind_rows(sf1, data.frame(x = 1))
 	exp = st_as_sf(data_frame(
 		x = c(1, 1),
-		y = st_sfc(st_point(0:1), NA)
+		y = st_sfc(st_point(0:1), st_point())
 	))
 	expect_identical(out, exp)
 
 	out = bind_rows(sf1, sf2)
 	exp = st_as_sf(data_frame(
 		x = c(1, 2),
-		y = st_sfc(st_point(0:1), NA),
-		z = st_sfc(NA, st_point(2:3))
+		y = st_sfc(st_point(0:1), st_point()),
+		z = st_sfc(st_point(), st_point(2:3))
 	))
 	expect_identical(out, exp)
 
 	out = bind_rows(sf2, sf1)
 	exp = st_as_sf(sf_column_name = "z", data_frame(
 		x = c(2, 1),
-		z = st_sfc(st_point(2:3), NA),
-		y = st_sfc(NA, st_point(0:1))
+		z = st_sfc(st_point(2:3), st_point()),
+		y = st_sfc(st_point(), st_point(0:1))
 	))
 	expect_identical(out, exp)
 })

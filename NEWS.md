@@ -1,5 +1,9 @@
 # version 1.0-8
 
+* improve efficiency of `st_sfc()`, and by that also of `[.sfc`; #1925
+
+* add `is.na<-` method for `sfc` objects, creating empty geometries, so that `merge()` works; #1925
+
 * handle argument `xpd` in calls to `plot.sfc_POLYGON()` and `plot.sfc_MULTIPOLYGON()`
 
 * `pivot_wider()` method added, by Henning Teickner; #1915

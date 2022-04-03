@@ -1,6 +1,6 @@
 
-R version 4.1.2 (2021-11-01) -- "Bird Hippie"
-Copyright (C) 2021 The R Foundation for Statistical Computing
+R version 4.1.3 (2022-03-10) -- "One Push-Up"
+Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -540,15 +540,15 @@ CRS:           NA
 2 6 2 c POINT (1 1)
 > merge(a, b, all = TRUE)
 Simple feature collection with 4 features and 3 fields (with 1 geometry empty)
-Geometry type: GEOMETRY
+Geometry type: POINT
 Dimension:     XY
 Bounding box:  xmin: 0 ymin: 0 xmax: 2 ymax: 2
 CRS:           NA
-  b  a    x                 geometry
-1 2 NA    a GEOMETRYCOLLECTION EMPTY
-2 5  1    b              POINT (0 0)
-3 6  2    c              POINT (1 1)
-4 7  3 <NA>              POINT (2 2)
+  b  a    x    geometry
+1 2 NA    a POINT EMPTY
+2 5  1    b POINT (0 0)
+3 6  2    c POINT (1 1)
+4 7  3 <NA> POINT (2 2)
 > 
 > # joins:
 > inner_join(a, b)
@@ -854,6 +854,9 @@ POINT (-0.0500922 0.992953)
 > # st_bbox:
 > library(sp)
 > demo(meuse, ask = FALSE, echo = FALSE)
+Warning message:
+In showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj = prefer_proj) :
+  Discarded datum Amersfoort in Proj4 definition
 > suppressWarnings(st_bbox(meuse))
   xmin   ymin   xmax   ymax 
 178605 329714 181390 333611 
@@ -1123,4 +1126,4 @@ CRS:           NA
 > 
 > proc.time()
    user  system elapsed 
-  8.386   0.119   8.498 
+  7.893   0.085   7.971 

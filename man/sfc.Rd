@@ -2,6 +2,7 @@
 % Please edit documentation in R/sfc.R
 \name{sfc}
 \alias{sfc}
+\alias{format.sfc}
 \alias{st_sfc}
 \alias{sfc_POINT}
 \alias{sfc_LINESTRING}
@@ -10,12 +11,24 @@
 \alias{sfc_MULTILINESTRING}
 \alias{sfc_MULTIPOLYGON}
 \alias{sfc_GEOMETRYCOLLECTION}
+\alias{[.sfc}
+\alias{is.na<-.sfc}
 \title{Create simple feature geometry list column}
 \usage{
-st_sfc(..., crs = NA_crs_, precision = 0, check_ring_dir = FALSE, dim)
+\method{format}{sfc}(x, ..., width = 30)
+
+st_sfc(..., crs = NA_crs_, precision = 0, check_ring_dir = FALSE, dim, cls)
+
+\method{[}{sfc}(x, i, j, ..., op = st_intersects)
+
+\method{is.na}{sfc}(x) <- value
 }
 \arguments{
+\item{x}{object of class \code{sfc}}
+
 \item{...}{zero or more simple feature geometries (objects of class \code{sfg}), or a single list of such objects; \code{NULL} values will get replaced by empty geometries.}
+
+\item{width}{integer; maximum width of the character for printing as WKT}
 
 \item{crs}{coordinate reference system: integer with the EPSG code, or character with proj4string}
 
@@ -24,9 +37,21 @@ st_sfc(..., crs = NA_crs_, precision = 0, check_ring_dir = FALSE, dim)
 \item{check_ring_dir}{see \link{st_read}}
 
 \item{dim}{character; if this function is called without valid geometries, this argument may carry the right dimension to set empty geometries}
+
+\item{cls}{class of the result, if already known}
+
+\item{i}{integer or logical index, or object of class \code{sf}, \code{sfc} or \code{sfg}}
+
+\item{j}{ignored}
+
+\item{op}{function; if \code{i} is a spatial object, predicate to use for selection}
+
+\item{value}{logical vector the same length of \code{x}}
 }
 \value{
-an object of class \code{sfc}, which is a classed list-column with simple feature geometries.
+an object of class \code{sfc}, which is a classed list-column with simple 
+feature geometries, along with metadata on coordinate reference system, bounding box, 
+precision and the number of empty geometries.
 }
 \description{
 Create simple feature geometry list column, set class, and add coordinate reference system and precision
@@ -36,6 +61,8 @@ A simple feature geometry list-column is a list of class
 \code{c("stc_TYPE", "sfc")} which most often contains objects of identical type;
 in case of a mix of types or an empty set, \code{TYPE} is set to the
 superclass \code{GEOMETRY}.
+
+\code{is.na<-.sfc} replaces selected geometries with empty geometries.
 }
 \examples{
 pt1 = st_point(c(0,1))

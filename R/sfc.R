@@ -8,6 +8,9 @@ str.sfc <- function(object, ...) {
 	}
 }
 
+#' @name sfc
+#' @param x object of class \code{sfc}
+#' @param width integer; maximum width of the character for printing as WKT
 #' @export
 format.sfc = function(x, ..., width = 30) {
 	vapply(x, format, "", ..., width = width)
@@ -24,7 +27,10 @@ format.sfc = function(x, ..., width = 30) {
 #' @param precision numeric; see \link{st_as_binary}
 #' @param check_ring_dir see \link{st_read}
 #' @param dim character; if this function is called without valid geometries, this argument may carry the right dimension to set empty geometries
-#' @return an object of class \code{sfc}, which is a classed list-column with simple feature geometries.
+#' @param cls class of the result, if already known
+#' @return an object of class \code{sfc}, which is a classed list-column with simple 
+#' feature geometries, along with metadata on coordinate reference system, bounding box, 
+#' precision and the number of empty geometries.
 #'
 #' @details A simple feature geometry list-column is a list of class
 #' \code{c("stc_TYPE", "sfc")} which most often contains objects of identical type;
@@ -36,7 +42,7 @@ format.sfc = function(x, ..., width = 30) {
 #' (sfc = st_sfc(pt1, pt2))
 #' d = st_sf(data.frame(a=1:2, geom=sfc))
 #' @export
-st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, dim) {
+st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, dim, cls) {
 	lst = list(...)
 	# if we have only one arg, which is already a list with sfg's, but NOT a geometrycollection:
 	# (this is the old form of calling st_sfc; it is way faster to call st_sfc(lst) if lst
@@ -46,28 +52,31 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 		lst = lst[[1]]
 	stopifnot(is.numeric(crs) || is.character(crs) || inherits(crs, "crs"))
 
-	# check for NULLs:
+	# check for NULLs; if lst comes from NextMethod(), NA indexes yield NULL members 
 	a = attributes(lst)
-	is_null = vapply(lst, function(x) is.null(x) || isTRUE(is.na(x)), NA)
-	lst = unclass(lst)
-	lst = lst[! is_null]
+	is_null = vapply(lst, is.null, FALSE)
+	lst = unclass(lst)[!is_null]
 	attributes(lst) = a
 
-	sfg_classes = vapply(lst, class, rep(NA_character_, 3))
-	cls = if (length(lst) == 0) # empty set: no geometries read
-		c("sfc_GEOMETRY", "sfc")
-	else {
-		# class: do we have a mix of geometry types?
-		single = if (!is.null(attr(lst, "single_type"))) # set by CPL_read_wkb:
-				attr(lst, "single_type")
-			else
-				length(unique(sfg_classes[2L,])) == 1L
-		attr(lst, "single_type") = NULL # clean up
-		if (single)
-			c(paste0("sfc_", sfg_classes[2L, 1L]), "sfc")
-		else
-			c("sfc_GEOMETRY", "sfc")    # the mix
-	}
+	if (missing(cls) || cls[1] == "sfc_GEOMETRY" || length(lst) == 0) {
+		# determine common class:
+		sfg_classes = vapply(lst, class, rep(NA_character_, 3))
+		cls = if (length(lst) == 0) # empty set: no geometries read
+				c("sfc_GEOMETRY", "sfc")
+			else {
+				# class: do we have a mix of geometry types?
+				single = if (!is.null(attr(lst, "single_type"))) # set by CPL_read_wkb:
+						attr(lst, "single_type")
+					else
+						length(unique(sfg_classes[2L,])) == 1L
+				attr(lst, "single_type") = NULL # clean up
+				if (single)
+					c(paste0("sfc_", sfg_classes[2L, 1L]), "sfc")
+				else
+					c("sfc_GEOMETRY", "sfc")    # the mix
+			}
+	} else
+		sfg_classes = matrix(c(dim, substr(cls[1], 5, 100), "sfg"), 1)
 
 	if (any(is_null)) {
 		if (missing(dim)) {
@@ -142,11 +151,26 @@ sfg_is_empty = function(x) {
 }
 
 #' @export
+#' @name sfc
+#' @param i integer or logical index, or object of class \code{sf}, \code{sfc} or \code{sfg}
+#' @param j ignored
+#' @param op function; if \code{i} is a spatial object, predicate to use for selection
 "[.sfc" = function(x, i, j, ..., op = st_intersects) {
-	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc") || inherits(i, "sfg")))
+	if (!missing(i) && inherits(i, c("sf", "sfc", "sfg")))
 		i = lengths(op(x, i, ...)) != 0
 	st_sfc(NextMethod(), crs = st_crs(x), precision = st_precision(x),
-		dim = if(length(x)) class(x[[1]])[1] else "XY")
+		dim = if(length(x)) class(x[[1]])[1] else "XY", cls = class(x))
+}
+
+#' @export
+#' @name sfc
+#' @param value logical vector the same length of \code{x}
+#' @details \code{is.na<-.sfc} replaces selected geometries with empty geometries.
+"is.na<-.sfc" = function(x, value) {
+		dimx = if(length(x)) class(x[[1]])[1] else "XY"
+		cls = class(x)
+		x[value] = list(typed_empty(cls, nchar(dimx), dim = dimx))
+		st_sfc(x, crs = st_crs(x), precision = st_precision(x), dim = dimx, cls = cls)
 }
 
 
