@@ -10,7 +10,7 @@ bb_wrap = function(bb) {
 }
 
 bbox.Set = function(obj, ...) {
-	sel = vapply(obj, function(x) { length(x) && !all(is.na(x)) }, TRUE)
+	sel = !vapply(obj, anyNA, TRUE)
 	if (! any(sel))
 		NA_bbox_
 	else
