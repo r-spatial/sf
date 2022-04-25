@@ -1,5 +1,7 @@
 # version 1.0-8
 
+* clarify `pipeline` argument in `st_transform()` when axis order is ambiguous; #1934
+
 * handle argument `xpd` in calls to `plot.sfc_POLYGON()` and `plot.sfc_MULTIPOLYGON()`
 
 * `pivot_wider()` method added, by Henning Teickner; #1915
@@ -8,7 +10,7 @@
 
 * `st_layers()` returns `crs` of each layer in a `crs` list of `crs` objects
 
-* restore `st_graticule()` behaviour to that of before using s2; https://github.com/tidyverse/ggplot2/issues/4571
+* restore `st_graticule()` behaviour to pre-sf 1.0-0; https://github.com/tidyverse/ggplot2/issues/4571
 
 * `gdal_metadata()` sets metadata item names properly
 
