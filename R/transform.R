@@ -56,6 +56,11 @@ sanity_check = function(x) {
 #' @param check logical; if \code{TRUE}, perform a sanity check on resulting polygons
 #' @details Transforms coordinates of object to new projection. 
 #' Features that cannot be transformed are returned as empty geometries.
+#' Transforms using the \code{pipeline=} argument may fail if there is
+#' ambiguity in the axis order of the specified coordinate reference system;
+#' if you need the traditional GIS order, use \code{"OGC:CRS84"}, not
+#' \code{"EPSG:4326"}. Extra care is needed with the ESRI Shapefile format,
+#' because WKT1 does not store axis order unambigiously.
 #'
 #' @seealso Projecting simple feature geometries 
 #' to projections not supported by GDAL may be done by 

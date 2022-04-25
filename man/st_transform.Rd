@@ -81,6 +81,11 @@ Transform or convert coordinates of simple feature
 \details{
 Transforms coordinates of object to new projection. 
 Features that cannot be transformed are returned as empty geometries.
+Transforms using the \code{pipeline=} argument may fail if there is
+ambiguity in the axis order of the specified coordinate reference system;
+if you need the traditional GIS order, use \code{"OGC:CRS84"}, not
+\code{"EPSG:4326"}. Extra care is needed with the ESRI Shapefile format,
+because WKT1 does not store axis order unambigiously.
 
 The \code{st_transform} method for \code{sfg} objects assumes that the CRS of the object is available as an attribute of that name.
 

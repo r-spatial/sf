@@ -1,5 +1,7 @@
 # version 1.0-8
 
+* clarify `pipeline` argument in `st_transform()` when axis order is ambiguous; #1934
+
 * handle argument `xpd` in calls to `plot.sfc_POLYGON()` and `plot.sfc_MULTIPOLYGON()`
 
 * `pivot_wider()` method added, by Henning Teickner; #1915
