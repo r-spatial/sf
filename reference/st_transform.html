@@ -156,7 +156,12 @@ at least the one specified will be considered; a negative value disables this fe
     <div id="details">
     <h2>Details</h2>
     <p>Transforms coordinates of object to new projection. 
-Features that cannot be transformed are returned as empty geometries.</p>
+Features that cannot be transformed are returned as empty geometries.
+Transforms using the <code>pipeline=</code> argument may fail if there is
+ambiguity in the axis order of the specified coordinate reference system;
+if you need the traditional GIS order, use <code>"OGC:CRS84"</code>, not
+<code>"EPSG:4326"</code>. Extra care is needed with the ESRI Shapefile format,
+because WKT1 does not store axis order unambigiously.</p>
 <p>The <code>st_transform</code> method for <code>sfg</code> objects assumes that the CRS of the object is available as an attribute of that name.</p>
 <p>For a discussion of using <code>options</code>, see <a href="https://github.com/r-spatial/sf/issues/280" class="external-link">https://github.com/r-spatial/sf/issues/280</a> and <a href="https://github.com/r-spatial/sf/issues/541" class="external-link">https://github.com/r-spatial/sf/issues/541</a></p>
 <p><code>sf_proj_info</code> lists the available projections, ellipses, datums, units, or data search path of the PROJ library when <code>type</code> is equal to proj, ellps, datum, units or path; when <code>type</code> equals <code>have_datum_files</code> a boolean is returned indicating whether datum files are installed and accessible (checking for <code>conus</code>).</p>
@@ -222,7 +227,7 @@ to projections not supported by GDAL may be done by
 <span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (-30 20)</span>
 <span class="r-in"><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpzADSoh/temp_libpath12b452fb5e437/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpqfzWWv/temp_libpath483c7e90501f/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
