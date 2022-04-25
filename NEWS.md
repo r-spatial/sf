@@ -1,6 +1,32 @@
+# version 1.0-8
+
+* handle argument `xpd` in calls to `plot.sfc_POLYGON()` and `plot.sfc_MULTIPOLYGON()`
+
+* `pivot_wider()` method added, by Henning Teickner; #1915
+
+* add `gdal_addo()` to add or remove overviews from raster images; #1921
+
+* `st_layers()` returns `crs` of each layer in a `crs` list of `crs` objects
+
+* restore `st_graticule()` behaviour to that of before using s2; https://github.com/tidyverse/ggplot2/issues/4571
+
+* `gdal_metadata()` sets metadata item names properly
+
+* `st_read()` gains an argument `optional` passed on to `as.data.frame` to avoid changing column names; #1916
+
+* GPX files are autodetected by `st_read()`; #1917
+
+* unnecessary coordinate names are not returned in `st_sample()`, making the output size smaller; #1879
+
 # version 1.0-7
 
-* fix compile problems against GDAL < 2.5.0 introduced in 1.0-6; #1899
+* `st_drop_geometry()` is a generic; #1914
+
+* `st_crs(x)$ud_unit` returns the unit of the coordinate reference system of `x`
+
+* geometric predicates return `sgbp` objects omitting self-intersections etc. by passing `remove_self = TRUE` and unique symmetric relationship by passing `retain_unique = TRUE` (to `...` if needed); this simplifies identifying (and removing) duplicated geometries; duplicates are identified by e.g. by `st_equals(x, retain_unique = TRUE) |> unlist() |> unique()`; #1893
+
+* fix compile issue against GDAL < 2.5.0 introduced in 1.0-6; #1899
 
 # version 1.0-6
 

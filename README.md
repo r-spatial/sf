@@ -53,7 +53,7 @@ This will install binary packages on Windows and MacOS, unless you configured R 
 
 Install development versions from GitHub with:
 ```r
-library(devtools)
+library(remotes)
 install_github("r-spatial/sf")
 ```
 
@@ -81,7 +81,7 @@ install.packages("sf", configure.args = "--with-proj-lib=/usr/local/lib/")
 Or the development version:
 
 ```r
-library(devtools)
+library(remotes)
 install_github("r-spatial/sf", configure.args = "--with-proj-lib=/usr/local/lib/")
 ```
 

@@ -24,7 +24,7 @@ jobs:
           # use a different tic template type if you do not want to build on all listed platforms
           # - { os: windows-latest, r: "release" }
           #- { os: macOS-latest, r: "release", pkgdown: "true", latex: "true" }
-          - { os: ubuntu-latest, r: "devel" }
+          - { os: ubuntu-latest, r: "devel", pkgdown: "true" }
           - { os: ubuntu-latest, r: "release" }
 
     env:

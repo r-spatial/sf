@@ -62,20 +62,20 @@ Type 'q()' to quit R.
 + }
 Driver: OSM 
 Available layers:
-        layer_name       geometry_type features fields
-1           points               Point       NA     10
-2            lines         Line String       NA      9
-3 multilinestrings   Multi Line String       NA      4
-4    multipolygons       Multi Polygon       NA     25
-5  other_relations Geometry Collection       NA      4
+        layer_name       geometry_type features fields crs_name
+1           points               Point       NA     10   WGS 84
+2            lines         Line String       NA      9   WGS 84
+3 multilinestrings   Multi Line String       NA      4   WGS 84
+4    multipolygons       Multi Polygon       NA     25   WGS 84
+5  other_relations Geometry Collection       NA      4   WGS 84
 Driver: OSM 
 Available layers:
-        layer_name       geometry_type features fields
-1           points               Point        0     10
-2            lines         Line String        0      9
-3 multilinestrings   Multi Line String        0      4
-4    multipolygons       Multi Polygon        3     25
-5  other_relations Geometry Collection        0      4
+        layer_name       geometry_type features fields crs_name
+1           points               Point        0     10   WGS 84
+2            lines         Line String        0      9   WGS 84
+3 multilinestrings   Multi Line String        0      4   WGS 84
+4    multipolygons       Multi Polygon        3     25   WGS 84
+5  other_relations Geometry Collection        0      4   WGS 84
 Simple feature collection with 3 features and 25 fields
 Geometry type: MULTIPOLYGON
 Dimension:     XY
@@ -373,3 +373,4 @@ Error in CPL_read_ogr(dsn, layer, query, as.character(options), quiet,  :
 > proc.time()
    user  system elapsed 
   1.182   0.064   1.243 
+

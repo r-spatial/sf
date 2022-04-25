@@ -180,6 +180,7 @@ st_poly_sample = function(x, size, ..., type = "random",
 				} else
 					runif(size, bb[2], bb[4])
 				m = cbind(lon, lat)
+				colnames(m) = NULL
 				st_sfc(lapply(seq_len(nrow(m)), function(i) st_point(m[i,])), crs = st_crs(x))
 			}
 		pts[x] # cut out x from bbox
@@ -205,7 +206,7 @@ st_multipoints_sample = function(x, size, ..., type = "random") {
 	st_sfc(st_multipoint(m[sample(nrow(m), size, ...),]), crs = st_crs(x))
 }
 
-st_ll_sample = function (x, size, ..., type = "random", offset = runif(1)) {
+st_ll_sample = function(x, size, ..., type = "random", offset = runif(1)) {
 	crs = st_crs(x)
 	if (isTRUE(st_is_longlat(x))) {
 		message_longlat("st_sample")
@@ -246,9 +247,10 @@ hex_grid_points = function(obj, pt, dx) {
 	x = seq(xlim[1] - dx, xlim[2] + dx, dx) + offset[1]
 	y = seq(ylim[1] - 2 * dy, ylim[2] + 2 * dy, dy) + offset[2]
 
-	y  <- rep(y, each = length(x))
-	x  <- rep(c(x, x + dx / 2), length.out = length(y))
+	y = rep(y, each = length(x))
+	x = rep(c(x, x + dx / 2), length.out = length(y))
 	xy = cbind(x, y)[x >= xlim[1] & x <= xlim[2] & y >= ylim[1] & y <= ylim[2], ]
+	colnames(xy) = NULL
 	st_sfc(lapply(seq_len(nrow(xy)), function(i) st_point(xy[i,])), crs = st_crs(bb))
 }
 
@@ -259,7 +261,7 @@ st_sample_exact = function(x, size, ..., type, by_polygon) {
 		random_pt_new = st_sample(x, size = diff, ..., type, exact = FALSE, by_polygon = by_polygon)
 		random_pt = c(random_pt, random_pt_new)
 	}
-	if(length(random_pt) > size) {
+	if (length(random_pt) > size) {
 		random_pt = random_pt[1:size]
 	}
 	random_pt

@@ -70,7 +70,7 @@ st_nearest_points.sf = function(x, y, ...) {
 #' 
 #' get index of nearest feature
 #' @param x object of class \code{sfg}, \code{sfc} or \code{sf}
-#' @param y object of class \code{sfg}, \code{sfc} or \code{sf}; if missing, features in code{x} will be compared to all remaining features in \code{x}.
+#' @param y object of class \code{sfg}, \code{sfc} or \code{sf}; if missing, features in \code{x} will be compared to all remaining features in \code{x}.
 #' @param ... ignored
 #' @param check_crs logical; should \code{x} and \code{y} be checked for CRS equality?
 #' @param longlat logical; does \code{x} have ellipsoidal coordinates?

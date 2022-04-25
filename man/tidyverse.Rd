@@ -16,6 +16,8 @@
 \alias{summarise}
 \alias{distinct.sf}
 \alias{gather.sf}
+\alias{pivot_longer.sf}
+\alias{pivot_wider.sf}
 \alias{spread.sf}
 \alias{sample_n.sf}
 \alias{sample_frac.sf}
@@ -64,6 +66,38 @@ gather.sf(
   na.rm = FALSE,
   convert = FALSE,
   factor_key = FALSE
+)
+
+pivot_longer.sf(
+  data,
+  cols,
+  names_to = "name",
+  names_prefix = NULL,
+  names_sep = NULL,
+  names_pattern = NULL,
+  names_ptypes = NULL,
+  names_transform = NULL,
+  names_repair = "check_unique",
+  values_to = "value",
+  values_drop_na = FALSE,
+  values_ptypes = NULL,
+  values_transform = NULL,
+  ...
+)
+
+pivot_wider.sf(
+  data,
+  id_cols = NULL,
+  names_from,
+  names_prefix = "",
+  names_sep = "_",
+  names_glue = NULL,
+  names_sort = FALSE,
+  names_repair = "check_unique",
+  values_from,
+  values_fill = NULL,
+  values_fn = NULL,
+  ...
 )
 
 spread.sf(
@@ -148,6 +182,44 @@ more details.}
 \item{convert}{see \link[tidyr]{separate_rows}}
 
 \item{factor_key}{see original function docs}
+
+\item{cols}{see original function docs}
+
+\item{names_to}{see original function docs}
+
+\item{names_prefix}{see original function docs}
+
+\item{names_sep}{see original function docs}
+
+\item{names_pattern}{see original function docs}
+
+\item{names_ptypes}{see original function docs}
+
+\item{names_transform}{see original function docs}
+
+\item{names_repair}{see original function docs}
+
+\item{values_to}{see original function docs}
+
+\item{values_drop_na}{see original function docs}
+
+\item{values_ptypes}{see original function docs}
+
+\item{values_transform}{see original function docs}
+
+\item{id_cols}{see original function docs}
+
+\item{names_from}{see original function docs}
+
+\item{names_glue}{see original function docs}
+
+\item{names_sort}{see original function docs}
+
+\item{values_from}{see original function docs}
+
+\item{values_fill}{see original function docs}
+
+\item{values_fn}{see original function docs}
 
 \item{fill}{see original function docs}
 

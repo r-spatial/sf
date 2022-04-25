@@ -93,6 +93,8 @@ st_join = function(x, y, join, ...) UseMethod("st_join")
 #' }
 #' A left join returns all records of the \code{x} object with \code{y} fields for non-matched records filled with \code{NA} values; an inner join returns only records that spatially match.
 #' 
+#' To replicate the results of \code{st_within(x, y)} you will need to use \code{st_join(x, y, join = "st_within", left = FALSE)}.
+#'
 #' @return an object of class \code{sf}, joined based on geometry
 #' @examples
 #' a = st_sf(a = 1:3,

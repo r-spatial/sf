@@ -24,7 +24,8 @@ st_read(dsn, layer, ...)
   check_ring_dir = FALSE,
   fid_column_name = character(0),
   drivers = character(0),
-  wkt_filter = character(0)
+  wkt_filter = character(0),
+  optional = FALSE
 )
 
 read_sf(..., quiet = TRUE, stringsAsFactors = FALSE, as_tibble = TRUE)
@@ -99,6 +100,8 @@ clockwise, holes clockwise)}
 \item{drivers}{character; limited set of driver short names to be tried (default: try all)}
 
 \item{wkt_filter}{character; WKT representation of a spatial filter (may be used as bounding box, selecting overlapping geometries); see examples}
+
+\item{optional}{logical; passed to \link[base]{as.data.frame}; always \code{TRUE} when \code{as_tibble} is \code{TRUE}}
 
 \item{as_tibble}{logical; should the returned table be of class tibble or data.frame?}
 
