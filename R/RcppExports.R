@@ -329,6 +329,18 @@ CPL_xy2sfc <- function(cc, dim, to_points, which) {
     .Call('_sf_CPL_xy2sfc', PACKAGE = 'sf', cc, dim, to_points, which)
 }
 
+sfc_is_null <- function(sfc) {
+    .Call('_sf_sfc_is_null', PACKAGE = 'sf', sfc)
+}
+
+sfc_unique_sfg_dims_and_types <- function(sfc) {
+    .Call('_sf_sfc_unique_sfg_dims_and_types', PACKAGE = 'sf', sfc)
+}
+
+sfc_count_empty <- function(sfc) {
+    .Call('_sf_sfc_count_empty', PACKAGE = 'sf', sfc)
+}
+
 points_cpp <- function(pts, gdim = "XY") {
     .Call('_sf_points_cpp', PACKAGE = 'sf', pts, gdim)
 }
