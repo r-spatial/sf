@@ -10,11 +10,14 @@ bb_wrap = function(bb) {
 }
 
 bbox.Set = function(obj, ...) {
+	n_empty = sfc_count_empty(obj)
+	if (n_empty == length(obj))
+		return(NA_bbox_)
+	else if (n_empty == 0)
+		return(bb_wrap(CPL_get_bbox(obj, 0)))
+	
 	sel = vapply(obj, function(x) { length(x) && !all(is.na(x)) }, TRUE)
-	if (! any(sel))
-		NA_bbox_
-	else
-		bb_wrap(CPL_get_bbox(unclass(obj)[sel], 0))
+	bb_wrap(CPL_get_bbox(unclass(obj)[sel], 0))
 }
 bbox.Mtrx = function(obj, ...) {
 	if (length(obj) == 0)
