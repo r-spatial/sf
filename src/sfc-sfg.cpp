@@ -91,8 +91,8 @@ List sfc_unique_sfg_dims_and_types(List sfc) {
 }
 
 // [[Rcpp::export]]
-int sfc_count_empty(List sfc) {
-	int n_empty = 0;
+LogicalVector sfc_is_empty(List sfc) {
+	LogicalVector out(sfc.size());
 	
 	SEXP item;
 	
@@ -121,13 +121,13 @@ int sfc_count_empty(List sfc) {
 				}
 			}
 			
-			n_empty += is_empty;
+			out[i] = is_empty;
 		} else {
-			n_empty += item_len == 0;
+			out[i] = item_len == 0;
 		}
 	}
 	
-	return n_empty;
+	return out;
 }
 
 // [[Rcpp::export]]

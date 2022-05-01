@@ -337,8 +337,8 @@ sfc_unique_sfg_dims_and_types <- function(sfc) {
     .Call('_sf_sfc_unique_sfg_dims_and_types', PACKAGE = 'sf', sfc)
 }
 
-sfc_count_empty <- function(sfc) {
-    .Call('_sf_sfc_count_empty', PACKAGE = 'sf', sfc)
+sfc_is_empty <- function(sfc) {
+    .Call('_sf_sfc_is_empty', PACKAGE = 'sf', sfc)
 }
 
 points_cpp <- function(pts, gdim = "XY") {

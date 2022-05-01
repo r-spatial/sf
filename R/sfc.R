@@ -126,7 +126,7 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 
 	# set n_empty, check XY* is uniform:
 	if (is.null(attr(lst, "n_empty")) || any(is_null)) { # n_empty is set by CPL_read_wkb:
-		attr(lst, "n_empty") = sfc_count_empty(lst)
+		attr(lst, "n_empty") = sum(sfc_is_empty(lst))
 # 		https://github.com/r-spatial/sf/issues/1592 :
 #		if (length(u <- unique(sfg_classes[1L,])) > 1)
 #			stop(paste("found multiple dimensions:", paste(u, collapse = " ")))
@@ -150,7 +150,7 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 		value = list(value)
 	x = unclass(x) # becomes a list, but keeps attributes
 	ret = st_sfc(NextMethod())
-	structure(ret, n_empty = sfc_count_empty(ret))
+	structure(ret, n_empty = sum(sfc_is_empty(ret)))
 }
 
 #' @export
