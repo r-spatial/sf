@@ -201,7 +201,7 @@ gives a map which is interactive: you can zoom and pan, and query features by cl
 
 Package `tmap` is another package for plotting maps, with emphasis on production-ready maps.
 
-```{r}
+```{r eval=require("tmap", quietly = TRUE)}
 library(tmap)
 qtm(nc)
 ```
