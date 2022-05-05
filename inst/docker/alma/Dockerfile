@@ -62,8 +62,17 @@ RUN yum install -y dnf --enablerepo=powertools \
     sqlite-devel \
     geos-devel \
     proj-devel
-RUN R -e 'install.packages("stars", repos = "https://cloud.r-project.org")'
+RUN yum install -y dnf --enablerepo=powertools libcurl-devel
+RUN R -e 'install.packages(c("stars", "jsonlite", "curl", "lubridate"), repos = "https://cloud.r-project.org")'
 RUN pip3 install rpy2
+RUN yum install -y dnf --enablerepo=powertools git
+RUN pip3 install xarray
+RUN pip3 install requests
+RUN pip3 install dask
 
 # original:
 USER 18585
+
+RUN git clone https://github.com/Open-EO/openeo-udf-python-to-r.git
+RUN (cd openeo-udf-python-to-r; \
+    python3 test.py)
