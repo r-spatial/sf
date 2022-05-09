@@ -170,7 +170,7 @@ all to the Multi variety; defaults to <code>TRUE</code></p></dd>
 <dd><p>logical; logical: should character vectors be
   converted to factors?  Default for <code>read_sf</code> or R version &gt;= 4.1.0 is 
 <code>FALSE</code>, for <code>st_read</code> and R version &lt; 4.1.0 equal to
-<code><a href="https://rdrr.io/r/base/base-deprecated.html" class="external-link">default.stringsAsFactors()</a></code></p></dd>
+<code><a href="https://rdrr.io/r/base/base-defunct.html" class="external-link">default.stringsAsFactors()</a></code></p></dd>
 <dt>int64_as_string</dt>
 <dd><p>logical; if TRUE, Int64 attributes are returned as
 string; if FALSE, they are returned as double and a warning is given when
@@ -254,7 +254,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">nc</span> <span class="op">=</span> <span class="fu">st_read</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpVPPwWi/temp_libpath12b1029b5019e/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/Rtmp0rq7hu/temp_libpath12ac3119bc3d1/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
@@ -295,7 +295,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
 <span class="r-in"><span class="co">## only two features by where clause</span></span>
 <span class="r-in"><span class="va">nc_sql</span> <span class="op">=</span> <span class="fu">st_read</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>,</span>
 <span class="r-in">                     query <span class="op">=</span> <span class="st">"SELECT NAME, SID74, FIPS FROM \"nc\" WHERE BIR74 &gt; 20000"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Reading query `SELECT NAME, SID74, FIPS FROM "nc" WHERE BIR74 &gt; 20000' from data source `/tmp/RtmpVPPwWi/temp_libpath12b1029b5019e/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Reading query `SELECT NAME, SID74, FIPS FROM "nc" WHERE BIR74 &gt; 20000' from data source `/tmp/Rtmp0rq7hu/temp_libpath12ac3119bc3d1/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 2 features and 3 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
