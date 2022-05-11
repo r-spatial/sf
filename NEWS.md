@@ -1,5 +1,7 @@
 # version 1.0-8
 
+* add pdf driver to windows build; #1942
+
 * clarify `pipeline` argument in `st_transform()` when axis order is ambiguous; #1934
 
 * handle argument `xpd` in calls to `plot.sfc_POLYGON()` and `plot.sfc_MULTIPOLYGON()`

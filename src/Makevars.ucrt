@@ -1,9 +1,10 @@
 
-PKG_CPPFLAGS =\
+PKG_CPPFLAGS = \
 	-DHAVE_PROJ_H
 
 PKG_LIBS =  \
--lgeos_c -lgeos -lgdal -lxml2 -lopenjp2 -lnetcdf -lmysqlclient -ljson-c -lgta -lfreexl -lexpat -lssl -lpsapi -lgif -lmfhdf -lhdf5_hl -lcrypto -lportablexdr -ldf -lhdf5 -lpng16 -lpng -lpcre -lcurl -lrtmp -lssl -lssh2 -lidn2 -lunistring -liconv -lgcrypt -lcrypto -lgpg-error -lws2_32 -ltiff -llzma -ljpeg -lz -lcfitsio -lzstd -lwebpdecoder -lwebp -lsbml-static -lgeotiff -lproj -lsqlite3 -lbz2 -lcrypt32 -lwldap32 -lsecur32
+-lgeos_c -lgeos -lgdal -lxml2 -lopenjp2 -lnetcdf -lmysqlclient -ljson-c -lgta -lfreexl -lexpat -lssl -lpsapi -lgif -lmfhdf -lhdf5_hl -lcrypto -lportablexdr -ldf -lhdf5 -lpng16 -lpng -lpoppler -llcms2 -lfreetype -lharfbuzz -lfreetype -llz4 -lpcre2-8 -lpcre -lcurl -lrtmp -lssl -lssh2 -lidn2 -lunistring -liconv -lgcrypt -lcrypto -lgpg-error -lws2_32 -ltiff -llzma -ljpeg -lz -lcfitsio -lzstd -lwebpdecoder -lwebp -lsbml-static -lgeotiff -lproj -lsqlite3 -lbz2 -lcrypt32 -lwldap32 -lsecur32
+
 
 all: clean winlibs
 
