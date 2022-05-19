@@ -1,5 +1,5 @@
 
-PKG_CPPFLAGS =\
+PKG_CPPFLAGS = \
 	-DHAVE_PROJ_H
 
 PKG_LIBS =  \
