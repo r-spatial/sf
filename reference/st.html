@@ -115,25 +115,44 @@
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>for <code>st_point</code>, numeric vector (or one-row-matrix) of length 2, 3 or 4; for <code>st_linestring</code> and <code>st_multipoint</code>, numeric matrix with points in rows; for <code>st_polygon</code> and <code>st_multilinestring</code>, list with numeric matrices with points in rows; for <code>st_multipolygon</code>, list of lists with numeric matrices; for <code>st_geometrycollection</code> list with (non-geometrycollection) simple feature objects</p></dd>
+
+
 <dt>dim</dt>
 <dd><p>character, indicating dimensions: "XY", "XYZ", "XYM", or "XYZM"; only really needed for three-dimensional points (which can be either XYZ or XYM) or empty geometries; see details</p></dd>
+
+
 <dt>dims</dt>
 <dd><p>character; specify dimensionality in case of an empty (NULL) geometrycollection, in which case <code>x</code> is the empty <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>objects to be pasted together into a single simple feature</p></dd>
+
+
 <dt>width</dt>
 <dd><p>integer; number of characters to be printed (max 30; 0 means print everything)</p></dd>
+
+
 <dt>n</dt>
 <dd><p>integer; number of elements to be selected</p></dd>
+
+
 <dt>recursive</dt>
 <dd><p>logical; ignored</p></dd>
+
+
 <dt>flatten</dt>
 <dd><p>logical; if TRUE, try to simplify results; if FALSE, return geometrycollection containing all objects</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>object of the same nature as <code>x</code>, but with appropriate class attribute set
-as.matrix returns the set of points that form a geometry as a single matrix, where each point is a row; use <code>unlist(x, recursive = FALSE)</code> to get sets of matrices.</p>
+    
+
+<p>object of the same nature as <code>x</code>, but with appropriate class attribute set</p>
+
+
+<p>as.matrix returns the set of points that form a geometry as a single matrix, where each point is a row; use <code>unlist(x, recursive = FALSE)</code> to get sets of matrices.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -262,7 +281,7 @@ as.matrix returns the set of points that form a geometry as a single matrix, whe
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

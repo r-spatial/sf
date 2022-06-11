@@ -132,6 +132,8 @@ drivers, <code>dsn</code> is a file name, but may also be a folder, or contain
 the name and access credentials of a database); in case of GeoJSON,
 <code>dsn</code> may be the character string holding the geojson data. It can
 also be an open database connection.</p></dd>
+
+
 <dt>layer</dt>
 <dd><p>layer name (varies by driver, may be a file name without
 extension); in case <code>layer</code> is missing, <code>st_read</code> will read the
@@ -141,61 +143,96 @@ are no layers in <code>dsn</code>. If <code>dsn</code> is a database connection,
 <code>layer</code> can be a table name or a database identifier (see
 <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">Id</a></code>). It is also possible to omit <code>layer</code> and rather
 use the <code>query</code> argument.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>parameter(s) passed on to <a href="st_as_sf.html">st_as_sf</a></p></dd>
+
+
 <dt>query</dt>
 <dd><p>SQL query to select records; see details</p></dd>
+
+
 <dt>options</dt>
 <dd><p>character; driver dependent dataset open options, multiple
 options supported. For possible values, see the "Open options" section
 of the GDAL documentation of the corresponding driver, and
 https://github.com/r-spatial/sf/issues/1157 for an example.</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>logical; suppress info on name, driver, size and spatial
 reference, or signaling no or multiple layers</p></dd>
+
+
 <dt>geometry_column</dt>
 <dd><p>integer or character; in case of multiple geometry
 fields, which one to take?</p></dd>
+
+
 <dt>type</dt>
 <dd><p>integer; ISO number of desired simple feature type; see details.
 If left zero, and <code>promote_to_multi</code> is <code>TRUE</code>, in case of mixed
 feature geometry types, conversion to the highest numeric type value found
 will be attempted. A vector with different values for each geometry column
 can be given.</p></dd>
+
+
 <dt>promote_to_multi</dt>
 <dd><p>logical; in case of a mix of Point and MultiPoint, or
 of LineString and MultiLineString, or of Polygon and MultiPolygon, convert
 all to the Multi variety; defaults to <code>TRUE</code></p></dd>
+
+
 <dt>stringsAsFactors</dt>
 <dd><p>logical; logical: should character vectors be
   converted to factors?  Default for <code>read_sf</code> or R version &gt;= 4.1.0 is 
 <code>FALSE</code>, for <code>st_read</code> and R version &lt; 4.1.0 equal to
 <code><a href="https://rdrr.io/r/base/base-defunct.html" class="external-link">default.stringsAsFactors()</a></code></p></dd>
+
+
 <dt>int64_as_string</dt>
 <dd><p>logical; if TRUE, Int64 attributes are returned as
 string; if FALSE, they are returned as double and a warning is given when
 precision is lost (i.e., values are larger than 2^53).</p></dd>
+
+
 <dt>check_ring_dir</dt>
 <dd><p>logical; if TRUE, polygon ring directions are checked
 and if necessary corrected (when seen from above: exterior ring counter
 clockwise, holes clockwise)</p></dd>
+
+
 <dt>fid_column_name</dt>
 <dd><p>character; name of column to write feature IDs to; defaults to not doing this</p></dd>
+
+
 <dt>drivers</dt>
 <dd><p>character; limited set of driver short names to be tried (default: try all)</p></dd>
+
+
 <dt>wkt_filter</dt>
 <dd><p>character; WKT representation of a spatial filter (may be used as bounding box, selecting overlapping geometries); see examples</p></dd>
+
+
 <dt>optional</dt>
 <dd><p>logical; passed to <a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a>; always <code>TRUE</code> when <code>as_tibble</code> is <code>TRUE</code></p></dd>
+
+
 <dt>as_tibble</dt>
 <dd><p>logical; should the returned table be of class tibble or data.frame?</p></dd>
+
+
 <dt>EWKB</dt>
 <dd><p>logical; is the WKB of type EWKB? if missing, defaults to
 <code>TRUE</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>object of class <a href="sf.html">sf</a> when a layer was successfully read; in case
+    
+
+<p>object of class <a href="sf.html">sf</a> when a layer was successfully read; in case
   argument <code>layer</code> is missing and data source <code>dsn</code> does not
   contain a single layer, an object of class <code>sf_layers</code> is returned
   with the layer names, each with their geometry type(s). Note that the
@@ -254,7 +291,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">nc</span> <span class="op">=</span> <span class="fu">st_read</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpfqCULt/temp_libpath45a710495fd3/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpGMfiZH/temp_libpath129bd70873397/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
@@ -295,7 +332,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
 <span class="r-in"><span class="co">## only two features by where clause</span></span>
 <span class="r-in"><span class="va">nc_sql</span> <span class="op">=</span> <span class="fu">st_read</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>,</span>
 <span class="r-in">                     query <span class="op">=</span> <span class="st">"SELECT NAME, SID74, FIPS FROM \"nc\" WHERE BIR74 &gt; 20000"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Reading query `SELECT NAME, SID74, FIPS FROM "nc" WHERE BIR74 &gt; 20000' from data source `/tmp/RtmpfqCULt/temp_libpath45a710495fd3/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Reading query `SELECT NAME, SID74, FIPS FROM "nc" WHERE BIR74 &gt; 20000' from data source `/tmp/RtmpGMfiZH/temp_libpath129bd70873397/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 2 features and 3 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
@@ -375,7 +412,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

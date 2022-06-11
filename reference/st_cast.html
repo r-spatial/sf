@@ -133,23 +133,40 @@
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>object of class <code>sfg</code>, <code>sfc</code> or <code>sf</code></p></dd>
+
+
 <dt>to</dt>
 <dd><p>character; target type, if missing, simplification is tried; when <code>x</code> is of type <code>sfg</code> (i.e., a single geometry) then <code>to</code> needs to be specified.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>ignored</p></dd>
+
+
 <dt>ids</dt>
 <dd><p>integer vector, denoting how geometries should be grouped (default: no grouping)</p></dd>
+
+
 <dt>group_or_split</dt>
 <dd><p>logical; if TRUE, group or split geometries; if FALSE, carry out a 1-1 per-geometry conversion.</p></dd>
+
+
 <dt>warn</dt>
 <dd><p>logical; if <code>TRUE</code>, warn if attributes are assigned to sub-geometries</p></dd>
+
+
 <dt>do_split</dt>
 <dd><p>logical; if <code>TRUE</code>, allow splitting of geometries in sub-geometries</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>object of class <code>to</code> if successful, or unmodified object if unsuccessful. If information gets lost while type casting, a warning is raised.
-In case <code>to</code> is missing, <code>st_cast.sfc</code> will coerce combinations of "POINT" and "MULTIPOINT", "LINESTRING" and "MULTILINESTRING", "POLYGON" and "MULTIPOLYGON" into their "MULTI..." form, or in case all geometries are "GEOMETRYCOLLECTION" will return a list of all the contents of the "GEOMETRYCOLLECTION" objects, or else do nothing. In case <code>to</code> is specified, if <code>to</code> is "GEOMETRY", geometries are not converted, else, <code>st_cast</code> will try to coerce all elements into <code>to</code>; <code>ids</code> may be specified to group e.g. "POINT" objects into a "MULTIPOINT", if not specified no grouping takes place. If e.g. a "sfc_MULTIPOINT" is cast to a "sfc_POINT", the objects are split, so no information gets lost, unless <code>group_or_split</code> is <code>FALSE</code>.</p>
+    
+
+<p>object of class <code>to</code> if successful, or unmodified object if unsuccessful. If information gets lost while type casting, a warning is raised.</p>
+
+
+<p>In case <code>to</code> is missing, <code>st_cast.sfc</code> will coerce combinations of "POINT" and "MULTIPOINT", "LINESTRING" and "MULTILINESTRING", "POLYGON" and "MULTIPOLYGON" into their "MULTI..." form, or in case all geometries are "GEOMETRYCOLLECTION" will return a list of all the contents of the "GEOMETRYCOLLECTION" objects, or else do nothing. In case <code>to</code> is specified, if <code>to</code> is "GEOMETRY", geometries are not converted, else, <code>st_cast</code> will try to coerce all elements into <code>to</code>; <code>ids</code> may be specified to group e.g. "POINT" objects into a "MULTIPOINT", if not specified no grouping takes place. If e.g. a "sfc_MULTIPOINT" is cast to a "sfc_POINT", the objects are split, so no information gets lost, unless <code>group_or_split</code> is <code>FALSE</code>.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -162,7 +179,7 @@ In case <code>to</code> is missing, <code>st_cast.sfc</code> will coerce combina
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># example(st_read)</span></span>
 <span class="r-in"><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpfqCULt/temp_libpath45a710495fd3/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpGMfiZH/temp_libpath129bd70873397/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
@@ -291,7 +308,7 @@ In case <code>to</code> is missing, <code>st_cast.sfc</code> will coerce combina
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

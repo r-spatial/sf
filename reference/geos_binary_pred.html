@@ -120,29 +120,52 @@
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>object of class <code>sf</code>, <code>sfc</code> or <code>sfg</code></p></dd>
+
+
 <dt>y</dt>
 <dd><p>object of class <code>sf</code>, <code>sfc</code> or <code>sfg</code>; if missing, <code>x</code> is used</p></dd>
+
+
 <dt>sparse</dt>
 <dd><p>logical; should a sparse index list be returned (TRUE) or a dense logical matrix? See below.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>passed on to <a href="https://r-spatial.github.io/s2/reference/s2_options.html" class="external-link">s2_options</a></p></dd>
+
+
 <dt>prepared</dt>
 <dd><p>logical; prepare geometry for x, before looping over y? See Details.</p></dd>
+
+
 <dt>model</dt>
 <dd><p>character; polygon/polyline model; one of
 "open", "semi-open" or "closed"; see Details.</p></dd>
+
+
 <dt>retain_unique</dt>
 <dd><p>logical; if TRUE (and y is missing) return only indexes of points larger than the current index; this can be used to select unique geometries, see examples. This argument can be used for all geometry predictates; see als <a href="tidyverse.html">distinct.sf</a> to find records where geometries AND attributes are distinct.</p></dd>
+
+
 <dt>remove_self</dt>
 <dd><p>logical; if TRUE (and y is missing) return only indexes of geometries different from the current index; this can be used to omit self-intersections; see examples. This argument can be used for all geometry predictates</p></dd>
+
+
 <dt>par</dt>
 <dd><p>numeric; parameter used for "equals_exact" (margin);</p></dd>
+
+
 <dt>dist</dt>
 <dd><p>distance threshold; geometry indexes with distances smaller or equal to this value are returned; numeric value or units value having distance units.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>If <code>sparse=FALSE</code>, <code>st_predicate</code> (with <code>predicate</code> e.g. "intersects") returns a dense logical matrix with element <code>i,j</code><code>TRUE</code> when <code>predicate(x[i], y[j])</code> (e.g., when geometry of feature i and j intersect); if <code>sparse=TRUE</code>, an object of class <code><a href="sgbp.html">sgbp</a></code> with a sparse list representation of the same matrix, with list element <code>i</code> an integer vector with all indices j for which <code>predicate(x[i],y[j])</code> is <code>TRUE</code> (and hence a zero-length integer vector if none of them is <code>TRUE</code>). From the dense matrix, one can find out if one or more elements intersect by <code>apply(mat, 1, any)</code>, and from the sparse list by <code>lengths(lst) &gt; 0</code>, see examples below.</p>
+    
+
+<p>If <code>sparse=FALSE</code>, <code>st_predicate</code> (with <code>predicate</code> e.g. "intersects") returns a dense logical matrix with element <code>i,j</code></p>
+<p></p>
+<p><code>TRUE</code> when <code>predicate(x[i], y[j])</code> (e.g., when geometry of feature i and j intersect); if <code>sparse=TRUE</code>, an object of class <code><a href="sgbp.html">sgbp</a></code> with a sparse list representation of the same matrix, with list element <code>i</code> an integer vector with all indices j for which <code>predicate(x[i],y[j])</code> is <code>TRUE</code> (and hence a zero-length integer vector if none of them is <code>TRUE</code>). From the dense matrix, one can find out if one or more elements intersect by <code>apply(mat, 1, any)</code>, and from the sparse list by <code>lengths(lst) &gt; 0</code>, see examples below.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -246,7 +269,7 @@ the function <code><a href="geos_binary_ops.html">st_intersection</a></code> ins
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

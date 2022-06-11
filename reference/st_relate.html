@@ -88,16 +88,25 @@
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>object of class <code>sf</code>, <code>sfc</code> or <code>sfg</code></p></dd>
+
+
 <dt>y</dt>
 <dd><p>object of class <code>sf</code>, <code>sfc</code> or <code>sfg</code></p></dd>
+
+
 <dt>pattern</dt>
 <dd><p>character; define the pattern to match to, see details.</p></dd>
+
+
 <dt>sparse</dt>
 <dd><p>logical; should a sparse matrix be returned (TRUE) or a dense matrix?</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>In case <code>pattern</code> is not given, <code>st_relate</code> returns a dense <code>character</code> matrix; element [i,j] has nine characters, referring to the DE9-IM relationship between x[i] and y[j], encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of x[i] and the interior of y[j], which is one of 0,1,2,F, digits denoting dimensionality, F denoting not intersecting. When <code>pattern</code> is given, a dense logical matrix or sparse index list returned with matches to the given pattern; see <a href="geos_binary_ops.html">st_intersection</a> for a description of the returned matrix or list. See also <a href="https://en.wikipedia.org/wiki/DE-9IM" class="external-link">https://en.wikipedia.org/wiki/DE-9IM</a> for further explanation.</p>
+    
+
+<p>In case <code>pattern</code> is not given, <code>st_relate</code> returns a dense <code>character</code> matrix; element [i,j] has nine characters, referring to the DE9-IM relationship between x[i] and y[j], encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of x[i] and the interior of y[j], which is one of 0,1,2,F, digits denoting dimensionality, F denoting not intersecting. When <code>pattern</code> is given, a dense logical matrix or sparse index list returned with matches to the given pattern; see <a href="geos_binary_ops.html">st_intersection</a> for a description of the returned matrix or list. See also <a href="https://en.wikipedia.org/wiki/DE-9IM" class="external-link">https://en.wikipedia.org/wiki/DE-9IM</a> for further explanation.</p>
     </div>
 
     <div id="ref-examples">
@@ -178,7 +187,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

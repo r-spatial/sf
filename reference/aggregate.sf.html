@@ -97,22 +97,37 @@
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>object of class <a href="sf.html">sf</a></p></dd>
+
+
 <dt>by</dt>
 <dd><p>either a list of grouping vectors with length equal to <code>nrow(x)</code> (see <a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a>), or an object of class <code>sf</code> or <code>sfc</code> with geometries that are used to generate groupings, using the binary predicate specified by the argument <code>join</code></p></dd>
+
+
 <dt>FUN</dt>
 <dd><p>function passed on to <a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a>, in case <code>ids</code> was specified and attributes need to be grouped</p></dd>
+
+
 <dt>...</dt>
 <dd><p>arguments passed on to <code>FUN</code></p></dd>
+
+
 <dt>do_union</dt>
 <dd><p>logical; should grouped geometries be unioned using <a href="geos_combine.html">st_union</a>? See details.</p></dd>
+
+
 <dt>simplify</dt>
 <dd><p>logical; see <a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></p></dd>
+
+
 <dt>join</dt>
 <dd><p>logical spatial predicate function to use if <code>by</code> is a simple features object or geometry; see <a href="st_join.html">st_join</a></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>an <code>sf</code> object with aggregated attributes and geometries; additional grouping variables having the names of <code>names(ids)</code> or are named <code>Group.i</code> for <code>ids[[i]]</code>; see <a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a>.</p>
+    
+
+<p>an <code>sf</code> object with aggregated attributes and geometries; additional grouping variables having the names of <code>names(ids)</code> or are named <code>Group.i</code> for <code>ids[[i]]</code>; see <a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a>.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -198,7 +213,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

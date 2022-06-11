@@ -145,76 +145,147 @@
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>character vector, possibly of length larger than 1 when more than one raster is read</p></dd>
+
+
 <dt>...</dt>
 <dd><p>ignored</p></dd>
+
+
 <dt>options</dt>
 <dd><p>open options</p></dd>
+
+
 <dt>driver</dt>
 <dd><p>character; when empty vector, driver is auto-detected.</p></dd>
+
+
 <dt>read_data</dt>
 <dd><p>logical; if <code>FALSE</code>, only the imagery metadata is returned</p></dd>
+
+
 <dt>NA_value</dt>
 <dd><p>(double) non-NA value to use for missing values; if <code>NA</code>, when writing missing values are not specially flagged in output dataset, when reading the default (dataset) missing values are used (if present / set).</p></dd>
+
+
 <dt>RasterIO_parameters</dt>
 <dd><p>list with named parameters to GDAL's RasterIO; see the stars::read_stars documentation.</p></dd>
+
+
 <dt>file</dt>
 <dd><p>file name</p></dd>
+
+
 <dt>type</dt>
 <dd><p>gdal write type</p></dd>
+
+
 <dt>geotransform</dt>
 <dd><p>length 6 numeric vector with GDAL geotransform parameters.</p></dd>
+
+
 <dt>update</dt>
 <dd><p>logical; <code>TRUE</code> if in an existing raster file pixel values shall be updated.</p></dd>
+
+
 <dt>gt</dt>
 <dd><p>double vector of length 6</p></dd>
+
+
 <dt>domain_item</dt>
 <dd><p>character vector of length 0, 1 (with domain), or 2 (with domain and item); use <code>""</code> for the default domain, use <code>NA_character_</code> to query the domain names.</p></dd>
+
+
 <dt>parse</dt>
 <dd><p>logical; should metadata be parsed into a named list (<code>TRUE</code>) or returned as character data?</p></dd>
+
+
 <dt>name</dt>
 <dd><p>logical; retrieve name of subdataset? If <code>FALSE</code>, retrieve description</p></dd>
+
+
 <dt>mask</dt>
 <dd><p>stars object with NA mask (0 where NA), or NULL</p></dd>
+
+
 <dt>use_integer</dt>
 <dd><p>boolean; if <code>TRUE</code>, raster values are read as (and rounded to) unsigned 32-bit integers values; if <code>FALSE</code> they are read as 32-bit floating points numbers. The former is supposedly faster.</p></dd>
+
+
 <dt>breaks</dt>
 <dd><p>numeric vector with break values for contour polygons (or lines)</p></dd>
+
+
 <dt>use_contours</dt>
 <dd><p>logical;</p></dd>
+
+
 <dt>contour_lines</dt>
 <dd><p>logical;</p></dd>
+
+
 <dt>connect8</dt>
 <dd><p>logical; if <code>TRUE</code> use 8 connection algorithm, rather than 4</p></dd>
+
+
 <dt>sf</dt>
 <dd><p>object of class <code>sf</code></p></dd>
+
+
 <dt>f</dt>
 <dd><p>character; file name</p></dd>
+
+
 <dt>pts</dt>
 <dd><p>points matrix</p></dd>
+
+
 <dt>bilinear</dt>
 <dd><p>logical; use bilinear interpolation, rather than nearest neighbor?</p></dd>
+
+
 <dt>array_name</dt>
 <dd><p>array name</p></dd>
+
+
 <dt>dimension_values</dt>
 <dd><p>list with dimension values</p></dd>
+
+
 <dt>units</dt>
 <dd><p>character; units names (udunits conform) corresponding to dimension_values</p></dd>
+
+
 <dt>nxy</dt>
 <dd><p>integer vector of length 2</p></dd>
+
+
 <dt>values</dt>
 <dd><p>fill value</p></dd>
+
+
 <dt>crs</dt>
 <dd><p>object of class <code>crs</code></p></dd>
+
+
 <dt>xlim</dt>
 <dd><p>numeric</p></dd>
+
+
 <dt>ylim</dt>
 <dd><p>numeric</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>object of class <code>crs</code>, see <a href="st_crs.html">st_crs</a>.
-named list with metadata items
-<code>gdal_subdatasets</code> returns a zero-length list if <code>file</code> does not have subdatasets, and else a named list with subdatasets.</p>
+    
+
+<p>object of class <code>crs</code>, see <a href="st_crs.html">st_crs</a>.</p>
+
+
+<p>named list with metadata items</p>
+
+
+<p><code>gdal_subdatasets</code> returns a zero-length list if <code>file</code> does not have subdatasets, and else a named list with subdatasets.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -249,7 +320,7 @@ named list with metadata items
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

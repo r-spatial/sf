@@ -204,102 +204,196 @@
     <h2>Arguments</h2>
     <dl><dt>.data</dt>
 <dd><p>data object of class <a href="sf.html">sf</a></p></dd>
+
+
 <dt>...</dt>
 <dd><p>other arguments</p></dd>
+
+
 <dt>.dots</dt>
 <dd><p>see corresponding function in package <code>dplyr</code></p></dd>
+
+
 <dt>add</dt>
 <dd><p>see corresponding function in dplyr</p></dd>
+
+
 <dt>x</dt>
 <dd><p>A pair of data frames, data frame extensions (e.g. a tibble), or
 lazy data frames (e.g. from dbplyr or dtplyr). See <em>Methods</em>, below, for
 more details.</p></dd>
+
+
 <dt>do_union</dt>
 <dd><p>logical; in case <code>summary</code> does not create a geometry column, should geometries be created by unioning using <a href="geos_combine.html">st_union</a>, or simply by combining using <a href="geos_combine.html">st_combine</a>? Using <a href="geos_combine.html">st_union</a> resolves internal boundaries, but in case of unioning points, this will likely change the order of the points; see Details.</p></dd>
+
+
 <dt>is_coverage</dt>
 <dd><p>logical; if <code>do_union</code> is <code>TRUE</code>, use an optimized algorithm for features that form a polygonal coverage (have no overlaps)</p></dd>
+
+
 <dt>.keep_all</dt>
 <dd><p>see corresponding function in dplyr</p></dd>
+
+
 <dt>data</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>key</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>value</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>na.rm</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>convert</dt>
 <dd><p>see <a href="https://tidyr.tidyverse.org/reference/separate_rows.html" class="external-link">separate_rows</a></p></dd>
+
+
 <dt>factor_key</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>cols</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>names_to</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>names_prefix</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>names_sep</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>names_pattern</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>names_ptypes</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>names_transform</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>names_repair</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>values_to</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>values_drop_na</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>values_ptypes</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>values_transform</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>id_cols</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>names_from</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>names_glue</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>names_sort</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>values_from</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>values_fill</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>values_fn</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>fill</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>drop</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>sep</dt>
 <dd><p>see <a href="https://tidyr.tidyverse.org/reference/separate_rows.html" class="external-link">separate_rows</a></p></dd>
+
+
 <dt>tbl</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>size</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>replace</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>weight</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>.env</dt>
 <dd><p>see original function docs</p></dd>
+
+
 <dt>col</dt>
 <dd><p>see <a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">separate</a></p></dd>
+
+
 <dt>into</dt>
 <dd><p>see <a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">separate</a></p></dd>
+
+
 <dt>remove</dt>
 <dd><p>see <a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">separate</a></p></dd>
+
+
 <dt>extra</dt>
 <dd><p>see <a href="https://tidyr.tidyverse.org/reference/separate.html" class="external-link">separate</a></p></dd>
+
+
 <dt>.preserve</dt>
 <dd><p>see <a href="https://tidyr.tidyverse.org/reference/nest.html" class="external-link">unnest</a></p></dd>
+
+
 <dt>y</dt>
 <dd><p>A pair of data frames, data frame extensions (e.g. a tibble), or
 lazy data frames (e.g. from dbplyr or dtplyr). See <em>Methods</em>, below, for
 more details.</p></dd>
+
+
 <dt>by</dt>
 <dd><p>A character vector of variables to join by.</p>
 <p>If <code>NULL</code>, the default, <code>*_join()</code> will perform a natural join, using all
@@ -314,19 +408,28 @@ For example, <code>by = c("a" = "b", "c" = "d")</code> will match <code>x$a</cod
 <code>x$c</code> to <code>y$d</code>.</p>
 <p>To perform a cross-join, generating all combinations of <code>x</code> and <code>y</code>,
 use <code>by = character()</code>.</p></dd>
+
+
 <dt>copy</dt>
 <dd><p>If <code>x</code> and <code>y</code> are not from the same data source,
 and <code>copy</code> is <code>TRUE</code>, then <code>y</code> will be copied into the
 same src as <code>x</code>.  This allows you to join tables across srcs, but
 it is a potentially expensive operation so you must opt into it.</p></dd>
+
+
 <dt>suffix</dt>
 <dd><p>If there are non-joined duplicate variables in <code>x</code> and
 <code>y</code>, these suffixes will be added to the output to disambiguate them.
 Should be a character vector of length 2.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>an object of class <a href="sf.html">sf</a></p>
+    
+
+<p>an object of class <a href="sf.html">sf</a></p>
+
+
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -342,7 +445,7 @@ Should be a character vector of length 2.</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span class="r-in"><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpfqCULt/temp_libpath45a710495fd3/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpGMfiZH/temp_libpath129bd70873397/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
@@ -455,7 +558,7 @@ Should be a character vector of length 2.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

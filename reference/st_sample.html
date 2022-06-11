@@ -113,25 +113,40 @@ interfaced and do not use the <code>size</code> argument, see examples.</p>
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>object of class <code>sf</code> or <code>sfc</code></p></dd>
+
+
 <dt>size</dt>
 <dd><p>sample size(s) requested; either total size, or a numeric vector with sample sizes for each feature geometry. When sampling polygons, the returned sampling size may differ from the requested size, as the bounding box is sampled, and sampled points intersecting the polygon are returned.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>passed on to <a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a> for <code>multipoint</code> sampling, or to <code>spatstat</code> functions for spatstat sampling types (see details)</p></dd>
+
+
 <dt>type</dt>
 <dd><p>character; indicates the spatial sampling type; one of <code>random</code>, <code>hexagonal</code> (triangular really), <code>regular</code>,
 or one of the <code>spatstat</code> methods such as <code>Thomas</code> for calling <code><a href="https://rdrr.io/pkg/spatstat.random/man/rThomas.html" class="external-link">spatstat.random::rThomas</a></code> (see Details).</p></dd>
+
+
 <dt>exact</dt>
 <dd><p>logical; should the length of output be exactly</p></dd>
+
+
 <dt>warn_if_not_integer</dt>
 <dd><p>logical; if <code>FALSE</code> then no warning is emitted if <code>size</code> is not an integer</p></dd>
+
+
 <dt>by_polygon</dt>
 <dd><p>logical; for <code>MULTIPOLYGON</code> geometries, should the effort be split by <code>POLYGON</code>? See https://github.com/r-spatial/sf/issues/1480
 the same as specified by <code>size</code>? <code>TRUE</code> by default. Only applies to polygons, and
 when <code>type = "random"</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>an <code>sfc</code> object containing the sampled <code>POINT</code> geometries</p>
+    
+
+<p>an <code>sfc</code> object containing the sampled <code>POINT</code> geometries</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -150,7 +165,7 @@ For instance, to use <code><a href="https://rdrr.io/pkg/spatstat.random/man/rTho
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpfqCULt/temp_libpath45a710495fd3/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpGMfiZH/temp_libpath129bd70873397/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
@@ -239,7 +254,7 @@ For instance, to use <code><a href="https://rdrr.io/pkg/spatstat.random/man/rTho
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

@@ -104,35 +104,64 @@ print(x, ..., n = getOption("sf_max_print", default = 10))</code></pre></div>
     <h2>Arguments</h2>
     <dl><dt>...</dt>
 <dd><p>column elements to be binded into an <code>sf</code> object or a single <code>list</code> or <code>data.frame</code> with such columns; at least one of these columns shall be a geometry list-column of class <code>sfc</code> or be a list-column that can be converted into an <code>sfc</code> by <a href="st_as_sfc.html">st_as_sfc</a>.</p></dd>
+
+
 <dt>agr</dt>
 <dd><p>character vector; see details below.</p></dd>
+
+
 <dt>row.names</dt>
 <dd><p>row.names for the created <code>sf</code> object</p></dd>
+
+
 <dt>stringsAsFactors</dt>
 <dd><p>logical; see <a href="st_read.html">st_read</a></p></dd>
+
+
 <dt>crs</dt>
 <dd><p>coordinate reference system, something suitable as input to <a href="st_crs.html">st_crs</a></p></dd>
+
+
 <dt>precision</dt>
 <dd><p>numeric; see <a href="st_as_binary.html">st_as_binary</a></p></dd>
+
+
 <dt>sf_column_name</dt>
 <dd><p>character; name of the active list-column with simple feature geometries; in case
 there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the first one is taken.</p></dd>
+
+
 <dt>check_ring_dir</dt>
 <dd><p>see <a href="st_read.html">st_read</a></p></dd>
+
+
 <dt>sfc_last</dt>
 <dd><p>logical; if <code>TRUE</code>, <code>sfc</code> columns are always put last, otherwise column order is left unmodified.</p></dd>
+
+
 <dt>x</dt>
 <dd><p>object of class <code>sf</code></p></dd>
+
+
 <dt>i</dt>
 <dd><p>record selection, see <a href="https://rdrr.io/r/base/Extract.data.frame.html" class="external-link">[.data.frame</a></p></dd>
+
+
 <dt>j</dt>
 <dd><p>variable selection, see <a href="https://rdrr.io/r/base/Extract.data.frame.html" class="external-link">[.data.frame</a></p></dd>
+
+
 <dt>drop</dt>
 <dd><p>logical, default <code>FALSE</code>; if <code>TRUE</code> drop the geometry column and return a <code>data.frame</code>, else make the geometry sticky and return a <code>sf</code> object.</p></dd>
+
+
 <dt>op</dt>
 <dd><p>function; geometrical binary predicate function to apply when <code>i</code> is a simple feature object</p></dd>
+
+
 <dt>n</dt>
 <dd><p>maximum number of features to print; can be set globally by <code>options(sf_max_print=...)</code></p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -240,7 +269,7 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

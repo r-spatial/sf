@@ -97,25 +97,42 @@
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>object of class <code>sf</code>, <code>sfc</code> or <code>sfg</code> or numeric vector with bounding box given as (minx, miny, maxx, maxy).</p></dd>
+
+
 <dt>crs</dt>
 <dd><p>object of class <code>crs</code>, with the display coordinate reference system</p></dd>
+
+
 <dt>datum</dt>
 <dd><p>either an object of class <code>crs</code> with the coordinate reference system for the graticules, or <code>NULL</code> in which case a grid in the coordinate system of <code>x</code> is drawn, or <code>NA</code>, in which case an empty <code>sf</code> object is returned.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>ignored</p></dd>
+
+
 <dt>lon</dt>
 <dd><p>numeric; degrees east for the meridians</p></dd>
+
+
 <dt>lat</dt>
 <dd><p>numeric; degrees north for the parallels</p></dd>
+
+
 <dt>ndiscr</dt>
 <dd><p>integer; number of points to discretize a parallel or meridian</p></dd>
+
+
 <dt>margin</dt>
 <dd><p>numeric; small number to trim a longlat bounding box that touches or
 crosses +/-180 long or +/-90 latitude.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>an object of class <code>sf</code> with additional attributes describing the type
+    
+
+<p>an object of class <code>sf</code> with additional attributes describing the type
 (E: meridian, N: parallel) degree value, label, start and end coordinates and angle;
 see example.</p>
     </div>
@@ -184,7 +201,7 @@ see example.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

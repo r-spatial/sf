@@ -103,16 +103,25 @@
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>object of class <code>sf</code>, <code>sfc</code> or <code>sfg</code></p></dd>
+
+
 <dt>y</dt>
 <dd><p>object of class <code>sf</code>, <code>sfc</code> or <code>sfg</code></p></dd>
+
+
 <dt>...</dt>
 <dd><p>arguments passed on to <a href="https://r-spatial.github.io/s2/reference/s2_options.html" class="external-link">s2_options</a></p></dd>
+
+
 <dt>tolerance</dt>
 <dd><p>tolerance values used for <code>st_snap</code>; numeric value or object of class <code>units</code>; may have tolerance values for each feature in <code>x</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>The intersection, difference or symmetric difference between two sets of geometries.
+    
+
+<p>The intersection, difference or symmetric difference between two sets of geometries.
 The returned object has the same class as that of the first argument (<code>x</code>) with the non-empty geometries resulting from applying the operation to all geometry pairs in <code>x</code> and <code>y</code>. In case <code>x</code> is of class <code>sf</code>, the matching attributes of the original object(s) are added. The <code>sfc</code> geometry list-column returned carries an attribute <code>idx</code>, which is an <code>n</code>-by-2 matrix with every row the index of the corresponding entries of <code>x</code> and <code>y</code>, respectively.</p>
     </div>
     <div id="details">
@@ -205,7 +214,7 @@ the function <code><a href="geos_binary_pred.html">st_intersects</a></code> inst
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

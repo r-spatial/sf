@@ -98,22 +98,37 @@
     <dl><dt>from</dt>
 <dd><p>character description of source CRS, or object of class <code>crs</code>, 
 or pipeline describing a transformation</p></dd>
+
+
 <dt>to</dt>
 <dd><p>character description of target CRS, or object of class <code>crs</code></p></dd>
+
+
 <dt>pts</dt>
 <dd><p>two-column numeric matrix, or object that can be coerced into a matrix</p></dd>
+
+
 <dt>keep</dt>
 <dd><p>logical value controlling the handling of unprojectable points. If
 `keep` is `TRUE`, then such points will yield `Inf` or `-Inf` in the
 return value; otherwise an error is reported and nothing is returned.</p></dd>
+
+
 <dt>warn</dt>
 <dd><p>logical; if <code>TRUE</code>, warn when non-finite values are generated</p></dd>
+
+
 <dt>authority_compliant</dt>
 <dd><p>logical; <code>TRUE</code> means handle axis order authority compliant (e.g. EPSG:4326 implying x=lat, y=lon), <code>FALSE</code> means use visualisation order (i.e. always x=lon, y=lat)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>two-column numeric matrix with transformed/converted coordinates, returning invalid values as <code>Inf</code></p>
+    
+
+<p>two-column numeric matrix with transformed/converted coordinates, returning invalid values as <code>Inf</code></p>
+
+
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -137,7 +152,7 @@ return value; otherwise an error is reported and nothing is returned.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

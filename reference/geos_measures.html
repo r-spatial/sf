@@ -104,27 +104,52 @@
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>object of class <code>sf</code>, <code>sfc</code> or <code>sfg</code></p></dd>
+
+
 <dt>...</dt>
 <dd><p>passed on to <a href="https://r-spatial.github.io/s2/reference/s2_is_collection.html" class="external-link">s2_distance</a> or <a href="https://r-spatial.github.io/s2/reference/s2_closest_feature.html" class="external-link">s2_distance_matrix</a></p></dd>
+
+
 <dt>y</dt>
 <dd><p>object of class <code>sf</code>, <code>sfc</code> or <code>sfg</code>, defaults to <code>x</code></p></dd>
+
+
 <dt>dist_fun</dt>
 <dd><p>deprecated</p></dd>
+
+
 <dt>by_element</dt>
 <dd><p>logical; if <code>TRUE</code>, return a vector with distance between the first elements of <code>x</code> and <code>y</code>, the second, etc. if <code>FALSE</code>, return the dense matrix with all pairwise distances.</p></dd>
+
+
 <dt>which</dt>
 <dd><p>character; for Cartesian coordinates only: one of <code>Euclidean</code>, <code>Hausdorff</code> or <code>Frechet</code>; for geodetic coordinates, great circle distances are computed; see details</p></dd>
+
+
 <dt>par</dt>
 <dd><p>for <code>which</code> equal to <code>Hausdorff</code> or <code>Frechet</code>, optionally use a value between 0 and 1 to densify the geometry</p></dd>
+
+
 <dt>tolerance</dt>
 <dd><p>ignored if <code>st_is_longlat(x)</code> is <code>FALSE</code>; otherwise, if set to a positive value, the first distance smaller than <code>tolerance</code> will be returned, and true distance may be smaller; this may speed up computation. In meters, or a <code>units</code> object convertible to meters.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>If the coordinate reference system of <code>x</code> was set, these functions return values with unit of measurement; see <a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a>.
-st_area returns the area of a geometry, in the coordinate reference system used; in case <code>x</code> is in degrees longitude/latitude, <a href="https://rdrr.io/pkg/lwgeom/man/geod.html" class="external-link">st_geod_area</a> is used for area calculation.
-st_length returns the length of a <code>LINESTRING</code> or <code>MULTILINESTRING</code> geometry, using the coordinate reference system.  <code>POINT</code>, <code>MULTIPOINT</code>, <code>POLYGON</code> or <code>MULTIPOLYGON</code> geometries return zero.
-If <code>by_element</code> is <code>FALSE</code><code>st_distance</code> returns a dense numeric matrix of dimension length(x) by length(y); otherwise it returns a numeric vector of length <code>x</code> or <code>y</code>, the shorter one being recycled. Distances involving empty geometries are <code>NA</code>.</p>
+    
+
+<p>If the coordinate reference system of <code>x</code> was set, these functions return values with unit of measurement; see <a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a>.</p>
+
+
+<p>st_area returns the area of a geometry, in the coordinate reference system used; in case <code>x</code> is in degrees longitude/latitude, <a href="https://rdrr.io/pkg/lwgeom/man/geod.html" class="external-link">st_geod_area</a> is used for area calculation.</p>
+
+
+<p>st_length returns the length of a <code>LINESTRING</code> or <code>MULTILINESTRING</code> geometry, using the coordinate reference system.  <code>POINT</code>, <code>MULTIPOINT</code>, <code>POLYGON</code> or <code>MULTIPOLYGON</code> geometries return zero.</p>
+
+
+<p>If <code>by_element</code> is <code>FALSE</code></p>
+<p></p>
+<p><code>st_distance</code> returns a dense numeric matrix of dimension length(x) by length(y); otherwise it returns a numeric vector of length <code>x</code> or <code>y</code>, the shorter one being recycled. Distances involving empty geometries are <code>NA</code>.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -181,7 +206,7 @@ If <code>by_element</code> is <code>FALSE</code><code>st_distance</code> returns
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

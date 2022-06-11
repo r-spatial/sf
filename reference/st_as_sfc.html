@@ -152,25 +152,44 @@
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>object to convert</p></dd>
+
+
 <dt>...</dt>
 <dd><p>further arguments</p></dd>
+
+
 <dt>EWKB</dt>
 <dd><p>logical; if TRUE, parse as EWKB (extended WKB; PostGIS: ST_AsEWKB), otherwise as ISO WKB (PostGIS: ST_AsBinary)</p></dd>
+
+
 <dt>spatialite</dt>
 <dd><p>logical; if <code>TRUE</code>, WKB is assumed to be in the spatialite dialect, see <a href="https://www.gaia-gis.it/gaia-sins/BLOB-Geometry.html" class="external-link">https://www.gaia-gis.it/gaia-sins/BLOB-Geometry.html</a>; this is only supported in native endian-ness (i.e., files written on system with the same endian-ness as that on which it is being read).</p></dd>
+
+
 <dt>pureR</dt>
 <dd><p>logical; if TRUE, use only R code, if FALSE, use compiled (C++) code; use TRUE when the endian-ness of the binary differs from the host machine (<code>.Platform$endian</code>).</p></dd>
+
+
 <dt>crs</dt>
 <dd><p>coordinate reference system to be assigned; object of class <code>crs</code></p></dd>
+
+
 <dt>GeoJSON</dt>
 <dd><p>logical; if <code>TRUE</code>, try to read geometries from GeoJSON text strings
 geometry, see <code><a href="st_crs.html">st_crs()</a></code></p></dd>
+
+
 <dt>precision</dt>
 <dd><p>precision value; see <a href="st_as_binary.html">st_as_binary</a></p></dd>
+
+
 <dt>forceMulti</dt>
 <dd><p>logical; if <code>TRUE</code>, force coercion into <code>MULTIPOLYGON</code> or <code>MULTILINE</code> objects, else autodetect</p></dd>
+
+
 <dt>endian</dt>
 <dd><p>integer; 0 or 1: defaults to the endian of the native machine</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -227,7 +246,7 @@ Postgis EWKT or GeoJSON representations of a single geometry for each vector ele
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

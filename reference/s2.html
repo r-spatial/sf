@@ -97,21 +97,32 @@
     <dl><dt>use_s2</dt>
 <dd><p>logical; if <code>TRUE</code>, use the s2 spherical geometry package
 for geographical coordinate operations</p></dd>
+
+
 <dt>x</dt>
 <dd><p>object of class <code>sf</code>, <code>sfc</code> or <code>sfg</code></p></dd>
+
+
 <dt>...</dt>
 <dd><p>passed on</p></dd>
+
+
 <dt>oriented</dt>
 <dd><p>logical; if <code>FALSE</code>, polygons that
 cover more than half of the globe are inverted; if <code>TRUE</code>, no reversal
 takes place and it is assumed that the inside of the polygon is to the
 left of the polygon's path.</p></dd>
+
+
 <dt>rebuild</dt>
 <dd><p>logical; call <a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_rebuild</a> on the geometry (think of this as a <code>st_make_valid</code> on the sphere)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p><code>sf_use_s2</code> returns the value of this variable before (re)setting it,
+    
+
+<p><code>sf_use_s2</code> returns the value of this variable before (re)setting it,
 invisibly if <code>use_s2</code> is not missing.</p>
     </div>
     <div id="details">
@@ -147,7 +158,7 @@ invisibly if <code>use_s2</code> is not missing.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

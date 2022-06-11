@@ -121,37 +121,64 @@
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>object of class sf, sfc or sfg</p></dd>
+
+
 <dt>crs</dt>
 <dd><p>target coordinate reference system: object of class `crs`, or input string for <a href="st_crs.html">st_crs</a></p></dd>
+
+
 <dt>...</dt>
 <dd><p>ignored</p></dd>
+
+
 <dt>aoi</dt>
 <dd><p>area of interest, in degrees: 
 WestLongitude, SouthLatitude, EastLongitude, NorthLatitude</p></dd>
+
+
 <dt>pipeline</dt>
 <dd><p>character; coordinate operation pipeline, for overriding the default operation</p></dd>
+
+
 <dt>reverse</dt>
 <dd><p>boolean; has only an effect when <code>pipeline</code> is defined:
 if <code>TRUE</code>, the inverse operation of the pipeline is applied</p></dd>
+
+
 <dt>desired_accuracy</dt>
 <dd><p>numeric; Only coordinate operations that offer an accuracy of 
 at least the one specified will be considered; a negative value disables this feature
 (requires GDAL &gt;= 3.3)</p></dd>
+
+
 <dt>allow_ballpark</dt>
 <dd><p>logical; are ballpark (low accuracy) transformations allowed? 
 (requires GDAL &gt;= 3.3)</p></dd>
+
+
 <dt>partial</dt>
 <dd><p>logical; allow for partial projection, if not all points of a geometry can be projected (corresponds to setting environment variable <code>OGR_ENABLE_PARTIAL_REPROJECTION</code> to <code>TRUE</code>)</p></dd>
+
+
 <dt>check</dt>
 <dd><p>logical; if <code>TRUE</code>, perform a sanity check on resulting polygons</p></dd>
+
+
 <dt>options</dt>
 <dd><p>character; should have "WRAPDATELINE=YES" to function; another parameter that is used is "DATELINEOFFSET=10" (where 10 is the default value)</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>logical; print options after they have been parsed?</p></dd>
+
+
 <dt>type</dt>
 <dd><p>character; one of <code>have_datum_files</code>, <code>proj</code>, <code>ellps</code>, <code>datum</code>, <code>units</code> or <code>prime_meridians</code>; see Details.</p></dd>
+
+
 <dt>path</dt>
 <dd><p>character; PROJ search path to be set</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -227,7 +254,7 @@ to projections not supported by GDAL may be done by
 <span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (-30 20)</span>
 <span class="r-in"><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpfqCULt/temp_libpath45a710495fd3/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpGMfiZH/temp_libpath129bd70873397/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
@@ -278,7 +305,7 @@ to projections not supported by GDAL may be done by
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

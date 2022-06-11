@@ -123,23 +123,39 @@
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>object of class <code>sfg</code>, <code>sfc</code> or <code>sf</code></p></dd>
+
+
 <dt>dist</dt>
 <dd><p>numeric; buffer distance for all, or for each of the elements in <code>x</code>; in case
 <code>dist</code> is a <code>units</code> object, it should be convertible to <code>arc_degree</code> if
 <code>x</code> has geographic coordinates, and to <code>st_crs(x)$units</code> otherwise</p></dd>
+
+
 <dt>nQuadSegs</dt>
 <dd><p>integer; number of segments per quadrant (fourth of a circle), for all or per-feature</p></dd>
+
+
 <dt>endCapStyle</dt>
 <dd><p>character; style of line ends, one of 'ROUND', 'FLAT', 'SQUARE'</p></dd>
+
+
 <dt>joinStyle</dt>
 <dd><p>character; style of line joins, one of 'ROUND', 'MITRE', 'BEVEL'</p></dd>
+
+
 <dt>mitreLimit</dt>
 <dd><p>numeric; limit of extension for a join if <code>joinStyle</code> 'MITRE' is used (default 1.0, minimum 0.0)</p></dd>
+
+
 <dt>singleSide</dt>
 <dd><p>logical; if <code>TRUE</code>, single-sided buffers are returned for linear geometries,
 in which case negative <code>dist</code> values give buffers on the right-hand side, positive on the left.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>ignored</p></dd>
+
+
 <dt>preserveTopology</dt>
 <dd><p>logical; carry out topology preserving
 simplification? May be specified for each, or for all feature geometries.
@@ -150,24 +166,37 @@ coordinates or <code><a href="s2.html">sf_use_s2()</a></code> returns <code>FALS
 other cases (with a warning when set equal to <code>FALSE</code>) since the
 function implicitly calls <code><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2::s2_simplify</a></code> which always preserve
 topological relationships (per single feature).</p></dd>
+
+
 <dt>dTolerance</dt>
 <dd><p>numeric; tolerance parameter, specified for all or for each
 feature geometry. If you run <code>st_simplify</code>, the input data is
 specified with long-lat coordinates and <code><a href="s2.html">sf_use_s2()</a></code> returns
 <code>TRUE</code>, then the value of <code>dTolerance</code> must be specified in
 meters.</p></dd>
+
+
 <dt>bOnlyEdges</dt>
 <dd><p>logical; if TRUE, return lines, else return polygons</p></dd>
+
+
 <dt>envelope</dt>
 <dd><p>object of class <code>sfc</code> or <code>sfg</code> containing a <code>POLYGON</code> with the envelope for a voronoi diagram; this only takes effect when it is larger than the default envelope, chosen when <code>envelope</code> is an empty polygon</p></dd>
+
+
 <dt>of_largest_polygon</dt>
 <dd><p>logical; for <code>st_centroid</code>: if <code>TRUE</code>, return centroid of the largest (sub)polygon of a <code>MULTIPOLYGON</code> rather than of the whole <code>MULTIPOLYGON</code></p></dd>
+
+
 <dt>dfMaxLength</dt>
 <dd><p>maximum length of a line segment. If <code>x</code> has geographical coordinates (long/lat), <code>dfMaxLength</code> is either a numeric expressed in meter, or an object of class <code>units</code> with length units <code>rad</code> or <code>degree</code>; segmentation in the long/lat case takes place along the great circle, using <a href="https://rdrr.io/pkg/lwgeom/man/geod.html" class="external-link">st_geod_segmentize</a>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>an object of the same class of <code>x</code>, with manipulated geometry.</p>
+    
+
+<p>an object of the same class of <code>x</code>, with manipulated geometry.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -237,7 +266,7 @@ center point and a boundary point of every circle, otherwise a circle (buffer) i
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">op</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpfqCULt/temp_libpath45a710495fd3/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpGMfiZH/temp_libpath129bd70873397/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
@@ -352,7 +381,7 @@ center point and a boundary point of every circle, otherwise a circle (buffer) i
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

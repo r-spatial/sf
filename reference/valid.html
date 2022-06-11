@@ -110,21 +110,38 @@
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>object of class <code>sfg</code>, <code>sfg</code> or <code>sf</code></p></dd>
+
+
 <dt>...</dt>
 <dd><p>ignored</p></dd>
+
+
 <dt>NA_on_exception</dt>
 <dd><p>logical; if TRUE, for polygons that would otherwise raise a GEOS error (exception, e.g. for a POLYGON having more than zero but less than 4 points, or a LINESTRING having one point) return an <code>NA</code> rather than raising an error, and suppress warning messages (e.g. about self-intersection); if FALSE, regular GEOS errors and warnings will be emitted.</p></dd>
+
+
 <dt>reason</dt>
 <dd><p>logical; if <code>TRUE</code>, return a character with, for each geometry, the reason for invalidity, <code>NA</code> on exception, or <code>"Valid Geometry"</code> otherwise.</p></dd>
+
+
 <dt>oriented</dt>
 <dd><p>logical; only relevant if <code>st_is_longlat(x)</code> is <code>TRUE</code>; see <a href="s2.html">s2</a></p></dd>
+
+
 <dt>s2_options</dt>
 <dd><p>only relevant if <code>st_is_longlat(x)</code> is <code>TRUE</code>; options for <a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_rebuild</a>, see <a href="https://r-spatial.github.io/s2/reference/s2_options.html" class="external-link">s2_options</a> and Details.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p><code>st_is_valid</code> returns a logical vector indicating for each geometries of <code>x</code> whether it is valid. <code>st_make_valid</code> returns an object with a topologically valid geometry.
-Object of the same class as <code>x</code></p>
+    
+
+<p><code>st_is_valid</code> returns a logical vector indicating for each geometries of <code>x</code> whether it is valid. <code>st_make_valid</code> returns an object with a topologically valid geometry.</p>
+
+
+<p>Object of the same class as <code>x</code></p>
+
+
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -168,7 +185,7 @@ Object of the same class as <code>x</code></p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

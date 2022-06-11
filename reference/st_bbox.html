@@ -163,16 +163,28 @@
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>object of class <code>bbox</code></p></dd>
+
+
 <dt>obj</dt>
 <dd><p>object to compute the bounding box from</p></dd>
+
+
 <dt>...</dt>
 <dd><p>for format.bbox, passed on to <a href="https://rdrr.io/r/base/format.html" class="external-link">format</a> to format individual numbers</p></dd>
+
+
 <dt>crs</dt>
 <dd><p>object of class <code>crs</code>, or argument to <a href="st_crs.html">st_crs</a>, specifying the CRS of this bounding box.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a numeric vector of length four, with <code>xmin</code>, <code>ymin</code>, <code>xmax</code>and <code>ymax</code> values; if <code>obj</code> is of class <code>sf</code>, <code>sfc</code>, <code>Spatial</code> or <code>Raster</code>, the object
+    
+
+<p>a numeric vector of length four, with <code>xmin</code>, <code>ymin</code>, <code>xmax</code></p>
+
+
+<p>and <code>ymax</code> values; if <code>obj</code> is of class <code>sf</code>, <code>sfc</code>, <code>Spatial</code> or <code>Raster</code>, the object
 returned has a class <code>bbox</code>, an attribute <code>crs</code> and a method to print the
 bbox and an <code>st_crs</code> method to retrieve the coordinate reference system
 corresponding to <code>obj</code> (and hence the bounding box). <a href="st_as_sfc.html">st_as_sfc</a> has a
@@ -213,7 +225,7 @@ methods for <code>bbox</code> objects to generate a polygon around the four boun
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

@@ -96,22 +96,37 @@
     <h2>Arguments</h2>
     <dl><dt>util</dt>
 <dd><p>character; one of <code>info</code>, <code>warp</code>, <code>rasterize</code>, <code>translate</code>, <code>vectortranslate</code> (for ogr2ogr), <code>buildvrt</code>, <code>demprocessing</code>, <code>nearblack</code>, <code>grid</code>, <code>mdiminfo</code> and <code>mdimtranslate</code> (the last two requiring GDAL 3.1)</p></dd>
+
+
 <dt>source</dt>
 <dd><p>character; name of input layer(s); for <code>warp</code>, <code>buidvrt</code> or <code>mdimtranslate</code> this can be more than one</p></dd>
+
+
 <dt>destination</dt>
 <dd><p>character; name of output layer</p></dd>
+
+
 <dt>options</dt>
 <dd><p>character; options for the utility</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>logical; if <code>TRUE</code>, suppress printing the output for <code>info</code> and <code>mdiminfo</code>, and suppress printing progress</p></dd>
+
+
 <dt>processing</dt>
 <dd><p>character; processing options for <code>demprocessing</code></p></dd>
+
+
 <dt>colorfilename</dt>
 <dd><p>character; name of color file for <code>demprocessing</code> (mandatory if <code>processing="color-relief"</code>)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p><code>info</code> returns a character vector with the raster metadata; all other utils return (invisibly) a logical indicating success (i.e., <code>TRUE</code>); in case of failure, an error is raised.</p>
+    
+
+<p><code>info</code> returns a character vector with the raster metadata; all other utils return (invisibly) a logical indicating success (i.e., <code>TRUE</code>); in case of failure, an error is raised.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -158,7 +173,7 @@
 <span class="r-in"><span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="va">in_file</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Driver: GTiff/GeoTIFF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Files: /tmp/RtmpfqCULt/temp_libpath45a710495fd3/sf/tif/geomatrix.tif</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Files: /tmp/RtmpGMfiZH/temp_libpath129bd70873397/sf/tif/geomatrix.tif</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Size is 20, 20</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coordinate System is:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> PROJCRS["WGS 84 / UTM zone 11N",</span>
@@ -218,7 +233,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Band 1 Block=20x20 Type=Byte, ColorInterp=Gray</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Computed Min/Max=74.000,255.000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `storms_xyz' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/Rtmpf4jB9V/file49a7520fdbf7.gpkg' using driver `GPKG'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpGoO2Fb/file131d321dfdf7c.gpkg' using driver `GPKG'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 71 features and 0 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: LINESTRING</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XYZ</span>
@@ -226,7 +241,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> z_range:       zmin: 924 zmax: 1017</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: NAD83 / North Carolina (ftUS)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `storms_xyz' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpfqCULt/temp_libpath45a710495fd3/sf/shape/storms_xyz.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpGMfiZH/temp_libpath129bd70873397/sf/shape/storms_xyz.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 71 features and 0 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: LINESTRING</span>
@@ -248,7 +263,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>
