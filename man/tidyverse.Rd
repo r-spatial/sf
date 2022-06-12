@@ -161,7 +161,7 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 
 \item{add}{see corresponding function in dplyr}
 
-\item{x}{A pair of data frames, data frame extensions (e.g. a tibble), or
+\item{x, y}{A pair of data frames, data frame extensions (e.g. a tibble), or
 lazy data frames (e.g. from dbplyr or dtplyr). See \emph{Methods}, below, for
 more details.}
 
@@ -246,10 +246,6 @@ more details.}
 \item{extra}{see \link[tidyr]{separate}}
 
 \item{.preserve}{see \link[tidyr:nest]{unnest}}
-
-\item{y}{A pair of data frames, data frame extensions (e.g. a tibble), or
-lazy data frames (e.g. from dbplyr or dtplyr). See \emph{Methods}, below, for
-more details.}
 
 \item{by}{A character vector of variables to join by.
 

@@ -13,7 +13,6 @@ RnwWeave: knitr
 LaTeX: XeLaTeX
 
 AutoAppendNewline: Yes
-StripTrailingWhitespace: No
 
 BuildType: Package
 PackageUseDevtools: Yes
