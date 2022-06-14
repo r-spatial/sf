@@ -102,7 +102,8 @@ interfaced and do not use the <code>size</code> argument, see examples.</p>
   type <span class="op">=</span> <span class="st">"random"</span>,
   exact <span class="op">=</span> <span class="cn">TRUE</span>,
   warn_if_not_integer <span class="op">=</span> <span class="cn">TRUE</span>,
-  by_polygon <span class="op">=</span> <span class="cn">FALSE</span>
+  by_polygon <span class="op">=</span> <span class="cn">FALSE</span>,
+  progress <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span>
 
 <span class="co"># S3 method for sfg</span>
@@ -141,6 +142,10 @@ or one of the <code>spatstat</code> methods such as <code>Thomas</code> for call
 the same as specified by <code>size</code>? <code>TRUE</code> by default. Only applies to polygons, and
 when <code>type = "random"</code>.</p></dd>
 
+
+<dt>progress</dt>
+<dd><p>logical; if <code>TRUE</code> show progress bar (only if <code>size</code> is a vector).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -165,7 +170,7 @@ For instance, to use <code><a href="https://rdrr.io/pkg/spatstat.random/man/rTho
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpmqtvN8/temp_libpath12a47338a30bd/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpAWWxc9/temp_libpath46692692d4a1/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
