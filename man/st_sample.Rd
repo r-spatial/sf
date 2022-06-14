@@ -18,7 +18,8 @@ st_sample(x, size, ...)
   type = "random",
   exact = TRUE,
   warn_if_not_integer = TRUE,
-  by_polygon = FALSE
+  by_polygon = FALSE,
+  progress = FALSE
 )
 
 \method{st_sample}{sfg}(x, size, ...)
@@ -40,6 +41,8 @@ or one of the \code{spatstat} methods such as \code{Thomas} for calling \code{sp
 \item{by_polygon}{logical; for \code{MULTIPOLYGON} geometries, should the effort be split by \code{POLYGON}? See https://github.com/r-spatial/sf/issues/1480
 the same as specified by \code{size}? \code{TRUE} by default. Only applies to polygons, and
 when \code{type = "random"}.}
+
+\item{progress}{logical; if \code{TRUE} show progress bar (only if \code{size} is a vector).}
 }
 \value{
 an \code{sfc} object containing the sampled \code{POINT} geometries
