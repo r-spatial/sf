@@ -6,15 +6,17 @@ s = st_sf(a = 1:2, geom = st_sfc(pl1, pl2))
 (a = aggregate(s, list(c(1,1)), mean, do_union = FALSE))
 (a = aggregate(s, list(c(1,1)), mean, do_union = TRUE))
 # expect_warning(st_cast(a, "POINT"))
-demo(meuse_sf, echo = FALSE, ask = FALSE)
-a = aggregate(meuse_sf, list(meuse_sf$soil), mean)
-attributes(a)$agr
-a = aggregate(meuse_sf, list(soil = meuse_sf$soil), mean)
-attributes(a)$agr
-a = aggregate(meuse_sf, list(meuse_sf$soil, meuse_sf$ffreq), mean)
-attributes(a)$agr
-a = aggregate(meuse_sf, list(soil = meuse_sf$soil, ff = meuse_sf$ffreq), mean)
-attributes(a)$agr
+if (require(sp, quietly = TRUE)) {
+ demo(meuse_sf, echo = FALSE, ask = FALSE)
+ a = aggregate(meuse_sf, list(meuse_sf$soil), mean)
+ print(attributes(a)$agr)
+ a = aggregate(meuse_sf, list(soil = meuse_sf$soil), mean)
+ print(attributes(a)$agr)
+ a = aggregate(meuse_sf, list(meuse_sf$soil, meuse_sf$ffreq), mean)
+ print(attributes(a)$agr)
+ a = aggregate(meuse_sf, list(soil = meuse_sf$soil, ff = meuse_sf$ffreq), mean)
+ print(attributes(a)$agr)
+}
 
 # aggregate by sf/sfc
 a = st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)))) * 2

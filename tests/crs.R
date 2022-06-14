@@ -41,15 +41,17 @@ if (sf_extSoftVersion()["USE_PROJ_H"] == "true" || sf_proj_info("have_datum_file
   "datum files not installed"
 }
 
-x0 = sp::CRS("+init=epsg:4326")
-cat(sp::wkt(x0), "\n")
-x = st_crs(x0)
-x
+if (require(sp, quietly = TRUE)) {
+ x0 = sp::CRS("+init=epsg:4326")
+ cat(sp::wkt(x0), "\n")
+ x = st_crs(x0)
+ print(x)
 
-y0 = st_crs(4326)
-y0
-y = as(y0, "CRS")
-cat(sp::wkt(y), "\n")
+ y0 = st_crs(4326)
+ y0
+ y = as(y0, "CRS")
+ cat(sp::wkt(y), "\n")
+}
 
 # https://github.com/r-spatial/sf/issues/1170
 g = st_as_sfc("POLYGON ((-61.66957 10.69214, -61.565 10.75728, -61.37453 10.77654, -61.40721 10.60681, -61.66957 10.69214))")

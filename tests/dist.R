@@ -1,5 +1,4 @@
 suppressPackageStartupMessages(library(sf))
-library(sp)
 suppressPackageStartupMessages(library(units))
 
 x = st_sfc(
@@ -19,17 +18,19 @@ st_point(c(4,0)),
 crs = 4326
 )
 
-d.sf = st_distance(x, y)
-d.sp = spDists(as(x, "Spatial"), as(y, "Spatial"))
-units(d.sp) = as_units("km")
-round(d.sf - d.sp, 7)
+if (require(sp, quietly = TRUE)) {
+ d.sf = st_distance(x, y)
+ d.sp = spDists(as(x, "Spatial"), as(y, "Spatial"))
+ units(d.sp) = as_units("km")
+ print(round(d.sf - d.sp, 7))
 
 #summary(unclass(d.sf) - d.sp)
 
-st_crs(x) = st_crs(y) = NA
-d.sf = st_distance(x, y)
-d.sp = spDists(as(x, "Spatial"), as(y, "Spatial"))
-round(d.sf - d.sp, 7)
+ st_crs(x) = st_crs(y) = NA
+ d.sf = st_distance(x, y)
+ d.sp = spDists(as(x, "Spatial"), as(y, "Spatial"))
+ print(round(d.sf - d.sp, 7))
+}
 
 # st_length:
 st_crs(y) = 4326
