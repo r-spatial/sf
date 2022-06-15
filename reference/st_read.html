@@ -291,7 +291,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">nc</span> <span class="op">=</span> <span class="fu">st_read</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpP5UzBO/temp_libpath12ad515293353/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpYbnxo6/temp_libpath471413057058/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
@@ -332,7 +332,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
 <span class="r-in"><span class="co">## only two features by where clause</span></span>
 <span class="r-in"><span class="va">nc_sql</span> <span class="op">=</span> <span class="fu">st_read</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>,</span>
 <span class="r-in">                     query <span class="op">=</span> <span class="st">"SELECT NAME, SID74, FIPS FROM \"nc\" WHERE BIR74 &gt; 20000"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Reading query `SELECT NAME, SID74, FIPS FROM "nc" WHERE BIR74 &gt; 20000' from data source `/tmp/RtmpP5UzBO/temp_libpath12ad515293353/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Reading query `SELECT NAME, SID74, FIPS FROM "nc" WHERE BIR74 &gt; 20000' from data source `/tmp/RtmpYbnxo6/temp_libpath471413057058/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 2 features and 3 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
@@ -359,35 +359,35 @@ that reside in the same directory, only one of them having extension <code>.shp<
 <span class="r-in"><span class="co"># spatial filter, as wkt:</span></span>
 <span class="r-in"><span class="va">wkt</span> <span class="op">=</span> <span class="fu"><a href="st_as_text.html">st_as_text</a></span><span class="op">(</span><span class="fu"><a href="st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="co"># filter by (bbox overlaps of) first feature geometry:</span></span>
-<span class="r-in"><span class="fu">read_sf</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"gpkg/nc.gpkg"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>, wkt_filter <span class="op">=</span> <span class="va">wkt</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">st_read</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"gpkg/nc.gpkg"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>, wkt_filter <span class="op">=</span> <span class="va">wkt</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc.gpkg' from data source </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpYbnxo6/temp_libpath471413057058/sf/gpkg/nc.gpkg' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `GPKG'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 4 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -81.91116 ymin: 35.98933 xmax: -80.87086 ymax: 36.58965</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  NAD27</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 15</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    AREA PERIMETER CNTY_ CNTY_ID NAME   FIPS  FIPSNO CRESS_ID BIR74 SID74 NWBIR74</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> 0.081      1.29  <span style="text-decoration: underline;">1</span>880    <span style="text-decoration: underline;">1</span>880 Watau… 37189  <span style="text-decoration: underline;">37</span>189       95  <span style="text-decoration: underline;">1</span>323     1      17</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> 0.114      1.44  <span style="text-decoration: underline;">1</span>825    <span style="text-decoration: underline;">1</span>825 Ashe   37009  <span style="text-decoration: underline;">37</span>009        5  <span style="text-decoration: underline;">1</span>091     1      10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> 0.199      1.98  <span style="text-decoration: underline;">1</span>874    <span style="text-decoration: underline;">1</span>874 Wilkes 37193  <span style="text-decoration: underline;">37</span>193       97  <span style="text-decoration: underline;">3</span>146     4     200</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> 0.061      1.23  <span style="text-decoration: underline;">1</span>827    <span style="text-decoration: underline;">1</span>827 Alleg… 37005  <span style="text-decoration: underline;">37</span>005        3   487     0      10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 4 more variables: BIR79 &lt;dbl&gt;, SID79 &lt;dbl&gt;, NWBIR79 &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   geom &lt;MULTIPOLYGON [°]&gt;</span></span>
 <span class="r-in"><span class="co"># read geojson from string:</span></span>
 <span class="r-in"><span class="va">geojson_txt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"{\"type\":\"MultiPoint\",\"coordinates\":"</span>,</span>
 <span class="r-in">   <span class="st">"[[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">=</span> <span class="fu">read_sf</span><span class="op">(</span><span class="va">geojson_txt</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">x</span> <span class="op">=</span> <span class="fu">st_read</span><span class="op">(</span><span class="va">geojson_txt</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `OGRGeoJSON' from data source </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `{"type":"MultiPoint","coordinates": [[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `GeoJSON'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 0 fields</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOINT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 3 ymin: 3.6 xmax: 3.9 ymax: 4.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
 <span class="r-in"><span class="va">x</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 0 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOINT</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 3 ymin: 3.6 xmax: 3.9 ymax: 4.6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 1</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                         geometry</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                 <span style="color: #949494; font-style: italic;">&lt;MULTIPOINT [°]&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> ((3.2 4), (3 4.6), (3.8 4.4), (3.5 3.8), (3.4 3.6), (3.9 4.5))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                         geometry</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 MULTIPOINT ((3.2 4), (3 4.6...</span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tomoakin/RPostgreSQL" class="external-link">RPostgreSQL</a></span><span class="op">)</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">conn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/RPostgreSQL/man/PostgreSQL.html" class="external-link">PostgreSQL</a></span><span class="op">(</span><span class="op">)</span>, dbname <span class="op">=</span> <span class="st">"postgis"</span><span class="op">)</span><span class="op">)</span></span>

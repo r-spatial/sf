@@ -204,24 +204,12 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 <span class="r-out co"><span class="r-pr">#&gt;</span>   a       geom       geom2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 1 POINT(0 0) POINT (0 1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 2 POINT(0 1) POINT (1 1)</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">meuse</span>, package <span class="op">=</span> <span class="st">"sp"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">meuse_sf</span> <span class="op">=</span> <span class="fu">st_as_sf</span><span class="op">(</span><span class="va">meuse</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">28992</span>, agr <span class="op">=</span> <span class="st">"constant"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">meuse_sf</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 3 features and 12 fields</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Attribute-geometry relationship: 12 constant, 0 aggregate, 0 identity</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 181025 ymin: 333537 xmax: 181165 ymax: 333611</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: Amersfoort / RD New</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   cadmium copper lead zinc  elev       dist   om ffreq soil lime landuse dist.m</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    11.7     85  299 1022 7.909 0.00135803 13.6     1    1    1      Ah     50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2     8.6     81  277 1141 6.983 0.01222430 14.0     1    1    1      Ah     30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3     6.5     68  199  640 7.800 0.10302900 13.0     1    1    1      Ah    150</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                geometry</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 POINT (181072 333611)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 POINT (181025 333558)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 POINT (181165 333537)</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">meuse_sf</span><span class="op">)</span></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://github.com/edzer/sp/" class="external-link">sp</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in"> <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">meuse</span>, package <span class="op">=</span> <span class="st">"sp"</span><span class="op">)</span></span>
+<span class="r-in"> <span class="va">meuse_sf</span> <span class="op">=</span> <span class="fu">st_as_sf</span><span class="op">(</span><span class="va">meuse</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">28992</span>, agr <span class="op">=</span> <span class="st">"constant"</span><span class="op">)</span></span>
+<span class="r-in"> <span class="va">meuse_sf</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span></span>
+<span class="r-in"> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">meuse_sf</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">}</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     cadmium           copper            lead            zinc       </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Min.   : 0.200   Min.   : 14.00   Min.   : 37.0   Min.   : 113.0  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1st Qu.: 0.800   1st Qu.: 23.00   1st Qu.: 72.5   1st Qu.: 198.0  </span>
@@ -246,7 +234,7 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Ab     : 8   3rd Qu.: 450.0                      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  (Other):25   Max.   :1000.0                      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  NA's   : 1                                       </span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/edzer/sp/" class="external-link">sp</a></span><span class="op">)</span></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://github.com/edzer/sp/" class="external-link">sp</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"><span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>,<span class="op">-</span><span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="op">-</span><span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>,<span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">x1</span> <span class="op">=</span> <span class="fl">0.1</span> <span class="op">*</span> <span class="va">x</span> <span class="op">+</span> <span class="fl">0.1</span></span>
 <span class="r-in"><span class="va">x2</span> <span class="op">=</span> <span class="fl">0.1</span> <span class="op">*</span> <span class="va">x</span> <span class="op">+</span> <span class="fl">0.4</span></span>
@@ -266,69 +254,17 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 <span class="r-in"><span class="va">r</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">SpatialPolygons</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">p1</span>,<span class="va">p2</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">a</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">r</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          geometry</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  MULTIPOLYGON:2  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  epsg:NA     :0  </span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/demo.html" class="external-link">demo</a></span><span class="op">(</span><span class="va">meuse</span>, ask <span class="op">=</span> <span class="cn">FALSE</span>, echo <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">meuse</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>GDAL Message 1: +init=epsg:XXXX syntax is deprecated. It might return a CRS with a non-EPSG compliant axis order.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     cadmium           copper            lead            zinc       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Min.   : 0.200   Min.   : 14.00   Min.   : 37.0   Min.   : 113.0  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1st Qu.: 0.800   1st Qu.: 23.00   1st Qu.: 72.5   1st Qu.: 198.0  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Median : 2.100   Median : 31.00   Median :123.0   Median : 326.0  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Mean   : 3.246   Mean   : 40.32   Mean   :153.4   Mean   : 469.7  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3rd Qu.: 3.850   3rd Qu.: 49.50   3rd Qu.:207.0   3rd Qu.: 674.5  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Max.   :18.100   Max.   :128.00   Max.   :654.0   Max.   :1839.0  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       elev             dist               om         ffreq  soil   lime   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Min.   : 5.180   Min.   :0.00000   Min.   : 1.000   1:84   1:97   0:111  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1st Qu.: 7.546   1st Qu.:0.07569   1st Qu.: 5.300   2:48   2:46   1: 44  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Median : 8.180   Median :0.21184   Median : 6.900   3:23   3:12          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Mean   : 8.165   Mean   :0.24002   Mean   : 7.478                        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3rd Qu.: 8.955   3rd Qu.:0.36407   3rd Qu.: 9.000                        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Max.   :10.520   Max.   :0.88039   Max.   :17.000                        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                     NA's   :2                             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     landuse       dist.m                geometry  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  W      :50   Min.   :  10.0   POINT        :155  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Ah     :39   1st Qu.:  80.0   epsg:NA      :  0  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Am     :22   Median : 270.0   +proj=ster...:  0  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Fw     :10   Mean   : 290.3                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Ab     : 8   3rd Qu.: 450.0                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  (Other):25   Max.   :1000.0                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  NA's   : 1                                       </span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">meuse.grid</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      part.a           part.b            dist        soil     ffreq   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   1:1665   1: 779  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.1193   2:1084   2:1335  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Median :0.0000   Median :1.0000   Median :0.2715   3: 354   3: 989  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Mean   :0.3986   Mean   :0.6014   Mean   :0.2971                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3rd Qu.:1.0000   3rd Qu.:1.0000   3rd Qu.:0.4402                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Max.   :1.0000   Max.   :1.0000   Max.   :0.9926                    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           geometry   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  POINT        :3103  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  epsg:NA      :   0  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  +proj=ster...:   0  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                      </span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">meuse.area</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           geometry</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  POLYGON      :1  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  epsg:NA      :0  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  +proj=ster...:0  </span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">meuse.riv</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           geometry</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  POLYGON      :1  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  epsg:NA      :0  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  +proj=ster...:0  </span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">st_as_sf</span><span class="op">(</span><span class="fu"><a href="coerce-methods.html">as</a></span><span class="op">(</span><span class="va">meuse.riv</span>, <span class="st">"SpatialLines"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           geometry</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  LINESTRING   :1  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  epsg:NA      :0  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  +proj=ster...:0  </span>
 <span class="r-in"><span class="va">pol.grd</span> <span class="op">=</span> <span class="fu"><a href="coerce-methods.html">as</a></span><span class="op">(</span><span class="va">meuse.grid</span>, <span class="st">"SpatialPolygonsDataFrame"</span><span class="op">)</span></span>
 <span class="r-in"><span class="co"># summary(st_as_sf(pol.grd))</span></span>
 <span class="r-in"><span class="co"># summary(st_as_sf(as(pol.grd, "SpatialLinesDataFrame")))</span></span>
+<span class="r-in"><span class="op">}</span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>GDAL Message 1: +init=epsg:XXXX syntax is deprecated. It might return a CRS with a non-EPSG compliant axis order.</span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="http://spatstat.org/" class="external-link">spatstat.geom</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in">  <span class="va">g</span> <span class="op">=</span> <span class="fu">st_as_sf</span><span class="op">(</span><span class="va">gorillas</span><span class="op">)</span></span>
 <span class="r-in">  <span class="co"># select only the points:</span></span>
