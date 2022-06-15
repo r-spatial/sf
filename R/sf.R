@@ -29,10 +29,12 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' df = st_as_sf(d, wkt = "geom")
 #' d$geom2 = st_sfc(pt1, pt2)
 #' st_as_sf(d) # should warn
-#' data(meuse, package = "sp")
-#' meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, agr = "constant")
-#' meuse_sf[1:3,]
-#' summary(meuse_sf)
+#' if (require(sp, quietly = TRUE)) {
+#'  data(meuse, package = "sp")
+#'  meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, agr = "constant")
+#'  meuse_sf[1:3,]
+#'  summary(meuse_sf)
+#' }
 #' @export
 st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 		dim = "XYZ", remove = TRUE, na.fail = TRUE, sf_column_name = NULL) {

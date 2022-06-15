@@ -51,6 +51,7 @@ test_that("Reading of truncated buffers results in a proper error", {
 })
 
 test_that("st_as_sfc() honors crs argument", {
+  skip_if_not_installed("blob")
   raw = st_as_binary(st_point(c(26e5, 12e5)))
 
   list = list(raw)

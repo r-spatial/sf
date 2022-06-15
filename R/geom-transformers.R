@@ -574,9 +574,11 @@ st_node.sf = function(x) {
 #' @param ... ignored
 #' @examples
 #' sf = st_sf(a=1, geom=st_sfc(st_linestring(rbind(c(0,0),c(1,1)))), crs = 4326)
-#' seg = st_segmentize(sf, units::set_units(100, km))
-#' seg = st_segmentize(sf, units::set_units(0.01, rad))
-#' nrow(seg$geom[[1]])
+#' if (require(lwgeom, quietly = TRUE)) {
+#'  seg = st_segmentize(sf, units::set_units(100, km))
+#'  seg = st_segmentize(sf, units::set_units(0.01, rad))
+#'  nrow(seg$geom[[1]])
+#' }
 st_segmentize	= function(x, dfMaxLength, ...)
 	UseMethod("st_segmentize")
 

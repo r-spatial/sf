@@ -1,6 +1,6 @@
 
-R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
-Copyright (C) 2021 The R Foundation for Statistical Computing
+R version 4.2.0 (2022-04-22) -- "Vigorous Calisthenics"
+Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -16,7 +16,6 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > suppressPackageStartupMessages(library(sf))
-> library(sp)
 > suppressPackageStartupMessages(library(units))
 > 
 > x = st_sfc(
@@ -36,23 +35,25 @@ Type 'q()' to quit R.
 + crs = 4326
 + )
 > 
-> d.sf = st_distance(x, y)
-> d.sp = spDists(as(x, "Spatial"), as(y, "Spatial"))
-> units(d.sp) = as_units("km")
-> round(d.sf - d.sp, 7)
+> if (require(sp, quietly = TRUE)) {
++  d.sf = st_distance(x, y)
++  d.sp = spDists(as(x, "Spatial"), as(y, "Spatial"))
++  units(d.sp) = as_units("km")
++  print(round(d.sf - d.sp, 7))
++ 
++ #summary(unclass(d.sf) - d.sp)
++ 
++  st_crs(x) = st_crs(y) = NA
++  d.sf = st_distance(x, y)
++  d.sp = spDists(as(x, "Spatial"), as(y, "Spatial"))
++  print(round(d.sf - d.sp, 7))
++ }
 Units: [m]
          [,1]      [,2]      [,3]      [,4]      [,5]
 [1,] 6107.765 -124.3896 -248.7792 -373.1688 -497.5585
 [2,] 6065.138    0.0000 -124.3896 -248.7792 -373.1688
 [3,] 5940.569 -124.3896    0.0000 -124.3896 -248.7792
 [4,] 5743.252 -248.7792 -124.3896    0.0000 -124.3896
-> 
-> #summary(unclass(d.sf) - d.sp)
-> 
-> st_crs(x) = st_crs(y) = NA
-> d.sf = st_distance(x, y)
-> d.sp = spDists(as(x, "Spatial"), as(y, "Spatial"))
-> round(d.sf - d.sp, 7)
      [,1] [,2] [,3] [,4] [,5]
 [1,]    0    0    0    0    0
 [2,]    0    0    0    0    0
@@ -80,7 +81,7 @@ Units: [m]
 > st_length(z)
 1451026 [m]
 > st_length(z) - sum(d[1,2], d[2,3], d[3,4], d[4,5])
-2.328306e-10 [m]
+0 [m]
 > 
 > # st_line_sample:
 > ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
@@ -108,4 +109,4 @@ Error in st_line_sample(ls, density = 1/1000) :
 > 
 > proc.time()
    user  system elapsed 
-  1.856   0.097   2.456 
+  1.343   0.096   1.431 

@@ -12,20 +12,22 @@ pol3 = list(outer + 24)
 mp = list(pol1,pol2,pol3)
 mp1 = st_multipolygon(mp)
 sf = st_sf(a=1, st_sfc(mp1))
-a = as(sf, "Spatial")
-class(a)
-b = st_as_sf(a)
-a2 = as(a, "SpatialPolygonsDataFrame")
-all.equal(a, a2) # round-trip
+if (require(sp, quietly = TRUE)) {
+ a = as(sf, "Spatial")
+ print(class(a))
+ b = st_as_sf(a)
+ a2 = as(a, "SpatialPolygonsDataFrame")
+ print(all.equal(a, a2)) # round-trip
 
-b1 = as(a, "sf")
-all.equal(b, b1)
-b = st_as_sfc(a)
-b1 = as(a, "sfc")
-all.equal(b, b1)
+ b1 = as(a, "sf")
+ print(all.equal(b, b1))
+ b = st_as_sfc(a)
+ b1 = as(a, "sfc")
+ print(all.equal(b, b1))
+}
 
 # SpatialMultiPoints
-library(sp)
+if (require(sp, quietly = TRUE)) {
 suppressWarnings(RNGversion("3.5.3"))
 set.seed(1331)
 # example(SpatialMultiPoints, ask = FALSE, echo = FALSE) # loads mpdf
@@ -57,3 +59,4 @@ all.equal(nc, st_as_sf(as(nc, "Spatial")))
 st_crs(nc) == st_crs(st_as_sf(as(nc, "Spatial")))
 
 detach("package:sp")
+}

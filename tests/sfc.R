@@ -1,5 +1,4 @@
 suppressPackageStartupMessages(library(sf))
-library(testthat)
 
 p = st_point(c(1/3,1/6))
 st_sfc(p, precision = 1000)
@@ -34,7 +33,9 @@ attr(d1, "sf_col") = "geom"
 st_geometry(d1) = d$geom
 
 d$geometry = d$geom # second geometry list-column
-expect_warning(st_geometry(d) <- d$geom)
+if (require(testthat, quietly = TRUE)) {
+ expect_warning(st_geometry(d) <- d$geom)
+}
 d
 
 x = st_sfc(list(st_point(0:1), st_point(0:1)), crs = 4326)
@@ -62,7 +63,6 @@ st_cast(x, "POINT")
 sf = st_sf(a = 3:2, geom = x)
 st_cast(sf, "POINT")
 
-suppressPackageStartupMessages( library(dplyr) )
 
 x %>% st_cast("POINT")
 
@@ -126,7 +126,6 @@ format(st_bbox(nc))
 st_agr("constant")
 st_agr()
 x <- st_sf(a = 1:2, b = 3:4, geom = x, agr = c("constant", "aggregate"))
-suppressPackageStartupMessages(library(dplyr))
 y <- x %>% st_set_agr("constant")
 y
 
@@ -155,6 +154,7 @@ b = data.frame(x = c("a", "b", "c"), b = c(2,5,6))
 merge(a, b)
 merge(a, b, all = TRUE)
 
+if (require(dplyr, quietly = TRUE)) {
 # joins:
 inner_join(a, b)
 left_join(a, b)
@@ -163,6 +163,7 @@ full_join(a, b)
 semi_join(a, b)
 anti_join(a, b)
 left_join(a, data.frame(b, geometry = 1), by = "b")
+}
 
 # st_joins:
 a = st_sf(a = 1:3,
@@ -221,8 +222,10 @@ lengths(p_sample_exact)
 #plot(p_sample[[1]], add = TRUE)
 #plot(p_sample_exact[[1]], add = TRUE)
 
-#class(st_bind_cols(nc, as.data.frame(nc)[1:3]))
-class(dplyr::bind_cols(nc, as.data.frame(nc)[1:3]))
+if (require(dplyr, quietly = TRUE)) {
+ #class(st_bind_cols(nc, as.data.frame(nc)[1:3]))
+ print(class(dplyr::bind_cols(nc, as.data.frame(nc)[1:3])))
+}
 class(rbind(nc, nc))
 class(cbind(nc, nc))
 
@@ -238,13 +241,13 @@ plot(st_jitter(st_geometry(nc), factor = .01), add = TRUE, col = '#ff8888')
 st_jitter(st_sfc(st_point(0:1)), amount = .1)
 
 # st_bbox:
-library(sp)
+if (require(sp, quietly = TRUE) && require(raster, quietly = TRUE)) {
 demo(meuse, ask = FALSE, echo = FALSE)
 suppressWarnings(st_bbox(meuse))
 crs = suppressWarnings(st_crs(meuse))
-library(raster)
 suppressWarnings(st_bbox(raster(meuse.grid)))
 st_bbox(extent(raster()))
+}
 
 # st_to_s2
 if (FALSE) { # stops working with GDAL 2.3.0 / PROJ 5.0.1:

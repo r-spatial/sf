@@ -244,7 +244,9 @@ if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.7.0") > -1) {
 st_polygonize(st_node(l))
 st_node(st_multilinestring(list(rbind(c(0,0), c(1,1), c(0,1), c(1,0), c(0,0)))))
 sf = st_sf(a=1, geom=st_sfc(st_linestring(rbind(c(0,0),c(1,1)))), crs = 4326)
-seg = st_segmentize(sf, units::set_units(100, km))
-seg = st_segmentize(sf, units::set_units(0.01, rad))
-nrow(seg$geom[[1]])
+if (require(lwgeom, quietly = TRUE)) {
+ seg = st_segmentize(sf, units::set_units(100, km))
+ seg = st_segmentize(sf, units::set_units(0.01, rad))
+ nrow(seg$geom[[1]])
+}
 }

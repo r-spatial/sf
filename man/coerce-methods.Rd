@@ -38,6 +38,7 @@ For converting simple features (i.e., \code{sf} objects) to their \code{Spatial}
 }
 \examples{
 nc <- st_read(system.file("shape/nc.shp", package="sf"))
+if (require(sp, quietly = TRUE)) {
 # convert to SpatialPolygonsDataFrame
 spdf <- as_Spatial(nc)
 # identical to
@@ -46,4 +47,5 @@ spdf <- as(nc, "Spatial")
 as(st_geometry(nc), "Spatial")
 # back to sf
 as(spdf, "sf")
+}
 }

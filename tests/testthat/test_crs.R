@@ -89,6 +89,7 @@ test_that("old-style crs are repaired", {
 })
 
 test_that("sp-style CRS objects are accepted", {
+  skip_if_not_installed("sp")
   library(sp)
   x = CRS("+proj=longlat")
   x_crs = st_crs("+proj=longlat")
@@ -105,6 +106,7 @@ test_that("print.crs works", {
 })
 
 test_that("crs.Raster works", {
+  skip_if_not_installed("raster")
   library(raster)
   r = raster()
   x = st_crs(r)

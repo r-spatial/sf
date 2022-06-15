@@ -1,6 +1,6 @@
 
-R version 4.1.2 (2021-11-01) -- "Bird Hippie"
-Copyright (C) 2021 The R Foundation for Statistical Computing
+R version 4.2.0 (2022-04-22) -- "Vigorous Calisthenics"
+Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -15,77 +15,118 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> suppressPackageStartupMessages(library(spatstat.random))
 > suppressPackageStartupMessages(library(sf))
-> 
-> data(chicago)
-> st_as_sf(chicago)
-Simple feature collection with 620 features and 4 fields
-Geometry type: GEOMETRY
-Dimension:     XY
-Bounding box:  xmin: 0.3893523 ymin: 153.1034 xmax: 1281.986 ymax: 1276.56
-CRS:           NA
-First 10 features:
-     label seg tp marks                           geom
-1   window  NA NA  <NA> POLYGON ((0.3893523 153.103...
-2  segment  NA NA  <NA> LINESTRING (0.3894739 1253....
-3  segment  NA NA  <NA> LINESTRING (109.683 1251.77...
-4  segment  NA NA  <NA> LINESTRING (109.683 1251.77...
-5  segment  NA NA  <NA> LINESTRING (198.1486 1276.5...
-6  segment  NA NA  <NA> LINESTRING (197.9988 1251.1...
-7  segment  NA NA  <NA> LINESTRING (290.4787 1276.5...
-8  segment  NA NA  <NA> LINESTRING (288.9907 1250.5...
-9  segment  NA NA  <NA> LINESTRING (380.1326 1276.5...
-10 segment  NA NA  <NA> LINESTRING (379.9827 1249.8...
-> # ppp:
-> g = gorillas
-> st_as_sf(g)
-Simple feature collection with 648 features and 4 fields
-Geometry type: GEOMETRY
-Dimension:     XY
-Bounding box:  xmin: 580457.9 ymin: 674172.8 xmax: 585934 ymax: 678739.2
-CRS:           NA
-First 10 features:
-   group season       date  label                           geom
-NA  <NA>   <NA>       <NA> window POLYGON ((584712 674237.1, ...
-1  major    dry 2006-01-06  point      POINT (582518.4 676886.2)
-2  major    dry 2006-01-10  point        POINT (581823 677422.7)
-3  major    dry 2006-01-15  point        POINT (582131 676937.9)
-4  major    dry 2006-01-24  point        POINT (582111.9 677420)
-5  minor    dry 2006-01-27  point      POINT (582585.1 677509.7)
-6  major    dry 2006-01-28  point      POINT (582302.3 677521.6)
-7  major    dry 2006-02-01  point      POINT (583167.2 676730.5)
-8  major    dry 2006-02-03  point      POINT (583584.5 677207.1)
-9  major    dry 2006-02-13  point      POINT (583117.8 676850.3)
-> marks(g) = NULL
-> st_as_sf(g)
-Simple feature collection with 648 features and 1 field
-Geometry type: GEOMETRY
-Dimension:     XY
-Bounding box:  xmin: 580457.9 ymin: 674172.8 xmax: 585934 ymax: 678739.2
-CRS:           NA
-First 10 features:
-    label                           geom
-1  window POLYGON ((584712 674237.1, ...
-2   point      POINT (582518.4 676886.2)
-3   point        POINT (581823 677422.7)
-4   point        POINT (582131 676937.9)
-5   point        POINT (582111.9 677420)
-6   point      POINT (582585.1 677509.7)
-7   point      POINT (582302.3 677521.6)
-8   point      POINT (583167.2 676730.5)
-9   point      POINT (583584.5 677207.1)
-10  point      POINT (583117.8 676850.3)
-> 
-> # multipolygon: https://github.com/r-spatial/sf/issues/1161
-> window = read_sf(system.file("shape/nc.shp", package = "sf")) %>%
+> if (require(spatstat.random, quietly = TRUE)) {
++ 
++ data(chicago)
++ st_as_sf(chicago)
++ # ppp:
++ g = gorillas
++ st_as_sf(g)
++ marks(g) = NULL
++ st_as_sf(g)
++ 
++ # multipolygon: https://github.com/r-spatial/sf/issues/1161
++ window = read_sf(system.file("shape/nc.shp", package = "sf")) %>%
 +   st_transform(32119)
-> 
-> win = spatstat.geom::as.owin(window)
-> 
-> set.seed(1331)
-> pp2a = runifpoint(n = 50, win = win)
-> print(st_as_sf(pp2a))
++ 
++ win = spatstat.geom::as.owin(window)
++ 
++ set.seed(1331)
++ pp2a = runifpoint(n = 50, win = win)
++ print(st_as_sf(pp2a))
++ 
++ # st_sample going the spatstat way
++ x <- sf::st_sfc(sf::st_polygon(list(rbind(c(0, 0), c(10, 0), c(10, 10), c(0, 0)))))
++ try(pts <- st_sample(x, type = "thomas"))
++ try(pts <- st_sample(x, kappa = 1, mu = 10, type = "Thomas"))
++ # points expected
++ set.seed(1331)
++ pts <- st_sample(x, kappa = 1, mu = 10, scale = 0.1, type = "Thomas")
++ #plot(x)
++ #plot(pts, add = TRUE)
++ pts
++ 
++ # see https://github.com/r-spatial/sf/issues/1233
++ # png("/tmp/spa%03d.png")
++ 
++ p1 = st_point(0:1)
++ p2 = st_point(1:2)
++ p3 = st_point(c(-1,2))
++ p = st_sfc(p1, p2, p3)
++ as.ppp(p)
++ try(as.ppp(st_set_crs(p, 4326)))
++ 
++ sf = st_sf(geom = p)
++ try(as.ppp(sf))
++ sf = st_sf(a = 1:3, geom = p)
++ as.ppp(sf)
++ sf = st_sf(a = 1:3, b=3:1, geom = p)
++ as.ppp(sf) # warns
++ 
++ w = st_as_sfc(st_bbox(st_sfc(p1, p2)))
++ sf = st_sf(a = 1:3, geom = p)
++ (p0 = rbind(st_sf(a = 0, geom = w), sf))
++ try(as.ppp(p0)) # errors: one point outside window
++ 
++ w = st_as_sfc(st_bbox(p))
++ sf = st_sf(a = 1:3, geom = p)
++ (p0 = rbind(st_sf(a = 0, geom = w), sf))
++ as.ppp(p0)
++ 
++ # as.owin.sf, as.owin.sfc_*
++ nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), check_ring_dir = TRUE, quiet = TRUE)
++ try(as.owin(nc)) # should be projected
++ nc = st_transform(nc, 32119)
++ plot(as.owin(nc), col = 'grey')
++ plot(as.owin(st_geometry(nc)), col = 'grey')
++ 
++ sq = rbind(c(-1,-1), c(1, -1), c(1,1), c(-1,1), c(-1,-1))
++ pol = st_polygon(list(0.5 * sq, sq[5:1,] * 0.45)) # w hole
++ plot(as.owin(pol), col = 'grey')
++ plot(as.owin(st_sfc(pol)), col = 'grey')
++ mpol = st_multipolygon(list(
++ 	list(sq, sq[5:1,] * 0.9),
++ 	list(sq * 2, sq[5:1,] * 1.8)))
++ plot(as.owin(mpol), col = 'grey')
++ plot(as.owin(st_sfc(mpol)), col = 'grey')
++ plot(as.owin(st_sfc(pol, mpol)), col = 'grey')
++ plot(as.owin(st_sf(a=1:2, st_sfc(pol, mpol))), col = 'grey')
++ (o = as.owin(st_sf(a=1:2, st_sfc(pol, mpol))))
++ st_as_sfc(o)
++ 
++ plot(st_as_sfc(o), col = 'blue', main = 'st_as_sfc(o)')
++ plot(st_as_sf(o), col = 'blue', main = 'st_as_sf(o)')
++ 
++ data(japanesepines)
++ st_as_sf(japanesepines) # warns about multiplier
++ jp = rescale(japanesepines)
++ st_as_sf(jp) # No warning
++ 
++ data(nztrees)
++ qNZ <- quadratcount(nztrees, nx=4, ny=3)
++ ts = as.tess(qNZ)
++ plot(st_as_sfc(ts))
++ 
++ ls = st_linestring(rbind(c(0,0), c(1,1), c(2,0)))
++ plot(as.psp(ls))
++ mls = st_multilinestring(list(rbind(c(0,0), c(1,1), c(2,0)), rbind(c(3,3), c(4,2))))
++ plot(as.psp(mls))
++ 
++ plot(as.psp(st_sfc(ls)))
++ plot(as.psp(st_sfc(mls)))
++ plot(as.psp(st_sfc(ls, mls)))
++ 
++ sf = st_sf(st_cast(st_sfc(ls, mls), "MULTILINESTRING"), marks = 1:2, foo = 2:1)
++ as.psp(sf) # picks marks itself
++ as.psp(sf, marks = 5:1)
++ 
++ (x = st_as_sf(as.psp(sf)))
++ (y = st_as_sfc(as.psp(sf)))
++ all.equal(st_geometry(x), y)
++ }
+spatstat.geom 2.4-0
+spatstat.random 2.2-0
 Simple feature collection with 51 features and 1 field
 Geometry type: GEOMETRY
 Dimension:     XY
@@ -103,238 +144,26 @@ First 10 features:
 8   point        POINT (843281.2 287246)
 9   point        POINT (648479.4 235471)
 10  point      POINT (852595.8 267252.6)
-> 
-> # st_sample going the spatstat way
-> x <- sf::st_sfc(sf::st_polygon(list(rbind(c(0, 0), c(10, 0), c(10, 10), c(0, 0)))))
-> try(pts <- st_sample(x, type = "thomas"))
 Error in st_poly_sample(x, size = size, ..., type = type, by_polygon = by_polygon) : 
   rthomas is not an exported function from spatstat.random.
-> try(pts <- st_sample(x, kappa = 1, mu = 10, type = "Thomas"))
 Error in st_poly_sample(x, size = size, ..., type = type, by_polygon = by_polygon) : 
   The spatstat function rThomas did not return a valid result. Consult the help file.
 Error message from spatstat:
 Error : 'scale' should be a single number
 
-> # points expected
-> set.seed(1331)
-> pts <- st_sample(x, kappa = 1, mu = 10, scale = 0.1, type = "Thomas")
-> #plot(x)
-> #plot(pts, add = TRUE)
-> pts
-Simple feature collection with 597 features and 1 field
-Geometry type: POINT
-Dimension:     XY
-Bounding box:  xmin: 1.213108 ymin: 0.02200954 xmax: 9.994943 ymax: 8.82534
-CRS:           NA
-First 10 features:
-   label                      geom
-2  point POINT (9.076646 8.661168)
-3  point POINT (9.347089 8.800523)
-4  point  POINT (9.207624 8.82534)
-5  point POINT (9.403886 8.666932)
-6  point  POINT (9.437082 8.63911)
-7  point POINT (9.254756 8.573871)
-8  point  POINT (9.29172 8.678031)
-9  point POINT (9.735812 1.621866)
-10 point POINT (9.853825 1.616409)
-11 point POINT (9.665138 1.593111)
-> 
-> # see https://github.com/r-spatial/sf/issues/1233
-> # png("/tmp/spa%03d.png")
-> 
-> p1 = st_point(0:1)
-> p2 = st_point(1:2)
-> p3 = st_point(c(-1,2))
-> p = st_sfc(p1, p2, p3)
-> as.ppp(p)
-Planar point pattern: 3 points
-window: rectangle = [-1, 1] x [1, 2] units
-> try(as.ppp(st_set_crs(p, 4326)))
 Error : Only projected coordinates may be converted to spatstat class objects
-> 
-> sf = st_sf(geom = p)
-> try(as.ppp(sf))
-Planar point pattern: 3 points
-window: rectangle = [-1, 1] x [1, 2] units
-> sf = st_sf(a = 1:3, geom = p)
-> as.ppp(sf)
-Marked planar point pattern: 3 points
-marks are numeric, of storage type  'integer'
-window: rectangle = [-1, 1] x [1, 2] units
-> sf = st_sf(a = 1:3, b=3:1, geom = p)
-> as.ppp(sf) # warns
-Marked planar point pattern: 3 points
-marks are numeric, of storage type  'integer'
-window: rectangle = [-1, 1] x [1, 2] units
-Warning message:
-In as.ppp.sf(sf) : only first attribute column is used for marks
-> 
-> w = st_as_sfc(st_bbox(st_sfc(p1, p2)))
-> sf = st_sf(a = 1:3, geom = p)
-> (p0 = rbind(st_sf(a = 0, geom = w), sf))
-Simple feature collection with 4 features and 1 field
-Geometry type: GEOMETRY
-Dimension:     XY
-Bounding box:  xmin: -1 ymin: 1 xmax: 1 ymax: 2
-CRS:           NA
-  a                           geom
-1 0 POLYGON ((0 1, 1 1, 1 2, 0 ...
-2 1                    POINT (0 1)
-3 2                    POINT (1 2)
-4 3                   POINT (-1 2)
-> try(as.ppp(p0)) # errors: one point outside window
 Error in `marks<-.ppp`(`*tmp*`, value = value) : 
   number of rows of data frame != number of points
-In addition: Warning message:
-1 point was rejected as lying outside the specified window 
-> 
-> w = st_as_sfc(st_bbox(p))
-> sf = st_sf(a = 1:3, geom = p)
-> (p0 = rbind(st_sf(a = 0, geom = w), sf))
-Simple feature collection with 4 features and 1 field
-Geometry type: GEOMETRY
-Dimension:     XY
-Bounding box:  xmin: -1 ymin: 1 xmax: 1 ymax: 2
-CRS:           NA
-  a                           geom
-1 0 POLYGON ((-1 1, 1 1, 1 2, -...
-2 1                    POINT (0 1)
-3 2                    POINT (1 2)
-4 3                   POINT (-1 2)
-> as.ppp(p0)
-Marked planar point pattern: 3 points
-marks are numeric, of storage type  'double'
-window: polygonal boundary
-enclosing rectangle: [-1, 1] x [1, 2] units
-> 
-> # as.owin.sf, as.owin.sfc_*
-> nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), check_ring_dir = TRUE, quiet = TRUE)
-> try(as.owin(nc)) # should be projected
+In addition: Warning messages:
+1: In as.ppp.sf(sf) : only first attribute column is used for marks
+2: 1 point was rejected as lying outside the specified window 
 Error in as.owin.sfc_MULTIPOLYGON(st_cast(W, "MULTIPOLYGON"), ...) : 
   Only projected coordinates may be converted to spatstat class objects
-> nc = st_transform(nc, 32119)
-> plot(as.owin(nc), col = 'grey')
-> plot(as.owin(st_geometry(nc)), col = 'grey')
-> 
-> sq = rbind(c(-1,-1), c(1, -1), c(1,1), c(-1,1), c(-1,-1))
-> pol = st_polygon(list(0.5 * sq, sq[5:1,] * 0.45)) # w hole
-> plot(as.owin(pol), col = 'grey')
-> plot(as.owin(st_sfc(pol)), col = 'grey')
-> mpol = st_multipolygon(list(
-+ 	list(sq, sq[5:1,] * 0.9),
-+ 	list(sq * 2, sq[5:1,] * 1.8)))
-> plot(as.owin(mpol), col = 'grey')
-> plot(as.owin(st_sfc(mpol)), col = 'grey')
-> plot(as.owin(st_sfc(pol, mpol)), col = 'grey')
-> plot(as.owin(st_sf(a=1:2, st_sfc(pol, mpol))), col = 'grey')
-> (o = as.owin(st_sf(a=1:2, st_sfc(pol, mpol))))
-window: polygonal boundary
-enclosing rectangle: [-2, 2] x [-2, 2] units
-> st_as_sfc(o)
-Geometry set for 1 feature 
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: -2 ymin: -2 xmax: 2 ymax: 2
-CRS:           NA
-MULTIPOLYGON (((2 2, -2 2, -2 -2, 2 -2, 2 2), (...
-> 
-> plot(st_as_sfc(o), col = 'blue', main = 'st_as_sfc(o)')
-> plot(st_as_sf(o), col = 'blue', main = 'st_as_sf(o)')
-> 
-> data(japanesepines)
-> st_as_sf(japanesepines) # warns about multiplier
-Simple feature collection with 66 features and 1 field
-Geometry type: GEOMETRY
-Dimension:     XY
-Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1
-CRS:           NA
-First 10 features:
-    label                           geom
-1  window POLYGON ((0 0, 1 0, 1 1, 0 ...
-2   point              POINT (0.09 0.09)
-3   point              POINT (0.29 0.02)
-4   point              POINT (0.38 0.03)
-5   point              POINT (0.39 0.18)
-6   point              POINT (0.48 0.03)
-7   point              POINT (0.59 0.02)
-8   point              POINT (0.65 0.16)
-9   point              POINT (0.67 0.13)
-10  point              POINT (0.73 0.13)
+[1] TRUE
 Warning message:
 In st_as_sfc.owin(spatstat.geom::as.owin(x)) :
   The spatstat object has an measurement unit multiplier != 1. Consider rescaling before converting.
-> jp = rescale(japanesepines)
-> st_as_sf(jp) # No warning
-Simple feature collection with 66 features and 1 field
-Geometry type: GEOMETRY
-Dimension:     XY
-Bounding box:  xmin: 0 ymin: 0 xmax: 5.7 ymax: 5.7
-CRS:           NA
-First 10 features:
-    label                           geom
-1  window POLYGON ((0 0, 5.7 0, 5.7 5...
-2   point            POINT (0.513 0.513)
-3   point            POINT (1.653 0.114)
-4   point            POINT (2.166 0.171)
-5   point            POINT (2.223 1.026)
-6   point            POINT (2.736 0.171)
-7   point            POINT (3.363 0.114)
-8   point            POINT (3.705 0.912)
-9   point            POINT (3.819 0.741)
-10  point            POINT (4.161 0.741)
-> 
-> data(nztrees)
-> qNZ <- quadratcount(nztrees, nx=4, ny=3)
-> ts = as.tess(qNZ)
-> plot(st_as_sfc(ts))
-> 
-> ls = st_linestring(rbind(c(0,0), c(1,1), c(2,0)))
-> plot(as.psp(ls))
-> mls = st_multilinestring(list(rbind(c(0,0), c(1,1), c(2,0)), rbind(c(3,3), c(4,2))))
-> plot(as.psp(mls))
-> 
-> plot(as.psp(st_sfc(ls)))
-> plot(as.psp(st_sfc(mls)))
-> plot(as.psp(st_sfc(ls, mls)))
-> 
-> sf = st_sf(st_cast(st_sfc(ls, mls), "MULTILINESTRING"), marks = 1:2, foo = 2:1)
-> as.psp(sf) # picks marks itself
-marked planar line segment pattern: 5 line segments
-Mark variables:  marks, foo
-window: rectangle = [0, 4] x [0, 3] units
-> as.psp(sf, marks = 5:1)
-marked planar line segment pattern: 5 line segments
-marks are numeric, of type 'integer'
-window: rectangle = [0, 4] x [0, 3] units
-> 
-> (x = st_as_sf(as.psp(sf)))
-Simple feature collection with 6 features and 3 fields
-Geometry type: GEOMETRY
-Dimension:     XY
-Bounding box:  xmin: 0 ymin: 0 xmax: 4 ymax: 3
-CRS:           NA
-    marks foo   label                           geom
-NA     NA  NA  window POLYGON ((0 0, 4 0, 4 3, 0 ...
-1       1   2 segment          LINESTRING (0 0, 1 1)
-1.1     1   2 segment          LINESTRING (1 1, 2 0)
-2       2   1 segment          LINESTRING (0 0, 1 1)
-2.1     2   1 segment          LINESTRING (1 1, 2 0)
-2.2     2   1 segment          LINESTRING (3 3, 4 2)
-> (y = st_as_sfc(as.psp(sf)))
-Geometry set for 6 features 
-Geometry type: GEOMETRY
-Dimension:     XY
-Bounding box:  xmin: 0 ymin: 0 xmax: 4 ymax: 3
-CRS:           NA
-First 5 geometries:
-POLYGON ((0 0, 4 0, 4 3, 0 3, 0 0))
-LINESTRING (0 0, 1 1)
-LINESTRING (1 1, 2 0)
-LINESTRING (0 0, 1 1)
-LINESTRING (1 1, 2 0)
-> all.equal(st_geometry(x), y)
-[1] TRUE
 > 
 > proc.time()
    user  system elapsed 
-  2.019   0.071   2.083 
+  2.801   0.108   2.903 

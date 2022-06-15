@@ -1,5 +1,5 @@
-suppressPackageStartupMessages(library(spatstat.random))
 suppressPackageStartupMessages(library(sf))
+if (require(spatstat.random, quietly = TRUE)) {
 
 data(chicago)
 st_as_sf(chicago)
@@ -107,3 +107,4 @@ as.psp(sf, marks = 5:1)
 (x = st_as_sf(as.psp(sf)))
 (y = st_as_sfc(as.psp(sf)))
 all.equal(st_geometry(x), y)
+}

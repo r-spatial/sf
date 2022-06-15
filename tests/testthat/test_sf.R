@@ -20,6 +20,7 @@ test_that("we can subset sf objects", {
 })
 
 test_that("we can create points sf from data.frame", {
+  skip_if_not_installed("sp")
   data(meuse, package = "sp") # load data.frame from sp
   meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
   meuse_sf[1:5,]
@@ -63,6 +64,7 @@ test_that("rbind/cbind work", {
 })
 
 test_that("st_as_sf bulk points work", {
+  skip_if_not_installed("sp")
   data(meuse, package = "sp") # load data.frame from sp
   x <- meuse
   meuse_sf = st_as_sf(x, coords = c("x", "y"), crs = 28992)
@@ -82,6 +84,7 @@ test_that("st_as_sf bulk points work", {
 })
 
 test_that("transform work", {
+  skip_if_not_installed("sp")
   data(meuse, package = "sp")
   x  = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
   x2 = transform(x, elev2 = elev^2, lead_zinc = lead/zinc)

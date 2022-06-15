@@ -1,6 +1,6 @@
 
-R version 4.1.2 (2021-11-01) -- "Bird Hippie"
-Copyright (C) 2021 The R Foundation for Statistical Computing
+R version 4.2.0 (2022-04-22) -- "Vigorous Calisthenics"
+Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -17,7 +17,116 @@ Type 'q()' to quit R.
 
 > suppressPackageStartupMessages(library(sf))
 > 
-> library(dplyr)
+> if (require(dplyr, quietly = TRUE)) {
++  options(dplyr.summarise.inform=FALSE)
++  read_sf(system.file("shape/nc.shp", package="sf"), quiet = TRUE) %>%
++ 	st_transform(3857) -> nc
++  nc %>% filter(AREA > .1) %>% plot()
++ 
++ # plot 10 smallest counties in grey:
++  nc %>% 
++    select(BIR74, geometry) %>% 
++    plot()
++ 
++  nc %>% 
++   select(AREA, geometry) %>% 
++   arrange(AREA) %>% 
++   slice(1:10) %>% 
++   plot(add = TRUE, col = 'grey', main ="")
++ 
++ # select: check both when geometry is part of the selection, and when not:
++  nc %>% select(SID74, SID79) %>% names()
++  nc %>% select(SID74, SID79, geometry) %>% names()
++  nc %>% select(SID74, SID79) %>% class()
++  nc %>% select(SID74, SID79, geometry) %>% class()
++ 
++ # group_by:
++  nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
++  nc %>% group_by(area_cl) %>% class()
++ 
++ # mutate:
++  nc2 <- nc %>% mutate(area10 = AREA/10)
++ 
++ # transmute:
++  nc %>% transmute(AREA = AREA/10, geometry = geometry) %>% class()
++  nc %>% transmute(AREA = AREA/10) %>% class()
++ 
++ # rename:
++  nc2 <- nc %>% rename(area = AREA)
++ 
++ # distinct:
++  nc[c(1:100,1:10),] %>% distinct() %>% nrow()
++ 
++ # summarize:
++  nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
++  nc.g <- nc %>% group_by(area_cl)
++  nc.g %>% summarise(mean(AREA))
++  nc.g %>% summarize(mean(AREA)) %>% plot(col = 3:6/7)
++ 
++  library(tidyr)
++ 
++ # time-wide to long table, using tidyr::gather
++ # stack the two SID columns for the July 1, 1974 - June 30, 1978 and July 1, 1979 - June 30, 1984 periods
++ # (see https://cran.r-project.org/web/packages/spdep/vignettes/sids.pdf)
++  nc %>% select(SID74, SID79, geometry) %>% gather("VAR", "SID", -geometry) %>% summary()
++ 
++ # spread:
++  nc$row = 1:100
++  nc.g <- nc %>% select(SID74, SID79, row) %>% gather("VAR", "SID", -row, -geometry)
++  nc.g %>% tail()
++  nc.g %>% spread(VAR, SID) %>% head()
++  nc %>% select(SID74, SID79, geometry, row) %>% gather("VAR", "SID", -geometry, -row) %>% spread(VAR, SID) %>% head()
++ 
++ # test st_set_crs in pipe:
++  sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
++  x <- sfc %>% st_set_crs(4326) %>% st_transform(3857)
++  x
++ 
++ read_sf(system.file("shape/nc.shp", package="sf"), quiet = TRUE) %>%
++ 	st_transform(3857) -> nc
++  nc.merc <- st_transform(nc, 32119) # NC State Plane
++  suppressPackageStartupMessages(library(units))
++  install_unit("person")
++  person = as_units("person")
++  nc.merc <- nc.merc %>% mutate(area = st_area(nc.merc), dens = BIR74 * person / area)
++ 
++ # summary(nc.merc$dens) # requires units 0.4-2
++  nc.merc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
++  nc.grp <- nc.merc %>% group_by(area_cl)
++ 
++  out <- nc.grp %>% summarise(A = sum(area), pop = sum(dens * area), 
++ 	new_dens = sum(dens * area)/sum(area)) 
++ 
++ # mean densities depend on grouping:
++  nc.merc %>% summarize(mean(dens))
++  out %>% summarise(mean(new_dens))
++ 
++ # total densities don't:
++  nc.merc %>% summarise(sum(area * dens))
++  out %>% summarise(sum(A * new_dens))
++ 
++  conn = system.file("gpkg/nc.gpkg", package = "sf")
++ 
++ if (require(DBI, quietly = TRUE) && require(RSQLite, quietly = TRUE)) {
++  con = dbConnect(SQLite(), dbname = system.file("gpkg/nc.gpkg", package = "sf"))
++  dbReadTable(con, "nc.gpkg") %>% filter(AREA > 0.2) %>% collect %>% st_sf
++ 
++ # nest:
++  storms.sf = st_as_sf(storms, coords = c("long", "lat"), crs = 4326)
++  x <- storms.sf %>% group_by(name, year) %>% nest
++ 
++  nrow(distinct(nc[c(1,1,1,2,2,3:100),]))
++ 
++ # set.seed(1331)
++  nc$gp <- sample(10, 100, replace=TRUE)
++ # Get centroid of each group of polygons; https://github.com/r-spatial/sf/issues/969
++  nc_gp_cent <- nc %>%
++                 group_by(gp) %>%
++                 group_map(st_area)
++ 
++  nc %>% st_filter(nc[1,]) %>% nrow
++ } # DBI & SQLITE
++ } # dplyr
 
 Attaching package: 'dplyr'
 
@@ -29,259 +138,10 @@ The following objects are masked from 'package:base':
 
     intersect, setdiff, setequal, union
 
-> options(dplyr.summarise.inform=FALSE)
-> read_sf(system.file("shape/nc.shp", package="sf"), quiet = TRUE) %>%
-+ 	st_transform(3857) -> nc
-> nc %>% filter(AREA > .1) %>% plot()
+[1] 4
 Warning message:
 plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all 
 > 
-> # plot 10 smallest counties in grey:
-> nc %>% 
-+   select(BIR74, geometry) %>% 
-+   plot()
-> 
-> nc %>% 
-+   select(AREA, geometry) %>% 
-+   arrange(AREA) %>% 
-+   slice(1:10) %>% 
-+   plot(add = TRUE, col = 'grey', main ="")
-> 
-> # select: check both when geometry is part of the selection, and when not:
-> nc %>% select(SID74, SID79) %>% names()
-[1] "SID74"    "SID79"    "geometry"
-> nc %>% select(SID74, SID79, geometry) %>% names()
-[1] "SID74"    "SID79"    "geometry"
-> nc %>% select(SID74, SID79) %>% class()
-[1] "sf"         "tbl_df"     "tbl"        "data.frame"
-> nc %>% select(SID74, SID79, geometry) %>% class()
-[1] "sf"         "tbl_df"     "tbl"        "data.frame"
-> 
-> # group_by:
-> nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
-> nc %>% group_by(area_cl) %>% class()
-[1] "sf"         "grouped_df" "tbl_df"     "tbl"        "data.frame"
-> 
-> # mutate:
-> nc2 <- nc %>% mutate(area10 = AREA/10)
-> 
-> # transmute:
-> nc %>% transmute(AREA = AREA/10, geometry = geometry) %>% class()
-[1] "sf"         "tbl_df"     "tbl"        "data.frame"
-> nc %>% transmute(AREA = AREA/10) %>% class()
-[1] "sf"         "tbl_df"     "tbl"        "data.frame"
-> 
-> # rename:
-> nc2 <- nc %>% rename(area = AREA)
-> 
-> # distinct:
-> nc[c(1:100,1:10),] %>% distinct() %>% nrow()
-[1] 100
-> 
-> # summarize:
-> nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
-> nc.g <- nc %>% group_by(area_cl)
-> nc.g %>% summarise(mean(AREA))
-Simple feature collection with 4 features and 2 fields
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: -9386880 ymin: 4012991 xmax: -8399788 ymax: 4382079
-Projected CRS: WGS 84 / Pseudo-Mercator
-# A tibble: 4 × 3
-  area_cl     `mean(AREA)`                                              geometry
-  <fct>              <dbl>                                    <MULTIPOLYGON [m]>
-1 (0,0.1]           0.0760 (((-8863447 4143479, -8857175 4151339, -8858837 4156…
-2 (0.1,0.12]        0.112  (((-9362143 4197312, -9355589 4200996, -9354263 4203…
-3 (0.12,0.15]       0.134  (((-9302071 4171499, -9311146 4181234, -9311292 4183…
-4 (0.15,0.25]       0.190  (((-8830723 4133018, -8832558 4137955, -8832096 4141…
-> nc.g %>% summarize(mean(AREA)) %>% plot(col = 3:6/7)
-> 
-> library(tidyr)
-> 
-> # time-wide to long table, using tidyr::gather
-> # stack the two SID columns for the July 1, 1974 - June 30, 1978 and July 1, 1979 - June 30, 1984 periods
-> # (see https://cran.r-project.org/web/packages/spdep/vignettes/sids.pdf)
-> nc %>% select(SID74, SID79, geometry) %>% gather("VAR", "SID", -geometry) %>% summary()
-          geometry       VAR                 SID        
- MULTIPOLYGON :200   Length:200         Min.   : 0.000  
- epsg:3857    :  0   Class :character   1st Qu.: 2.000  
- +proj=merc...:  0   Mode  :character   Median : 5.000  
-                                        Mean   : 7.515  
-                                        3rd Qu.: 9.000  
-                                        Max.   :57.000  
-> 
-> # spread:
-> nc$row = 1:100
-> nc.g <- nc %>% select(SID74, SID79, row) %>% gather("VAR", "SID", -row, -geometry)
-> nc.g %>% tail()
-Simple feature collection with 6 features and 3 fields
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: -8802506 ymin: 4012991 xmax: -8492268 ymax: 4166167
-Projected CRS: WGS 84 / Pseudo-Mercator
-# A tibble: 6 × 4
-    row                                                     geometry VAR     SID
-  <int>                                           <MULTIPOLYGON [m]> <chr> <dbl>
-1    95 (((-8588146 4131923, -8589850 4133303, -8589356 4135198, -8… SID79     4
-2    96 (((-8711999 4081959, -8719511 4077863, -8731642 4078864, -8… SID79     5
-3    97 (((-8685774 4073056, -8697387 4077823, -8700120 4077570, -8… SID79     3
-4    98 (((-8755885 4021935, -8802506 4069795, -8798771 4071779, -8… SID79    17
-5    99 (((-8678517 4054264, -8679088 4061405, -8680136 4061550, -8… SID79     9
-6   100 (((-8755885 4021935, -8753548 4025868, -8753052 4030195, -8… SID79     6
-> nc.g %>% spread(VAR, SID) %>% head()
-Simple feature collection with 6 features and 3 fields
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: -9099356 ymin: 4310668 xmax: -8434988 ymax: 4382079
-Projected CRS: WGS 84 / Pseudo-Mercator
-# A tibble: 6 × 4
-    row                                                     geometry SID74 SID79
-  <int>                                           <MULTIPOLYGON [m]> <dbl> <dbl>
-1     1 (((-9069486 4332934, -9077066 4338201, -9079419 4338351, -9…     1     0
-2     2 (((-9043562 4351030, -9043652 4352973, -9046117 4356516, -9…     0     3
-3     3 (((-8956335 4334068, -8958566 4335747, -8965300 4336025, -8…     5     6
-4     4 (((-8461241 4344709, -8462173 4347214, -8463902 4346972, -8…     1     2
-5     5 (((-8595797 4333852, -8597683 4330212, -8604808 4329788, -8…     9     3
-6     6 (((-8543185 4332878, -8569416 4332369, -8570981 4333107, -8…     7     5
-> nc %>% select(SID74, SID79, geometry, row) %>% gather("VAR", "SID", -geometry, -row) %>% spread(VAR, SID) %>% head()
-Simple feature collection with 6 features and 3 fields
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: -9099356 ymin: 4310668 xmax: -8434988 ymax: 4382079
-Projected CRS: WGS 84 / Pseudo-Mercator
-# A tibble: 6 × 4
-                                                      geometry   row SID74 SID79
-                                            <MULTIPOLYGON [m]> <int> <dbl> <dbl>
-1 (((-9069486 4332934, -9077066 4338201, -9079419 4338351, -9…     1     1     0
-2 (((-9043562 4351030, -9043652 4352973, -9046117 4356516, -9…     2     0     3
-3 (((-8956335 4334068, -8958566 4335747, -8965300 4336025, -8…     3     5     6
-4 (((-8461241 4344709, -8462173 4347214, -8463902 4346972, -8…     4     1     2
-5 (((-8595797 4333852, -8597683 4330212, -8604808 4329788, -8…     5     9     3
-6 (((-8543185 4332878, -8569416 4332369, -8570981 4333107, -8…     6     7     5
-> 
-> # test st_set_crs in pipe:
-> sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
-> x <- sfc %>% st_set_crs(4326) %>% st_transform(3857)
-> x
-Geometry set for 2 features 
-Geometry type: POINT
-Dimension:     XY
-Bounding box:  xmin: 0 ymin: 0 xmax: 111319.5 ymax: 111325.1
-Projected CRS: WGS 84 / Pseudo-Mercator
-POINT (0 0)
-POINT (111319.5 111325.1)
-> 
-> read_sf(system.file("shape/nc.shp", package="sf"), quiet = TRUE) %>%
-+ 	st_transform(3857) -> nc
-> nc.merc <- st_transform(nc, 32119) # NC State Plane
-> suppressPackageStartupMessages(library(units))
-> install_unit("person")
-> person = as_units("person")
-> nc.merc <- nc.merc %>% mutate(area = st_area(nc.merc), dens = BIR74 * person / area)
-> 
-> # summary(nc.merc$dens) # requires units 0.4-2
-> nc.merc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
-> nc.grp <- nc.merc %>% group_by(area_cl)
-> 
-> out <- nc.grp %>% summarise(A = sum(area), pop = sum(dens * area), 
-+ 	new_dens = sum(dens * area)/sum(area)) 
-> 
-> # mean densities depend on grouping:
-> nc.merc %>% summarize(mean(dens))
-Simple feature collection with 1 feature and 1 field
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
-Projected CRS: NAD83 / North Carolina
-# A tibble: 1 × 2
-  `mean(dens)`                                                          geometry
-  [person/m^2]                                                <MULTIPOLYGON [m]>
-1   0.00000259 (((138426 177699.3, 145548.6 177837.2, 151051.2 180557.6, 152246…
-> out %>% summarise(mean(new_dens))
-Simple feature collection with 1 feature and 1 field
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
-Projected CRS: NAD83 / North Carolina
-# A tibble: 1 × 2
-  `mean(new_dens)`                                                      geometry
-      [person/m^2]                                            <MULTIPOLYGON [m]>
-1       0.00000259 (((154399.2 148898.9, 142569.6 149407.8, 123829 150481.4, 12…
-> 
-> # total densities don't:
-> nc.merc %>% summarise(sum(area * dens))
-Simple feature collection with 1 feature and 1 field
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
-Projected CRS: NAD83 / North Carolina
-# A tibble: 1 × 2
-  `sum(area * dens)`                                                    geometry
-            [person]                                          <MULTIPOLYGON [m]>
-1             329962 (((138426 177699.3, 145548.6 177837.2, 151051.2 180557.6, …
-> out %>% summarise(sum(A * new_dens))
-Simple feature collection with 1 feature and 1 field
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
-Projected CRS: NAD83 / North Carolina
-# A tibble: 1 × 2
-  `sum(A * new_dens)`                                                   geometry
-             [person]                                         <MULTIPOLYGON [m]>
-1              329962 (((154399.2 148898.9, 142569.6 149407.8, 123829 150481.4,…
-> 
-> conn = system.file("gpkg/nc.gpkg", package = "sf")
-> 
-> library(DBI)
-> library(RSQLite)
-> con = dbConnect(SQLite(), dbname = system.file("gpkg/nc.gpkg", package = "sf"))
-> dbReadTable(con, "nc.gpkg") %>% filter(AREA > 0.2) %>% collect %>% st_sf
-Simple feature collection with 11 features and 15 fields
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: -80.06441 ymin: 33.88199 xmax: -76.49254 ymax: 36.06665
-CRS:           NA
-First 10 features:
-   fid  AREA PERIMETER CNTY_ CNTY_ID     NAME  FIPS FIPSNO CRESS_ID BIR74 SID74
-1   37 0.219     2.130  1938    1938     Wake 37183  37183       92 14484    16
-2   47 0.201     1.805  1968    1968 Randolph 37151  37151       76  4456     7
-3   54 0.207     1.851  1989    1989 Johnston 37101  37101       51  3999     6
-4   57 0.203     3.197  2004    2004 Beaufort 37013  37013        7  2692     7
-5   79 0.241     2.214  2083    2083  Sampson 37163  37163       82  3025     4
-6   88 0.204     1.871  2100    2100   Duplin 37061  37061       31  2483     4
-7   94 0.240     2.004  2150    2150  Robeson 37155  37155       78  7889    31
-8   96 0.225     2.107  2162    2162   Bladen 37017  37017        9  1782     8
-9   97 0.214     2.152  2185    2185   Pender 37141  37141       71  1228     4
-10  98 0.240     2.365  2232    2232 Columbus 37047  37047       24  3350    15
-   NWBIR74 BIR79 SID79 NWBIR79                           geom
-1     4397 20857    31    6221 MULTIPOLYGON (((-78.92107 3...
-2      384  5711    12     483 MULTIPOLYGON (((-79.76499 3...
-3     1165  4780    13    1349 MULTIPOLYGON (((-78.53874 3...
-4     1131  2909     4    1163 MULTIPOLYGON (((-77.10377 3...
-5     1396  3447     4    1524 MULTIPOLYGON (((-78.11377 3...
-6     1061  2777     7    1227 MULTIPOLYGON (((-77.68983 3...
-7     5904  9087    26    6899 MULTIPOLYGON (((-78.86451 3...
-8      818  2052     5    1023 MULTIPOLYGON (((-78.2615 34...
-9      580  1602     3     763 MULTIPOLYGON (((-78.02592 3...
-10    1431  4144    17    1832 MULTIPOLYGON (((-78.65572 3...
-> 
-> # nest:
-> storms.sf = st_as_sf(storms, coords = c("long", "lat"), crs = 4326)
-> x <- storms.sf %>% group_by(name, year) %>% nest
-> 
-> nrow(distinct(nc[c(1,1,1,2,2,3:100),]))
-[1] 100
-> 
-> # set.seed(1331)
-> nc$gp <- sample(10, 100, replace=TRUE)
-> # Get centroid of each group of polygons; https://github.com/r-spatial/sf/issues/969
-> nc_gp_cent <- nc %>%
-+                 group_by(gp) %>%
-+                 group_map(st_area)
-> 
-> nc %>% st_filter(nc[1,]) %>% nrow
-[1] 4
-> 
 > proc.time()
    user  system elapsed 
-  2.796   0.072   2.862 
+  3.146   0.104   3.289 

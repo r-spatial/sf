@@ -86,11 +86,13 @@ d$geom = c("POINT(0 0)", "POINT(0 1)")
 df = st_as_sf(d, wkt = "geom")
 d$geom2 = st_sfc(pt1, pt2)
 st_as_sf(d) # should warn
-data(meuse, package = "sp")
-meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, agr = "constant")
-meuse_sf[1:3,]
-summary(meuse_sf)
-library(sp)
+if (require(sp, quietly = TRUE)) {
+ data(meuse, package = "sp")
+ meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, agr = "constant")
+ meuse_sf[1:3,]
+ summary(meuse_sf)
+}
+if (require(sp, quietly = TRUE)) {
 x = rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))
 x1 = 0.1 * x + 0.1
 x2 = 0.1 * x + 0.4
@@ -119,6 +121,7 @@ summary(st_as_sf(as(meuse.riv, "SpatialLines")))
 pol.grd = as(meuse.grid, "SpatialPolygonsDataFrame")
 # summary(st_as_sf(pol.grd))
 # summary(st_as_sf(as(pol.grd, "SpatialLinesDataFrame")))
+}
 if (require(spatstat.geom)) {
   g = st_as_sf(gorillas)
   # select only the points:

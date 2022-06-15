@@ -34,11 +34,12 @@ diag(m) = c(1, 3)
 # affine:
 st_point(c(1,2)) * m + c(2,5)
 # world in 0-360 range:
-library(maps)
-w = st_as_sf(map('world', plot = FALSE, fill = TRUE))
-w2 = (st_geometry(w) + c(360,90)) \%\% c(360) - c(0,90)
-w3 = st_wrap_dateline(st_set_crs(w2 - c(180,0), 4326)) + c(180,0)
-plot(st_set_crs(w3, 4326), axes = TRUE)
+if (require(maps, quietly = TRUE)) {
+ w = st_as_sf(map('world', plot = FALSE, fill = TRUE))
+ w2 = (st_geometry(w) + c(360,90)) \%\% c(360) - c(0,90)
+ w3 = st_wrap_dateline(st_set_crs(w2 - c(180,0), 4326)) + c(180,0)
+ plot(st_set_crs(w3, 4326), axes = TRUE)
+}
 (mp <- st_point(c(1,2)) + st_point(c(3,4))) # MULTIPOINT (1 2, 3 4)
 mp - st_point(c(3,4)) # POINT (1 2)
 opar = par(mfrow = c(2,2), mar = c(0, 0, 1, 0))

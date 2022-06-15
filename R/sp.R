@@ -23,7 +23,7 @@
 
 #' @name st_as_sf
 #' @examples
-#' library(sp)
+#' if (require(sp, quietly = TRUE)) {
 #' x = rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))
 #' x1 = 0.1 * x + 0.1
 #' x2 = 0.1 * x + 0.4
@@ -52,6 +52,7 @@
 #' pol.grd = as(meuse.grid, "SpatialPolygonsDataFrame")
 #' # summary(st_as_sf(pol.grd))
 #' # summary(st_as_sf(as(pol.grd, "SpatialLinesDataFrame")))
+#' }
 #' @export
 st_as_sf.Spatial = function(x, ...) {
 	if ("data" %in% slotNames(x))
@@ -238,6 +239,7 @@ setAs("XY", "Spatial", function(from) as(st_sfc(from), "Spatial"))
 #' @export
 #' @examples
 #' nc <- st_read(system.file("shape/nc.shp", package="sf"))
+#' if (require(sp, quietly = TRUE)) {
 #' # convert to SpatialPolygonsDataFrame
 #' spdf <- as_Spatial(nc)
 #' # identical to
@@ -246,6 +248,7 @@ setAs("XY", "Spatial", function(from) as(st_sfc(from), "Spatial"))
 #' as(st_geometry(nc), "Spatial")
 #' # back to sf
 #' as(spdf, "sf")
+#' }
 as_Spatial = function(from, cast = TRUE, IDs = paste0("ID", seq_along(from))) {
 	if (inherits(from, "sf")) {
 		geom = st_geometry(from)
