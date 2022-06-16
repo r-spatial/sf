@@ -589,13 +589,9 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 		// write factor levels to CategoryNames:
 		if (x.attr("levels") != R_NilValue) {
 			Rcpp::CharacterVector levels = x.attr("levels");
-			Rcpp::CharacterVector l(levels.size() + 1);
-			l[0] = ""; // levels start at 1, CategoryNames at 0.
-			for (int i = 0; i < levels.size(); i++)
-				l[i+1] = levels[i];
 			for (int band = 1; band <= dims(2); band++) {
 				GDALRasterBand *poBand = poDstDS->GetRasterBand( band );
-				if (poBand->SetCategoryNames(create_options(l).data()) != CE_None)
+				if (poBand->SetCategoryNames(create_options(levels).data()) != CE_None)
 					warning("error writing factor levels to raster band");
 			}
 		}
@@ -604,14 +600,12 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 			Rcpp::NumericMatrix co = x.attr("rgba"); // r g b alpha in columns; levels in rows
 			GDALColorTable ct = GDALColorTable(GPI_RGB);
 			GDALColorEntry ce;
-			ce.c1 = 0; ce.c2 = 0; ce.c3 = 0; ce.c4 = 0;
-			ct.SetColorEntry(0, &ce);
 			for (int i = 0; i < co.nrow(); i++) {
 				ce.c1 = co(i, 0);
 				ce.c2 = co(i, 1);
 				ce.c3 = co(i, 2);
 				ce.c4 = co(i, 3);
-				ct.SetColorEntry(i + 1, &ce);
+				ct.SetColorEntry(i, &ce);
 			}
 			GDALRasterBand *poBand = poDstDS->GetRasterBand( 1 ); // can only set CT for band 1
 			if (poBand->SetColorTable(&ct) != CE_None)

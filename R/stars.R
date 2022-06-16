@@ -43,22 +43,42 @@ gdal_write = function(x, ..., file, driver = "GTiff", options = character(0), ty
 		from = c(0, 0) # nocov end
 	} else {
 		mat = x[[1]]
+		dm = dim(mat)
+		if (is.factor(mat)) {
+			rgba = NULL
+			ex = attr(mat, "exclude")
+			if (is.null(ex))
+				lev = c("", levels(mat)) # add "" for value 0: R factors start at 1
+			else {
+				if (any(ex)) {
+					lev = vector("character", length(ex)) # fills with ""
+					lev[!ex] = levels(mat)
+					rgba = if (!is.null(co <- attr(mat, "rgba"))) {
+						n = length(ex)
+						coltab = cbind(rep(0., n), rep(0, n), rep(0, n), rep(255, n))
+						coltab[!ex,] = co
+						coltab 
+					}
+					values = which(!ex) - 1
+					mat = values[as.numeric(mat)]
+				} else
+					lev = levels(mat)
+			}
+			mat = structure(mat, class = NULL, levels = lev, dim = dm, rgba = rgba)
+		}
 		only_create = FALSE # write x too
 		if (! update) {
 			if (!all(from == 0))
 				stop("cannot write sub-rasters only")
-			if (!all(dims == dim(mat)))
+			if (!all(dims == dm))
 				stop("dimensions don't match")
 		}
-		dm = dim(mat)
 		dim(mat) = c(dm[1], prod(dm[-1])) # flatten to 2-D matrix
 	}
 	if (length(dims) == 2)
 		dims = c(dims, 1) # one band
-	else { # add band descriptions?
-		if (is.character(d[[3]]$values))
-			attr(mat, "descriptions") = d[[3]]$values
-	}
+	else if (is.character(d[[3]]$values)) # add band descriptions?
+		attr(mat, "descriptions") = d[[3]]$values
 
 	CPL_write_gdal(mat, file, driver, options, type, dims, from, geotransform,
 		st_crs(x)[[2]], as.double(NA_value), create = !update, only_create = only_create)
