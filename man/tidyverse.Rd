@@ -2,6 +2,9 @@
 % Please edit documentation in R/tidyverse.R, R/join.R
 \name{tidyverse}
 \alias{tidyverse}
+\alias{dplyr_col_modify.sf}
+\alias{dplyr_row_slice.sf}
+\alias{dplyr_reconstruct.sf}
 \alias{group_by.sf}
 \alias{ungroup.sf}
 \alias{rowwise.sf}
@@ -30,6 +33,12 @@
 \alias{anti_join.sf}
 \title{Tidyverse methods for sf objects (remove .sf suffix!)}
 \usage{
+dplyr_col_modify.sf(data, cols)
+
+dplyr_row_slice.sf(data, i, ...)
+
+dplyr_reconstruct.sf(data, template)
+
 group_by.sf(.data, ..., add = FALSE)
 
 ungroup.sf(x, ...)
@@ -141,9 +150,13 @@ semi_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 anti_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 }
 \arguments{
-\item{.data}{data object of class \link{sf}}
+\item{data}{see original function docs}
+
+\item{cols}{see original function docs}
 
 \item{...}{other arguments}
+
+\item{.data}{data object of class \link{sf}}
 
 \item{add}{see corresponding function in dplyr}
 
@@ -159,8 +172,6 @@ more details.}
 
 \item{.keep_all}{see corresponding function in dplyr}
 
-\item{data}{see original function docs}
-
 \item{key}{see original function docs}
 
 \item{value}{see original function docs}
@@ -170,8 +181,6 @@ more details.}
 \item{convert}{see \link[tidyr]{separate_rows}}
 
 \item{factor_key}{see original function docs}
-
-\item{cols}{see original function docs}
 
 \item{names_to}{see original function docs}
 
