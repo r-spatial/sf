@@ -1,4 +1,5 @@
 ## dplyr methods:
+#' @importFrom dplyr dplyr_col_modify dplyr_row_slice dplyr_reconstruct
 #group_map.sf <- function(.tbl, .f, ...) {
 #	 st_as_sf(NextMethod()) # nocov
 #}
@@ -17,6 +18,7 @@ dplyr_row_slice.sf <- function(data, i, ...){
 
 # This is currently only used in `bind_rows()` and `bind_cols()`
 # because sf overrides all default implementations
+#' @export
 dplyr_reconstruct.sf = function(data, template) {
 	sfc_name = attr(template, "sf_column")
 	if (inherits(template, "tbl_df"))
