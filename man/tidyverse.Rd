@@ -154,7 +154,11 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 
 \item{cols}{see original function docs}
 
+\item{i}{see original function docs}
+
 \item{...}{other arguments}
+
+\item{template}{see original function docs}
 
 \item{.data}{data object of class \link{sf}}
 

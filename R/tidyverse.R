@@ -6,13 +6,13 @@
 #' @name tidyverse
 dplyr_col_modify.sf <- function(data, cols){
 	x <- NextMethod()
-	dplyr_reconstruct(x, data)
+	dplyr::dplyr_reconstruct(x, data)
 }
 
 #' @name tidyverse
 dplyr_row_slice.sf <- function(data, i, ...){
 	x <- NextMethod()	
-	dplyr_reconstruct(x, data)
+	dplyr::dplyr_reconstruct(x, data)
 }
 
 # This is currently only used in `bind_rows()` and `bind_cols()`
@@ -324,6 +324,8 @@ gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, fac
 }
 
 #' @name tidyverse
+#' @param i see original function docs
+#' @param template see original function docs
 #' @param data see original function docs
 #' @param cols see original function docs
 #' @param names_to see original function docs
