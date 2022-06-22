@@ -102,6 +102,8 @@
 
 <span class="fu">st_inscribed_circle</span><span class="op">(</span><span class="va">x</span>, <span class="va">dTolerance</span>, <span class="va">...</span><span class="op">)</span>
 
+<span class="fu">st_minimum_rotated_rectangle</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
+
 <span class="fu">st_voronoi</span><span class="op">(</span><span class="va">x</span>, <span class="va">envelope</span>, dTolerance <span class="op">=</span> <span class="fl">0</span>, bOnlyEdges <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
 <span class="fu">st_polygonize</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
@@ -213,6 +215,11 @@ For <code>st_inscribed_circle</code>, if <code>nQuadSegs</code> is 0 a 2-point L
 center point and a boundary point of every circle, otherwise a circle (buffer) is returned where
 <code>nQuadSegs</code> controls the number of points per quadrant to approximate the circle.
 <code>st_inscribed_circle</code> requires GEOS version 3.9 or above</p>
+<p><code>st_minimum_rotated_rectangle</code> returns the minimum
+rotated rectangular POLYGON which encloses the input geometry. The
+rectangle has width equal to the minimum diameter, and a longer
+length. If the convex hill of the input is degenerate (a line or
+point) a linestring or point is returned.</p>
 <p><code>st_voronoi</code> creates voronoi tesselation. <code>st_voronoi</code> requires GEOS version 3.5 or above</p>
 <p><code>st_polygonize</code> creates polygon from lines that form a closed ring. In case of <code>st_polygonize</code>, <code>x</code> must be an object of class <code>LINESTRING</code> or <code>MULTILINESTRING</code>, or an <code>sfc</code> geometry list-column object containing these</p>
 <p><code>st_line_merge</code> merges lines. In case of <code>st_line_merge</code>, <code>x</code> must be an object of class <code>MULTILINESTRING</code>, or an <code>sfc</code> geometry list-column object containing these</p>
@@ -266,7 +273,7 @@ center point and a boundary point of every circle, otherwise a circle (buffer) i
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">op</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpbLoSRi/temp_libpath12b03238a7d72/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpUFrghw/temp_libpath46bd47e6dc8e/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
