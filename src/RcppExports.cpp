@@ -603,13 +603,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_geos_make_valid
-Rcpp::List CPL_geos_make_valid(Rcpp::List sfc);
-RcppExport SEXP _sf_CPL_geos_make_valid(SEXP sfcSEXP) {
+Rcpp::List CPL_geos_make_valid(Rcpp::List sfc, std::string method, bool keep_collapsed);
+RcppExport SEXP _sf_CPL_geos_make_valid(SEXP sfcSEXP, SEXP methodSEXP, SEXP keep_collapsedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_geos_make_valid(sfc));
+    Rcpp::traits::input_parameter< std::string >::type method(methodSEXP);
+    Rcpp::traits::input_parameter< bool >::type keep_collapsed(keep_collapsedSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_make_valid(sfc, method, keep_collapsed));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1371,7 +1373,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_delete_ogr", (DL_FUNC) &_sf_CPL_delete_ogr, 4},
     {"_sf_CPL_geos_binop", (DL_FUNC) &_sf_CPL_geos_binop, 6},
     {"_sf_CPL_geos_is_valid_reason", (DL_FUNC) &_sf_CPL_geos_is_valid_reason, 1},
-    {"_sf_CPL_geos_make_valid", (DL_FUNC) &_sf_CPL_geos_make_valid, 1},
+    {"_sf_CPL_geos_make_valid", (DL_FUNC) &_sf_CPL_geos_make_valid, 3},
     {"_sf_CPL_geos_is_valid", (DL_FUNC) &_sf_CPL_geos_is_valid, 2},
     {"_sf_CPL_geos_is_simple", (DL_FUNC) &_sf_CPL_geos_is_simple, 1},
     {"_sf_CPL_geos_is_empty", (DL_FUNC) &_sf_CPL_geos_is_empty, 1},

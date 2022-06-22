@@ -177,8 +177,8 @@ CPL_geos_is_valid_reason <- function(sfc) {
     .Call('_sf_CPL_geos_is_valid_reason', PACKAGE = 'sf', sfc)
 }
 
-CPL_geos_make_valid <- function(sfc) {
-    .Call('_sf_CPL_geos_make_valid', PACKAGE = 'sf', sfc)
+CPL_geos_make_valid <- function(sfc, method, keep_collapsed) {
+    .Call('_sf_CPL_geos_make_valid', PACKAGE = 'sf', sfc, method, keep_collapsed)
 }
 
 CPL_geos_is_valid <- function(sfc, NA_on_exception = TRUE) {

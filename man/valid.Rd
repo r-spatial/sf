@@ -27,7 +27,9 @@ st_make_valid(x, ...)
   x,
   ...,
   oriented = FALSE,
-  s2_options = s2::s2_options(snap = s2::s2_snap_precision(1e+07))
+  s2_options = s2::s2_options(snap = s2::s2_snap_precision(1e+07)),
+  geos_method = "valid_structure",
+  geos_keep_collapsed = TRUE
 )
 }
 \arguments{
@@ -42,6 +44,10 @@ st_make_valid(x, ...)
 \item{oriented}{logical; only relevant if \code{st_is_longlat(x)} is \code{TRUE}; see \link{s2}}
 
 \item{s2_options}{only relevant if \code{st_is_longlat(x)} is \code{TRUE}; options for \link[s2]{s2_rebuild}, see \link[s2]{s2_options} and Details.}
+
+\item{geos_method}{character; either "valid_linework" (Original method, combines all rings into a set of noded lines and then extracts valid polygons from that linework) or "valid_structure" (Structured method, first makes all rings valid then merges shells and subtracts holes from shells to generate valid result. Assumes that holes and shells are correctly categorized.) (requires GEOS >= 3.10.1)}
+
+\item{geos_keep_collapsed}{logical; When this parameter is not set to \code{FALSE}, the "valid_structure" method will drop any component that has collapsed into a lower dimensionality. For example, a ring collapsing to a line, or a line collapsing to a point (requires GEOS >= 3.10.1)}
 }
 \value{
 \code{st_is_valid} returns a logical vector indicating for each geometries of \code{x} whether it is valid. \code{st_make_valid} returns an object with a topologically valid geometry.
