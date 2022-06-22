@@ -72,7 +72,7 @@ st_make_valid.sfg = function(x, ...) {
 #' @param oriented logical; only relevant if \code{st_is_longlat(x)} is \code{TRUE}; see \link{s2}
 #' @param s2_options only relevant if \code{st_is_longlat(x)} is \code{TRUE}; options for \link[s2]{s2_rebuild}, see \link[s2]{s2_options} and Details.
 #' @param geos_method character; either "valid_linework" (Original method, combines all rings into a set of noded lines and then extracts valid polygons from that linework) or "valid_structure" (Structured method, first makes all rings valid then merges shells and subtracts holes from shells to generate valid result. Assumes that holes and shells are correctly categorized.) (requires GEOS >= 3.10.1)
-#' @param geos_keep_collapsed logical; When this parameter is not set to \code{FALSE}, the "valid_structure" method will drop any component that has collapsed into a lower dimensionality. For example, a ring collapsing to a line, or a line collapsing to a point (requires GEOS >= 3.10.1)
+#' @param geos_keep_collapsed logical; When this parameter is not set to \code{FALSE}, the "valid_structure" method will keep any component that has collapsed into a lower dimensionality. For example, a ring collapsing to a line, or a line collapsing to a point (requires GEOS >= 3.10.1)
 #' @details if \code{s2_options} is not specified and \code{x} has a non-zero precision set, then this precision value will be used as the value in \code{s2_snap_precision}, passed on to \code{s2_options}, rather than the 1e7 default.
 st_make_valid.sfc = function(x, ..., oriented = FALSE, s2_options = s2::s2_options(snap = s2::s2_snap_precision(1e7)),
 							 geos_method = "valid_structure", geos_keep_collapsed = TRUE) {

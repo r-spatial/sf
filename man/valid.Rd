@@ -47,7 +47,7 @@ st_make_valid(x, ...)
 
 \item{geos_method}{character; either "valid_linework" (Original method, combines all rings into a set of noded lines and then extracts valid polygons from that linework) or "valid_structure" (Structured method, first makes all rings valid then merges shells and subtracts holes from shells to generate valid result. Assumes that holes and shells are correctly categorized.) (requires GEOS >= 3.10.1)}
 
-\item{geos_keep_collapsed}{logical; When this parameter is not set to \code{FALSE}, the "valid_structure" method will drop any component that has collapsed into a lower dimensionality. For example, a ring collapsing to a line, or a line collapsing to a point (requires GEOS >= 3.10.1)}
+\item{geos_keep_collapsed}{logical; When this parameter is not set to \code{FALSE}, the "valid_structure" method will keep any component that has collapsed into a lower dimensionality. For example, a ring collapsing to a line, or a line collapsing to a point (requires GEOS >= 3.10.1)}
 }
 \value{
 \code{st_is_valid} returns a logical vector indicating for each geometries of \code{x} whether it is valid. \code{st_make_valid} returns an object with a topologically valid geometry.
