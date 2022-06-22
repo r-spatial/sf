@@ -1,5 +1,7 @@
 # version 1.0-8
 
+* add `st_minimum_rotated_rectangle()` if GEOS > 3.9.0; #1953
+
 * fix `st_sample()` with `type = "hexagonal"` for corner case (n=1), add a `progress` argument for a progress bar; #1945
 
 * add package `pbapply` to Suggests; #1945

@@ -328,6 +328,37 @@ st_inscribed_circle.sf = function(x, dTolerance, ...) {
 	st_set_geometry(x, st_inscribed_circle(st_geometry(x), dTolerance), ...)
 }
 
+#' @name geos_unary
+#' @details \code{st_minimum_rotated_rectangle} returns the minimum
+#' rotated rectangular POLYGON which encloses the input geometry. The
+#' rectangle has width equal to the minimum diameter, and a longer
+#' length. If the convex hill of the input is degenerate (a line or
+#' point) a linestring or point is returned.
+#' @export
+st_minimum_rotated_rectangle = function(x, ...)
+	UseMethod("st_minimum_rotated_rectangle")
+
+#' @export
+st_minimum_rotated_rectangle.sfg = function(x, ...) {
+	get_first_sfg(st_minimum_rotated_rectangle(st_sfc(x), ...))
+}
+
+#' @export
+st_minimum_rotated_rectangle.sfc = function(x, ...) {
+	if (compareVersion(CPL_geos_version(), "3.9.0") > -1) { # >=
+		if (isTRUE(st_is_longlat(x)))
+			warning("st_minimum_rotated_rectangle does not work correctly for longitude/latitude data")
+		st_sfc(CPL_geos_op("minimum_rotated_rectangle", x, 0L, integer(0),
+			dTolerance = 0., logical(0), bOnlyEdges = as.integer(FALSE)))
+	} else
+		stop("for st_minimum_rotated_rectangle, GEOS version 3.9.0 or higher is required")
+}
+
+#' @export
+st_minimum_rotated_rectangle.sf = function(x, dTolerance, ...) {
+	st_set_geometry(x, st_minimum_rotated_rectangle(st_geometry(x)), ...)
+}
+
 
 #' @name geos_unary
 #' @export

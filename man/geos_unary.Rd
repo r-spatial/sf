@@ -8,6 +8,7 @@
 \alias{st_simplify}
 \alias{st_triangulate}
 \alias{st_inscribed_circle}
+\alias{st_minimum_rotated_rectangle}
 \alias{st_voronoi}
 \alias{st_polygonize}
 \alias{st_line_merge}
@@ -38,6 +39,8 @@ st_simplify(x, preserveTopology, dTolerance = 0)
 st_triangulate(x, dTolerance = 0, bOnlyEdges = FALSE)
 
 st_inscribed_circle(x, dTolerance, ...)
+
+st_minimum_rotated_rectangle(x, ...)
 
 st_voronoi(x, envelope, dTolerance = 0, bOnlyEdges = FALSE)
 
@@ -124,6 +127,12 @@ For \code{st_inscribed_circle}, if \code{nQuadSegs} is 0 a 2-point LINESTRING is
 center point and a boundary point of every circle, otherwise a circle (buffer) is returned where
 \code{nQuadSegs} controls the number of points per quadrant to approximate the circle.
 \code{st_inscribed_circle} requires GEOS version 3.9 or above
+
+\code{st_minimum_rotated_rectangle} returns the minimum
+rotated rectangular POLYGON which encloses the input geometry. The
+rectangle has width equal to the minimum diameter, and a longer
+length. If the convex hill of the input is degenerate (a line or
+point) a linestring or point is returned.
 
 \code{st_voronoi} creates voronoi tesselation. \code{st_voronoi} requires GEOS version 3.5 or above
 

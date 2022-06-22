@@ -810,6 +810,10 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 			out[i] = geos_ptr(chkNULL(GEOSMaximumInscribedCircle_r(hGEOSCtxt, g[i].get(),
 				dTolerance[i])), hGEOSCtxt);
 		}
+	} else if (op == "minimum_rotated_rectangle") {
+		for (size_t i = 0; i < g.size(); i++) {
+			out[i] = geos_ptr(chkNULL(GEOSMinimumRotatedRectangle_r(hGEOSCtxt, g[i].get())), hGEOSCtxt);
+		}
 	} else
 #endif
 		Rcpp::stop("invalid operation"); // #nocov
