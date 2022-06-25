@@ -81,44 +81,44 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for data.frame</span>
-<span class="fu">st_as_sf</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">...</span>,
-  agr <span class="op">=</span> <span class="va">NA_agr_</span>,
-  <span class="va">coords</span>,
-  <span class="va">wkt</span>,
-  dim <span class="op">=</span> <span class="st">"XYZ"</span>,
-  remove <span class="op">=</span> <span class="cn">TRUE</span>,
-  na.fail <span class="op">=</span> <span class="cn">TRUE</span>,
-  sf_column_name <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for sf</span>
-<span class="fu">st_as_sf</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for sfc</span>
-<span class="fu">st_as_sf</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for Spatial</span>
-<span class="fu">st_as_sf</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for map</span>
-<span class="fu">st_as_sf</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, fill <span class="op">=</span> <span class="cn">TRUE</span>, group <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="co"># S3 method for ppp</span>
-<span class="fu">st_as_sf</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for psp</span>
-<span class="fu">st_as_sf</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for lpp</span>
-<span class="fu">st_as_sf</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for s2_geography</span>
-<span class="fu">st_as_sf</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, crs <span class="op">=</span> <span class="fu"><a href="st_crs.html">st_crs</a></span><span class="op">(</span><span class="fl">4326</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for data.frame</span></span>
+<span><span class="fu">st_as_sf</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  agr <span class="op">=</span> <span class="va">NA_agr_</span>,</span>
+<span>  <span class="va">coords</span>,</span>
+<span>  <span class="va">wkt</span>,</span>
+<span>  dim <span class="op">=</span> <span class="st">"XYZ"</span>,</span>
+<span>  remove <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  na.fail <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  sf_column_name <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sf</span></span>
+<span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sfc</span></span>
+<span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for Spatial</span></span>
+<span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for map</span></span>
+<span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, fill <span class="op">=</span> <span class="cn">TRUE</span>, group <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for ppp</span></span>
+<span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for psp</span></span>
+<span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for lpp</span></span>
+<span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for s2_geography</span></span>
+<span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, crs <span class="op">=</span> <span class="fu"><a href="st_crs.html">st_crs</a></span><span class="op">(</span><span class="fl">4326</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -179,9 +179,9 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">pt1</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">pt2</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="va">pt1</span>, <span class="va">pt2</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">pt1</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pt2</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="va">pt1</span>, <span class="va">pt2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 2 features </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
@@ -189,13 +189,13 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 <span class="r-out co"><span class="r-pr">#&gt;</span> CRS:           NA</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (0 1)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (1 1)</span>
-<span class="r-in"><span class="va">d</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">d</span><span class="op">$</span><span class="va">geom</span> <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="va">pt1</span>, <span class="va">pt2</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">df</span> <span class="op">=</span> <span class="fu">st_as_sf</span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">d</span><span class="op">$</span><span class="va">geom</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"POINT(0 0)"</span>, <span class="st">"POINT(0 1)"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">df</span> <span class="op">=</span> <span class="fu">st_as_sf</span><span class="op">(</span><span class="va">d</span>, wkt <span class="op">=</span> <span class="st">"geom"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">d</span><span class="op">$</span><span class="va">geom2</span> <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="va">pt1</span>, <span class="va">pt2</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="co"># should warn</span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">d</span><span class="op">$</span><span class="va">geom</span> <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="va">pt1</span>, <span class="va">pt2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">df</span> <span class="op">=</span> <span class="fu">st_as_sf</span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">d</span><span class="op">$</span><span class="va">geom</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"POINT(0 0)"</span>, <span class="st">"POINT(0 1)"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">df</span> <span class="op">=</span> <span class="fu">st_as_sf</span><span class="op">(</span><span class="va">d</span>, wkt <span class="op">=</span> <span class="st">"geom"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">d</span><span class="op">$</span><span class="va">geom2</span> <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="va">pt1</span>, <span class="va">pt2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="co"># should warn</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 2 features and 2 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
@@ -204,12 +204,12 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 <span class="r-out co"><span class="r-pr">#&gt;</span>   a       geom       geom2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 1 POINT(0 0) POINT (0 1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 2 POINT(0 1) POINT (1 1)</span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://github.com/edzer/sp/" class="external-link">sp</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"> <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">meuse</span>, package <span class="op">=</span> <span class="st">"sp"</span><span class="op">)</span></span>
-<span class="r-in"> <span class="va">meuse_sf</span> <span class="op">=</span> <span class="fu">st_as_sf</span><span class="op">(</span><span class="va">meuse</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">28992</span>, agr <span class="op">=</span> <span class="st">"constant"</span><span class="op">)</span></span>
-<span class="r-in"> <span class="va">meuse_sf</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span></span>
-<span class="r-in"> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">meuse_sf</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://github.com/edzer/sp/" class="external-link">sp</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span> <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">meuse</span>, package <span class="op">=</span> <span class="st">"sp"</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="va">meuse_sf</span> <span class="op">=</span> <span class="fu">st_as_sf</span><span class="op">(</span><span class="va">meuse</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">28992</span>, agr <span class="op">=</span> <span class="st">"constant"</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="va">meuse_sf</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span></span></span>
+<span class="r-in"><span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">meuse_sf</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     cadmium           copper            lead            zinc       </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Min.   : 0.200   Min.   : 14.00   Min.   : 37.0   Min.   : 113.0  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1st Qu.: 0.800   1st Qu.: 23.00   1st Qu.: 72.5   1st Qu.: 198.0  </span>
@@ -234,42 +234,42 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Ab     : 8   3rd Qu.: 450.0                      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  (Other):25   Max.   :1000.0                      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  NA's   : 1                                       </span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://github.com/edzer/sp/" class="external-link">sp</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>,<span class="op">-</span><span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="op">-</span><span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>,<span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x1</span> <span class="op">=</span> <span class="fl">0.1</span> <span class="op">*</span> <span class="va">x</span> <span class="op">+</span> <span class="fl">0.1</span></span>
-<span class="r-in"><span class="va">x2</span> <span class="op">=</span> <span class="fl">0.1</span> <span class="op">*</span> <span class="va">x</span> <span class="op">+</span> <span class="fl">0.4</span></span>
-<span class="r-in"><span class="va">x3</span> <span class="op">=</span> <span class="fl">0.1</span> <span class="op">*</span> <span class="va">x</span> <span class="op">+</span> <span class="fl">0.7</span></span>
-<span class="r-in"><span class="va">y</span> <span class="op">=</span> <span class="va">x</span> <span class="op">+</span> <span class="fl">3</span></span>
-<span class="r-in"><span class="va">y1</span> <span class="op">=</span> <span class="va">x1</span> <span class="op">+</span> <span class="fl">3</span></span>
-<span class="r-in"><span class="va">y3</span> <span class="op">=</span> <span class="va">x3</span> <span class="op">+</span> <span class="fl">3</span></span>
-<span class="r-in"><span class="va">m</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fl">5</span>, <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">z</span> <span class="op">=</span> <span class="va">x</span> <span class="op">+</span> <span class="va">m</span></span>
-<span class="r-in"><span class="va">z1</span> <span class="op">=</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">m</span></span>
-<span class="r-in"><span class="va">z2</span> <span class="op">=</span> <span class="va">x2</span> <span class="op">+</span> <span class="va">m</span></span>
-<span class="r-in"><span class="va">z3</span> <span class="op">=</span> <span class="va">x3</span> <span class="op">+</span> <span class="va">m</span></span>
-<span class="r-in"><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygons</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygon</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="fl">5</span><span class="op">:</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygon</a></span><span class="op">(</span><span class="va">x2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygon</a></span><span class="op">(</span><span class="va">x3</span><span class="op">)</span>,</span>
-<span class="r-in">   <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygon</a></span><span class="op">(</span><span class="va">y</span><span class="op">[</span><span class="fl">5</span><span class="op">:</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygon</a></span><span class="op">(</span><span class="va">y1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygon</a></span><span class="op">(</span><span class="va">x1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygon</a></span><span class="op">(</span><span class="va">y3</span><span class="op">)</span><span class="op">)</span>, <span class="st">"ID1"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygons</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygon</a></span><span class="op">(</span><span class="va">z</span><span class="op">[</span><span class="fl">5</span><span class="op">:</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygon</a></span><span class="op">(</span><span class="va">z2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygon</a></span><span class="op">(</span><span class="va">z3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygon</a></span><span class="op">(</span><span class="va">z1</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">  <span class="st">"ID2"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">r</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">SpatialPolygons</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">p1</span>,<span class="va">p2</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">a</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">r</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/demo.html" class="external-link">demo</a></span><span class="op">(</span><span class="va">meuse</span>, ask <span class="op">=</span> <span class="cn">FALSE</span>, echo <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">meuse</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">meuse.grid</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">meuse.area</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">meuse.riv</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">st_as_sf</span><span class="op">(</span><span class="fu"><a href="coerce-methods.html">as</a></span><span class="op">(</span><span class="va">meuse.riv</span>, <span class="st">"SpatialLines"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">pol.grd</span> <span class="op">=</span> <span class="fu"><a href="coerce-methods.html">as</a></span><span class="op">(</span><span class="va">meuse.grid</span>, <span class="st">"SpatialPolygonsDataFrame"</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># summary(st_as_sf(pol.grd))</span></span>
-<span class="r-in"><span class="co"># summary(st_as_sf(as(pol.grd, "SpatialLinesDataFrame")))</span></span>
-<span class="r-in"><span class="op">}</span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://github.com/edzer/sp/" class="external-link">sp</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>,<span class="op">-</span><span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="op">-</span><span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>,<span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x1</span> <span class="op">=</span> <span class="fl">0.1</span> <span class="op">*</span> <span class="va">x</span> <span class="op">+</span> <span class="fl">0.1</span></span></span>
+<span class="r-in"><span><span class="va">x2</span> <span class="op">=</span> <span class="fl">0.1</span> <span class="op">*</span> <span class="va">x</span> <span class="op">+</span> <span class="fl">0.4</span></span></span>
+<span class="r-in"><span><span class="va">x3</span> <span class="op">=</span> <span class="fl">0.1</span> <span class="op">*</span> <span class="va">x</span> <span class="op">+</span> <span class="fl">0.7</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">=</span> <span class="va">x</span> <span class="op">+</span> <span class="fl">3</span></span></span>
+<span class="r-in"><span><span class="va">y1</span> <span class="op">=</span> <span class="va">x1</span> <span class="op">+</span> <span class="fl">3</span></span></span>
+<span class="r-in"><span><span class="va">y3</span> <span class="op">=</span> <span class="va">x3</span> <span class="op">+</span> <span class="fl">3</span></span></span>
+<span class="r-in"><span><span class="va">m</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fl">5</span>, <span class="fl">2</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">z</span> <span class="op">=</span> <span class="va">x</span> <span class="op">+</span> <span class="va">m</span></span></span>
+<span class="r-in"><span><span class="va">z1</span> <span class="op">=</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">m</span></span></span>
+<span class="r-in"><span><span class="va">z2</span> <span class="op">=</span> <span class="va">x2</span> <span class="op">+</span> <span class="va">m</span></span></span>
+<span class="r-in"><span><span class="va">z3</span> <span class="op">=</span> <span class="va">x3</span> <span class="op">+</span> <span class="va">m</span></span></span>
+<span class="r-in"><span><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygons</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygon</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="fl">5</span><span class="op">:</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygon</a></span><span class="op">(</span><span class="va">x2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygon</a></span><span class="op">(</span><span class="va">x3</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>   <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygon</a></span><span class="op">(</span><span class="va">y</span><span class="op">[</span><span class="fl">5</span><span class="op">:</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygon</a></span><span class="op">(</span><span class="va">y1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygon</a></span><span class="op">(</span><span class="va">x1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygon</a></span><span class="op">(</span><span class="va">y3</span><span class="op">)</span><span class="op">)</span>, <span class="st">"ID1"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygons</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span> <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygon</a></span><span class="op">(</span><span class="va">z</span><span class="op">[</span><span class="fl">5</span><span class="op">:</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygon</a></span><span class="op">(</span><span class="va">z2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygon</a></span><span class="op">(</span><span class="va">z3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">Polygon</a></span><span class="op">(</span><span class="va">z1</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"ID2"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">r</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/sp/man/SpatialPolygons.html" class="external-link">SpatialPolygons</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">p1</span>,<span class="va">p2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">a</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">r</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/demo.html" class="external-link">demo</a></span><span class="op">(</span><span class="va">meuse</span>, ask <span class="op">=</span> <span class="cn">FALSE</span>, echo <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">meuse</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">meuse.grid</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">meuse.area</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">meuse.riv</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu">st_as_sf</span><span class="op">(</span><span class="fu"><a href="coerce-methods.html">as</a></span><span class="op">(</span><span class="va">meuse.riv</span>, <span class="st">"SpatialLines"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pol.grd</span> <span class="op">=</span> <span class="fu"><a href="coerce-methods.html">as</a></span><span class="op">(</span><span class="va">meuse.grid</span>, <span class="st">"SpatialPolygonsDataFrame"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># summary(st_as_sf(pol.grd))</span></span></span>
+<span class="r-in"><span><span class="co"># summary(st_as_sf(as(pol.grd, "SpatialLinesDataFrame")))</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>GDAL Message 1: +init=epsg:XXXX syntax is deprecated. It might return a CRS with a non-EPSG compliant axis order.</span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="http://spatstat.org/" class="external-link">spatstat.geom</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">g</span> <span class="op">=</span> <span class="fu">st_as_sf</span><span class="op">(</span><span class="va">gorillas</span><span class="op">)</span></span>
-<span class="r-in">  <span class="co"># select only the points:</span></span>
-<span class="r-in">  <span class="va">g</span><span class="op">[</span><span class="fu"><a href="st_is.html">st_is</a></span><span class="op">(</span><span class="va">g</span>, <span class="st">"POINT"</span><span class="op">)</span>,<span class="op">]</span></span>
-<span class="r-in"><span class="op">}</span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="http://spatstat.org/" class="external-link">spatstat.geom</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">g</span> <span class="op">=</span> <span class="fu">st_as_sf</span><span class="op">(</span><span class="va">gorillas</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="co"># select only the points:</span></span></span>
+<span class="r-in"><span>  <span class="va">g</span><span class="op">[</span><span class="fu"><a href="st_is.html">st_is</a></span><span class="op">(</span><span class="va">g</span>, <span class="st">"POINT"</span><span class="op">)</span>,<span class="op">]</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: spatstat.geom</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: spatstat.data</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> spatstat.geom 2.4-0</span>
@@ -290,11 +290,11 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8  major    dry 2006-02-03 point POINT (583584.5 677207.1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9  major    dry 2006-02-13 point POINT (583117.8 676850.3)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10 major    dry 2006-02-15 point POINT (582902.8 676724.1)</span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="http://spatstat.org/" class="external-link">spatstat.linnet</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"> <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">chicago</span><span class="op">)</span></span>
-<span class="r-in"> <span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">chicago</span><span class="op">)</span><span class="op">[</span><span class="st">"label"</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in"> <span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">chicago</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span>,<span class="st">"label"</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="http://spatstat.org/" class="external-link">spatstat.linnet</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span> <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">chicago</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">chicago</span><span class="op">)</span><span class="op">[</span><span class="st">"label"</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="fu">st_as_sf</span><span class="op">(</span><span class="va">chicago</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span>,<span class="st">"label"</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: spatstat.linnet</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: spatstat.random</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> spatstat.random 2.2-0</span>

@@ -81,7 +81,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">st_sfc</span><span class="op">(</span><span class="va">...</span>, crs <span class="op">=</span> <span class="va">NA_crs_</span>, precision <span class="op">=</span> <span class="fl">0</span>, check_ring_dir <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">dim</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">st_sfc</span><span class="op">(</span><span class="va">...</span>, crs <span class="op">=</span> <span class="va">NA_crs_</span>, precision <span class="op">=</span> <span class="fl">0</span>, check_ring_dir <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">dim</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -122,9 +122,9 @@ superclass <code>GEOMETRY</code>.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">pt1</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">pt2</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">(</span><span class="va">sfc</span> <span class="op">=</span> <span class="fu">st_sfc</span><span class="op">(</span><span class="va">pt1</span>, <span class="va">pt2</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">pt1</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pt2</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">(</span><span class="va">sfc</span> <span class="op">=</span> <span class="fu">st_sfc</span><span class="op">(</span><span class="va">pt1</span>, <span class="va">pt2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 2 features </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
@@ -132,7 +132,7 @@ superclass <code>GEOMETRY</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CRS:           NA</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (0 1)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (1 1)</span>
-<span class="r-in"><span class="va">d</span> <span class="op">=</span> <span class="fu"><a href="sf.html">st_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, geom<span class="op">=</span><span class="va">sfc</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="va">d</span> <span class="op">=</span> <span class="fu"><a href="sf.html">st_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, geom<span class="op">=</span><span class="va">sfc</span><span class="op">)</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>

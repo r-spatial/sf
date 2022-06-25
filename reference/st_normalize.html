@@ -85,7 +85,7 @@ the input, but other domains can be used as well</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">st_normalize</span><span class="op">(</span><span class="va">x</span>, domain <span class="op">=</span> <span class="fu"><a href="st_bbox.html">st_bbox</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">st_normalize</span><span class="op">(</span><span class="va">x</span>, domain <span class="op">=</span> <span class="fu"><a href="st_bbox.html">st_bbox</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -107,13 +107,13 @@ bounding box of <code>x</code></p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">7</span>,<span class="fl">52</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">st_normalize</span><span class="op">(</span><span class="va">p1</span>, domain <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">7</span>,<span class="fl">52</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">st_normalize</span><span class="op">(</span><span class="va">p1</span>, domain <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">10</span>, <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (0.7 0.52)</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">30</span>,<span class="fl">20</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">sfc</span> <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">sfc</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">30</span>,<span class="fl">20</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sfc</span> <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sfc</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 2 features </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
@@ -121,11 +121,11 @@ bounding box of <code>x</code></p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (7 52)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (-30 20)</span>
-<span class="r-in"><span class="va">sfc_norm</span> <span class="op">&lt;-</span> <span class="fu">st_normalize</span><span class="op">(</span><span class="va">sfc</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="st_bbox.html">st_bbox</a></span><span class="op">(</span><span class="va">sfc_norm</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="va">sfc_norm</span> <span class="op">&lt;-</span> <span class="fu">st_normalize</span><span class="op">(</span><span class="va">sfc</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="st_bbox.html">st_bbox</a></span><span class="op">(</span><span class="va">sfc_norm</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> xmin ymin xmax ymax </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    0    0    1    1 </span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>

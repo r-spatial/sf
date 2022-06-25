@@ -81,40 +81,40 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">st_transform</span><span class="op">(</span><span class="va">x</span>, <span class="va">crs</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for sfc</span>
-<span class="fu">st_transform</span><span class="op">(</span>
-  <span class="va">x</span>,
-  crs <span class="op">=</span> <span class="fu"><a href="st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,
-  <span class="va">...</span>,
-  aoi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  pipeline <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  reverse <span class="op">=</span> <span class="cn">FALSE</span>,
-  desired_accuracy <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>,
-  allow_ballpark <span class="op">=</span> <span class="cn">TRUE</span>,
-  partial <span class="op">=</span> <span class="cn">TRUE</span>,
-  check <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for sf</span>
-<span class="fu">st_transform</span><span class="op">(</span><span class="va">x</span>, crs <span class="op">=</span> <span class="fu"><a href="st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for sfg</span>
-<span class="fu">st_transform</span><span class="op">(</span><span class="va">x</span>, crs <span class="op">=</span> <span class="fu"><a href="st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">st_wrap_dateline</span><span class="op">(</span><span class="va">x</span>, <span class="va">options</span>, <span class="va">quiet</span><span class="op">)</span>
-
-<span class="co"># S3 method for sfc</span>
-<span class="fu">st_wrap_dateline</span><span class="op">(</span><span class="va">x</span>, options <span class="op">=</span> <span class="st">"WRAPDATELINE=YES"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="co"># S3 method for sf</span>
-<span class="fu">st_wrap_dateline</span><span class="op">(</span><span class="va">x</span>, options <span class="op">=</span> <span class="st">"WRAPDATELINE=YES"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="co"># S3 method for sfg</span>
-<span class="fu">st_wrap_dateline</span><span class="op">(</span><span class="va">x</span>, options <span class="op">=</span> <span class="st">"WRAPDATELINE=YES"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu">sf_proj_info</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"proj"</span>, <span class="va">path</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">st_transform</span><span class="op">(</span><span class="va">x</span>, <span class="va">crs</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sfc</span></span>
+<span><span class="fu">st_transform</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  crs <span class="op">=</span> <span class="fu"><a href="st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  aoi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  pipeline <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  reverse <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  desired_accuracy <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>,</span>
+<span>  allow_ballpark <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  partial <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  check <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sf</span></span>
+<span><span class="fu">st_transform</span><span class="op">(</span><span class="va">x</span>, crs <span class="op">=</span> <span class="fu"><a href="st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sfg</span></span>
+<span><span class="fu">st_transform</span><span class="op">(</span><span class="va">x</span>, crs <span class="op">=</span> <span class="fu"><a href="st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">st_wrap_dateline</span><span class="op">(</span><span class="va">x</span>, <span class="va">options</span>, <span class="va">quiet</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sfc</span></span>
+<span><span class="fu">st_wrap_dateline</span><span class="op">(</span><span class="va">x</span>, options <span class="op">=</span> <span class="st">"WRAPDATELINE=YES"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sf</span></span>
+<span><span class="fu">st_wrap_dateline</span><span class="op">(</span><span class="va">x</span>, options <span class="op">=</span> <span class="st">"WRAPDATELINE=YES"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sfg</span></span>
+<span><span class="fu">st_wrap_dateline</span><span class="op">(</span><span class="va">x</span>, options <span class="op">=</span> <span class="st">"WRAPDATELINE=YES"</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">sf_proj_info</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"proj"</span>, <span class="va">path</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -207,10 +207,10 @@ to projections not supported by GDAL may be done by
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">7</span>,<span class="fl">52</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">30</span>,<span class="fl">20</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">sfc</span> <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">sfc</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">7</span>,<span class="fl">52</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">30</span>,<span class="fl">20</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sfc</span> <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sfc</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 2 features </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
@@ -218,7 +218,7 @@ to projections not supported by GDAL may be done by
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (7 52)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (-30 20)</span>
-<span class="r-in"><span class="fu">st_transform</span><span class="op">(</span><span class="va">sfc</span>, <span class="fl">3857</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">st_transform</span><span class="op">(</span><span class="va">sfc</span>, <span class="fl">3857</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 2 features </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
@@ -226,7 +226,7 @@ to projections not supported by GDAL may be done by
 <span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: WGS 84 / Pseudo-Mercator</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (779236.4 6800125)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (-3339585 2273031)</span>
-<span class="r-in"><span class="fu">st_transform</span><span class="op">(</span><span class="fu"><a href="sf.html">st_sf</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">2</span><span class="op">:</span><span class="fl">1</span>, geom<span class="op">=</span><span class="va">sfc</span><span class="op">)</span>, <span class="st">"+init=epsg:3857"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">st_transform</span><span class="op">(</span><span class="fu"><a href="sf.html">st_sf</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">2</span><span class="op">:</span><span class="fl">1</span>, geom<span class="op">=</span><span class="va">sfc</span><span class="op">)</span>, <span class="st">"+init=epsg:3857"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 2 features and 1 field</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
@@ -235,16 +235,16 @@ to projections not supported by GDAL may be done by
 <span class="r-out co"><span class="r-pr">#&gt;</span>   a                     geom</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 2 POINT (779236.4 6800125)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 1 POINT (-3339585 2273031)</span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">st_transform</span><span class="op">(</span><span class="va">sfc</span>, <span class="fl">3857</span>, aoi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">280</span>,<span class="op">-</span><span class="fl">90</span>,<span class="fl">180</span>,<span class="fl">90</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">st_transform</span><span class="op">(</span><span class="va">sfc</span>, <span class="fl">3857</span>, aoi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">280</span>,<span class="op">-</span><span class="fl">90</span>,<span class="fl">180</span>,<span class="fl">90</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>GDAL Error 1: Invalid dfWestLongitudeDeg</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error in CPL_transform(x, crs, aoi, pipeline, reverse, desired_accuracy,  : </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   values for area of interest not accepted</span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="sf_extSoftVersion.html">sf_extSoftVersion</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="st">"GDAL"</span><span class="op">]</span> <span class="op">&gt;=</span> <span class="st">"3.0.0"</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="fu">st_transform</span><span class="op">(</span><span class="va">sfc</span>, pipeline <span class="op">=</span></span>
-<span class="r-in">    <span class="st">"+proj=pipeline +step +proj=axisswap +order=2,1"</span><span class="op">)</span> <span class="co"># reverse axes</span></span>
-<span class="r-in">  <span class="fu">st_transform</span><span class="op">(</span><span class="va">sfc</span>, pipeline <span class="op">=</span></span>
-<span class="r-in">    <span class="st">"+proj=pipeline +step +proj=axisswap +order=2,1"</span>, reverse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># also reverse axes</span></span>
-<span class="r-in"><span class="op">}</span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="sf_extSoftVersion.html">sf_extSoftVersion</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="st">"GDAL"</span><span class="op">]</span> <span class="op">&gt;=</span> <span class="st">"3.0.0"</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu">st_transform</span><span class="op">(</span><span class="va">sfc</span>, pipeline <span class="op">=</span></span></span>
+<span class="r-in"><span>    <span class="st">"+proj=pipeline +step +proj=axisswap +order=2,1"</span><span class="op">)</span> <span class="co"># reverse axes</span></span></span>
+<span class="r-in"><span>  <span class="fu">st_transform</span><span class="op">(</span><span class="va">sfc</span>, pipeline <span class="op">=</span></span></span>
+<span class="r-in"><span>    <span class="st">"+proj=pipeline +step +proj=axisswap +order=2,1"</span>, reverse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># also reverse axes</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 2 features </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
@@ -252,45 +252,45 @@ to projections not supported by GDAL may be done by
 <span class="r-out co"><span class="r-pr">#&gt;</span> CRS:           NA</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (7 52)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (-30 20)</span>
-<span class="r-in"><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/Rtmpuvkp4f/temp_libpath12ada1429000c/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpRoLNM6/temp_libpath12b0034de0ec5/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  NAD27</span>
-<span class="r-in"><span class="fu"><a href="geos_measures.html">st_area</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span> <span class="co"># area from long/lat</span></span>
+<span class="r-in"><span><span class="fu"><a href="geos_measures.html">st_area</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span> <span class="co"># area from long/lat</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1137107793 [m^2]</span>
-<span class="r-in"><span class="fu"><a href="geos_measures.html">st_area</a></span><span class="op">(</span><span class="fu">st_transform</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span>, <span class="fl">32119</span><span class="op">)</span><span class="op">)</span> <span class="co"># NC state plane, m</span></span>
+<span class="r-in"><span><span class="fu"><a href="geos_measures.html">st_area</a></span><span class="op">(</span><span class="fu">st_transform</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span>, <span class="fl">32119</span><span class="op">)</span><span class="op">)</span> <span class="co"># NC state plane, m</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1137598162 [m^2]</span>
-<span class="r-in"><span class="fu"><a href="geos_measures.html">st_area</a></span><span class="op">(</span><span class="fu">st_transform</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span>, <span class="fl">2264</span><span class="op">)</span><span class="op">)</span> <span class="co"># NC state plane, US foot</span></span>
+<span class="r-in"><span><span class="fu"><a href="geos_measures.html">st_area</a></span><span class="op">(</span><span class="fu">st_transform</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span>, <span class="fl">2264</span><span class="op">)</span><span class="op">)</span> <span class="co"># NC state plane, US foot</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12244955726 [US_survey_foot^2]</span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-quantities/units/" class="external-link">units</a></span><span class="op">)</span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-quantities/units/" class="external-link">units</a></span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> udunits database from /usr/share/xml/udunits/udunits2.xml</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="fu"><a href="geos_measures.html">st_area</a></span><span class="op">(</span><span class="fu">st_transform</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span>, <span class="fl">2264</span><span class="op">)</span><span class="op">)</span>, <span class="va">m</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="fu"><a href="geos_measures.html">st_area</a></span><span class="op">(</span><span class="fu">st_transform</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span>, <span class="fl">2264</span><span class="op">)</span><span class="op">)</span>, <span class="va">m</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1137598162 [m^2]</span>
-<span class="r-in"><span class="fu">st_transform</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/structure.html" class="external-link">structure</a></span><span class="op">(</span><span class="va">p1</span>, proj4string <span class="op">=</span> <span class="st">"+init=epsg:4326"</span><span class="op">)</span>, <span class="st">"+init=epsg:3857"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">st_transform</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/structure.html" class="external-link">structure</a></span><span class="op">(</span><span class="va">p1</span>, proj4string <span class="op">=</span> <span class="st">"+init=epsg:4326"</span><span class="op">)</span>, <span class="st">"+init=epsg:3857"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (779236.4 6800125)</span>
-<span class="r-in"><span class="fu">st_wrap_dateline</span><span class="op">(</span><span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">179</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">179</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">st_wrap_dateline</span><span class="op">(</span><span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">179</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">179</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 1 feature </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTILINESTRING</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -180 ymin: 0 xmax: 180 ymax: 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> MULTILINESTRING ((-179 0, -180 0), (180 0, 179 0))</span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va">maps</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"> <span class="va">wrld</span> <span class="op">&lt;-</span> <span class="fu"><a href="st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="fu">maps</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/maps/man/map.html" class="external-link">map</a></span><span class="op">(</span><span class="st">"world"</span>, fill <span class="op">=</span> <span class="cn">TRUE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"> <span class="va">wrld_wrap</span> <span class="op">&lt;-</span> <span class="fu">st_wrap_dateline</span><span class="op">(</span><span class="va">wrld</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WRAPDATELINE=YES"</span>, <span class="st">"DATELINEOFFSET=180"</span><span class="op">)</span>,</span>
-<span class="r-in">   quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"> <span class="va">wrld_moll</span> <span class="op">&lt;-</span> <span class="fu">st_transform</span><span class="op">(</span><span class="va">wrld_wrap</span>, <span class="st">"+proj=moll"</span><span class="op">)</span></span>
-<span class="r-in"> <span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">wrld_moll</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"transparent"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va">maps</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span> <span class="va">wrld</span> <span class="op">&lt;-</span> <span class="fu"><a href="st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="fu">maps</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/maps/man/map.html" class="external-link">map</a></span><span class="op">(</span><span class="st">"world"</span>, fill <span class="op">=</span> <span class="cn">TRUE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="va">wrld_wrap</span> <span class="op">&lt;-</span> <span class="fu">st_wrap_dateline</span><span class="op">(</span><span class="va">wrld</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WRAPDATELINE=YES"</span>, <span class="st">"DATELINEOFFSET=180"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>   quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="va">wrld_moll</span> <span class="op">&lt;-</span> <span class="fu">st_transform</span><span class="op">(</span><span class="va">wrld_wrap</span>, <span class="st">"+proj=moll"</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">wrld_moll</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"transparent"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>GDAL Error 1: IllegalArgumentException: Points of LinearRing do not form a closed linestring</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>GDAL Error 1: IllegalArgumentException: Points of LinearRing do not form a closed linestring</span>
 <span class="r-plt img"><img src="st_transform-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="fu">sf_proj_info</span><span class="op">(</span><span class="st">"datum"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">sf_proj_info</span><span class="op">(</span><span class="st">"datum"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> data frame with 0 columns and 0 rows</span>
 </code></pre></div>
     </div>

@@ -81,15 +81,15 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">gdal_utils</span><span class="op">(</span>
-  util <span class="op">=</span> <span class="st">"info"</span>,
-  <span class="va">source</span>,
-  <span class="va">destination</span>,
-  options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  quiet <span class="op">=</span> <span class="op">!</span><span class="op">(</span><span class="va">util</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"info"</span>, <span class="st">"mdiminfo"</span><span class="op">)</span><span class="op">)</span>,
-  processing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  colorfilename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gdal_utils</span><span class="op">(</span></span>
+<span>  util <span class="op">=</span> <span class="st">"info"</span>,</span>
+<span>  <span class="va">source</span>,</span>
+<span>  <span class="va">destination</span>,</span>
+<span>  options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="op">!</span><span class="op">(</span><span class="va">util</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"info"</span>, <span class="st">"mdiminfo"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  processing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  colorfilename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -135,45 +135,45 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="sf_extSoftVersion.html">sf_extSoftVersion</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="st">"GDAL"</span><span class="op">]</span> <span class="op">&gt;</span> <span class="st">"2.1.0"</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co"># info utils can be used to list information about about a raster</span></span>
-<span class="r-in"><span class="co"># dataset. More info: https://gdal.org/programs/gdalinfo.html</span></span>
-<span class="r-in"><span class="va">in_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"tif/geomatrix.tif"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">gdal_utils</span><span class="op">(</span><span class="st">"info"</span>, <span class="va">in_file</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"-mm"</span>, <span class="st">"-proj4"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># vectortranslate utils can be used to convert simple features data between</span></span>
-<span class="r-in"><span class="co"># file formats. More info: https://gdal.org/programs/ogr2ogr.html</span></span>
-<span class="r-in"><span class="va">in_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/storms_xyz.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">out_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">".gpkg"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">gdal_utils</span><span class="op">(</span></span>
-<span class="r-in">  util <span class="op">=</span> <span class="st">"vectortranslate"</span>,</span>
-<span class="r-in">  source <span class="op">=</span> <span class="va">in_file</span>,</span>
-<span class="r-in">  destination <span class="op">=</span> <span class="va">out_file</span>, <span class="co"># output format must be specified for GDAL &lt; 2.3</span></span>
-<span class="r-in">  options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"-f"</span>, <span class="st">"GPKG"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="co"># The parameters can be specified as c("name") or c("name", "value"). The</span></span>
-<span class="r-in"><span class="co"># vectortranslate utils can perform also various operations during the</span></span>
-<span class="r-in"><span class="co"># conversion process. For example we can reproject the features during the</span></span>
-<span class="r-in"><span class="co"># translation.</span></span>
-<span class="r-in"><span class="fu">gdal_utils</span><span class="op">(</span></span>
-<span class="r-in">  util <span class="op">=</span> <span class="st">"vectortranslate"</span>,</span>
-<span class="r-in">  source <span class="op">=</span> <span class="va">in_file</span>,</span>
-<span class="r-in">  destination <span class="op">=</span> <span class="va">out_file</span>,</span>
-<span class="r-in">  options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="st">"-f"</span>, <span class="st">"GPKG"</span>, <span class="co"># output file format for GDAL &lt; 2.3</span></span>
-<span class="r-in">  <span class="st">"-s_srs"</span>, <span class="st">"EPSG:4326"</span>, <span class="co"># input file SRS</span></span>
-<span class="r-in">  <span class="st">"-t_srs"</span>, <span class="st">"EPSG:2264"</span>, <span class="co"># output file SRS</span></span>
-<span class="r-in">  <span class="st">"-overwrite"</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="va">out_file</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># The parameter s_srs had to be specified because, in this case, the in_file</span></span>
-<span class="r-in"><span class="co"># has no associated SRS.</span></span>
-<span class="r-in"><span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="va">in_file</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="sf_extSoftVersion.html">sf_extSoftVersion</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="st">"GDAL"</span><span class="op">]</span> <span class="op">&gt;</span> <span class="st">"2.1.0"</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># info utils can be used to list information about about a raster</span></span></span>
+<span class="r-in"><span><span class="co"># dataset. More info: https://gdal.org/programs/gdalinfo.html</span></span></span>
+<span class="r-in"><span><span class="va">in_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"tif/geomatrix.tif"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">gdal_utils</span><span class="op">(</span><span class="st">"info"</span>, <span class="va">in_file</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"-mm"</span>, <span class="st">"-proj4"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># vectortranslate utils can be used to convert simple features data between</span></span></span>
+<span class="r-in"><span><span class="co"># file formats. More info: https://gdal.org/programs/ogr2ogr.html</span></span></span>
+<span class="r-in"><span><span class="va">in_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/storms_xyz.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">out_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">".gpkg"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">gdal_utils</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  util <span class="op">=</span> <span class="st">"vectortranslate"</span>,</span></span>
+<span class="r-in"><span>  source <span class="op">=</span> <span class="va">in_file</span>,</span></span>
+<span class="r-in"><span>  destination <span class="op">=</span> <span class="va">out_file</span>, <span class="co"># output format must be specified for GDAL &lt; 2.3</span></span></span>
+<span class="r-in"><span>  options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"-f"</span>, <span class="st">"GPKG"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># The parameters can be specified as c("name") or c("name", "value"). The</span></span></span>
+<span class="r-in"><span><span class="co"># vectortranslate utils can perform also various operations during the</span></span></span>
+<span class="r-in"><span><span class="co"># conversion process. For example we can reproject the features during the</span></span></span>
+<span class="r-in"><span><span class="co"># translation.</span></span></span>
+<span class="r-in"><span><span class="fu">gdal_utils</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  util <span class="op">=</span> <span class="st">"vectortranslate"</span>,</span></span>
+<span class="r-in"><span>  source <span class="op">=</span> <span class="va">in_file</span>,</span></span>
+<span class="r-in"><span>  destination <span class="op">=</span> <span class="va">out_file</span>,</span></span>
+<span class="r-in"><span>  options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">"-f"</span>, <span class="st">"GPKG"</span>, <span class="co"># output file format for GDAL &lt; 2.3</span></span></span>
+<span class="r-in"><span>  <span class="st">"-s_srs"</span>, <span class="st">"EPSG:4326"</span>, <span class="co"># input file SRS</span></span></span>
+<span class="r-in"><span>  <span class="st">"-t_srs"</span>, <span class="st">"EPSG:2264"</span>, <span class="co"># output file SRS</span></span></span>
+<span class="r-in"><span>  <span class="st">"-overwrite"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="va">out_file</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># The parameter s_srs had to be specified because, in this case, the in_file</span></span></span>
+<span class="r-in"><span><span class="co"># has no associated SRS.</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="va">in_file</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Driver: GTiff/GeoTIFF</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Files: /tmp/Rtmpuvkp4f/temp_libpath12ada1429000c/sf/tif/geomatrix.tif</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Files: /tmp/RtmpRoLNM6/temp_libpath12b0034de0ec5/sf/tif/geomatrix.tif</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Size is 20, 20</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coordinate System is:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> PROJCRS["WGS 84 / UTM zone 11N",</span>
@@ -233,7 +233,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Band 1 Block=20x20 Type=Byte, ColorInterp=Gray</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Computed Min/Max=74.000,255.000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `storms_xyz' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpcPkqs5/file133022972760e.gpkg' using driver `GPKG'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpgSSxxG/file1332449be2d46.gpkg' using driver `GPKG'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 71 features and 0 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: LINESTRING</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XYZ</span>
@@ -241,7 +241,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> z_range:       zmin: 924 zmax: 1017</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: NAD83 / North Carolina (ftUS)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `storms_xyz' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/Rtmpuvkp4f/temp_libpath12ada1429000c/sf/shape/storms_xyz.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpRoLNM6/temp_libpath12b0034de0ec5/sf/shape/storms_xyz.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 71 features and 0 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: LINESTRING</span>

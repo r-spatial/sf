@@ -81,10 +81,10 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">st_interpolate_aw</span><span class="op">(</span><span class="va">x</span>, <span class="va">to</span>, <span class="va">extensive</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for sf</span>
-<span class="fu">st_interpolate_aw</span><span class="op">(</span><span class="va">x</span>, <span class="va">to</span>, <span class="va">extensive</span>, <span class="va">...</span>, keep_NA <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">st_interpolate_aw</span><span class="op">(</span><span class="va">x</span>, <span class="va">to</span>, <span class="va">extensive</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sf</span></span>
+<span><span class="fu">st_interpolate_aw</span><span class="op">(</span><span class="va">x</span>, <span class="va">to</span>, <span class="va">extensive</span>, <span class="va">...</span>, keep_NA <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -112,28 +112,28 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/Rtmpuvkp4f/temp_libpath12ada1429000c/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpRoLNM6/temp_libpath12b0034de0ec5/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  NAD27</span>
-<span class="r-in"><span class="va">g</span> <span class="op">=</span> <span class="fu"><a href="st_make_grid.html">st_make_grid</a></span><span class="op">(</span><span class="va">nc</span>, n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">a1</span> <span class="op">=</span> <span class="fu">st_interpolate_aw</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="st">"BIR74"</span><span class="op">]</span>, <span class="va">g</span>, extensive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="va">g</span> <span class="op">=</span> <span class="fu"><a href="st_make_grid.html">st_make_grid</a></span><span class="op">(</span><span class="va">nc</span>, n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">a1</span> <span class="op">=</span> <span class="fu">st_interpolate_aw</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="st">"BIR74"</span><span class="op">]</span>, <span class="va">g</span>, extensive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>st_interpolate_aw assumes attributes are constant or uniform over areas of x</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">a1</span><span class="op">$</span><span class="va">BIR74</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">nc</span><span class="op">$</span><span class="va">BIR74</span><span class="op">)</span> <span class="co"># not close to one: property is assumed spatially intensive</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">a1</span><span class="op">$</span><span class="va">BIR74</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">nc</span><span class="op">$</span><span class="va">BIR74</span><span class="op">)</span> <span class="co"># not close to one: property is assumed spatially intensive</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4026287</span>
-<span class="r-in"><span class="va">a2</span> <span class="op">=</span> <span class="fu">st_interpolate_aw</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="st">"BIR74"</span><span class="op">]</span>, <span class="va">g</span>, extensive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="va">a2</span> <span class="op">=</span> <span class="fu">st_interpolate_aw</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="st">"BIR74"</span><span class="op">]</span>, <span class="va">g</span>, extensive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>st_interpolate_aw assumes attributes are constant or uniform over areas of x</span>
-<span class="r-in"><span class="co"># verify mass preservation (pycnophylactic) property:</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">a2</span><span class="op">$</span><span class="va">BIR74</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">nc</span><span class="op">$</span><span class="va">BIR74</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># verify mass preservation (pycnophylactic) property:</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">a2</span><span class="op">$</span><span class="va">BIR74</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">nc</span><span class="op">$</span><span class="va">BIR74</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9999998</span>
-<span class="r-in"><span class="va">a1</span><span class="op">$</span><span class="va">intensive</span> <span class="op">=</span> <span class="va">a1</span><span class="op">$</span><span class="va">BIR74</span></span>
-<span class="r-in"><span class="va">a1</span><span class="op">$</span><span class="va">extensive</span> <span class="op">=</span> <span class="va">a2</span><span class="op">$</span><span class="va">BIR74</span></span>
-<span class="r-in"><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">a1</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"intensive"</span>, <span class="st">"extensive"</span><span class="op">)</span><span class="op">]</span>, key.pos <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="va">a1</span><span class="op">$</span><span class="va">intensive</span> <span class="op">=</span> <span class="va">a1</span><span class="op">$</span><span class="va">BIR74</span></span></span>
+<span class="r-in"><span><span class="va">a1</span><span class="op">$</span><span class="va">extensive</span> <span class="op">=</span> <span class="va">a2</span><span class="op">$</span><span class="va">BIR74</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">a1</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"intensive"</span>, <span class="st">"extensive"</span><span class="op">)</span><span class="op">]</span>, key.pos <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="interpolate_aw-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>

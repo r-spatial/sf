@@ -81,31 +81,31 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">st_is_valid</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for sfc</span>
-<span class="fu">st_is_valid</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, NA_on_exception <span class="op">=</span> <span class="cn">TRUE</span>, reason <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-
-<span class="co"># S3 method for sf</span>
-<span class="fu">st_is_valid</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for sfg</span>
-<span class="fu">st_is_valid</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">st_make_valid</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for sfg</span>
-<span class="fu">st_make_valid</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for sfc</span>
-<span class="fu">st_make_valid</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">...</span>,
-  oriented <span class="op">=</span> <span class="cn">FALSE</span>,
-  s2_options <span class="op">=</span> <span class="fu">s2</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_options.html" class="external-link">s2_options</a></span><span class="op">(</span>snap <span class="op">=</span> <span class="fu">s2</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_options.html" class="external-link">s2_snap_precision</a></span><span class="op">(</span><span class="fl">1e+07</span><span class="op">)</span><span class="op">)</span>,
-  geos_method <span class="op">=</span> <span class="st">"valid_structure"</span>,
-  geos_keep_collapsed <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">st_is_valid</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sfc</span></span>
+<span><span class="fu">st_is_valid</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, NA_on_exception <span class="op">=</span> <span class="cn">TRUE</span>, reason <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sf</span></span>
+<span><span class="fu">st_is_valid</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sfg</span></span>
+<span><span class="fu">st_is_valid</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">st_make_valid</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sfg</span></span>
+<span><span class="fu">st_make_valid</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sfc</span></span>
+<span><span class="fu">st_make_valid</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  oriented <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  s2_options <span class="op">=</span> <span class="fu">s2</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_options.html" class="external-link">s2_options</a></span><span class="op">(</span>snap <span class="op">=</span> <span class="fu">s2</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_options.html" class="external-link">s2_snap_precision</a></span><span class="op">(</span><span class="fl">1e+07</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  geos_method <span class="op">=</span> <span class="st">"valid_structure"</span>,</span>
+<span>  geos_keep_collapsed <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -161,19 +161,19 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="st_as_sfc.html">st_as_sfc</a></span><span class="op">(</span><span class="st">"POLYGON((0 0, 0 10, 10 0, 10 10, 0 0))"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">st_is_valid</span><span class="op">(</span><span class="va">p1</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="st_as_sfc.html">st_as_sfc</a></span><span class="op">(</span><span class="st">"POLYGON((0 0, 0 10, 10 0, 10 10, 0 0))"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">st_is_valid</span><span class="op">(</span><span class="va">p1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-in"><span class="fu">st_is_valid</span><span class="op">(</span><span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">1</span><span class="op">)</span>, <span class="va">p1</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, reason <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">st_is_valid</span><span class="op">(</span><span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">1</span><span class="op">)</span>, <span class="va">p1</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, reason <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Valid Geometry"         "Self-intersection[5 5]"</span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>,<span class="fl">0.5</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu">st_is_valid</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>,<span class="fl">0.5</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu">st_is_valid</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
-<span class="r-in"><span class="va">y</span> <span class="op">=</span> <span class="fu">st_make_valid</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">st_is_valid</span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">=</span> <span class="fu">st_make_valid</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">st_is_valid</span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
-<span class="r-in"><span class="va">y</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="st_cast.html">st_cast</a></span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="st_cast.html">st_cast</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 2 features </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: GEOMETRY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>

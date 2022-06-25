@@ -81,29 +81,29 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">st_as_binary</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for sfc</span>
-<span class="fu">st_as_binary</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">...</span>,
-  EWKB <span class="op">=</span> <span class="cn">FALSE</span>,
-  endian <span class="op">=</span> <span class="va">.Platform</span><span class="op">$</span><span class="va">endian</span>,
-  pureR <span class="op">=</span> <span class="cn">FALSE</span>,
-  precision <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"precision"</span><span class="op">)</span>,
-  hex <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for sfg</span>
-<span class="fu">st_as_binary</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">...</span>,
-  endian <span class="op">=</span> <span class="va">.Platform</span><span class="op">$</span><span class="va">endian</span>,
-  EWKB <span class="op">=</span> <span class="cn">FALSE</span>,
-  pureR <span class="op">=</span> <span class="cn">FALSE</span>,
-  hex <span class="op">=</span> <span class="cn">FALSE</span>,
-  srid <span class="op">=</span> <span class="fl">0</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">st_as_binary</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sfc</span></span>
+<span><span class="fu">st_as_binary</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  EWKB <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  endian <span class="op">=</span> <span class="va">.Platform</span><span class="op">$</span><span class="va">endian</span>,</span>
+<span>  pureR <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  precision <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"precision"</span><span class="op">)</span>,</span>
+<span>  hex <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sfg</span></span>
+<span><span class="fu">st_as_binary</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  endian <span class="op">=</span> <span class="va">.Platform</span><span class="op">$</span><span class="va">endian</span>,</span>
+<span>  EWKB <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  pureR <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  hex <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  srid <span class="op">=</span> <span class="fl">0</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -148,29 +148,29 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># examples of setting precision:</span></span>
-<span class="r-in"><span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span>precision <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">st_as_binary</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">st_as_sfc</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># examples of setting precision:</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span>precision <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">st_as_binary</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">st_as_sfc</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 1 feature </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 0.333 ymin: 0.167 xmax: 0.333 ymax: 0.167</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CRS:           NA</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (0.333 0.167)</span>
-<span class="r-in"><span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span>precision <span class="op">=</span>  <span class="fl">100</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">st_as_binary</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">st_as_sfc</span></span>
+<span class="r-in"><span><span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span>precision <span class="op">=</span>  <span class="fl">100</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">st_as_binary</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">st_as_sfc</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 1 feature </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 0.33 ymin: 0.17 xmax: 0.33 ymax: 0.17</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CRS:           NA</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (0.33 0.17)</span>
-<span class="r-in"><span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fl">1e6</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span>precision <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">st_as_binary</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">st_as_sfc</span></span>
+<span class="r-in"><span><span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fl">1e6</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span>precision <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">st_as_binary</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">st_as_sfc</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 1 feature </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 333300 ymin: 166700 xmax: 333300 ymax: 166700</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CRS:           NA</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (333300 166700)</span>
-<span class="r-in"><span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fl">1e6</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span>precision <span class="op">=</span> <span class="fl">0.001</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">st_as_binary</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">st_as_sfc</span></span>
+<span class="r-in"><span><span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fl">1e6</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span>precision <span class="op">=</span> <span class="fl">0.001</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">st_as_binary</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">st_as_sfc</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 1 feature </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>

@@ -273,28 +273,28 @@
 </h3>
 <p>As we usually do not work with geometries of single simple features, but with datasets consisting of sets of features with attributes, the two are put together in <code>sf</code> (simple feature) objects. The following command reads the <code>nc</code> dataset from a file that is contained in the <code>sf</code> package:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span>
-<span class="co">## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1; sf_use_s2() is TRUE</span>
-<span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## Reading layer `nc' from data source </span>
-<span class="co">##   `/tmp/Rtmpuvkp4f/temp_libpath12ada1429000c/sf/shape/nc.shp' </span>
-<span class="co">##   using driver `ESRI Shapefile'</span>
-<span class="co">## Simple feature collection with 100 features and 14 fields</span>
-<span class="co">## Geometry type: MULTIPOLYGON</span>
-<span class="co">## Dimension:     XY</span>
-<span class="co">## Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span>
-<span class="co">## Geodetic CRS:  NAD27</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
+<span><span class="co">## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1; sf_use_s2() is TRUE</span></span>
+<span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## Reading layer `nc' from data source </span></span>
+<span><span class="co">##   `/tmp/RtmpRoLNM6/temp_libpath12b0034de0ec5/sf/shape/nc.shp' </span></span>
+<span><span class="co">##   using driver `ESRI Shapefile'</span></span>
+<span><span class="co">## Simple feature collection with 100 features and 14 fields</span></span>
+<span><span class="co">## Geometry type: MULTIPOLYGON</span></span>
+<span><span class="co">## Dimension:     XY</span></span>
+<span><span class="co">## Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span></span>
+<span><span class="co">## Geodetic CRS:  NAD27</span></span></code></pre></div>
 <p>(Note that users will not use <code>system.file</code> but give a <code>filename</code> directly, and that shapefiles consist of more than one file, all with identical basename, which reside in the same directory.) The short report printed gives the file name, the driver (ESRI Shapefile), mentions that there are 100 features (records, represented as rows) and 14 fields (attributes, represented as columns). This object is of class</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span>
-<span class="co">## [1] "sf"         "data.frame"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span></span>
+<span><span class="co">## [1] "sf"         "data.frame"</span></span></code></pre></div>
 <p>meaning it extends (and “is” a) <code>data.frame</code>, but with a single list-column with geometries, which is held in the column with name</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">nc</span>, <span class="st">"sf_column"</span><span class="op">)</span>
-<span class="co">## [1] "geometry"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">nc</span>, <span class="st">"sf_column"</span><span class="op">)</span></span>
+<span><span class="co">## [1] "geometry"</span></span></code></pre></div>
 <p>If we print the first three features, we see their attribute values and an abridged version of the geometry</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">9</span><span class="op">:</span><span class="fl">15</span><span class="op">]</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">9</span><span class="op">:</span><span class="fl">15</span><span class="op">]</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <p>which would give the following output:</p>
 <p><img src="sf_xfig.png"></p>
 <p>In the output we see:</p>
@@ -307,50 +307,50 @@
 </ul>
 <p>Methods for <code>sf</code> objects are</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/methods.html" class="external-link">methods</a></span><span class="op">(</span>class <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span>
-<span class="co">##  [1] [                            [[&lt;-                        </span>
-<span class="co">##  [3] $&lt;-                          aggregate                   </span>
-<span class="co">##  [5] as.data.frame                cbind                       </span>
-<span class="co">##  [7] coerce                       dbDataType                  </span>
-<span class="co">##  [9] dbWriteTable                 filter                      </span>
-<span class="co">## [11] identify                     initialize                  </span>
-<span class="co">## [13] merge                        plot                        </span>
-<span class="co">## [15] print                        rbind                       </span>
-<span class="co">## [17] show                         slotsFromS3                 </span>
-<span class="co">## [19] st_agr                       st_agr&lt;-                    </span>
-<span class="co">## [21] st_area                      st_as_s2                    </span>
-<span class="co">## [23] st_as_sf                     st_as_sfc                   </span>
-<span class="co">## [25] st_bbox                      st_boundary                 </span>
-<span class="co">## [27] st_buffer                    st_cast                     </span>
-<span class="co">## [29] st_centroid                  st_collection_extract       </span>
-<span class="co">## [31] st_convex_hull               st_coordinates              </span>
-<span class="co">## [33] st_crop                      st_crs                      </span>
-<span class="co">## [35] st_crs&lt;-                     st_difference               </span>
-<span class="co">## [37] st_drop_geometry             st_filter                   </span>
-<span class="co">## [39] st_geometry                  st_geometry&lt;-               </span>
-<span class="co">## [41] st_inscribed_circle          st_interpolate_aw           </span>
-<span class="co">## [43] st_intersection              st_intersects               </span>
-<span class="co">## [45] st_is_valid                  st_is                       </span>
-<span class="co">## [47] st_join                      st_line_merge               </span>
-<span class="co">## [49] st_m_range                   st_make_valid               </span>
-<span class="co">## [51] st_minimum_rotated_rectangle st_nearest_points           </span>
-<span class="co">## [53] st_node                      st_normalize                </span>
-<span class="co">## [55] st_point_on_surface          st_polygonize               </span>
-<span class="co">## [57] st_precision                 st_reverse                  </span>
-<span class="co">## [59] st_sample                    st_segmentize               </span>
-<span class="co">## [61] st_set_precision             st_shift_longitude          </span>
-<span class="co">## [63] st_simplify                  st_snap                     </span>
-<span class="co">## [65] st_sym_difference            st_transform                </span>
-<span class="co">## [67] st_triangulate               st_union                    </span>
-<span class="co">## [69] st_voronoi                   st_wrap_dateline            </span>
-<span class="co">## [71] st_write                     st_z_range                  </span>
-<span class="co">## [73] st_zm                        transform                   </span>
-<span class="co">## see '?methods' for accessing help and source code</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/methods.html" class="external-link">methods</a></span><span class="op">(</span>class <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span></span>
+<span><span class="co">##  [1] [                            [[&lt;-                        </span></span>
+<span><span class="co">##  [3] $&lt;-                          aggregate                   </span></span>
+<span><span class="co">##  [5] as.data.frame                cbind                       </span></span>
+<span><span class="co">##  [7] coerce                       dbDataType                  </span></span>
+<span><span class="co">##  [9] dbWriteTable                 filter                      </span></span>
+<span><span class="co">## [11] identify                     initialize                  </span></span>
+<span><span class="co">## [13] merge                        plot                        </span></span>
+<span><span class="co">## [15] print                        rbind                       </span></span>
+<span><span class="co">## [17] show                         slotsFromS3                 </span></span>
+<span><span class="co">## [19] st_agr                       st_agr&lt;-                    </span></span>
+<span><span class="co">## [21] st_area                      st_as_s2                    </span></span>
+<span><span class="co">## [23] st_as_sf                     st_as_sfc                   </span></span>
+<span><span class="co">## [25] st_bbox                      st_boundary                 </span></span>
+<span><span class="co">## [27] st_buffer                    st_cast                     </span></span>
+<span><span class="co">## [29] st_centroid                  st_collection_extract       </span></span>
+<span><span class="co">## [31] st_convex_hull               st_coordinates              </span></span>
+<span><span class="co">## [33] st_crop                      st_crs                      </span></span>
+<span><span class="co">## [35] st_crs&lt;-                     st_difference               </span></span>
+<span><span class="co">## [37] st_drop_geometry             st_filter                   </span></span>
+<span><span class="co">## [39] st_geometry                  st_geometry&lt;-               </span></span>
+<span><span class="co">## [41] st_inscribed_circle          st_interpolate_aw           </span></span>
+<span><span class="co">## [43] st_intersection              st_intersects               </span></span>
+<span><span class="co">## [45] st_is_valid                  st_is                       </span></span>
+<span><span class="co">## [47] st_join                      st_line_merge               </span></span>
+<span><span class="co">## [49] st_m_range                   st_make_valid               </span></span>
+<span><span class="co">## [51] st_minimum_rotated_rectangle st_nearest_points           </span></span>
+<span><span class="co">## [53] st_node                      st_normalize                </span></span>
+<span><span class="co">## [55] st_point_on_surface          st_polygonize               </span></span>
+<span><span class="co">## [57] st_precision                 st_reverse                  </span></span>
+<span><span class="co">## [59] st_sample                    st_segmentize               </span></span>
+<span><span class="co">## [61] st_set_precision             st_shift_longitude          </span></span>
+<span><span class="co">## [63] st_simplify                  st_snap                     </span></span>
+<span><span class="co">## [65] st_sym_difference            st_transform                </span></span>
+<span><span class="co">## [67] st_triangulate               st_union                    </span></span>
+<span><span class="co">## [69] st_voronoi                   st_wrap_dateline            </span></span>
+<span><span class="co">## [71] st_write                     st_z_range                  </span></span>
+<span><span class="co">## [73] st_zm                        transform                   </span></span>
+<span><span class="co">## see '?methods' for accessing help and source code</span></span></code></pre></div>
 <p>It is also possible to create <code>data.frame</code> objects with geometry list-columns that are not of class <code>sf</code>, e.g. by</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">nc.no_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">nc.no_sf</span><span class="op">)</span>
-<span class="co">## [1] "data.frame"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">nc.no_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">nc.no_sf</span><span class="op">)</span></span>
+<span><span class="co">## [1] "data.frame"</span></span></code></pre></div>
 <p>However, such objects:</p>
 <ul>
 <li>no longer register which column is the geometry list-column</li>
@@ -364,120 +364,120 @@
 </h3>
 <p>The column in the <code>sf</code> data.frame that contains the geometries is a list, of class <code>sfc</code>. We can retrieve the geometry list-column in this case by <code>nc$geom</code> or <code>nc[[15]]</code>, but the more general way uses <code>st_geometry</code>:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="op">(</span><span class="va">nc_geom</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## Geometry set for 100 features </span>
-<span class="co">## Geometry type: MULTIPOLYGON</span>
-<span class="co">## Dimension:     XY</span>
-<span class="co">## Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span>
-<span class="co">## Geodetic CRS:  NAD27</span>
-<span class="co">## First 5 geometries:</span>
-<span class="co">## MULTIPOLYGON (((-81.47276 36.23436, -81.54084 3...</span>
-<span class="co">## MULTIPOLYGON (((-81.23989 36.36536, -81.24069 3...</span>
-<span class="co">## MULTIPOLYGON (((-80.45634 36.24256, -80.47639 3...</span>
-<span class="co">## MULTIPOLYGON (((-76.00897 36.3196, -76.01735 36...</span>
-<span class="co">## MULTIPOLYGON (((-77.21767 36.24098, -77.23461 3...</span></code></pre></div>
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">nc_geom</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## Geometry set for 100 features </span></span>
+<span><span class="co">## Geometry type: MULTIPOLYGON</span></span>
+<span><span class="co">## Dimension:     XY</span></span>
+<span><span class="co">## Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span></span>
+<span><span class="co">## Geodetic CRS:  NAD27</span></span>
+<span><span class="co">## First 5 geometries:</span></span>
+<span><span class="co">## MULTIPOLYGON (((-81.47276 36.23436, -81.54084 3...</span></span>
+<span><span class="co">## MULTIPOLYGON (((-81.23989 36.36536, -81.24069 3...</span></span>
+<span><span class="co">## MULTIPOLYGON (((-80.45634 36.24256, -80.47639 3...</span></span>
+<span><span class="co">## MULTIPOLYGON (((-76.00897 36.3196, -76.01735 36...</span></span>
+<span><span class="co">## MULTIPOLYGON (((-77.21767 36.24098, -77.23461 3...</span></span></code></pre></div>
 <p>Geometries are printed in abbreviated form, but we can view a complete geometry by selecting it, e.g. the first one by</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">nc_geom</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
-<span class="co">## MULTIPOLYGON (((-81.47276 36.23436, -81.54084 36.27251, -81.56198 36.27359, -81.63306 36.34069, -81.74107 36.39178, -81.69828 36.47178, -81.7028 36.51934, -81.67 36.58965, -81.3453 36.57286, -81.34754 36.53791, -81.32478 36.51368, -81.31332 36.4807, -81.26624 36.43721, -81.26284 36.40504, -81.24069 36.37942, -81.23989 36.36536, -81.26424 36.35241, -81.32899 36.3635, -81.36137 36.35316, -81.36569 36.33905, -81.35413 36.29972, -81.36745 36.2787, -81.40639 36.28505, -81.41233 36.26729, -81.43104 36.26072, -81.45289 36.23959, -81.47276 36.23436)))</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">nc_geom</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="co">## MULTIPOLYGON (((-81.47276 36.23436, -81.54084 36.27251, -81.56198 36.27359, -81.63306 36.34069, -81.74107 36.39178, -81.69828 36.47178, -81.7028 36.51934, -81.67 36.58965, -81.3453 36.57286, -81.34754 36.53791, -81.32478 36.51368, -81.31332 36.4807, -81.26624 36.43721, -81.26284 36.40504, -81.24069 36.37942, -81.23989 36.36536, -81.26424 36.35241, -81.32899 36.3635, -81.36137 36.35316, -81.36569 36.33905, -81.35413 36.29972, -81.36745 36.2787, -81.40639 36.28505, -81.41233 36.26729, -81.43104 36.26072, -81.45289 36.23959, -81.47276 36.23436)))</span></span></code></pre></div>
 <p>The way this is printed is called <em>well-known text</em>, and is part of the standards. The word <code>MULTIPOLYGON</code> is followed by three parentheses, because it can consist of multiple polygons, in the form of <code>MULTIPOLYGON(POL1,POL2)</code>, where <code>POL1</code> might consist of an exterior ring and zero or more interior rings, as of <code>(EXT1,HOLE1,HOLE2)</code>. Sets of coordinates are held together with parentheses, so we get <code>((crds_ext)(crds_hole1)(crds_hole2))</code> where <code>crds_</code> is a comma-separated set of coordinates of a ring. This leads to the case above, where <code>MULTIPOLYGON(((crds_ext)))</code> refers to the exterior ring (1), without holes (2), of the first polygon (3) - hence three parentheses.</p>
 <p>We can see there is a single polygon with no rings:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, reset <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># reset = FALSE: we want to add to a plot with a legend</span>
-<span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">]</span>, col <span class="op">=</span> <span class="st">'grey'</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, reset <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># reset = FALSE: we want to add to a plot with a legend</span></span>
+<span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">]</span>, col <span class="op">=</span> <span class="st">'grey'</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="sf1_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 <p>but some of the polygons in this dataset have multiple exterior rings; they can be identified by</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
-<span class="op">(</span><span class="va">w</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">nc_geom</span>, <span class="va">length</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## [1]  4 56 57 87 91 95</span>
-<span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="va">w</span>,<span class="fl">1</span><span class="op">]</span>, col <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">7</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">(</span><span class="va">w</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">nc_geom</span>, <span class="va">length</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## [1]  4 56 57 87 91 95</span></span>
+<span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="va">w</span>,<span class="fl">1</span><span class="op">]</span>, col <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">7</span><span class="op">)</span></span></code></pre></div>
 <p><img src="sf1_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
 <p>Following the <code>MULTIPOLYGON</code> datastructure, in R we have a list of lists of lists of matrices. For instance, we get the first 3 coordinate pairs of the second exterior ring (first ring is always exterior) for the geometry of feature 4 by</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">nc_geom</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span>
-<span class="co">##           [,1]     [,2]</span>
-<span class="co">## [1,] -76.02717 36.55672</span>
-<span class="co">## [2,] -75.99866 36.55665</span>
-<span class="co">## [3,] -75.91192 36.54253</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">nc_geom</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span></span>
+<span><span class="co">##           [,1]     [,2]</span></span>
+<span><span class="co">## [1,] -76.02717 36.55672</span></span>
+<span><span class="co">## [2,] -75.99866 36.55665</span></span>
+<span><span class="co">## [3,] -75.91192 36.54253</span></span></code></pre></div>
 <p>Geometry columns have their own class,</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">nc_geom</span><span class="op">)</span>
-<span class="co">## [1] "sfc_MULTIPOLYGON" "sfc"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">nc_geom</span><span class="op">)</span></span>
+<span><span class="co">## [1] "sfc_MULTIPOLYGON" "sfc"</span></span></code></pre></div>
 <p>Methods for geometry list-columns include</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/methods.html" class="external-link">methods</a></span><span class="op">(</span>class <span class="op">=</span> <span class="st">'sfc'</span><span class="op">)</span>
-<span class="co">##  [1] [                            [&lt;-                         </span>
-<span class="co">##  [3] as.data.frame                c                           </span>
-<span class="co">##  [5] coerce                       format                      </span>
-<span class="co">##  [7] identify                     initialize                  </span>
-<span class="co">##  [9] Ops                          print                       </span>
-<span class="co">## [11] rep                          show                        </span>
-<span class="co">## [13] slotsFromS3                  st_area                     </span>
-<span class="co">## [15] st_as_binary                 st_as_grob                  </span>
-<span class="co">## [17] st_as_s2                     st_as_sf                    </span>
-<span class="co">## [19] st_as_text                   st_bbox                     </span>
-<span class="co">## [21] st_boundary                  st_buffer                   </span>
-<span class="co">## [23] st_cast                      st_centroid                 </span>
-<span class="co">## [25] st_collection_extract        st_convex_hull              </span>
-<span class="co">## [27] st_coordinates               st_crop                     </span>
-<span class="co">## [29] st_crs                       st_crs&lt;-                    </span>
-<span class="co">## [31] st_difference                st_geometry                 </span>
-<span class="co">## [33] st_inscribed_circle          st_intersection             </span>
-<span class="co">## [35] st_intersects                st_is_valid                 </span>
-<span class="co">## [37] st_is                        st_line_merge               </span>
-<span class="co">## [39] st_m_range                   st_make_valid               </span>
-<span class="co">## [41] st_minimum_rotated_rectangle st_nearest_points           </span>
-<span class="co">## [43] st_node                      st_normalize                </span>
-<span class="co">## [45] st_point_on_surface          st_polygonize               </span>
-<span class="co">## [47] st_precision                 st_reverse                  </span>
-<span class="co">## [49] st_sample                    st_segmentize               </span>
-<span class="co">## [51] st_set_precision             st_shift_longitude          </span>
-<span class="co">## [53] st_simplify                  st_snap                     </span>
-<span class="co">## [55] st_sym_difference            st_transform                </span>
-<span class="co">## [57] st_triangulate               st_union                    </span>
-<span class="co">## [59] st_voronoi                   st_wrap_dateline            </span>
-<span class="co">## [61] st_write                     st_z_range                  </span>
-<span class="co">## [63] st_zm                        str                         </span>
-<span class="co">## [65] summary                      vec_cast.sfc                </span>
-<span class="co">## [67] vec_ptype2.sfc              </span>
-<span class="co">## see '?methods' for accessing help and source code</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/methods.html" class="external-link">methods</a></span><span class="op">(</span>class <span class="op">=</span> <span class="st">'sfc'</span><span class="op">)</span></span>
+<span><span class="co">##  [1] [                            [&lt;-                         </span></span>
+<span><span class="co">##  [3] as.data.frame                c                           </span></span>
+<span><span class="co">##  [5] coerce                       format                      </span></span>
+<span><span class="co">##  [7] identify                     initialize                  </span></span>
+<span><span class="co">##  [9] Ops                          print                       </span></span>
+<span><span class="co">## [11] rep                          show                        </span></span>
+<span><span class="co">## [13] slotsFromS3                  st_area                     </span></span>
+<span><span class="co">## [15] st_as_binary                 st_as_grob                  </span></span>
+<span><span class="co">## [17] st_as_s2                     st_as_sf                    </span></span>
+<span><span class="co">## [19] st_as_text                   st_bbox                     </span></span>
+<span><span class="co">## [21] st_boundary                  st_buffer                   </span></span>
+<span><span class="co">## [23] st_cast                      st_centroid                 </span></span>
+<span><span class="co">## [25] st_collection_extract        st_convex_hull              </span></span>
+<span><span class="co">## [27] st_coordinates               st_crop                     </span></span>
+<span><span class="co">## [29] st_crs                       st_crs&lt;-                    </span></span>
+<span><span class="co">## [31] st_difference                st_geometry                 </span></span>
+<span><span class="co">## [33] st_inscribed_circle          st_intersection             </span></span>
+<span><span class="co">## [35] st_intersects                st_is_valid                 </span></span>
+<span><span class="co">## [37] st_is                        st_line_merge               </span></span>
+<span><span class="co">## [39] st_m_range                   st_make_valid               </span></span>
+<span><span class="co">## [41] st_minimum_rotated_rectangle st_nearest_points           </span></span>
+<span><span class="co">## [43] st_node                      st_normalize                </span></span>
+<span><span class="co">## [45] st_point_on_surface          st_polygonize               </span></span>
+<span><span class="co">## [47] st_precision                 st_reverse                  </span></span>
+<span><span class="co">## [49] st_sample                    st_segmentize               </span></span>
+<span><span class="co">## [51] st_set_precision             st_shift_longitude          </span></span>
+<span><span class="co">## [53] st_simplify                  st_snap                     </span></span>
+<span><span class="co">## [55] st_sym_difference            st_transform                </span></span>
+<span><span class="co">## [57] st_triangulate               st_union                    </span></span>
+<span><span class="co">## [59] st_voronoi                   st_wrap_dateline            </span></span>
+<span><span class="co">## [61] st_write                     st_z_range                  </span></span>
+<span><span class="co">## [63] st_zm                        str                         </span></span>
+<span><span class="co">## [65] summary                      vec_cast.sfc                </span></span>
+<span><span class="co">## [67] vec_ptype2.sfc              </span></span>
+<span><span class="co">## see '?methods' for accessing help and source code</span></span></code></pre></div>
 <p>Coordinate reference systems (<code>st_crs</code> and <code>st_transform</code>) are discussed in the section on <a href="#crs">coordinate reference systems</a>. <code>st_as_wkb</code> and <code>st_as_text</code> convert geometry list-columns into well-known-binary or well-known-text, explained <a href="#wkb">below</a>. <code>st_bbox</code> retrieves the coordinate bounding box.</p>
 <p>Attributes include</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">nc_geom</span><span class="op">)</span>
-<span class="co">## $n_empty</span>
-<span class="co">## [1] 0</span>
-<span class="co">## </span>
-<span class="co">## $crs</span>
-<span class="co">## Coordinate Reference System:</span>
-<span class="co">##   User input: NAD27 </span>
-<span class="co">##   wkt:</span>
-<span class="co">## GEOGCRS["NAD27",</span>
-<span class="co">##     DATUM["North American Datum 1927",</span>
-<span class="co">##         ELLIPSOID["Clarke 1866",6378206.4,294.978698213898,</span>
-<span class="co">##             LENGTHUNIT["metre",1]]],</span>
-<span class="co">##     PRIMEM["Greenwich",0,</span>
-<span class="co">##         ANGLEUNIT["degree",0.0174532925199433]],</span>
-<span class="co">##     CS[ellipsoidal,2],</span>
-<span class="co">##         AXIS["latitude",north,</span>
-<span class="co">##             ORDER[1],</span>
-<span class="co">##             ANGLEUNIT["degree",0.0174532925199433]],</span>
-<span class="co">##         AXIS["longitude",east,</span>
-<span class="co">##             ORDER[2],</span>
-<span class="co">##             ANGLEUNIT["degree",0.0174532925199433]],</span>
-<span class="co">##     ID["EPSG",4267]]</span>
-<span class="co">## </span>
-<span class="co">## $class</span>
-<span class="co">## [1] "sfc_MULTIPOLYGON" "sfc"             </span>
-<span class="co">## </span>
-<span class="co">## $precision</span>
-<span class="co">## [1] 0</span>
-<span class="co">## </span>
-<span class="co">## $bbox</span>
-<span class="co">##      xmin      ymin      xmax      ymax </span>
-<span class="co">## -84.32385  33.88199 -75.45698  36.58965</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">nc_geom</span><span class="op">)</span></span>
+<span><span class="co">## $n_empty</span></span>
+<span><span class="co">## [1] 0</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $crs</span></span>
+<span><span class="co">## Coordinate Reference System:</span></span>
+<span><span class="co">##   User input: NAD27 </span></span>
+<span><span class="co">##   wkt:</span></span>
+<span><span class="co">## GEOGCRS["NAD27",</span></span>
+<span><span class="co">##     DATUM["North American Datum 1927",</span></span>
+<span><span class="co">##         ELLIPSOID["Clarke 1866",6378206.4,294.978698213898,</span></span>
+<span><span class="co">##             LENGTHUNIT["metre",1]]],</span></span>
+<span><span class="co">##     PRIMEM["Greenwich",0,</span></span>
+<span><span class="co">##         ANGLEUNIT["degree",0.0174532925199433]],</span></span>
+<span><span class="co">##     CS[ellipsoidal,2],</span></span>
+<span><span class="co">##         AXIS["latitude",north,</span></span>
+<span><span class="co">##             ORDER[1],</span></span>
+<span><span class="co">##             ANGLEUNIT["degree",0.0174532925199433]],</span></span>
+<span><span class="co">##         AXIS["longitude",east,</span></span>
+<span><span class="co">##             ORDER[2],</span></span>
+<span><span class="co">##             ANGLEUNIT["degree",0.0174532925199433]],</span></span>
+<span><span class="co">##     ID["EPSG",4267]]</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $class</span></span>
+<span><span class="co">## [1] "sfc_MULTIPOLYGON" "sfc"             </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $precision</span></span>
+<span><span class="co">## [1] 0</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $bbox</span></span>
+<span><span class="co">##      xmin      ymin      xmax      ymax </span></span>
+<span><span class="co">## -84.32385  33.88199 -75.45698  36.58965</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="mixed-geometry-types">Mixed geometry types<a class="anchor" aria-label="anchor" href="#mixed-geometry-types"></a>
@@ -485,30 +485,30 @@
 <p>The class of <code>nc_geom</code> is <code>c("sfc_MULTIPOLYGON", "sfc")</code>: <code>sfc</code> is shared with all geometry types, and <code>sfc_TYPE</code> with <code>TYPE</code> indicating the type of the particular geometry at hand.</p>
 <p>There are two “special” types: <code>GEOMETRYCOLLECTION</code>, and <code>GEOMETRY</code>. <code>GEOMETRYCOLLECTION</code> indicates that each of the geometries may contain a mix of geometry types, as in</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="op">(</span><span class="va">mix</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_geometrycollection</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,
-    <span class="fu"><a href="../reference/st.html">st_geometrycollection</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## Geometry set for 2 features </span>
-<span class="co">## Geometry type: GEOMETRYCOLLECTION</span>
-<span class="co">## Dimension:     XY</span>
-<span class="co">## Bounding box:  xmin: 1 ymin: 2 xmax: 2 ymax: 4</span>
-<span class="co">## CRS:           NA</span>
-<span class="co">## GEOMETRYCOLLECTION (POINT (1 2))</span>
-<span class="co">## GEOMETRYCOLLECTION (LINESTRING (1 3, 2 4))</span>
-<span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">mix</span><span class="op">)</span>
-<span class="co">## [1] "sfc_GEOMETRYCOLLECTION" "sfc"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">mix</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_geometrycollection</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="../reference/st.html">st_geometrycollection</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## Geometry set for 2 features </span></span>
+<span><span class="co">## Geometry type: GEOMETRYCOLLECTION</span></span>
+<span><span class="co">## Dimension:     XY</span></span>
+<span><span class="co">## Bounding box:  xmin: 1 ymin: 2 xmax: 2 ymax: 4</span></span>
+<span><span class="co">## CRS:           NA</span></span>
+<span><span class="co">## GEOMETRYCOLLECTION (POINT (1 2))</span></span>
+<span><span class="co">## GEOMETRYCOLLECTION (LINESTRING (1 3, 2 4))</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">mix</span><span class="op">)</span></span>
+<span><span class="co">## [1] "sfc_GEOMETRYCOLLECTION" "sfc"</span></span></code></pre></div>
 <p>Still, the geometries are here of a single type.</p>
 <p>The second <code>GEOMETRY</code>, indicates that the geometries in the geometry list-column are of varying type:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="op">(</span><span class="va">mix</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="../reference/st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## Geometry set for 2 features </span>
-<span class="co">## Geometry type: GEOMETRY</span>
-<span class="co">## Dimension:     XY</span>
-<span class="co">## Bounding box:  xmin: 1 ymin: 2 xmax: 2 ymax: 4</span>
-<span class="co">## CRS:           NA</span>
-<span class="co">## POINT (1 2)</span>
-<span class="co">## LINESTRING (1 3, 2 4)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">mix</span><span class="op">)</span>
-<span class="co">## [1] "sfc_GEOMETRY" "sfc"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">mix</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="../reference/st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## Geometry set for 2 features </span></span>
+<span><span class="co">## Geometry type: GEOMETRY</span></span>
+<span><span class="co">## Dimension:     XY</span></span>
+<span><span class="co">## Bounding box:  xmin: 1 ymin: 2 xmax: 2 ymax: 4</span></span>
+<span><span class="co">## CRS:           NA</span></span>
+<span><span class="co">## POINT (1 2)</span></span>
+<span><span class="co">## LINESTRING (1 3, 2 4)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">mix</span><span class="op">)</span></span>
+<span><span class="co">## [1] "sfc_GEOMETRY" "sfc"</span></span></code></pre></div>
 <p>These two are fundamentally different: <code>GEOMETRY</code> is a superclass without instances, <code>GEOMETRYCOLLECTION</code> is a geometry instance. <code>GEOMETRY</code> list-columns occur when we read in a data source with a mix of geometry types. <code>GEOMETRYCOLLECTION</code> <em>is</em> a single feature’s geometry: the intersection of two feature polygons may consist of points, lines and polygons, see the example <a href="#geometrycollection">below</a>.</p>
 </div>
 <div class="section level3">
@@ -524,55 +524,55 @@
 </ol>
 <p>Creator functions are rarely used in practice, since we typically bulk read and write spatial data. They are useful for illustration:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="op">(</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## POINT (1 2)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-<span class="co">##  'XY' num [1:2] 1 2</span>
-<span class="op">(</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## POINT Z (1 2 3)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-<span class="co">##  'XYZ' num [1:3] 1 2 3</span>
-<span class="op">(</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>, <span class="st">"XYM"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## POINT M (1 2 3)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-<span class="co">##  'XYM' num [1:3] 1 2 3</span>
-<span class="op">(</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## POINT ZM (1 2 3 4)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-<span class="co">##  'XYZM' num [1:4] 1 2 3 4</span>
-<span class="fu"><a href="../reference/st_zm.html">st_zm</a></span><span class="op">(</span><span class="va">x</span>, drop <span class="op">=</span> <span class="cn">TRUE</span>, what <span class="op">=</span> <span class="st">"ZM"</span><span class="op">)</span>
-<span class="co">## POINT (1 2)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## POINT (1 2)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="co">##  'XY' num [1:2] 1 2</span></span>
+<span><span class="op">(</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## POINT Z (1 2 3)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="co">##  'XYZ' num [1:3] 1 2 3</span></span>
+<span><span class="op">(</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>, <span class="st">"XYM"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## POINT M (1 2 3)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="co">##  'XYM' num [1:3] 1 2 3</span></span>
+<span><span class="op">(</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## POINT ZM (1 2 3 4)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="co">##  'XYZM' num [1:4] 1 2 3 4</span></span>
+<span><span class="fu"><a href="../reference/st_zm.html">st_zm</a></span><span class="op">(</span><span class="va">x</span>, drop <span class="op">=</span> <span class="cn">TRUE</span>, what <span class="op">=</span> <span class="st">"ZM"</span><span class="op">)</span></span>
+<span><span class="co">## POINT (1 2)</span></span></code></pre></div>
 <p>This means that we can represent 2-, 3- or 4-dimensional coordinates. All geometry objects inherit from <code>sfg</code> (simple feature geometry), but also have a type (e.g. <code>POINT</code>), and a dimension (e.g. <code>XYM</code>) class name. A figure illustrates six of the seven most common types.</p>
 <p>With the exception of the <code>POINT</code> which has a single point as geometry, the remaining six common single simple feature geometry types that correspond to single features (single records, or rows in a <code>data.frame</code>) are created like this</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.2</span>,<span class="fl">4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4.6</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.8</span>,<span class="fl">4.4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.5</span>,<span class="fl">3.8</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.4</span>,<span class="fl">3.6</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.9</span>,<span class="fl">4.5</span><span class="op">)</span><span class="op">)</span>
-<span class="op">(</span><span class="va">mp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_multipoint</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## MULTIPOINT ((3.2 4), (3 4.6), (3.8 4.4), (3.5 3.8), (3.4 3.6), (3.9 4.5))</span>
-<span class="va">s1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">3</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">4</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">5</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span>
-<span class="op">(</span><span class="va">ls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_linestring</a></span><span class="op">(</span><span class="va">s1</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## LINESTRING (0 3, 0 4, 1 5, 2 5)</span>
-<span class="va">s2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>,<span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>,<span class="fl">4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">4.8</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">4.8</span><span class="op">)</span><span class="op">)</span>
-<span class="va">s3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">4.4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.6</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span>
-<span class="op">(</span><span class="va">mls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_multilinestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">s1</span>,<span class="va">s2</span>,<span class="va">s3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## MULTILINESTRING ((0 3, 0 4, 1 5, 2 5), (0.2 3, 0.2 4, 1 4.8, 2 4.8), (0 4.4, 0.6 5))</span>
-<span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
-<span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
-<span class="va">pol</span> <span class="op">&lt;-</span><span class="fu"><a href="../reference/st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">p1</span>,<span class="va">p2</span><span class="op">)</span><span class="op">)</span>
-<span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>
-<span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.3</span>,<span class="fl">0.3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.8</span>,<span class="fl">0.3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.8</span>,<span class="fl">0.8</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.3</span>,<span class="fl">0.8</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.3</span>,<span class="fl">0.3</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">5</span><span class="op">:</span><span class="fl">1</span>,<span class="op">]</span>
-<span class="va">p5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span>
-<span class="op">(</span><span class="va">mpol</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_multipolygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">p1</span>,<span class="va">p2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">p3</span>,<span class="va">p4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">p5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## MULTIPOLYGON (((0 0, 1 0, 3 2, 2 4, 1 4, 0 0), (1 1, 1 2, 2 2, 1 1)), ((3 0, 4 0, 4 1, 3 1, 3 0), (3.3 0.3, 3.3 0.8, 3.8 0.8, 3.8 0.3, 3.3 0.3)), ((3 3, 4 2, 4 3, 3 3)))</span>
-<span class="op">(</span><span class="va">gc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_geometrycollection</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">mp</span>, <span class="va">mpol</span>, <span class="va">ls</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## GEOMETRYCOLLECTION (MULTIPOINT ((3.2 4), (3 4.6), (3.8 4.4), (3.5 3.8), (3.4 3.6), (3.9 4.5)), MULTIPOLYGON (((0 0, 1 0, 3 2, 2 4, 1 4, 0 0), (1 1, 1 2, 2 2, 1 1)), ((3 0, 4 0, 4 1, 3 1, 3 0), (3.3 0.3, 3.3 0.8, 3.8 0.8, 3.8 0.3, 3.3 0.3)), ((3 3, 4 2, 4 3, 3 3))), LINESTRING (0 3, 0 4, 1 5, 2 5))</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.2</span>,<span class="fl">4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">4.6</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.8</span>,<span class="fl">4.4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.5</span>,<span class="fl">3.8</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.4</span>,<span class="fl">3.6</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.9</span>,<span class="fl">4.5</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">(</span><span class="va">mp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_multipoint</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## MULTIPOINT ((3.2 4), (3 4.6), (3.8 4.4), (3.5 3.8), (3.4 3.6), (3.9 4.5))</span></span>
+<span><span class="va">s1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">3</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">4</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">5</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">(</span><span class="va">ls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_linestring</a></span><span class="op">(</span><span class="va">s1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## LINESTRING (0 3, 0 4, 1 5, 2 5)</span></span>
+<span><span class="va">s2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>,<span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>,<span class="fl">4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">4.8</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">4.8</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">s3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">4.4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.6</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">(</span><span class="va">mls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_multilinestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">s1</span>,<span class="va">s2</span>,<span class="va">s3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## MULTILINESTRING ((0 3, 0 4, 1 5, 2 5), (0.2 3, 0.2 4, 1 4.8, 2 4.8), (0 4.4, 0.6 5))</span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">pol</span> <span class="op">&lt;-</span><span class="fu"><a href="../reference/st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">p1</span>,<span class="va">p2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.3</span>,<span class="fl">0.3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.8</span>,<span class="fl">0.3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.8</span>,<span class="fl">0.8</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.3</span>,<span class="fl">0.8</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.3</span>,<span class="fl">0.3</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">5</span><span class="op">:</span><span class="fl">1</span>,<span class="op">]</span></span>
+<span><span class="va">p5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">(</span><span class="va">mpol</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_multipolygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">p1</span>,<span class="va">p2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">p3</span>,<span class="va">p4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">p5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## MULTIPOLYGON (((0 0, 1 0, 3 2, 2 4, 1 4, 0 0), (1 1, 1 2, 2 2, 1 1)), ((3 0, 4 0, 4 1, 3 1, 3 0), (3.3 0.3, 3.3 0.8, 3.8 0.8, 3.8 0.3, 3.3 0.3)), ((3 3, 4 2, 4 3, 3 3)))</span></span>
+<span><span class="op">(</span><span class="va">gc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_geometrycollection</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">mp</span>, <span class="va">mpol</span>, <span class="va">ls</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## GEOMETRYCOLLECTION (MULTIPOINT ((3.2 4), (3 4.6), (3.8 4.4), (3.5 3.8), (3.4 3.6), (3.9 4.5)), MULTIPOLYGON (((0 0, 1 0, 3 2, 2 4, 1 4, 0 0), (1 1, 1 2, 2 2, 1 1)), ((3 0, 4 0, 4 1, 3 1, 3 0), (3.3 0.3, 3.3 0.8, 3.8 0.8, 3.8 0.3, 3.3 0.3)), ((3 3, 4 2, 4 3, 3 3))), LINESTRING (0 3, 0 4, 1 5, 2 5))</span></span></code></pre></div>
 <p>The objects created are shown here:</p>
 <p><img src="sf1_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
 <p>Geometries can also be empty, as in</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="op">(</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_geometrycollection</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## GEOMETRYCOLLECTION EMPTY</span>
-<span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-<span class="co">## [1] 0</span></code></pre></div>
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_geometrycollection</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## GEOMETRYCOLLECTION EMPTY</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="co">## [1] 0</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="wkb">Well-known text, well-known binary, precision<a class="anchor" aria-label="anchor" href="#wkb"></a>
@@ -582,22 +582,22 @@
 </h4>
 <p>Well-known text (WKT) and well-known binary (WKB) are two encodings for simple feature geometries. Well-known text, e.g. seen in</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">10</span><span class="op">:</span><span class="fl">1</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="../reference/st_as_text.html">st_as_text</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-<span class="co">## [1] "LINESTRING (10 5, 9 4, 8 3, 7 2, 6 1)"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">10</span><span class="op">:</span><span class="fl">1</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/st_as_text.html">st_as_text</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="co">## [1] "LINESTRING (10 5, 9 4, 8 3, 7 2, 6 1)"</span></span></code></pre></div>
 <p>(but without the leading <code>## [1]</code> and quotes), is human-readable. Coordinates are usually floating point numbers, and moving large amounts of information as text is slow and imprecise. For that reason, we use well-known binary (WKB) encoding</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/st_as_binary.html">st_as_binary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-<span class="co">##  [1] 01 02 00 00 00 05 00 00 00 00 00 00 00 00 00 24 40 00 00 00 00 00 00 14 40</span>
-<span class="co">## [26] 00 00 00 00 00 00 22 40 00 00 00 00 00 00 10 40 00 00 00 00 00 00 20 40 00</span>
-<span class="co">## [51] 00 00 00 00 00 08 40 00 00 00 00 00 00 1c 40 00 00 00 00 00 00 00 40 00 00</span>
-<span class="co">## [76] 00 00 00 00 18 40 00 00 00 00 00 00 f0 3f</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/st_as_binary.html">st_as_binary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="co">##  [1] 01 02 00 00 00 05 00 00 00 00 00 00 00 00 00 24 40 00 00 00 00 00 00 14 40</span></span>
+<span><span class="co">## [26] 00 00 00 00 00 00 22 40 00 00 00 00 00 00 10 40 00 00 00 00 00 00 20 40 00</span></span>
+<span><span class="co">## [51] 00 00 00 00 00 08 40 00 00 00 00 00 00 1c 40 00 00 00 00 00 00 00 40 00 00</span></span>
+<span><span class="co">## [76] 00 00 00 00 18 40 00 00 00 00 00 00 f0 3f</span></span></code></pre></div>
 <p>WKT and WKB can both be transformed back into R native objects by</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/st_as_sfc.html">st_as_sfc</a></span><span class="op">(</span><span class="st">"LINESTRING(10 5, 9 4, 8 3, 7 2, 6 1)"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
-<span class="co">## LINESTRING (10 5, 9 4, 8 3, 7 2, 6 1)</span>
-<span class="fu"><a href="../reference/st_as_sfc.html">st_as_sfc</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/structure.html" class="external-link">structure</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_as_binary.html">st_as_binary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>, class <span class="op">=</span> <span class="st">"WKB"</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
-<span class="co">## LINESTRING (10 5, 9 4, 8 3, 7 2, 6 1)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/st_as_sfc.html">st_as_sfc</a></span><span class="op">(</span><span class="st">"LINESTRING(10 5, 9 4, 8 3, 7 2, 6 1)"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="co">## LINESTRING (10 5, 9 4, 8 3, 7 2, 6 1)</span></span>
+<span><span class="fu"><a href="../reference/st_as_sfc.html">st_as_sfc</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/structure.html" class="external-link">structure</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_as_binary.html">st_as_binary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span>, class <span class="op">=</span> <span class="st">"WKB"</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="co">## LINESTRING (10 5, 9 4, 8 3, 7 2, 6 1)</span></span></code></pre></div>
 <p>GDAL, GEOS, spatial databases and GIS read and write WKB which is fast and precise. Conversion between R native objects and WKB is done by package <code>sf</code> in compiled (C++/Rcpp) code, making this a reusable and fast route for I/O of simple feature geometries in R.</p>
 </div>
 <div class="section level4">
@@ -617,80 +617,80 @@
 </h3>
 <p>As we’ve seen above, reading spatial data from an external file can be done by</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">filename</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>
-<span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">filename</span><span class="op">)</span>
-<span class="co">## Reading layer `nc' from data source </span>
-<span class="co">##   `/tmp/Rtmpuvkp4f/temp_libpath12ada1429000c/sf/shape/nc.shp' </span>
-<span class="co">##   using driver `ESRI Shapefile'</span>
-<span class="co">## Simple feature collection with 100 features and 14 fields</span>
-<span class="co">## Geometry type: MULTIPOLYGON</span>
-<span class="co">## Dimension:     XY</span>
-<span class="co">## Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span>
-<span class="co">## Geodetic CRS:  NAD27</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">filename</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span></span>
+<span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">filename</span><span class="op">)</span></span>
+<span><span class="co">## Reading layer `nc' from data source </span></span>
+<span><span class="co">##   `/tmp/RtmpRoLNM6/temp_libpath12b0034de0ec5/sf/shape/nc.shp' </span></span>
+<span><span class="co">##   using driver `ESRI Shapefile'</span></span>
+<span><span class="co">## Simple feature collection with 100 features and 14 fields</span></span>
+<span><span class="co">## Geometry type: MULTIPOLYGON</span></span>
+<span><span class="co">## Dimension:     XY</span></span>
+<span><span class="co">## Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span></span>
+<span><span class="co">## Geodetic CRS:  NAD27</span></span></code></pre></div>
 <p>we can suppress the output by adding argument <code>quiet=TRUE</code> or by using the otherwise nearly identical but more quiet</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="va">filename</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="va">filename</span><span class="op">)</span></span></code></pre></div>
 <p>Writing takes place in the same fashion, using <code>st_write</code>:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/st_write.html">st_write</a></span><span class="op">(</span><span class="va">nc</span>, <span class="st">"nc.shp"</span><span class="op">)</span>
-<span class="co">## Writing layer `nc' to data source `nc.shp' using driver `ESRI Shapefile'</span>
-<span class="co">## Writing 100 features with 14 fields and geometry type Multi Polygon.</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/st_write.html">st_write</a></span><span class="op">(</span><span class="va">nc</span>, <span class="st">"nc.shp"</span><span class="op">)</span></span>
+<span><span class="co">## Writing layer `nc' to data source `nc.shp' using driver `ESRI Shapefile'</span></span>
+<span><span class="co">## Writing 100 features with 14 fields and geometry type Multi Polygon.</span></span></code></pre></div>
 <p>If we repeat this, we get an error message that the file already exists, and we can overwrite by</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/st_write.html">st_write</a></span><span class="op">(</span><span class="va">nc</span>, <span class="st">"nc.shp"</span>, delete_layer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">## Deleting layer `nc' using driver `ESRI Shapefile'</span>
-<span class="co">## Writing layer `nc' to data source `nc.shp' using driver `ESRI Shapefile'</span>
-<span class="co">## Writing 100 features with 14 fields and geometry type Multi Polygon.</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/st_write.html">st_write</a></span><span class="op">(</span><span class="va">nc</span>, <span class="st">"nc.shp"</span>, delete_layer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">## Deleting layer `nc' using driver `ESRI Shapefile'</span></span>
+<span><span class="co">## Writing layer `nc' to data source `nc.shp' using driver `ESRI Shapefile'</span></span>
+<span><span class="co">## Writing 100 features with 14 fields and geometry type Multi Polygon.</span></span></code></pre></div>
 <p>or its quiet alternative that does this by default,</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/st_write.html">write_sf</a></span><span class="op">(</span><span class="va">nc</span>, <span class="st">"nc.shp"</span><span class="op">)</span> <span class="co"># silently overwrites</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/st_write.html">write_sf</a></span><span class="op">(</span><span class="va">nc</span>, <span class="st">"nc.shp"</span><span class="op">)</span> <span class="co"># silently overwrites</span></span></code></pre></div>
 <div class="section level4">
 <h4 id="driver-specific-options">Driver-specific options<a class="anchor" aria-label="anchor" href="#driver-specific-options"></a>
 </h4>
 <p>The <code>dsn</code> and <code>layer</code> arguments to <code>st_read</code> and <code>st_write</code> denote a data source name and optionally a layer name. Their exact interpretation as well as the options they support vary per driver, the <a href="https://gdal.org/drivers/vector/index.html" class="external-link">GDAL driver documentation</a> is best consulted for this. For instance, a PostGIS table in database <code>postgis</code> might be read by</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">meuse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"PG:dbname=postgis"</span>, <span class="st">"meuse"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">meuse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"PG:dbname=postgis"</span>, <span class="st">"meuse"</span><span class="op">)</span></span></code></pre></div>
 <p>where the <code>PG:</code> string indicates this concerns the PostGIS driver, followed by database name, and possibly port and user credentials. When the <code>layer</code> and <code>driver</code> arguments are not specified, <code>st_read</code> tries to guess them from the datasource, or else simply reads the first layer, giving a warning in case there are more.</p>
 <p><code>st_read</code> typically reads the coordinate reference system as <code>proj4string</code>, but not the EPSG (SRID). GDAL cannot retrieve SRID (EPSG code) from <code>proj4string</code> strings, and, when needed, it has to be set by the user. See also the section on <a href="#crs">coordinate reference systems</a>.</p>
 <p><code><a href="../reference/st_drivers.html">st_drivers()</a></code> returns a <code>data.frame</code> listing available drivers, and their metadata: names, whether a driver can write, and whether it is a raster and/or vector driver. All drivers can read. Reading of some common data formats is illustrated below:</p>
 <p><code>st_layers(dsn)</code> lists the layers present in data source <code>dsn</code>, and gives the number of fields, features and geometry type for each layer:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/st_layers.html">st_layers</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"osm/overpass.osm"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## Driver: OSM </span>
-<span class="co">## Available layers:</span>
-<span class="co">##         layer_name       geometry_type features fields crs_name</span>
-<span class="co">## 1           points               Point       NA     10   WGS 84</span>
-<span class="co">## 2            lines         Line String       NA      9   WGS 84</span>
-<span class="co">## 3 multilinestrings   Multi Line String       NA      4   WGS 84</span>
-<span class="co">## 4    multipolygons       Multi Polygon       NA     25   WGS 84</span>
-<span class="co">## 5  other_relations Geometry Collection       NA      4   WGS 84</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/st_layers.html">st_layers</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"osm/overpass.osm"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## Driver: OSM </span></span>
+<span><span class="co">## Available layers:</span></span>
+<span><span class="co">##         layer_name       geometry_type features fields crs_name</span></span>
+<span><span class="co">## 1           points               Point       NA     10   WGS 84</span></span>
+<span><span class="co">## 2            lines         Line String       NA      9   WGS 84</span></span>
+<span><span class="co">## 3 multilinestrings   Multi Line String       NA      4   WGS 84</span></span>
+<span><span class="co">## 4    multipolygons       Multi Polygon       NA     25   WGS 84</span></span>
+<span><span class="co">## 5  other_relations Geometry Collection       NA      4   WGS 84</span></span></code></pre></div>
 <p>we see that in this case, the number of features is <code>NA</code> because for this xml file the whole file needs to be read, which may be costly for large files. We can force counting by</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>OSM_USE_CUSTOM_INDEXING<span class="op">=</span><span class="st">"NO"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/st_layers.html">st_layers</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"osm/overpass.osm"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>, do_count <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">## Driver: OSM </span>
-<span class="co">## Available layers:</span>
-<span class="co">##         layer_name       geometry_type features fields crs_name</span>
-<span class="co">## 1           points               Point        1     10   WGS 84</span>
-<span class="co">## 2            lines         Line String        0      9   WGS 84</span>
-<span class="co">## 3 multilinestrings   Multi Line String        0      4   WGS 84</span>
-<span class="co">## 4    multipolygons       Multi Polygon       13     25   WGS 84</span>
-<span class="co">## 5  other_relations Geometry Collection        0      4   WGS 84</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>OSM_USE_CUSTOM_INDEXING<span class="op">=</span><span class="st">"NO"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/st_layers.html">st_layers</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"osm/overpass.osm"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>, do_count <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">## Driver: OSM </span></span>
+<span><span class="co">## Available layers:</span></span>
+<span><span class="co">##         layer_name       geometry_type features fields crs_name</span></span>
+<span><span class="co">## 1           points               Point        1     10   WGS 84</span></span>
+<span><span class="co">## 2            lines         Line String        0      9   WGS 84</span></span>
+<span><span class="co">## 3 multilinestrings   Multi Line String        0      4   WGS 84</span></span>
+<span><span class="co">## 4    multipolygons       Multi Polygon       13     25   WGS 84</span></span>
+<span><span class="co">## 5  other_relations Geometry Collection        0      4   WGS 84</span></span></code></pre></div>
 <p>Another example of reading kml and kmz files is:</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Download .shp data</span>
-<span class="va">u_shp</span> <span class="op">&lt;-</span> <span class="st">"http://coagisweb.cabq.gov/datadownload/biketrails.zip"</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="va">u_shp</span>, <span class="st">"biketrails.zip"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span><span class="st">"biketrails.zip"</span><span class="op">)</span>
-<span class="va">u_kmz</span> <span class="op">&lt;-</span> <span class="st">"http://coagisweb.cabq.gov/datadownload/BikePaths.kmz"</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="va">u_kmz</span>, <span class="st">"BikePaths.kmz"</span><span class="op">)</span>
-<span class="co"># Read file formats</span>
-<span class="va">biketrails_shp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"biketrails.shp"</span><span class="op">)</span>
-<span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.info.html" class="external-link">Sys.info</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">==</span> <span class="st">"Linux"</span><span class="op">)</span> <span class="co"># may not work if not Linux</span>
-  <span class="va">biketrails_kmz</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"BikePaths.kmz"</span><span class="op">)</span>
-<span class="va">u_kml</span> <span class="op">=</span> <span class="st">"http://www.northeastraces.com/oxonraces.com/nearme/safe/6.kml"</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="va">u_kml</span>, <span class="st">"bikeraces.kml"</span><span class="op">)</span>
-<span class="va">bikraces</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"bikeraces.kml"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Download .shp data</span></span>
+<span><span class="va">u_shp</span> <span class="op">&lt;-</span> <span class="st">"http://coagisweb.cabq.gov/datadownload/biketrails.zip"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="va">u_shp</span>, <span class="st">"biketrails.zip"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span><span class="st">"biketrails.zip"</span><span class="op">)</span></span>
+<span><span class="va">u_kmz</span> <span class="op">&lt;-</span> <span class="st">"http://coagisweb.cabq.gov/datadownload/BikePaths.kmz"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="va">u_kmz</span>, <span class="st">"BikePaths.kmz"</span><span class="op">)</span></span>
+<span><span class="co"># Read file formats</span></span>
+<span><span class="va">biketrails_shp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"biketrails.shp"</span><span class="op">)</span></span>
+<span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.info.html" class="external-link">Sys.info</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">==</span> <span class="st">"Linux"</span><span class="op">)</span> <span class="co"># may not work if not Linux</span></span>
+<span>  <span class="va">biketrails_kmz</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"BikePaths.kmz"</span><span class="op">)</span></span>
+<span><span class="va">u_kml</span> <span class="op">=</span> <span class="st">"http://www.northeastraces.com/oxonraces.com/nearme/safe/6.kml"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="va">u_kml</span>, <span class="st">"bikeraces.kml"</span><span class="op">)</span></span>
+<span><span class="va">bikraces</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"bikeraces.kml"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="crud">Create, read, update and delete<a class="anchor" aria-label="anchor" href="#crud"></a>
@@ -719,57 +719,57 @@
 <p>The importance of having <code>epsg</code> values stored with data besides <code>proj4string</code> values is that the <code>epsg</code> refers to particular, well-known CRS, whose parameters may change (improve) over time; fixing only the <code>proj4string</code> may remove the possibility to benefit from such improvements, and limit some of the provenance of datasets, but may help reproducibility.</p>
 <p>Coordinate reference system transformations can be carried out using <code>st_transform</code>, e.g. converting longitudes/latitudes in NAD27 to web mercator (EPSG:3857) can be done by</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">nc.web_mercator</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">nc</span>, <span class="fl">3857</span><span class="op">)</span>
-<span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc.web_mercator</span><span class="op">)</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span>
-<span class="co">##          [,1]    [,2]</span>
-<span class="co">## [1,] -8463267 4377519</span>
-<span class="co">## [2,] -8460094 4377510</span>
-<span class="co">## [3,] -8450437 4375553</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">nc.web_mercator</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">nc</span>, <span class="fl">3857</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc.web_mercator</span><span class="op">)</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span></span>
+<span><span class="co">##          [,1]    [,2]</span></span>
+<span><span class="co">## [1,] -8463267 4377519</span></span>
+<span><span class="co">## [2,] -8460094 4377510</span></span>
+<span><span class="co">## [3,] -8450437 4375553</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="conversion-including-to-and-from-sp">Conversion, including to and from sp<a class="anchor" aria-label="anchor" href="#conversion-including-to-and-from-sp"></a>
 </h3>
 <p><code>sf</code> objects and objects deriving from <code>Spatial</code> (package <code>sp</code>) can be coerced both ways:</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/methods/showMethods.html" class="external-link">showMethods</a></span><span class="op">(</span><span class="st">"coerce"</span>, classes <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span>
-<span class="co">## Function: coerce (package methods)</span>
-<span class="co">## from="sf", to="Spatial"</span>
-<span class="co">## from="Spatial", to="sf"</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/methods.html" class="external-link">methods</a></span><span class="op">(</span><span class="va">st_as_sf</span><span class="op">)</span>
-<span class="co">##  [1] st_as_sf.data.frame*   st_as_sf.lpp*          st_as_sf.map*         </span>
-<span class="co">##  [4] st_as_sf.owin*         st_as_sf.ppp*          st_as_sf.ppplist*     </span>
-<span class="co">##  [7] st_as_sf.psp*          st_as_sf.s2_geography* st_as_sf.sf*          </span>
-<span class="co">## [10] st_as_sf.sfc*          st_as_sf.Spatial*      st_as_sf.SpatVector*  </span>
-<span class="co">## see '?methods' for accessing help and source code</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/methods.html" class="external-link">methods</a></span><span class="op">(</span><span class="va">st_as_sfc</span><span class="op">)</span>
-<span class="co">##  [1] st_as_sfc.bbox*               st_as_sfc.blob*              </span>
-<span class="co">##  [3] st_as_sfc.character*          st_as_sfc.dimensions*        </span>
-<span class="co">##  [5] st_as_sfc.factor*             st_as_sfc.list*              </span>
-<span class="co">##  [7] st_as_sfc.map*                st_as_sfc.owin*              </span>
-<span class="co">##  [9] st_as_sfc.pq_geometry*        st_as_sfc.psp*               </span>
-<span class="co">## [11] st_as_sfc.raw*                st_as_sfc.s2_geography*      </span>
-<span class="co">## [13] st_as_sfc.sf*                 st_as_sfc.SpatialLines*      </span>
-<span class="co">## [15] st_as_sfc.SpatialMultiPoints* st_as_sfc.SpatialPixels*     </span>
-<span class="co">## [17] st_as_sfc.SpatialPoints*      st_as_sfc.SpatialPolygons*   </span>
-<span class="co">## [19] st_as_sfc.tess*               st_as_sfc.WKB*               </span>
-<span class="co">## see '?methods' for accessing help and source code</span>
-<span class="co"># anticipate that sp::CRS will expand proj4strings:</span>
-<span class="va">p4s</span> <span class="op">&lt;-</span> <span class="st">"+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"</span>
-<span class="fu"><a href="../reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">p4s</span>
-<span class="co"># anticipate geometry column name changes:</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">[</span><span class="fl">15</span><span class="op">]</span> <span class="op">=</span> <span class="st">"geometry"</span>
-<span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">nc</span>, <span class="st">"sf_column"</span><span class="op">)</span> <span class="op">=</span> <span class="st">"geometry"</span>
-<span class="va">nc.sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/coerce-methods.html">as</a></span><span class="op">(</span><span class="va">nc</span>, <span class="st">"Spatial"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">nc.sp</span><span class="op">)</span>
-<span class="co">## [1] "SpatialPolygonsDataFrame"</span>
-<span class="co">## attr(,"package")</span>
-<span class="co">## [1] "sp"</span>
-<span class="va">nc2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="va">nc.sp</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">nc</span>, <span class="va">nc2</span><span class="op">)</span>
-<span class="co">## [1] "Attributes: &lt; Component \"class\": Lengths (4, 2) differ (string compare on first 2) &gt;"           </span>
-<span class="co">## [2] "Attributes: &lt; Component \"class\": 1 string mismatch &gt;"                                           </span>
-<span class="co">## [3] "Component \"geometry\": Attributes: &lt; Component \"crs\": Component \"input\": 1 string mismatch &gt;"</span>
-<span class="co">## [4] "Component \"geometry\": Attributes: &lt; Component \"crs\": Component \"wkt\": 1 string mismatch &gt;"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/methods/showMethods.html" class="external-link">showMethods</a></span><span class="op">(</span><span class="st">"coerce"</span>, classes <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span></span>
+<span><span class="co">## Function: coerce (package methods)</span></span>
+<span><span class="co">## from="sf", to="Spatial"</span></span>
+<span><span class="co">## from="Spatial", to="sf"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/methods.html" class="external-link">methods</a></span><span class="op">(</span><span class="va">st_as_sf</span><span class="op">)</span></span>
+<span><span class="co">##  [1] st_as_sf.data.frame*   st_as_sf.lpp*          st_as_sf.map*         </span></span>
+<span><span class="co">##  [4] st_as_sf.owin*         st_as_sf.ppp*          st_as_sf.ppplist*     </span></span>
+<span><span class="co">##  [7] st_as_sf.psp*          st_as_sf.s2_geography* st_as_sf.sf*          </span></span>
+<span><span class="co">## [10] st_as_sf.sfc*          st_as_sf.Spatial*      st_as_sf.SpatVector*  </span></span>
+<span><span class="co">## see '?methods' for accessing help and source code</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/methods.html" class="external-link">methods</a></span><span class="op">(</span><span class="va">st_as_sfc</span><span class="op">)</span></span>
+<span><span class="co">##  [1] st_as_sfc.bbox*               st_as_sfc.blob*              </span></span>
+<span><span class="co">##  [3] st_as_sfc.character*          st_as_sfc.dimensions*        </span></span>
+<span><span class="co">##  [5] st_as_sfc.factor*             st_as_sfc.list*              </span></span>
+<span><span class="co">##  [7] st_as_sfc.map*                st_as_sfc.owin*              </span></span>
+<span><span class="co">##  [9] st_as_sfc.pq_geometry*        st_as_sfc.psp*               </span></span>
+<span><span class="co">## [11] st_as_sfc.raw*                st_as_sfc.s2_geography*      </span></span>
+<span><span class="co">## [13] st_as_sfc.sf*                 st_as_sfc.SpatialLines*      </span></span>
+<span><span class="co">## [15] st_as_sfc.SpatialMultiPoints* st_as_sfc.SpatialPixels*     </span></span>
+<span><span class="co">## [17] st_as_sfc.SpatialPoints*      st_as_sfc.SpatialPolygons*   </span></span>
+<span><span class="co">## [19] st_as_sfc.tess*               st_as_sfc.WKB*               </span></span>
+<span><span class="co">## see '?methods' for accessing help and source code</span></span>
+<span><span class="co"># anticipate that sp::CRS will expand proj4strings:</span></span>
+<span><span class="va">p4s</span> <span class="op">&lt;-</span> <span class="st">"+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"</span></span>
+<span><span class="fu"><a href="../reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">p4s</span></span>
+<span><span class="co"># anticipate geometry column name changes:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">[</span><span class="fl">15</span><span class="op">]</span> <span class="op">=</span> <span class="st">"geometry"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">nc</span>, <span class="st">"sf_column"</span><span class="op">)</span> <span class="op">=</span> <span class="st">"geometry"</span></span>
+<span><span class="va">nc.sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/coerce-methods.html">as</a></span><span class="op">(</span><span class="va">nc</span>, <span class="st">"Spatial"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">nc.sp</span><span class="op">)</span></span>
+<span><span class="co">## [1] "SpatialPolygonsDataFrame"</span></span>
+<span><span class="co">## attr(,"package")</span></span>
+<span><span class="co">## [1] "sp"</span></span>
+<span><span class="va">nc2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="va">nc.sp</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="va">nc</span>, <span class="va">nc2</span><span class="op">)</span></span>
+<span><span class="co">## [1] "Attributes: &lt; Component \"class\": Lengths (4, 2) differ (string compare on first 2) &gt;"           </span></span>
+<span><span class="co">## [2] "Attributes: &lt; Component \"class\": 1 string mismatch &gt;"                                           </span></span>
+<span><span class="co">## [3] "Component \"geometry\": Attributes: &lt; Component \"crs\": Component \"input\": 1 string mismatch &gt;"</span></span>
+<span><span class="co">## [4] "Component \"geometry\": Attributes: &lt; Component \"crs\": Component \"wkt\": 1 string mismatch &gt;"</span></span></code></pre></div>
 <p>As the <code>Spatial*</code> objects only support <code>MULTILINESTRING</code> and <code>MULTIPOLYGON</code>, <code>LINESTRING</code> and <code>POLYGON</code> geometries are automatically coerced into their <code>MULTI</code> form. When converting <code>Spatial*</code> into <code>sf</code>, if all geometries consist of a single <code>POLYGON</code> (possibly with holes), a <code>POLYGON</code> and otherwise all geometries are returned as <code>MULTIPOLYGON</code>: a mix of <code>POLYGON</code> and <code>MULTIPOLYGON</code> (such as common in shapefiles) is not created. Argument <code>forceMulti=TRUE</code> will override this, and create <code>MULTIPOLYGON</code>s in all cases. For <code>LINES</code> the situation is identical.</p>
 </div>
 <div class="section level3">
@@ -778,88 +778,88 @@
 <p>The standard for simple feature access defines a number of geometrical operations.</p>
 <p><code>st_is_valid</code> and <code>st_is_simple</code> return a boolean indicating whether a geometry is valid or simple.</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/valid.html">st_is_valid</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,<span class="op">]</span><span class="op">)</span>
-<span class="co">## [1] TRUE TRUE</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/valid.html">st_is_valid</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,<span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">## [1] TRUE TRUE</span></span></code></pre></div>
 <p><code>st_distance</code> returns a dense numeric matrix with distances between geometries. <code>st_relate</code> returns a character matrix with the <a href="https://en.wikipedia.org/wiki/DE-9IM#Illustration" class="external-link">DE9-IM</a> values for each pair of geometries:</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">nc</span>, <span class="fl">32119</span><span class="op">)</span>
-<span class="fu"><a href="../reference/geos_measures.html">st_distance</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">4</span>,<span class="fl">22</span><span class="op">)</span>,<span class="op">]</span>, <span class="va">x</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">33</span>,<span class="fl">55</span>,<span class="fl">56</span><span class="op">)</span>,<span class="op">]</span><span class="op">)</span>
-<span class="co">## Units: [m]</span>
-<span class="co">##           [,1]     [,2]      [,3]     [,4]</span>
-<span class="co">## [1,]      0.00 312184.9 128341.85 475623.3</span>
-<span class="co">## [2,] 440561.15 114939.7 590434.80      0.0</span>
-<span class="co">## [3,]  18944.03 352719.1  78756.89 517527.8</span>
-<span class="fu"><a href="../reference/st_relate.html">st_relate</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="op">]</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="op">]</span><span class="op">)</span>
-<span class="co">## although coordinates are longitude/latitude, st_relate assumes that they are planar</span>
-<span class="co">##      [,1]        [,2]        [,3]        [,4]       </span>
-<span class="co">## [1,] "2FFF1FFF2" "FF2F11212" "FF2FF1212" "FF2FF1212"</span>
-<span class="co">## [2,] "FF2F11212" "2FFF1FFF2" "FF2F11212" "FF2FF1212"</span>
-<span class="co">## [3,] "FF2FF1212" "FF2F11212" "2FFF1FFF2" "FF2FF1212"</span>
-<span class="co">## [4,] "FF2FF1212" "FF2FF1212" "FF2FF1212" "2FFF1FFF2"</span>
-<span class="co">## [5,] "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">nc</span>, <span class="fl">32119</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/geos_measures.html">st_distance</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">4</span>,<span class="fl">22</span><span class="op">)</span>,<span class="op">]</span>, <span class="va">x</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">33</span>,<span class="fl">55</span>,<span class="fl">56</span><span class="op">)</span>,<span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">## Units: [m]</span></span>
+<span><span class="co">##           [,1]     [,2]      [,3]     [,4]</span></span>
+<span><span class="co">## [1,]      0.00 312184.9 128341.85 475623.3</span></span>
+<span><span class="co">## [2,] 440561.15 114939.7 590434.80      0.0</span></span>
+<span><span class="co">## [3,]  18944.03 352719.1  78756.89 517527.8</span></span>
+<span><span class="fu"><a href="../reference/st_relate.html">st_relate</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="op">]</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">## although coordinates are longitude/latitude, st_relate assumes that they are planar</span></span>
+<span><span class="co">##      [,1]        [,2]        [,3]        [,4]       </span></span>
+<span><span class="co">## [1,] "2FFF1FFF2" "FF2F11212" "FF2FF1212" "FF2FF1212"</span></span>
+<span><span class="co">## [2,] "FF2F11212" "2FFF1FFF2" "FF2F11212" "FF2FF1212"</span></span>
+<span><span class="co">## [3,] "FF2FF1212" "FF2F11212" "2FFF1FFF2" "FF2FF1212"</span></span>
+<span><span class="co">## [4,] "FF2FF1212" "FF2FF1212" "FF2FF1212" "2FFF1FFF2"</span></span>
+<span><span class="co">## [5,] "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212"</span></span></code></pre></div>
 <p>The commands <code>st_intersects</code>, <code>st_disjoint</code>, <code>st_touches</code>, <code>st_crosses</code>, <code>st_within</code>, <code>st_contains</code>, <code>st_overlaps</code>, <code>st_equals</code>, <code>st_covers</code>, <code>st_covered_by</code>, <code>st_equals_exact</code> and <code>st_is_within_distance</code> return a sparse matrix with matching (TRUE) indexes, or a full logical matrix:</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="op">]</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="op">]</span><span class="op">)</span>
-<span class="co">## Sparse geometry binary predicate list of length 5, where the predicate</span>
-<span class="co">## was `intersects'</span>
-<span class="co">##  1: 1, 2</span>
-<span class="co">##  2: 1, 2, 3</span>
-<span class="co">##  3: 2, 3</span>
-<span class="co">##  4: 4</span>
-<span class="co">##  5: (empty)</span>
-<span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="op">]</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="op">]</span>, sparse <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="co">##       [,1]  [,2]  [,3]  [,4]</span>
-<span class="co">## [1,]  TRUE  TRUE FALSE FALSE</span>
-<span class="co">## [2,]  TRUE  TRUE  TRUE FALSE</span>
-<span class="co">## [3,] FALSE  TRUE  TRUE FALSE</span>
-<span class="co">## [4,] FALSE FALSE FALSE  TRUE</span>
-<span class="co">## [5,] FALSE FALSE FALSE FALSE</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="op">]</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">## Sparse geometry binary predicate list of length 5, where the predicate</span></span>
+<span><span class="co">## was `intersects'</span></span>
+<span><span class="co">##  1: 1, 2</span></span>
+<span><span class="co">##  2: 1, 2, 3</span></span>
+<span><span class="co">##  3: 2, 3</span></span>
+<span><span class="co">##  4: 4</span></span>
+<span><span class="co">##  5: (empty)</span></span>
+<span><span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="op">]</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="op">]</span>, sparse <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">##       [,1]  [,2]  [,3]  [,4]</span></span>
+<span><span class="co">## [1,]  TRUE  TRUE FALSE FALSE</span></span>
+<span><span class="co">## [2,]  TRUE  TRUE  TRUE FALSE</span></span>
+<span><span class="co">## [3,] FALSE  TRUE  TRUE FALSE</span></span>
+<span><span class="co">## [4,] FALSE FALSE FALSE  TRUE</span></span>
+<span><span class="co">## [5,] FALSE FALSE FALSE FALSE</span></span></code></pre></div>
 <p>The commands <code>st_buffer</code>, <code>st_boundary</code>, <code>st_convexhull</code>, <code>st_union_cascaded</code>, <code>st_simplify</code>, <code>st_triangulate</code>, <code>st_polygonize</code>, <code>st_centroid</code>, <code>st_segmentize</code>, and <code>st_union</code> return new geometries, e.g.:</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">sel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">5</span>,<span class="fl">14</span><span class="op">)</span>
-<span class="va">geom</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc.web_mercator</span><span class="op">[</span><span class="va">sel</span>,<span class="op">]</span><span class="op">)</span>
-<span class="va">buf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">geom</span>, dist <span class="op">=</span> <span class="fl">30000</span><span class="op">)</span>
-<span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">buf</span>, border <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span>
-<span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">geom</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">geom</span>, <span class="op">-</span><span class="fl">5000</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">'blue'</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">sel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">5</span>,<span class="fl">14</span><span class="op">)</span></span>
+<span><span class="va">geom</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc.web_mercator</span><span class="op">[</span><span class="va">sel</span>,<span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">buf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">geom</span>, dist <span class="op">=</span> <span class="fl">30000</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">buf</span>, border <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">geom</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">geom</span>, <span class="op">-</span><span class="fl">5000</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">'blue'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="sf1_files/figure-html/unnamed-chunk-39-1.png" width="700"></p>
 <p>Commands <code>st_intersection</code>, <code>st_union</code>, <code>st_difference</code>, <code>st_sym_difference</code> return new geometries that are a function of pairs of geometries:</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span>
-<span class="va">u</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/geos_combine.html">st_union</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span>
-<span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">u</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">u</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/geos_combine.html">st_union</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">u</span><span class="op">)</span></span></code></pre></div>
 <p><img src="sf1_files/figure-html/unnamed-chunk-40-1.png" width="700"></p>
 <p>The following code shows how computing an intersection between two polygons may yield a <code>GEOMETRYCOLLECTION</code> with a point, line and polygon:</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">opar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-<span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">7.5</span>,<span class="fl">7.5</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="op">-</span><span class="fl">1</span>,<span class="op">-</span><span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span>,<span class="fl">7</span>,<span class="fl">7</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">.5</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0.5</span>,<span class="op">-</span><span class="fl">0.5</span>,<span class="op">-</span><span class="fl">0.5</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">a</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">"intersecting two polygons:"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">b</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span>
-<span class="op">(</span><span class="va">i</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/geos_binary_ops.html">st_intersection</a></span><span class="op">(</span><span class="va">a</span>,<span class="va">b</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## GEOMETRYCOLLECTION (POINT (1 0), LINESTRING (4 0, 3 0), POLYGON ((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5 0)))</span>
-<span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">a</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">"GEOMETRYCOLLECTION"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">b</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span>
-<span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">i</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, col <span class="op">=</span> <span class="st">'green'</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">opar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">7.5</span>,<span class="fl">7.5</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="op">-</span><span class="fl">1</span>,<span class="op">-</span><span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">6</span>,<span class="fl">7</span>,<span class="fl">7</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">.5</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">0.5</span>,<span class="op">-</span><span class="fl">0.5</span>,<span class="op">-</span><span class="fl">0.5</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">a</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">"intersecting two polygons:"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">b</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span></span>
+<span><span class="op">(</span><span class="va">i</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/geos_binary_ops.html">st_intersection</a></span><span class="op">(</span><span class="va">a</span>,<span class="va">b</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## GEOMETRYCOLLECTION (POINT (1 0), LINESTRING (4 0, 3 0), POLYGON ((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5 0)))</span></span>
+<span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">a</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/title.html" class="external-link">title</a></span><span class="op">(</span><span class="st">"GEOMETRYCOLLECTION"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">b</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">i</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, col <span class="op">=</span> <span class="st">'green'</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="sf1_files/figure-html/unnamed-chunk-41-1.png" width="672"></p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">opar</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">opar</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="non-simple-and-non-valid-geometries">Non-simple and non-valid geometries<a class="anchor" aria-label="anchor" href="#non-simple-and-non-valid-geometries"></a>
 </h3>
 <p>Non-simple geometries are for instance self-intersecting lines (left); non-valid geometries are for instance polygons with slivers (middle) or self-intersections (right).</p>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span>
-<span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0.6</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="va">x3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="../reference/geos_query.html">st_is_simple</a></span><span class="op">(</span><span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="va">x1</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## [1] FALSE</span>
-<span class="fu"><a href="../reference/valid.html">st_is_valid</a></span><span class="op">(</span><span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="va">x2</span>,<span class="va">x3</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## [1] FALSE FALSE</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
+<span><span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0.6</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">x3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/geos_query.html">st_is_simple</a></span><span class="op">(</span><span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="va">x1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## [1] FALSE</span></span>
+<span><span class="fu"><a href="../reference/valid.html">st_is_valid</a></span><span class="op">(</span><span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="va">x2</span>,<span class="va">x3</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## [1] FALSE FALSE</span></span></code></pre></div>
 <p><img src="sf1_files/figure-html/unnamed-chunk-43-1.png" width="700"></p>
 </div>
 </div>
@@ -868,30 +868,30 @@
 </h2>
 <p>Where possible geometric operations such as <code><a href="../reference/geos_measures.html">st_distance()</a></code>, <code><a href="../reference/geos_measures.html">st_length()</a></code> and <code><a href="../reference/geos_measures.html">st_area()</a></code> report results with a units attribute appropriate for the CRS:</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/geos_measures.html">st_area</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span>
-<span class="co">## $units</span>
-<span class="co">## $numerator</span>
-<span class="co">## [1] "m" "m"</span>
-<span class="co">## </span>
-<span class="co">## $denominator</span>
-<span class="co">## character(0)</span>
-<span class="co">## </span>
-<span class="co">## attr(,"class")</span>
-<span class="co">## [1] "symbolic_units"</span>
-<span class="co">## </span>
-<span class="co">## $class</span>
-<span class="co">## [1] "units"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/geos_measures.html">st_area</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span></span>
+<span><span class="co">## $units</span></span>
+<span><span class="co">## $numerator</span></span>
+<span><span class="co">## [1] "m" "m"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $denominator</span></span>
+<span><span class="co">## character(0)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## attr(,"class")</span></span>
+<span><span class="co">## [1] "symbolic_units"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $class</span></span>
+<span><span class="co">## [1] "units"</span></span></code></pre></div>
 <p>The <strong>units</strong> package can be used to convert between units:</p>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">units</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">km</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span> <span class="co"># result in square kilometers</span>
-<span class="co">## 1137.108 [km^2]</span>
-<span class="fu">units</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">ha</span><span class="op">)</span> <span class="co"># result in hectares</span>
-<span class="co">## 113710.8 [ha]</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">units</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">km</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span> <span class="co"># result in square kilometers</span></span>
+<span><span class="co">## 1137.108 [km^2]</span></span>
+<span><span class="fu">units</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">ha</span><span class="op">)</span> <span class="co"># result in hectares</span></span>
+<span><span class="co">## 113710.8 [ha]</span></span></code></pre></div>
 <p>The result can be stripped of their attributes if needs be:</p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span>
-<span class="co">## [1] 1137107793</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span></span>
+<span><span class="co">## [1] 1137107793</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="how-attributes-relate-to-geometries">How attributes relate to geometries<a class="anchor" aria-label="anchor" href="#how-attributes-relate-to-geometries"></a>
@@ -900,34 +900,34 @@
 <p>The standard documents about simple features are very detailed about the geometric aspects of features, but say nearly nothing about attributes, except that their values should be understood in another reference system (their units of measurement, e.g. as implemented in the package <a href="https://CRAN.R-project.org/package=units" class="external-link"><strong>units</strong></a>). But there is more to it. For variables like air temperature, interpolation usually makes sense, for others like human body temperature it doesn’t. The difference is that air temperature is a field, which continues between sensors, where body temperature is an object property that doesn’t extend beyond the body – in spatial statistics bodies would be called a point pattern, their temperature the point marks. For geometries that have a non-zero size (positive length or area), attribute values may refer to the every sub-geometry (every point), or may summarize the geometry. For example, a state’s population density summarizes the whole state, and is not a meaningful estimate of population density for a give point inside the state without the context of the state. On the other hand, land use or geological maps give polygons with constant land use or geology, every point inside the polygon is of that class. Some properties are spatially <a href="https://en.wikipedia.org/wiki/Intensive_and_extensive_properties" class="external-link">extensive</a>, meaning that attributes would summed up when two geometries are merged: population is an example. Other properties are spatially intensive, and should be averaged, with population density the example.</p>
 <p>Simple feature objects of class <code>sf</code> have an <em>agr</em> attribute that points to the <em>attribute-geometry-relationship</em>, how attributes relate to their geometry. It can be defined at creation time:</p>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>,
-    agr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>AREA <span class="op">=</span> <span class="st">"aggregate"</span>, PERIMETER <span class="op">=</span> <span class="st">"aggregate"</span>, CNTY_ <span class="op">=</span> <span class="st">"identity"</span>,
-        CNTY_ID <span class="op">=</span> <span class="st">"identity"</span>, NAME <span class="op">=</span> <span class="st">"identity"</span>, FIPS <span class="op">=</span> <span class="st">"identity"</span>, FIPSNO <span class="op">=</span> <span class="st">"identity"</span>,
-        CRESS_ID <span class="op">=</span> <span class="st">"identity"</span>, BIR74 <span class="op">=</span> <span class="st">"aggregate"</span>, SID74 <span class="op">=</span> <span class="st">"aggregate"</span>, NWBIR74 <span class="op">=</span> <span class="st">"aggregate"</span>,
-        BIR79 <span class="op">=</span> <span class="st">"aggregate"</span>, SID79 <span class="op">=</span> <span class="st">"aggregate"</span>, NWBIR79 <span class="op">=</span> <span class="st">"aggregate"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">## Reading layer `nc' from data source </span>
-<span class="co">##   `/tmp/Rtmpuvkp4f/temp_libpath12ada1429000c/sf/shape/nc.shp' </span>
-<span class="co">##   using driver `ESRI Shapefile'</span>
-<span class="co">## Simple feature collection with 100 features and 14 fields</span>
-<span class="co">## Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity</span>
-<span class="co">## Geometry type: MULTIPOLYGON</span>
-<span class="co">## Dimension:     XY</span>
-<span class="co">## Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span>
-<span class="co">## Geodetic CRS:  NAD27</span>
-<span class="fu"><a href="../reference/st_agr.html">st_agr</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span>
-<span class="co">##      AREA PERIMETER     CNTY_   CNTY_ID      NAME      FIPS    FIPSNO  CRESS_ID </span>
-<span class="co">## aggregate aggregate  identity  identity  identity  identity  identity  identity </span>
-<span class="co">##     BIR74     SID74   NWBIR74     BIR79     SID79   NWBIR79 </span>
-<span class="co">## aggregate aggregate aggregate aggregate aggregate aggregate </span>
-<span class="co">## Levels: constant aggregate identity</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">meuse</span>, package <span class="op">=</span> <span class="st">"sp"</span><span class="op">)</span>
-<span class="va">meuse_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="va">meuse</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">28992</span>, agr <span class="op">=</span> <span class="st">"constant"</span><span class="op">)</span>
-<span class="fu"><a href="../reference/st_agr.html">st_agr</a></span><span class="op">(</span><span class="va">meuse_sf</span><span class="op">)</span>
-<span class="co">##  cadmium   copper     lead     zinc     elev     dist       om    ffreq </span>
-<span class="co">## constant constant constant constant constant constant constant constant </span>
-<span class="co">##     soil     lime  landuse   dist.m </span>
-<span class="co">## constant constant constant constant </span>
-<span class="co">## Levels: constant aggregate identity</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>,</span>
+<span>    agr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>AREA <span class="op">=</span> <span class="st">"aggregate"</span>, PERIMETER <span class="op">=</span> <span class="st">"aggregate"</span>, CNTY_ <span class="op">=</span> <span class="st">"identity"</span>,</span>
+<span>        CNTY_ID <span class="op">=</span> <span class="st">"identity"</span>, NAME <span class="op">=</span> <span class="st">"identity"</span>, FIPS <span class="op">=</span> <span class="st">"identity"</span>, FIPSNO <span class="op">=</span> <span class="st">"identity"</span>,</span>
+<span>        CRESS_ID <span class="op">=</span> <span class="st">"identity"</span>, BIR74 <span class="op">=</span> <span class="st">"aggregate"</span>, SID74 <span class="op">=</span> <span class="st">"aggregate"</span>, NWBIR74 <span class="op">=</span> <span class="st">"aggregate"</span>,</span>
+<span>        BIR79 <span class="op">=</span> <span class="st">"aggregate"</span>, SID79 <span class="op">=</span> <span class="st">"aggregate"</span>, NWBIR79 <span class="op">=</span> <span class="st">"aggregate"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## Reading layer `nc' from data source </span></span>
+<span><span class="co">##   `/tmp/RtmpRoLNM6/temp_libpath12b0034de0ec5/sf/shape/nc.shp' </span></span>
+<span><span class="co">##   using driver `ESRI Shapefile'</span></span>
+<span><span class="co">## Simple feature collection with 100 features and 14 fields</span></span>
+<span><span class="co">## Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity</span></span>
+<span><span class="co">## Geometry type: MULTIPOLYGON</span></span>
+<span><span class="co">## Dimension:     XY</span></span>
+<span><span class="co">## Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span></span>
+<span><span class="co">## Geodetic CRS:  NAD27</span></span>
+<span><span class="fu"><a href="../reference/st_agr.html">st_agr</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span></span>
+<span><span class="co">##      AREA PERIMETER     CNTY_   CNTY_ID      NAME      FIPS    FIPSNO  CRESS_ID </span></span>
+<span><span class="co">## aggregate aggregate  identity  identity  identity  identity  identity  identity </span></span>
+<span><span class="co">##     BIR74     SID74   NWBIR74     BIR79     SID79   NWBIR79 </span></span>
+<span><span class="co">## aggregate aggregate aggregate aggregate aggregate aggregate </span></span>
+<span><span class="co">## Levels: constant aggregate identity</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">meuse</span>, package <span class="op">=</span> <span class="st">"sp"</span><span class="op">)</span></span>
+<span><span class="va">meuse_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="va">meuse</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">28992</span>, agr <span class="op">=</span> <span class="st">"constant"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/st_agr.html">st_agr</a></span><span class="op">(</span><span class="va">meuse_sf</span><span class="op">)</span></span>
+<span><span class="co">##  cadmium   copper     lead     zinc     elev     dist       om    ffreq </span></span>
+<span><span class="co">## constant constant constant constant constant constant constant constant </span></span>
+<span><span class="co">##     soil     lime  landuse   dist.m </span></span>
+<span><span class="co">## constant constant constant constant </span></span>
+<span><span class="co">## Levels: constant aggregate identity</span></span></code></pre></div>
 <p>When not specified, this field is filled with <code>NA</code> values, but if non-<code>NA</code>, it has one of three possibilities</p>
 <table class="table">
 <colgroup>

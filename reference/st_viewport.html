@@ -81,7 +81,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">st_viewport</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, bbox <span class="op">=</span> <span class="fu"><a href="st_bbox.html">st_bbox</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="va">asp</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">st_viewport</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, bbox <span class="op">=</span> <span class="fu"><a href="st_bbox.html">st_bbox</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="va">asp</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -118,25 +118,25 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">grid</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">grid</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘grid’</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:spatstat.geom’:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     as.mask</span>
-<span class="r-in"><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/Rtmpuvkp4f/temp_libpath12ada1429000c/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpRoLNM6/temp_libpath12b0034de0ec5/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  NAD27</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/grid/grid.newpage.html" class="external-link">grid.newpage</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/grid/viewports.html" class="external-link">pushViewport</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/grid/viewport.html" class="external-link">viewport</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.8</span>, height <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/grid/viewports.html" class="external-link">pushViewport</a></span><span class="op">(</span><span class="fu">st_viewport</span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/grid/grid.draw.html" class="external-link">grid.draw</a></span><span class="op">(</span><span class="fu"><a href="st_as_grob.html">st_as_grob</a></span><span class="op">(</span><span class="va">x</span>, gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html" class="external-link">gpar</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/grid/grid.newpage.html" class="external-link">grid.newpage</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/grid/viewports.html" class="external-link">pushViewport</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/grid/viewport.html" class="external-link">viewport</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.8</span>, height <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/grid/viewports.html" class="external-link">pushViewport</a></span><span class="op">(</span><span class="fu">st_viewport</span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/grid/grid.draw.html" class="external-link">grid.draw</a></span><span class="op">(</span><span class="fu"><a href="st_as_grob.html">st_as_grob</a></span><span class="op">(</span><span class="va">x</span>, gp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/gpar.html" class="external-link">gpar</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="st_viewport-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>

@@ -87,41 +87,41 @@ Well-Know Binary geometries to sfc</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">st_read</span><span class="op">(</span><span class="va">dsn</span>, <span class="va">layer</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for character</span>
-<span class="fu">st_read</span><span class="op">(</span>
-  <span class="va">dsn</span>,
-  <span class="va">layer</span>,
-  <span class="va">...</span>,
-  query <span class="op">=</span> <span class="cn">NA</span>,
-  options <span class="op">=</span> <span class="cn">NULL</span>,
-  quiet <span class="op">=</span> <span class="cn">FALSE</span>,
-  geometry_column <span class="op">=</span> <span class="fl">1L</span>,
-  type <span class="op">=</span> <span class="fl">0</span>,
-  promote_to_multi <span class="op">=</span> <span class="cn">TRUE</span>,
-  stringsAsFactors <span class="op">=</span> <span class="fu">sf_stringsAsFactors</span><span class="op">(</span><span class="op">)</span>,
-  int64_as_string <span class="op">=</span> <span class="cn">FALSE</span>,
-  check_ring_dir <span class="op">=</span> <span class="cn">FALSE</span>,
-  fid_column_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  drivers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  wkt_filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  optional <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="fu">read_sf</span><span class="op">(</span><span class="va">...</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span>, as_tibble <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="co"># S3 method for DBIObject</span>
-<span class="fu">st_read</span><span class="op">(</span>
-  dsn <span class="op">=</span> <span class="cn">NULL</span>,
-  layer <span class="op">=</span> <span class="cn">NULL</span>,
-  query <span class="op">=</span> <span class="cn">NULL</span>,
-  EWKB <span class="op">=</span> <span class="cn">TRUE</span>,
-  quiet <span class="op">=</span> <span class="cn">TRUE</span>,
-  as_tibble <span class="op">=</span> <span class="cn">FALSE</span>,
-  geometry_column <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">st_read</span><span class="op">(</span><span class="va">dsn</span>, <span class="va">layer</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for character</span></span>
+<span><span class="fu">st_read</span><span class="op">(</span></span>
+<span>  <span class="va">dsn</span>,</span>
+<span>  <span class="va">layer</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  query <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  options <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  geometry_column <span class="op">=</span> <span class="fl">1L</span>,</span>
+<span>  type <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  promote_to_multi <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  stringsAsFactors <span class="op">=</span> <span class="fu">sf_stringsAsFactors</span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  int64_as_string <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  check_ring_dir <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  fid_column_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  drivers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  wkt_filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  optional <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">read_sf</span><span class="op">(</span><span class="va">...</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span>, as_tibble <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for DBIObject</span></span>
+<span><span class="fu">st_read</span><span class="op">(</span></span>
+<span>  dsn <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  layer <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  query <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  EWKB <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  as_tibble <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  geometry_column <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -289,16 +289,16 @@ that reside in the same directory, only one of them having extension <code>.shp<
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">nc</span> <span class="op">=</span> <span class="fu">st_read</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">nc</span> <span class="op">=</span> <span class="fu">st_read</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/Rtmpuvkp4f/temp_libpath12ada1429000c/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpRoLNM6/temp_libpath12b0034de0ec5/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  NAD27</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span> <span class="co"># note that AREA was computed using Euclidian area on lon/lat degrees</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span> <span class="co"># note that AREA was computed using Euclidian area on lon/lat degrees</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       AREA          PERIMETER         CNTY_         CNTY_ID    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Min.   :0.0420   Min.   :0.999   Min.   :1825   Min.   :1825  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1st Qu.:0.0910   1st Qu.:1.324   1st Qu.:1902   1st Qu.:1902  </span>
@@ -327,51 +327,51 @@ that reside in the same directory, only one of them having extension <code>.shp<
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Mean   : 8.36   Mean   : 1352.8                      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  3rd Qu.:10.25   3rd Qu.: 1406.8                      </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Max.   :57.00   Max.   :11631.0                      </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">## only three fields by select clause</span></span>
-<span class="r-in"><span class="co">## only two features by where clause</span></span>
-<span class="r-in"><span class="va">nc_sql</span> <span class="op">=</span> <span class="fu">st_read</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>,</span>
-<span class="r-in">                     query <span class="op">=</span> <span class="st">"SELECT NAME, SID74, FIPS FROM \"nc\" WHERE BIR74 &gt; 20000"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Reading query `SELECT NAME, SID74, FIPS FROM "nc" WHERE BIR74 &gt; 20000' from data source `/tmp/Rtmpuvkp4f/temp_libpath12ada1429000c/sf/shape/nc.shp' </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## only three fields by select clause</span></span></span>
+<span class="r-in"><span><span class="co">## only two features by where clause</span></span></span>
+<span class="r-in"><span><span class="va">nc_sql</span> <span class="op">=</span> <span class="fu">st_read</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                     query <span class="op">=</span> <span class="st">"SELECT NAME, SID74, FIPS FROM \"nc\" WHERE BIR74 &gt; 20000"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Reading query `SELECT NAME, SID74, FIPS FROM "nc" WHERE BIR74 &gt; 20000' from data source `/tmp/RtmpRoLNM6/temp_libpath12b0034de0ec5/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 2 features and 3 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POLYGON</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -81.06555 ymin: 34.82742 xmax: -78.49929 ymax: 35.50912</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  NAD27</span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/edzer/sp/" class="external-link">sp</a></span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/utils/example.html" class="external-link">example</a></span><span class="op">(</span><span class="va">meuse</span>, ask <span class="op">=</span> <span class="cn">FALSE</span>, echo <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in">  <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="st_write.html">st_write</a></span><span class="op">(</span><span class="fu"><a href="st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="va">meuse</span><span class="op">)</span>, <span class="st">"PG:dbname=postgis"</span>, <span class="st">"meuse"</span>,</span>
-<span class="r-in">       layer_options <span class="op">=</span> <span class="st">"OVERWRITE=true"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">  <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">st_meuse</span> <span class="op">&lt;-</span> <span class="fu">st_read</span><span class="op">(</span><span class="st">"PG:dbname=postgis"</span>, <span class="st">"meuse"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/exists.html" class="external-link">exists</a></span><span class="op">(</span><span class="st">"st_meuse"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">st_meuse</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co">## note that we need special escaping of layer  within single quotes (nc.gpkg)</span></span>
-<span class="r-in"><span class="co">## and that geom needs to be included in the select, otherwise we don't detect it</span></span>
-<span class="r-in"><span class="va">layer</span> <span class="op">&lt;-</span> <span class="fu"><a href="st_layers.html">st_layers</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"gpkg/nc.gpkg"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">name</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">nc_gpkg_sql</span> <span class="op">=</span> <span class="fu">st_read</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"gpkg/nc.gpkg"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span>,</span>
-<span class="r-in">   query <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"SELECT NAME, SID74, FIPS, geom  FROM \"%s\" WHERE BIR74 &gt; 20000"</span>, <span class="va">layer</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"><span class="co"># spatial filter, as wkt:</span></span>
-<span class="r-in"><span class="va">wkt</span> <span class="op">=</span> <span class="fu"><a href="st_as_text.html">st_as_text</a></span><span class="op">(</span><span class="fu"><a href="st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># filter by (bbox overlaps of) first feature geometry:</span></span>
-<span class="r-in"><span class="fu">st_read</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"gpkg/nc.gpkg"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>, wkt_filter <span class="op">=</span> <span class="va">wkt</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/edzer/sp/" class="external-link">sp</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/utils/example.html" class="external-link">example</a></span><span class="op">(</span><span class="va">meuse</span>, ask <span class="op">=</span> <span class="cn">FALSE</span>, echo <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="st_write.html">st_write</a></span><span class="op">(</span><span class="fu"><a href="st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="va">meuse</span><span class="op">)</span>, <span class="st">"PG:dbname=postgis"</span>, <span class="st">"meuse"</span>,</span></span>
+<span class="r-in"><span>       layer_options <span class="op">=</span> <span class="st">"OVERWRITE=true"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">st_meuse</span> <span class="op">&lt;-</span> <span class="fu">st_read</span><span class="op">(</span><span class="st">"PG:dbname=postgis"</span>, <span class="st">"meuse"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/exists.html" class="external-link">exists</a></span><span class="op">(</span><span class="st">"st_meuse"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">st_meuse</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co">## note that we need special escaping of layer  within single quotes (nc.gpkg)</span></span></span>
+<span class="r-in"><span><span class="co">## and that geom needs to be included in the select, otherwise we don't detect it</span></span></span>
+<span class="r-in"><span><span class="va">layer</span> <span class="op">&lt;-</span> <span class="fu"><a href="st_layers.html">st_layers</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"gpkg/nc.gpkg"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">name</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">nc_gpkg_sql</span> <span class="op">=</span> <span class="fu">st_read</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"gpkg/nc.gpkg"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>   query <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"SELECT NAME, SID74, FIPS, geom  FROM \"%s\" WHERE BIR74 &gt; 20000"</span>, <span class="va">layer</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="co"># spatial filter, as wkt:</span></span></span>
+<span class="r-in"><span><span class="va">wkt</span> <span class="op">=</span> <span class="fu"><a href="st_as_text.html">st_as_text</a></span><span class="op">(</span><span class="fu"><a href="st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># filter by (bbox overlaps of) first feature geometry:</span></span></span>
+<span class="r-in"><span><span class="fu">st_read</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"gpkg/nc.gpkg"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>, wkt_filter <span class="op">=</span> <span class="va">wkt</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc.gpkg' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/Rtmpuvkp4f/temp_libpath12ada1429000c/sf/gpkg/nc.gpkg' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpRoLNM6/temp_libpath12b0034de0ec5/sf/gpkg/nc.gpkg' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `GPKG'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 4 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -81.91116 ymin: 35.98933 xmax: -80.87086 ymax: 36.58965</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  NAD27</span>
-<span class="r-in"><span class="co"># read geojson from string:</span></span>
-<span class="r-in"><span class="va">geojson_txt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"{\"type\":\"MultiPoint\",\"coordinates\":"</span>,</span>
-<span class="r-in">   <span class="st">"[[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">x</span> <span class="op">=</span> <span class="fu">st_read</span><span class="op">(</span><span class="va">geojson_txt</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># read geojson from string:</span></span></span>
+<span class="r-in"><span><span class="va">geojson_txt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"{\"type\":\"MultiPoint\",\"coordinates\":"</span>,</span></span>
+<span class="r-in"><span>   <span class="st">"[[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">=</span> <span class="fu">st_read</span><span class="op">(</span><span class="va">geojson_txt</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `OGRGeoJSON' from data source </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   `{"type":"MultiPoint","coordinates": [[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `GeoJSON'</span>
@@ -380,7 +380,7 @@ that reside in the same directory, only one of them having extension <code>.shp<
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 3 ymin: 3.6 xmax: 3.9 ymax: 4.6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
-<span class="r-in"><span class="va">x</span></span>
+<span class="r-in"><span><span class="va">x</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 0 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOINT</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
@@ -388,16 +388,16 @@ that reside in the same directory, only one of them having extension <code>.shp<
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                         geometry</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 MULTIPOINT ((3.2 4), (3 4.6...</span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tomoakin/RPostgreSQL" class="external-link">RPostgreSQL</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">conn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/RPostgreSQL/man/PostgreSQL.html" class="external-link">PostgreSQL</a></span><span class="op">(</span><span class="op">)</span>, dbname <span class="op">=</span> <span class="st">"postgis"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/exists.html" class="external-link">exists</a></span><span class="op">(</span><span class="st">"conn"</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">inherits</a></span><span class="op">(</span><span class="va">conn</span>, <span class="st">"try-error"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">x</span> <span class="op">=</span> <span class="fu">st_read</span><span class="op">(</span><span class="va">conn</span>, <span class="st">"meuse"</span>, query <span class="op">=</span> <span class="st">"select * from meuse limit 3;"</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">x</span> <span class="op">=</span> <span class="fu">st_read</span><span class="op">(</span><span class="va">conn</span>, table <span class="op">=</span> <span class="st">"public.meuse"</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="co"># SRID resolved by the database, not by GDAL!</span></span>
-<span class="r-in">  <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html" class="external-link">dbDisconnect</a></span><span class="op">(</span><span class="va">conn</span><span class="op">)</span></span>
-<span class="r-in"> <span class="op">}</span></span>
-<span class="r-in"><span class="op">}</span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tomoakin/RPostgreSQL" class="external-link">RPostgreSQL</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="va">conn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/RPostgreSQL/man/PostgreSQL.html" class="external-link">PostgreSQL</a></span><span class="op">(</span><span class="op">)</span>, dbname <span class="op">=</span> <span class="st">"postgis"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/exists.html" class="external-link">exists</a></span><span class="op">(</span><span class="st">"conn"</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">inherits</a></span><span class="op">(</span><span class="va">conn</span>, <span class="st">"try-error"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">x</span> <span class="op">=</span> <span class="fu">st_read</span><span class="op">(</span><span class="va">conn</span>, <span class="st">"meuse"</span>, query <span class="op">=</span> <span class="st">"select * from meuse limit 3;"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">x</span> <span class="op">=</span> <span class="fu">st_read</span><span class="op">(</span><span class="va">conn</span>, table <span class="op">=</span> <span class="st">"public.meuse"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="co"># SRID resolved by the database, not by GDAL!</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html" class="external-link">dbDisconnect</a></span><span class="op">(</span><span class="va">conn</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>

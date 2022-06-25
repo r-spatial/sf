@@ -81,39 +81,39 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">st_intersects</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">st_disjoint</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="va">x</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, prepared <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu">st_touches</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, prepared <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">st_crosses</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, prepared <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">st_within</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, prepared <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">st_contains</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, prepared <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span>, model <span class="op">=</span> <span class="st">"open"</span><span class="op">)</span>
-
-<span class="fu">st_contains_properly</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, prepared <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">st_overlaps</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, prepared <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">st_equals</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">y</span>,
-  sparse <span class="op">=</span> <span class="cn">TRUE</span>,
-  prepared <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>,
-  retain_unique <span class="op">=</span> <span class="cn">FALSE</span>,
-  remove_self <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="fu">st_covers</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, prepared <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span>, model <span class="op">=</span> <span class="st">"closed"</span><span class="op">)</span>
-
-<span class="fu">st_covered_by</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="va">x</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, prepared <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span>, model <span class="op">=</span> <span class="st">"closed"</span><span class="op">)</span>
-
-<span class="fu">st_equals_exact</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">par</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, prepared <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">st_is_within_distance</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="va">x</span>, <span class="va">dist</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">st_intersects</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">st_disjoint</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="va">x</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, prepared <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">st_touches</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, prepared <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">st_crosses</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, prepared <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">st_within</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, prepared <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">st_contains</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, prepared <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span>, model <span class="op">=</span> <span class="st">"open"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">st_contains_properly</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, prepared <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">st_overlaps</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, prepared <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">st_equals</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">y</span>,</span>
+<span>  sparse <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  prepared <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  retain_unique <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  remove_self <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">st_covers</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, prepared <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span>, model <span class="op">=</span> <span class="st">"closed"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">st_covered_by</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="va">x</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, prepared <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span>, model <span class="op">=</span> <span class="st">"closed"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">st_equals_exact</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">par</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, prepared <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">st_is_within_distance</span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="va">x</span>, <span class="va">dist</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -187,32 +187,32 @@ the function <code><a href="geos_binary_ops.html">st_intersection</a></code> ins
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">pts</span> <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.5</span>,<span class="fl">.5</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">1.5</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.5</span>, <span class="fl">2.5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">pol</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">(</span><span class="va">lst</span> <span class="op">=</span> <span class="fu">st_intersects</span><span class="op">(</span><span class="va">pts</span>, <span class="va">pol</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">pts</span> <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.5</span>,<span class="fl">.5</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">1.5</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.5</span>, <span class="fl">2.5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pol</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">(</span><span class="va">lst</span> <span class="op">=</span> <span class="fu">st_intersects</span><span class="op">(</span><span class="va">pts</span>, <span class="va">pol</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sparse geometry binary predicate list of length 3, where the predicate</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> was `intersects'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1: 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  2: 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  3: (empty)</span>
-<span class="r-in"><span class="op">(</span><span class="va">mat</span> <span class="op">=</span> <span class="fu">st_intersects</span><span class="op">(</span><span class="va">pts</span>, <span class="va">pol</span>, sparse <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="op">(</span><span class="va">mat</span> <span class="op">=</span> <span class="fu">st_intersects</span><span class="op">(</span><span class="va">pts</span>, <span class="va">pol</span>, sparse <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       [,1]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [2,]  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [3,] FALSE</span>
-<span class="r-in"><span class="co"># which points fall inside a polygon?</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">mat</span>, <span class="fl">1</span>, <span class="va">any</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># which points fall inside a polygon?</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">mat</span>, <span class="fl">1</span>, <span class="va">any</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1]  TRUE  TRUE FALSE</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/lengths.html" class="external-link">lengths</a></span><span class="op">(</span><span class="va">lst</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/lengths.html" class="external-link">lengths</a></span><span class="op">(</span><span class="va">lst</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1]  TRUE  TRUE FALSE</span>
-<span class="r-in"><span class="co"># which points fall inside the first polygon?</span></span>
-<span class="r-in"><span class="fu">st_intersects</span><span class="op">(</span><span class="va">pol</span>, <span class="va">pts</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span class="r-in"><span><span class="co"># which points fall inside the first polygon?</span></span></span>
+<span class="r-in"><span><span class="fu">st_intersects</span><span class="op">(</span><span class="va">pol</span>, <span class="va">pts</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1 2</span>
-<span class="r-in"><span class="co"># remove duplicate geometries:</span></span>
-<span class="r-in"><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="sf.html">st_sf</a></span><span class="op">(</span>a <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span>, geom <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p1</span>, <span class="va">p2</span>, <span class="va">p1</span>, <span class="va">p1</span>, <span class="va">p2</span>, <span class="va">p2</span>, <span class="va">p1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">st_equals</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># remove duplicate geometries:</span></span></span>
+<span class="r-in"><span><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="sf.html">st_sf</a></span><span class="op">(</span>a <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span>, geom <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p1</span>, <span class="va">p2</span>, <span class="va">p1</span>, <span class="va">p1</span>, <span class="va">p2</span>, <span class="va">p2</span>, <span class="va">p1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">st_equals</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sparse geometry binary predicate list of length 8, where the predicate</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> was `equals'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1: 1, 2, 4, 5, 8</span>
@@ -223,7 +223,7 @@ the function <code><a href="geos_binary_ops.html">st_intersection</a></code> ins
 <span class="r-out co"><span class="r-pr">#&gt;</span>  6: 3, 6, 7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  7: 3, 6, 7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  8: 1, 2, 4, 5, 8</span>
-<span class="r-in"><span class="fu">st_equals</span><span class="op">(</span><span class="va">p</span>, remove_self <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">st_equals</span><span class="op">(</span><span class="va">p</span>, remove_self <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sparse geometry binary predicate list of length 8, where the predicate</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> was `equals', with remove_self = TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1: 2, 4, 5, 8</span>
@@ -234,7 +234,7 @@ the function <code><a href="geos_binary_ops.html">st_intersection</a></code> ins
 <span class="r-out co"><span class="r-pr">#&gt;</span>  6: 3, 7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  7: 3, 6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  8: 1, 2, 4, 5</span>
-<span class="r-in"><span class="op">(</span><span class="va">u</span> <span class="op">=</span> <span class="fu">st_equals</span><span class="op">(</span><span class="va">p</span>, retain_unique <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="op">(</span><span class="va">u</span> <span class="op">=</span> <span class="fu">st_equals</span><span class="op">(</span><span class="va">p</span>, retain_unique <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sparse geometry binary predicate list of length 8, where the predicate</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> was `equals', with retain_unique = TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  1: 2, 4, 5, 8</span>
@@ -245,8 +245,8 @@ the function <code><a href="geos_binary_ops.html">st_intersection</a></code> ins
 <span class="r-out co"><span class="r-pr">#&gt;</span>  6: 7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  7: (empty)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  8: (empty)</span>
-<span class="r-in"><span class="co"># retain the records with unique geometries:</span></span>
-<span class="r-in"><span class="va">p</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">u</span><span class="op">)</span>,<span class="op">]</span></span>
+<span class="r-in"><span><span class="co"># retain the records with unique geometries:</span></span></span>
+<span class="r-in"><span><span class="va">p</span><span class="op">[</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">u</span><span class="op">)</span>,<span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 2 features and 1 field</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>

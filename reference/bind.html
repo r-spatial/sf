@@ -83,13 +83,13 @@ Bind columns (variables) of sf objects"><meta property="og:image" content="/logo
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S3 method for sf</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">...</span>, deparse.level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-
-<span class="co"># S3 method for sf</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">...</span>, deparse.level <span class="op">=</span> <span class="fl">1</span>, sf_column_name <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-
-<span class="fu">st_bind_cols</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for sf</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">...</span>, deparse.level <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sf</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">...</span>, deparse.level <span class="op">=</span> <span class="fl">1</span>, sf_column_name <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">st_bind_cols</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -121,11 +121,11 @@ Bind columns (variables) of sf objects"><meta property="og:image" content="/logo
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">crs</span> <span class="op">=</span> <span class="fu"><a href="st_crs.html">st_crs</a></span><span class="op">(</span><span class="fl">3857</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">a</span> <span class="op">=</span> <span class="fu"><a href="sf.html">st_sf</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">1</span>, geom <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="va">crs</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">b</span> <span class="op">=</span> <span class="fu"><a href="sf.html">st_sf</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">1</span>, geom <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="va">crs</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">c</span> <span class="op">=</span> <span class="fu"><a href="sf.html">st_sf</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">4</span>, geom <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="st.html">st_multilinestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="va">crs</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">a</span>,<span class="va">b</span>,<span class="va">c</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">crs</span> <span class="op">=</span> <span class="fu"><a href="st_crs.html">st_crs</a></span><span class="op">(</span><span class="fl">3857</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">a</span> <span class="op">=</span> <span class="fu"><a href="sf.html">st_sf</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">1</span>, geom <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="va">crs</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">b</span> <span class="op">=</span> <span class="fu"><a href="sf.html">st_sf</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">1</span>, geom <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="va">crs</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">c</span> <span class="op">=</span> <span class="fu"><a href="sf.html">st_sf</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">4</span>, geom <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="st.html">st_multilinestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="va">crs</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">a</span>,<span class="va">b</span>,<span class="va">c</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 3 features and 1 field</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: GEOMETRY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
@@ -135,7 +135,7 @@ Bind columns (variables) of sf objects"><meta property="og:image" content="/logo
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 1                  POINT (0 1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 1        LINESTRING (1 3, 2 4)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 4 MULTILINESTRING ((1 3, 2 4))</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">a</span>,<span class="va">b</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">a</span>,<span class="va">b</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 2 features and 1 field</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: GEOMETRY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
@@ -144,7 +144,7 @@ Bind columns (variables) of sf objects"><meta property="og:image" content="/logo
 <span class="r-out co"><span class="r-pr">#&gt;</span>   a                  geom</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 1           POINT (0 1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 1 LINESTRING (1 3, 2 4)</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">a</span>,<span class="va">b</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">a</span>,<span class="va">b</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 2 features and 1 field</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: GEOMETRY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
@@ -153,7 +153,7 @@ Bind columns (variables) of sf objects"><meta property="og:image" content="/logo
 <span class="r-out co"><span class="r-pr">#&gt;</span>   a                  geom</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 1           POINT (0 1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 1 LINESTRING (1 3, 2 4)</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">b</span>,<span class="va">c</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">b</span>,<span class="va">c</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 2 features and 1 field</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: GEOMETRY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
@@ -162,7 +162,7 @@ Bind columns (variables) of sf objects"><meta property="og:image" content="/logo
 <span class="r-out co"><span class="r-pr">#&gt;</span>   a                         geom</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 1        LINESTRING (1 3, 2 4)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 4 MULTILINESTRING ((1 3, 2 4))</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">a</span>,<span class="va">b</span>,<span class="va">c</span><span class="op">)</span> <span class="co"># warns</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">a</span>,<span class="va">b</span>,<span class="va">c</span><span class="op">)</span> <span class="co"># warns</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 3 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Active geometry column: geom</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
@@ -171,8 +171,8 @@ Bind columns (variables) of sf objects"><meta property="og:image" content="/logo
 <span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: WGS 84 / Pseudo-Mercator</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   a a.1 a.2        geom                geom.1                       geom.2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 1   1   4 POINT (0 1) LINESTRING (1 3, 2 4) MULTILINESTRING ((1 3, 2 4))</span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">a</span>,<span class="va">b</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">a</span>,<span class="va">b</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘dplyr’</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:stats’:</span>
@@ -188,8 +188,8 @@ Bind columns (variables) of sf objects"><meta property="og:image" content="/logo
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> `geom` -&gt; `geom...4`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   a...1    geom...2 a...3              geom...4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     1 POINT (0 1)     1 LINESTRING (1 3, 2 4)</span>
-<span class="r-in"><span class="va">c</span> <span class="op">=</span> <span class="fu"><a href="sf.html">st_sf</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">4</span>, geomc <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="st.html">st_multilinestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="va">crs</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">a</span>,<span class="va">b</span>,<span class="va">c</span>, sf_column_name <span class="op">=</span> <span class="st">"geomc"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="va">c</span> <span class="op">=</span> <span class="fu"><a href="sf.html">st_sf</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">4</span>, geomc <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="st.html">st_multilinestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="va">crs</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">a</span>,<span class="va">b</span>,<span class="va">c</span>, sf_column_name <span class="op">=</span> <span class="st">"geomc"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 3 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Active geometry column: geomc</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTILINESTRING</span>
@@ -198,8 +198,8 @@ Bind columns (variables) of sf objects"><meta property="og:image" content="/logo
 <span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: WGS 84 / Pseudo-Mercator</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   a a.1 a.2        geom                geom.1                        geomc</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 1   1   4 POINT (0 1) LINESTRING (1 3, 2 4) MULTILINESTRING ((1 3, 2 4))</span>
-<span class="r-in"><span class="va">df</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="sf.html">st_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">c</span>, <span class="va">df</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="va">df</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="sf.html">st_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">c</span>, <span class="va">df</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 2 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTILINESTRING</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
@@ -207,8 +207,8 @@ Bind columns (variables) of sf objects"><meta property="og:image" content="/logo
 <span class="r-out co"><span class="r-pr">#&gt;</span> Projected CRS: WGS 84 / Pseudo-Mercator</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   a x                        geomc</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 4 3 MULTILINESTRING ((1 3, 2 4))</span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">c</span>, <span class="va">df</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">c</span>, <span class="va">df</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 1 feature and 2 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTILINESTRING</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>

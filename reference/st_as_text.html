@@ -81,16 +81,16 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S3 method for crs</span>
-<span class="fu">st_as_text</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, projjson <span class="op">=</span> <span class="cn">FALSE</span>, pretty <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-
-<span class="fu">st_as_text</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for sfg</span>
-<span class="fu">st_as_text</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for sfc</span>
-<span class="fu">st_as_text</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, EWKT <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for crs</span></span>
+<span><span class="fu">st_as_text</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, projjson <span class="op">=</span> <span class="cn">FALSE</span>, pretty <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">st_as_text</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sfg</span></span>
+<span><span class="fu">st_as_text</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sfc</span></span>
+<span><span class="fu">st_as_text</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, EWKT <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -125,9 +125,9 @@ a SRID to a WKT string).</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">st_as_text</span><span class="op">(</span><span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">st_as_text</span><span class="op">(</span><span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "POINT (1 2)"</span>
-<span class="r-in"><span class="fu">st_as_text</span><span class="op">(</span><span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">90</span>,<span class="fl">40</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span>, EWKT <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">st_as_text</span><span class="op">(</span><span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">90</span>,<span class="fl">40</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span>, EWKT <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "SRID=4326;POINT (-90 40)"</span>
 </code></pre></div>
     </div>

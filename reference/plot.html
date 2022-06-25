@@ -83,151 +83,151 @@ Plot sf object</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S3 method for sf</span>
-<span class="fu">plot</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">y</span>,
-  <span class="va">...</span>,
-  <span class="va">main</span>,
-  pal <span class="op">=</span> <span class="cn">NULL</span>,
-  nbreaks <span class="op">=</span> <span class="fl">10</span>,
-  breaks <span class="op">=</span> <span class="st">"pretty"</span>,
-  max.plot <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"sf_max.plot"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="fl">9</span> <span class="kw">else</span> <span class="va">n</span>,
-  key.pos <span class="op">=</span> <span class="fu">get_key_pos</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>,
-  key.length <span class="op">=</span> <span class="fl">0.618</span>,
-  key.width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">lcm</a></span><span class="op">(</span><span class="fl">1.8</span><span class="op">)</span>,
-  reset <span class="op">=</span> <span class="cn">TRUE</span>,
-  logz <span class="op">=</span> <span class="cn">FALSE</span>,
-  extent <span class="op">=</span> <span class="va">x</span>,
-  xlim <span class="op">=</span> <span class="fu"><a href="st_bbox.html">st_bbox</a></span><span class="op">(</span><span class="va">extent</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">]</span>,
-  ylim <span class="op">=</span> <span class="fu"><a href="st_bbox.html">st_bbox</a></span><span class="op">(</span><span class="va">extent</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span><span class="op">]</span>
-<span class="op">)</span>
-
-<span class="fu">get_key_pos</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for sfc_POINT</span>
-<span class="fu">plot</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">y</span>,
-  <span class="va">...</span>,
-  pch <span class="op">=</span> <span class="fl">1</span>,
-  cex <span class="op">=</span> <span class="fl">1</span>,
-  col <span class="op">=</span> <span class="fl">1</span>,
-  bg <span class="op">=</span> <span class="fl">0</span>,
-  lwd <span class="op">=</span> <span class="fl">1</span>,
-  lty <span class="op">=</span> <span class="fl">1</span>,
-  type <span class="op">=</span> <span class="st">"p"</span>,
-  add <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for sfc_MULTIPOINT</span>
-<span class="fu">plot</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">y</span>,
-  <span class="va">...</span>,
-  pch <span class="op">=</span> <span class="fl">1</span>,
-  cex <span class="op">=</span> <span class="fl">1</span>,
-  col <span class="op">=</span> <span class="fl">1</span>,
-  bg <span class="op">=</span> <span class="fl">0</span>,
-  lwd <span class="op">=</span> <span class="fl">1</span>,
-  lty <span class="op">=</span> <span class="fl">1</span>,
-  type <span class="op">=</span> <span class="st">"p"</span>,
-  add <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for sfc_LINESTRING</span>
-<span class="fu">plot</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">...</span>, lty <span class="op">=</span> <span class="fl">1</span>, lwd <span class="op">=</span> <span class="fl">1</span>, col <span class="op">=</span> <span class="fl">1</span>, pch <span class="op">=</span> <span class="fl">1</span>, type <span class="op">=</span> <span class="st">"l"</span>, add <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-
-<span class="co"># S3 method for sfc_CIRCULARSTRING</span>
-<span class="fu">plot</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for sfc_MULTILINESTRING</span>
-<span class="fu">plot</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">...</span>, lty <span class="op">=</span> <span class="fl">1</span>, lwd <span class="op">=</span> <span class="fl">1</span>, col <span class="op">=</span> <span class="fl">1</span>, pch <span class="op">=</span> <span class="fl">1</span>, type <span class="op">=</span> <span class="st">"l"</span>, add <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-
-<span class="co"># S3 method for sfc_POLYGON</span>
-<span class="fu">plot</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">y</span>,
-  <span class="va">...</span>,
-  lty <span class="op">=</span> <span class="fl">1</span>,
-  lwd <span class="op">=</span> <span class="fl">1</span>,
-  col <span class="op">=</span> <span class="cn">NA</span>,
-  cex <span class="op">=</span> <span class="fl">1</span>,
-  pch <span class="op">=</span> <span class="cn">NA</span>,
-  border <span class="op">=</span> <span class="fl">1</span>,
-  add <span class="op">=</span> <span class="cn">FALSE</span>,
-  rule <span class="op">=</span> <span class="st">"evenodd"</span>,
-  xpd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="st">"xpd"</span><span class="op">)</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for sfc_MULTIPOLYGON</span>
-<span class="fu">plot</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">y</span>,
-  <span class="va">...</span>,
-  lty <span class="op">=</span> <span class="fl">1</span>,
-  lwd <span class="op">=</span> <span class="fl">1</span>,
-  col <span class="op">=</span> <span class="cn">NA</span>,
-  border <span class="op">=</span> <span class="fl">1</span>,
-  add <span class="op">=</span> <span class="cn">FALSE</span>,
-  rule <span class="op">=</span> <span class="st">"evenodd"</span>,
-  xpd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="st">"xpd"</span><span class="op">)</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for sfc_GEOMETRYCOLLECTION</span>
-<span class="fu">plot</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">y</span>,
-  <span class="va">...</span>,
-  pch <span class="op">=</span> <span class="fl">1</span>,
-  cex <span class="op">=</span> <span class="fl">1</span>,
-  bg <span class="op">=</span> <span class="fl">0</span>,
-  lty <span class="op">=</span> <span class="fl">1</span>,
-  lwd <span class="op">=</span> <span class="fl">1</span>,
-  col <span class="op">=</span> <span class="fl">1</span>,
-  border <span class="op">=</span> <span class="fl">1</span>,
-  add <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for sfc_GEOMETRY</span>
-<span class="fu">plot</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">y</span>,
-  <span class="va">...</span>,
-  pch <span class="op">=</span> <span class="fl">1</span>,
-  cex <span class="op">=</span> <span class="fl">1</span>,
-  bg <span class="op">=</span> <span class="fl">0</span>,
-  lty <span class="op">=</span> <span class="fl">1</span>,
-  lwd <span class="op">=</span> <span class="fl">1</span>,
-  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="geos_query.html">st_dimension</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">==</span> <span class="fl">2</span>, <span class="cn">NA</span>, <span class="fl">1</span><span class="op">)</span>,
-  border <span class="op">=</span> <span class="fl">1</span>,
-  add <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for sfg</span>
-<span class="fu">plot</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">plot_sf</span><span class="op">(</span>
-  <span class="va">x</span>,
-  xlim <span class="op">=</span> <span class="cn">NULL</span>,
-  ylim <span class="op">=</span> <span class="cn">NULL</span>,
-  asp <span class="op">=</span> <span class="cn">NA</span>,
-  axes <span class="op">=</span> <span class="cn">FALSE</span>,
-  bgc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="st">"bg"</span><span class="op">)</span>,
-  <span class="va">...</span>,
-  <span class="va">xaxs</span>,
-  <span class="va">yaxs</span>,
-  <span class="va">lab</span>,
-  setParUsrBB <span class="op">=</span> <span class="cn">FALSE</span>,
-  bgMap <span class="op">=</span> <span class="cn">NULL</span>,
-  expandBB <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,
-  graticule <span class="op">=</span> <span class="va">NA_crs_</span>,
-  col_graticule <span class="op">=</span> <span class="st">"grey"</span>,
-  <span class="va">border</span>,
-  extent <span class="op">=</span> <span class="va">x</span>
-<span class="op">)</span>
-
-<span class="fu">sf.colors</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span>, cutoff.tails <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.35</span>, <span class="fl">0.2</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">1</span>, categorical <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for sf</span></span>
+<span><span class="fu">plot</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">y</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  <span class="va">main</span>,</span>
+<span>  pal <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  nbreaks <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  breaks <span class="op">=</span> <span class="st">"pretty"</span>,</span>
+<span>  max.plot <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"sf_max.plot"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="fl">9</span> <span class="kw">else</span> <span class="va">n</span>,</span>
+<span>  key.pos <span class="op">=</span> <span class="fu">get_key_pos</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>,</span>
+<span>  key.length <span class="op">=</span> <span class="fl">0.618</span>,</span>
+<span>  key.width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">lcm</a></span><span class="op">(</span><span class="fl">1.8</span><span class="op">)</span>,</span>
+<span>  reset <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  logz <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  extent <span class="op">=</span> <span class="va">x</span>,</span>
+<span>  xlim <span class="op">=</span> <span class="fu"><a href="st_bbox.html">st_bbox</a></span><span class="op">(</span><span class="va">extent</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>  ylim <span class="op">=</span> <span class="fu"><a href="st_bbox.html">st_bbox</a></span><span class="op">(</span><span class="va">extent</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">get_key_pos</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sfc_POINT</span></span>
+<span><span class="fu">plot</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">y</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  pch <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  cex <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  col <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  bg <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  lwd <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  lty <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"p"</span>,</span>
+<span>  add <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sfc_MULTIPOINT</span></span>
+<span><span class="fu">plot</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">y</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  pch <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  cex <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  col <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  bg <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  lwd <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  lty <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"p"</span>,</span>
+<span>  add <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sfc_LINESTRING</span></span>
+<span><span class="fu">plot</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">...</span>, lty <span class="op">=</span> <span class="fl">1</span>, lwd <span class="op">=</span> <span class="fl">1</span>, col <span class="op">=</span> <span class="fl">1</span>, pch <span class="op">=</span> <span class="fl">1</span>, type <span class="op">=</span> <span class="st">"l"</span>, add <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sfc_CIRCULARSTRING</span></span>
+<span><span class="fu">plot</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sfc_MULTILINESTRING</span></span>
+<span><span class="fu">plot</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">...</span>, lty <span class="op">=</span> <span class="fl">1</span>, lwd <span class="op">=</span> <span class="fl">1</span>, col <span class="op">=</span> <span class="fl">1</span>, pch <span class="op">=</span> <span class="fl">1</span>, type <span class="op">=</span> <span class="st">"l"</span>, add <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sfc_POLYGON</span></span>
+<span><span class="fu">plot</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">y</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  lty <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  lwd <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  col <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  cex <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  pch <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  border <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  add <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  rule <span class="op">=</span> <span class="st">"evenodd"</span>,</span>
+<span>  xpd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="st">"xpd"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sfc_MULTIPOLYGON</span></span>
+<span><span class="fu">plot</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">y</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  lty <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  lwd <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  col <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  border <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  add <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  rule <span class="op">=</span> <span class="st">"evenodd"</span>,</span>
+<span>  xpd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="st">"xpd"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sfc_GEOMETRYCOLLECTION</span></span>
+<span><span class="fu">plot</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">y</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  pch <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  cex <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  bg <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  lty <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  lwd <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  col <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  border <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  add <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sfc_GEOMETRY</span></span>
+<span><span class="fu">plot</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">y</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  pch <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  cex <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  bg <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  lty <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  lwd <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="geos_query.html">st_dimension</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">==</span> <span class="fl">2</span>, <span class="cn">NA</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  border <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  add <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sfg</span></span>
+<span><span class="fu">plot</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">plot_sf</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  xlim <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ylim <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  asp <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  axes <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  bgc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="st">"bg"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  <span class="va">xaxs</span>,</span>
+<span>  <span class="va">yaxs</span>,</span>
+<span>  <span class="va">lab</span>,</span>
+<span>  setParUsrBB <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  bgMap <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  expandBB <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,</span>
+<span>  graticule <span class="op">=</span> <span class="va">NA_crs_</span>,</span>
+<span>  col_graticule <span class="op">=</span> <span class="st">"grey"</span>,</span>
+<span>  <span class="va">border</span>,</span>
+<span>  extent <span class="op">=</span> <span class="va">x</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">sf.colors</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span>, cutoff.tails <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.35</span>, <span class="fl">0.2</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">1</span>, categorical <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -426,32 +426,32 @@ If categorical is <code>TRUE</code>, default colors are from <a href="https://co
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"gpkg/nc.gpkg"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># plot single attribute, auto-legend:</span></span>
-<span class="r-in"><span class="fu">plot</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="st">"SID74"</span><span class="op">]</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"gpkg/nc.gpkg"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># plot single attribute, auto-legend:</span></span></span>
+<span class="r-in"><span><span class="fu">plot</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="st">"SID74"</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="co"># plot multiple:</span></span>
-<span class="r-in"><span class="fu">plot</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SID74"</span>, <span class="st">"SID79"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="co"># better use ggplot2::geom_sf to facet and get a single legend!</span></span>
+<span class="r-in"><span><span class="co"># plot multiple:</span></span></span>
+<span class="r-in"><span><span class="fu">plot</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SID74"</span>, <span class="st">"SID79"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="co"># better use ggplot2::geom_sf to facet and get a single legend!</span></span></span>
 <span class="r-plt img"><img src="plot-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="co"># adding to a plot of an sf object only works when using reset=FALSE in the first plot:</span></span>
-<span class="r-in"><span class="fu">plot</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="st">"SID74"</span><span class="op">]</span>, reset <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">plot</span><span class="op">(</span><span class="fu"><a href="geos_unary.html">st_centroid</a></span><span class="op">(</span><span class="fu"><a href="st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># adding to a plot of an sf object only works when using reset=FALSE in the first plot:</span></span></span>
+<span class="r-in"><span><span class="fu">plot</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="st">"SID74"</span><span class="op">]</span>, reset <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">plot</span><span class="op">(</span><span class="fu"><a href="geos_unary.html">st_centroid</a></span><span class="op">(</span><span class="fu"><a href="st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot-3.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="co"># log10 z-scale:</span></span>
-<span class="r-in"><span class="fu">plot</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="st">"SID74"</span><span class="op">]</span>, logz <span class="op">=</span> <span class="cn">TRUE</span>, breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">.5</span>,<span class="fl">1</span>,<span class="fl">1.5</span>,<span class="fl">2</span><span class="op">)</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">.5</span>,<span class="fl">1</span>,<span class="fl">1.5</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># log10 z-scale:</span></span></span>
+<span class="r-in"><span><span class="fu">plot</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="st">"SID74"</span><span class="op">]</span>, logz <span class="op">=</span> <span class="cn">TRUE</span>, breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">.5</span>,<span class="fl">1</span>,<span class="fl">1.5</span>,<span class="fl">2</span><span class="op">)</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">.5</span>,<span class="fl">1</span>,<span class="fl">1.5</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot-4.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="co"># and we need to reset the plotting device after that, e.g. by</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">layout</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># when plotting only geometries, the reset=FALSE is not needed:</span></span>
-<span class="r-in"><span class="fu">plot</span><span class="op">(</span><span class="fu"><a href="st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">plot</span><span class="op">(</span><span class="fu"><a href="st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, col <span class="op">=</span> <span class="st">'red'</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># and we need to reset the plotting device after that, e.g. by</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">layout</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># when plotting only geometries, the reset=FALSE is not needed:</span></span></span>
+<span class="r-in"><span><span class="fu">plot</span><span class="op">(</span><span class="fu"><a href="st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">plot</span><span class="op">(</span><span class="fu"><a href="st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, col <span class="op">=</span> <span class="st">'red'</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot-5.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="co"># add a custom legend to an arbitray plot:</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">layout</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, widths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">lcm</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">plot</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="stars.html">.image_scale</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, col <span class="op">=</span> <span class="fu">sf.colors</span><span class="op">(</span><span class="fl">9</span><span class="op">)</span>, key.length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">lcm</a></span><span class="op">(</span><span class="fl">8</span><span class="op">)</span>, key.pos <span class="op">=</span> <span class="fl">4</span>, at <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># add a custom legend to an arbitray plot:</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">layout</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, widths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">lcm</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">plot</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="stars.html">.image_scale</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, col <span class="op">=</span> <span class="fu">sf.colors</span><span class="op">(</span><span class="fl">9</span><span class="op">)</span>, key.length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">lcm</a></span><span class="op">(</span><span class="fl">8</span><span class="op">)</span>, key.pos <span class="op">=</span> <span class="fl">4</span>, at <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot-6.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="fu">sf.colors</span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">sf.colors</span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "#0000B3FF" "#0400FFFF" "#4500FFFF" "#8500FFFF" "#C527D8FF" "#FF50AFFF"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "#FF7A85FF" "#FFA35CFF" "#FFCC33FF" "#FFF50AFF"</span>
 </code></pre></div>
