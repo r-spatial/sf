@@ -81,7 +81,14 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">st_sfc</span><span class="op">(</span><span class="va">...</span>, crs <span class="op">=</span> <span class="va">NA_crs_</span>, precision <span class="op">=</span> <span class="fl">0</span>, check_ring_dir <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">dim</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">st_sfc</span><span class="op">(</span></span>
+<span>  <span class="va">...</span>,</span>
+<span>  crs <span class="op">=</span> <span class="va">NA_crs_</span>,</span>
+<span>  precision <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  check_ring_dir <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">dim</span>,</span>
+<span>  recompute_bbox <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -104,6 +111,10 @@
 
 <dt>dim</dt>
 <dd><p>character; if this function is called without valid geometries, this argument may carry the right dimension to set empty geometries</p></dd>
+
+
+<dt>recompute_bbox</dt>
+<dd><p>logical; use <code>TRUE</code> to force recomputation of the bounding box</p></dd>
 
 </dl></div>
     <div id="value">
