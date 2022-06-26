@@ -1,5 +1,7 @@
 # version 1.0-8
 
+* optimizations for `st_sfc()` by @paleolimbot; #1938, #1925
+
 * `[<-.sfc()` recomputes the bounding box; `st_sfc()` gets parameter `compute_bbox`; #1965
 
 * add new algorithm and drop option to `st_make_valid()` when using GEOS and GEOS >= 3.10.1; #1655
