@@ -12,7 +12,14 @@
 \alias{sfc_GEOMETRYCOLLECTION}
 \title{Create simple feature geometry list column}
 \usage{
-st_sfc(..., crs = NA_crs_, precision = 0, check_ring_dir = FALSE, dim)
+st_sfc(
+  ...,
+  crs = NA_crs_,
+  precision = 0,
+  check_ring_dir = FALSE,
+  dim,
+  recompute_bbox = FALSE
+)
 }
 \arguments{
 \item{...}{zero or more simple feature geometries (objects of class \code{sfg}), or a single list of such objects; \code{NULL} values will get replaced by empty geometries.}
@@ -24,6 +31,8 @@ st_sfc(..., crs = NA_crs_, precision = 0, check_ring_dir = FALSE, dim)
 \item{check_ring_dir}{see \link{st_read}}
 
 \item{dim}{character; if this function is called without valid geometries, this argument may carry the right dimension to set empty geometries}
+
+\item{recompute_bbox}{logical; use \code{TRUE} to force recomputation of the bounding box}
 }
 \value{
 an object of class \code{sfc}, which is a classed list-column with simple feature geometries.

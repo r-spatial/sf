@@ -1,6 +1,10 @@
 # version 1.0-8
 
-* add `st_minimum_rotated_rectangle()` if GEOS > 3.9.0; #1953
+* `[<-.sfc()` recomputes the bounding box; `st_sfc()` gets parameter `compute_bbox`; #1965
+
+* add new algorithm and drop option to `st_make_valid()` when using GEOS and GEOS >= 3.10.1; #1655
+
+* add `st_minimum_rotated_rectangle()`, available when GEOS >= 3.9.0; #1953
 
 * fix `st_sample()` with `type = "hexagonal"` for corner case (n=1), add a `progress` argument for a progress bar; #1945
 
