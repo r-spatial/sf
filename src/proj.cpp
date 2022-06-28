@@ -263,8 +263,10 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 
 	if (from_to.size() != 1 && from_to.size() != 2)
 		stop("from_to should be size 1 or 2 character vector"); // #nocov
-	if (pts.ncol() != 2)
-		stop("pts should be 2-column numeric vector"); // #nocov
+	if (pts.ncol() < 2 || pts.ncol() > 4)
+		stop("pts should be 2-, 3- or 4-column numeric vector"); // #nocov
+	bool have_z = pts.ncol() > 2; // column 3
+	bool have_t = pts.ncol() > 3; // column 4
 
 	proj_context_use_proj4_init_rules(PJ_DEFAULT_CTX, 1); // FIXME: needed?
 	PJ *P = NULL;
@@ -286,31 +288,41 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 	// copy over:
 	std::vector<PJ_COORD> x(pts.nrow());
 	for (int i = 0; i < pts.nrow(); i++) {
-		x.data()[i].lp.lam = pts(i, 0);
-		x.data()[i].lp.phi = pts(i, 1);
+		x.data()[i].lpzt.lam = pts(i, 0);
+		x.data()[i].lpzt.phi = pts(i, 1);
+		// for default z and t values, see https://proj.org/development/migration.html
+		x.data()[i].lpzt.z = have_z ? pts(i, 2) : 0.0;
+		x.data()[i].lpzt.t = have_t ? pts(i, 3) : HUGE_VAL; 
 	}
 
 	// deg2rad?
 	if (proj_angular_output(P, PJ_INV)) {
 		for (int i = 0; i < pts.nrow(); i++) {
-			x.data()[i].lp.lam = proj_torad(x.data()[i].lp.lam);
-			x.data()[i].lp.phi = proj_torad(x.data()[i].lp.phi);
+			x.data()[i].lpzt.lam = proj_torad(x.data()[i].lpzt.lam);
+			x.data()[i].lpzt.phi = proj_torad(x.data()[i].lpzt.phi);
 		}
 	}
-
-//	for (int i = 0; i < pts.nrow(); i++)
-//  		 Rcout << xx[i] << " " << yy[i] << std::endl;
 
 	// transform:
 	if (keep) {
 		// use proj_trans() on individual points, making unprojectable points be NA
 		PJ_COORD row = { 0.0, 0.0, 0.0, 0.0 }, projected;
 		for (int i = 0; i < pts.nrow(); i++) {
-			row.lp.lam = x.data()[i].lp.lam;
-			row.lp.phi = x.data()[i].lp.phi;
+			/*
+			row.lpzt.lam = x.data()[i].lpzt.lam;
+			row.lpzt.phi = x.data()[i].lpzt.phi;
+			row.lpzt.z = x.data()[i].lpzt.z;
+			row.lpzt.t = x.data()[i].lpzt.t;
+			*/
+			row.lpzt = x.data()[i].lpzt;
 			projected = proj_trans(P, PJ_FWD, row);
-			x.data()[i].lp.lam = projected.lp.lam;
-			x.data()[i].lp.phi = projected.lp.phi;
+			/*
+			x.data()[i].lpzt.lam = projected.lpzt.lam;
+			x.data()[i].lpzt.phi = projected.lpzt.phi;
+			x.data()[i].lpzt.z = projected.lpzt.z;
+			x.data()[i].lpzt.t = projected.lpzt.t;
+			*/
+			x.data()[i].lpzt = projected.lpzt;
 		}
 	} else {
 		// DEFAULT: use proj_trans_array() on array, returning zero-length if any point is unprojectable
@@ -323,8 +335,8 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 	// rad2deg?
 	if (proj_angular_output(P, PJ_FWD)) {
 		for (int i = 0; i < pts.nrow(); i++) {
-			x.data()[i].lp.lam = proj_todeg(x.data()[i].lp.lam);
-			x.data()[i].lp.phi = proj_todeg(x.data()[i].lp.phi);
+			x.data()[i].lpzt.lam = proj_todeg(x.data()[i].lpzt.lam);
+			x.data()[i].lpzt.phi = proj_todeg(x.data()[i].lpzt.phi);
 		}
 	}
 	proj_destroy(P);
@@ -332,8 +344,12 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 	// copy to out matrix:
 	NumericMatrix out(pts.nrow(), pts.ncol());
 	for (int i = 0; i < out.nrow(); i++) {
-		out(i, 0) = x.data()[i].lp.lam;
-		out(i, 1) = x.data()[i].lp.phi;
+		out(i, 0) = x.data()[i].lpzt.lam;
+		out(i, 1) = x.data()[i].lpzt.phi;
+		if (have_z)
+			out(i, 2) = x.data()[i].lpzt.z;
+		if (have_t)
+			out(i, 3) = x.data()[i].lpzt.t;
 	}
 
 	int nwarn = 0;
@@ -341,6 +357,10 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 		if (out(i, 0) == HUGE_VAL || out(i, 1) == HUGE_VAL) {
 			out(i, 0) = NA_REAL;
 			out(i, 1) = NA_REAL;
+			if (have_z)
+				out(i, 2) = NA_REAL;
+			if (have_t)
+				out(i, 3) = NA_REAL;
 			nwarn++; // #nocov
 		}
 	}
