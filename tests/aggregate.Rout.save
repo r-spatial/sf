@@ -109,4 +109,4 @@ CRS:           NA
 > 
 > proc.time()
    user  system elapsed 
-  1.177   0.056   1.225 
+  0.988   0.034   1.013 
