@@ -22,7 +22,7 @@ or pipeline describing a transformation}
 
 \item{to}{character description of target CRS, or object of class \code{crs}}
 
-\item{pts}{two-column numeric matrix, or object that can be coerced into a matrix}
+\item{pts}{two-, three- or four-column numeric matrix, or object that can be coerced into a matrix; columns 3 and 4 contain z and t values.}
 
 \item{keep}{logical value controlling the handling of unprojectable points. If
 `keep` is `TRUE`, then such points will yield `Inf` or `-Inf` in the
