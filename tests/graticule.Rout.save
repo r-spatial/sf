@@ -1,6 +1,6 @@
 
-R version 4.0.4 (2021-02-15) -- "Lost Library Book"
-Copyright (C) 2021 The R Foundation for Statistical Computing
+R version 4.2.0 (2022-04-22) -- "Vigorous Calisthenics"
+Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -15,26 +15,26 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> library(maps)
-> m = map('usa', plot = FALSE, fill = TRUE)
-> suppressPackageStartupMessages(library(sf))
-> m0 <- st_as_sfc(m)
-> m <- st_as_sf(m)
-> 
-> laea = st_crs("+proj=laea +lat_0=30 +lon_0=-95") # Lambert equal area
-> m <- st_transform(st_as_sf(m), laea)
-> 
-> bb = st_bbox(m)
-> bbox = st_linestring(rbind(c( bb[1],bb[2]),c( bb[3],bb[2]),c( bb[3],bb[4]),c( bb[1],bb[4]),c( bb[1],bb[2])))
-> 
-> g = st_graticule(m)
-> plot(m, xlim = 1.2 * c(-2450853.4, 2186391.9))
-> plot(g[1], add = TRUE, col = 'grey')
-> plot(bbox, add = TRUE)
-> points(g$x_start, g$y_start, col = 'red')
-> points(g$x_end, g$y_end, col = 'blue')
-> 
-> invisible(lapply(seq_len(nrow(g)), function(i) {
+> if (require(maps, quietly = TRUE)) {
++ m = map('usa', plot = FALSE, fill = TRUE)
++ suppressPackageStartupMessages(library(sf))
++ m0 <- st_as_sfc(m)
++ m <- st_as_sf(m)
++ 
++ laea = st_crs("+proj=laea +lat_0=30 +lon_0=-95") # Lambert equal area
++ m <- st_transform(st_as_sf(m), laea)
++ 
++ bb = st_bbox(m)
++ bbox = st_linestring(rbind(c( bb[1],bb[2]),c( bb[3],bb[2]),c( bb[3],bb[4]),c( bb[1],bb[4]),c( bb[1],bb[2])))
++ 
++ g = st_graticule(m)
++ plot(m, xlim = 1.2 * c(-2450853.4, 2186391.9))
++ plot(g[1], add = TRUE, col = 'grey')
++ plot(bbox, add = TRUE)
++ points(g$x_start, g$y_start, col = 'red')
++ points(g$x_end, g$y_end, col = 'blue')
++ 
++ invisible(lapply(seq_len(nrow(g)), function(i) {
 + 	if (g$type[i] == "N" && g$x_start[i] - min(g$x_start) < 1000)
 + 		text(g[i,"x_start"], g[i,"y_start"], labels = parse(text = g[i,"degree_label"]), 
 + 			srt = g$angle_start[i], pos = 2, cex = .7)
@@ -48,45 +48,28 @@ Type 'q()' to quit R.
 + 		text(g[i,"x_end"], g[i,"y_end"], labels = parse(text = g[i,"degree_label"]), 
 + 			srt = g$angle_end[i] - 90, pos = 3, cex = .7)
 + }))
-> 
-> plot(m, graticule = st_crs(4326))
-> nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
-> # options(warn=2)
-> g = st_graticule(nc, datum = st_crs(nc))
-> #g = st_graticule(nc)
-> 
-> plot(nc[1], graticule = st_crs(nc))
-> 
-> plot(nc[1], graticule = st_crs(nc), axes = TRUE)
-> 
-> g = st_graticule()
-> 
-> library(ggplot2)
-> if (utils::packageVersion("ggplot2") > "2.2.1") {
++ 
++ plot(m, graticule = st_crs(4326))
++ nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
++ # options(warn=2)
++ g = st_graticule(nc, datum = st_crs(nc))
++ #g = st_graticule(nc)
++ 
++ plot(nc[1], graticule = st_crs(nc))
++ 
++ plot(nc[1], graticule = st_crs(nc), axes = TRUE)
++ 
++ g = st_graticule()
++ 
++ if (require(ggplot2, quietly = TRUE) && utils::packageVersion("ggplot2") > "2.2.1") {
 +   ggplot() + geom_sf(data = st_set_crs(nc, NA_crs_)) # NA_crs_ for crs
 + }
-> 
-> library(maps) #421
-> (wrld2 = st_as_sf(map('world2', plot=FALSE, fill=TRUE )))
-Simple feature collection with 253 features and 1 field
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: 0 ymin: -89.99001 xmax: 360 ymax: 83.59961
-Geodetic CRS:  WGS 84
-First 10 features:
-                     ID                           geom
-1                 Aruba MULTIPOLYGON (((290.1009 12...
-2           Afghanistan MULTIPOLYGON (((74.89131 37...
-3                Angola MULTIPOLYGON (((23.9665 -10...
-4              Anguilla MULTIPOLYGON (((296.9988 18...
-5               Albania MULTIPOLYGON (((20.06396 42...
-6               Finland MULTIPOLYGON (((20.61133 60...
-7               Andorra MULTIPOLYGON (((1.706055 42...
-8  United Arab Emirates MULTIPOLYGON (((53.92783 24...
-9             Argentina MULTIPOLYGON (((295.4508 -5...
-10              Armenia MULTIPOLYGON (((45.55235 40...
-> try(plot(wrld2, graticule = TRUE))
++ 
++ library(maps) #421
++ (wrld2 = st_as_sf(map('world2', plot=FALSE, fill=TRUE )))
++ try(plot(wrld2, graticule = TRUE))
++ }
 > 
 > proc.time()
    user  system elapsed 
-  3.120   0.258   3.505 
+  1.960   0.175   2.135 

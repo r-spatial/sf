@@ -118,12 +118,13 @@ omitted; it returns TRUE on success, FALSE on failure, invisibly.
 nc = st_read(system.file("shape/nc.shp", package="sf"))
 st_write(nc, paste0(tempdir(), "/", "nc.shp"))
 st_write(nc, paste0(tempdir(), "/", "nc.shp"), delete_layer = TRUE) # overwrites
-data(meuse, package = "sp") # loads data.frame from sp
-meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
-# writes X and Y as columns:
-st_write(meuse_sf, paste0(tempdir(), "/", "meuse.csv"), layer_options = "GEOMETRY=AS_XY")
-st_write(meuse_sf, paste0(tempdir(), "/", "meuse.csv"), layer_options = "GEOMETRY=AS_WKT",
-  delete_dsn=TRUE) # overwrites
+if (require(sp, quietly = TRUE)) {
+ data(meuse, package = "sp") # loads data.frame from sp
+ meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
+ # writes X and Y as columns:
+ st_write(meuse_sf, paste0(tempdir(), "/", "meuse.csv"), layer_options = "GEOMETRY=AS_XY")
+ st_write(meuse_sf, paste0(tempdir(), "/", "meuse.csv"), layer_options = "GEOMETRY=AS_WKT",
+   delete_dsn=TRUE) # overwrites
 \dontrun{
  library(sp)
  example(meuse, ask = FALSE, echo = FALSE)
@@ -131,6 +132,7 @@ st_write(meuse_sf, paste0(tempdir(), "/", "meuse.csv"), layer_options = "GEOMETR
      layer_options = c("OVERWRITE=yes", "LAUNDER=true")))
  demo(nc, ask = FALSE)
  try(st_write(nc, "PG:dbname=postgis", "sids", layer_options = "OVERWRITE=true"))
+}
 }
 }
 \seealso{

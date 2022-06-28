@@ -18,7 +18,8 @@ st_sample(x, size, ...)
   type = "random",
   exact = TRUE,
   warn_if_not_integer = TRUE,
-  by_polygon = FALSE
+  by_polygon = FALSE,
+  progress = FALSE
 )
 
 \method{st_sample}{sfg}(x, size, ...)
@@ -40,6 +41,8 @@ or one of the \code{spatstat} methods such as \code{Thomas} for calling \code{sp
 \item{by_polygon}{logical; for \code{MULTIPOLYGON} geometries, should the effort be split by \code{POLYGON}? See https://github.com/r-spatial/sf/issues/1480
 the same as specified by \code{size}? \code{TRUE} by default. Only applies to polygons, and
 when \code{type = "random"}.}
+
+\item{progress}{logical; if \code{TRUE} show progress bar (only if \code{size} is a vector).}
 }
 \value{
 an \code{sfc} object containing the sampled \code{POINT} geometries
@@ -77,12 +80,14 @@ x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0)))), crs 
 plot(x, axes = TRUE, graticule = TRUE)
 if (sf_extSoftVersion()["proj.4"] >= "4.9.0")
   plot(p <- st_sample(x, 1000), add = TRUE)
+if (require(lwgeom, quietly = TRUE)) { # for st_segmentize()
 x2 = st_transform(st_segmentize(x, 1e4), st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
 g = st_transform(st_graticule(), st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
 plot(x2, graticule = g)
 if (sf_extSoftVersion()["proj.4"] >= "4.9.0") {
   p2 = st_transform(p, st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
   plot(p2, add = TRUE)
+}
 }
 x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,10),c(0,90),c(0,0))))) # NOT long/lat:
 plot(x)

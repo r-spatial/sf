@@ -1,5 +1,5 @@
 
-R version 4.1.3 (2022-03-10) -- "One Push-Up"
+R version 4.2.0 (2022-04-22) -- "Vigorous Calisthenics"
 Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -35,7 +35,7 @@ attr(,"class")
 > try(length(gdal_metadata(tif, c("DERIVED_SUBDATASETS")))) # fails on Fedora 26
 [1] 2
 > 
-> if (require(stars)) {
+> if (require(stars, quietly = TRUE)) {
 +   tif = system.file("tif/geomatrix.tif", package = "sf")
 +   r = read_stars(tif)
 +   d = (st_dimensions(r))
@@ -91,8 +91,6 @@ attr(,"class")
 +     }
 +   }
 + }
-Loading required package: stars
-Loading required package: abind
 [1] TRUE
 [1] TRUE
 Geometry set for 20 features 
@@ -246,6 +244,9 @@ First 10 features:
 
 
 
+Warning message:
+In read_stars(lc, RAT = "Land Cover Class") :
+  categorical data values starting at 0 are shifted with one to start at 1
 > 
 > r = gdal_read(tif)
 > gt = c(0,1,0,0,0,1)
@@ -263,5 +264,5 @@ First 10 features:
 > 
 > proc.time()
    user  system elapsed 
-  1.652   0.091   1.736 
+  2.229   0.122   2.345 
 

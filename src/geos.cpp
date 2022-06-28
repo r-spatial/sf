@@ -8,12 +8,6 @@
 # if GEOS_VERSION_MINOR >= 5
 #  define HAVE350
 # endif
-# if GEOS_VERSION_MINOR >= 9
-#  define HAVE390
-# endif
-# if GEOS_VERSION_MINOR >= 8
-#  define HAVE380
-# endif
 # if GEOS_VERSION_MINOR == 6
 #  if GEOS_VERSION_PATCH >= 1
 #   define HAVE361
@@ -23,6 +17,17 @@
 #  define HAVE361
 #  define HAVE370
 # endif
+# if GEOS_VERSION_MINOR >= 8
+#  define HAVE380
+# endif
+# if GEOS_VERSION_MINOR >= 9
+#  define HAVE390
+# endif
+# if GEOS_VERSION_MINOR >= 10
+#  if GEOS_VERSION_PATCH >= 1
+#   define HAVE3101
+#  endif
+# endif
 #else
 # if GEOS_VERSION_MAJOR > 3
 #  define HAVE340
@@ -31,6 +36,7 @@
 #  define HAVE361
 #  define HAVE380
 #  define HAVE390
+#  define HAVE3101
 # endif
 #endif
 
@@ -528,14 +534,28 @@ Rcpp::CharacterVector CPL_geos_is_valid_reason(Rcpp::List sfc) {
 
 // #nocov start - no GEOS 3.8.0 on travis yet
 // [[Rcpp::export]]
-Rcpp::List CPL_geos_make_valid(Rcpp::List sfc) {
+Rcpp::List CPL_geos_make_valid(Rcpp::List sfc, std::string method, bool keep_collapsed) {
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 
 	std::vector<GeomPtr> gmv = geometries_from_sfc(hGEOSCtxt, sfc, NULL);
 	std::vector<GeomPtr> out(gmv.size());
 #ifdef HAVE380
+# ifdef HAVE3101
+	GEOSMakeValidParams *makeValidParams = GEOSMakeValidParams_create_r(hGEOSCtxt);
+	if (method == "valid_linework")
+		GEOSMakeValidParams_setMethod_r(hGEOSCtxt, makeValidParams, GEOS_MAKE_VALID_LINEWORK);
+	else if (method == "valid_structure")
+		GEOSMakeValidParams_setMethod_r(hGEOSCtxt, makeValidParams, GEOS_MAKE_VALID_STRUCTURE);
+	else
+		Rcpp::stop("geos_method not recognized");
+	GEOSMakeValidParams_setKeepCollapsed_r(hGEOSCtxt, makeValidParams, (int) keep_collapsed);
+	for (size_t i = 0; i < gmv.size(); i++)
+		gmv[i] = geos_ptr(GEOSMakeValidWithParams_r(hGEOSCtxt, gmv[i].get(), makeValidParams), hGEOSCtxt);
+	GEOSMakeValidParams_destroy_r(hGEOSCtxt, makeValidParams);
+# else
 	for (size_t i = 0; i < gmv.size(); i++)
 		gmv[i] = geos_ptr(GEOSMakeValid_r(hGEOSCtxt, gmv[i].get()), hGEOSCtxt);
+# endif
 #else
 	Rcpp::stop("this shouldn't happen: st_make_valid should use lwgeom");
 #endif
@@ -809,6 +829,10 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 		for (size_t i = 0; i < g.size(); i++) {
 			out[i] = geos_ptr(chkNULL(GEOSMaximumInscribedCircle_r(hGEOSCtxt, g[i].get(),
 				dTolerance[i])), hGEOSCtxt);
+		}
+	} else if (op == "minimum_rotated_rectangle") {
+		for (size_t i = 0; i < g.size(); i++) {
+			out[i] = geos_ptr(chkNULL(GEOSMinimumRotatedRectangle_r(hGEOSCtxt, g[i].get())), hGEOSCtxt);
 		}
 	} else
 #endif

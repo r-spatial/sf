@@ -121,7 +121,7 @@ set_utf8 = function(x) {
 #' # spatial filter, as wkt:
 #' wkt = st_as_text(st_geometry(nc[1,]))
 #' # filter by (bbox overlaps of) first feature geometry:
-#' read_sf(system.file("gpkg/nc.gpkg", package="sf"), wkt_filter = wkt)
+#' st_read(system.file("gpkg/nc.gpkg", package="sf"), wkt_filter = wkt)
 #' @export
 st_read = function(dsn, layer, ...) UseMethod("st_read")
 
@@ -246,7 +246,7 @@ st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet 
 #' # read geojson from string:
 #' geojson_txt <- paste("{\"type\":\"MultiPoint\",\"coordinates\":",
 #'    "[[3.2,4],[3,4.6],[3.8,4.4],[3.5,3.8],[3.4,3.6],[3.9,4.5]]}")
-#' x = read_sf(geojson_txt)
+#' x = st_read(geojson_txt)
 #' x
 read_sf <- function(..., quiet = TRUE, stringsAsFactors = FALSE, as_tibble = TRUE) {
 	st_read(..., quiet = quiet, stringsAsFactors = stringsAsFactors, as_tibble = as_tibble)
@@ -369,12 +369,13 @@ abbreviate_shapefile_names = function(x) {
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' st_write(nc, paste0(tempdir(), "/", "nc.shp"))
 #' st_write(nc, paste0(tempdir(), "/", "nc.shp"), delete_layer = TRUE) # overwrites
-#' data(meuse, package = "sp") # loads data.frame from sp
-#' meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
-#' # writes X and Y as columns:
-#' st_write(meuse_sf, paste0(tempdir(), "/", "meuse.csv"), layer_options = "GEOMETRY=AS_XY")
-#' st_write(meuse_sf, paste0(tempdir(), "/", "meuse.csv"), layer_options = "GEOMETRY=AS_WKT",
-#'   delete_dsn=TRUE) # overwrites
+#' if (require(sp, quietly = TRUE)) {
+#'  data(meuse, package = "sp") # loads data.frame from sp
+#'  meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
+#'  # writes X and Y as columns:
+#'  st_write(meuse_sf, paste0(tempdir(), "/", "meuse.csv"), layer_options = "GEOMETRY=AS_XY")
+#'  st_write(meuse_sf, paste0(tempdir(), "/", "meuse.csv"), layer_options = "GEOMETRY=AS_WKT",
+#'    delete_dsn=TRUE) # overwrites
 #' \dontrun{
 #'  library(sp)
 #'  example(meuse, ask = FALSE, echo = FALSE)
@@ -382,6 +383,7 @@ abbreviate_shapefile_names = function(x) {
 #'      layer_options = c("OVERWRITE=yes", "LAUNDER=true")))
 #'  demo(nc, ask = FALSE)
 #'  try(st_write(nc, "PG:dbname=postgis", "sids", layer_options = "OVERWRITE=true"))
+#' }
 #' }
 #' @export
 st_write = function(obj, dsn, layer, ...) UseMethod("st_write")

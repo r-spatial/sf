@@ -48,7 +48,7 @@ plot(b1, xlim = c(-.2,1.2), ylim = c(-.2,1.2), col = NA, border = 'green')
 plot(st_sfc(b2, b3), add = TRUE, col = NA, border = 'blue')
 plot(ls, add = TRUE, col = 'red')
 
-nc = read_sf(system.file("gpkg/nc.gpkg", package="sf"))
+nc = st_read(system.file("gpkg/nc.gpkg", package="sf"))
 plot(st_geometry(nc))
 ls = st_nearest_points(nc[1,], nc)
 plot(ls, col = 'red', add = TRUE)

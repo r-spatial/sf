@@ -25,6 +25,7 @@ st_sample = function(x, size, ...) UseMethod("st_sample")
 #' @param by_polygon logical; for \code{MULTIPOLYGON} geometries, should the effort be split by \code{POLYGON}? See https://github.com/r-spatial/sf/issues/1480
 #' the same as specified by \code{size}? \code{TRUE} by default. Only applies to polygons, and
 #' when \code{type = "random"}.
+#' @param progress logical; if \code{TRUE} show progress bar (only if \code{size} is a vector).
 #' @return an \code{sfc} object containing the sampled \code{POINT} geometries
 #' @details if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{http://mathworld.wolfram.com/SpherePointPicking.html}
 #'
@@ -45,12 +46,14 @@ st_sample = function(x, size, ...) UseMethod("st_sample")
 #' plot(x, axes = TRUE, graticule = TRUE)
 #' if (sf_extSoftVersion()["proj.4"] >= "4.9.0")
 #'   plot(p <- st_sample(x, 1000), add = TRUE)
+#' if (require(lwgeom, quietly = TRUE)) { # for st_segmentize()
 #' x2 = st_transform(st_segmentize(x, 1e4), st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
 #' g = st_transform(st_graticule(), st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
 #' plot(x2, graticule = g)
 #' if (sf_extSoftVersion()["proj.4"] >= "4.9.0") {
 #'   p2 = st_transform(p, st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
 #'   plot(p2, add = TRUE)
+#' }
 #' }
 #' x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,10),c(0,90),c(0,0))))) # NOT long/lat:
 #' plot(x)
@@ -93,13 +96,18 @@ st_sample.sf = function(x, size, ...) st_sample(st_geometry(x), size, ...)
 #' @export
 #' @name st_sample
 st_sample.sfc = function(x, size, ..., type = "random", exact = TRUE, warn_if_not_integer = TRUE,
-		by_polygon = FALSE) {
+		by_polygon = FALSE, progress = FALSE) {
 
 	if (!missing(size) && warn_if_not_integer && any(size %% 1 != 0))
 		warning("size is not an integer")
 	if (!missing(size) && length(size) > 1) { # recurse:
 		size = rep(size, length.out = length(x))
-		ret = lapply(1:length(x), function(i) st_sample(x[i], size[i], type = type, exact = exact, ...))
+		ret = if (progress) {
+				if (!requireNamespace("pbapply", quietly = TRUE))
+					stop("package pbapply required, please install it first")
+				pbapply::pblapply(1:length(x), function(i) st_sample(x[i], size[i], type = type, exact = exact, ...))
+			} else
+				lapply(1:length(x), function(i) st_sample(x[i], size[i], type = type, exact = exact, ...))
 		st_set_crs(do.call(c, ret), st_crs(x))
 	} else {
 		res = switch(max(st_dimension(x)) + 1,
@@ -249,7 +257,7 @@ hex_grid_points = function(obj, pt, dx) {
 
 	y = rep(y, each = length(x))
 	x = rep(c(x, x + dx / 2), length.out = length(y))
-	xy = cbind(x, y)[x >= xlim[1] & x <= xlim[2] & y >= ylim[1] & y <= ylim[2], ]
+	xy = cbind(x, y)[x >= xlim[1] & x <= xlim[2] & y >= ylim[1] & y <= ylim[2], , drop = FALSE]
 	colnames(xy) = NULL
 	st_sfc(lapply(seq_len(nrow(xy)), function(i) st_point(xy[i,])), crs = st_crs(bb))
 }

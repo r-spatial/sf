@@ -1,6 +1,6 @@
 
-R version 4.1.2 (2021-11-01) -- "Bird Hippie"
-Copyright (C) 2021 The R Foundation for Statistical Computing
+R version 4.2.0 (2022-04-22) -- "Vigorous Calisthenics"
+Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -16,7 +16,6 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > suppressPackageStartupMessages(library(sf))
-> library(testthat)
 > 
 > p = st_point(c(1/3,1/6))
 > st_sfc(p, precision = 1000)
@@ -154,7 +153,9 @@ CRS:           NA
 > st_geometry(d1) = d$geom
 > 
 > d$geometry = d$geom # second geometry list-column
-> expect_warning(st_geometry(d) <- d$geom)
+> if (require(testthat, quietly = TRUE)) {
++  expect_warning(st_geometry(d) <- d$geom)
++ }
 > d
 Simple feature collection with 2 features and 1 field
 Active geometry column: geom
@@ -232,7 +233,6 @@ CRS:           NA
 Warning message:
 In st_cast.MULTIPOINT(X[[i]], ...) : point from first coordinate only
 > 
-> suppressPackageStartupMessages( library(dplyr) )
 > 
 > x %>% st_cast("POINT")
 Geometry set for 2 features 
@@ -347,7 +347,7 @@ use `st_zm(...)` to coerce to XY dimensions
 > 
 > sf_extSoftVersion()[1:3]
     GEOS     GDAL   proj.4 
-"3.10.1"  "3.4.0"  "8.2.0" 
+"3.10.2"  "3.4.3"  "8.2.0" 
 > 
 > # Ops.sfc:
 > ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))))
@@ -448,7 +448,6 @@ Levels: constant aggregate identity
 [1] <NA>
 Levels: constant aggregate identity
 > x <- st_sf(a = 1:2, b = 3:4, geom = x, agr = c("constant", "aggregate"))
-> suppressPackageStartupMessages(library(dplyr))
 > y <- x %>% st_set_agr("constant")
 > y
 Simple feature collection with 2 features and 2 fields
@@ -550,71 +549,37 @@ CRS:           NA
 3 6  2    c              POINT (1 1)
 4 7  3 <NA>              POINT (2 2)
 > 
-> # joins:
-> inner_join(a, b)
+> if (require(dplyr, quietly = TRUE)) {
++ # joins:
++ inner_join(a, b)
++ left_join(a, b)
++ right_join(a, b)
++ full_join(a, b)
++ semi_join(a, b)
++ anti_join(a, b)
++ left_join(a, data.frame(b, geometry = 1), by = "b")
++ }
+
+Attaching package: 'dplyr'
+
+The following object is masked from 'package:testthat':
+
+    matches
+
+The following objects are masked from 'package:stats':
+
+    filter, lag
+
+The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union
+
 Joining, by = "b"
-Simple feature collection with 2 features and 3 fields
-Geometry type: POINT
-Dimension:     XY
-Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1
-CRS:           NA
-  a b x    geometry
-1 1 5 b POINT (0 0)
-2 2 6 c POINT (1 1)
-> left_join(a, b)
 Joining, by = "b"
-Simple feature collection with 3 features and 3 fields
-Geometry type: POINT
-Dimension:     XY
-Bounding box:  xmin: 0 ymin: 0 xmax: 2 ymax: 2
-CRS:           NA
-  a b    x    geometry
-1 1 5    b POINT (0 0)
-2 2 6    c POINT (1 1)
-3 3 7 <NA> POINT (2 2)
-> right_join(a, b)
 Joining, by = "b"
-Simple feature collection with 3 features and 3 fields (with 1 geometry empty)
-Geometry type: POINT
-Dimension:     XY
-Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1
-CRS:           NA
-   a b x    geometry
-1  1 5 b POINT (0 0)
-2  2 6 c POINT (1 1)
-3 NA 2 a POINT EMPTY
-> full_join(a, b)
 Joining, by = "b"
-Simple feature collection with 4 features and 3 fields (with 1 geometry empty)
-Geometry type: POINT
-Dimension:     XY
-Bounding box:  xmin: 0 ymin: 0 xmax: 2 ymax: 2
-CRS:           NA
-   a b    x    geometry
-1  1 5    b POINT (0 0)
-2  2 6    c POINT (1 1)
-3  3 7 <NA> POINT (2 2)
-4 NA 2    a POINT EMPTY
-> semi_join(a, b)
 Joining, by = "b"
-Simple feature collection with 2 features and 2 fields
-Geometry type: POINT
-Dimension:     XY
-Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1
-CRS:           NA
-  a b    geometry
-1 1 5 POINT (0 0)
-2 2 6 POINT (1 1)
-> anti_join(a, b)
 Joining, by = "b"
-Simple feature collection with 1 feature and 2 fields
-Geometry type: POINT
-Dimension:     XY
-Bounding box:  xmin: 2 ymin: 2 xmax: 2 ymax: 2
-CRS:           NA
-  a b    geometry
-1 3 7 POINT (2 2)
-> left_join(a, data.frame(b, geometry = 1), by = "b")
 Simple feature collection with 3 features and 4 fields
 Geometry type: POINT
 Dimension:     XY
@@ -809,15 +774,17 @@ MULTIPOINT EMPTY
 > #plot(p_sample[[1]], add = TRUE)
 > #plot(p_sample_exact[[1]], add = TRUE)
 > 
-> #class(st_bind_cols(nc, as.data.frame(nc)[1:3]))
-> class(dplyr::bind_cols(nc, as.data.frame(nc)[1:3]))
+> if (require(dplyr, quietly = TRUE)) {
++  #class(st_bind_cols(nc, as.data.frame(nc)[1:3]))
++  print(class(dplyr::bind_cols(nc, as.data.frame(nc)[1:3])))
++ }
 New names:
-* AREA -> AREA...1
-* PERIMETER -> PERIMETER...2
-* CNTY_ -> CNTY_...3
-* AREA -> AREA...16
-* PERIMETER -> PERIMETER...17
-* ...
+• `AREA` -> `AREA...1`
+• `PERIMETER` -> `PERIMETER...2`
+• `CNTY_` -> `CNTY_...3`
+• `AREA` -> `AREA...16`
+• `PERIMETER` -> `PERIMETER...17`
+• `CNTY_` -> `CNTY_...18`
 [1] "sf"         "data.frame"
 > class(rbind(nc, nc))
 [1] "sf"         "data.frame"
@@ -852,13 +819,13 @@ CRS:           NA
 POINT (-0.0500922 0.992953)
 > 
 > # st_bbox:
-> library(sp)
-> demo(meuse, ask = FALSE, echo = FALSE)
-> suppressWarnings(st_bbox(meuse))
-  xmin   ymin   xmax   ymax 
-178605 329714 181390 333611 
-> crs = suppressWarnings(st_crs(meuse))
-> library(raster)
+> if (require(sp, quietly = TRUE) && require(raster, quietly = TRUE)) {
++ demo(meuse, ask = FALSE, echo = FALSE)
++ suppressWarnings(st_bbox(meuse))
++ crs = suppressWarnings(st_crs(meuse))
++ suppressWarnings(st_bbox(raster(meuse.grid)))
++ st_bbox(extent(raster()))
++ }
 
 Attaching package: 'raster'
 
@@ -866,12 +833,12 @@ The following object is masked from 'package:dplyr':
 
     select
 
-> suppressWarnings(st_bbox(raster(meuse.grid)))
-  xmin   ymin   xmax   ymax 
-178440 329600 181560 333760 
-> st_bbox(extent(raster()))
 xmin ymin xmax ymax 
 -180  -90  180   90 
+Warning messages:
+1: no function found corresponding to methods exports from 'raster' for: 'area' 
+2: In showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj = prefer_proj) :
+  Discarded datum Amersfoort in Proj4 definition
 > 
 > # st_to_s2
 > if (FALSE) { # stops working with GDAL 2.3.0 / PROJ 5.0.1:
@@ -1122,6 +1089,6 @@ CRS:           NA
 1 POINT (0 1)
 > 
 > proc.time()
-  7.515   0.116   7.641 
-
+   user  system elapsed 
+ 10.773   0.216  10.985 
 

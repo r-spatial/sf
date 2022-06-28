@@ -38,9 +38,10 @@ group_split.sf <- function(.tbl, ..., .keep = TRUE) {
 #' @param ... other arguments
 #' @name tidyverse
 #' @examples
-#' library(dplyr)
-#' nc = st_read(system.file("shape/nc.shp", package="sf"))
-#' nc %>% filter(AREA > .1) %>% plot()
+#' if (require(dplyr, quietly = TRUE)) {
+#'  nc = read_sf(system.file("shape/nc.shp", package="sf"))
+#'  nc %>% filter(AREA > .1) %>% plot()
+#' }
 filter.sf <- function(.data, ..., .dots) {
 	agr = st_agr(.data)
 	class(.data) <- setdiff(class(.data), "sf")
@@ -50,9 +51,11 @@ filter.sf <- function(.data, ..., .dots) {
 #' @name tidyverse
 #' @examples
 #' # plot 10 smallest counties in grey:
-#' st_geometry(nc) %>% plot()
-#' nc %>% select(AREA) %>% arrange(AREA) %>% slice(1:10) %>% plot(add = TRUE, col = 'grey')
-#' title("the ten counties with smallest area")
+#' if (require(dplyr, quietly = TRUE)) {
+#'  st_geometry(nc) %>% plot()
+#'  nc %>% select(AREA) %>% arrange(AREA) %>% slice(1:10) %>% plot(add = TRUE, col = 'grey')
+#'  title("the ten counties with smallest area")
+#' }
 arrange.sf <- function(.data, ..., .dots) {
 	sf_column_name = attr(.data, "sf_column")
 	class(.data) = setdiff(class(.data), "sf")
@@ -62,8 +65,10 @@ arrange.sf <- function(.data, ..., .dots) {
 #' @name tidyverse
 #' @param add see corresponding function in dplyr
 #' @examples
-#' nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
-#' nc %>% group_by(area_cl) %>% class()
+#' if (require(dplyr, quietly = TRUE)) {
+#'  nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
+#'  nc %>% group_by(area_cl) %>% class()
+#' }
 group_by.sf <- function(.data, ..., add = FALSE) {
 	sf_column_name = attr(.data, "sf_column")
 	class(.data) <- setdiff(class(.data), "sf")
@@ -102,7 +107,9 @@ rowwise.sf <- function(x, ...) {
 
 #' @name tidyverse
 #' @examples
-#' nc2 <- nc %>% mutate(area10 = AREA/10)
+#' if (require(dplyr, quietly = TRUE)) {
+#'  nc2 <- nc %>% mutate(area10 = AREA/10)
+#' }
 mutate.sf <- function(.data, ..., .dots) {
 	#st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
 	agr = st_agr(.data)
@@ -113,8 +120,10 @@ mutate.sf <- function(.data, ..., .dots) {
 
 #' @name tidyverse
 #' @examples
-#' nc %>% transmute(AREA = AREA/10, geometry = geometry) %>% class()
-#' nc %>% transmute(AREA = AREA/10) %>% class()
+#' if (require(dplyr, quietly = TRUE)) {
+#'  nc %>% transmute(AREA = AREA/10, geometry = geometry) %>% class()
+#'  nc %>% transmute(AREA = AREA/10) %>% class()
+#' }
 transmute.sf <- function(.data, ..., .dots) {
 	sf_column_name = attr(.data, "sf_column")
 	agr = st_agr(.data)
@@ -125,10 +134,12 @@ transmute.sf <- function(.data, ..., .dots) {
 
 #' @name tidyverse
 #' @examples
-#' nc %>% select(SID74, SID79) %>% names()
-#' nc %>% select(SID74, SID79, geometry) %>% names()
-#' nc %>% select(SID74, SID79) %>% class()
-#' nc %>% select(SID74, SID79, geometry) %>% class()
+#' if (require(dplyr, quietly = TRUE)) {
+#'  nc %>% select(SID74, SID79) %>% names()
+#'  nc %>% select(SID74, SID79, geometry) %>% names()
+#'  nc %>% select(SID74, SID79) %>% class()
+#'  nc %>% select(SID74, SID79, geometry) %>% class()
+#' }
 #' @details \code{select} keeps the geometry regardless whether it is selected or not; to deselect it, first pipe through \code{as.data.frame} to let dplyr's own \code{select} drop it.
 select.sf <- function(.data, ...) {
 
@@ -168,7 +179,9 @@ select.sf <- function(.data, ...) {
 
 #' @name tidyverse
 #' @examples
-#' nc2 <- nc %>% rename(area = AREA)
+#' if (require(dplyr, quietly = TRUE)) {
+#'  nc2 <- nc %>% rename(area = AREA)
+#' }
 rename.sf <- function(.data, ...) {
 
 	if (!requireNamespace("tidyselect", quietly = TRUE))
@@ -212,7 +225,9 @@ rename.sf <- function(.data, ...) {
 
 #' @name tidyverse
 #' @examples
-#' nc %>% slice(1:2)
+#' if (require(dplyr, quietly = TRUE)) {
+#'  nc %>% slice(1:2)
+#' }
 slice.sf <- function(.data, ..., .dots) {
 	class(.data) <- setdiff(class(.data), "sf")
 	sf_column <- attr(.data, "sf_column")
@@ -229,11 +244,13 @@ slice.sf <- function(.data, ..., .dots) {
 #'
 #' In case \code{do_union} is \code{FALSE}, \code{summarise} will simply combine geometries using \link{c.sfg}. When polygons sharing a boundary are combined, this leads to geometries that are invalid; see for instance \url{https://github.com/r-spatial/sf/issues/681}.
 #' @examples
-#' nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
-#' nc.g <- nc %>% group_by(area_cl)
-#' nc.g %>% summarise(mean(AREA))
-#' nc.g %>% summarise(mean(AREA)) %>% plot(col = grey(3:6 / 7))
-#' nc %>% as.data.frame %>% summarise(mean(AREA))
+#' if (require(dplyr, quietly = TRUE)) {
+#'  nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
+#'  nc.g <- nc %>% group_by(area_cl)
+#'  nc.g %>% summarise(mean(AREA))
+#'  nc.g %>% summarise(mean(AREA)) %>% plot(col = grey(3:6 / 7))
+#'  nc %>% as.data.frame %>% summarise(mean(AREA))
+#' }
 summarise.sf <- function(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE) {
 	sf_column = attr(.data, "sf_column")
 	precision = st_precision(.data)
@@ -276,7 +293,9 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE
 #' @name tidyverse
 #' @param .keep_all see corresponding function in dplyr
 #' @examples
-#' nc[c(1:100, 1:10), ] %>% distinct() %>% nrow()
+#' if (require(dplyr, quietly = TRUE)) {
+#'  nc[c(1:100, 1:10), ] %>% distinct() %>% nrow()
+#' }
 #' @details \code{distinct} gives distinct records for which all attributes and geometries are distinct; \link{st_equals} is used to find out which geometries are distinct.
 distinct.sf <- function(.data, ..., .keep_all = FALSE) {
 	sf_column = attr(.data, "sf_column")
@@ -310,8 +329,9 @@ distinct.sf <- function(.data, ..., .keep_all = FALSE) {
 #' @param na.rm see original function docs
 #' @param factor_key see original function docs
 #' @examples
-#' library(tidyr)
-#' nc %>% select(SID74, SID79) %>% gather("VAR", "SID", -geometry) %>% summary()
+#' if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE)) {
+#'  nc %>% select(SID74, SID79) %>% gather("VAR", "SID", -geometry) %>% summary()
+#' }
 gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, factor_key = FALSE) {
 
 	if (! requireNamespace("rlang", quietly = TRUE))
@@ -415,11 +435,12 @@ pivot_wider.sf = function(data,
 #' @param fill see original function docs
 #' @param drop see original function docs
 #' @examples
-#' library(tidyr)
-#' nc$row = 1:100 # needed for spread to work
-#' nc %>% select(SID74, SID79, geometry, row) %>%
+#' if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE)) {
+#'  nc$row = 1:100 # needed for spread to work
+#'  nc %>% select(SID74, SID79, geometry, row) %>%
 #'		gather("VAR", "SID", -geometry, -row) %>%
 #'		spread(VAR, SID) %>% head()
+#' }
 spread.sf <- function(data, key, value, fill = NA, convert = FALSE, drop = TRUE,
 	        sep = NULL) {
 
@@ -450,12 +471,14 @@ sample_frac.sf <- function(tbl, size = 1, replace = FALSE, weight = NULL, .env =
 
 #' @name tidyverse
 #' @examples
-#' storms.sf = st_as_sf(storms, coords = c("long", "lat"), crs = 4326)
-#' x <- storms.sf %>% group_by(name, year) %>% nest
-#' trs = lapply(x$data, function(tr) st_cast(st_combine(tr), "LINESTRING")[[1]]) %>%
+#' if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE)) {
+#'  storms.sf = st_as_sf(storms, coords = c("long", "lat"), crs = 4326)
+#'  x <- storms.sf %>% group_by(name, year) %>% nest
+#'  trs = lapply(x$data, function(tr) st_cast(st_combine(tr), "LINESTRING")[[1]]) %>%
 #'     st_sfc(crs = 4326)
-#' trs.sf = st_sf(x[,1:2], trs)
-#' plot(trs.sf["year"], axes = TRUE)
+#'  trs.sf = st_sf(x[,1:2], trs)
+#'  plot(trs.sf["year"], axes = TRUE)
+#' }
 #' @details \code{nest} assumes that a simple feature geometry list-column was among the columns that were nested.
 nest.sf = function (.data, ...) {
 

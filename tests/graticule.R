@@ -1,4 +1,4 @@
-library(maps)
+if (require(maps, quietly = TRUE)) {
 m = map('usa', plot = FALSE, fill = TRUE)
 suppressPackageStartupMessages(library(sf))
 m0 <- st_as_sfc(m)
@@ -44,11 +44,11 @@ plot(nc[1], graticule = st_crs(nc), axes = TRUE)
 
 g = st_graticule()
 
-library(ggplot2)
-if (utils::packageVersion("ggplot2") > "2.2.1") {
+if (require(ggplot2, quietly = TRUE) && utils::packageVersion("ggplot2") > "2.2.1") {
   ggplot() + geom_sf(data = st_set_crs(nc, NA_crs_)) # NA_crs_ for crs
 }
 
 library(maps) #421
 (wrld2 = st_as_sf(map('world2', plot=FALSE, fill=TRUE )))
 try(plot(wrld2, graticule = TRUE))
+}

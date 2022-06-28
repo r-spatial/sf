@@ -1,6 +1,6 @@
 
-R version 4.1.2 (2021-11-01) -- "Bird Hippie"
-Copyright (C) 2021 The R Foundation for Statistical Computing
+R version 4.2.0 (2022-04-22) -- "Vigorous Calisthenics"
+Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -82,8 +82,17 @@ POINT (111319.5 111325.1)
 + }
 [1] "datum files installed"
 > 
-> x0 = sp::CRS("+init=epsg:4326")
-> cat(sp::wkt(x0), "\n")
+> if (require(sp, quietly = TRUE)) {
++  x0 = sp::CRS("+init=epsg:4326")
++  cat(sp::wkt(x0), "\n")
++  x = st_crs(x0)
++  print(x)
++ 
++  y0 = st_crs(4326)
++  y0
++  y = as(y0, "CRS")
++  cat(sp::wkt(y), "\n")
++ }
 GEOGCRS["WGS 84",
     ENSEMBLE["World Geodetic System 1984 ensemble",
         MEMBER["World Geodetic System 1984 (Transit)",
@@ -121,8 +130,6 @@ GEOGCRS["WGS 84",
         SCOPE["unknown"],
         AREA["World."],
         BBOX[-90,-180,90,180]]] 
-> x = st_crs(x0)
-> x
 Coordinate Reference System:
   User input: WGS 84 
   wkt:
@@ -163,40 +170,6 @@ GEOGCRS["WGS 84",
         SCOPE["unknown"],
         AREA["World."],
         BBOX[-90,-180,90,180]]]
-> 
-> y0 = st_crs(4326)
-> y0
-Coordinate Reference System:
-  User input: EPSG:4326 
-  wkt:
-GEOGCRS["WGS 84",
-    ENSEMBLE["World Geodetic System 1984 ensemble",
-        MEMBER["World Geodetic System 1984 (Transit)"],
-        MEMBER["World Geodetic System 1984 (G730)"],
-        MEMBER["World Geodetic System 1984 (G873)"],
-        MEMBER["World Geodetic System 1984 (G1150)"],
-        MEMBER["World Geodetic System 1984 (G1674)"],
-        MEMBER["World Geodetic System 1984 (G1762)"],
-        MEMBER["World Geodetic System 1984 (G2139)"],
-        ELLIPSOID["WGS 84",6378137,298.257223563,
-            LENGTHUNIT["metre",1]],
-        ENSEMBLEACCURACY[2.0]],
-    PRIMEM["Greenwich",0,
-        ANGLEUNIT["degree",0.0174532925199433]],
-    CS[ellipsoidal,2],
-        AXIS["geodetic latitude (Lat)",north,
-            ORDER[1],
-            ANGLEUNIT["degree",0.0174532925199433]],
-        AXIS["geodetic longitude (Lon)",east,
-            ORDER[2],
-            ANGLEUNIT["degree",0.0174532925199433]],
-    USAGE[
-        SCOPE["Horizontal component of 3D system."],
-        AREA["World."],
-        BBOX[-90,-180,90,180]],
-    ID["EPSG",4326]]
-> y = as(y0, "CRS")
-> cat(sp::wkt(y), "\n")
 GEOGCRS["WGS 84",
     ENSEMBLE["World Geodetic System 1984 ensemble",
         MEMBER["World Geodetic System 1984 (Transit)"],
@@ -240,5 +213,5 @@ GEOGCRS["WGS 84",
 > 
 > proc.time()
    user  system elapsed 
-  0.874   0.060   0.927 
+  1.297   0.072   1.380 
 

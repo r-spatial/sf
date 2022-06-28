@@ -24,6 +24,7 @@ format.sfc = function(x, ..., width = 30) {
 #' @param precision numeric; see \link{st_as_binary}
 #' @param check_ring_dir see \link{st_read}
 #' @param dim character; if this function is called without valid geometries, this argument may carry the right dimension to set empty geometries
+#' @param recompute_bbox logical; use \code{TRUE} to force recomputation of the bounding box
 #' @return an object of class \code{sfc}, which is a classed list-column with simple feature geometries.
 #'
 #' @details A simple feature geometry list-column is a list of class
@@ -36,7 +37,8 @@ format.sfc = function(x, ..., width = 30) {
 #' (sfc = st_sfc(pt1, pt2))
 #' d = st_sf(data.frame(a=1:2, geom=sfc))
 #' @export
-st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, dim) {
+st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, dim,
+				  recompute_bbox = FALSE) {
 	lst = list(...)
 	# if we have only one arg, which is already a list with sfg's, but NOT a geometrycollection:
 	# (this is the old form of calling st_sfc; it is way faster to call st_sfc(lst) if lst
@@ -48,12 +50,13 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 
 	# check for NULLs:
 	a = attributes(lst)
-	is_null = vapply(lst, function(x) is.null(x) || isTRUE(is.na(x)), NA)
+	is_null = sfc_is_null(lst)
 	lst = unclass(lst)
 	lst = lst[! is_null]
 	attributes(lst) = a
 
-	sfg_classes = vapply(lst, class, rep(NA_character_, 3))
+	dims_and_types = sfc_unique_sfg_dims_and_types(lst)
+	
 	cls = if (length(lst) == 0) # empty set: no geometries read
 		c("sfc_GEOMETRY", "sfc")
 	else {
@@ -61,10 +64,10 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 		single = if (!is.null(attr(lst, "single_type"))) # set by CPL_read_wkb:
 				attr(lst, "single_type")
 			else
-				length(unique(sfg_classes[2L,])) == 1L
+				length(dims_and_types[[2]]) == 1L
 		attr(lst, "single_type") = NULL # clean up
 		if (single)
-			c(paste0("sfc_", sfg_classes[2L, 1L]), "sfc")
+			c(paste0("sfc_", dims_and_types[[2]][1]), "sfc")
 		else
 			c("sfc_GEOMETRY", "sfc")    # the mix
 	}
@@ -74,14 +77,14 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 			dim = if (length(lst) == 0) # we have no clue:
 					"XY"
 				else
-					sfg_classes[1L, 1L]
+					dims_and_types[[1]][1]
 		}
 		ret = vector("list", length(is_null))
 		ret[!is_null] = lst
 		ret[ is_null] = list(typed_empty(cls, nchar(dim), dim = dim))
 		attributes(ret) = attributes(lst)
 		lst = ret
-		sfg_classes = vapply(lst, class, rep(NA_character_, 3))
+		dims_and_types = sfc_unique_sfg_dims_and_types(lst)
 	}
 
 	# set class:
@@ -93,13 +96,13 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 
 	# compute bbox, if not set:
 	bb = attr(lst, "bbox")
-	if (is.null(bb) || any(is.na(bb)))
+	if (is.null(bb) || any(is.na(bb)) || recompute_bbox)
 		attr(lst, "bbox") = compute_bbox(lst)
 
 	# compute z_range, if dims permit and not set
 	zr = attr(lst, "z_range")
 	if (is.null(zr) || any(is.na(zr))) {
-		u <- unique(sfg_classes[1L,])
+		u <- dims_and_types[[1]]
 		if( "XYZM" %in% u ) {
 			attr(lst, "z_range") = compute_z_range(lst)
 			attr(lst, "m_range") = compute_m_range(lst)
@@ -125,20 +128,12 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 
 	# set n_empty, check XY* is uniform:
 	if (is.null(attr(lst, "n_empty")) || any(is_null)) { # n_empty is set by CPL_read_wkb:
-		attr(lst, "n_empty") = sum(vapply(lst, sfg_is_empty, TRUE))
+		attr(lst, "n_empty") = sum(sfc_is_empty(lst))
 # 		https://github.com/r-spatial/sf/issues/1592 :
 #		if (length(u <- unique(sfg_classes[1L,])) > 1)
 #			stop(paste("found multiple dimensions:", paste(u, collapse = " ")))
 	}
 	lst
-}
-
-sfg_is_empty = function(x) {
-	switch(class(x)[2],
-		POINT = any(!is.finite(x)),
-		MULTIPOINT = , LINESTRING = , CIRCULARSTRING = , CURVE = nrow(x) == 0,
-		length(x) == 0
-	)
 }
 
 #' @export
@@ -156,8 +151,9 @@ sfg_is_empty = function(x) {
 	if (is.null(value) || inherits(value, "sfg"))
 		value = list(value)
 	x = unclass(x) # becomes a list, but keeps attributes
-	ret = st_sfc(NextMethod())
-	structure(ret, n_empty = sum(vapply(ret, sfg_is_empty, TRUE)))
+
+	ret = st_sfc(NextMethod(), recompute_bbox = TRUE)
+	structure(ret, n_empty = sum(sfc_is_empty(ret)))
 }
 
 #' @export

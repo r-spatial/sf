@@ -55,7 +55,7 @@ Compute graticules and their parameters
 
 \examples{
 library(sf)
-library(maps)
+if (require(maps, quietly = TRUE)) {
 
 usa = st_as_sf(map('usa', plot = FALSE, fill = TRUE))
 laea = st_crs("+proj=laea +lat_0=30 +lon_0=-95") # Lambert equal area
@@ -87,4 +87,5 @@ if (g$type[i] == "E" && g$y_end[i] - max(g$y_end) > -1000)
 		srt = g$angle_end[i] - 90, pos = 3, cex = .7)
 }))
 plot(usa, graticule = st_crs(4326), axes = TRUE, lon = seq(-60,-130,by=-10))
+}
 }

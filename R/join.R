@@ -105,8 +105,9 @@ st_join = function(x, y, join, ...) UseMethod("st_join")
 #' st_join(a, b, left = FALSE)
 #' # two ways to aggregate y's attribute values outcome over x's geometries:
 #' st_join(a, b) %>% aggregate(list(.$a.x), mean)
-#' library(dplyr)
-#' st_join(a, b) %>% group_by(a.x) %>% summarise(mean(a.y))
+#' if (require(dplyr, quietly = TRUE)) {
+#'  st_join(a, b) %>% group_by(a.x) %>% summarise(mean(a.y))
+#' }
 #' # example of largest = TRUE:
 #' nc <- st_transform(st_read(system.file("shape/nc.shp", package="sf")), 2264)                
 #' gr = st_sf(

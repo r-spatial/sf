@@ -1,6 +1,7 @@
 suppressPackageStartupMessages(library(sf))
 options(rgdal_show_exportToProj4_warnings = "none")
-library(dplyr)
+
+if (require(dplyr, quietly = TRUE)) {
 
 # plot linestrings:
 l1 = st_linestring(matrix(runif(6)-0.5,,2))
@@ -114,3 +115,4 @@ plot(nc["e"], logz = TRUE)
 # shared key:
 plot(nc[c("SID74", "SID79")], key.pos = -1)
 plot(nc[c("BIR74", "BIR79")], key.pos = 1, logz=TRUE)
+}
