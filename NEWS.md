@@ -1,5 +1,7 @@
 # version 1.0-8
 
+* `sf_project()` accepts 3- or 4-column matrices, containing z and t values;
+
 * optimizations for `st_sfc()` by @paleolimbot; #1938, #1925
 
 * `[<-.sfc()` recomputes the bounding box; `st_sfc()` gets parameter `compute_bbox`; #1965

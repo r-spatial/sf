@@ -244,9 +244,6 @@ First 10 features:
 
 
 
-Warning message:
-In read_stars(lc, RAT = "Land Cover Class") :
-  categorical data values starting at 0 are shifted with one to start at 1
 > 
 > r = gdal_read(tif)
 > gt = c(0,1,0,0,0,1)
@@ -264,5 +261,5 @@ In read_stars(lc, RAT = "Land Cover Class") :
 > 
 > proc.time()
    user  system elapsed 
-  2.229   0.122   2.345 
+  2.299   0.112   2.402 
 
