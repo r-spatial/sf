@@ -24,7 +24,7 @@ dplyr_reconstruct.sf = function(data, template) {
 		data = dplyr::as_tibble(data)
 
 	# Return a bare data frame is the geometry column is no longer there
-	if (!sfc_name %in% names(data))
+	if (!sfc_name %in% names(data) || !inherits(data[[sfc_name]], "sfc"))
 		return(data)
 
 	prec = st_precision(template)
