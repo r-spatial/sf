@@ -6,13 +6,13 @@
 #' @name tidyverse
 dplyr_col_modify.sf <- function(data, cols){
 	x <- NextMethod()
-	dplyr::dplyr_reconstruct(x, data)
+	dplyr_reconstruct.sf(x, data)
 }
 
 #' @name tidyverse
 dplyr_row_slice.sf <- function(data, i, ...){
 	x <- NextMethod()	
-	dplyr::dplyr_reconstruct(x, data)
+	dplyr_reconstruct.sf(x, data)
 }
 
 # This is currently only used in `bind_rows()` and `bind_cols()`
@@ -20,22 +20,28 @@ dplyr_row_slice.sf <- function(data, i, ...){
 #' @name tidyverse
 dplyr_reconstruct.sf = function(data, template) {
 	sfc_name = attr(template, "sf_column")
-	if (inherits(template, "tbl_df"))
-		data = dplyr::as_tibble(data)
+	class(data) = setdiff(class(template), "sf")
 
-	# Return a bare data frame is the geometry column is no longer there
+	# Return a bare data frame is the geometry column is no longer there or invalid:
 	if (!sfc_name %in% names(data) || !inherits(data[[sfc_name]], "sfc"))
-		return(data)
+		data
+	else {
+		prec = st_precision(template)
+		crs = st_crs(template)
+		agr = if (!is.null(agr <- attr(data, "agr")) && is.factor(agr)) {
+				att = names(data)[!sapply(data, inherits, what = "sfc")] # non-sfc columns
+				setNames(agr[att], att) # NA's new columns
+			} else
+				NA_agr_
 
-	prec = st_precision(template)
-	crs = st_crs(template)
-
-	st_as_sf(
-		data,
-		sf_column_name = sfc_name,
-		crs = crs,
-		precision = prec
-	)
+		st_as_sf(
+			data,
+			sf_column_name = sfc_name,
+			crs = crs,
+			precision = prec,
+			agr = agr
+		)
+	}
 }
 
 group_split.sf <- function(.tbl, ..., .keep = TRUE) {
