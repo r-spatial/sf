@@ -271,3 +271,8 @@ test_that("grouped_df class is retained on row slice", {
 	skip_if_not_installed("dplyr")
 	expect_true(nc %>% group_by(PERIMETER > 2) %>% slice(1) %>% inherits("grouped_df"))
 })
+
+test_that("rowwise_df class is retained on filtered rows", {
+	skip_if_not_installed("dplyr")
+	expect_true(nc %>% rowwise() %>% filter(AREA > .1) %>% inherits("rowwise_df"))
+})
