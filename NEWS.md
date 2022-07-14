@@ -1,3 +1,5 @@
+# version 1.0-9
+
 # version 1.0-8
 
 * `st_drop_geometry.default()` returns `x` unmodified;
