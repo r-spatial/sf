@@ -54,7 +54,7 @@ when applied to a \code{data.frame} and when \code{value} is an object of class 
 
 the replacement function applied to \code{sf} objects will overwrite the geometry list-column, if \code{value} is \code{NULL}, it will remove it and coerce \code{x} to a \code{data.frame}.
 
-if \code{x} is of class \code{sf}, \code{st_drop_geometry} drops the geometry of its argument, and reclasses it accordingly; otherwise it does nothing.
+if \code{x} is of class \code{sf}, \code{st_drop_geometry} drops the geometry of its argument, and reclasses it accordingly; otherwise it returns \code{x} unmodified.
 }
 \examples{
 df = data.frame(a = 1:2)
