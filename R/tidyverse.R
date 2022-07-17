@@ -592,6 +592,15 @@ pillar_shaft.sfc <- function(x, ...) {
 	pillar::new_pillar_shaft_simple(out, align = "right", min_width = 25)
 }
 
+#' @name tidyverse
+drop_na.sf <- function(x, ...) {
+	sf_column_name = attr(x, "sf_column")
+	class(x) <- setdiff(class(x), "sf")
+	st_as_sf(NextMethod(), sf_column_name = sf_column_name)
+}
+
+
+
 #nocov start
 register_all_s3_methods = function() {
 	has_dplyr_1.0 =
@@ -631,6 +640,7 @@ register_all_s3_methods = function() {
 	register_s3_method("tidyr", "separate_rows", "sf")
 	register_s3_method("tidyr", "unite", "sf")
 	register_s3_method("tidyr", "unnest", "sf")
+	register_s3_method("tidyr", "drop_na", "sf")
 	register_s3_method("pillar", "obj_sum", "sfc")
 	register_s3_method("pillar", "type_sum", "sfc")
 	register_s3_method("pillar", "pillar_shaft", "sfc")
