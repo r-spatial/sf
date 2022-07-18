@@ -13,6 +13,7 @@ using namespace Rcpp;
 #define WIN32BIT
 #endif
 
+#if GDAL_VERSION_NUM >= 3040000 && !(defined(WIN32BIT))
 CharacterVector get_attributes(std::vector<std::shared_ptr<GDALAttribute>> a) {
 	CharacterVector l(a.size());
 	CharacterVector na(a.size());
@@ -24,6 +25,7 @@ CharacterVector get_attributes(std::vector<std::shared_ptr<GDALAttribute>> a) {
 		l.attr("names") = na;
 	return l;
 }
+#endif
 
 #if GDAL_VERSION_NUM >= 3010000 && !(defined(WIN32BIT))
 List get_dimension_values(std::shared_ptr<GDALMDArray> array) {
@@ -37,7 +39,11 @@ List get_dimension_values(std::shared_ptr<GDALMDArray> array) {
 		offset.push_back(0);
 		nValues *= anCount.back();
 	}
+#if GDAL_VERSION_NUM >= 3040000 && !(defined(WIN32BIT))
 	CharacterVector att = get_attributes(array->GetAttributes());
+#else
+	CharacterVector att;
+#endif
 	List ret(1);
 	if (array->GetDataType().GetClass() == GEDTC_NUMERIC) {
 		NumericVector vec( nValues );
