@@ -27,6 +27,7 @@
 \alias{separate_rows.sf}
 \alias{unite.sf}
 \alias{unnest.sf}
+\alias{drop_na.sf}
 \alias{inner_join.sf}
 \alias{left_join.sf}
 \alias{right_join.sf}
@@ -142,6 +143,8 @@ separate_rows.sf(data, ..., sep = "[^[:alnum:]]+", convert = FALSE)
 unite.sf(data, col, ..., sep = "_", remove = TRUE)
 
 unnest.sf(data, ..., .preserve = NULL)
+
+drop_na.sf(x, ...)
 
 inner_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 
