@@ -13,6 +13,18 @@ using namespace Rcpp;
 #define WIN32BIT
 #endif
 
+CharacterVector get_attributes(std::vector<std::shared_ptr<GDALAttribute>> a) {
+	CharacterVector l(a.size());
+	CharacterVector na(a.size());
+	for (int i = 0; i < a.size(); i++) {
+		l[i] = a[i]->ReadAsString();
+		na[i] = a[i]->GetName();
+	}
+	if (a.size())
+		l.attr("names") = na;
+	return l;
+}
+
 #if GDAL_VERSION_NUM >= 3010000 && !(defined(WIN32BIT))
 List get_dimension_values(std::shared_ptr<GDALMDArray> array) {
 	size_t nValues = 1;
@@ -25,6 +37,7 @@ List get_dimension_values(std::shared_ptr<GDALMDArray> array) {
 		offset.push_back(0);
 		nValues *= anCount.back();
 	}
+	CharacterVector att = get_attributes(array->GetAttributes());
 	List ret(1);
 	if (array->GetDataType().GetClass() == GEDTC_NUMERIC) {
 		NumericVector vec( nValues );
@@ -38,6 +51,8 @@ List get_dimension_values(std::shared_ptr<GDALMDArray> array) {
 			Rcout << "cannot convert values for array " << array->GetName() << std::endl;
 		vec.attr("dim") = dims;
 		vec.attr("units") = array->GetUnit();
+		if (att.size())
+			vec.attr("attributes") = att;
 		ret[0] = vec;
 	} else {
 		// CharacterVector vec(nValues);
@@ -53,6 +68,8 @@ List get_dimension_values(std::shared_ptr<GDALMDArray> array) {
 		CharacterVector cv(nValues);
 		for (size_t i = 0; i < nValues; i++)
 			cv[i] = vec[i];
+		if (att.size())
+			cv.attr("attributes") = att;
 		ret[0] = cv;
 	}
 	return ret;
