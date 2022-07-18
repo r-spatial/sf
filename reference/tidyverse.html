@@ -189,6 +189,8 @@
 <span></span>
 <span><span class="fu">unnest.sf</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span>, .preserve <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">drop_na.sf</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">inner_join.sf</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, by <span class="op">=</span> <span class="cn">NULL</span>, copy <span class="op">=</span> <span class="cn">FALSE</span>, suffix <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">".x"</span>, <span class="st">".y"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">left_join.sf</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, by <span class="op">=</span> <span class="cn">NULL</span>, copy <span class="op">=</span> <span class="cn">FALSE</span>, suffix <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">".x"</span>, <span class="st">".y"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -228,7 +230,7 @@
 <dd><p>see corresponding function in dplyr</p></dd>
 
 
-<dt>x</dt>
+<dt>x, y</dt>
 <dd><p>A pair of data frames, data frame extensions (e.g. a tibble), or
 lazy data frames (e.g. from dbplyr or dtplyr). See <em>Methods</em>, below, for
 more details.</p></dd>
@@ -392,12 +394,6 @@ more details.</p></dd>
 
 <dt>.preserve</dt>
 <dd><p>see <a href="https://tidyr.tidyverse.org/reference/nest.html" class="external-link">unnest</a></p></dd>
-
-
-<dt>y</dt>
-<dd><p>A pair of data frames, data frame extensions (e.g. a tibble), or
-lazy data frames (e.g. from dbplyr or dtplyr). See <em>Methods</em>, below, for
-more details.</p></dd>
 
 
 <dt>by</dt>
