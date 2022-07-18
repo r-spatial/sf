@@ -139,7 +139,7 @@
     <h2>Details</h2>
     <p>when applied to a <code>data.frame</code> and when <code>value</code> is an object of class <code>sfc</code>, <code>st_set_geometry</code> and <code>st_geometry&lt;-</code> will first check for the existence of an attribute <code>sf_column</code> and overwrite that, or else look for list-columns of class <code>sfc</code> and overwrite the first of that, or else write the geometry list-column to a column named <code>geometry</code>.  In case <code>value</code> is character and <code>x</code> is of class <code>sf</code>, the "active" geometry column is set to <code>x[[value]]</code>.</p>
 <p>the replacement function applied to <code>sf</code> objects will overwrite the geometry list-column, if <code>value</code> is <code>NULL</code>, it will remove it and coerce <code>x</code> to a <code>data.frame</code>.</p>
-<p>if <code>x</code> is of class <code>sf</code>, <code>st_drop_geometry</code> drops the geometry of its argument, and reclasses it accordingly; otherwise it does nothing.</p>
+<p>if <code>x</code> is of class <code>sf</code>, <code>st_drop_geometry</code> drops the geometry of its argument, and reclasses it accordingly; otherwise it returns <code>x</code> unmodified.</p>
     </div>
 
     <div id="ref-examples">
