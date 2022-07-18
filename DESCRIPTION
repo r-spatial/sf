@@ -112,7 +112,7 @@ LinkingTo:
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 SystemRequirements: C++11, GDAL (>= 2.0.1), GEOS (>= 3.4.0),
     PROJ (>= 4.8.0), sqlite3
 Collate: 

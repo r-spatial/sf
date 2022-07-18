@@ -1,5 +1,7 @@
 # version 1.0-9
 
+* add `drop_na()` method for `sf` objects; #1975
+
 # version 1.0-8
 
 * `st_drop_geometry.default()` returns `x` unmodified;
