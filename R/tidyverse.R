@@ -599,8 +599,6 @@ drop_na.sf <- function(x, ...) {
 	st_as_sf(NextMethod(), sf_column_name = sf_column_name)
 }
 
-
-
 #nocov start
 register_all_s3_methods = function() {
 	has_dplyr_1.0 =
@@ -631,6 +629,7 @@ register_all_s3_methods = function() {
 	register_s3_method("dplyr", "summarise", "sf")
 	register_s3_method("dplyr", "transmute", "sf")
 	register_s3_method("dplyr", "ungroup", "sf")
+	register_s3_method("tidyr", "drop_na", "sf")
 	register_s3_method("tidyr", "gather", "sf")
 	register_s3_method("tidyr", "pivot_longer", "sf")
 	register_s3_method("tidyr", "pivot_wider", "sf")
@@ -640,7 +639,6 @@ register_all_s3_methods = function() {
 	register_s3_method("tidyr", "separate_rows", "sf")
 	register_s3_method("tidyr", "unite", "sf")
 	register_s3_method("tidyr", "unnest", "sf")
-	register_s3_method("tidyr", "drop_na", "sf")
 	register_s3_method("pillar", "obj_sum", "sfc")
 	register_s3_method("pillar", "type_sum", "sfc")
 	register_s3_method("pillar", "pillar_shaft", "sfc")
