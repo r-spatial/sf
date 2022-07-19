@@ -150,7 +150,7 @@ List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVecto
 
 	size_t nValues = 1;
 	std::vector<size_t> anCount;
-	std::vector<GUInt64> stp;
+	std::vector<GInt64> stp;
 	IntegerVector dims;
 	CharacterVector dim_names;
 	std::vector<GUInt64> offst;
@@ -158,20 +158,28 @@ List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVecto
 	int i = 0;
 	for (const auto poDim: array->GetDimensions()) {
 		dim_names.push_back(poDim->GetName());
-		if (offst.size() == 0)
+		if (offset.size() == 0)
 			offst.push_back(0);
 		else
-			offset.push_back(offset[i]);
+			offst.push_back(offset[i]);
 		if (step.size() == 0)
-			stp.push_back(static_cast<GUInt64>(1));
+			stp.push_back(1);
 		else
-			stp.push_back(static_cast<GUInt64>(step[i]));
+			stp.push_back(step[i]);
 		if (count.size() == 0)
-			anCount.push_back(static_cast<size_t>((poDim->GetSize() - offst.back())/stp.back()));
+			anCount.push_back((poDim->GetSize() - offst.back())/stp.back());
 		else
-			anCount.push_back(static_cast<size_t>(count[i]));
-		dims.push_back(static_cast<size_t>(anCount.back()));
+			anCount.push_back(count[i]);
+		dims.push_back(anCount.back());
 		nValues *= anCount.back();
+		/*
+		if (count.size() > i)
+			Rcout << "count[i]: " << count[i] << "\n";
+		Rcout << "nValues: " << nValues << "\n";
+		Rcout << "stp[i]: " << stp[i] << "\n";
+		Rcout << "anCount[i]: " << anCount[i] << "\n";
+		Rcout << "offst[i]: " << offst[i] << "\n";
+		*/
 		List dimension(get_dimension(poDim));
 		dimensions.push_back(dimension);
 		i++;
