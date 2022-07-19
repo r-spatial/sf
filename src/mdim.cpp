@@ -93,7 +93,8 @@ List get_dimension(const std::shared_ptr<GDALDimension> dim) {
 }
 
 // [[Rcpp::export]]
-List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVector oo) {
+List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVector oo,
+				IntegerVector offset, IntegerVector count, IntegerVector step) {
 
 	std::vector <char *> oo_char = create_options(oo, true); // open options
 	auto poDataset = std::unique_ptr<GDALDataset>(
@@ -140,21 +141,40 @@ List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVecto
 	auto array(curGroup->OpenMDArray(name));
 	if (!array)
 		stop("Cannot find array");
+	if (offset.size() != 0 && offset.size() != array->GetDimensionCount())
+		stop("offset has wrong size");
+	if (count.size() != 0 && count.size() != array->GetDimensionCount())
+		stop("count has wrong size");
+	if (step.size() != 0 && step.size() != array->GetDimensionCount())
+		stop("step has wrong size");
 
 	size_t nValues = 1;
 	std::vector<size_t> anCount;
+	std::vector<GUInt64> stp;
 	IntegerVector dims;
 	CharacterVector dim_names;
-	std::vector<GUInt64> offset;
+	std::vector<GUInt64> offst;
 	List dimensions;
+	int i = 0;
 	for (const auto poDim: array->GetDimensions()) {
-		anCount.push_back(static_cast<size_t>(poDim->GetSize()));
-		dims.push_back(static_cast<size_t>(poDim->GetSize()));
 		dim_names.push_back(poDim->GetName());
-		offset.push_back(0);
+		if (offst.size() == 0)
+			offst.push_back(0);
+		else
+			offset.push_back(offset[i]);
+		if (step.size() == 0)
+			stp.push_back(static_cast<GUInt64>(1));
+		else
+			stp.push_back(static_cast<GUInt64>(step[i]));
+		if (count.size() == 0)
+			anCount.push_back(static_cast<size_t>((poDim->GetSize() - offst.back())/stp.back()));
+		else
+			anCount.push_back(static_cast<size_t>(count[i]));
+		dims.push_back(static_cast<size_t>(anCount.back()));
 		nValues *= anCount.back();
 		List dimension(get_dimension(poDim));
 		dimensions.push_back(dimension);
+		i++;
 	}
 	List vec_lst(n);
 	CharacterVector a_names(n);
@@ -163,9 +183,9 @@ List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVecto
 		a_names[i] = array_names[i];
 		auto arr(curGroup->OpenMDArray(name));
 		NumericVector vec( nValues );
-		bool ok = arr->Read(offset.data(),
+		bool ok = arr->Read(offst.data(),
 					anCount.data(),
-					nullptr, /* step: defaults to 1,1,1 */
+					(const GInt64*) stp.data(), /* step: defaults to 1,1,1 */
 					nullptr, /* stride: default to row-major convention */
 					GDALExtendedDataType::Create(GDT_Float64),
 					vec.begin());

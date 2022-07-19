@@ -335,8 +335,8 @@ gdal_extract = function(f, pts, bilinear = FALSE) {
 #' @param array_name array name
 #' @param options open options
 #' @export
-gdal_read_mdim = function(file, array_name = character(0), options = character(0)) {
-	read_mdim(file, array_name, options)
+gdal_read_mdim = function(file, array_name = character(0), options = character(0), offset, count, step) {
+	read_mdim(file, array_name, options, offset, count, step)
 }
 
 #' @name gdal
