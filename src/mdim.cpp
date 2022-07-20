@@ -293,7 +293,9 @@ List write_mdim(List x, CharacterVector file, List dimensions, CharacterVector u
 }
 
 #else
-List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVector oo) {
+List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVector oo,
+				IntegerVector offset, IntegerVector count, IntegerVector step, 
+				bool proxy = false, bool debug = false) {
 	stop("requires GDAL >= 3.1.0 and 64-bit");
 }
 List write_mdim(List x, CharacterVector file, List dimensions, CharacterVector units) {
