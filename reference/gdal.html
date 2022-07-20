@@ -134,7 +134,16 @@
 <span></span>
 <span><span class="fu">gdal_extract</span><span class="op">(</span><span class="va">f</span>, <span class="va">pts</span>, bilinear <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">gdal_read_mdim</span><span class="op">(</span><span class="va">file</span>, array_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">gdal_read_mdim</span><span class="op">(</span></span>
+<span>  <span class="va">file</span>,</span>
+<span>  array_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  <span class="va">offset</span>,</span>
+<span>  <span class="va">count</span>,</span>
+<span>  <span class="va">step</span>,</span>
+<span>  proxy <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  debug <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">gdal_write_mdim</span><span class="op">(</span><span class="va">x</span>, <span class="va">file</span>, <span class="va">dimension_values</span>, <span class="va">units</span><span class="op">)</span></span>
 <span></span>
@@ -245,6 +254,26 @@
 
 <dt>array_name</dt>
 <dd><p>array name</p></dd>
+
+
+<dt>offset</dt>
+<dd><p>offset (pixels)</p></dd>
+
+
+<dt>count</dt>
+<dd><p>number of pixels to read</p></dd>
+
+
+<dt>step</dt>
+<dd><p>step size (pixels)</p></dd>
+
+
+<dt>proxy</dt>
+<dd><p>logical; return proxy object?</p></dd>
+
+
+<dt>debug</dt>
+<dd><p>logical; print debug messages?</p></dd>
 
 
 <dt>dimension_values</dt>
