@@ -75,7 +75,9 @@ gdal_read_mdim(
   options = character(0),
   offset,
   count,
-  step
+  step,
+  proxy = FALSE,
+  debug = FALSE
 )
 
 gdal_write_mdim(x, file, dimension_values, units)
@@ -140,6 +142,10 @@ gdal_create(f, nxy, values, crs, xlim, ylim)
 \item{count}{number of pixels to read}
 
 \item{step}{step size (pixels)}
+
+\item{proxy}{logical; return proxy object?}
+
+\item{debug}{logical; print debug messages?}
 
 \item{dimension_values}{list with dimension values}
 
