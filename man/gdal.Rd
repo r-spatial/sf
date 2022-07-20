@@ -69,7 +69,14 @@ gdal_rasterize(sf, x, gt, file, driver = "GTiff", options = character())
 
 gdal_extract(f, pts, bilinear = FALSE)
 
-gdal_read_mdim(file, array_name = character(0), options = character(0))
+gdal_read_mdim(
+  file,
+  array_name = character(0),
+  options = character(0),
+  offset,
+  count,
+  step
+)
 
 gdal_write_mdim(x, file, dimension_values, units)
 
@@ -127,6 +134,12 @@ gdal_create(f, nxy, values, crs, xlim, ylim)
 \item{bilinear}{logical; use bilinear interpolation, rather than nearest neighbor?}
 
 \item{array_name}{array name}
+
+\item{offset}{offset (pixels)}
+
+\item{count}{number of pixels to read}
+
+\item{step}{step size (pixels)}
 
 \item{dimension_values}{list with dimension values}
 

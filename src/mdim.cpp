@@ -17,7 +17,7 @@ using namespace Rcpp;
 CharacterVector get_attributes(std::vector<std::shared_ptr<GDALAttribute>> a) {
 	CharacterVector l(a.size());
 	CharacterVector na(a.size());
-	for (int i = 0; i < a.size(); i++) {
+	for (size_t i = 0; i < a.size(); i++) {
 		l[i] = a[i]->ReadAsString();
 		na[i] = a[i]->GetName();
 	}
@@ -94,7 +94,8 @@ List get_dimension(const std::shared_ptr<GDALDimension> dim) {
 
 // [[Rcpp::export]]
 List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVector oo,
-				IntegerVector offset, IntegerVector count, IntegerVector step) {
+				IntegerVector offset, IntegerVector count, IntegerVector step, 
+				bool proxy = false, bool debug = false) {
 
 	std::vector <char *> oo_char = create_options(oo, true); // open options
 	auto poDataset = std::unique_ptr<GDALDataset>(
@@ -141,12 +142,14 @@ List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVecto
 	auto array(curGroup->OpenMDArray(name));
 	if (!array)
 		stop("Cannot find array");
-	if (offset.size() != 0 && offset.size() != array->GetDimensionCount())
+	if (offset.size() != 0 && (size_t) offset.size() != array->GetDimensionCount())
 		stop("offset has wrong size");
-	if (count.size() != 0 && count.size() != array->GetDimensionCount())
+	if (count.size() != 0 && (size_t) count.size() != array->GetDimensionCount())
 		stop("count has wrong size");
-	if (step.size() != 0 && step.size() != array->GetDimensionCount())
+	if (step.size() != 0 && (size_t) step.size() != array->GetDimensionCount())
 		stop("step has wrong size");
+	if (proxy && (offset.size() != 0 || count.size() != 0 || step.size() != 0))
+		stop("if proxy=TRUE, do not set offset, count or step, use these when reading data (downsample)");
 
 	size_t nValues = 1;
 	std::vector<size_t> anCount;
@@ -172,14 +175,14 @@ List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVecto
 			anCount.push_back(count[i]);
 		dims.push_back(anCount.back());
 		nValues *= anCount.back();
-		/*
-		if (count.size() > i)
-			Rcout << "count[i]: " << count[i] << "\n";
-		Rcout << "nValues: " << nValues << "\n";
-		Rcout << "stp[i]: " << stp[i] << "\n";
-		Rcout << "anCount[i]: " << anCount[i] << "\n";
-		Rcout << "offst[i]: " << offst[i] << "\n";
-		*/
+		if (debug) {
+			if (count.size() > i)
+				Rcout << "count[i]: " << count[i] << "\n";
+			Rcout << "nValues: " << nValues << "\n";
+			Rcout << "stp[i]: " << stp[i] << "\n";
+			Rcout << "anCount[i]: " << anCount[i] << "\n";
+			Rcout << "offst[i]: " << offst[i] << "\n";
+		}
 		List dimension(get_dimension(poDim));
 		dimensions.push_back(dimension);
 		i++;
@@ -190,37 +193,43 @@ List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVecto
 		name = array_names[i];
 		a_names[i] = array_names[i];
 		auto arr(curGroup->OpenMDArray(name));
-		NumericVector vec( nValues );
-		bool ok = arr->Read(offst.data(),
-					anCount.data(),
-					(const GInt64*) stp.data(), /* step: defaults to 1,1,1 */
-					nullptr, /* stride: default to row-major convention */
-					GDALExtendedDataType::Create(GDT_Float64),
-					vec.begin());
-		if (!ok)
-			Rcout << "Read failed for array " << name << std::endl;
 		dims.attr("names") = dim_names;
 		dimensions.attr("names") = dim_names;
-		bool has_offset = false;
-		double offst = arr->GetOffset(&has_offset);
-		if (!has_offset)
-			offst = 0.0;
-		bool has_scale = false;
-		double scale = arr->GetScale(&has_scale);
-		if (!has_scale)
-			scale = 1.0;
-		bool has_nodata = false;
-		double nodata_value = arr->GetNoDataValueAsDouble(&has_nodata);
-		if (has_offset || has_scale || has_nodata) {
-			for (size_t i = 0; i < nValues; i++) {
-				if (ISNAN(vec[i]) || (has_nodata && vec[i] == nodata_value))
-					vec[i] = NA_REAL;
-				else
-					vec[i] = vec[i] * scale + offst;
+		NumericVector vec;
+		if (! proxy) { // read the arrays:
+			NumericVector vec_(nValues);
+			if (debug)
+				Rcout << "size of vec_: " << vec_.size() << "\n";
+			bool ok = arr->Read(offst.data(),
+						anCount.data(),
+						(const GInt64*) stp.data(), /* step: defaults to 1,1,1 */
+						nullptr, /* stride: default to row-major convention */
+						GDALExtendedDataType::Create(GDT_Float64),
+						vec_.begin());
+			if (!ok)
+				Rcout << "Read failed for array " << name << std::endl;
+			bool has_offset = false;
+			double offst = arr->GetOffset(&has_offset);
+			if (!has_offset)
+				offst = 0.0;
+			bool has_scale = false;
+			double scale = arr->GetScale(&has_scale);
+			if (!has_scale)
+				scale = 1.0;
+			bool has_nodata = false;
+			double nodata_value = arr->GetNoDataValueAsDouble(&has_nodata);
+			if (has_offset || has_scale || has_nodata) {
+				for (size_t i = 0; i < nValues; i++) {
+					if (ISNAN(vec_[i]) || (has_nodata && vec_[i] == nodata_value))
+						vec_[i] = NA_REAL;
+					else
+						vec_[i] = vec_[i] * scale + offst;
+				}
 			}
-		}
-		vec.attr("dim") = dims;
-		vec.attr("units") = arr->GetUnit();
+			vec_.attr("dim") = dims;
+			vec_.attr("units") = arr->GetUnit();
+			vec = vec_;
+		} 
 		vec_lst[i] = vec;
 	}
 	vec_lst.attr("names") = a_names;

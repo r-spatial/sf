@@ -334,9 +334,14 @@ gdal_extract = function(f, pts, bilinear = FALSE) {
 #' @param file file name
 #' @param array_name array name
 #' @param options open options
+#' @param offset offset (pixels)
+#' @param count number of pixels to read
+#' @param step step size (pixels)
+#' @param proxy logical; return proxy object?
+#' @param debug logical; print debug messages?
 #' @export
-gdal_read_mdim = function(file, array_name = character(0), options = character(0), offset, count, step) {
-	read_mdim(file, array_name, options, offset, count, step)
+gdal_read_mdim = function(file, array_name = character(0), options = character(0), offset, count, step, proxy = FALSE, debug = FALSE) {
+	read_mdim(file, array_name, options, offset, count, step, proxy, debug)
 }
 
 #' @name gdal

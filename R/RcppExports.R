@@ -253,8 +253,8 @@ CPL_raw_to_hex <- function(raw) {
     .Call('_sf_CPL_raw_to_hex', PACKAGE = 'sf', raw)
 }
 
-read_mdim <- function(file, array_names, oo, offset, count, step) {
-    .Call('_sf_read_mdim', PACKAGE = 'sf', file, array_names, oo, offset, count, step)
+read_mdim <- function(file, array_names, oo, offset, count, step, proxy = FALSE, debug = FALSE) {
+    .Call('_sf_read_mdim', PACKAGE = 'sf', file, array_names, oo, offset, count, step, proxy, debug)
 }
 
 write_mdim <- function(x, file, dimensions, units) {
