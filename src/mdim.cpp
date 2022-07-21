@@ -182,9 +182,10 @@ List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVecto
 			Rcout << "stp[i]: " << stp[i] << "\n";
 			Rcout << "anCount[i]: " << anCount[i] << "\n";
 			Rcout << "offst[i]: " << offst[i] << "\n";
+			Rcout << "dims[i]: " << dims[i] << "\n";
 		}
 		List dimension(get_dimension(poDim));
-		dimensions.push_back(dimension);
+		dimensions.push_back(dimension); // mind the "s"
 		i++;
 	}
 	List vec_lst(n);
@@ -229,7 +230,7 @@ List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVecto
 			vec_.attr("dim") = dims;
 			vec_.attr("units") = arr->GetUnit();
 			vec = vec_;
-		} 
+		}
 		vec_lst[i] = vec;
 	}
 	vec_lst.attr("names") = a_names;
