@@ -347,11 +347,12 @@ gdal_read_mdim = function(file, array_name = character(0), options = character(0
 }
 
 #' @name gdal
-#' @param dimension_values list with dimension values
-#' @param units character; units names (udunits conform) corresponding to dimension_values
+#' @param mdi character; meta data items (values; keys in names)
+#' @param wkt character; WKT of crs
+#' @param gt numeric; geotransform
 #' @export
-gdal_write_mdim = function(x, file, dimension_values, units) {
-	write_mdim(x, file, dimension_values, units)
+gdal_write_mdim = function(x, file, mdi, wkt, gt) {
+	write_mdim(x, file, mdi, wkt, gt)
 }
 
 #' @name gdal

@@ -73,14 +73,14 @@ gdal_read_mdim(
   file,
   array_name = character(0),
   options = character(0),
-  offset,
-  count,
-  step,
+  offset = integer(0),
+  count = integer(0),
+  step = integer(0),
   proxy = FALSE,
   debug = FALSE
 )
 
-gdal_write_mdim(x, file, dimension_values, units)
+gdal_write_mdim(x, file, mdi, wkt, gt)
 
 gdal_create(f, nxy, values, crs, xlim, ylim)
 }
@@ -107,7 +107,7 @@ gdal_create(f, nxy, values, crs, xlim, ylim)
 
 \item{update}{logical; \code{TRUE} if in an existing raster file pixel values shall be updated.}
 
-\item{gt}{double vector of length 6}
+\item{gt}{numeric; geotransform}
 
 \item{domain_item}{character vector of length 0, 1 (with domain), or 2 (with domain and item); use \code{""} for the default domain, use \code{NA_character_} to query the domain names.}
 
@@ -147,9 +147,9 @@ gdal_create(f, nxy, values, crs, xlim, ylim)
 
 \item{debug}{logical; print debug messages?}
 
-\item{dimension_values}{list with dimension values}
+\item{mdi}{character; meta data items (values; keys in names)}
 
-\item{units}{character; units names (udunits conform) corresponding to dimension_values}
+\item{wkt}{character; WKT of crs}
 
 \item{nxy}{integer vector of length 2}
 

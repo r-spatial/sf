@@ -1,5 +1,7 @@
 # version 1.0-9
 
+* fix utils `mdiminfo` and `mdimtranslate` in `gdal_utils()` 
+
 * extend arguments of `gdal_read_mdim()` needed by `stars::read_mdim()` if `stars` >= 0.5-7
 
 * add `drop_na()` method for `sf` objects; #1975

@@ -257,8 +257,16 @@ read_mdim <- function(file, array_names, oo, offset, count, step, proxy = FALSE,
     .Call('_sf_read_mdim', PACKAGE = 'sf', file, array_names, oo, offset, count, step, proxy, debug)
 }
 
-write_mdim <- function(x, file, dimensions, units) {
-    .Call('_sf_write_mdim', PACKAGE = 'sf', x, file, dimensions, units)
+write_mdim <- function(x, file, mdi, wkt, gt) {
+    .Call('_sf_write_mdim', PACKAGE = 'sf', x, file, mdi, wkt, gt)
+}
+
+write_mdim2 <- function(name, driver, x, d, e, wkt, curvilinear = FALSE) {
+    .Call('_sf_write_mdim2', PACKAGE = 'sf', name, driver, x, d, e, wkt, curvilinear)
+}
+
+write_mdimx <- function(name, driver) {
+    .Call('_sf_write_mdimx', PACKAGE = 'sf', name, driver)
 }
 
 opp_sfc <- function(geom, value, mult, crs) {

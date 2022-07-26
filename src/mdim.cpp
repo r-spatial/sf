@@ -244,52 +244,106 @@ List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVecto
 }
 
 // [[Rcpp::export]]
-List write_mdim(List x, CharacterVector file, List dimensions, CharacterVector units) {
+List write_mdim(List x, CharacterVector file, CharacterVector mdi, CharacterVector wkt, NumericVector gt) {
 
-	stop("not implemented yet");
+//	stop("not implemented yet");
+	// create dataset in memory:
+	GDALDriver *dr = GetGDALDriverManager()->GetDriverByName("MEM");
+	if (dr == NULL)
+		stop("creating memory driver failed");	
 
-	// GDALDatasetH hDstDS = nullptr;
-	/* if( psOptionsForBinary->bUpdate )
-	{
-		CPLPushErrorHandler(CPLQuietErrorHandler);
-		hDstDS = GDALOpenEx(
-			psOptionsForBinary->pszDest,
-			GDAL_OF_RASTER | GDAL_OF_MULTIDIM_RASTER | GDAL_OF_VERBOSE_ERROR | GDAL_OF_UPDATE,
-			nullptr, nullptr, nullptr );
-		CPLPopErrorHandler();
+	NumericVector a = x[0];
+	NumericVector dima = a.attr("dim");
+	int nbands = 1;
+	for (size_t i = 2; i < dima.size(); i++)
+		nbands = nbands * dima[i];
+    auto poDataset = std::unique_ptr<GDALDataset>(
+					dr->Create("", dima[0], dima[1], nbands, GDT_Float64, NULL));
+    if(!poDataset)
+        stop("Cannot create dataset in memory"); 
+
+	if (poDataset->RasterIO(GF_Write, 0, 0, dima[0], dima[1],
+			a.begin(), dima[0], dima[1], GDT_Float64,
+			nbands, NULL, 0, 0, 0, NULL) == CE_Failure)
+		stop("write failure"); // #nocov
+	
+	if (mdi.size()) {
+		CharacterVector mdi_names = mdi.attr("names");
+		for (size_t i = 0; i < mdi.size(); i++)
+			poDataset->SetMetadataItem(mdi_names[i], mdi[i]);
 	}
-	*/
-
-	const char *pszDest = file[0];
-	CPLString osFormat("");
-	if( EQUAL(CPLGetExtension(pszDest), "nc") )
-		osFormat = "netCDF";
-	/*
-	else
-		osFormat = GetOutputDriverForRaster(pszDest);
-	*/
-	if( osFormat.empty() )
-		stop("format not found");
-	GDALDriver *poDriver = GDALDriver::FromHandle(GDALGetDriverByName( osFormat ));
-	char** papszDriverMD = poDriver ? poDriver->GetMetadata(): nullptr;
-	if( poDriver == nullptr
-		|| (!CPLTestBool(CSLFetchNameValueDef(papszDriverMD, GDAL_DCAP_RASTER, "FALSE")) &&
-			!CPLTestBool(CSLFetchNameValueDef(papszDriverMD, GDAL_DCAP_MULTIDIM_RASTER, "FALSE")))
-		|| (!CPLTestBool(CSLFetchNameValueDef(papszDriverMD, GDAL_DCAP_CREATE, "FALSE")) &&
-			!CPLTestBool(CSLFetchNameValueDef(papszDriverMD, GDAL_DCAP_CREATECOPY, "FALSE")) &&
-			!CPLTestBool(CSLFetchNameValueDef(papszDriverMD, GDAL_DCAP_CREATE_MULTIDIMENSIONAL, "FALSE")) &&
-			!CPLTestBool(CSLFetchNameValueDef(papszDriverMD, GDAL_DCAP_CREATECOPY_MULTIDIMENSIONAL, "FALSE"))) )
-				stop("output driver does not support creation");
+	double *gtd = &(gt[0]);
+	poDataset->SetGeoTransform(gtd);
+	if (wkt.size()) {
+		OGRSpatialReference sr(wkt[0]);
+		poDataset->SetSpatialRef(&sr);
+	}
+	GDALDriver *nc = GetGDALDriverManager()->GetDriverByName("NetCDF");
+	GDALDataset *out = nc->CreateCopy(file[0], poDataset.get(), false, NULL, GDALDummyProgress, NULL);
+	GDALClose(out);
+	return x;
+}
 
 
-	/*
-	GDALDatasetH hRetDS = GDALMultiDimTranslate(
-										psOptionsForBinary->pszDest,
-					                    hDstDS,
-                                        1, &hInDS,
-                                        psOptions, &bUsageError);
-										*/
+std::shared_ptr<GDALDimension> add_dim(std::shared_ptr<GDALGroup> g, const char *name, List dim, NumericVector values) {
+	std::shared_ptr<GDALDimension> d = g->CreateDimension(name, "", "", values.size(), nullptr);
+	std::vector<std::shared_ptr<GDALDimension>> dv;
+	dv.push_back(d);
+	GDALExtendedDataType dbl = GDALExtendedDataType::Create(GDT_Float64);
+	std::shared_ptr<GDALMDArray> md = g->CreateMDArray(name, dv, dbl, nullptr);
+	GUInt64 start[1] = { 0 };
+	size_t count[1];
+	count[0] = values.size();
+	md->Write(start, count, nullptr, nullptr, dbl, &(values[0]), nullptr, 0);
+	// set unit here:
+	// md->SetUnit("days since 1970-01-01");
+	return d;
+}
 
+void add_array(std::shared_ptr<GDALGroup> g, const char *name, NumericVector a, 
+				std::vector<std::shared_ptr<GDALDimension>> dims, std::vector<size_t> count) {
+	GDALExtendedDataType dbl = GDALExtendedDataType::Create(GDT_Float64);
+	std::shared_ptr<GDALMDArray> mda = g->CreateMDArray(name, dims, dbl, nullptr);
+	std::vector<GUInt64> start;
+	for (size_t i = 0; i < count.size(); i++)
+		start.push_back(0);
+	mda->Write(start.data(), count.data(), nullptr, nullptr, dbl, &(a[0]), nullptr, 0);
+	// set unit here:
+	// mda->SetUnit("degree_C");
+}
+
+// [[Rcpp::export]]
+List write_mdim2(CharacterVector name, CharacterVector driver, List x, List d, List e, CharacterVector wkt, bool curvilinear = false) {
+	if (name.size() != 1
+		stop("name should have length 1");
+	if (driver.size() != 1)
+		stop("driver should have length 1");
+	GDALDriver *nc = GetGDALDriverManager()->GetDriverByName(driver[0]);
+	if (nc == NULL)
+		stop("cannot open driver");
+	GDALDataset *md = nc->CreateMultiDimensional(name[0], nullptr, nullptr);
+	if (md == NULL)
+		stop("Cannot create MD array on driver");
+	std::shared_ptr<GDALGroup> g = md->GetRootGroup();
+
+	if (!curvilinear) {
+		CharacterVector n = d.attr("names");
+		std::vector<size_t> count;
+		// add dimensions to g:
+		std::vector<std::shared_ptr<GDALDimension>> dims;
+		for (int i = d.size() - 1; i >= 0; i--) {
+			dims.push_back(add_dim(g, n[i], d[i], e[i]));
+			NumericVector ev = e[i];
+			count.push_back(ev.size());
+		}
+	
+		CharacterVector a = x.attr("names");
+		// add data arrays to g:
+		for (size_t i = 0; i < x.size(); i++)
+			add_array(g, a[i], x[i], dims, count);
+	} else
+		stop("curvilinear not yet implemented");
+	GDALClose(md);
 	return x;
 }
 
@@ -299,7 +353,10 @@ List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVecto
 				bool proxy = false, bool debug = false) {
 	stop("requires GDAL >= 3.1.0 and 64-bit");
 }
-List write_mdim(List x, CharacterVector file, List dimensions, CharacterVector units) {
+List write_mdim2(CharacterVector name, CharacterVector driver, List x, List d, List e, CharacterVector wkt, bool curvilinear = false) {
+	stop("requires GDAL >= 3.1.0 and 64-bit");
+}
+List write_mdim(List x, CharacterVector file, CharacterVector mdi, CharacterVector wkt, NumericVector gt) {
 	stop("requires GDAL >= 3.1.0 and 64-bit");
 }
 #endif
