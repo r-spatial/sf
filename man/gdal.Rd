@@ -12,6 +12,7 @@
 \alias{gdal_rasterize}
 \alias{gdal_extract}
 \alias{gdal_read_mdim}
+\alias{gdal_write_mdim_old}
 \alias{gdal_write_mdim}
 \alias{gdal_create}
 \title{functions to interact with gdal not meant to be called directly by users (but e.g. by stars::read_stars)}
@@ -80,7 +81,9 @@ gdal_read_mdim(
   debug = FALSE
 )
 
-gdal_write_mdim(x, file, mdi, wkt, gt)
+gdal_write_mdim_old(x, file, mdi, wkt, gt)
+
+gdal_write_mdim(x, file, driver, dimensions, expanded, wkt, curvilinear)
 
 gdal_create(f, nxy, values, crs, xlim, ylim)
 }
@@ -150,6 +153,12 @@ gdal_create(f, nxy, values, crs, xlim, ylim)
 \item{mdi}{character; meta data items (values; keys in names)}
 
 \item{wkt}{character; WKT of crs}
+
+\item{dimensions}{dimensions object}
+
+\item{expanded}{list with dimension values}
+
+\item{curvilinear}{length 0 or 2 character vector; names of the coordinate arrays}
 
 \item{nxy}{integer vector of length 2}
 

@@ -351,9 +351,19 @@ gdal_read_mdim = function(file, array_name = character(0), options = character(0
 #' @param wkt character; WKT of crs
 #' @param gt numeric; geotransform
 #' @export
-gdal_write_mdim = function(x, file, mdi, wkt, gt) {
-	write_mdim(x, file, mdi, wkt, gt)
+gdal_write_mdim_old = function(x, file, mdi, wkt, gt) {
+	write_mdim_old(x, file, mdi, wkt, gt)
 }
+
+#' @name gdal
+#' @param dimensions dimensions object
+#' @param expanded list with dimension values
+#' @param curvilinear length 0 or 2 character vector; names of the coordinate arrays
+#' @export
+gdal_write_mdim = function(x, file, driver, dimensions, expanded, wkt, curvilinear) {
+	write_mdim(file, driver, x, dimensions, expanded, wkt, curvilinear)
+}
+
 
 #' @name gdal
 #' @param f character; file name
