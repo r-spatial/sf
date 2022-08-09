@@ -859,21 +859,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// write_mdim_old
-List write_mdim_old(List x, CharacterVector file, CharacterVector mdi, CharacterVector wkt, NumericVector gt);
-RcppExport SEXP _sf_write_mdim_old(SEXP xSEXP, SEXP fileSEXP, SEXP mdiSEXP, SEXP wktSEXP, SEXP gtSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< List >::type x(xSEXP);
-    Rcpp::traits::input_parameter< CharacterVector >::type file(fileSEXP);
-    Rcpp::traits::input_parameter< CharacterVector >::type mdi(mdiSEXP);
-    Rcpp::traits::input_parameter< CharacterVector >::type wkt(wktSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type gt(gtSEXP);
-    rcpp_result_gen = Rcpp::wrap(write_mdim_old(x, file, mdi, wkt, gt));
-    return rcpp_result_gen;
-END_RCPP
-}
 // write_mdim
 List write_mdim(CharacterVector name, CharacterVector driver, List x, List d, List e, CharacterVector wkt, CharacterVector curv);
 RcppExport SEXP _sf_write_mdim(SEXP nameSEXP, SEXP driverSEXP, SEXP xSEXP, SEXP dSEXP, SEXP eSEXP, SEXP wktSEXP, SEXP curvSEXP) {
@@ -888,6 +873,21 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< CharacterVector >::type wkt(wktSEXP);
     Rcpp::traits::input_parameter< CharacterVector >::type curv(curvSEXP);
     rcpp_result_gen = Rcpp::wrap(write_mdim(name, driver, x, d, e, wkt, curv));
+    return rcpp_result_gen;
+END_RCPP
+}
+// write_mdim_old
+List write_mdim_old(List x, CharacterVector file, CharacterVector mdi, CharacterVector wkt, NumericVector gt);
+RcppExport SEXP _sf_write_mdim_old(SEXP xSEXP, SEXP fileSEXP, SEXP mdiSEXP, SEXP wktSEXP, SEXP gtSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type x(xSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type file(fileSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type mdi(mdiSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type wkt(wktSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type gt(gtSEXP);
+    rcpp_result_gen = Rcpp::wrap(write_mdim_old(x, file, mdi, wkt, gt));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1449,8 +1449,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_hex_to_raw", (DL_FUNC) &_sf_CPL_hex_to_raw, 1},
     {"_sf_CPL_raw_to_hex", (DL_FUNC) &_sf_CPL_raw_to_hex, 1},
     {"_sf_read_mdim", (DL_FUNC) &_sf_read_mdim, 8},
-    {"_sf_write_mdim_old", (DL_FUNC) &_sf_write_mdim_old, 5},
     {"_sf_write_mdim", (DL_FUNC) &_sf_write_mdim, 7},
+    {"_sf_write_mdim_old", (DL_FUNC) &_sf_write_mdim_old, 5},
     {"_sf_opp_sfc", (DL_FUNC) &_sf_opp_sfc, 4},
     {"_sf_normalize_sfc", (DL_FUNC) &_sf_normalize_sfc, 4},
     {"_sf_CPL_polygonize", (DL_FUNC) &_sf_CPL_polygonize, 10},

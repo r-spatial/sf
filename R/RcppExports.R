@@ -257,12 +257,12 @@ read_mdim <- function(file, array_names, oo, offset, count, step, proxy = FALSE,
     .Call('_sf_read_mdim', PACKAGE = 'sf', file, array_names, oo, offset, count, step, proxy, debug)
 }
 
-write_mdim_old <- function(x, file, mdi, wkt, gt) {
-    .Call('_sf_write_mdim_old', PACKAGE = 'sf', x, file, mdi, wkt, gt)
-}
-
 write_mdim <- function(name, driver, x, d, e, wkt, curv) {
     .Call('_sf_write_mdim', PACKAGE = 'sf', name, driver, x, d, e, wkt, curv)
+}
+
+write_mdim_old <- function(x, file, mdi, wkt, gt) {
+    .Call('_sf_write_mdim_old', PACKAGE = 'sf', x, file, mdi, wkt, gt)
 }
 
 opp_sfc <- function(geom, value, mult, crs) {
