@@ -28,8 +28,6 @@ setOldClass(c("sfc_GEOMETRYCOLLECTION", "sfc"))
 setOldClass("sfg")
 setOldClass("crs")
 
-.sf_cache <- new.env(FALSE, parent=globalenv())
-
 pathGrob <- NULL
 .onLoad = function(libname, pkgname) {
 	if (getRversion() < as.numeric_version("3.6")) { # nocov start
@@ -38,7 +36,8 @@ pathGrob <- NULL
 		}
 	} # nocov end
 	load_gdal() 
-	assign(".sf.use_s2", Sys.getenv("_SF_USE_S2") != "false", envir=.sf_cache)
+	if ((s2 <- Sys.getenv("_SF_USE_S2")) != "")
+		options(sf_use_s2 = s2 != "false")
 }
 
 .onUnload = function(libname, pkgname) {

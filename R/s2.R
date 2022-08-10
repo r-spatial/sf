@@ -10,14 +10,12 @@
 #' @return \code{sf_use_s2} returns the value of this variable before (re)setting it,
 #' invisibly if \code{use_s2} is not missing.
 sf_use_s2 = function(use_s2) {
-	ret_val = get(".sf.use_s2", envir = .sf_cache)
+	ret_val = getOption("sf_use_s2", default = TRUE)
 	if (! missing(use_s2)) {
 		stopifnot(is.logical(use_s2), length(use_s2)==1, !is.na(use_s2))
-		if (use_s2 && !requireNamespace("s2", quietly = TRUE))
-			stop("package s2 not available: install it first?")
 		if (ret_val != use_s2)
 			message(paste0("Spherical geometry (s2) switched ", ifelse(use_s2, "on", "off")))
-		assign(".sf.use_s2", use_s2, envir = .sf_cache)
+		options(sf_use_s2 = use_s2)
 		invisible(ret_val)
 	} else
 		ret_val

@@ -1,5 +1,7 @@
 # version 1.0-9
 
+* use the global `options("sf_use_s2")` to determine whether to use s2, rather than a value in a local environment; #1977
+
 * fix utils `mdiminfo` and `mdimtranslate` in `gdal_utils()` 
 
 * extend arguments of `gdal_read_mdim()` needed by `stars::read_mdim()` if `stars` >= 0.5-7
