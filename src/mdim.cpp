@@ -29,6 +29,11 @@ CharacterVector get_attributes(std::vector<std::shared_ptr<GDALAttribute>> a) {
 
 #if GDAL_VERSION_NUM >= 3010000 && !(defined(WIN32BIT))
 List get_dimension_values(std::shared_ptr<GDALMDArray> array) {
+	List ret(1);
+	if (array == nullptr) {
+		warning("array is NULL");
+		return ret; // FIXME but this is an error essentially.
+	}
 	size_t nValues = 1;
 	std::vector<size_t> anCount;
 	IntegerVector dims;
@@ -44,7 +49,6 @@ List get_dimension_values(std::shared_ptr<GDALMDArray> array) {
 #else
 	CharacterVector att;
 #endif
-	List ret(1);
 	if (array->GetDataType().GetClass() == GEDTC_NUMERIC) {
 		NumericVector vec( nValues );
 		bool ok = array->Read(offset.data(),
@@ -82,6 +86,8 @@ List get_dimension_values(std::shared_ptr<GDALMDArray> array) {
 }
 
 List get_dimension(const std::shared_ptr<GDALDimension> dim) {
+	if (dim == nullptr)
+		stop("dim is NULL");
 	List dimension = List::create(
 		_["from"] = IntegerVector::create(1),
 		_["to"] = IntegerVector::create(dim->GetSize()),
@@ -93,7 +99,7 @@ List get_dimension(const std::shared_ptr<GDALDimension> dim) {
 }
 
 // [[Rcpp::export]]
-List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVector oo,
+List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterVector oo,
 				IntegerVector offset, IntegerVector count, IntegerVector step, 
 				bool proxy = false, bool debug = false) {
 
@@ -250,52 +256,22 @@ void write_attributes(std::shared_ptr<GDALMDArray> md, CharacterVector attrs) {
 		std::vector<GUInt64> empty;
 		for (int i = 0; i < attrs.size(); i++) {
 			const char *name = names[i];
-			std::shared_ptr<GDALAttribute> at = md->CreateAttribute(name, empty,  GDALExtendedDataType::CreateString(0), nullptr);
-			if (at == nullptr)
-				stop("could not create attribute");
-			at->Write(attrs[i]);
+			std::shared_ptr<GDALAttribute> at = 
+					md->CreateAttribute(name, empty,  GDALExtendedDataType::CreateString(0), nullptr);
+			if (at == nullptr) {
+				Rcout << names[i] << ":" << std::endl;
+				warning("could not create attribute: does it already exist? (skipping)");
+			} else
+				at->Write(attrs[i]);
 		}
 	}
 }
 
-std::shared_ptr<GDALDimension> write_dimension(std::shared_ptr<GDALGroup> g, const char *name, 
-				NumericVector values, size_t n, const std::string &type) {
-	std::shared_ptr<GDALDimension> d = g->CreateDimension(name, type, "", n, nullptr);
-	if (d == nullptr)
-		stop("creation of dimension failed");
-	if (values.size() != 0) {
-		std::vector<std::shared_ptr<GDALDimension>> dv;
-		dv.push_back(d);
-		GDALExtendedDataType dbl = GDALExtendedDataType::Create(GDT_Float64);
-		std::shared_ptr<GDALMDArray> md = g->CreateMDArray(name, dv, dbl, nullptr);
-		GUInt64 start[1] = { 0 };
-		size_t count[1];
-		count[0] = values.size();
-		md->Write(start, count, nullptr, nullptr, dbl, &(values[0]), nullptr, 0);
-		if (values.attr("attrs") != R_NilValue)
-			write_attributes(md, values.attr("attrs"));
-	}
-	return d;
-}
-
-std::shared_ptr<GDALMDArray> write_array(std::shared_ptr<GDALGroup> g, const char *name, NumericVector a, 
-				std::vector<std::shared_ptr<GDALDimension>> dims, std::vector<size_t> count) {
-	GDALExtendedDataType dbl = GDALExtendedDataType::Create(GDT_Float64);
-	std::shared_ptr<GDALMDArray> mda = g->CreateMDArray(name, dims, dbl, nullptr);
-	std::vector<GUInt64> start;
-	for (size_t i = 0; i < count.size(); i++)
-		start.push_back(0);
-	if (a.size() != 0) {
-		mda->Write(start.data(), count.data(), nullptr, nullptr, dbl, &(a[0]), nullptr, 0);
-		if (a.attr("attrs") != R_NilValue)
-			write_attributes(mda, a.attr("attrs"));
-	}
-	return mda;
-}
-
 // [[Rcpp::export]]
-List write_mdim(CharacterVector name, CharacterVector driver, List x, List d, List e, CharacterVector wkt, 
-				CharacterVector curv) {
+List CPL_write_mdim(CharacterVector name, CharacterVector driver, IntegerVector dimensions,
+				List variables, CharacterVector wkt, CharacterVector xy, CharacterVector RootGroupOptions,
+				CharacterVector CreationOptions) {
+	
 	if (name.size() != 1)
 		stop("name should have length 1");
 	if (driver.size() != 1)
@@ -303,14 +279,6 @@ List write_mdim(CharacterVector name, CharacterVector driver, List x, List d, Li
 	GDALDriver *nc = GetGDALDriverManager()->GetDriverByName(driver[0]);
 	if (nc == NULL)
 		stop("cannot open driver");
-
-	// create n-D array
-	GDALDataset *md = nc->CreateMultiDimensional(name[0], nullptr, nullptr);
-	if (md == NULL)
-		stop("Cannot create MD array on this driver");
-	std::shared_ptr<GDALGroup> g = md->GetRootGroup();
-	if (g == NULL)
-		stop("Cannot get RootGroup");
 	OGRSpatialReference *dest = NULL;
 	if (wkt.size()) {
 		char *cp = wkt[0];
@@ -318,92 +286,87 @@ List write_mdim(CharacterVector name, CharacterVector driver, List x, List d, Li
 		dest->importFromWkt((const char *) cp);
 	}
 
-	CharacterVector n = d.attr("names");
-	std::vector<size_t> count;
+	// create n-D array
+	std::vector <char *> rgo = create_options(RootGroupOptions, true);
+	std::vector <char *> co = create_options(CreationOptions, true); // open options
+	GDALDataset *md = nc->CreateMultiDimensional(name[0], 
+					RootGroupOptions.size() ? rgo.data() : nullptr, 
+					CreationOptions.size()  ? co.data() : nullptr);
+	if (md == NULL)
+		stop("Cannot create MD array on this driver");
+	std::shared_ptr<GDALGroup> g = md->GetRootGroup();
+	if (g == NULL)
+		stop("Cannot get RootGroup");
 
-	// add dimensions to g:
-	std::vector<std::shared_ptr<GDALDimension>> dims;
-	List raster = d.attr("raster");
-	CharacterVector xy = raster["dimensions"];
-	std::string type = "";
-	for (int i = d.size() - 1; i >= 0; i--) { // last-to-first:
-		List this_dim = d[i];
-		NumericVector from = this_dim[0]; // $from
-		NumericVector to = this_dim[1];   // $to
-		count.push_back(to[0] - from[0] + 1);
-		if (n[i] == xy[0]) // "x"
+	// create dimensions on g:
+	CharacterVector names; 
+	if (dimensions.attr("names") != R_NilValue)
+		names = dimensions.attr("names");
+	else
+		stop("dimensions should have names");
+	std::vector<std::shared_ptr<GDALDimension>> all_dims;
+	for (int i = dimensions.size() - 1; i >= 0; i--) { // backwards, for whatever reason
+		std::string type;
+		if (names[i] == xy[0]) // "x"
 			type = "HORIZONTAL_X";
-		else if (n[i] == xy[1]) // "y"
+		else if (names[i] == xy[1]) // "y"
 			type = "HORIZONTAL_Y";
-		else if (n[i] == "time")
+		else if (names[i] == "time")
 			type = "TEMPORAL";
 		else
 			type = "";
-		dims.push_back(write_dimension(g, n[i], e[i], count.back(), type));
+		const char *name = names[i];
+		std::shared_ptr<GDALDimension> d = g->CreateDimension(name, type, "", dimensions[i], nullptr);
+		if (d == nullptr)
+			stop("creation of dimension failed");
+		all_dims.push_back(d);
 	}
-	
-	CharacterVector a = x.attr("names");
-	// write data arrays (variables) to g:
-	for (int i = 0; i < x.size(); i++) {
-		std::shared_ptr<GDALMDArray> mda;
-		if (curv.size() == 2 && (a[i] == curv[0] || a[i] == curv[1])) { // curvilinear lon & lat arrays:
-			// lat and lon have only x and y as dimension:
-			std::vector<std::shared_ptr<GDALDimension>> dims12 = {dims.end() - 2, dims.end()};
-			std::vector<size_t> count12 = {count.end() - 2, count.end()};
-			mda = write_array(g, a[i], x[i], dims12, count12);
-			/* if (dest != NULL && !mda->SetSpatialRef(dest)) // seems this is not needed
-				warning("failed to assign CRS to array"); */
-		} else { // other arrays:
-			mda = write_array(g, a[i], x[i], dims, count);
-			if (dest != NULL && !mda->SetSpatialRef(dest))
-				warning("failed to assign CRS to array");
+	std::reverse(all_dims.begin(), all_dims.end()); // because I can't think backwards
+
+	// create & write variables to g; write attributes
+	GDALExtendedDataType dbl = GDALExtendedDataType::Create(GDT_Float64);
+	if (variables.attr("names") != R_NilValue)
+		names = variables.attr("names");
+	else
+		stop("variables should have names");
+	LogicalVector which_crs;
+	if (variables.attr("which_crs") != R_NilValue)
+		which_crs = variables.attr("which_crs");
+	else
+		stop("which_crs attribute missing");
+
+	for (size_t i = 0; i < variables.size(); i++) {
+		NumericVector a = variables[i];
+		IntegerVector which_dims;
+		if (a.attr("which_dims") == R_NilValue)
+			stop("variable has no attribute which_dims");
+		else
+			which_dims = a.attr("which_dims");
+		std::vector<std::shared_ptr<GDALDimension>> dims;
+		for (int i = which_dims.size() - 1; i >= 0; i--)
+			dims.push_back(all_dims[which_dims[i]]);
+		const char *name = names[i];
+		std::shared_ptr<GDALMDArray> mda = g->CreateMDArray(name, dims, dbl, nullptr);
+		if (dest != NULL && which_crs[i] && !mda->SetSpatialRef(dest))
+			warning("failed to assign CRS to array");
+		if (a.size() != 0) {
+			std::vector<GUInt64> start;
+			std::vector<size_t> count;
+			for (int i = dims.size() - 1; i >= 0; i--) {
+				start.push_back(0); // FIXME: modify if updating sub-array
+				count.push_back(dimensions[which_dims[i]]);
+			}
+			mda->Write(start.data(), count.data(), nullptr, nullptr, dbl, &(a[0]), nullptr, 0);
 		}
+		if (a.attr("attrs") != R_NilValue)
+			write_attributes(mda, a.attr("attrs"));
 	}
+
+	// close, free & return:
 	GDALClose(md);
 	if (dest != NULL)
 		delete dest;
-	return x;
-}
-
-// [[Rcpp::export]]
-List write_mdim_old(List x, CharacterVector file, CharacterVector mdi, CharacterVector wkt, NumericVector gt) {
-
-// uses the "classic" GDAL interface; first create dataset in memory:
-	GDALDriver *dr = GetGDALDriverManager()->GetDriverByName("MEM");
-	if (dr == NULL)
-		stop("creating memory driver failed");	
-
-	NumericVector a = x[0];
-	NumericVector dima = a.attr("dim");
-	int nbands = 1;
-	for (int i = 2; i < dima.size(); i++)
-		nbands = nbands * dima[i];
-    auto poDataset = std::unique_ptr<GDALDataset>(
-					dr->Create("", dima[0], dima[1], nbands, GDT_Float64, NULL));
-    if (!poDataset) {
-        stop("Cannot create dataset in memory"); 
-	}
-
-	if (poDataset->RasterIO(GF_Write, 0, 0, dima[0], dima[1],
-			a.begin(), dima[0], dima[1], GDT_Float64,
-			nbands, NULL, 0, 0, 0, NULL) == CE_Failure)
-		stop("write failure"); // #nocov
-	
-	if (mdi.size()) {
-		CharacterVector mdi_names = mdi.attr("names");
-		for (int i = 0; i < mdi.size(); i++)
-			poDataset->SetMetadataItem(mdi_names[i], mdi[i]);
-	}
-	double *gtd = &(gt[0]);
-	poDataset->SetGeoTransform(gtd);
-	if (wkt.size()) {
-		OGRSpatialReference sr(wkt[0]);
-		poDataset->SetSpatialRef(&sr);
-	}
-	GDALDriver *nc = GetGDALDriverManager()->GetDriverByName("NetCDF");
-	GDALDataset *out = nc->CreateCopy(file[0], poDataset.get(), false, NULL, GDALDummyProgress, NULL);
-	GDALClose(out);
-	return x;
+	return variables;
 }
 
 #else
@@ -412,10 +375,8 @@ List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVecto
 				bool proxy = false, bool debug = false) {
 	stop("requires GDAL >= 3.1.0 and 64-bit");
 }
-List write_mdim(CharacterVector name, CharacterVector driver, List x, List d, List e, CharacterVector wkt, CharacterVector curv) {
-	stop("requires GDAL >= 3.1.0 and 64-bit");
-}
-List write_mdim_old(List x, CharacterVector file, CharacterVector mdi, CharacterVector wkt, NumericVector gt) {
+List write_mdim(CharacterVector name, CharacterVector driver, IntegerVector dimensions,
+				List variables, CharacterVector wkt, CharacterVector xy) {
 	stop("requires GDAL >= 3.1.0 and 64-bit");
 }
 #endif

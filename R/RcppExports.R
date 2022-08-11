@@ -253,16 +253,12 @@ CPL_raw_to_hex <- function(raw) {
     .Call('_sf_CPL_raw_to_hex', PACKAGE = 'sf', raw)
 }
 
-read_mdim <- function(file, array_names, oo, offset, count, step, proxy = FALSE, debug = FALSE) {
-    .Call('_sf_read_mdim', PACKAGE = 'sf', file, array_names, oo, offset, count, step, proxy, debug)
+CPL_read_mdim <- function(file, array_names, oo, offset, count, step, proxy = FALSE, debug = FALSE) {
+    .Call('_sf_CPL_read_mdim', PACKAGE = 'sf', file, array_names, oo, offset, count, step, proxy, debug)
 }
 
-write_mdim <- function(name, driver, x, d, e, wkt, curv) {
-    .Call('_sf_write_mdim', PACKAGE = 'sf', name, driver, x, d, e, wkt, curv)
-}
-
-write_mdim_old <- function(x, file, mdi, wkt, gt) {
-    .Call('_sf_write_mdim_old', PACKAGE = 'sf', x, file, mdi, wkt, gt)
+CPL_write_mdim <- function(name, driver, dimensions, variables, wkt, xy, RootGroupOptions, CreationOptions) {
+    .Call('_sf_CPL_write_mdim', PACKAGE = 'sf', name, driver, dimensions, variables, wkt, xy, RootGroupOptions, CreationOptions)
 }
 
 opp_sfc <- function(geom, value, mult, crs) {
