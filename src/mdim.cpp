@@ -344,7 +344,7 @@ List CPL_write_mdim(CharacterVector name, CharacterVector driver, IntegerVector 
 	else
 		stop("which_crs attribute missing");
 
-	for (size_t i = 0; i < variables.size(); i++) {
+	for (int i = 0; i < variables.size(); i++) {
 		NumericVector a = variables[i];
 		IntegerVector which_dims;
 		if (a.attr("which_dims") == R_NilValue)

@@ -12,7 +12,6 @@
 \alias{gdal_rasterize}
 \alias{gdal_extract}
 \alias{gdal_read_mdim}
-\alias{gdal_write_mdim_old}
 \alias{gdal_write_mdim}
 \alias{gdal_create}
 \title{functions to interact with gdal not meant to be called directly by users (but e.g. by stars::read_stars)}
@@ -81,9 +80,17 @@ gdal_read_mdim(
   debug = FALSE
 )
 
-gdal_write_mdim_old(x, file, mdi, wkt, gt)
-
-gdal_write_mdim(x, file, driver, dimensions, expanded, wkt, curvilinear)
+gdal_write_mdim(
+  file,
+  driver,
+  dimx,
+  cdl,
+  wkt,
+  xy,
+  ...,
+  root_group_options = character(0),
+  options = character(0)
+)
 
 gdal_create(f, nxy, values, crs, xlim, ylim)
 }
@@ -92,9 +99,9 @@ gdal_create(f, nxy, values, crs, xlim, ylim)
 
 \item{...}{ignored}
 
-\item{options}{open options}
+\item{options}{character; driver specific options regarding reading or creating the dataset}
 
-\item{driver}{character; when empty vector, driver is auto-detected.}
+\item{driver}{character; driver short name; when empty vector, driver is auto-detected.}
 
 \item{read_data}{logical; if \code{FALSE}, only the imagery metadata is returned}
 
@@ -110,7 +117,7 @@ gdal_create(f, nxy, values, crs, xlim, ylim)
 
 \item{update}{logical; \code{TRUE} if in an existing raster file pixel values shall be updated.}
 
-\item{gt}{numeric; geotransform}
+\item{gt}{double vector of length 6}
 
 \item{domain_item}{character vector of length 0, 1 (with domain), or 2 (with domain and item); use \code{""} for the default domain, use \code{NA_character_} to query the domain names.}
 
@@ -150,15 +157,15 @@ gdal_create(f, nxy, values, crs, xlim, ylim)
 
 \item{debug}{logical; print debug messages?}
 
-\item{mdi}{character; meta data items (values; keys in names)}
+\item{dimx}{integer named vector with dimensions of object}
+
+\item{cdl}{list with variables, each having a named dim attribute}
 
 \item{wkt}{character; WKT of crs}
 
-\item{dimensions}{dimensions object}
+\item{xy}{character; names of the spatial x and y dimension}
 
-\item{expanded}{list with dimension values}
-
-\item{curvilinear}{length 0 or 2 character vector; names of the coordinate arrays}
+\item{root_group_options}{character; driver specific options regarding the creation of the root group}
 
 \item{nxy}{integer vector of length 2}
 

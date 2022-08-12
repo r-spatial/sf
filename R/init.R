@@ -28,6 +28,8 @@ setOldClass(c("sfc_GEOMETRYCOLLECTION", "sfc"))
 setOldClass("sfg")
 setOldClass("crs")
 
+.sf_cache <- new.env(FALSE, parent=globalenv())
+
 pathGrob <- NULL
 .onLoad = function(libname, pkgname) {
 	if (getRversion() < as.numeric_version("3.6")) { # nocov start
