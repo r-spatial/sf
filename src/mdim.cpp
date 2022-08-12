@@ -308,23 +308,23 @@ List CPL_write_mdim(CharacterVector name, CharacterVector driver, IntegerVector 
 		stop("Cannot get RootGroup");
 
 	// create dimensions on g:
-	CharacterVector names; 
+	CharacterVector dimnames; 
 	if (dimensions.attr("names") != R_NilValue)
-		names = dimensions.attr("names");
+		dimnames = dimensions.attr("names");
 	else
 		stop("dimensions should have names");
 	std::vector<std::shared_ptr<GDALDimension>> all_dims;
 	for (int i = dimensions.size() - 1; i >= 0; i--) { // backwards, for whatever reason
 		std::string type;
-		if (names[i] == xy[0]) // "x"
+		if (dimnames[i] == xy[0]) // "x"
 			type = "HORIZONTAL_X";
-		else if (names[i] == xy[1]) // "y"
+		else if (dimnames[i] == xy[1]) // "y"
 			type = "HORIZONTAL_Y";
-		else if (names[i] == "time")
+		else if (dimnames[i] == "time")
 			type = "TEMPORAL";
 		else
 			type = "";
-		const char *name = names[i];
+		const char *name = dimnames[i];
 		std::shared_ptr<GDALDimension> d = g->CreateDimension(name, type, "", dimensions[i], nullptr);
 		if (d == nullptr)
 			stop("creation of dimension failed");
@@ -334,6 +334,7 @@ List CPL_write_mdim(CharacterVector name, CharacterVector driver, IntegerVector 
 
 	// create & write variables to g; write attributes
 	GDALExtendedDataType dbl = GDALExtendedDataType::Create(GDT_Float64);
+	CharacterVector names; 
 	if (variables.attr("names") != R_NilValue)
 		names = variables.attr("names");
 	else
@@ -359,9 +360,14 @@ List CPL_write_mdim(CharacterVector name, CharacterVector driver, IntegerVector 
 		}
 		const char *name = names[i];
 		std::shared_ptr<GDALMDArray> mda = g->CreateMDArray(name, dims, dbl, nullptr);
+		if (dims.size() == 1 && names[i] == dimnames[which_dims[0]])
+			dims[0]->SetIndexingVariable(mda);
 		if (dest != NULL && which_crs[i] && !mda->SetSpatialRef(dest))
 			warning("failed to assign CRS to array");
+		if (a.attr("attrs") != R_NilValue)
+			write_attributes(mda, a.attr("attrs"));
 		if (a.size() != 0) {
+			// Rcout << "Variable: " << name << ", ndims: " << dims.size() << ", crs: " << which_crs[i] << std::endl;
 			std::vector<GUInt64> start;
 			std::vector<size_t> count;
 			for (int i = dims.size() - 1; i >= 0; i--) {
@@ -370,8 +376,6 @@ List CPL_write_mdim(CharacterVector name, CharacterVector driver, IntegerVector 
 			}
 			mda->Write(start.data(), count.data(), nullptr, nullptr, dbl, &(a[0]), nullptr, 0);
 		}
-		if (a.attr("attrs") != R_NilValue)
-			write_attributes(mda, a.attr("attrs"));
 	}
 
 	// close, free & return:
