@@ -77,7 +77,9 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.0-9" id="version-10-9">version 1.0-9<a class="anchor" aria-label="anchor" href="#version-10-9"></a></h2>
-<ul><li><p>extend arguments of <code><a href="../reference/gdal.html">gdal_read_mdim()</a></code> needed by <code><a href="https://r-spatial.github.io/stars/reference/read_mdim.html" class="external-link">stars::read_mdim()</a></code> if <code>stars</code> &gt;= 0.5-7</p></li>
+<ul><li><p>use the global <code>options("sf_use_s2")</code> to determine whether to use s2, rather than a value in a local environment; <a href="https://github.com/r-spatial/sf/issues/1977" class="external-link">#1977</a></p></li>
+<li><p>fix utils <code>mdiminfo</code> and <code>mdimtranslate</code> in <code><a href="../reference/gdal_utils.html">gdal_utils()</a></code></p></li>
+<li><p>extend arguments of <code><a href="../reference/gdal.html">gdal_read_mdim()</a></code> needed by <code><a href="https://r-spatial.github.io/stars/reference/read_mdim.html" class="external-link">stars::read_mdim()</a></code> if <code>stars</code> &gt;= 0.5-7</p></li>
 <li><p>add <code><a href="https://tidyr.tidyverse.org/reference/drop_na.html" class="external-link">drop_na()</a></code> method for <code>sf</code> objects; <a href="https://github.com/r-spatial/sf/issues/1975" class="external-link">#1975</a></p></li>
 </ul></div>
     <div class="section level2">

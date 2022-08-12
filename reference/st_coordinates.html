@@ -100,7 +100,11 @@
 
 <p>matrix with coordinates (X, Y, possibly Z and/or M) in rows, possibly followed by integer indicators <code>L1</code>,...,<code>L3</code> that point out to which structure the coordinate belongs; for <code>POINT</code> this is absent (each coordinate is a feature), for <code>LINESTRING</code></p>
 <p></p>
-<p><code>L1</code> refers to the feature, for <code>MULTIPOLYGON</code></p>
+<p><code>L1</code> refers to the feature, for <code>MULTILINESTRING</code></p>
+<p></p>
+<p><code>L1</code> refers to the part and <code>L2</code> to the simple feature, for <code>POLYGON</code></p>
+<p></p>
+<p><code>L1</code> refers to the main ring or holes and <code>L2</code> to the simple feature, for <code>MULTIPOLYGON</code></p>
 <p></p>
 <p><code>L1</code> refers to the main ring or holes, <code>L2</code> to the ring id in the <code>MULTIPOLYGON</code>, and <code>L3</code> to the simple feature.</p>
     </div>

@@ -138,14 +138,24 @@
 <span>  <span class="va">file</span>,</span>
 <span>  array_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
 <span>  options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
-<span>  <span class="va">offset</span>,</span>
-<span>  <span class="va">count</span>,</span>
-<span>  <span class="va">step</span>,</span>
+<span>  offset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  step <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
 <span>  proxy <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  debug <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">gdal_write_mdim</span><span class="op">(</span><span class="va">x</span>, <span class="va">file</span>, <span class="va">dimension_values</span>, <span class="va">units</span><span class="op">)</span></span>
+<span><span class="fu">gdal_write_mdim</span><span class="op">(</span></span>
+<span>  <span class="va">file</span>,</span>
+<span>  <span class="va">driver</span>,</span>
+<span>  <span class="va">dimx</span>,</span>
+<span>  <span class="va">cdl</span>,</span>
+<span>  <span class="va">wkt</span>,</span>
+<span>  <span class="va">xy</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  root_group_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">gdal_create</span><span class="op">(</span><span class="va">f</span>, <span class="va">nxy</span>, <span class="va">values</span>, <span class="va">crs</span>, <span class="va">xlim</span>, <span class="va">ylim</span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -161,11 +171,11 @@
 
 
 <dt>options</dt>
-<dd><p>open options</p></dd>
+<dd><p>character; driver specific options regarding reading or creating the dataset</p></dd>
 
 
 <dt>driver</dt>
-<dd><p>character; when empty vector, driver is auto-detected.</p></dd>
+<dd><p>character; driver short name; when empty vector, driver is auto-detected.</p></dd>
 
 
 <dt>read_data</dt>
@@ -276,12 +286,24 @@
 <dd><p>logical; print debug messages?</p></dd>
 
 
-<dt>dimension_values</dt>
-<dd><p>list with dimension values</p></dd>
+<dt>dimx</dt>
+<dd><p>integer named vector with dimensions of object</p></dd>
 
 
-<dt>units</dt>
-<dd><p>character; units names (udunits conform) corresponding to dimension_values</p></dd>
+<dt>cdl</dt>
+<dd><p>list with variables, each having a named dim attribute</p></dd>
+
+
+<dt>wkt</dt>
+<dd><p>character; WKT of crs</p></dd>
+
+
+<dt>xy</dt>
+<dd><p>character; names of the spatial x and y dimension</p></dd>
+
+
+<dt>root_group_options</dt>
+<dd><p>character; driver specific options regarding the creation of the root group</p></dd>
 
 
 <dt>nxy</dt>
