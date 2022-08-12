@@ -88,10 +88,18 @@ List get_dimension_values(std::shared_ptr<GDALMDArray> array) {
 List get_dimension(const std::shared_ptr<GDALDimension> dim) {
 	if (dim == nullptr)
 		stop("dim is NULL");
+	List dv;
+	if (dim->GetIndexingVariable() == nullptr) {
+		NumericVector nv(dim->GetSize());
+		for (size_t i = 0; i < dim->GetSize(); i++)
+			nv[i] = i + 1.0;
+		dv = List::create(nv);
+	} else
+		dv = get_dimension_values(dim->GetIndexingVariable());
 	List dimension = List::create(
 		_["from"] = IntegerVector::create(1),
 		_["to"] = IntegerVector::create(dim->GetSize()),
-		_["values"] = get_dimension_values(dim->GetIndexingVariable()),
+		_["values"] = dv,
 		_["type"] = CharacterVector::create(dim->GetType()),
 		_["direction"] = CharacterVector::create(dim->GetDirection())
 		);
@@ -125,16 +133,16 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 	}
 
 	// Rcout << "name: " << curGroup->GetName() << " full_name: " << curGroup->GetFullName() << std::endl;
-	if (array_names.size() == 0) { // sort out: find the one(s) with the most dimensions
+	if (array_names.size() == 0) { // find the one(s) with the most dimensions:
 		int ndim = 0;
 		int largest_size = 0;
-		for (const auto an: curGroup->GetMDArrayNames()) { // all:
+		for (const auto an: curGroup->GetMDArrayNames()) { // find largest size:
 			auto a(curGroup->OpenMDArray(an));
 			ndim = a->GetDimensions().size();
 			if (ndim > largest_size)
 				largest_size = ndim;
 		}
-		for (const auto an: curGroup->GetMDArrayNames()) { // all:
+		for (const auto an: curGroup->GetMDArrayNames()) { // identify target arrays:
 			auto a(curGroup->OpenMDArray(an));
 			ndim = a->GetDimensions().size();
 			if (ndim == largest_size)
@@ -182,6 +190,7 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 		dims.push_back(anCount.back());
 		nValues *= anCount.back();
 		if (debug) {
+			Rcout << "Dimension name: " << poDim->GetName() << "\n";
 			if (count.size() > i)
 				Rcout << "count[i]: " << count[i] << "\n";
 			Rcout << "nValues: " << nValues << "\n";
@@ -343,8 +352,11 @@ List CPL_write_mdim(CharacterVector name, CharacterVector driver, IntegerVector 
 		else
 			which_dims = a.attr("which_dims");
 		std::vector<std::shared_ptr<GDALDimension>> dims;
-		for (int i = which_dims.size() - 1; i >= 0; i--)
+		for (int i = which_dims.size() - 1; i >= 0; i--) {
+			if (which_dims[i] == NA_INTEGER)
+				stop("NA value in which_dims: logic error");
 			dims.push_back(all_dims[which_dims[i]]);
+		}
 		const char *name = names[i];
 		std::shared_ptr<GDALMDArray> mda = g->CreateMDArray(name, dims, dbl, nullptr);
 		if (dest != NULL && which_crs[i] && !mda->SetSpatialRef(dest))
