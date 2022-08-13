@@ -1,6 +1,6 @@
 
-R version 4.1.2 (2021-11-01) -- "Bird Hippie"
-Copyright (C) 2021 The R Foundation for Statistical Computing
+R version 4.2.1 (2022-06-23) -- "Funny-Looking Kid"
+Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -159,7 +159,7 @@ In st_interpolate_aw.sf(nc["BIR74"], g, extensive = TRUE) :
 > st_line_merge(mls)
 LINESTRING (0 0, 1 1, 2 0)
 > 
-> if (compareVersion(sf_extSoftVersion()["GEOS"], "3.5.0") > -1) {
+> if (isTRUE(try(compareVersion(sf_extSoftVersion()["GEOS"], "3.5.0") > -1, silent = TRUE))) {
 +  # voronoi:
 +  set.seed(1)
 +  x = st_multipoint(matrix(runif(10),,2))
@@ -564,7 +564,7 @@ Sparse geometry binary predicate list of length 1, where the predicate
 was `intersects'
  1: (empty)
 > 
-> if (compareVersion(sf_extSoftVersion()["GEOS"], "3.7.0") > -1) {
+> if (isTRUE(try(compareVersion(sf_extSoftVersion()["GEOS"], "3.7.0") > -1, silent = TRUE))) {
 + 	ls = st_linestring(rbind(c(1,1), c(2,2), c(3,3)))
 + 	print(st_reverse(ls))
 + 	print(st_reverse(st_sfc(ls)))
@@ -667,4 +667,4 @@ CRS:           NA
 > 
 > proc.time()
    user  system elapsed 
- 38.973   0.083  39.055 
+ 10.184   0.779  10.082 
