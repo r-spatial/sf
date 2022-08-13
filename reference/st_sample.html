@@ -125,7 +125,7 @@ interfaced and do not use the <code>size</code> argument, see examples.</p>
 
 
 <dt>type</dt>
-<dd><p>character; indicates the spatial sampling type; one of <code>random</code>, <code>hexagonal</code> (triangular really), <code>regular</code>,
+<dd><p>character; indicates the spatial sampling type; one of <code>random</code>, <code>hexagonal</code> (triangular really), <code>regular</code>, <code>Fibonacci</code>,
 or one of the <code>spatstat</code> methods such as <code>Thomas</code> for calling <code><a href="https://rdrr.io/pkg/spatstat.random/man/rThomas.html" class="external-link">spatstat.random::rThomas</a></code> (see Details).</p></dd>
 
 
@@ -159,9 +159,11 @@ when <code>type = "random"</code>.</p></dd>
 the object if <code>size</code> is a single number, or the specified number of points
 in each feature if <code>size</code> is a vector of integers equal in length to the geometry
 of <code>x</code>.</p>
-<p>if <code>x</code> has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. <a href="http://mathworld.wolfram.com/SpherePointPicking.html" class="external-link">http://mathworld.wolfram.com/SpherePointPicking.html</a></p>
+<p>if <code>x</code> has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. <a href="http://mathworld.wolfram.com/SpherePointPicking.html" class="external-link">http://mathworld.wolfram.com/SpherePointPicking.html</a>.</p>
 <p>For <code>regular</code> or <code>hexagonal</code> sampling of polygons, the resulting size is only an approximation.</p>
 <p>As parameter called <code>offset</code> can be passed to control ("fix") regular or hexagonal sampling: for polygons a length 2 numeric vector (by default: a random point from <code>st_bbox(x)</code>); for lines use a number like <code>runif(1)</code>.</p>
+<p>Fibonacci sampling see: Alvaro Gonzalez, 2010. Measurement of Areas on a Sphere Using Fibonacci and Latitude-Longitude Lattices. 
+Mathematical Geosciences 42(1), p. 49-64</p>
 <p>Sampling methods from package <code>spatstat</code> are interfaced (see examples), and need their own parameters to be set. 
 For instance, to use <code><a href="https://rdrr.io/pkg/spatstat.random/man/rThomas.html" class="external-link">spatstat.random::rThomas()</a></code>, set <code>type = "Thomas"</code>.</p>
     </div>
@@ -170,7 +172,7 @@ For instance, to use <code><a href="https://rdrr.io/pkg/spatstat.random/man/rTho
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpPBUbkA/temp_libpath497b6c4eb34f/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpVibL3T/temp_libpath4930742002c8/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
