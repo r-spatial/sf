@@ -333,7 +333,7 @@ List CPL_write_mdim(CharacterVector name, CharacterVector driver, IntegerVector 
 	std::reverse(all_dims.begin(), all_dims.end()); // because I can't think backwards
 
 	// create & write variables to g; write attributes
-	GDALExtendedDataType dbl = GDALExtendedDataType::Create(GDT_Float64);
+	GDALExtendedDataType edt = GDALExtendedDataType::Create(GDT_Float64);
 	CharacterVector names; 
 	if (variables.attr("names") != R_NilValue)
 		names = variables.attr("names");
@@ -344,37 +344,71 @@ List CPL_write_mdim(CharacterVector name, CharacterVector driver, IntegerVector 
 		which_crs = variables.attr("which_crs");
 	else
 		stop("which_crs attribute missing");
+	LogicalVector is_numeric;
+	if (variables.attr("is_numeric") != R_NilValue)
+		is_numeric = variables.attr("is_numeric");
+	else
+		stop("is_numeric attribute missing");
 
 	for (int i = 0; i < variables.size(); i++) {
-		NumericVector a = variables[i];
+		NumericVector a;
+		CharacterVector c;
 		IntegerVector which_dims;
-		if (a.attr("which_dims") == R_NilValue)
-			stop("variable has no attribute which_dims");
-		else
-			which_dims = a.attr("which_dims");
 		std::vector<std::shared_ptr<GDALDimension>> dims;
+		if (is_numeric[i]) {
+			edt = GDALExtendedDataType::Create(GDT_Float64);
+			a = variables[i];
+			if (a.attr("which_dims") == R_NilValue)
+				stop("variable has no attribute which_dims");
+			else
+				which_dims = a.attr("which_dims");
+		} else {
+			edt = GDALExtendedDataType::CreateString(0);
+			c = variables[i];
+			if (c.attr("which_dims") == R_NilValue)
+				stop("variable has no attribute which_dims");
+			else
+				which_dims = c.attr("which_dims");
+		}
 		for (int i = which_dims.size() - 1; i >= 0; i--) {
 			if (which_dims[i] == NA_INTEGER)
 				stop("NA value in which_dims: logic error");
 			dims.push_back(all_dims[which_dims[i]]);
 		}
 		const char *name = names[i];
-		std::shared_ptr<GDALMDArray> mda = g->CreateMDArray(name, dims, dbl, nullptr);
+		std::shared_ptr<GDALMDArray> mda = g->CreateMDArray(name, dims, edt, nullptr);
 		if (dims.size() == 1 && names[i] == dimnames[which_dims[0]])
-			dims[0]->SetIndexingVariable(mda);
+			dims[0]->SetIndexingVariable(mda); // FIXME: NetCDF doesn't have?
 		if (dest != NULL && which_crs[i] && !mda->SetSpatialRef(dest))
 			warning("failed to assign CRS to array");
-		if (a.attr("attrs") != R_NilValue)
-			write_attributes(mda, a.attr("attrs"));
-		if (a.size() != 0) {
-			// Rcout << "Variable: " << name << ", ndims: " << dims.size() << ", crs: " << which_crs[i] << std::endl;
-			std::vector<GUInt64> start;
-			std::vector<size_t> count;
-			for (int i = dims.size() - 1; i >= 0; i--) {
-				start.push_back(0); // FIXME: modify if updating sub-array
-				count.push_back(dimensions[which_dims[i]]);
+
+		// set start & count of writing area:
+		std::vector<GUInt64> start;
+		std::vector<size_t> count;
+		for (int i = dims.size() - 1; i >= 0; i--) {
+			start.push_back(0); // FIXME: modify if updating sub-array
+			count.push_back(dimensions[which_dims[i]]);
+		}
+		if (is_numeric[i]) { // write numeric array:
+			if (a.attr("attrs") != R_NilValue)
+				write_attributes(mda, a.attr("attrs"));
+			if (a.size() != 0) {
+				// Rcout << "Variable: " << name << ", ndims: " << dims.size() << ", crs: " << which_crs[i] << std::endl;
+				mda->Write(start.data(), count.data(), nullptr, nullptr, edt, &(a[0]), nullptr, 0);
 			}
-			mda->Write(start.data(), count.data(), nullptr, nullptr, dbl, &(a[0]), nullptr, 0);
+		} else { // write character array:
+			if (c.attr("attrs") != R_NilValue)
+				write_attributes(mda, c.attr("attrs"));
+			if (c.size() != 0) {
+				if (dims.size() != 1)
+					stop("can only write one-dimensional character variables");
+				std::vector<const char *> v;
+				for (int i = 0; i < c.size(); i++) {
+					const char *cp = c[i];
+					v.push_back(cp);
+				}
+				mda->Write(start.data(), count.data(), nullptr, nullptr, edt, v.data(), nullptr, 0);
+			}
 		}
 	}
 
