@@ -257,8 +257,8 @@ CPL_read_mdim <- function(file, array_names, oo, offset, count, step, proxy = FA
     .Call('_sf_CPL_read_mdim', PACKAGE = 'sf', file, array_names, oo, offset, count, step, proxy, debug)
 }
 
-CPL_write_mdim <- function(name, driver, dimensions, variables, wkt, xy, RootGroupOptions, CreationOptions) {
-    .Call('_sf_CPL_write_mdim', PACKAGE = 'sf', name, driver, dimensions, variables, wkt, xy, RootGroupOptions, CreationOptions)
+CPL_write_mdim <- function(name, driver, dimensions, variables, wkt, xy, RootGroupOptions, CreationOptions, as_float = TRUE) {
+    .Call('_sf_CPL_write_mdim', PACKAGE = 'sf', name, driver, dimensions, variables, wkt, xy, RootGroupOptions, CreationOptions, as_float)
 }
 
 opp_sfc <- function(geom, value, mult, crs) {

@@ -218,7 +218,7 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 				Rcout << "size of vec_: " << vec_.size() << "\n";
 			bool ok = arr->Read(offst.data(),
 						anCount.data(),
-						(const GInt64*) stp.data(), /* step: defaults to 1,1,1 */
+						stp.data(), /* step: defaults to 1,1,1 */
 						nullptr, /* stride: default to row-major convention */
 						GDALExtendedDataType::Create(GDT_Float64),
 						vec_.begin());
@@ -279,7 +279,7 @@ void write_attributes(std::shared_ptr<GDALMDArray> md, CharacterVector attrs) {
 // [[Rcpp::export]]
 List CPL_write_mdim(CharacterVector name, CharacterVector driver, IntegerVector dimensions,
 				List variables, CharacterVector wkt, CharacterVector xy, CharacterVector RootGroupOptions,
-				CharacterVector CreationOptions) {
+				CharacterVector CreationOptions, bool as_float = true) {
 	
 	if (name.size() != 1)
 		stop("name should have length 1");
@@ -356,7 +356,10 @@ List CPL_write_mdim(CharacterVector name, CharacterVector driver, IntegerVector 
 		IntegerVector which_dims;
 		std::vector<std::shared_ptr<GDALDimension>> dims;
 		if (is_numeric[i]) {
-			edt = GDALExtendedDataType::Create(GDT_Float64);
+			if (as_float)
+				edt = GDALExtendedDataType::Create(GDT_Float32);
+			else
+				edt = GDALExtendedDataType::Create(GDT_Float64);
 			a = variables[i];
 			if (a.attr("which_dims") == R_NilValue)
 				stop("variable has no attribute which_dims");
@@ -389,12 +392,19 @@ List CPL_write_mdim(CharacterVector name, CharacterVector driver, IntegerVector 
 			start.push_back(0); // FIXME: modify if updating sub-array
 			count.push_back(dimensions[which_dims[i]]);
 		}
+		bool success;
 		if (is_numeric[i]) { // write numeric array:
 			if (a.attr("attrs") != R_NilValue)
 				write_attributes(mda, a.attr("attrs"));
 			if (a.size() != 0) {
 				// Rcout << "Variable: " << name << ", ndims: " << dims.size() << ", crs: " << which_crs[i] << std::endl;
-				mda->Write(start.data(), count.data(), nullptr, nullptr, edt, &(a[0]), nullptr, 0);
+				if (as_float) {
+					std::vector<float> flt(a.size());
+					for (int j = 0; j < a.size(); j++)
+						flt[j] = a[j];
+					success = mda->Write(start.data(), count.data(), nullptr, nullptr, edt, flt.data(), nullptr, 0);
+				} else
+					success = mda->Write(start.data(), count.data(), nullptr, nullptr, edt, &(a[0]), nullptr, 0);
 			}
 		} else { // write character array:
 			if (c.attr("attrs") != R_NilValue)
@@ -407,9 +417,11 @@ List CPL_write_mdim(CharacterVector name, CharacterVector driver, IntegerVector 
 					const char *cp = c[i];
 					v.push_back(cp);
 				}
-				mda->Write(start.data(), count.data(), nullptr, nullptr, edt, v.data(), nullptr, 0);
+				success = mda->Write(start.data(), count.data(), nullptr, nullptr, edt, v.data(), nullptr, 0);
 			}
 		}
+		if (! success)
+			Rcout << "Error writing array " << name << std::endl;
 	}
 
 	// close, free & return:

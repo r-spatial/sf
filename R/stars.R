@@ -352,10 +352,12 @@ gdal_read_mdim = function(file, array_name = character(0), options = character(0
 #' @param xy character; names of the spatial x and y dimension
 #' @param root_group_options character; driver specific options regarding the creation of the root group
 #' @param options character; driver specific options regarding reading or creating the dataset
+#' @param as_float logical; when \code{TRUE} write 4-byte floating point numbers, when \code{FALSE} write 8-byte doubles.
 #' @export
 gdal_write_mdim = function(file, driver, dimx, cdl, wkt, xy, ...,
-						   root_group_options = character(0), options = character(0)) {
-    CPL_write_mdim(file, driver, dimx, cdl, wkt, xy, root_group_options, options)
+						   root_group_options = character(0), options = character(0),
+						   as_float = TRUE) {
+    CPL_write_mdim(file, driver, dimx, cdl, wkt, xy, root_group_options, options, as_float)
 }
 
 

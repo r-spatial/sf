@@ -860,8 +860,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_write_mdim
-List CPL_write_mdim(CharacterVector name, CharacterVector driver, IntegerVector dimensions, List variables, CharacterVector wkt, CharacterVector xy, CharacterVector RootGroupOptions, CharacterVector CreationOptions);
-RcppExport SEXP _sf_CPL_write_mdim(SEXP nameSEXP, SEXP driverSEXP, SEXP dimensionsSEXP, SEXP variablesSEXP, SEXP wktSEXP, SEXP xySEXP, SEXP RootGroupOptionsSEXP, SEXP CreationOptionsSEXP) {
+List CPL_write_mdim(CharacterVector name, CharacterVector driver, IntegerVector dimensions, List variables, CharacterVector wkt, CharacterVector xy, CharacterVector RootGroupOptions, CharacterVector CreationOptions, bool as_float);
+RcppExport SEXP _sf_CPL_write_mdim(SEXP nameSEXP, SEXP driverSEXP, SEXP dimensionsSEXP, SEXP variablesSEXP, SEXP wktSEXP, SEXP xySEXP, SEXP RootGroupOptionsSEXP, SEXP CreationOptionsSEXP, SEXP as_floatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -873,7 +873,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< CharacterVector >::type xy(xySEXP);
     Rcpp::traits::input_parameter< CharacterVector >::type RootGroupOptions(RootGroupOptionsSEXP);
     Rcpp::traits::input_parameter< CharacterVector >::type CreationOptions(CreationOptionsSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_write_mdim(name, driver, dimensions, variables, wkt, xy, RootGroupOptions, CreationOptions));
+    Rcpp::traits::input_parameter< bool >::type as_float(as_floatSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_write_mdim(name, driver, dimensions, variables, wkt, xy, RootGroupOptions, CreationOptions, as_float));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1435,7 +1436,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_hex_to_raw", (DL_FUNC) &_sf_CPL_hex_to_raw, 1},
     {"_sf_CPL_raw_to_hex", (DL_FUNC) &_sf_CPL_raw_to_hex, 1},
     {"_sf_CPL_read_mdim", (DL_FUNC) &_sf_CPL_read_mdim, 8},
-    {"_sf_CPL_write_mdim", (DL_FUNC) &_sf_CPL_write_mdim, 8},
+    {"_sf_CPL_write_mdim", (DL_FUNC) &_sf_CPL_write_mdim, 9},
     {"_sf_opp_sfc", (DL_FUNC) &_sf_opp_sfc, 4},
     {"_sf_normalize_sfc", (DL_FUNC) &_sf_normalize_sfc, 4},
     {"_sf_CPL_polygonize", (DL_FUNC) &_sf_CPL_polygonize, 10},

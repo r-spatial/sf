@@ -89,7 +89,8 @@ gdal_write_mdim(
   xy,
   ...,
   root_group_options = character(0),
-  options = character(0)
+  options = character(0),
+  as_float = TRUE
 )
 
 gdal_create(f, nxy, values, crs, xlim, ylim)
@@ -166,6 +167,8 @@ gdal_create(f, nxy, values, crs, xlim, ylim)
 \item{xy}{character; names of the spatial x and y dimension}
 
 \item{root_group_options}{character; driver specific options regarding the creation of the root group}
+
+\item{as_float}{logical; when \code{TRUE} write 4-byte floating point numbers, when \code{FALSE} write 8-byte doubles.}
 
 \item{nxy}{integer vector of length 2}
 
