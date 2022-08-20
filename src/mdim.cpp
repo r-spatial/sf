@@ -440,7 +440,7 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 
 List CPL_write_mdim(CharacterVector name, CharacterVector driver, IntegerVector dimensions,
 				List variables, CharacterVector wkt, CharacterVector xy, CharacterVector RootGroupOptions,
-				CharacterVector CreationOptions) {
+				CharacterVector CreationOptions, bool as_float = true) {
 	stop("requires GDAL >= 3.1.0 and 64-bit");
 }
 #endif
