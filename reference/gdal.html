@@ -154,7 +154,8 @@
 <span>  <span class="va">xy</span>,</span>
 <span>  <span class="va">...</span>,</span>
 <span>  root_group_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
-<span>  options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
+<span>  options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  as_float <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">gdal_create</span><span class="op">(</span><span class="va">f</span>, <span class="va">nxy</span>, <span class="va">values</span>, <span class="va">crs</span>, <span class="va">xlim</span>, <span class="va">ylim</span><span class="op">)</span></span></code></pre></div>
@@ -304,6 +305,10 @@
 
 <dt>root_group_options</dt>
 <dd><p>character; driver specific options regarding the creation of the root group</p></dd>
+
+
+<dt>as_float</dt>
+<dd><p>logical; when <code>TRUE</code> write 4-byte floating point numbers, when <code>FALSE</code> write 8-byte doubles.</p></dd>
 
 
 <dt>nxy</dt>
