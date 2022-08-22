@@ -5,18 +5,16 @@
 
 # This is currently only used in `bind_rows()` and `bind_cols()`
 # because sf overrides all default implementations
+#' @name tidyverse
 dplyr_reconstruct.sf = function(data, template) {
 	sfc_name = attr(template, "sf_column")
 	if (inherits(template, "tbl_df"))
 		data = dplyr::as_tibble(data)
-
 	# Return a bare data frame is the geometry column is no longer there
 	if (!sfc_name %in% names(data))
 		return(data)
-
 	prec = st_precision(template)
 	crs = st_crs(template)
-
 	st_as_sf(
 		data,
 		sf_column_name = sfc_name,
@@ -41,6 +39,12 @@ group_split.sf <- function(.tbl, ..., .keep = TRUE) {
 #' if (require(dplyr, quietly = TRUE)) {
 #'  nc = read_sf(system.file("shape/nc.shp", package="sf"))
 #'  nc %>% filter(AREA > .1) %>% plot()
+#'  # plot 10 smallest counties in grey:
+#'  st_geometry(nc) %>% plot()
+#'  nc %>% select(AREA) %>% arrange(AREA) %>% slice(1:10) %>% plot(add = TRUE, col = 'grey')
+#'  title("the ten counties with smallest area")
+#'  nc2 <- nc %>% mutate(area10 = AREA/10)
+#'  nc %>% slice(1:2)
 #' }
 filter.sf <- function(.data, ..., .dots) {
 	agr = st_agr(.data)
@@ -104,7 +108,6 @@ rowwise.sf <- function(x, ...) {
 		class = c("sf", class(x)))
 }
 
-
 #' @name tidyverse
 #' @examples
 #' if (require(dplyr, quietly = TRUE)) {
@@ -117,6 +120,7 @@ mutate.sf <- function(.data, ..., .dots) {
 	class(.data) <- setdiff(class(.data), "sf")
 	.re_sf(NextMethod(), sf_column_name = sf_column_name, agr)
 }
+
 
 #' @name tidyverse
 #' @examples
@@ -234,6 +238,7 @@ slice.sf <- function(.data, ..., .dots) {
 	st_as_sf(NextMethod(), sf_column_name = sf_column)
 }
 
+
 #' @name tidyverse
 #' @aliases summarise
 #' @param do_union logical; in case \code{summary} does not create a geometry column, should geometries be created by unioning using \link{st_union}, or simply by combining using \link{st_combine}? Using \link{st_union} resolves internal boundaries, but in case of unioning points, this will likely change the order of the points; see Details.
@@ -350,6 +355,7 @@ gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, fac
 }
 
 #' @name tidyverse
+#' @param template see original function docs
 #' @param data see original function docs
 #' @param cols see original function docs
 #' @param names_to see original function docs
@@ -586,6 +592,13 @@ pillar_shaft.sfc <- function(x, ...) {
 	pillar::new_pillar_shaft_simple(out, align = "right", min_width = 25)
 }
 
+#' @name tidyverse
+drop_na.sf <- function(x, ...) {
+	sf_column_name = attr(x, "sf_column")
+	class(x) <- setdiff(class(x), "sf")
+	st_as_sf(NextMethod(), sf_column_name = sf_column_name)
+}
+
 #nocov start
 register_all_s3_methods = function() {
 	has_dplyr_1.0 =
@@ -594,7 +607,6 @@ register_all_s3_methods = function() {
 
 	if (has_dplyr_1.0)
 		register_s3_method("dplyr", "dplyr_reconstruct", "sf")
-
 	register_s3_method("dplyr", "anti_join", "sf")
 	register_s3_method("dplyr", "arrange", "sf")
 	register_s3_method("dplyr", "distinct", "sf")
@@ -617,6 +629,7 @@ register_all_s3_methods = function() {
 	register_s3_method("dplyr", "summarise", "sf")
 	register_s3_method("dplyr", "transmute", "sf")
 	register_s3_method("dplyr", "ungroup", "sf")
+	register_s3_method("tidyr", "drop_na", "sf")
 	register_s3_method("tidyr", "gather", "sf")
 	register_s3_method("tidyr", "pivot_longer", "sf")
 	register_s3_method("tidyr", "pivot_wider", "sf")

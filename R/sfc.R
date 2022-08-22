@@ -471,7 +471,7 @@ typed_empty = function(cls, ncol = 2, dim = "XY") {
 #' retrieve coordinates in matrix form
 #' @param x object of class sf, sfc or sfg
 #' @param ... ignored
-#' @return matrix with coordinates (X, Y, possibly Z and/or M) in rows, possibly followed by integer indicators \code{L1},...,\code{L3} that point out to which structure the coordinate belongs; for \code{POINT} this is absent (each coordinate is a feature), for \code{LINESTRING} \code{L1} refers to the feature, for \code{MULTIPOLYGON} \code{L1} refers to the main ring or holes, \code{L2} to the ring id in the \code{MULTIPOLYGON}, and \code{L3} to the simple feature.
+#' @return matrix with coordinates (X, Y, possibly Z and/or M) in rows, possibly followed by integer indicators \code{L1},...,\code{L3} that point out to which structure the coordinate belongs; for \code{POINT} this is absent (each coordinate is a feature), for \code{LINESTRING} \code{L1} refers to the feature, for \code{MULTILINESTRING} \code{L1} refers to the part and \code{L2} to the simple feature, for \code{POLYGON} \code{L1} refers to the main ring or holes and \code{L2} to the simple feature, for \code{MULTIPOLYGON} \code{L1} refers to the main ring or holes, \code{L2} to the ring id in the \code{MULTIPOLYGON}, and \code{L3} to the simple feature.
 #' @export
 st_coordinates = function(x, ...) UseMethod("st_coordinates")
 

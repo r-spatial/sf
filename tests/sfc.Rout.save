@@ -1,5 +1,5 @@
 
-R version 4.2.0 (2022-04-22) -- "Vigorous Calisthenics"
+R version 4.2.1 (2022-06-23) -- "Funny-Looking Kid"
 Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -835,9 +835,8 @@ The following object is masked from 'package:dplyr':
 
 xmin ymin xmax ymax 
 -180  -90  180   90 
-Warning messages:
-1: no function found corresponding to methods exports from 'raster' for: 'area' 
-2: In showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj = prefer_proj) :
+Warning message:
+In showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj = prefer_proj) :
   Discarded datum Amersfoort in Proj4 definition
 > 
 > # st_to_s2
@@ -1090,5 +1089,5 @@ CRS:           NA
 > 
 > proc.time()
    user  system elapsed 
- 10.773   0.216  10.985 
+  9.106   0.771   8.984 
 

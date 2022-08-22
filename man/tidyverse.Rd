@@ -2,6 +2,7 @@
 % Please edit documentation in R/tidyverse.R, R/join.R
 \name{tidyverse}
 \alias{tidyverse}
+\alias{dplyr_reconstruct.sf}
 \alias{filter.sf}
 \alias{arrange.sf}
 \alias{group_by.sf}
@@ -26,6 +27,7 @@
 \alias{separate_rows.sf}
 \alias{unite.sf}
 \alias{unnest.sf}
+\alias{drop_na.sf}
 \alias{inner_join.sf}
 \alias{left_join.sf}
 \alias{right_join.sf}
@@ -34,6 +36,8 @@
 \alias{anti_join.sf}
 \title{Tidyverse methods for sf objects (remove .sf suffix!)}
 \usage{
+dplyr_reconstruct.sf(data, template)
+
 filter.sf(.data, ..., .dots)
 
 arrange.sf(.data, ..., .dots)
@@ -140,6 +144,8 @@ unite.sf(data, col, ..., sep = "_", remove = TRUE)
 
 unnest.sf(data, ..., .preserve = NULL)
 
+drop_na.sf(x, ...)
+
 inner_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 
 left_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
@@ -153,6 +159,10 @@ semi_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 anti_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 }
 \arguments{
+\item{data}{see original function docs}
+
+\item{template}{see original function docs}
+
 \item{.data}{data object of class \link{sf}}
 
 \item{...}{other arguments}
@@ -161,7 +171,7 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 
 \item{add}{see corresponding function in dplyr}
 
-\item{x}{A pair of data frames, data frame extensions (e.g. a tibble), or
+\item{x, y}{A pair of data frames, data frame extensions (e.g. a tibble), or
 lazy data frames (e.g. from dbplyr or dtplyr). See \emph{Methods}, below, for
 more details.}
 
@@ -170,8 +180,6 @@ more details.}
 \item{is_coverage}{logical; if \code{do_union} is \code{TRUE}, use an optimized algorithm for features that form a polygonal coverage (have no overlaps)}
 
 \item{.keep_all}{see corresponding function in dplyr}
-
-\item{data}{see original function docs}
 
 \item{key}{see original function docs}
 
@@ -247,10 +255,6 @@ more details.}
 
 \item{.preserve}{see \link[tidyr:nest]{unnest}}
 
-\item{y}{A pair of data frames, data frame extensions (e.g. a tibble), or
-lazy data frames (e.g. from dbplyr or dtplyr). See \emph{Methods}, below, for
-more details.}
-
 \item{by}{A character vector of variables to join by.
 
 If \code{NULL}, the default, \verb{*_join()} will perform a natural join, using all
@@ -299,6 +303,12 @@ In case \code{do_union} is \code{FALSE}, \code{summarise} will simply combine ge
 if (require(dplyr, quietly = TRUE)) {
  nc = read_sf(system.file("shape/nc.shp", package="sf"))
  nc \%>\% filter(AREA > .1) \%>\% plot()
+ # plot 10 smallest counties in grey:
+ st_geometry(nc) \%>\% plot()
+ nc \%>\% select(AREA) \%>\% arrange(AREA) \%>\% slice(1:10) \%>\% plot(add = TRUE, col = 'grey')
+ title("the ten counties with smallest area")
+ nc2 <- nc \%>\% mutate(area10 = AREA/10)
+ nc \%>\% slice(1:2)
 }
 # plot 10 smallest counties in grey:
 if (require(dplyr, quietly = TRUE)) {
