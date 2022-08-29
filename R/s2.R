@@ -10,14 +10,12 @@
 #' @return \code{sf_use_s2} returns the value of this variable before (re)setting it,
 #' invisibly if \code{use_s2} is not missing.
 sf_use_s2 = function(use_s2) {
-	ret_val = get(".sf.use_s2", envir = .sf_cache)
+	ret_val = getOption("sf_use_s2", default = TRUE)
 	if (! missing(use_s2)) {
 		stopifnot(is.logical(use_s2), length(use_s2)==1, !is.na(use_s2))
-		if (use_s2 && !requireNamespace("s2", quietly = TRUE))
-			stop("package s2 not available: install it first?")
 		if (ret_val != use_s2)
 			message(paste0("Spherical geometry (s2) switched ", ifelse(use_s2, "on", "off")))
-		assign(".sf.use_s2", use_s2, envir = .sf_cache)
+		options(sf_use_s2 = use_s2)
 		invisible(ret_val)
 	} else
 		ret_val
@@ -40,18 +38,18 @@ st_as_sf.s2_geography = function(x, ..., crs = st_crs(4326)) {
 }
 
 # dynamically exported in tidyverse.R
-as_s2_geography.sfg <- function(x, ..., oriented = FALSE) {
+as_s2_geography.sfg <- function(x, ..., oriented = getOption("s2_oriented", FALSE)) {
 	b = structure(list(st_as_binary(x)), class = "WKB")
 	s2::as_s2_geography(b, ..., oriented = oriented)
 }
 
 # dynamically exported in tidyverse.R
-as_s2_geography.sfc <- function(x, ..., oriented = FALSE) {
+as_s2_geography.sfc <- function(x, ..., oriented = getOption("s2_oriented", FALSE)) {
 	st_as_s2.sfc(x, ..., oriented = oriented)
 }
 
 # dynamically exported in tidyverse.R
-as_s2_geography.sf <- function(x, ..., oriented = FALSE) {
+as_s2_geography.sf <- function(x, ..., oriented = getOption("s2_oriented", FALSE)) {
 	st_as_s2.sf(x, ..., oriented = oriented)
 }
 
@@ -88,7 +86,7 @@ st_as_s2.sf = function(x, ...) st_as_s2(st_geometry(x), ...)
 #' left of the polygon's path.
 #' @param rebuild logical; call \link[s2]{s2_rebuild} on the geometry (think of this as a \code{st_make_valid} on the sphere)
 #' @export
-st_as_s2.sfc = function(x, ..., oriented = FALSE, rebuild = FALSE) {
+st_as_s2.sfc = function(x, ..., oriented = getOption("s2_oriented", FALSE), rebuild = FALSE) {
 	if (!is.na(st_crs(x)) && !st_is_longlat(x))
 		x = st_transform(x, ifelse(st_axis_order(), "OGC:CRS84", "EPSG:4326"))
 	if (length(x) && nchar(class(x[[1]])[1]) > 2) { # Z, M, ZM:

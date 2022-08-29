@@ -1,8 +1,18 @@
+# version 1.0-9
+
+* add `Fibonacci` as a spatial sampling type in `st_sample()`
+
+* use the global `options("sf_use_s2")` to determine whether to use s2, rather than a value in a local environment; #1977
+
+* fix utils `mdiminfo` and `mdimtranslate` in `gdal_utils()` 
+
+* extend arguments of `gdal_read_mdim()` needed by `stars::read_mdim()` if `stars` >= 0.5-7; add `gdal_write_mdim()`
+
+* add `drop_na()` method for `sf` objects; #1975
+
 # version 1.0-8
 
 * `st_drop_geometry.default()` returns `x` unmodified;
-
-* `dplyr_col_modify.sf()` and `dplyr_row_slice.sf()` now replace `sf` methods for `filter`, `slice`, `arrange`, and `mutate`; #1958, #1963 by @huizezhang-sherry 
 
 * `sf_project()` accepts 3- or 4-column matrices, containing z and t values;
 

@@ -364,21 +364,23 @@ Rcpp::LogicalVector CPL_gdalgrid(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 Rcpp::CharacterVector CPL_gdalmdiminfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options,
 		Rcpp::CharacterVector oo) { 
 	std::vector <char *> oo_char = create_options(oo, true);
-	GDALDatasetH ds = GDALOpenEx((const char *) obj[0], GA_ReadOnly, NULL, oo_char.data(), NULL);
-	if (ds == NULL)
-		return 1; // #nocov
+	GDALDatasetH ds = GDALOpenEx((const char *) obj[0], GDAL_OF_MULTIDIM_RASTER | GDAL_OF_VERBOSE_ERROR , NULL, oo_char.data(), NULL);
+	if (ds == NULL) {
+		Rcpp::Rcout << "failed to open " << obj[0] << std::endl;
+		Rcpp::stop("Error opening data source");
+	}
 	std::vector <char *> options_char = create_options(options, true);
 	GDALMultiDimInfoOptions* opt = GDALMultiDimInfoOptionsNew(options_char.data(), NULL);
 	char *ret_val = GDALMultiDimInfo(ds, opt);
 	GDALMultiDimInfoOptionsFree(opt);
 	GDALClose(ds);
-	Rcpp::CharacterVector ret(1);
 	if (ret_val != NULL) {
-		ret[0] = ret_val; // copies?
+		Rcpp::CharacterVector ret(1);
+		ret[0] = ret_val;
 		CPLFree(ret_val);
+		return ret;
 	} else
 		Rcpp::stop("GDALMultiDimInfo returned NULL");
-	return ret;
 }
 
 // [[Rcpp::export]]
@@ -394,21 +396,21 @@ Rcpp::LogicalVector CPL_gdalmdimtranslate(Rcpp::CharacterVector src, Rcpp::Chara
 
 	if (! quiet)
 		GDALMultiDimTranslateOptionsSetProgress(opt, GDALRProgress, NULL);
-	GDALDatasetH src_pt = GDALOpenEx((const char *) src[0], GDAL_OF_RASTER | GA_ReadOnly, 
-		NULL, oo_char.data(), NULL);
-	if (src_pt == NULL)
-		return 1; // #nocov
 	std::vector<GDALDatasetH> srcpt(src.size());
 	for (int i = 0; i < src.size(); i++) {
-		srcpt[i] = GDALOpenEx((const char *) src[i], GDAL_OF_RASTER | GA_ReadOnly, NULL, 
+		srcpt[i] = GDALOpenEx((const char *) src[i], GDAL_OF_RASTER | GDAL_OF_MULTIDIM_RASTER | GDAL_OF_VERBOSE_ERROR, NULL, 
 			oo_char.data(), NULL);
-		if (srcpt[i] == NULL)
-			Rcpp::stop("cannot open source dataset");
+		if (srcpt[i] == NULL) {
+			Rcpp::Rcout << "dataset: " << src[i] << ": " << std::endl;
+			Rcpp::stop("Cannot open source dataset");
+		}
 	}
 	GDALDatasetH result = GDALMultiDimTranslate((const char *) dst[0], NULL, srcpt.size(), srcpt.data(), opt, &err);
 	GDALMultiDimTranslateOptionsFree(opt);
 	if (result != NULL)
 		GDALClose(result);
+	else 
+		Rcpp::stop("failed to open destination data set");
 	for (int i = 0; i < src.size(); i++)
 		GDALClose(srcpt[i]);
 	return result == NULL || err;

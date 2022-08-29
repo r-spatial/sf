@@ -3,45 +3,24 @@
 #	 st_as_sf(NextMethod()) # nocov
 #}
 
-#' @name tidyverse
-dplyr_col_modify.sf <- function(data, cols){
-	x <- NextMethod()
-	dplyr_reconstruct.sf(x, data)
-}
-
-#' @name tidyverse
-dplyr_row_slice.sf <- function(data, i, ...){
-	x <- NextMethod()	
-	dplyr_reconstruct.sf(x, data)
-}
-
 # This is currently only used in `bind_rows()` and `bind_cols()`
 # because sf overrides all default implementations
 #' @name tidyverse
 dplyr_reconstruct.sf = function(data, template) {
 	sfc_name = attr(template, "sf_column")
-	class(data) = setdiff(class(template), "sf")
-
-	# Return a bare data frame is the geometry column is no longer there or invalid:
-	if (!sfc_name %in% names(data) || !inherits(data[[sfc_name]], "sfc"))
-		data
-	else {
-		prec = st_precision(template)
-		crs = st_crs(template)
-		agr = if (!is.null(agr <- attr(data, "agr")) && is.factor(agr)) {
-				att = names(data)[!sapply(data, inherits, what = "sfc")] # non-sfc columns
-				setNames(agr[att], att) # NA's new columns
-			} else
-				NA_agr_
-
-		st_as_sf(
-			data,
-			sf_column_name = sfc_name,
-			crs = crs,
-			precision = prec,
-			agr = agr
-		)
-	}
+	if (inherits(template, "tbl_df"))
+		data = dplyr::as_tibble(data)
+	# Return a bare data frame is the geometry column is no longer there
+	if (!sfc_name %in% names(data))
+		return(data)
+	prec = st_precision(template)
+	crs = st_crs(template)
+	st_as_sf(
+		data,
+		sf_column_name = sfc_name,
+		crs = crs,
+		precision = prec
+	)
 }
 
 group_split.sf <- function(.tbl, ..., .keep = TRUE) {
@@ -61,12 +40,33 @@ group_split.sf <- function(.tbl, ..., .keep = TRUE) {
 #'  nc = read_sf(system.file("shape/nc.shp", package="sf"))
 #'  nc %>% filter(AREA > .1) %>% plot()
 #'  # plot 10 smallest counties in grey:
-#' st_geometry(nc) %>% plot()
-#' nc %>% select(AREA) %>% arrange(AREA) %>% slice(1:10) %>% plot(add = TRUE, col = 'grey')
-#' title("the ten counties with smallest area")
-#' nc2 <- nc %>% mutate(area10 = AREA/10)
-#' nc %>% slice(1:2)
+#'  st_geometry(nc) %>% plot()
+#'  nc %>% select(AREA) %>% arrange(AREA) %>% slice(1:10) %>% plot(add = TRUE, col = 'grey')
+#'  title("the ten counties with smallest area")
+#'  nc2 <- nc %>% mutate(area10 = AREA/10)
+#'  nc %>% slice(1:2)
 #' }
+filter.sf <- function(.data, ..., .dots) {
+	agr = st_agr(.data)
+	class(.data) <- setdiff(class(.data), "sf")
+	.re_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"), agr)
+}
+
+#' @name tidyverse
+#' @examples
+#' # plot 10 smallest counties in grey:
+#' if (require(dplyr, quietly = TRUE)) {
+#'  st_geometry(nc) %>% plot()
+#'  nc %>% select(AREA) %>% arrange(AREA) %>% slice(1:10) %>% plot(add = TRUE, col = 'grey')
+#'  title("the ten counties with smallest area")
+#' }
+arrange.sf <- function(.data, ..., .dots) {
+	sf_column_name = attr(.data, "sf_column")
+	class(.data) = setdiff(class(.data), "sf")
+	st_as_sf(NextMethod(), sf_column_name = sf_column_name)
+}
+
+#' @name tidyverse
 #' @param add see corresponding function in dplyr
 #' @examples
 #' if (require(dplyr, quietly = TRUE)) {
@@ -106,6 +106,19 @@ rowwise.sf <- function(x, ...) {
 		sf_column = sf_column_name,
 		agr = agr,
 		class = c("sf", class(x)))
+}
+
+#' @name tidyverse
+#' @examples
+#' if (require(dplyr, quietly = TRUE)) {
+#'  nc2 <- nc %>% mutate(area10 = AREA/10)
+#' }
+mutate.sf <- function(.data, ..., .dots) {
+	#st_as_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"))
+	agr = st_agr(.data)
+	sf_column_name = attr(.data, "sf_column")
+	class(.data) <- setdiff(class(.data), "sf")
+	.re_sf(NextMethod(), sf_column_name = sf_column_name, agr)
 }
 
 
@@ -213,6 +226,18 @@ rename.sf <- function(.data, ...) {
 
 	st_set_agr(st_as_sf(ret, sf_column_name = sf_column), agr)
 }
+
+#' @name tidyverse
+#' @examples
+#' if (require(dplyr, quietly = TRUE)) {
+#'  nc %>% slice(1:2)
+#' }
+slice.sf <- function(.data, ..., .dots) {
+	class(.data) <- setdiff(class(.data), "sf")
+	sf_column <- attr(.data, "sf_column")
+	st_as_sf(NextMethod(), sf_column_name = sf_column)
+}
+
 
 #' @name tidyverse
 #' @aliases summarise
@@ -330,7 +355,6 @@ gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, fac
 }
 
 #' @name tidyverse
-#' @param i see original function docs
 #' @param template see original function docs
 #' @param data see original function docs
 #' @param cols see original function docs
@@ -568,6 +592,13 @@ pillar_shaft.sfc <- function(x, ...) {
 	pillar::new_pillar_shaft_simple(out, align = "right", min_width = 25)
 }
 
+#' @name tidyverse
+drop_na.sf <- function(x, ...) {
+	sf_column_name = attr(x, "sf_column")
+	class(x) <- setdiff(class(x), "sf")
+	st_as_sf(NextMethod(), sf_column_name = sf_column_name)
+}
+
 #nocov start
 register_all_s3_methods = function() {
 	has_dplyr_1.0 =
@@ -575,17 +606,18 @@ register_all_s3_methods = function() {
 		utils::packageVersion("dplyr") >= "0.8.99.9000"
 
 	if (has_dplyr_1.0)
-	register_s3_method("dplyr", "dplyr_reconstruct", "sf")
-	register_s3_method("dplyr", "dplyr_row_slice", "sf")
-	register_s3_method("dplyr", "dplyr_col_modify", "sf")
+		register_s3_method("dplyr", "dplyr_reconstruct", "sf")
 	register_s3_method("dplyr", "anti_join", "sf")
+	register_s3_method("dplyr", "arrange", "sf")
 	register_s3_method("dplyr", "distinct", "sf")
+	register_s3_method("dplyr", "filter", "sf")
 	register_s3_method("dplyr", "full_join", "sf")
 	register_s3_method("dplyr", "group_by", "sf")
 #	register_s3_method("dplyr", "group_map", "sf")
 	register_s3_method("dplyr", "group_split", "sf")
 	register_s3_method("dplyr", "inner_join", "sf")
 	register_s3_method("dplyr", "left_join", "sf")
+	register_s3_method("dplyr", "mutate", "sf")
 	register_s3_method("dplyr", "rename", "sf")
 	register_s3_method("dplyr", "right_join", "sf")
 	register_s3_method("dplyr", "rowwise", "sf")
@@ -593,9 +625,11 @@ register_all_s3_methods = function() {
 	register_s3_method("dplyr", "sample_n", "sf")
 	register_s3_method("dplyr", "select", "sf")
 	register_s3_method("dplyr", "semi_join", "sf")
+	register_s3_method("dplyr", "slice", "sf")
 	register_s3_method("dplyr", "summarise", "sf")
 	register_s3_method("dplyr", "transmute", "sf")
 	register_s3_method("dplyr", "ungroup", "sf")
+	register_s3_method("tidyr", "drop_na", "sf")
 	register_s3_method("tidyr", "gather", "sf")
 	register_s3_method("tidyr", "pivot_longer", "sf")
 	register_s3_method("tidyr", "pivot_wider", "sf")

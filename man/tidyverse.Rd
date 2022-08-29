@@ -2,15 +2,17 @@
 % Please edit documentation in R/tidyverse.R, R/join.R
 \name{tidyverse}
 \alias{tidyverse}
-\alias{dplyr_col_modify.sf}
-\alias{dplyr_row_slice.sf}
 \alias{dplyr_reconstruct.sf}
+\alias{filter.sf}
+\alias{arrange.sf}
 \alias{group_by.sf}
 \alias{ungroup.sf}
 \alias{rowwise.sf}
+\alias{mutate.sf}
 \alias{transmute.sf}
 \alias{select.sf}
 \alias{rename.sf}
+\alias{slice.sf}
 \alias{summarise.sf}
 \alias{summarise}
 \alias{distinct.sf}
@@ -25,6 +27,7 @@
 \alias{separate_rows.sf}
 \alias{unite.sf}
 \alias{unnest.sf}
+\alias{drop_na.sf}
 \alias{inner_join.sf}
 \alias{left_join.sf}
 \alias{right_join.sf}
@@ -33,11 +36,11 @@
 \alias{anti_join.sf}
 \title{Tidyverse methods for sf objects (remove .sf suffix!)}
 \usage{
-dplyr_col_modify.sf(data, cols)
-
-dplyr_row_slice.sf(data, i, ...)
-
 dplyr_reconstruct.sf(data, template)
+
+filter.sf(.data, ..., .dots)
+
+arrange.sf(.data, ..., .dots)
 
 group_by.sf(.data, ..., add = FALSE)
 
@@ -45,11 +48,15 @@ ungroup.sf(x, ...)
 
 rowwise.sf(x, ...)
 
+mutate.sf(.data, ..., .dots)
+
 transmute.sf(.data, ..., .dots)
 
 select.sf(.data, ...)
 
 rename.sf(.data, ...)
+
+slice.sf(.data, ..., .dots)
 
 summarise.sf(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE)
 
@@ -137,6 +144,8 @@ unite.sf(data, col, ..., sep = "_", remove = TRUE)
 
 unnest.sf(data, ..., .preserve = NULL)
 
+drop_na.sf(x, ...)
+
 inner_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 
 left_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
@@ -152,23 +161,19 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 \arguments{
 \item{data}{see original function docs}
 
-\item{cols}{see original function docs}
-
-\item{i}{see original function docs}
-
-\item{...}{other arguments}
-
 \item{template}{see original function docs}
 
 \item{.data}{data object of class \link{sf}}
 
-\item{add}{see corresponding function in dplyr}
-
-\item{x}{A pair of data frames, data frame extensions (e.g. a tibble), or
-lazy data frames (e.g. from dbplyr or dtplyr). See \emph{Methods}, below, for
-more details.}
+\item{...}{other arguments}
 
 \item{.dots}{see corresponding function in package \code{dplyr}}
+
+\item{add}{see corresponding function in dplyr}
+
+\item{x, y}{A pair of data frames, data frame extensions (e.g. a tibble), or
+lazy data frames (e.g. from dbplyr or dtplyr). See \emph{Methods}, below, for
+more details.}
 
 \item{do_union}{logical; in case \code{summary} does not create a geometry column, should geometries be created by unioning using \link{st_union}, or simply by combining using \link{st_combine}? Using \link{st_union} resolves internal boundaries, but in case of unioning points, this will likely change the order of the points; see Details.}
 
@@ -185,6 +190,8 @@ more details.}
 \item{convert}{see \link[tidyr]{separate_rows}}
 
 \item{factor_key}{see original function docs}
+
+\item{cols}{see original function docs}
 
 \item{names_to}{see original function docs}
 
@@ -248,10 +255,6 @@ more details.}
 
 \item{.preserve}{see \link[tidyr:nest]{unnest}}
 
-\item{y}{A pair of data frames, data frame extensions (e.g. a tibble), or
-lazy data frames (e.g. from dbplyr or dtplyr). See \emph{Methods}, below, for
-more details.}
-
 \item{by}{A character vector of variables to join by.
 
 If \code{NULL}, the default, \verb{*_join()} will perform a natural join, using all
@@ -301,15 +304,24 @@ if (require(dplyr, quietly = TRUE)) {
  nc = read_sf(system.file("shape/nc.shp", package="sf"))
  nc \%>\% filter(AREA > .1) \%>\% plot()
  # plot 10 smallest counties in grey:
-st_geometry(nc) \%>\% plot()
-nc \%>\% select(AREA) \%>\% arrange(AREA) \%>\% slice(1:10) \%>\% plot(add = TRUE, col = 'grey')
-title("the ten counties with smallest area")
-nc2 <- nc \%>\% mutate(area10 = AREA/10)
-nc \%>\% slice(1:2)
+ st_geometry(nc) \%>\% plot()
+ nc \%>\% select(AREA) \%>\% arrange(AREA) \%>\% slice(1:10) \%>\% plot(add = TRUE, col = 'grey')
+ title("the ten counties with smallest area")
+ nc2 <- nc \%>\% mutate(area10 = AREA/10)
+ nc \%>\% slice(1:2)
+}
+# plot 10 smallest counties in grey:
+if (require(dplyr, quietly = TRUE)) {
+ st_geometry(nc) \%>\% plot()
+ nc \%>\% select(AREA) \%>\% arrange(AREA) \%>\% slice(1:10) \%>\% plot(add = TRUE, col = 'grey')
+ title("the ten counties with smallest area")
 }
 if (require(dplyr, quietly = TRUE)) {
  nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
  nc \%>\% group_by(area_cl) \%>\% class()
+}
+if (require(dplyr, quietly = TRUE)) {
+ nc2 <- nc \%>\% mutate(area10 = AREA/10)
 }
 if (require(dplyr, quietly = TRUE)) {
  nc \%>\% transmute(AREA = AREA/10, geometry = geometry) \%>\% class()
@@ -323,6 +335,9 @@ if (require(dplyr, quietly = TRUE)) {
 }
 if (require(dplyr, quietly = TRUE)) {
  nc2 <- nc \%>\% rename(area = AREA)
+}
+if (require(dplyr, quietly = TRUE)) {
+ nc \%>\% slice(1:2)
 }
 if (require(dplyr, quietly = TRUE)) {
  nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))

@@ -452,7 +452,7 @@ as.data.frame.sf = function(x, ...) {
 
 #' @export
 #' @name st_geometry
-#' @details if \code{x} is of class \code{sf}, \code{st_drop_geometry} drops the geometry of its argument, and reclasses it accordingly; otherwise it does nothing.
+#' @details if \code{x} is of class \code{sf}, \code{st_drop_geometry} drops the geometry of its argument, and reclasses it accordingly; otherwise it returns \code{x} unmodified. 
 st_drop_geometry = function(x, ...) UseMethod("st_drop_geometry")
 
 #' @export

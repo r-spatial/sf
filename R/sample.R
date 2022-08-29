@@ -19,7 +19,7 @@ st_sample = function(x, size, ...) UseMethod("st_sample")
 #' @param size sample size(s) requested; either total size, or a numeric vector with sample sizes for each feature geometry. When sampling polygons, the returned sampling size may differ from the requested size, as the bounding box is sampled, and sampled points intersecting the polygon are returned.
 #' @param warn_if_not_integer logical; if \code{FALSE} then no warning is emitted if \code{size} is not an integer
 #' @param ... passed on to \link[base]{sample} for \code{multipoint} sampling, or to \code{spatstat} functions for spatstat sampling types (see details)
-#' @param type character; indicates the spatial sampling type; one of \code{random}, \code{hexagonal} (triangular really), \code{regular},
+#' @param type character; indicates the spatial sampling type; one of \code{random}, \code{hexagonal} (triangular really), \code{regular}, \code{Fibonacci},
 #' or one of the \code{spatstat} methods such as \code{Thomas} for calling \code{spatstat.random::rThomas} (see Details).
 #' @param exact logical; should the length of output be exactly
 #' @param by_polygon logical; for \code{MULTIPOLYGON} geometries, should the effort be split by \code{POLYGON}? See https://github.com/r-spatial/sf/issues/1480
@@ -27,11 +27,14 @@ st_sample = function(x, size, ...) UseMethod("st_sample")
 #' when \code{type = "random"}.
 #' @param progress logical; if \code{TRUE} show progress bar (only if \code{size} is a vector).
 #' @return an \code{sfc} object containing the sampled \code{POINT} geometries
-#' @details if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{http://mathworld.wolfram.com/SpherePointPicking.html}
+#' @details if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{http://mathworld.wolfram.com/SpherePointPicking.html}. 
 #'
 #' For \code{regular} or \code{hexagonal} sampling of polygons, the resulting size is only an approximation.
 #'
 #' As parameter called \code{offset} can be passed to control ("fix") regular or hexagonal sampling: for polygons a length 2 numeric vector (by default: a random point from \code{st_bbox(x)}); for lines use a number like \code{runif(1)}.
+#' 
+#' Fibonacci sampling see: Alvaro Gonzalez, 2010. Measurement of Areas on a Sphere Using Fibonacci and Latitude-Longitude Lattices. 
+#' Mathematical Geosciences 42(1), p. 49-64
 #'
 #' Sampling methods from package \code{spatstat} are interfaced (see examples), and need their own parameters to be set. 
 #' For instance, to use \code{spatstat.random::rThomas()}, set \code{type = "Thomas"}.
@@ -144,7 +147,7 @@ st_poly_sample = function(x, size, ..., type = "random",
 		a = sapply(x, st_area)
 		ret = mapply(st_poly_sample, x, size = size * a / sum_a, type = type, ...)
 		do.call(c, ret)
-	} else if (type %in% c("hexagonal", "regular", "random")) {
+	} else if (type %in% c("hexagonal", "regular", "random", "Fibonacci")) {
 
 		if (isTRUE(st_is_longlat(x))) {
 			if (type == "regular") {
@@ -153,7 +156,8 @@ st_poly_sample = function(x, size, ..., type = "random",
 			}
 			if (type == "hexagonal")
 				stop("hexagonal sampling on geographic coordinates not supported; consider projecting first")
-		}
+		} else if (type == "Fibonacci")
+			stop("Fibonacci sampling requires geographic (longlat) coordinates")
 
 		a0 = as.numeric(st_area(st_make_grid(x, n = c(1,1))))
 		a1 = as.numeric(sum(st_area(x)))
@@ -189,6 +193,10 @@ st_poly_sample = function(x, size, ..., type = "random",
 					runif(size, bb[2], bb[4])
 				m = cbind(lon, lat)
 				colnames(m) = NULL
+				st_sfc(lapply(seq_len(nrow(m)), function(i) st_point(m[i,])), crs = st_crs(x))
+			} else if (type == "Fibonacci") {
+				bb = st_bbox(x)
+				m = fiboGrid(size %/% 2, bb[c("xmin", "xmax")], bb[c("ymin", "ymax")])
 				st_sfc(lapply(seq_len(nrow(m)), function(i) st_point(m[i,])), crs = st_crs(x))
 			}
 		pts[x] # cut out x from bbox
@@ -260,6 +268,20 @@ hex_grid_points = function(obj, pt, dx) {
 	xy = cbind(x, y)[x >= xlim[1] & x <= xlim[2] & y >= ylim[1] & y <= ylim[2], , drop = FALSE]
 	colnames(xy) = NULL
 	st_sfc(lapply(seq_len(nrow(xy)), function(i) st_point(xy[i,])), crs = st_crs(bb))
+}
+
+fiboGrid <- function(N, xlim = c(-180,180), ylim = c(-90,90)) {
+	if (max(xlim) <= 180)
+		subtr = 180
+	else
+		subtr = 0
+    phi = (1 + sqrt(5))/2
+    i = seq(-N, N)
+    P = 2 * N + 1
+    lat = asin(2*i / P) * 180 / pi
+    lon = ((2 * pi * i / phi) %% pi) * 360 / pi - subtr
+    sel = lon <= xlim[2] & lon >= xlim[1] & lat <= ylim[2] & lat >= ylim[1]
+    cbind(lon, lat)[sel, ]
 }
 
 st_sample_exact = function(x, size, ..., type, by_polygon) {
