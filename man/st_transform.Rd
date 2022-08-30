@@ -131,6 +131,8 @@ if (require(maps, quietly = TRUE)) {
 sf_proj_info("datum")
 }
 \seealso{
+Projecting simple feature geometries 
+to projections not supported by GDAL may be done by 
 \link[lwgeom]{st_transform_proj}, part of package lwgeom.
 
 \link{sf_project} projects a matrix of coordinates, bypassing GDAL altogether

@@ -23,7 +23,9 @@ vec_cast.sfc(x, to, ...)
 \method{vec_cast.sfc}{default}(x, to, ...)
 }
 \arguments{
-\item{x, y}{Vector types.}
+\item{x}{Vector types.}
+
+\item{y}{Vector types.}
 
 \item{...}{These dots are for future extensions and must be empty.}
 
