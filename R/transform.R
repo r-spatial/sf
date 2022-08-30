@@ -62,9 +62,7 @@ sanity_check = function(x) {
 #' \code{"EPSG:4326"}. Extra care is needed with the ESRI Shapefile format,
 #' because WKT1 does not store axis order unambigiously.
 #'
-#' @seealso Projecting simple feature geometries 
-#' to projections not supported by GDAL may be done by 
-#' \link[lwgeom]{st_transform_proj}, part of package lwgeom.
+#' @seealso \link[lwgeom]{st_transform_proj}, part of package lwgeom.
 #' 
 #' \link{sf_project} projects a matrix of coordinates, bypassing GDAL altogether
 #' @examples
