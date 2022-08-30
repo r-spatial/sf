@@ -9,6 +9,7 @@
 \alias{st_set_geometry}
 \alias{st_drop_geometry}
 \alias{st_drop_geometry.sf}
+\alias{st_drop_geometry.default}
 \title{Get, set, replace or rename geometry from an sf object}
 \usage{
 \method{st_geometry}{sfc}(obj, ...)
@@ -28,6 +29,8 @@ st_set_geometry(x, value)
 st_drop_geometry(x, ...)
 
 \method{st_drop_geometry}{sf}(x, ...)
+
+\method{st_drop_geometry}{default}(x, ...)
 }
 \arguments{
 \item{obj}{object of class \code{sf} or \code{sfc}}
@@ -51,7 +54,7 @@ when applied to a \code{data.frame} and when \code{value} is an object of class 
 
 the replacement function applied to \code{sf} objects will overwrite the geometry list-column, if \code{value} is \code{NULL}, it will remove it and coerce \code{x} to a \code{data.frame}.
 
-\code{st_drop_geometry} drops the geometry of its argument, and reclasses it accordingly
+if \code{x} is of class \code{sf}, \code{st_drop_geometry} drops the geometry of its argument, and reclasses it accordingly; otherwise it returns \code{x} unmodified.
 }
 \examples{
 df = data.frame(a = 1:2)

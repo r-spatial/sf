@@ -15,12 +15,14 @@ pushViewport(st_viewport(nc))
 invisible(lapply(st_geometry(nc), function(x) grid.draw(st_as_grob(x, gp = gpar(fill = 'red')))))
 
 # POINTS:
-data(meuse, package = "sp")
-meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, agr = "constant")
-grid.newpage()
-pushViewport(st_viewport(meuse_sf))
-invisible(lapply(st_geometry(meuse_sf), 
+if (require(sp, quietly = TRUE)) {
+ data(meuse, package = "sp")
+ meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, agr = "constant")
+ grid.newpage()
+ pushViewport(st_viewport(meuse_sf))
+ invisible(lapply(st_geometry(meuse_sf), 
 	function(x) grid.draw(st_as_grob(x, gp = gpar(fill = 'red')))))
+}
 
 # MULTIPOINTS
 mp = st_multipoint(cbind(runif(100), runif(100)))
@@ -40,6 +42,7 @@ grid.newpage()
 pushViewport(st_viewport(ls))
 grid.draw(st_as_grob(ls, gp = gpar(fill = 'red')))
 
+if (require(sp, quietly = TRUE)) {
 # POINTS, right aspect in Long/Lat:
 meuse_ll = st_transform(meuse_sf, 4326)
 grid.newpage()
@@ -53,6 +56,7 @@ grid.newpage()
 pushViewport(st_viewport(meuse_ll))
 invisible(lapply(st_geometry(meuse_ll), 
 	function(x) grid.draw(st_as_grob(x, gp = gpar(fill = 'red')))))
+}
 
 gc = st_geometrycollection(list(st_point(0:1), st_linestring(matrix(1:4,2))))
 grb = st_as_grob(gc)

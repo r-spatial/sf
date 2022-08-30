@@ -1,6 +1,6 @@
 
-R version 3.5.2 (2018-12-20) -- "Eggshell Igloo"
-Copyright (C) 2018 The R Foundation for Statistical Computing
+R version 4.2.0 (2022-04-22) -- "Vigorous Calisthenics"
+Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -32,12 +32,14 @@ Type 'q()' to quit R.
 > invisible(lapply(st_geometry(nc), function(x) grid.draw(st_as_grob(x, gp = gpar(fill = 'red')))))
 > 
 > # POINTS:
-> data(meuse, package = "sp")
-> meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, agr = "constant")
-> grid.newpage()
-> pushViewport(st_viewport(meuse_sf))
-> invisible(lapply(st_geometry(meuse_sf), 
+> if (require(sp, quietly = TRUE)) {
++  data(meuse, package = "sp")
++  meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, agr = "constant")
++  grid.newpage()
++  pushViewport(st_viewport(meuse_sf))
++  invisible(lapply(st_geometry(meuse_sf), 
 + 	function(x) grid.draw(st_as_grob(x, gp = gpar(fill = 'red')))))
++ }
 > 
 > # MULTIPOINTS
 > mp = st_multipoint(cbind(runif(100), runif(100)))
@@ -57,23 +59,25 @@ Type 'q()' to quit R.
 > pushViewport(st_viewport(ls))
 > grid.draw(st_as_grob(ls, gp = gpar(fill = 'red')))
 > 
-> # POINTS, right aspect in Long/Lat:
-> meuse_ll = st_transform(meuse_sf, 4326)
-> grid.newpage()
-> pushViewport(st_viewport(meuse_ll))
-> invisible(lapply(st_geometry(meuse_ll), 
+> if (require(sp, quietly = TRUE)) {
++ # POINTS, right aspect in Long/Lat:
++ meuse_ll = st_transform(meuse_sf, 4326)
++ grid.newpage()
++ pushViewport(st_viewport(meuse_ll))
++ invisible(lapply(st_geometry(meuse_ll), 
 + 	function(x) grid.draw(st_as_grob(x, gp = gpar(fill = 'red')))))
-> 
-> # WRONG aspect:
-> st_crs(meuse_ll) = NA
-> grid.newpage()
-> pushViewport(st_viewport(meuse_ll))
-> invisible(lapply(st_geometry(meuse_ll), 
++ 
++ # WRONG aspect:
++ st_crs(meuse_ll) = NA
++ grid.newpage()
++ pushViewport(st_viewport(meuse_ll))
++ invisible(lapply(st_geometry(meuse_ll), 
 + 	function(x) grid.draw(st_as_grob(x, gp = gpar(fill = 'red')))))
++ }
 > 
 > gc = st_geometrycollection(list(st_point(0:1), st_linestring(matrix(1:4,2))))
 > grb = st_as_grob(gc)
 > 
 > proc.time()
    user  system elapsed 
-  0.620   0.035   0.647 
+  1.496   0.059   1.566 

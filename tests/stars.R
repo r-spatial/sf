@@ -8,7 +8,7 @@ try(gdal_metadata(tif, "wrongDomain"))
 gdal_metadata(tif, c("IMAGE_STRUCTURE"))
 try(length(gdal_metadata(tif, c("DERIVED_SUBDATASETS")))) # fails on Fedora 26
 
-if (require(stars)) {
+if (require(stars, quietly = TRUE)) {
   tif = system.file("tif/geomatrix.tif", package = "sf")
   r = read_stars(tif)
   d = (st_dimensions(r))

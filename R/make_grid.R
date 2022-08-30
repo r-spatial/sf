@@ -20,7 +20,7 @@
 #' # non-default offset:
 #' plot(st_make_grid(sfc, cellsize = .1, square = FALSE, offset = c(0, .05 / (sqrt(3)/2))))
 #' plot(sfc, add = TRUE)
-#' nc = read_sf(system.file("shape/nc.shp", package="sf"))
+#' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' g = st_make_grid(nc)
 #' plot(g)
 #' plot(st_geometry(nc), add = TRUE)

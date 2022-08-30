@@ -1,4 +1,4 @@
-library(testthat)
-suppressPackageStartupMessages(library(sf))
-
-test_check("sf")
+if (require(testthat, quietly = TRUE)) {
+ suppressPackageStartupMessages(library(sf))
+ test_check("sf")
+}

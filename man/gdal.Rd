@@ -69,9 +69,29 @@ gdal_rasterize(sf, x, gt, file, driver = "GTiff", options = character())
 
 gdal_extract(f, pts, bilinear = FALSE)
 
-gdal_read_mdim(file, array_name = character(0), options = character(0))
+gdal_read_mdim(
+  file,
+  array_name = character(0),
+  options = character(0),
+  offset = integer(0),
+  count = integer(0),
+  step = integer(0),
+  proxy = FALSE,
+  debug = FALSE
+)
 
-gdal_write_mdim(x, file, dimension_values, units)
+gdal_write_mdim(
+  file,
+  driver,
+  dimx,
+  cdl,
+  wkt,
+  xy,
+  ...,
+  root_group_options = character(0),
+  options = character(0),
+  as_float = TRUE
+)
 
 gdal_create(f, nxy, values, crs, xlim, ylim)
 }
@@ -80,9 +100,9 @@ gdal_create(f, nxy, values, crs, xlim, ylim)
 
 \item{...}{ignored}
 
-\item{options}{open options}
+\item{options}{character; driver specific options regarding reading or creating the dataset}
 
-\item{driver}{character; when empty vector, driver is auto-detected.}
+\item{driver}{character; driver short name; when empty vector, driver is auto-detected.}
 
 \item{read_data}{logical; if \code{FALSE}, only the imagery metadata is returned}
 
@@ -128,9 +148,27 @@ gdal_create(f, nxy, values, crs, xlim, ylim)
 
 \item{array_name}{array name}
 
-\item{dimension_values}{list with dimension values}
+\item{offset}{offset (pixels)}
 
-\item{units}{character; units names (udunits conform) corresponding to dimension_values}
+\item{count}{number of pixels to read}
+
+\item{step}{step size (pixels)}
+
+\item{proxy}{logical; return proxy object?}
+
+\item{debug}{logical; print debug messages?}
+
+\item{dimx}{integer named vector with dimensions of object}
+
+\item{cdl}{list with variables, each having a named dim attribute}
+
+\item{wkt}{character; WKT of crs}
+
+\item{xy}{character; names of the spatial x and y dimension}
+
+\item{root_group_options}{character; driver specific options regarding the creation of the root group}
+
+\item{as_float}{logical; when \code{TRUE} write 4-byte floating point numbers, when \code{FALSE} write 8-byte doubles.}
 
 \item{nxy}{integer vector of length 2}
 

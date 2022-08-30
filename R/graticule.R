@@ -27,7 +27,7 @@
 #' see example.
 #' @examples
 #' library(sf)
-#' library(maps)
+#' if (require(maps, quietly = TRUE)) {
 #'
 #' usa = st_as_sf(map('usa', plot = FALSE, fill = TRUE))
 #' laea = st_crs("+proj=laea +lat_0=30 +lon_0=-95") # Lambert equal area
@@ -59,6 +59,7 @@
 #'			srt = g$angle_end[i] - 90, pos = 3, cex = .7)
 #' }))
 #' plot(usa, graticule = st_crs(4326), axes = TRUE, lon = seq(-60,-130,by=-10))
+#' }
 st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 	datum = st_crs(4326), ..., lon = NULL, lat = NULL, ndiscr = 100,
 	margin = 0.001)

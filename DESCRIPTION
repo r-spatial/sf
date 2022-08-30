@@ -1,5 +1,5 @@
 Package: sf
-Version: 1.0-8
+Version: 1.0-9
 Title: Simple Features for R
 Authors@R:
     c(person(given = "Edzer",
@@ -66,7 +66,7 @@ Imports:
     grid,
     magrittr,
     Rcpp (>= 0.12.18),
-    s2 (>= 1.0.7),
+    s2 (>= 1.1.0),
     stats,
     tools,
     units (>= 0.7-0),
@@ -83,6 +83,7 @@ Suggests:
     Matrix,
     microbenchmark,
     odbc,
+    pbapply,
     pillar,
     pool,
     raster,

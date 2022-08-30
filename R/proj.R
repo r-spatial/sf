@@ -43,7 +43,7 @@ sf_proj_info = function(type = "proj", path) {
 #' @param from character description of source CRS, or object of class \code{crs}, 
 #' or pipeline describing a transformation
 #' @param to character description of target CRS, or object of class \code{crs} 
-#' @param pts two-column numeric matrix, or object that can be coerced into a matrix
+#' @param pts two-, three- or four-column numeric matrix, or object that can be coerced into a matrix; columns 3 and 4 contain z and t values.
 #' @param keep logical value controlling the handling of unprojectable points. If
 #' `keep` is `TRUE`, then such points will yield `Inf` or `-Inf` in the
 #' return value; otherwise an error is reported and nothing is returned.

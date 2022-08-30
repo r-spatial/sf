@@ -177,8 +177,8 @@ CPL_geos_is_valid_reason <- function(sfc) {
     .Call('_sf_CPL_geos_is_valid_reason', PACKAGE = 'sf', sfc)
 }
 
-CPL_geos_make_valid <- function(sfc) {
-    .Call('_sf_CPL_geos_make_valid', PACKAGE = 'sf', sfc)
+CPL_geos_make_valid <- function(sfc, method, keep_collapsed) {
+    .Call('_sf_CPL_geos_make_valid', PACKAGE = 'sf', sfc, method, keep_collapsed)
 }
 
 CPL_geos_is_valid <- function(sfc, NA_on_exception = TRUE) {
@@ -253,12 +253,12 @@ CPL_raw_to_hex <- function(raw) {
     .Call('_sf_CPL_raw_to_hex', PACKAGE = 'sf', raw)
 }
 
-read_mdim <- function(file, array_names, oo) {
-    .Call('_sf_read_mdim', PACKAGE = 'sf', file, array_names, oo)
+CPL_read_mdim <- function(file, array_names, oo, offset, count, step, proxy = FALSE, debug = FALSE) {
+    .Call('_sf_CPL_read_mdim', PACKAGE = 'sf', file, array_names, oo, offset, count, step, proxy, debug)
 }
 
-write_mdim <- function(x, file, dimensions, units) {
-    .Call('_sf_write_mdim', PACKAGE = 'sf', x, file, dimensions, units)
+CPL_write_mdim <- function(name, driver, dimensions, variables, wkt, xy, RootGroupOptions, CreationOptions, as_float = TRUE) {
+    .Call('_sf_CPL_write_mdim', PACKAGE = 'sf', name, driver, dimensions, variables, wkt, xy, RootGroupOptions, CreationOptions, as_float)
 }
 
 opp_sfc <- function(geom, value, mult, crs) {
@@ -327,6 +327,18 @@ CPL_proj_info <- function(type) {
 
 CPL_xy2sfc <- function(cc, dim, to_points, which) {
     .Call('_sf_CPL_xy2sfc', PACKAGE = 'sf', cc, dim, to_points, which)
+}
+
+sfc_is_null <- function(sfc) {
+    .Call('_sf_sfc_is_null', PACKAGE = 'sf', sfc)
+}
+
+sfc_unique_sfg_dims_and_types <- function(sfc) {
+    .Call('_sf_sfc_unique_sfg_dims_and_types', PACKAGE = 'sf', sfc)
+}
+
+sfc_is_empty <- function(sfc) {
+    .Call('_sf_sfc_is_empty', PACKAGE = 'sf', sfc)
 }
 
 points_cpp <- function(pts, gdim = "XY") {

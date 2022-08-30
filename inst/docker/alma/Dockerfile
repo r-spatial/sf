@@ -1,3 +1,7 @@
+#
+# Do not edit: NOW CONTINUED IN
+# https://github.com/Open-EO/openeo-udf-python-to-r/tree/main/docker
+#
 ARG SPARK_VERSION
 ARG PYTHON_PACKAGE
 

@@ -3,7 +3,7 @@
 #' @param x character vector, possibly of length larger than 1 when more than one raster is read
 #' @param ... ignored
 #' @param options character; raster layer read options
-#' @param driver character; when empty vector, driver is auto-detected.
+#' @param driver character; driver short name; when empty vector, driver is auto-detected.
 #' @param read_data logical; if \code{FALSE}, only the imagery metadata is returned
 #' @param NA_value (double) non-NA value to use for missing values; if \code{NA}, when writing missing values are not specially flagged in output dataset, when reading the default (dataset) missing values are used (if present / set).
 #' @param RasterIO_parameters list with named parameters to GDAL's RasterIO; see the stars::read_stars documentation.
@@ -43,22 +43,42 @@ gdal_write = function(x, ..., file, driver = "GTiff", options = character(0), ty
 		from = c(0, 0) # nocov end
 	} else {
 		mat = x[[1]]
+		dm = dim(mat)
+		if (is.factor(mat)) {
+			rgba = NULL
+			ex = attr(mat, "exclude")
+			if (is.null(ex))
+				lev = c("", levels(mat)) # add "" for value 0: R factors start at 1
+			else {
+				if (any(ex)) {
+					lev = vector("character", length(ex)) # fills with ""
+					lev[!ex] = levels(mat)
+					rgba = if (!is.null(co <- attr(mat, "rgba"))) {
+						n = length(ex)
+						coltab = cbind(rep(0., n), rep(0, n), rep(0, n), rep(255, n))
+						coltab[!ex,] = co
+						coltab 
+					}
+					values = which(!ex) - 1
+					mat = values[as.numeric(mat)]
+				} else
+					lev = levels(mat)
+			}
+			mat = structure(mat, class = NULL, levels = lev, dim = dm, rgba = rgba)
+		}
 		only_create = FALSE # write x too
 		if (! update) {
 			if (!all(from == 0))
 				stop("cannot write sub-rasters only")
-			if (!all(dims == dim(mat)))
+			if (!all(dims == dm))
 				stop("dimensions don't match")
 		}
-		dm = dim(mat)
 		dim(mat) = c(dm[1], prod(dm[-1])) # flatten to 2-D matrix
 	}
 	if (length(dims) == 2)
 		dims = c(dims, 1) # one band
-	else { # add band descriptions?
-		if (is.character(d[[3]]$values))
-			attr(mat, "descriptions") = d[[3]]$values
-	}
+	else if (is.character(d[[3]]$values)) # add band descriptions?
+		attr(mat, "descriptions") = d[[3]]$values
 
 	CPL_write_gdal(mat, file, driver, options, type, dims, from, geotransform,
 		st_crs(x)[[2]], as.double(NA_value), create = !update, only_create = only_create)
@@ -313,19 +333,33 @@ gdal_extract = function(f, pts, bilinear = FALSE) {
 #' @name gdal
 #' @param file file name
 #' @param array_name array name
-#' @param options open options
+#' @param offset offset (pixels)
+#' @param count number of pixels to read
+#' @param step step size (pixels)
+#' @param proxy logical; return proxy object?
+#' @param debug logical; print debug messages?
 #' @export
-gdal_read_mdim = function(file, array_name = character(0), options = character(0)) {
-	read_mdim(file, array_name, options)
+gdal_read_mdim = function(file, array_name = character(0), options = character(0), 
+						  offset = integer(0), count = integer(0), step = integer(0), 
+						  proxy = FALSE, debug = FALSE) {
+	CPL_read_mdim(file, array_name, options, offset, count, step, proxy, debug)
 }
 
 #' @name gdal
-#' @param dimension_values list with dimension values
-#' @param units character; units names (udunits conform) corresponding to dimension_values
+#' @param dimx integer named vector with dimensions of object
+#' @param cdl list with variables, each having a named dim attribute
+#' @param wkt character; WKT of crs
+#' @param xy character; names of the spatial x and y dimension
+#' @param root_group_options character; driver specific options regarding the creation of the root group
+#' @param options character; driver specific options regarding reading or creating the dataset
+#' @param as_float logical; when \code{TRUE} write 4-byte floating point numbers, when \code{FALSE} write 8-byte doubles.
 #' @export
-gdal_write_mdim = function(x, file, dimension_values, units) {
-	write_mdim(x, file, dimension_values, units)
+gdal_write_mdim = function(file, driver, dimx, cdl, wkt, xy, ...,
+						   root_group_options = character(0), options = character(0),
+						   as_float = TRUE) {
+    CPL_write_mdim(file, driver, dimx, cdl, wkt, xy, root_group_options, options, as_float)
 }
+
 
 #' @name gdal
 #' @param f character; file name

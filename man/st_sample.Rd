@@ -18,7 +18,8 @@ st_sample(x, size, ...)
   type = "random",
   exact = TRUE,
   warn_if_not_integer = TRUE,
-  by_polygon = FALSE
+  by_polygon = FALSE,
+  progress = FALSE
 )
 
 \method{st_sample}{sfg}(x, size, ...)
@@ -30,7 +31,7 @@ st_sample(x, size, ...)
 
 \item{...}{passed on to \link[base]{sample} for \code{multipoint} sampling, or to \code{spatstat} functions for spatstat sampling types (see details)}
 
-\item{type}{character; indicates the spatial sampling type; one of \code{random}, \code{hexagonal} (triangular really), \code{regular},
+\item{type}{character; indicates the spatial sampling type; one of \code{random}, \code{hexagonal} (triangular really), \code{regular}, \code{Fibonacci},
 or one of the \code{spatstat} methods such as \code{Thomas} for calling \code{spatstat.random::rThomas} (see Details).}
 
 \item{exact}{logical; should the length of output be exactly}
@@ -40,6 +41,8 @@ or one of the \code{spatstat} methods such as \code{Thomas} for calling \code{sp
 \item{by_polygon}{logical; for \code{MULTIPOLYGON} geometries, should the effort be split by \code{POLYGON}? See https://github.com/r-spatial/sf/issues/1480
 the same as specified by \code{size}? \code{TRUE} by default. Only applies to polygons, and
 when \code{type = "random"}.}
+
+\item{progress}{logical; if \code{TRUE} show progress bar (only if \code{size} is a vector).}
 }
 \value{
 an \code{sfc} object containing the sampled \code{POINT} geometries
@@ -57,11 +60,14 @@ the object if \code{size} is a single number, or the specified number of points
 in each feature if \code{size} is a vector of integers equal in length to the geometry
 of \code{x}.
 
-if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{http://mathworld.wolfram.com/SpherePointPicking.html}
+if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{http://mathworld.wolfram.com/SpherePointPicking.html}. 
 
 For \code{regular} or \code{hexagonal} sampling of polygons, the resulting size is only an approximation.
 
 As parameter called \code{offset} can be passed to control ("fix") regular or hexagonal sampling: for polygons a length 2 numeric vector (by default: a random point from \code{st_bbox(x)}); for lines use a number like \code{runif(1)}.
+
+Fibonacci sampling see: Alvaro Gonzalez, 2010. Measurement of Areas on a Sphere Using Fibonacci and Latitude-Longitude Lattices. 
+Mathematical Geosciences 42(1), p. 49-64
 
 Sampling methods from package \code{spatstat} are interfaced (see examples), and need their own parameters to be set. 
 For instance, to use \code{spatstat.random::rThomas()}, set \code{type = "Thomas"}.
@@ -77,12 +83,14 @@ x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0)))), crs 
 plot(x, axes = TRUE, graticule = TRUE)
 if (sf_extSoftVersion()["proj.4"] >= "4.9.0")
   plot(p <- st_sample(x, 1000), add = TRUE)
+if (require(lwgeom, quietly = TRUE)) { # for st_segmentize()
 x2 = st_transform(st_segmentize(x, 1e4), st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
 g = st_transform(st_graticule(), st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
 plot(x2, graticule = g)
 if (sf_extSoftVersion()["proj.4"] >= "4.9.0") {
   p2 = st_transform(p, st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
   plot(p2, add = TRUE)
+}
 }
 x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,10),c(0,90),c(0,0))))) # NOT long/lat:
 plot(x)

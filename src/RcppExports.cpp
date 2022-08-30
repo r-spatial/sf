@@ -603,13 +603,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_geos_make_valid
-Rcpp::List CPL_geos_make_valid(Rcpp::List sfc);
-RcppExport SEXP _sf_CPL_geos_make_valid(SEXP sfcSEXP) {
+Rcpp::List CPL_geos_make_valid(Rcpp::List sfc, std::string method, bool keep_collapsed);
+RcppExport SEXP _sf_CPL_geos_make_valid(SEXP sfcSEXP, SEXP methodSEXP, SEXP keep_collapsedSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type sfc(sfcSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_geos_make_valid(sfc));
+    Rcpp::traits::input_parameter< std::string >::type method(methodSEXP);
+    Rcpp::traits::input_parameter< bool >::type keep_collapsed(keep_collapsedSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_make_valid(sfc, method, keep_collapsed));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -839,30 +841,40 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// read_mdim
-List read_mdim(CharacterVector file, CharacterVector array_names, CharacterVector oo);
-RcppExport SEXP _sf_read_mdim(SEXP fileSEXP, SEXP array_namesSEXP, SEXP ooSEXP) {
+// CPL_read_mdim
+List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterVector oo, IntegerVector offset, IntegerVector count, IntegerVector step, bool proxy, bool debug);
+RcppExport SEXP _sf_CPL_read_mdim(SEXP fileSEXP, SEXP array_namesSEXP, SEXP ooSEXP, SEXP offsetSEXP, SEXP countSEXP, SEXP stepSEXP, SEXP proxySEXP, SEXP debugSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< CharacterVector >::type file(fileSEXP);
     Rcpp::traits::input_parameter< CharacterVector >::type array_names(array_namesSEXP);
     Rcpp::traits::input_parameter< CharacterVector >::type oo(ooSEXP);
-    rcpp_result_gen = Rcpp::wrap(read_mdim(file, array_names, oo));
+    Rcpp::traits::input_parameter< IntegerVector >::type offset(offsetSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type count(countSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type step(stepSEXP);
+    Rcpp::traits::input_parameter< bool >::type proxy(proxySEXP);
+    Rcpp::traits::input_parameter< bool >::type debug(debugSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_read_mdim(file, array_names, oo, offset, count, step, proxy, debug));
     return rcpp_result_gen;
 END_RCPP
 }
-// write_mdim
-List write_mdim(List x, CharacterVector file, List dimensions, CharacterVector units);
-RcppExport SEXP _sf_write_mdim(SEXP xSEXP, SEXP fileSEXP, SEXP dimensionsSEXP, SEXP unitsSEXP) {
+// CPL_write_mdim
+List CPL_write_mdim(CharacterVector name, CharacterVector driver, IntegerVector dimensions, List variables, CharacterVector wkt, CharacterVector xy, CharacterVector RootGroupOptions, CharacterVector CreationOptions, bool as_float);
+RcppExport SEXP _sf_CPL_write_mdim(SEXP nameSEXP, SEXP driverSEXP, SEXP dimensionsSEXP, SEXP variablesSEXP, SEXP wktSEXP, SEXP xySEXP, SEXP RootGroupOptionsSEXP, SEXP CreationOptionsSEXP, SEXP as_floatSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< List >::type x(xSEXP);
-    Rcpp::traits::input_parameter< CharacterVector >::type file(fileSEXP);
-    Rcpp::traits::input_parameter< List >::type dimensions(dimensionsSEXP);
-    Rcpp::traits::input_parameter< CharacterVector >::type units(unitsSEXP);
-    rcpp_result_gen = Rcpp::wrap(write_mdim(x, file, dimensions, units));
+    Rcpp::traits::input_parameter< CharacterVector >::type name(nameSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type driver(driverSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type dimensions(dimensionsSEXP);
+    Rcpp::traits::input_parameter< List >::type variables(variablesSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type wkt(wktSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type xy(xySEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type RootGroupOptions(RootGroupOptionsSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type CreationOptions(CreationOptionsSEXP);
+    Rcpp::traits::input_parameter< bool >::type as_float(as_floatSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_write_mdim(name, driver, dimensions, variables, wkt, xy, RootGroupOptions, CreationOptions, as_float));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1085,6 +1097,39 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type to_points(to_pointsSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type which(whichSEXP);
     rcpp_result_gen = Rcpp::wrap(CPL_xy2sfc(cc, dim, to_points, which));
+    return rcpp_result_gen;
+END_RCPP
+}
+// sfc_is_null
+LogicalVector sfc_is_null(List sfc);
+RcppExport SEXP _sf_sfc_is_null(SEXP sfcSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type sfc(sfcSEXP);
+    rcpp_result_gen = Rcpp::wrap(sfc_is_null(sfc));
+    return rcpp_result_gen;
+END_RCPP
+}
+// sfc_unique_sfg_dims_and_types
+List sfc_unique_sfg_dims_and_types(List sfc);
+RcppExport SEXP _sf_sfc_unique_sfg_dims_and_types(SEXP sfcSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type sfc(sfcSEXP);
+    rcpp_result_gen = Rcpp::wrap(sfc_unique_sfg_dims_and_types(sfc));
+    return rcpp_result_gen;
+END_RCPP
+}
+// sfc_is_empty
+LogicalVector sfc_is_empty(List sfc);
+RcppExport SEXP _sf_sfc_is_empty(SEXP sfcSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type sfc(sfcSEXP);
+    rcpp_result_gen = Rcpp::wrap(sfc_is_empty(sfc));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1371,7 +1416,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_delete_ogr", (DL_FUNC) &_sf_CPL_delete_ogr, 4},
     {"_sf_CPL_geos_binop", (DL_FUNC) &_sf_CPL_geos_binop, 6},
     {"_sf_CPL_geos_is_valid_reason", (DL_FUNC) &_sf_CPL_geos_is_valid_reason, 1},
-    {"_sf_CPL_geos_make_valid", (DL_FUNC) &_sf_CPL_geos_make_valid, 1},
+    {"_sf_CPL_geos_make_valid", (DL_FUNC) &_sf_CPL_geos_make_valid, 3},
     {"_sf_CPL_geos_is_valid", (DL_FUNC) &_sf_CPL_geos_is_valid, 2},
     {"_sf_CPL_geos_is_simple", (DL_FUNC) &_sf_CPL_geos_is_simple, 1},
     {"_sf_CPL_geos_is_empty", (DL_FUNC) &_sf_CPL_geos_is_empty, 1},
@@ -1390,8 +1435,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_nary_intersection", (DL_FUNC) &_sf_CPL_nary_intersection, 1},
     {"_sf_CPL_hex_to_raw", (DL_FUNC) &_sf_CPL_hex_to_raw, 1},
     {"_sf_CPL_raw_to_hex", (DL_FUNC) &_sf_CPL_raw_to_hex, 1},
-    {"_sf_read_mdim", (DL_FUNC) &_sf_read_mdim, 3},
-    {"_sf_write_mdim", (DL_FUNC) &_sf_write_mdim, 4},
+    {"_sf_CPL_read_mdim", (DL_FUNC) &_sf_CPL_read_mdim, 8},
+    {"_sf_CPL_write_mdim", (DL_FUNC) &_sf_CPL_write_mdim, 9},
     {"_sf_opp_sfc", (DL_FUNC) &_sf_opp_sfc, 4},
     {"_sf_normalize_sfc", (DL_FUNC) &_sf_normalize_sfc, 4},
     {"_sf_CPL_polygonize", (DL_FUNC) &_sf_CPL_polygonize, 10},
@@ -1409,6 +1454,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_proj_direct", (DL_FUNC) &_sf_CPL_proj_direct, 5},
     {"_sf_CPL_proj_info", (DL_FUNC) &_sf_CPL_proj_info, 1},
     {"_sf_CPL_xy2sfc", (DL_FUNC) &_sf_CPL_xy2sfc, 4},
+    {"_sf_sfc_is_null", (DL_FUNC) &_sf_sfc_is_null, 1},
+    {"_sf_sfc_unique_sfg_dims_and_types", (DL_FUNC) &_sf_sfc_unique_sfg_dims_and_types, 1},
+    {"_sf_sfc_is_empty", (DL_FUNC) &_sf_sfc_is_empty, 1},
     {"_sf_points_cpp", (DL_FUNC) &_sf_points_cpp, 2},
     {"_sf_CPL_signed_area", (DL_FUNC) &_sf_CPL_signed_area, 1},
     {"_sf_CPL_get_metadata", (DL_FUNC) &_sf_CPL_get_metadata, 3},

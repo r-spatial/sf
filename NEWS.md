@@ -1,4 +1,32 @@
+# version 1.0-9
+
+* add `Fibonacci` as a spatial sampling type in `st_sample()`
+
+* use the global `options("sf_use_s2")` to determine whether to use s2, rather than a value in a local environment; #1977
+
+* fix utils `mdiminfo` and `mdimtranslate` in `gdal_utils()` 
+
+* extend arguments of `gdal_read_mdim()` needed by `stars::read_mdim()` if `stars` >= 0.5-7; add `gdal_write_mdim()`
+
+* add `drop_na()` method for `sf` objects; #1975
+
 # version 1.0-8
+
+* `st_drop_geometry.default()` returns `x` unmodified;
+
+* `sf_project()` accepts 3- or 4-column matrices, containing z and t values;
+
+* optimizations for `st_sfc()` by @paleolimbot; #1938, #1925
+
+* `[<-.sfc()` recomputes the bounding box; `st_sfc()` gets parameter `compute_bbox`; #1965
+
+* add new algorithm and drop option to `st_make_valid()` when using GEOS and GEOS >= 3.10.1; #1655
+
+* add `st_minimum_rotated_rectangle()`, available when GEOS >= 3.9.0; #1953
+
+* fix `st_sample()` with `type = "hexagonal"` for corner case (n=1), add a `progress` argument for a progress bar; #1945
+
+* add package `pbapply` to Suggests; #1945
 
 * add pdf driver to windows build; #1942
 
@@ -6,7 +34,7 @@
 
 * handle argument `xpd` in calls to `plot.sfc_POLYGON()` and `plot.sfc_MULTIPOLYGON()`
 
-* `pivot_wider()` method added, by Henning Teickner; #1915
+* add `pivot_wider()` method, by Henning Teickner; #1915
 
 * add `gdal_addo()` to add or remove overviews from raster images; #1921
 
