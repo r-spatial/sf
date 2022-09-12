@@ -202,7 +202,6 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 	}
 	int n = array_names.size();
 
-	// how many arrays have identical dimensions to the first?
 	const char *name = array_names[0];
 	auto array(curGroup->OpenMDArray(name));
 	if (!array)
