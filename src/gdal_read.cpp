@@ -579,7 +579,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 
 	if (! quiet) {
 		if (! Rcpp::CharacterVector::is_na(query[0]))
-			Rcpp::Rcout << "Reading query `" << query[0] << "' from data source ";
+			Rcpp::Rcout << "Reading query `" << query[0] << "'" << std::endl << "from data source ";
 		else
 			Rcpp::Rcout << "Reading layer `" << layer[0] << "' from data source ";
 		// if (LENGTH(datasource[0]) > (width - (34 + LENGTH(layer[0]))))

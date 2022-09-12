@@ -9,7 +9,7 @@ gdal_utils(
   source,
   destination,
   options = character(0),
-  quiet = !(util \%in\% c("info", "mdiminfo")),
+  quiet = !(util \%in\% c("info", "mdiminfo")) || ("-multi" \%in\% options),
   processing = character(0),
   colorfilename = character(0)
 )

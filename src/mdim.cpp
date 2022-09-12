@@ -310,7 +310,7 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 	return ret;
 }
 
-
+/// WRITE:
 void write_attributes(std::shared_ptr<GDALMDArray> md, CharacterVector attrs) {
 	if (attrs.size() > 0) {
 		CharacterVector names = attrs.attr("names");

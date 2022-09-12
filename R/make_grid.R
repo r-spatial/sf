@@ -59,6 +59,17 @@ st_make_grid = function(x,
 	} else
 		TRUE
 
+	if (inherits(cellsize, "units")) {
+		if (!is.na(crs))
+			units(cellsize) = units(crs$ud_unit)
+		cellsize = units::drop_units(cellsize)
+	}
+	if (inherits(offset, "units")) {
+		if (!is.na(crs))
+			units(offset) = units(crs$ud_unit)
+		offset = units::drop_units(offset)
+	}
+
 	if (missing(n)) {
 		nx = ceiling((bb[3] - offset[1])/cellsize[1])
 		ny = ceiling((bb[4] - offset[2])/cellsize[2])
