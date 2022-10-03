@@ -233,7 +233,7 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 			stp.push_back(1);
 		else
 			stp.push_back(step[i]);
-		if (count.size() == 0)
+		if (count.size() == 0 || count[i] == NA_INTEGER || count[i] <= 0)
 			anCount.push_back((poDim->GetSize() - offst.back())/stp.back());
 		else
 			anCount.push_back(count[i]);
