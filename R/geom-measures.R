@@ -105,8 +105,9 @@ st_length = function(x, ...) {
 }
 
 message_longlat = function(caller) {
-	message(paste("although coordinates are longitude/latitude,",
-		caller, "assumes that they are planar"))
+	m = paste("although coordinates are longitude/latitude,", caller, "assumes that they are planar")
+	m = strwrap(m, width = getOption("width"))
+	message(paste0(m, collapse = "\n"))
 }
 
 #' Compute geometric measurements
