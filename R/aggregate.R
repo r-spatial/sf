@@ -130,6 +130,8 @@ st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE) {
 	i[gc] = st_collection_extract(i[gc], "POLYGON")
 	two_d = which(st_dimension(i) == 2)
 	i[two_d] = st_cast(i[two_d], "MULTIPOLYGON")
+	
+	i <- Filter( \(x) st_geometry_type(x) %in% c("POLYGON", "MULTIPOLYGON"), i) # remove geometries of other types than (multi)polygons
 
 	x_st = st_set_geometry(x, NULL)[idx[,1],, drop=FALSE]   # create st table, remove geom
 	if (any(!sapply(x_st, is.numeric)))
