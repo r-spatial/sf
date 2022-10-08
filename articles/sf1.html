@@ -277,7 +277,7 @@
 <span><span class="co">## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1; sf_use_s2() is TRUE</span></span>
 <span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">## Reading layer `nc' from data source </span></span>
-<span><span class="co">##   `/tmp/Rtmp9pk09I/temp_libpath1416745d0911b/sf/shape/nc.shp' </span></span>
+<span><span class="co">##   `/tmp/Rtmp4rfFBi/temp_libpath62e211bf9cab/sf/shape/nc.shp' </span></span>
 <span><span class="co">##   using driver `ESRI Shapefile'</span></span>
 <span><span class="co">## Simple feature collection with 100 features and 14 fields</span></span>
 <span><span class="co">## Geometry type: MULTIPOLYGON</span></span>
@@ -620,7 +620,7 @@
 <code class="sourceCode R"><span><span class="va">filename</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span></span>
 <span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">filename</span><span class="op">)</span></span>
 <span><span class="co">## Reading layer `nc' from data source </span></span>
-<span><span class="co">##   `/tmp/Rtmp9pk09I/temp_libpath1416745d0911b/sf/shape/nc.shp' </span></span>
+<span><span class="co">##   `/tmp/Rtmp4rfFBi/temp_libpath62e211bf9cab/sf/shape/nc.shp' </span></span>
 <span><span class="co">##   using driver `ESRI Shapefile'</span></span>
 <span><span class="co">## Simple feature collection with 100 features and 14 fields</span></span>
 <span><span class="co">## Geometry type: MULTIPOLYGON</span></span>
@@ -790,7 +790,8 @@
 <span><span class="co">## [2,] 440561.15 114939.7 590434.80      0.0</span></span>
 <span><span class="co">## [3,]  18944.03 352719.1  78756.89 517527.8</span></span>
 <span><span class="fu"><a href="../reference/st_relate.html">st_relate</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="op">]</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">## although coordinates are longitude/latitude, st_relate assumes that they are planar</span></span>
+<span><span class="co">## although coordinates are longitude/latitude, st_relate assumes that they are</span></span>
+<span><span class="co">## planar</span></span>
 <span><span class="co">##      [,1]        [,2]        [,3]        [,4]       </span></span>
 <span><span class="co">## [1,] "2FFF1FFF2" "FF2F11212" "FF2FF1212" "FF2FF1212"</span></span>
 <span><span class="co">## [2,] "FF2F11212" "2FFF1FFF2" "FF2F11212" "FF2FF1212"</span></span>
@@ -906,7 +907,7 @@
 <span>        CRESS_ID <span class="op">=</span> <span class="st">"identity"</span>, BIR74 <span class="op">=</span> <span class="st">"aggregate"</span>, SID74 <span class="op">=</span> <span class="st">"aggregate"</span>, NWBIR74 <span class="op">=</span> <span class="st">"aggregate"</span>,</span>
 <span>        BIR79 <span class="op">=</span> <span class="st">"aggregate"</span>, SID79 <span class="op">=</span> <span class="st">"aggregate"</span>, NWBIR79 <span class="op">=</span> <span class="st">"aggregate"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">## Reading layer `nc' from data source </span></span>
-<span><span class="co">##   `/tmp/Rtmp9pk09I/temp_libpath1416745d0911b/sf/shape/nc.shp' </span></span>
+<span><span class="co">##   `/tmp/Rtmp4rfFBi/temp_libpath62e211bf9cab/sf/shape/nc.shp' </span></span>
 <span><span class="co">##   using driver `ESRI Shapefile'</span></span>
 <span><span class="co">## Simple feature collection with 100 features and 14 fields</span></span>
 <span><span class="co">## Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity</span></span>
