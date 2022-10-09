@@ -105,8 +105,9 @@ st_length = function(x, ...) {
 }
 
 message_longlat = function(caller) {
-	message(paste("although coordinates are longitude/latitude,",
-		caller, "assumes that they are planar"))
+	m = paste("although coordinates are longitude/latitude,", caller, "assumes that they are planar")
+	m = strwrap(m, width = getOption("width"))
+	message(paste0(m, collapse = "\n"))
 }
 
 #' Compute geometric measurements
@@ -144,6 +145,8 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE,
 
 	x = st_geometry(x)
 	y = st_geometry(y)
+	if (by_element)
+		stopifnot(!missing_y, length(x) == length(y))
 
 	if (isTRUE(st_is_longlat(x)) && which == "Great Circle") {
 		if (sf_use_s2()) {
@@ -168,9 +171,17 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE,
 				lwgeom::st_geod_distance(x, y, tolerance)
 		}
 	} else {
-		d = if (by_element)
-				mapply(st_distance, x, y, by_element = FALSE, which = which, par = par)
-			else {
+		d = if (by_element) {
+				if (inherits(x, "sfc_POINT") && inherits(y, "sfc_POINT") && which == "Euclidean") {
+					xc = st_coordinates(x)
+					yc = st_coordinates(y)
+					d = sqrt((xc[,1] - yc[,1])^2 + (xc[,2] - yc[,2])^2)
+					if (! is.na(st_crs(x)))
+						units(d) = crs_parameters(st_crs(x))$ud_unit
+					d
+				} else
+					mapply(st_distance, x, y, by_element = FALSE, which = which, par = par)
+			} else {
 				if (missing_y && inherits(x, "sfc_POINT") && which == "Euclidean")
 					as.matrix(stats::dist(st_coordinates(x)))
 				else
