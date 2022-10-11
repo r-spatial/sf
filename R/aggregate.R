@@ -122,7 +122,7 @@ st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE) {
 
 	if (! all_constant(x))
 		warning("st_interpolate_aw assumes attributes are constant or uniform over areas of x")
-	i = st_intersection(st_geometry(x), st_geometry(to))
+	i = st_intersection(st_geometry(x), st_geometry(to), dimensions = "polygon")
 	idx = attr(i, "idx")
 
 	# https://stackoverflow.com/questions/57767022/how-do-you-use-st-interpolate-aw-with-polygon-layers-that-legitimately-include-p
