@@ -50,7 +50,8 @@ pathGrob <- NULL
 	m = paste0("Linking to GEOS ", strsplit(CPL_geos_version(TRUE), "-")[[1]][1],
 		", GDAL ", CPL_gdal_version(), ", PROJ ", CPL_proj_version(),
 		"; sf_use_s2() is ", sf_use_s2())
-	packageStartupMessage(m)
+	m = strwrap(m, width = getOption("width"))
+	packageStartupMessage(paste0(m, collapse = "\n"))
 	if (length(grep(CPL_geos_version(FALSE, TRUE), CPL_geos_version(TRUE))) != 1) { # nocov start
 		packageStartupMessage("WARNING: different compile-time and runtime versions for GEOS found:")
 		packageStartupMessage(paste(

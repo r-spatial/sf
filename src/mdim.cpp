@@ -38,9 +38,11 @@ List get_dimension_values(std::shared_ptr<GDALMDArray> array) {
 	std::vector<size_t> anCount;
 	IntegerVector dims;
 	std::vector<GUInt64> offset;
+	CharacterVector d_names;
 	for (const auto poDim: array->GetDimensions()) {
 		anCount.push_back(static_cast<size_t>(poDim->GetSize()));
 		dims.push_back(static_cast<size_t>(poDim->GetSize()));
+		d_names.push_back(poDim->GetName());
 		offset.push_back(0);
 		nValues *= anCount.back();
 	}
@@ -61,6 +63,7 @@ List get_dimension_values(std::shared_ptr<GDALMDArray> array) {
 			Rcout << "cannot convert values for array " << array->GetName() << std::endl;
 		vec.attr("dim") = dims;
 		vec.attr("units") = array->GetUnit();
+		vec.attr("d_names") = d_names;
 		if (att.size())
 			vec.attr("attributes") = att;
 		ret[0] = vec;
@@ -106,6 +109,44 @@ List get_dimension(const std::shared_ptr<GDALDimension> dim) {
 	return dimension;
 }
 
+// if present, return geometry elements (coordinates, indexes), else return empty list
+List get_geometry(std::shared_ptr<GDALGroup> curGroup) {
+	List lst;
+	for (const auto an: curGroup->GetMDArrayNames()) {
+		auto a(curGroup->OpenMDArray(an));
+		auto geom = a->GetAttribute("geometry");
+		if (geom) {
+			a = curGroup->OpenMDArray(geom->ReadAsString());
+			if (a == nullptr) {
+				Rcout << "could not open geometry array " << geom->ReadAsString() << std::endl;
+				stop("geometry array missing");
+			}
+			auto nc = a->GetAttribute("node_coordinates");
+			if (nc && nc->GetDataType().GetClass() == GEDTC_STRING && nc->GetDimensionCount() == 0) {
+				const char *ncs = nc->ReadAsString();
+				if (ncs) {
+					const CPLStringList nc_names(CSLTokenizeString2(ncs, " ", 0)); // x and y coordinate array
+					auto gt = a->GetAttribute("geometry_type");
+					if (gt == nullptr || gt->GetDataType().GetClass() != GEDTC_STRING)
+						stop("cannot get geometry_type attribute");
+					auto nco = a->GetAttribute("node_count");
+					auto pnco = a->GetAttribute("part_node_count");
+					auto ir = a->GetAttribute("interior_ring");
+					lst = List::create(
+						_["geometry_type"] = CharacterVector::create(gt->ReadAsString()),
+						_["x"] = get_dimension_values(curGroup->OpenMDArray(nc_names[0])),
+						_["y"] = get_dimension_values(curGroup->OpenMDArray(nc_names[1])),
+						_["node_count"] = nco ? get_dimension_values(curGroup->OpenMDArray(nco->ReadAsString())) : List::create(),
+						_["part_node_count"] = pnco ? get_dimension_values(curGroup->OpenMDArray(pnco->ReadAsString())) : List::create(),
+						_["interior_ring"] = ir ?  get_dimension_values(curGroup->OpenMDArray(ir->ReadAsString())): List::create() 
+					);
+				}
+			} 
+		}
+	}
+	return(lst);
+}
+
 // [[Rcpp::export]]
 List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterVector oo,
 				IntegerVector offset, IntegerVector count, IntegerVector step, 
@@ -130,7 +171,17 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 			Rcout << "group: " << groupNames[0] << ";" << std::endl;
 			stop("Cannot find group");
 		}
-	}
+		if (debug && groupNames.size() > 1) {
+			Rcout << "ignored groups: ";
+			for (int i = 1; i < groupNames.size(); i++)
+				Rcout << groupNames[i] << " ";
+			Rcout << std::endl;
+		}
+	} else if (debug)
+		Rcout << "using root group" << std::endl;
+
+	// find possible vector geometry array, and construct
+	List geometry = get_geometry(curGroup);
 
 	// Rcout << "name: " << curGroup->GetName() << " full_name: " << curGroup->GetFullName() << std::endl;
 	if (array_names.size() == 0) { // find the one(s) with the most dimensions:
@@ -151,7 +202,6 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 	}
 	int n = array_names.size();
 
-	// how many arrays have identical dimensions to the first?
 	const char *name = array_names[0];
 	auto array(curGroup->OpenMDArray(name));
 	if (!array)
@@ -183,7 +233,7 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 			stp.push_back(1);
 		else
 			stp.push_back(step[i]);
-		if (count.size() == 0)
+		if (count.size() == 0 || count[i] == NA_INTEGER || count[i] <= 0)
 			anCount.push_back((poDim->GetSize() - offst.back())/stp.back());
 		else
 			anCount.push_back(count[i]);
@@ -253,12 +303,13 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 	List ret = List::create(
 		_["array_list"] = vec_lst,
 		_["dimensions"] = dimensions,
-		_["srs"] = srs == nullptr ? CharacterVector::create(NA_STRING) : wkt_from_spatial_reference(srs.get())
+		_["srs"] = srs == nullptr ? CharacterVector::create(NA_STRING) : wkt_from_spatial_reference(srs.get()),
+		_["geometry"] = geometry
 	);
 	return ret;
 }
 
-
+/// WRITE:
 void write_attributes(std::shared_ptr<GDALMDArray> md, CharacterVector attrs) {
 	if (attrs.size() > 0) {
 		CharacterVector names = attrs.attr("names");

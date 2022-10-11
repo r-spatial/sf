@@ -52,14 +52,17 @@ Rcpp::CharacterVector CPL_gdalinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVec
 	std::vector <char *> options_char = create_options(options, true);
 	std::vector <char *> oo_char = create_options(oo, true); // open options
 	GDALInfoOptions* opt = GDALInfoOptionsNew(options_char.data(), NULL);
-	GDALDatasetH ds = GDALOpenEx((const char *) obj[0], GA_ReadOnly, NULL, oo_char.data(), NULL);
-	if (ds == NULL)
-		return 1; // #nocov
+	GDALDatasetH ds = NULL;
+	if (obj.size())
+		ds = GDALOpenEx((const char *) obj[0], GA_ReadOnly, NULL, oo_char.data(), NULL);
 	char *ret_val = GDALInfo(ds, opt);
+	if (ret_val == NULL)
+		return Rcpp::CharacterVector::create();
 	Rcpp::CharacterVector ret = ret_val; // copies
 	CPLFree(ret_val);
 	GDALInfoOptionsFree(opt);
-	GDALClose(ds);
+	if (ds)
+		GDALClose(ds);
 	return ret;
 }
 

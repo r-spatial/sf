@@ -72,9 +72,11 @@ resampling_method = function(option = "near") {
 #' st_read(in_file)
 #' }
 gdal_utils = function(util = "info", source, destination, options = character(0),
-		quiet = !(util %in% c("info", "mdiminfo")),
+		quiet = !(util %in% c("info", "mdiminfo")) || ("-multi" %in% options),
 		processing = character(0), colorfilename = character(0)) {
 
+	if (!quiet && "-multi" %in% options)
+		stop("with -multi quiet should be set to FALSE")
 #	if ("-co" %in% options)
 #		options["-co" == options] = "-oo"
 	if ("-oo" %in% options) { # -oo indicating opening options
@@ -96,7 +98,7 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 	quiet = as.logical(quiet)
 
 	ret = switch(util,
-			info = CPL_gdalinfo(source, options, oo),
+			info = CPL_gdalinfo(if (missing(source)) character(0) else source, options, oo),
 			warp = CPL_gdalwarp(source, destination, options, oo, doo, quiet, "-overwrite" %in% options),
 			warper = CPL_gdal_warper(source, destination, as.integer(resampling_method(options)),
 				oo, doo, quiet), # nocov
