@@ -13,7 +13,12 @@
 
 <a href="https://gist.github.com/edzer/f461a3a95570c4ab7edf3125c2f19d20"><img align="right" src="https://user-images.githubusercontent.com/520851/34887433-ce1d130e-f7c6-11e7-83fc-d60ad4fae6bd.gif" /></a>
 
-A package that provides [simple features access](https://en.wikipedia.org/wiki/Simple_Features) for R. Package sf:
+A package that provides [simple features access](https://en.wikipedia.org/wiki/Simple_Features) for R. 
+
+[Blogs, links](#blogs-presentations-vignettes-sp-sf-wiki) • [Cheatsheet](#cheatsheet) • [Installing](#installing)
+• [Contributing](#contributing) • [Acknowledgmenets](#acknowledgements) • [How to cite](#how-to-cite)
+
+Package sf:
 
 * represents simple features as records in a `data.frame` or `tibble` with a geometry list-column
 * represents natively in R all 17 simple feature types for all dimensions (XY, XYZ, XYM, XYZM)
@@ -29,7 +34,7 @@ A package that provides [simple features access](https://en.wikipedia.org/wiki/S
 
 (Illustration (c) by <a href="https://twitter.com/allison_horst/status/1071456081308614656">Allison Horst</a>)
 
-### Blogs, presentations, vignettes, sp-sf wiki
+## Blogs, presentations, vignettes, sp-sf wiki
 
 * an open access [R Journal article](https://journal.r-project.org/archive/2018/RJ-2018-009/index.html) summarizes the package
 * package vignettes: [first](https://r-spatial.github.io/sf/articles/sf1.html), [second](https://r-spatial.github.io/sf/articles/sf2.html), [third](https://r-spatial.github.io/sf/articles/sf3.html), [fourth](https://r-spatial.github.io/sf/articles/sf4.html), [fifth](https://r-spatial.github.io/sf/articles/sf5.html), [sixth](https://r-spatial.github.io/sf/articles/sf6.html), [seventh](https://r-spatial.github.io/sf/articles/sf7.html)
@@ -150,6 +155,14 @@ Functions and methods that require `liblwgeom`, including `st_make_valid` and al
 * Contributions of all sorts are most welcome, issues and pull requests are the preferred ways of sharing them.
 * When contributing pull requests, please adhere to the package style (in package code use `=` rather than `<-`; don't change indentation; tab stops of 4 spaces are preferred)
 * This project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
+
+## How to cite
+
+Package `sf` can be cited as: Edzer Pebesma, 2018.
+Simple Features for R: Standardized Support
+for Spatial Vector Data. The R Journal [10:1,
+439-446.](https://journal.r-project.org/archive/2018/RJ-2018-009/index.html)
+
 
 ## Acknowledgment
 
