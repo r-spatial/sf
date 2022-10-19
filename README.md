@@ -16,7 +16,7 @@
 A package that provides [simple features access](https://en.wikipedia.org/wiki/Simple_Features) for R. 
 
 [Blogs, links](#blogs-presentations-vignettes-sp-sf-wiki) • [Cheatsheet](#cheatsheet) • [Installing](#installing)
-• [Contributing](#contributing) • [Acknowledgmenets](#acknowledgements) • [How to cite](#how-to-cite)
+• [Contributing](#contributing) • [Acknowledgments](#acknowledgments) • [How to cite](#how-to-cite)
 
 Package sf:
 
