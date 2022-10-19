@@ -130,7 +130,7 @@ st_bbox.CIRCULARSTRING = function(obj, ...) {
 #' @export
 print.bbox = function(x, ...) {
 	x = structure(x, crs = NULL, class = NULL)
-	print(set_units(x, attr(x, "units"), mode = "standard"))
+	print(set_units(x, attr(x, "units"), mode = "standard"), ...)
 }
 
 compute_bbox = function(obj) {
