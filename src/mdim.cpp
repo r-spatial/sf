@@ -39,7 +39,7 @@ List get_dimension_values(std::shared_ptr<GDALMDArray> array) {
 	IntegerVector dims;
 	std::vector<GUInt64> offset;
 	CharacterVector d_names;
-	for (const auto poDim: array->GetDimensions()) {
+	for (const auto &poDim: array->GetDimensions()) {
 		anCount.push_back(static_cast<size_t>(poDim->GetSize()));
 		dims.push_back(static_cast<size_t>(poDim->GetSize()));
 		d_names.push_back(poDim->GetName());
@@ -112,7 +112,7 @@ List get_dimension(const std::shared_ptr<GDALDimension> dim) {
 // if present, return geometry elements (coordinates, indexes), else return empty list
 List get_geometry(std::shared_ptr<GDALGroup> curGroup) {
 	List lst;
-	for (const auto an: curGroup->GetMDArrayNames()) {
+	for (const auto &an: curGroup->GetMDArrayNames()) {
 		auto a(curGroup->OpenMDArray(an));
 		auto geom = a->GetAttribute("geometry");
 		if (geom) {
@@ -173,7 +173,7 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 		}
 		if (debug && groupNames.size() > 1) {
 			Rcout << "ignored groups: ";
-			for (int i = 1; i < groupNames.size(); i++)
+			for (size_t i = 1; i < groupNames.size(); i++)
 				Rcout << groupNames[i] << " ";
 			Rcout << std::endl;
 		}
@@ -187,13 +187,13 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 	if (array_names.size() == 0) { // find the one(s) with the most dimensions:
 		int ndim = 0;
 		int largest_size = 0;
-		for (const auto an: curGroup->GetMDArrayNames()) { // find largest size:
+		for (const auto &an: curGroup->GetMDArrayNames()) { // find largest size:
 			auto a(curGroup->OpenMDArray(an));
 			ndim = a->GetDimensions().size();
 			if (ndim > largest_size)
 				largest_size = ndim;
 		}
-		for (const auto an: curGroup->GetMDArrayNames()) { // identify target arrays:
+		for (const auto &an: curGroup->GetMDArrayNames()) { // identify target arrays:
 			auto a(curGroup->OpenMDArray(an));
 			ndim = a->GetDimensions().size();
 			if (ndim == largest_size)
@@ -223,7 +223,7 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 	std::vector<GUInt64> offst;
 	List dimensions;
 	int i = 0;
-	for (const auto poDim: array->GetDimensions()) {
+	for (const auto &poDim: array->GetDimensions()) {
 		dim_names.push_back(poDim->GetName());
 		if (offset.size() == 0)
 			offst.push_back(0);
@@ -443,7 +443,7 @@ List CPL_write_mdim(CharacterVector name, CharacterVector driver, IntegerVector 
 			start.push_back(0); // FIXME: modify if updating sub-array
 			count.push_back(dimensions[which_dims[i]]);
 		}
-		bool success;
+		bool success = true;
 		if (is_numeric[i]) { // write numeric array:
 			if (a.attr("attrs") != R_NilValue)
 				write_attributes(mda, a.attr("attrs"));
