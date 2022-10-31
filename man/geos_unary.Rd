@@ -259,3 +259,6 @@ if (require(lwgeom, quietly = TRUE)) {
  nrow(seg$geom[[1]])
 }
 }
+\seealso{
+[grDevices::chull()] for a more efficient algorithm for calculating the convex hull
+}
