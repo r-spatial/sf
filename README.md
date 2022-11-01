@@ -64,7 +64,7 @@ install_github("r-spatial/sf")
 
 ### Windows
 
-Installing sf from source works under Windows when [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is installed. This downloads the system requirements from [rwinlib](https://github.com/rwinlib/). 
+Installing sf from source works under Windows when [Rtools](https://cran.r-project.org/bin/windows/Rtools/) is installed.
 
 ### MacOS
 
@@ -77,7 +77,7 @@ brew install pkg-config
 brew install gdal
 ```
 
-Once gdal is installed, you will be able to install `sf` package from source in R. With the current version of `proj` (`7.0.0`) on homebrew, installation requires additional configuration:
+Once gdal is installed, you will be able to install `sf` package from source in R. With the current version of `proj` on homebrew, installation requires additional configuration:
 
 ```r
 install.packages("sf", configure.args = "--with-proj-lib=/usr/local/lib/")

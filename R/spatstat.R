@@ -111,18 +111,18 @@ st_as_sf.lpp = function(x, ...) {
 
 # as.ppp etc methods: from maptools/pkg/R/spatstat1.R
 
-as.ppp.sfc = function(X, W = NULL, ...) {
+as.ppp.sfc = function(X, W = NULL, ..., check = TRUE) {
 	check_spatstat("spatstat.geom", X)
 	d = st_dimension(X)
 	if (is.null(W)) {
 		if (d[1] == 2 && all(d[-1] == 0)) {
 			W = spatstat.geom::as.owin(X[1])
 			X = X[-1]
-			check = TRUE
 		} else if (all(d == 0)) { # no window in first feature geometry:
 			bb <- st_bbox(X)
 			W = spatstat.geom::owin(bb[c("xmin", "xmax")], bb[c("ymin", "ymax")])
-			check = FALSE
+			if (missing(check))
+				check = FALSE
 		} else
 			stop("sfc object does not consist of points, or a window followed by points")
 	}
