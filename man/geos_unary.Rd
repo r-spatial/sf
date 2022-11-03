@@ -112,6 +112,7 @@ Geometric unary operations on simple feature geometries. These are all generics,
 \code{st_buffer} computes a buffer around this geometry/each geometry. If any of \code{endCapStyle},
 \code{joinStyle}, or \code{mitreLimit} are set to non-default values ('ROUND', 'ROUND', 1.0 respectively) then
 the underlying 'buffer with style' GEOS function is used.
+If a negative buffer returns empty polygons instead of shrinking, set st_use_s2() to FALSE
 See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.html} for details.
 
 \code{st_boundary} returns the boundary of a geometry
@@ -258,4 +259,7 @@ if (require(lwgeom, quietly = TRUE)) {
  seg = st_segmentize(sf, units::set_units(0.01, rad))
  nrow(seg$geom[[1]])
 }
+}
+\seealso{
+[grDevices::chull()] for a more efficient algorithm for calculating the convex hull
 }

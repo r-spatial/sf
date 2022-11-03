@@ -347,7 +347,7 @@ use `st_zm(...)` to coerce to XY dimensions
 > 
 > sf_extSoftVersion()[1:3]
     GEOS     GDAL   proj.4 
-"3.10.2"  "3.4.3"  "8.2.0" 
+"3.10.2"  "3.4.3"  "8.2.1" 
 > 
 > # Ops.sfc:
 > ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))))
@@ -745,8 +745,10 @@ POINT (1333528 968263)
 POINT (1310837 958630)
 > # try with LINES, LongLat, should generate a warning:
 > nc[1:2,] %>% st_transform(4326) %>% st_cast("MULTILINESTRING") %>% st_sample(size = c(10,20))
-although coordinates are longitude/latitude, st_sample assumes that they are planar
-although coordinates are longitude/latitude, st_sample assumes that they are planar
+although coordinates are longitude/latitude, st_sample assumes that they are
+planar
+although coordinates are longitude/latitude, st_sample assumes that they are
+planar
 Geometry set for 2 features 
 Geometry type: MULTIPOINT
 Dimension:     XY
@@ -1089,5 +1091,5 @@ CRS:           NA
 > 
 > proc.time()
    user  system elapsed 
-  9.106   0.771   8.984 
+  8.907   0.852   8.874 
 

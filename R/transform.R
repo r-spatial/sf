@@ -165,14 +165,8 @@ st_wrap_dateline = function(x, options, quiet) UseMethod("st_wrap_dateline")
 #' @export
 #' @examples
 #' st_wrap_dateline(st_sfc(st_linestring(rbind(c(-179,0),c(179,0))), crs = 4326))
-#' if (require(maps, quietly = TRUE)) {
-#'  wrld <- st_as_sf(maps::map("world", fill = TRUE, plot = FALSE))
-#'  wrld_wrap <- st_wrap_dateline(wrld, options = c("WRAPDATELINE=YES", "DATELINEOFFSET=180"),
-#'    quiet = TRUE)
-#'  wrld_moll <- st_transform(wrld_wrap, "+proj=moll")
-#'  plot(st_geometry(wrld_moll), col = "transparent")
-#' }
-#' @details For a discussion of using \code{options}, see \url{https://github.com/r-spatial/sf/issues/280} and \url{https://github.com/r-spatial/sf/issues/541}
+#' @details For a discussion of using \code{options}, see \url{https://github.com/r-spatial/sf/issues/280} and \url{https://github.com/r-spatial/sf/issues/1983}
+#' @seealso \link{st_break_antimeridian}
 st_wrap_dateline.sfc = function(x, options = "WRAPDATELINE=YES", quiet = TRUE) {
 	if (is.na(st_crs(x)))
 		warning("crs not set: assuming geographic coordinates")

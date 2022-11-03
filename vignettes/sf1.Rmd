@@ -93,7 +93,7 @@ The four possible cases then are:
 
 ## Simple feature geometry types
 
-The following seven simple feature types are the most common, and are for instance the only ones used for [GeoJSON](https://tools.ietf.org/html/rfc7946):
+The following seven simple feature types are the most common, and are for instance the only ones used for [GeoJSON](https://www.rfc-editor.org/rfc/rfc7946):
 
 | type | description                                        |
 | ---- | -------------------------------------------------- |

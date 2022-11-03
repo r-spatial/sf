@@ -89,7 +89,7 @@ because WKT1 does not store axis order unambigiously.
 
 The \code{st_transform} method for \code{sfg} objects assumes that the CRS of the object is available as an attribute of that name.
 
-For a discussion of using \code{options}, see \url{https://github.com/r-spatial/sf/issues/280} and \url{https://github.com/r-spatial/sf/issues/541}
+For a discussion of using \code{options}, see \url{https://github.com/r-spatial/sf/issues/280} and \url{https://github.com/r-spatial/sf/issues/1983}
 
 \code{sf_proj_info} lists the available projections, ellipses, datums, units, or data search path of the PROJ library when \code{type} is equal to proj, ellps, datum, units or path; when \code{type} equals \code{have_datum_files} a boolean is returned indicating whether datum files are installed and accessible (checking for \code{conus}).
 
@@ -121,17 +121,12 @@ library(units)
 set_units(st_area(st_transform(nc[1,], 2264)), m^2)
 st_transform(structure(p1, proj4string = "+init=epsg:4326"), "+init=epsg:3857")
 st_wrap_dateline(st_sfc(st_linestring(rbind(c(-179,0),c(179,0))), crs = 4326))
-if (require(maps, quietly = TRUE)) {
- wrld <- st_as_sf(maps::map("world", fill = TRUE, plot = FALSE))
- wrld_wrap <- st_wrap_dateline(wrld, options = c("WRAPDATELINE=YES", "DATELINEOFFSET=180"),
-   quiet = TRUE)
- wrld_moll <- st_transform(wrld_wrap, "+proj=moll")
- plot(st_geometry(wrld_moll), col = "transparent")
-}
 sf_proj_info("datum")
 }
 \seealso{
 \link[lwgeom]{st_transform_proj}, part of package lwgeom.
 
 \link{sf_project} projects a matrix of coordinates, bypassing GDAL altogether
+
+\link{st_break_antimeridian}
 }
