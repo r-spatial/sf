@@ -1,5 +1,7 @@
 # version 1.0-9
 
+* add `st_break_antimeridian()`; #1983, #1991 by Roger Bivand
+
 * add `Fibonacci` as a spatial sampling type in `st_sample()`
 
 * use the global `options("sf_use_s2")` to determine whether to use s2, rather than a value in a local environment; #1977

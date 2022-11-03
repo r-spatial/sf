@@ -112,6 +112,7 @@ Geometric unary operations on simple feature geometries. These are all generics,
 \code{st_buffer} computes a buffer around this geometry/each geometry. If any of \code{endCapStyle},
 \code{joinStyle}, or \code{mitreLimit} are set to non-default values ('ROUND', 'ROUND', 1.0 respectively) then
 the underlying 'buffer with style' GEOS function is used.
+If a negative buffer returns empty polygons instead of shrinking, set st_use_s2() to FALSE
 See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.html} for details.
 
 \code{st_boundary} returns the boundary of a geometry
