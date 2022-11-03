@@ -112,7 +112,9 @@
 <div class="page-header"><h1 id="simple-features-for-r">Simple Features for R<a class="anchor" aria-label="anchor" href="#simple-features-for-r"></a>
 </h1></div>
 <p><a href="https://gist.github.com/edzer/f461a3a95570c4ab7edf3125c2f19d20" class="external-link"><img align="right" src="https://user-images.githubusercontent.com/520851/34887433-ce1d130e-f7c6-11e7-83fc-d60ad4fae6bd.gif"></a></p>
-<p>A package that provides <a href="https://en.wikipedia.org/wiki/Simple_Features" class="external-link">simple features access</a> for R. Package sf:</p>
+<p>A package that provides <a href="https://en.wikipedia.org/wiki/Simple_Features" class="external-link">simple features access</a> for R.</p>
+<p><a href="#blogs-presentations-vignettes-sp-sf-wiki">Blogs, links</a> • <a href="#cheatsheet">Cheatsheet</a> • <a href="#installing">Installing</a> • <a href="#contributing">Contributing</a> • <a href="#acknowledgment">Acknowledgment</a> • <a href="#how-to-cite">How to cite</a></p>
+<p>Package sf:</p>
 <ul>
 <li>represents simple features as records in a <code>data.frame</code> or <code>tibble</code> with a geometry list-column</li>
 <li>represents natively in R all 17 simple feature types for all dimensions (XY, XYZ, XYM, XYZM)</li>
@@ -127,9 +129,9 @@
 </ul>
 <p><a href="https://gist.github.com/edzer/442d74a5775abcd5068cf3e73b23687b" class="external-link"><img align="left" src="https://user-images.githubusercontent.com/520851/50280460-e35c1880-044c-11e9-9ed7-cc46754e49db.jpg"></a></p>
 <p>(Illustration (c) by <a href="https://twitter.com/allison_horst/status/1071456081308614656" class="external-link">Allison Horst</a>)</p>
-<div class="section level3">
-<h3 id="blogs-presentations-vignettes-sp-sf-wiki">Blogs, presentations, vignettes, sp-sf wiki<a class="anchor" aria-label="anchor" href="#blogs-presentations-vignettes-sp-sf-wiki"></a>
-</h3>
+<div class="section level2">
+<h2 id="blogs-presentations-vignettes-sp-sf-wiki">Blogs, presentations, vignettes, sp-sf wiki<a class="anchor" aria-label="anchor" href="#blogs-presentations-vignettes-sp-sf-wiki"></a>
+</h2>
 <ul>
 <li>an open access <a href="https://journal.r-project.org/archive/2018/RJ-2018-009/index.html" class="external-link">R Journal article</a> summarizes the package</li>
 <li>package vignettes: <a href="https://r-spatial.github.io/sf/articles/sf1.html" class="external-link">first</a>, <a href="https://r-spatial.github.io/sf/articles/sf2.html" class="external-link">second</a>, <a href="https://r-spatial.github.io/sf/articles/sf3.html" class="external-link">third</a>, <a href="https://r-spatial.github.io/sf/articles/sf4.html" class="external-link">fourth</a>, <a href="https://r-spatial.github.io/sf/articles/sf5.html" class="external-link">fifth</a>, <a href="https://r-spatial.github.io/sf/articles/sf6.html" class="external-link">sixth</a>, <a href="https://r-spatial.github.io/sf/articles/sf7.html" class="external-link">seventh</a>
@@ -164,7 +166,7 @@
 <div class="section level3">
 <h3 id="windows">Windows<a class="anchor" aria-label="anchor" href="#windows"></a>
 </h3>
-<p>Installing sf from source works under Windows when <a href="https://cran.r-project.org/bin/windows/Rtools/" class="external-link">Rtools</a> is installed. This downloads the system requirements from <a href="https://github.com/rwinlib/" class="external-link">rwinlib</a>.</p>
+<p>Installing sf from source works under Windows when <a href="https://cran.r-project.org/bin/windows/Rtools/" class="external-link">Rtools</a> is installed.</p>
 </div>
 <div class="section level3">
 <h3 id="macos">MacOS<a class="anchor" aria-label="anchor" href="#macos"></a>
@@ -173,7 +175,7 @@
 <p>The easiest way to install <code>gdal</code> is using Homebrew. Recent versions of Homebrew include a full-featured up-to-date <a href="https://github.com/Homebrew/homebrew-core/blob/master/Formula/gdal.rb" class="external-link">gdal formula</a>, which installs <code>proj</code> and <code>gdal</code> at the same time:</p>
 <pre><code>brew install pkg-config
 brew install gdal</code></pre>
-<p>Once gdal is installed, you will be able to install <code>sf</code> package from source in R. With the current version of <code>proj</code> (<code>7.0.0</code>) on homebrew, installation requires additional configuration:</p>
+<p>Once gdal is installed, you will be able to install <code>sf</code> package from source in R. With the current version of <code>proj</code> on homebrew, installation requires additional configuration:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"sf"</span>, configure.args <span class="op">=</span> <span class="st">"--with-proj-lib=/usr/local/lib/"</span><span class="op">)</span></span></code></pre></div>
 <p>Or the development version:</p>
@@ -194,11 +196,11 @@ brew install gdal</code></pre>
 <h4 id="ubuntu">Ubuntu<a class="anchor" aria-label="anchor" href="#ubuntu"></a>
 </h4>
 <p>Dependencies for recent versions of Ubuntu (18.04 and later) are available in the official repositories; you can install them with:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1"></a><span class="ex">apt-get</span> -y update <span class="kw">&amp;&amp;</span> <span class="ex">apt-get</span> install -y  libudunits2-dev libgdal-dev libgeos-dev libproj-dev</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">apt-get</span> <span class="at">-y</span> update <span class="kw">&amp;&amp;</span> <span class="ex">apt-get</span> install <span class="at">-y</span>  libudunits2-dev libgdal-dev libgeos-dev libproj-dev</span></code></pre></div>
 <p>However, to get more up-to-date versions of dependencies such as GDAL, we recommend adding the <a href="http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/" class="external-link">ubuntugis-unstable</a> PPA to the package repositories and installing them as follows:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">sudo</span> add-apt-repository ppa:ubuntugis/ubuntugis-unstable</span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">sudo</span> apt-get update</span>
-<span id="cb8-3"><a href="#cb8-3"></a><span class="fu">sudo</span> apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev </span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> add-apt-repository ppa:ubuntugis/ubuntugis-unstable</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get update</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev </span></code></pre></div>
 <p>Adding this PPA is required for installing <code>sf</code> on older versions of Ubuntu (e.g. Xenial).</p>
 <p>Another option, for advanced users, is to install dependencies from source; see e.g. an older <a href="https://github.com/r-spatial/sf/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml" class="external-link">Travis</a> config file for hints.</p>
 </div>
@@ -206,7 +208,7 @@ brew install gdal</code></pre>
 <h4 id="fedora">Fedora<a class="anchor" aria-label="anchor" href="#fedora"></a>
 </h4>
 <p>The following command installs all required dependencies:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">sudo</span> dnf install gdal-devel proj-devel geos-devel sqlite-devel udunits2-devel</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dnf install gdal-devel proj-devel geos-devel sqlite-devel udunits2-devel</span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="arch">Arch<a class="anchor" aria-label="anchor" href="#arch"></a>
@@ -240,6 +242,11 @@ yay/pacaur/yaourt/whatever -S udunits</code></pre>
 <li>When contributing pull requests, please adhere to the package style (in package code use <code>=</code> rather than <code>&lt;-</code>; don’t change indentation; tab stops of 4 spaces are preferred)</li>
 <li>This project is released with a <a href="CONDUCT.html">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</li>
 </ul>
+</div>
+<div class="section level2">
+<h2 id="how-to-cite">How to cite<a class="anchor" aria-label="anchor" href="#how-to-cite"></a>
+</h2>
+<p>Package <code>sf</code> can be cited as: Edzer Pebesma, 2018. Simple Features for R: Standardized Support for Spatial Vector Data. The R Journal <a href="https://journal.r-project.org/archive/2018/RJ-2018-009/index.html" class="external-link">10:1, 439-446.</a></p>
 </div>
 <div class="section level2">
 <h2 id="acknowledgment">Acknowledgment<a class="anchor" aria-label="anchor" href="#acknowledgment"></a>

@@ -75,6 +75,7 @@
     </div>
 
 <div id="simple-features-for-r" class="section level1">
+
 <p>Applicant: <a href="https://github.com/edzer/" class="external-link">Edzer Pebesma</a>, <a href="http://ifgi.uni-muenster.de/en" class="external-link">Institute for Geoinformatics</a>, University of Muenster, Germany; <a href="mailto:edzer.pebesma@uni-muenster.de">edzer.pebesma@uni-muenster.de</a></p>
 <p>Supporting authors: Edzer Pebesma, Roger Bivand, Michael Sumner, Robert Hijmans, Virgilio Gómez-Rubio</p>
 <p><a href="https://en.wikipedia.org/wiki/Simple_Features" class="external-link">Simple features</a> is an open (<a href="http://www.opengeospatial.org/standards/sfa" class="external-link">OGC</a> and <a href="http://www.iso.org/iso/home/store/catalogue_tc/catalogue_detail.htm?csnumber=40114" class="external-link">ISO</a>) interface standard for access and manipulation of spatial vector data (points, lines, polygons). It includes a standard <a href="http://www.opengeospatial.org/standards/sfs" class="external-link">SQL schema</a> that supports storage, retrieval, query and update of feature collections via a SQL interface. All commonly used databases provide this interface. <a href="http://geojson.org/" class="external-link">GeoJSON</a> is a standard for encoding simple features in JSON, and is used in JavaScript and MongoDB. Well-known-text (<a href="https://en.wikipedia.org/wiki/Well-known_text" class="external-link">WKT</a>) is a text representation of simple features used often in linked data; well-known-binary ([WKB] (<a href="https://en.wikipedia.org/wiki/Well-known_text" class="external-link uri">https://en.wikipedia.org/wiki/Well-known_text</a>)) a standard binary representation used in databases. <em>Simple Feature Access</em> defines coordinate reference systems, and makes it easy to move data from longitude-latitude to projections back and forth in a standardized way.</p>
@@ -84,7 +85,8 @@
 <p>Off-CRAN package <a href="https://github.com/thk686/rgdal2" class="external-link">rgdal2</a> is an interface to GDAL 2.0, which uses raw pointers to interface features, but does not import any data in R, using GDAL to handle everything. CRAN Package <a href="https://cran.r-project.org/web/packages/wkb/index.html" class="external-link">wkb</a>, contributed by Tibco Software, converts between WKB representations of several simple feature classes and corresponding classes in <code>sp</code>, and seems to be needed for Tibco software purposes.</p>
 <!---
 [second edition](http://www.springer.com/statistics/life+sciences%2C+medicine+%26+health/book/978-1-4614-7617-7))
---><div class="section level2">
+-->
+<div class="section level2">
 <h2 id="the-problem">The problem<a class="anchor" aria-label="anchor" href="#the-problem"></a></h2>
 <p>The problems we will solve are:</p>
 <ol style="list-style-type: decimal"><li>R can currently not represent simple features directly. It can read most simple feature classes in <code>sp</code> classes, but uses its own representation for this, and can only write data back without loss of information if it is furnished with ancilliary metadata encoded in a comment attribute to each Polygons object. It does for instance internally not distinguish between <code>POLYGON</code> and <code>MULTIPOLYGON</code> nor deal with several simple feature classes, including <code>TIN</code> and <code>GEOMETRYCOLLECTION</code>, nor handle <code>CURVE</code> geometries.</li>
@@ -112,7 +114,7 @@
 <div class="section level2">
 <h2 id="how-can-the-isc-help">How can the ISC help<a class="anchor" aria-label="anchor" href="#how-can-the-isc-help"></a></h2>
 <p>The following table contains the cost items.</p>
-<table class="table"><thead><tr class="header"><th>Item</th>
+<table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr class="header"><th>Item</th>
 <th>Cost</th>
 </tr></thead><tbody><tr class="odd"><td>employ a student assistant for one year (10 hrs/week)</td>
 <td>€ 6500</td>

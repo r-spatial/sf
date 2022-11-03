@@ -205,6 +205,7 @@ meters.</p></dd>
     <p><code>st_buffer</code> computes a buffer around this geometry/each geometry. If any of <code>endCapStyle</code>,
 <code>joinStyle</code>, or <code>mitreLimit</code> are set to non-default values ('ROUND', 'ROUND', 1.0 respectively) then
 the underlying 'buffer with style' GEOS function is used.
+If a negative buffer returns empty polygons instead of shrinking, set st_use_s2() to FALSE
 See <a href="https://postgis.net/docs/ST_Buffer.html" class="external-link">postgis.net/docs/ST_Buffer.html</a> for details.</p>
 <p><code>st_boundary</code> returns the boundary of a geometry</p>
 <p><code>st_convex_hull</code> creates the convex hull of a set of points</p>
@@ -228,6 +229,10 @@ point) a linestring or point is returned.</p>
 <p><code>st_reverse</code> reverses the nodes in a line</p>
 <p><code>st_node</code> adds nodes to linear geometries at intersections without a node, and only works on individual linear geometries</p>
 <p><code>st_segmentize</code> adds points to straight lines</p>
+    </div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p>[grDevices::chull()] for a more efficient algorithm for calculating the convex hull</p></div>
     </div>
 
     <div id="ref-examples">
@@ -273,7 +278,7 @@ point) a linestring or point is returned.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">op</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/Rtmp1GNirR/temp_libpath1407a16042da1/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmphrwRKf/temp_libpath13c1b69a543d0/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>

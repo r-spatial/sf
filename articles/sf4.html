@@ -100,11 +100,12 @@
 
       
 
-      </header><script src="sf4_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>4. Manipulating Simple Features</h1>
-                        <h4 data-toc-skip class="author">Edzer Pebesma</h4>
+                        <h4 data-toc-skip class="author">Edzer
+Pebesma</h4>
             
       
       <small class="dont-index">Source: <a href="https://github.com/r-spatial/sf/blob/HEAD/vignettes/sf4.Rmd" class="external-link"><code>vignettes/sf4.Rmd</code></a></small>
@@ -114,19 +115,25 @@
 
     
     
-<p>This vignette describes how simple features, i.e. records that come with a geometry, can be manipulated, for the case where these manipulations involve geometries. Manipulations include:</p>
+<p>This vignette describes how simple features, i.e. records that come
+with a geometry, can be manipulated, for the case where these
+manipulations involve geometries. Manipulations include:</p>
 <ul>
 <li>aggregating feature sets</li>
 <li>summarising feature sets</li>
 <li>joining two feature sets based on feature geometry</li>
 </ul>
-<p>Features are represented by records in an <code>sf</code> object, and have feature attributes (all non-geometry fields) and feature geometry. Since <code>sf</code> objects are a subclass of <code>data.frame</code> or <code>tbl_df</code>, operations on feature attributes work identically to how they work on <code>data.frame</code>s, e.g.</p>
+<p>Features are represented by records in an <code>sf</code> object, and
+have feature attributes (all non-geometry fields) and feature geometry.
+Since <code>sf</code> objects are a subclass of <code>data.frame</code>
+or <code>tbl_df</code>, operations on feature attributes work
+identically to how they work on <code>data.frame</code>s, e.g.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span><span class="co">## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1; sf_use_s2() is TRUE</span></span>
 <span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">## Reading layer `nc' from data source </span></span>
-<span><span class="co">##   `/tmp/Rtmp1GNirR/temp_libpath1407a16042da1/sf/shape/nc.shp' </span></span>
+<span><span class="co">##   `/tmp/RtmphrwRKf/temp_libpath13c1b69a543d0/sf/shape/nc.shp' </span></span>
 <span><span class="co">##   using driver `ESRI Shapefile'</span></span>
 <span><span class="co">## Simple feature collection with 100 features and 14 fields</span></span>
 <span><span class="co">## Geometry type: MULTIPOLYGON</span></span>
@@ -145,7 +152,10 @@
 <span><span class="co">##   BIR79 SID79 NWBIR79                       geometry</span></span>
 <span><span class="co">## 1  1364     0      19 MULTIPOLYGON (((1270814 913...</span></span></code></pre></div>
 <p>prints the first record.</p>
-<p>Many of the tidyverse/dplyr verbs have methods for <code>sf</code> objects. This means that if both <code>sf</code> and <code>dplyr</code> are loaded, manipulations such as selecting a single attribute will return an <code>sf</code> object:</p>
+<p>Many of the tidyverse/dplyr verbs have methods for <code>sf</code>
+objects. This means that if both <code>sf</code> and <code>dplyr</code>
+are loaded, manipulations such as selecting a single attribute will
+return an <code>sf</code> object:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="co">## </span></span>
@@ -165,7 +175,9 @@
 <span><span class="co">##   NWBIR74                       geometry</span></span>
 <span><span class="co">## 1      10 MULTIPOLYGON (((1270814 913...</span></span>
 <span><span class="co">## 2      10 MULTIPOLYGON (((1340555 959...</span></span></code></pre></div>
-<p>which implies that the geometry is sticky, and gets added automatically. If we want to drop geometry, we can coerce to <code>data.frame</code> first, this drops geometry list-columns:</p>
+<p>which implies that the geometry is sticky, and gets added
+automatically. If we want to drop geometry, we can coerce to
+<code>data.frame</code> first, this drops geometry list-columns:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nc</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">as.data.frame</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">NWBIR74</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">##   NWBIR74</span></span>
@@ -190,7 +202,8 @@
 <span><span class="co">## [1] 10</span></span>
 <span><span class="co">## attr(,"class")</span></span>
 <span><span class="co">## [1] "numeric"</span></span></code></pre></div>
-<p>but we can also use a spatial object as the row selector, to select features that intersect with another spatial feature:</p>
+<p>but we can also use a spatial object as the row selector, to select
+features that intersect with another spatial feature:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Ashe</span> <span class="op">=</span> <span class="va">nc</span><span class="op">[</span><span class="va">nc</span><span class="op">$</span><span class="va">NAME</span> <span class="op">==</span> <span class="st">"Ashe"</span>,<span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">Ashe</span><span class="op">)</span></span>
@@ -211,7 +224,11 @@
 <span><span class="co">## 2       10   542     3      12 MULTIPOLYGON (((1340555 959...</span></span>
 <span><span class="co">## 18     200  3725     7     222 MULTIPOLYGON (((1402677 837...</span></span>
 <span><span class="co">## 19      17  1775     1      33 MULTIPOLYGON (((1171158 868...</span></span></code></pre></div>
-<p>We see that in the result set <code>Ashe</code> is included, as the default value for argument <code>op</code> in <code>[.sf</code> is <code>st_intersects</code>, and <code>Ashe</code> intersects with itself. We could exclude self-intersection by using predicate <code>st_touches</code> (overlapping features don’t touch):</p>
+<p>We see that in the result set <code>Ashe</code> is included, as the
+default value for argument <code>op</code> in <code>[.sf</code> is
+<code>st_intersects</code>, and <code>Ashe</code> intersects with
+itself. We could exclude self-intersection by using predicate
+<code>st_touches</code> (overlapping features don’t touch):</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Ashe</span> <span class="op">=</span> <span class="va">nc</span><span class="op">[</span><span class="va">nc</span><span class="op">$</span><span class="va">NAME</span> <span class="op">==</span> <span class="st">"Ashe"</span>,<span class="op">]</span></span>
 <span><span class="va">nc</span><span class="op">[</span><span class="va">Ashe</span>, op <span class="op">=</span> <span class="va">st_touches</span><span class="op">]</span></span>
@@ -228,7 +245,8 @@
 <span><span class="co">## 2       10   542     3      12 MULTIPOLYGON (((1340555 959...</span></span>
 <span><span class="co">## 18     200  3725     7     222 MULTIPOLYGON (((1402677 837...</span></span>
 <span><span class="co">## 19      17  1775     1      33 MULTIPOLYGON (((1171158 868...</span></span></code></pre></div>
-<p>Using <code>dplyr</code>, we can do the same by calling the predicate directly:</p>
+<p>Using <code>dplyr</code>, we can do the same by calling the predicate
+directly:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nc</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lengths.html" class="external-link">lengths</a></span><span class="op">(</span><span class="fu"><a href="../reference/geos_binary_pred.html">st_touches</a></span><span class="op">(</span><span class="va">.</span>, <span class="va">Ashe</span><span class="op">)</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="co">## Simple feature collection with 3 features and 14 fields</span></span>
@@ -248,7 +266,9 @@
 <div class="section level2">
 <h2 id="aggregating-or-summarizing-feature-sets">Aggregating or summarizing feature sets<a class="anchor" aria-label="anchor" href="#aggregating-or-summarizing-feature-sets"></a>
 </h2>
-<p>Suppose we want to compare the 1974 fraction of SID (sudden infant death) of the counties that intersect with <code>Ashe</code> to the remaining ones. We can do this by:</p>
+<p>Suppose we want to compare the 1974 fraction of SID (sudden infant
+death) of the counties that intersect with <code>Ashe</code> to the
+remaining ones. We can do this by:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/aggregate.sf.html">aggregate</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SID74"</span>, <span class="st">"BIR74"</span><span class="op">)</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Ashe_nb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lengths.html" class="external-link">lengths</a></span><span class="op">(</span><span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span><span class="op">(</span><span class="va">nc</span>, <span class="va">Ashe</span><span class="op">)</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span>, <span class="va">sum</span><span class="op">)</span></span>
 <span><span class="op">(</span><span class="va">a</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>frac74 <span class="op">=</span> <span class="va">SID74</span> <span class="op">/</span> <span class="va">BIR74</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">frac74</span><span class="op">)</span><span class="op">)</span></span>
@@ -267,7 +287,12 @@
 <div class="section level2">
 <h2 id="joining-two-feature-sets-based-on-attributes">Joining two feature sets based on attributes<a class="anchor" aria-label="anchor" href="#joining-two-feature-sets-based-on-attributes"></a>
 </h2>
-<p>The usual join verbs of base R (<code>merge</code>) and of dplyr (<code>left_join</code>, etc) work for <code>sf</code> objects as well; the joining takes place on attributes (ignoring geometries). In case of no matching geometry, an empty geometry is substituted. The second argument should be a <code>data.frame</code> (or similar), not an <code>sf</code> object:</p>
+<p>The usual join verbs of base R (<code>merge</code>) and of dplyr
+(<code>left_join</code>, etc) work for <code>sf</code> objects as well;
+the joining takes place on attributes (ignoring geometries). In case of
+no matching geometry, an empty geometry is substituted. The second
+argument should be a <code>data.frame</code> (or similar), not an
+<code>sf</code> object:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="../reference/sf.html">st_sf</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, geom <span class="op">=</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">y</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span>
@@ -303,7 +328,8 @@
 <div class="section level2">
 <h2 id="joining-two-feature-sets-based-on-geometries">Joining two feature sets based on geometries<a class="anchor" aria-label="anchor" href="#joining-two-feature-sets-based-on-geometries"></a>
 </h2>
-<p>For joining based on spatial intersections (of any kind), <code>st_join</code> is used:</p>
+<p>For joining based on spatial intersections (of any kind),
+<code>st_join</code> is used:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="../reference/sf.html">st_sf</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, geom <span class="op">=</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">y</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">0.1</span><span class="op">)</span></span>
@@ -312,7 +338,8 @@
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.5</span>, <span class="fl">3.5</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="sf4_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
-<p>The join method is a left join, retaining all records of the first attribute:</p>
+<p>The join method is a left join, retaining all records of the first
+attribute:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/st_join.html">st_join</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span></span>
 <span><span class="co">## Simple feature collection with 2 features and 2 fields</span></span>
@@ -333,7 +360,8 @@
 <span><span class="co">## 2   2   2 POLYGON ((2.1 2, 2.099863 1...</span></span>
 <span><span class="co">## 3   3  NA POLYGON ((3.1 3, 3.099863 2...</span></span></code></pre></div>
 <p>and the geometry retained is that of the first argument.</p>
-<p>The spatial join predicate can be controlled with any function compatible with <code>st_intersects</code> (the default), e.g.</p>
+<p>The spatial join predicate can be controlled with any function
+compatible with <code>st_intersects</code> (the default), e.g.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/st_join.html">st_join</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, join <span class="op">=</span> <span class="va">st_covers</span><span class="op">)</span> <span class="co"># no matching y records: points don't cover circles</span></span>
 <span><span class="co">## Simple feature collection with 2 features and 2 fields</span></span>

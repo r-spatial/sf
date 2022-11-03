@@ -100,11 +100,13 @@
 
       
 
-      </header><script src="sf2_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>2. Reading, Writing and Converting Simple Features</h1>
-                        <h4 data-toc-skip class="author">Edzer Pebesma</h4>
+      <h1 data-toc-skip>2. Reading, Writing and Converting Simple
+Features</h1>
+                        <h4 data-toc-skip class="author">Edzer
+Pebesma</h4>
             
       
       <small class="dont-index">Source: <a href="https://github.com/r-spatial/sf/blob/HEAD/vignettes/sf2.Rmd" class="external-link"><code>vignettes/sf2.Rmd</code></a></small>
@@ -114,80 +116,112 @@
 
     
     
-<p>This vignette describes how simple features can be read in R from files or databases, and how they can be converted to other formats (text, <a href="https://cran.r-project.org/package=sp" class="external-link">sp</a>)</p>
+<p>This vignette describes how simple features can be read in R from
+files or databases, and how they can be converted to other formats
+(text, <a href="https://cran.r-project.org/package=sp" class="external-link">sp</a>)</p>
 <div class="section level2">
 <h2 id="reading-and-writing-through-gdal">Reading and writing through GDAL<a class="anchor" aria-label="anchor" href="#reading-and-writing-through-gdal"></a>
 </h2>
-<p>The Geospatial Data Abstraction Library (<a href="https://gdal.org/" class="external-link">GDAL</a>) is the swiss army knife for spatial data: it reads and writes vector and raster data from and to practically every file format, or database, of significance. Package <code>sf</code> reads and writes using GDAL by the functions <code>st_read</code> and <code>st_write</code>.</p>
+<p>The Geospatial Data Abstraction Library (<a href="https://gdal.org/" class="external-link">GDAL</a>) is the swiss army knife for spatial
+data: it reads and writes vector and raster data from and to practically
+every file format, or database, of significance. Package <code>sf</code>
+reads and writes using GDAL by the functions <code>st_read</code> and
+<code>st_write</code>.</p>
 <p>The data model GDAL uses needs</p>
 <ul>
 <li>a data source, which may be a file, directory, or database</li>
-<li>a layer, which is a single geospatial dataset inside a file or directory or e.g. a table in a database.</li>
+<li>a layer, which is a single geospatial dataset inside a file or
+directory or e.g. a table in a database.</li>
 <li>the specification of a driver (i.e., which format)</li>
 <li>driver-specific reading or writing data sources, or layers</li>
 </ul>
-<p>This may sound complex, but it is needed to map to over 200 data formats! Package <code>sf</code> tries hard to simplify this where possible (e.g. a file contains a single layer), but this vignette will try to point you to the options.</p>
+<p>This may sound complex, but it is needed to map to over 200 data
+formats! Package <code>sf</code> tries hard to simplify this where
+possible (e.g. a file contains a single layer), but this vignette will
+try to point you to the options.</p>
 <div class="section level3">
 <h3 id="using-st_read">Using st_read<a class="anchor" aria-label="anchor" href="#using-st_read"></a>
 </h3>
-<p>As an example, we read the North Carolina counties SIDS dataset, which comes shipped with the <code>sf</code> package by:</p>
+<p>As an example, we read the North Carolina counties SIDS dataset,
+which comes shipped with the <code>sf</code> package by:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span><span class="co">## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1; sf_use_s2() is TRUE</span></span>
 <span><span class="va">fname</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span></span>
 <span><span class="va">fname</span></span>
-<span><span class="co">## [1] "/tmp/Rtmp1GNirR/temp_libpath1407a16042da1/sf/shape/nc.shp"</span></span>
+<span><span class="co">## [1] "/tmp/RtmphrwRKf/temp_libpath13c1b69a543d0/sf/shape/nc.shp"</span></span>
 <span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">fname</span><span class="op">)</span></span>
 <span><span class="co">## Reading layer `nc' from data source </span></span>
-<span><span class="co">##   `/tmp/Rtmp1GNirR/temp_libpath1407a16042da1/sf/shape/nc.shp' </span></span>
+<span><span class="co">##   `/tmp/RtmphrwRKf/temp_libpath13c1b69a543d0/sf/shape/nc.shp' </span></span>
 <span><span class="co">##   using driver `ESRI Shapefile'</span></span>
 <span><span class="co">## Simple feature collection with 100 features and 14 fields</span></span>
 <span><span class="co">## Geometry type: MULTIPOLYGON</span></span>
 <span><span class="co">## Dimension:     XY</span></span>
 <span><span class="co">## Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span></span>
 <span><span class="co">## Geodetic CRS:  NAD27</span></span></code></pre></div>
-<p>Typical users will use a file name with path for <code>fname</code>, or first set R’s working directory with <code><a href="https://rdrr.io/r/base/getwd.html" class="external-link">setwd()</a></code> and use file name without path.</p>
-<p>We see here that a single argument is used to find both the datasource and the layer. This works when the datasource contains a single layer. In case the number of layers is zero (e.g. a database with no tables), an error message is given. In case there are more layers than one, the first layer is returned, but a message and a warning are given:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">st_read</span>(<span class="st">"PG:dbname=postgis"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2"></a>Multiple layers are present <span class="cf">in</span> data source PG<span class="op">:</span>dbname=postgis, reading layer <span class="st">`</span><span class="dt">meuse'.</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="dt">Use </span><span class="st">`</span>st_layers<span class="st">' to list all layer names and their type in a data source.</span></span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="st">Set the `layer'</span> argument <span class="cf">in</span> <span class="st">`</span><span class="dt">st_read' to read a particular layer.</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="dt">Reading layer </span><span class="st">`</span>meuse<span class="st">' from data source `PG:dbname=postgis'</span> using driver <span class="st">`</span><span class="dt">PostgreSQL'</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a><span class="dt">Simple feature collection with 155 features and 12 fields</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a><span class="dt">geometry type:  POINT</span></span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="dt">dimension:      XY</span></span>
-<span id="cb2-9"><a href="#cb2-9"></a><span class="dt">bbox:           xmin: 178605 ymin: 329714 xmax: 181390 ymax: 333611</span></span>
-<span id="cb2-10"><a href="#cb2-10"></a><span class="dt">epsg (SRID):    28992</span></span>
-<span id="cb2-11"><a href="#cb2-11"></a><span class="dt">proj4string:    +proj=sterea +lat_0=52.15616055555555 ...</span></span>
-<span id="cb2-12"><a href="#cb2-12"></a><span class="dt">Warning message:</span></span>
-<span id="cb2-13"><a href="#cb2-13"></a><span class="dt">In eval(substitute(expr), envir, enclos) :</span></span>
-<span id="cb2-14"><a href="#cb2-14"></a><span class="dt">  automatically selected the first layer in a data source containing more than one.</span></span></code></pre></div>
-<p>The message points to the <code>st_layers</code> command, which lists the driver and layers in a datasource, e.g.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;</span><span class="st"> </span><span class="kw">st_layers</span>(<span class="st">"PG:dbname=postgis"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2"></a>Driver<span class="op">:</span><span class="st"> </span>PostgreSQL </span>
-<span id="cb3-3"><a href="#cb3-3"></a>Available layers<span class="op">:</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="st">  </span>layer_name geometry_type features fields</span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="dv">1</span>      meuse         Point      <span class="dv">155</span>     <span class="dv">12</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="dv">2</span>   meuse_sf         Point      <span class="dv">155</span>     <span class="dv">12</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="dv">3</span>       sids Multi Polygon      <span class="dv">100</span>     <span class="dv">14</span></span>
-<span id="cb3-8"><a href="#cb3-8"></a><span class="dv">4</span>  meuse_tbl         Point      <span class="dv">155</span>     <span class="dv">13</span></span>
-<span id="cb3-9"><a href="#cb3-9"></a><span class="dv">5</span> meuse_tbl2         Point      <span class="dv">155</span>     <span class="dv">13</span></span>
-<span id="cb3-10"><a href="#cb3-10"></a><span class="op">&gt;</span><span class="st"> </span></span></code></pre></div>
+<p>Typical users will use a file name with path for <code>fname</code>,
+or first set R’s working directory with <code><a href="https://rdrr.io/r/base/getwd.html" class="external-link">setwd()</a></code> and use
+file name without path.</p>
+<p>We see here that a single argument is used to find both the
+datasource and the layer. This works when the datasource contains a
+single layer. In case the number of layers is zero (e.g. a database with
+no tables), an error message is given. In case there are more layers
+than one, the first layer is returned, but a message and a warning are
+given:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">st_read</span>(<span class="st">"PG:dbname=postgis"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>Multiple layers are present <span class="cf">in</span> data source PG<span class="sc">:</span>dbname<span class="ot">=</span>postgis, reading layer <span class="st">`</span><span class="at">meuse'.</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">Use </span><span class="st">`</span>st_layers<span class="st">' to list all layer names and their type in a data source.</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="st">Set the `layer'</span> argument <span class="cf">in</span> <span class="st">`</span><span class="at">st_read' to read a particular layer.</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">Reading layer </span><span class="st">`</span>meuse<span class="st">' from data source `PG:dbname=postgis'</span> using driver <span class="st">`</span><span class="at">PostgreSQL'</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">Simple feature collection with 155 features and 12 fields</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">geometry type:  POINT</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="at">dimension:      XY</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="at">bbox:           xmin: 178605 ymin: 329714 xmax: 181390 ymax: 333611</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="at">epsg (SRID):    28992</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="at">proj4string:    +proj=sterea +lat_0=52.15616055555555 ...</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="at">Warning message:</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="at">In eval(substitute(expr), envir, enclos) :</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="at">  automatically selected the first layer in a data source containing more than one.</span></span></code></pre></div>
+<p>The message points to the <code>st_layers</code> command, which lists
+the driver and layers in a datasource, e.g.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">st_layers</span>(<span class="st">"PG:dbname=postgis"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>Driver<span class="sc">:</span> PostgreSQL </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>Available layers<span class="sc">:</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  layer_name geometry_type features fields</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span>      meuse         Point      <span class="dv">155</span>     <span class="dv">12</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span>   meuse_sf         Point      <span class="dv">155</span>     <span class="dv">12</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span>       sids Multi Polygon      <span class="dv">100</span>     <span class="dv">14</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="dv">4</span>  meuse_tbl         Point      <span class="dv">155</span>     <span class="dv">13</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span> meuse_tbl2         Point      <span class="dv">155</span>     <span class="dv">13</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> </span></code></pre></div>
 <p>A particular layer can now be read by e.g.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"PG:dbname=postgis"</span>, <span class="st">"sids"</span><span class="op">)</span></span></code></pre></div>
-<p><code>st_layers</code> has the option to count the number of features in case these are missing: some datasources (e.g. OSM xml files) do not report the number of features, but need to be completely read for this. GDAL allows for more than one geometry column for a feature layer; these are reported by <code>st_layers</code>.</p>
-<p>In case a layer contains only geometries but no attributes (fields), <code>st_read</code> still returns an <code>sf</code> object, with a geometry column only.</p>
-<p>We see that GDAL automatically detects the driver (file format) of the datasource, by trying them all in turn.</p>
-<p><code>st_read</code> follows the conventions of base R, similar to how it reads tabular data into <code>data.frame</code>s. This means that character data are read, by default as <code>factor</code>s. For those who insist on retrieving character data as character vectors, the argument <code>stringsAsFactors</code> can be set to <code>FALSE</code>:</p>
+<p><code>st_layers</code> has the option to count the number of features
+in case these are missing: some datasources (e.g. OSM xml files) do not
+report the number of features, but need to be completely read for this.
+GDAL allows for more than one geometry column for a feature layer; these
+are reported by <code>st_layers</code>.</p>
+<p>In case a layer contains only geometries but no attributes (fields),
+<code>st_read</code> still returns an <code>sf</code> object, with a
+geometry column only.</p>
+<p>We see that GDAL automatically detects the driver (file format) of
+the datasource, by trying them all in turn.</p>
+<p><code>st_read</code> follows the conventions of base R, similar to
+how it reads tabular data into <code>data.frame</code>s. This means that
+character data are read, by default as <code>factor</code>s. For those
+who insist on retrieving character data as character vectors, the
+argument <code>stringsAsFactors</code> can be set to
+<code>FALSE</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">fname</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p>Alternatively, a user can set the global option <code>stringsAsFactors</code>, and this will have the same effect:</p>
+<p>Alternatively, a user can set the global option
+<code>stringsAsFactors</code>, and this will have the same effect:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">fname</span><span class="op">)</span></span>
 <span><span class="co">## Reading layer `nc' from data source </span></span>
-<span><span class="co">##   `/tmp/Rtmp1GNirR/temp_libpath1407a16042da1/sf/shape/nc.shp' </span></span>
+<span><span class="co">##   `/tmp/RtmphrwRKf/temp_libpath13c1b69a543d0/sf/shape/nc.shp' </span></span>
 <span><span class="co">##   using driver `ESRI Shapefile'</span></span>
 <span><span class="co">## Simple feature collection with 100 features and 14 fields</span></span>
 <span><span class="co">## Geometry type: MULTIPOLYGON</span></span>
@@ -198,20 +232,28 @@
 <div class="section level3">
 <h3 id="using-st_write">Using st_write<a class="anchor" aria-label="anchor" href="#using-st_write"></a>
 </h3>
-<p>To write a simple features object to a file, we need at least two arguments, the object and a filename:</p>
+<p>To write a simple features object to a file, we need at least two
+arguments, the object and a filename:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/st_write.html">st_write</a></span><span class="op">(</span><span class="va">nc</span>, <span class="st">"nc1.shp"</span><span class="op">)</span></span></code></pre></div>
-<p>The file name is taken as the data source name. The default for the layer name is the basename (filename without path) of the the data source name. For this, <code>st_write</code> needs to guess the driver. The above command is, for instance, equivalent to:</p>
+<p>The file name is taken as the data source name. The default for the
+layer name is the basename (filename without path) of the the data
+source name. For this, <code>st_write</code> needs to guess the driver.
+The above command is, for instance, equivalent to:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/st_write.html">st_write</a></span><span class="op">(</span><span class="va">nc</span>, dsn <span class="op">=</span> <span class="st">"nc1.shp"</span>, layer <span class="op">=</span> <span class="st">"nc.shp"</span>, driver <span class="op">=</span> <span class="st">"ESRI Shapefile"</span><span class="op">)</span></span>
 <span><span class="co">## Writing layer `nc' to data source `nc1.shp' using driver `ESRI Shapefile'</span></span>
 <span><span class="co">## Writing 100 features with 14 fields and geometry type Multi Polygon.</span></span></code></pre></div>
-<p>How the guessing of drivers works is explained in the next section.</p>
+<p>How the guessing of drivers works is explained in the next
+section.</p>
 </div>
 <div class="section level3">
 <h3 id="guessing-a-driver-for-output">Guessing a driver for output<a class="anchor" aria-label="anchor" href="#guessing-a-driver-for-output"></a>
 </h3>
-<p>The output driver is guessed from the datasource name, either from its extension (<code>.shp</code>: <code>ESRI Shapefile</code>), or its prefix (<code>PG:</code>: <code>PostgreSQL</code>). The list of extensions with corresponding driver (short driver name) is:</p>
+<p>The output driver is guessed from the datasource name, either from
+its extension (<code>.shp</code>: <code>ESRI Shapefile</code>), or its
+prefix (<code>PG:</code>: <code>PostgreSQL</code>). The list of
+extensions with corresponding driver (short driver name) is:</p>
 <table class="table">
 <thead><tr class="header">
 <th>extension</th>
@@ -314,6 +356,10 @@
 </table>
 <p>The list with prefixes is:</p>
 <table class="table">
+<colgroup>
+<col width="13%">
+<col width="86%">
+</colgroup>
 <thead><tr class="header">
 <th>prefix</th>
 <th>driver short name</th>
@@ -365,31 +411,53 @@
 <div class="section level3">
 <h3 id="dataset-and-layer-reading-or-creation-options">Dataset and layer reading or creation options<a class="anchor" aria-label="anchor" href="#dataset-and-layer-reading-or-creation-options"></a>
 </h3>
-<p>Various GDAL drivers have options that influences the reading or writing process, for example what the driver should do when a table already exists in a database: append records to the table or overwrite it:</p>
+<p>Various GDAL drivers have options that influences the reading or
+writing process, for example what the driver should do when a table
+already exists in a database: append records to the table or overwrite
+it:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/st_write.html">st_write</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="va">meuse</span><span class="op">)</span>, <span class="st">"PG:dbname=postgis"</span>, <span class="st">"meuse"</span>, </span>
 <span>    layer_options <span class="op">=</span> <span class="st">"OVERWRITE=true"</span><span class="op">)</span></span></code></pre></div>
-<p>In case the table exists and the option is not specified, the driver will give an error. Driver-specific options are documented in the driver manual of <a href="https://gdal.org/drivers/vector/index.html" class="external-link">gdal</a>. Multiple options can be given by multiple strings in <code>options</code>.</p>
-<p>For <code>st_read</code>, there is only <code>options</code>; for <code>st_write</code>, one needs to distinguish between <code>dataset_options</code> and <code>layer_options</code>, the first related to opening a dataset, the second to creating layers in the dataset.</p>
+<p>In case the table exists and the option is not specified, the driver
+will give an error. Driver-specific options are documented in the driver
+manual of <a href="https://gdal.org/drivers/vector/index.html" class="external-link">gdal</a>.
+Multiple options can be given by multiple strings in
+<code>options</code>.</p>
+<p>For <code>st_read</code>, there is only <code>options</code>; for
+<code>st_write</code>, one needs to distinguish between
+<code>dataset_options</code> and <code>layer_options</code>, the first
+related to opening a dataset, the second to creating layers in the
+dataset.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="reading-and-writing-directly-to-and-from-spatial-databases">Reading and writing directly to and from spatial databases<a class="anchor" aria-label="anchor" href="#reading-and-writing-directly-to-and-from-spatial-databases"></a>
 </h2>
-<p>Package <code>sf</code> supports reading and writing from and to spatial databases using the <code>DBI</code> interface. So far, testing has mainly be done with <code>PostGIS</code>, other databases might work but may also need more work. An example of reading is:</p>
+<p>Package <code>sf</code> supports reading and writing from and to
+spatial databases using the <code>DBI</code> interface. So far, testing
+has mainly be done with <code>PostGIS</code>, other databases might work
+but may also need more work. An example of reading is:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tomoakin/RPostgreSQL" class="external-link">RPostgreSQL</a></span><span class="op">)</span> </span>
 <span><span class="va">conn</span> <span class="op">=</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/RPostgreSQL/man/PostgreSQL.html" class="external-link">PostgreSQL</a></span><span class="op">(</span><span class="op">)</span>, dbname <span class="op">=</span> <span class="st">"postgis"</span><span class="op">)</span> </span>
 <span><span class="va">meuse</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">conn</span>, <span class="st">"meuse"</span><span class="op">)</span></span>
 <span><span class="va">meuse_1_3</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">conn</span>, query <span class="op">=</span> <span class="st">"select * from meuse limit 3;"</span><span class="op">)</span> </span>
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html" class="external-link">dbDisconnect</a></span><span class="op">(</span><span class="va">conn</span><span class="op">)</span> </span></code></pre></div>
-<p>We see here that in the second example a query is given. This query may contain spatial predicates, which could be a way to work through massive spatial datasets in R without having to read them completely in memory.</p>
+<p>We see here that in the second example a query is given. This query
+may contain spatial predicates, which could be a way to work through
+massive spatial datasets in R without having to read them completely in
+memory.</p>
 <p>Similarly, tables can be written:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">conn</span> <span class="op">=</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/RPostgreSQL/man/PostgreSQL.html" class="external-link">PostgreSQL</a></span><span class="op">(</span><span class="op">)</span>, dbname <span class="op">=</span> <span class="st">"postgis"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/st_write.html">st_write</a></span><span class="op">(</span><span class="va">conn</span>, <span class="va">meuse</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbDisconnect.html" class="external-link">dbDisconnect</a></span><span class="op">(</span><span class="va">conn</span><span class="op">)</span></span></code></pre></div>
-<p>Here, the default table (layer) name is taken from the object name (<code>meuse</code>). Argument <code>drop</code> informs to drop (remove) the table before writing; logical argument <code>binary</code> determines whether to use well-known binary or well-known text when writing the geometry (where well-known binary is faster and lossless).</p>
+<p>Here, the default table (layer) name is taken from the object name
+(<code>meuse</code>). Argument <code>drop</code> informs to drop
+(remove) the table before writing; logical argument <code>binary</code>
+determines whether to use well-known binary or well-known text when
+writing the geometry (where well-known binary is faster and
+lossless).</p>
 </div>
 <div class="section level2">
 <h2 id="conversion-to-other-formats-wkt-wkb-sp">Conversion to other formats: WKT, WKB, sp<a class="anchor" aria-label="anchor" href="#conversion-to-other-formats-wkt-wkb-sp"></a>
@@ -397,13 +465,15 @@
 <div class="section level3">
 <h3 id="conversion-to-and-from-well-known-text">Conversion to and from well-known text<a class="anchor" aria-label="anchor" href="#conversion-to-and-from-well-known-text"></a>
 </h3>
-<p>The usual form in which we see simple features printed is well-known text:</p>
+<p>The usual form in which we see simple features printed is well-known
+text:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">## POINT (0 1)</span></span>
 <span><span class="fu"><a href="../reference/st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">9</span>,ncol<span class="op">=</span><span class="fl">2</span>,byrow<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">## LINESTRING (0 1, 2 3, 4 5, 6 7, 8 9)</span></span></code></pre></div>
-<p>We can create these well-known text strings explicitly using <code>st_as_text</code>:</p>
+<p>We can create these well-known text strings explicitly using
+<code>st_as_text</code>:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="../reference/st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">9</span>,ncol<span class="op">=</span><span class="fl">2</span>,byrow<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">str</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_as_text.html">st_as_text</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
@@ -422,7 +492,8 @@
 <div class="section level3">
 <h3 id="conversion-to-and-from-well-known-binary">Conversion to and from well-known binary<a class="anchor" aria-label="anchor" href="#conversion-to-and-from-well-known-binary"></a>
 </h3>
-<p>Well-known binary is created from simple features by <code>st_as_binary</code>:</p>
+<p>Well-known binary is created from simple features by
+<code>st_as_binary</code>:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="../reference/st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">9</span>,ncol<span class="op">=</span><span class="fl">2</span>,byrow<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">(</span><span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_as_binary.html">st_as_binary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
@@ -432,7 +503,10 @@
 <span><span class="co">## [76] 00 00 00 00 20 40 00 00 00 00 00 00 22 40</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span><span class="co">## [1] "raw"</span></span></code></pre></div>
-<p>The object returned by <code>st_as_binary</code> is of class <code>WKB</code> and is either a list with raw vectors, or a single raw vector. These can be converted into a hexadecimal character vector using <code>rawToHex</code>:</p>
+<p>The object returned by <code>st_as_binary</code> is of class
+<code>WKB</code> and is either a list with raw vectors, or a single raw
+vector. These can be converted into a hexadecimal character vector using
+<code>rawToHex</code>:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/rawToHex.html">rawToHex</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span><span class="co">## [1] "0102000000050000000000000000000000000000000000f03f000000000000004000000000000008400000000000001040000000000000144000000000000018400000000000001c4000000000000020400000000000002240"</span></span></code></pre></div>
@@ -451,7 +525,9 @@
 <div class="section level3">
 <h3 id="conversion-to-and-from-sp">Conversion to and from sp<a class="anchor" aria-label="anchor" href="#conversion-to-and-from-sp"></a>
 </h3>
-<p>Spatial objects as maintained by package <code>sp</code> can be converted into simple feature objects or geometries by <code>st_as_sf</code> and <code>st_as_sfc</code>, respectively:</p>
+<p>Spatial objects as maintained by package <code>sp</code> can be
+converted into simple feature objects or geometries by
+<code>st_as_sf</code> and <code>st_as_sfc</code>, respectively:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/methods.html" class="external-link">methods</a></span><span class="op">(</span><span class="va">st_as_sf</span><span class="op">)</span></span>
 <span><span class="co">##  [1] st_as_sf.data.frame*   st_as_sf.lpp*          st_as_sf.map*         </span></span>
@@ -482,7 +558,10 @@
 <span><span class="co">## Warning: plotting the first 10 out of 12 attributes; use max.plot = 12 to plot</span></span>
 <span><span class="co">## all</span></span></code></pre></div>
 <p><img src="sf2_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
-<p>Conversion of simple feature objects of class <code>sf</code> or <code>sfc</code> into corresponding <code>Spatial*</code> objects is done using the <code>as</code> method, coercing to <code>Spatial</code>:</p>
+<p>Conversion of simple feature objects of class <code>sf</code> or
+<code>sfc</code> into corresponding <code>Spatial*</code> objects is
+done using the <code>as</code> method, coercing to
+<code>Spatial</code>:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">6</span>,<span class="fl">9</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/coerce-methods.html">as</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"Spatial"</span><span class="op">)</span></span>

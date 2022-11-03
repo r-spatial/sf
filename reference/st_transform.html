@@ -190,7 +190,7 @@ if you need the traditional GIS order, use <code>"OGC:CRS84"</code>, not
 <code>"EPSG:4326"</code>. Extra care is needed with the ESRI Shapefile format,
 because WKT1 does not store axis order unambigiously.</p>
 <p>The <code>st_transform</code> method for <code>sfg</code> objects assumes that the CRS of the object is available as an attribute of that name.</p>
-<p>For a discussion of using <code>options</code>, see <a href="https://github.com/r-spatial/sf/issues/280" class="external-link">https://github.com/r-spatial/sf/issues/280</a> and <a href="https://github.com/r-spatial/sf/issues/541" class="external-link">https://github.com/r-spatial/sf/issues/541</a></p>
+<p>For a discussion of using <code>options</code>, see <a href="https://github.com/r-spatial/sf/issues/280" class="external-link">https://github.com/r-spatial/sf/issues/280</a> and <a href="https://github.com/r-spatial/sf/issues/1983" class="external-link">https://github.com/r-spatial/sf/issues/1983</a></p>
 <p><code>sf_proj_info</code> lists the available projections, ellipses, datums, units, or data search path of the PROJ library when <code>type</code> is equal to proj, ellps, datum, units or path; when <code>type</code> equals <code>have_datum_files</code> a boolean is returned indicating whether datum files are installed and accessible (checking for <code>conus</code>).</p>
 <p>for PROJ &gt;= 6, <code>sf_proj_info</code> does not provide option <code>type = "datums"</code>. 
 PROJ &lt; 6 does not provide the option <code>type = "prime_meridians"</code>.</p>
@@ -200,7 +200,8 @@ variable as numeric, previous versions return a character vector containing a nu
     <div id="see-also">
     <h2>See also</h2>
     <div class="dont-index"><p><a href="https://rdrr.io/pkg/lwgeom/man/st_transform_proj.html" class="external-link">st_transform_proj</a>, part of package lwgeom.</p>
-<p><a href="sf_project.html">sf_project</a> projects a matrix of coordinates, bypassing GDAL altogether</p></div>
+<p><a href="sf_project.html">sf_project</a> projects a matrix of coordinates, bypassing GDAL altogether</p>
+<p><a href="st_break_antimeridian.html">st_break_antimeridian</a></p></div>
     </div>
 
     <div id="ref-examples">
@@ -252,7 +253,7 @@ variable as numeric, previous versions return a character vector containing a nu
 <span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (-30 20)</span>
 <span class="r-in"><span><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/Rtmp1GNirR/temp_libpath1407a16042da1/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmphrwRKf/temp_libpath13c1b69a543d0/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
@@ -278,16 +279,6 @@ variable as numeric, previous versions return a character vector containing a nu
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -180 ymin: 0 xmax: 180 ymax: 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  WGS 84</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> MULTILINESTRING ((-179 0, -180 0), (180 0, 179 0))</span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va">maps</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span> <span class="va">wrld</span> <span class="op">&lt;-</span> <span class="fu"><a href="st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="fu">maps</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/maps/man/map.html" class="external-link">map</a></span><span class="op">(</span><span class="st">"world"</span>, fill <span class="op">=</span> <span class="cn">TRUE</span>, plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span> <span class="va">wrld_wrap</span> <span class="op">&lt;-</span> <span class="fu">st_wrap_dateline</span><span class="op">(</span><span class="va">wrld</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"WRAPDATELINE=YES"</span>, <span class="st">"DATELINEOFFSET=180"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>   quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span> <span class="va">wrld_moll</span> <span class="op">&lt;-</span> <span class="fu">st_transform</span><span class="op">(</span><span class="va">wrld_wrap</span>, <span class="st">"+proj=moll"</span><span class="op">)</span></span></span>
-<span class="r-in"><span> <span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">wrld_moll</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"transparent"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>GDAL Error 1: IllegalArgumentException: Points of LinearRing do not form a closed linestring</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>GDAL Error 1: IllegalArgumentException: Points of LinearRing do not form a closed linestring</span>
-<span class="r-plt img"><img src="st_transform-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu">sf_proj_info</span><span class="op">(</span><span class="st">"datum"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> data frame with 0 columns and 0 rows</span>
 </code></pre></div>
