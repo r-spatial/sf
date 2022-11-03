@@ -166,3 +166,4 @@ Collate:
     's2.R'
     'terra.R'
     'geos-overlayng.R'
+    'break_antimeridian.R'

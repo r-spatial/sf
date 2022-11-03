@@ -1,6 +1,6 @@
 
-R version 4.1.0 (2021-05-18) -- "Camp Pontanezen"
-Copyright (C) 2021 The R Foundation for Statistical Computing
+R version 4.2.1 (2022-06-23) -- "Funny-Looking Kid"
+Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -116,7 +116,8 @@ attribute variables are assumed to be spatially constant throughout all geometri
 > # GEOS ops:
 > 
 > st_relate(a, b)
-although coordinates are longitude/latitude, st_relate assumes that they are planar
+although coordinates are longitude/latitude, st_relate assumes that they are
+planar
      [,1]        [,2]        [,3]        [,4]        [,5]        [,6]       
 [1,] "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212"
 [2,] "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212"
@@ -149,7 +150,8 @@ was `touches'
  5: 3, 6
 > 
 > st_crosses(a, b)
-although coordinates are longitude/latitude, st_crosses assumes that they are planar
+although coordinates are longitude/latitude, st_crosses assumes that they are
+planar
 Sparse geometry binary predicate list of length 5, where the predicate
 was `crosses'
  1: (empty)
@@ -177,7 +179,8 @@ was `contains'
  5: 2
 > 
 > st_overlaps(a, b)
-although coordinates are longitude/latitude, st_overlaps assumes that they are planar
+although coordinates are longitude/latitude, st_overlaps assumes that they are
+planar
 Sparse geometry binary predicate list of length 5, where the predicate
 was `overlaps'
  1: (empty)
@@ -331,4 +334,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-  1.512   0.046   1.547 
+  1.591   0.808   1.507 
