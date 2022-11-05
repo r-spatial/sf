@@ -16,6 +16,7 @@ test_that("sf can write to all writable formats", {
 				"nc",  # requires appropriate datum -> but writes in 4326, see below
 				"map", # doesn't support points
 				"ods", # generates valgrind error
+				"gdb", # https://github.com/r-spatial/sf/issues/2027
 				"gpx") # needs specially named attributes
     for (ext in setdiff(names(extension_map[extension_map %in% drvs]), excluded_drivers)) {
         expect_silent(st_write(meuse, paste0(tf, ".", ext), quiet = TRUE))
