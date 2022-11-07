@@ -113,8 +113,7 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 				nv0[0] = nv[i];
 				nv0.attr("class") = "Date";
 				Rcpp::Function as_POSIXlt_Date("as.POSIXlt.Date");
-				Rcpp::Function unlist("unlist");
-				Rcpp::NumericVector ret = unlist(as_POSIXlt_Date(nv0)); // use R
+				Rcpp::NumericVector ret = get_dbl6(as_POSIXlt_Date(nv0));
 				if (shape)
 					poFeature->SetField(j, 1900 + (int) ret[5], (int) ret[4] + 1, (int) ret[3]);
 				else

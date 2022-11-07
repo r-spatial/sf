@@ -280,16 +280,28 @@ Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
 				case OFTDate: {
 					int Year, Month, Day, Hour, Minute, TZFlag;
 					float Second;
+					const char *tzone = "";
 					poFeature->GetFieldAsDateTime(iField, &Year, &Month, &Day, &Hour, &Minute,
 						&Second, &TZFlag);
+					if (TZFlag == 100)
+						tzone = "UTC";
 					//  POSIXlt: sec   min  hour  mday   mon  year  wday  yday isdst ...
 					Rcpp::List dtlst =
-						Rcpp::List::create((double) Second, (double) Minute,
-						(double) Hour, (double) Day, (double) Month - 1, (double) Year - 1900,
-						0.0, 0.0, 0.0);
-					dtlst.attr("class") = "POSIXlt";
+						Rcpp::List::create(
+							Rcpp::_["sec"] = (double) Second, 
+							Rcpp::_["min"] = (int) Minute,
+							Rcpp::_["hour"] = (int) Hour,
+							Rcpp::_["mday"] = (int) Day,
+							Rcpp::_["mon"] = (int) Month - 1,
+							Rcpp::_["year"] = (int) Year - 1900,
+							Rcpp::_["wday"] = NA_INTEGER, 
+							Rcpp::_["yday"] = NA_INTEGER, 
+							Rcpp::_["isdst"] = NA_INTEGER,
+							Rcpp::_["zone"] = tzone,
+							Rcpp::_["gmtoff"] = NA_INTEGER);
 					if (TZFlag == 100)
 						dtlst.attr("tzone") = "UTC";
+					dtlst.attr("class") = "POSIXlt";
 					Rcpp::NumericVector nv;
 					nv = out[iField];
 					if (! not_NA) {
