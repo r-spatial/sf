@@ -117,6 +117,9 @@ RUN Rscript -e 'install.packages(c("RPostgres"), dependencies = FALSE, repos = "
 
 RUN cd sf && git pull
 RUN PROJ_LIB=/usr/share/proj R CMD INSTALL sf_*tar.gz
+RUN cd sf && git pull
+RUN R CMD INSTALL sf
+RUN R -e 'library(sf);library(testthat);source("sf/tests/testthat/test_tm.R")'
 #RUN _R_CHECK_FORCE_SUGGESTS_=false PROJ_LIB=/usr/share/proj R CMD check --as-cran sf_*tar.gz
 
 CMD ["/bin/bash"]
