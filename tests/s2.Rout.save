@@ -43,6 +43,7 @@ Linking to GEOS 3.10.2, GDAL 3.4.3, PROJ 8.2.0; sf_use_s2() is TRUE
 +   nf2 = st_nearest_feature(n1[1:50,], n1[51:100,])
 +   print(all.equal(nf1, nf2))
 + }
+[1] TRUE
 > 
 > set.seed(131)
 > n = 1000
@@ -66,4 +67,3 @@ Linking to GEOS 3.10.2, GDAL 3.4.3, PROJ 8.2.0; sf_use_s2() is TRUE
 > proc.time()
    user  system elapsed 
   1.829   0.063   1.885 
-

@@ -1,11 +1,6 @@
-<<<<<<< HEAD
 
-R version 4.1.2 (2021-11-01) -- "Bird Hippie"
-Copyright (C) 2021 The R Foundation for Statistical Computing
-=======
 R version 4.1.3 (2022-03-10) -- "One Push-Up"
 Copyright (C) 2022 The R Foundation for Statistical Computing
->>>>>>> 1fdb95ed72d373f522c9aef2a3ae3bcb1691f452
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -352,8 +347,7 @@ First 3 features:
 Writing layer `tst__' to data source `tst__.gpkg' using driver `GPKG'
 Writing 100 features with 15 fields and geometry type Multi Polygon.
 Reading layer `tst__' from data source 
-  `/home/rsb/topics/packages/github-rsb/sf.Rcheck/tests/tst__.gpkg' 
-  using driver `GPKG'
+  `/home/edzer/git/sf.Rcheck/tests/tst__.gpkg' using driver `GPKG'
 Simple feature collection with 100 features and 15 fields
 Geometry type: MULTIPOLYGON
 Dimension:     XY
@@ -377,9 +371,4 @@ Error in CPL_read_ogr(dsn, layer, query, as.character(options), quiet,  :
 > 
 > proc.time()
    user  system elapsed 
-<<<<<<< HEAD
-  1.182   0.064   1.243 
-=======
   1.409   0.087   1.500 
->>>>>>> 1fdb95ed72d373f522c9aef2a3ae3bcb1691f452
-
