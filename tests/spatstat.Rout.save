@@ -130,7 +130,7 @@ spatstat.random 3.0-0
 Simple feature collection with 51 features and 1 field
 Geometry type: GEOMETRY
 Dimension:     XY
-Bounding box:  xmin: 123829.8 ymin: 14740.06 xmax: 930518.6 ymax: 318255.5
+Bounding box:  xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
 CRS:           NA
 First 10 features:
     label                           geom
@@ -167,4 +167,3 @@ In st_as_sfc.owin(spatstat.geom::as.owin(x)) :
 > proc.time()
    user  system elapsed 
   2.495   0.845   2.446 
-

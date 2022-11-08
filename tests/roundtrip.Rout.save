@@ -87,4 +87,3 @@ attr(,"package")
 > proc.time()
    user  system elapsed 
   1.735   0.065   1.789 
-
