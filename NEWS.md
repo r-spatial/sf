@@ -1,5 +1,7 @@
 # version 1.0-9
 
+* adjust for changes how R-devel handles `POSIXlt`; #2028
+
 * add `st_break_antimeridian()`; #1983, #1991 by Roger Bivand
 
 * add `Fibonacci` as a spatial sampling type in `st_sample()`

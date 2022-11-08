@@ -118,9 +118,10 @@ RUN Rscript -e 'install.packages(c("RPostgres"), dependencies = FALSE, repos = "
 RUN cd sf && git pull
 RUN PROJ_LIB=/usr/share/proj R CMD INSTALL sf_*tar.gz
 
+RUN Rscript -e 'install.packages(c("RPostgreSQL"), dependencies = FALSE, repos = "https://cloud.r-project.org")'
 RUN cd sf && git  pull
-RUN R CMD INSTALL sf
-RUN R -e 'library(sf);library(testthat);source("sf/tests/testthat/test_tm.R")'
+# RUN R CMD INSTALL sf
+# RUN R -e 'library(sf);library(testthat);source("sf/tests/testthat/test_tm.R")'
 RUN R CMD build --no-build-vignettes sf
 RUN _R_CHECK_FORCE_SUGGESTS_=false PROJ_LIB=/usr/share/proj R CMD check --as-cran sf_*tar.gz
 
