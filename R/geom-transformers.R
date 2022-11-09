@@ -171,7 +171,7 @@ st_boundary.sf = function(x) {
 #' @name geos_unary
 #' @export
 #' @details \code{st_convex_hull} creates the convex hull of a set of points
-#' @seealso [grDevices::chull()] for a more efficient algorithm for calculating the convex hull
+#' @seealso [`grDevices::chull()`] for a more efficient algorithm for calculating the convex hull
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' nc_g = st_geometry(nc)
