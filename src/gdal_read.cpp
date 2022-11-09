@@ -221,7 +221,7 @@ Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
 	double dbl_max_int64 = pow(2.0, 53);
 	bool warn_int64 = false, has_null_geometries = false;
 	OGRFeature *poFeature;
-	while((poFeature = poLayer->GetNextFeature()) != NULL) {
+	while ((poFeature = poLayer->GetNextFeature()) != NULL) {
 		// getFID:
 		fids[i] = std::to_string(poFeature->GetFID());
 
