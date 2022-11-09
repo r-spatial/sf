@@ -261,5 +261,5 @@ if (require(lwgeom, quietly = TRUE)) {
 }
 }
 \seealso{
-[grDevices::chull()] for a more efficient algorithm for calculating the convex hull
+\link[grDevices]{chull} for a more efficient algorithm for calculating the convex hull
 }
