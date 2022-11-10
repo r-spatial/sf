@@ -267,7 +267,7 @@ st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet 
 
 	if (use_stream) {
 		stream = nanoarrow::nanoarrow_allocate_array_stream()
-		info <- CPL_read_gdal_stream(stream, dsn, layer, query, as.character(options), quiet,
+		info = CPL_read_gdal_stream(stream, dsn, layer, query, as.character(options), quiet,
 		    drivers, wkt_filter, dsn_exists, dsn_isdb, getOption("width"))
 		process_cpl_read_ogr_stream(stream, crs = info[[1]], num_features = info[[2]], ...)
 	} else {
