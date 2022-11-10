@@ -69,7 +69,7 @@ private:
 };
 
 // [[Rcpp::export]]
-Rcpp::CharacterVector CPL_read_gdal_stream(
+Rcpp::List CPL_read_gdal_stream(
         Rcpp::RObject stream_xptr,
         Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer,
 		Rcpp::CharacterVector query,
@@ -99,7 +99,9 @@ Rcpp::CharacterVector CPL_read_gdal_stream(
     }
 
     GDALStreamWrapper::Make(&stream_temp, prep, stream_out);
-    return Rcpp::CharacterVector::create(wkt_str);
+    double num_features = (double) poLayer->GetFeatureCount(false);
+
+    return Rcpp::List::create(wkt_str, Rcpp::NumericVector::create(num_features));
 }
 
 #else

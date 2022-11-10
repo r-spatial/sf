@@ -346,7 +346,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_read_gdal_stream
-Rcpp::CharacterVector CPL_read_gdal_stream(Rcpp::RObject stream_xptr, Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, Rcpp::CharacterVector query, Rcpp::CharacterVector options, bool quiet, Rcpp::CharacterVector drivers, Rcpp::CharacterVector wkt_filter, bool dsn_exists, bool dsn_isdb, int width);
+Rcpp::List CPL_read_gdal_stream(Rcpp::RObject stream_xptr, Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, Rcpp::CharacterVector query, Rcpp::CharacterVector options, bool quiet, Rcpp::CharacterVector drivers, Rcpp::CharacterVector wkt_filter, bool dsn_exists, bool dsn_isdb, int width);
 RcppExport SEXP _sf_CPL_read_gdal_stream(SEXP stream_xptrSEXP, SEXP datasourceSEXP, SEXP layerSEXP, SEXP querySEXP, SEXP optionsSEXP, SEXP quietSEXP, SEXP driversSEXP, SEXP wkt_filterSEXP, SEXP dsn_existsSEXP, SEXP dsn_isdbSEXP, SEXP widthSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

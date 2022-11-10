@@ -204,8 +204,33 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 		x
 }
 
-process_cpl_read_ogr_stream = function(x, ...) {
-	x
+process_cpl_read_ogr_stream = function(x, crs, num_features, as_tibble = FALSE, ...) {
+    is_geometry_column = vapply(
+		x$get_schema()$children,
+		function(s) identical(s$metadata[["ARROW:extension:name"]], "ogc.wkb"),
+		logical(1)
+	)
+
+    crs = sf::st_crs(crs)
+	if (num_features == -1) {
+		num_features = NULL
+	}
+	df = suppressWarnings(nanoarrow::convert_array_stream(x, size = num_features))
+
+	df[is_geometry_column] = lapply(df[is_geometry_column], function(x) {
+		x = sf::st_as_sfc(wk::as_wkb(x))
+		st_set_crs(x, crs)
+	})
+
+	if (as_tibble) {
+		df = tibble::as_tibble(df)
+	}
+
+	if (any(is_geometry_column)) {
+		st_as_sf(df)
+	} else {
+		df
+	}
 }
 
 #' @name st_read
@@ -242,11 +267,9 @@ st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet 
 
 	if (use_stream) {
 		stream = nanoarrow::nanoarrow_allocate_array_stream()
-		CPL_read_gdal_stream(stream, dsn, layer, query, as.character(options), quiet,
+		info <- CPL_read_gdal_stream(stream, dsn, layer, query, as.character(options), quiet,
 		    drivers, wkt_filter, dsn_exists, dsn_isdb, getOption("width"))
-		process_cpl_read_ogr_stream(stream, quiet, check_ring_dir = check_ring_dir,
-			stringsAsFactors = stringsAsFactors, geometry_column = geometry_column,
-			optional = optional, ...)
+		process_cpl_read_ogr_stream(stream, crs = info[[1]], num_features = info[[2]], ...)
 	} else {
 		x = CPL_read_ogr(dsn, layer, query, as.character(options), quiet, type, fid_column_name,
 		    drivers, wkt_filter, promote_to_multi, int64_as_string, dsn_exists, dsn_isdb, getOption("width"))
