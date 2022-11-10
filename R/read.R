@@ -278,7 +278,6 @@ st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet 
 			stringsAsFactors = stringsAsFactors, geometry_column = geometry_column,
 			optional = optional, ...)
 	}
-
 }
 
 #' @name st_read
