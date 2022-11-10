@@ -108,7 +108,6 @@ Suggests:
     tmap (>= 2.0),
     vctrs,
     wk
-Remotes: apache/arrow-nanoarrow#65
 LinkingTo: 
     Rcpp
 VignetteBuilder: 
