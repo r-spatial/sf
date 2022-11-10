@@ -517,7 +517,7 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 		eType = GDT_Byte; // #nocov
 #if GDAL_VERSION_NUM >= 3070000
 	else if (Type[0] == "Int8")
-		eType = GDT_Int8; // #nocov
+		eType = GDT_Byte; // #nocov
 #endif
 	else if (Type[0] == "UInt16")
 		eType = GDT_UInt16; // #nocov
