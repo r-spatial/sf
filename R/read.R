@@ -238,6 +238,7 @@ process_cpl_read_ogr_stream = function(x, crs, num_features, as_tibble = FALSE, 
 #' @param drivers character; limited set of driver short names to be tried (default: try all)
 #' @param wkt_filter character; WKT representation of a spatial filter (may be used as bounding box, selecting overlapping geometries); see examples
 #' @param optional logical; passed to \link[base]{as.data.frame}; always \code{TRUE} when \code{as_tibble} is \code{TRUE}
+#' @param use_stream Use TRUE to use the experimental columnar interface introduced in GDAL 3.6.
 #' @note The use of \code{system.file} in examples make sure that examples run regardless where R is installed:
 #' typical users will not use \code{system.file} but give the file name directly, either with full path or relative
 #' to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename
