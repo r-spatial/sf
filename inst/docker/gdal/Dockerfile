@@ -111,7 +111,7 @@ RUN wget -q http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_N
   && cd gdal* \
   && mkdir build \
   && cd ./build \
-  && cmake .. \
+  && cmake -DCMAKE_BUILD_TYPE=Release .. \
   && make \
   && make install \
   && ldconfig
