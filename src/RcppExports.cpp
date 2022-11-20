@@ -1209,8 +1209,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_write_gdal
-void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driver, CharacterVector options, CharacterVector Type, IntegerVector dims, IntegerVector from, NumericVector gt, CharacterVector p4s, NumericVector na_val, bool create, bool only_create);
-RcppExport SEXP _sf_CPL_write_gdal(SEXP xSEXP, SEXP fnameSEXP, SEXP driverSEXP, SEXP optionsSEXP, SEXP TypeSEXP, SEXP dimsSEXP, SEXP fromSEXP, SEXP gtSEXP, SEXP p4sSEXP, SEXP na_valSEXP, SEXP createSEXP, SEXP only_createSEXP) {
+void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driver, CharacterVector options, CharacterVector Type, IntegerVector dims, IntegerVector from, NumericVector gt, CharacterVector p4s, NumericVector na_val, NumericVector scale_offset, bool create, bool only_create);
+RcppExport SEXP _sf_CPL_write_gdal(SEXP xSEXP, SEXP fnameSEXP, SEXP driverSEXP, SEXP optionsSEXP, SEXP TypeSEXP, SEXP dimsSEXP, SEXP fromSEXP, SEXP gtSEXP, SEXP p4sSEXP, SEXP na_valSEXP, SEXP scale_offsetSEXP, SEXP createSEXP, SEXP only_createSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericMatrix >::type x(xSEXP);
@@ -1223,9 +1223,10 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type gt(gtSEXP);
     Rcpp::traits::input_parameter< CharacterVector >::type p4s(p4sSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type na_val(na_valSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type scale_offset(scale_offsetSEXP);
     Rcpp::traits::input_parameter< bool >::type create(createSEXP);
     Rcpp::traits::input_parameter< bool >::type only_create(only_createSEXP);
-    CPL_write_gdal(x, fname, driver, options, Type, dims, from, gt, p4s, na_val, create, only_create);
+    CPL_write_gdal(x, fname, driver, options, Type, dims, from, gt, p4s, na_val, scale_offset, create, only_create);
     return R_NilValue;
 END_RCPP
 }
@@ -1463,7 +1464,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_get_crs", (DL_FUNC) &_sf_CPL_get_crs, 2},
     {"_sf_CPL_inv_geotransform", (DL_FUNC) &_sf_CPL_inv_geotransform, 1},
     {"_sf_CPL_read_gdal", (DL_FUNC) &_sf_CPL_read_gdal, 6},
-    {"_sf_CPL_write_gdal", (DL_FUNC) &_sf_CPL_write_gdal, 12},
+    {"_sf_CPL_write_gdal", (DL_FUNC) &_sf_CPL_write_gdal, 13},
     {"_sf_CPL_extract", (DL_FUNC) &_sf_CPL_extract, 3},
     {"_sf_CPL_create", (DL_FUNC) &_sf_CPL_create, 6},
     {"_sf_CPL_read_wkb", (DL_FUNC) &_sf_CPL_read_wkb, 3},

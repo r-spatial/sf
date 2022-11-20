@@ -20,12 +20,15 @@ gdal_read = function(x, ..., options = character(0), driver = character(0), read
 #' @param type gdal write type
 #' @param geotransform length 6 numeric vector with GDAL geotransform parameters.
 #' @param update logical; \code{TRUE} if in an existing raster file pixel values shall be updated.
+#' @param scale_offset; length 2 numeric; contains scale and offset values
 gdal_write = function(x, ..., file, driver = "GTiff", options = character(0), type = "Float32", 
-		NA_value = NA_real_, geotransform, update = FALSE) {
+		NA_value = NA_real_, geotransform, update = FALSE, scale_offset = c(1.0, 0.0)) {
 
 	if (!requireNamespace("stars", quietly = TRUE))
 		stop("stars required: install that first") # nocov
 
+	if (any(scale_offset != c(1.0, 0.0)) && packageVersion("sf") <= "1.0-9")
+		warning("handling scale_offset requires sf > 1.0-9")
 	d = stars::st_dimensions(x)
 	xydims = attr(d, "raster")$dimensions
 	if (!all.equal(match(xydims, names(d)), 1:2))
@@ -81,7 +84,8 @@ gdal_write = function(x, ..., file, driver = "GTiff", options = character(0), ty
 		attr(mat, "descriptions") = d[[3]]$values
 
 	CPL_write_gdal(mat, file, driver, options, type, dims, from, geotransform,
-		st_crs(x)[[2]], as.double(NA_value), create = !update, only_create = only_create)
+		st_crs(x)[[2]], as.double(NA_value), scale_offset, create = !update, 
+		only_create = only_create)
 }
 
 #' @param gt double vector of length 6

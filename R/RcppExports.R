@@ -365,8 +365,8 @@ CPL_read_gdal <- function(fname, options, driver, read_data, NA_value, RasterIO_
     .Call('_sf_CPL_read_gdal', PACKAGE = 'sf', fname, options, driver, read_data, NA_value, RasterIO_parameters)
 }
 
-CPL_write_gdal <- function(x, fname, driver, options, Type, dims, from, gt, p4s, na_val, create = TRUE, only_create = FALSE) {
-    invisible(.Call('_sf_CPL_write_gdal', PACKAGE = 'sf', x, fname, driver, options, Type, dims, from, gt, p4s, na_val, create, only_create))
+CPL_write_gdal <- function(x, fname, driver, options, Type, dims, from, gt, p4s, na_val, scale_offset, create = TRUE, only_create = FALSE) {
+    invisible(.Call('_sf_CPL_write_gdal', PACKAGE = 'sf', x, fname, driver, options, Type, dims, from, gt, p4s, na_val, scale_offset, create, only_create))
 }
 
 CPL_extract <- function(input, xy, interpolate = FALSE) {

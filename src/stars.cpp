@@ -486,7 +486,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 // [[Rcpp::export]]
 void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driver,
 		CharacterVector options, CharacterVector Type, IntegerVector dims, IntegerVector from,
-		NumericVector gt, CharacterVector p4s, NumericVector na_val,
+		NumericVector gt, CharacterVector p4s, NumericVector na_val, NumericVector scale_offset,
 		bool create = true, bool only_create = false) {
 
 	// figure out driver:
@@ -535,6 +535,9 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 		stop("from should have length two"); // #nocov
 	if (na_val.length() != 1)
 		stop("na_val should have length 1"); // #nocov
+	if (scale_offset.size() != 2)
+		stop("scale_offset should have length 2");
+	bool set_scale_offset = (scale_offset[0] != 1.0 || scale_offset[1] != 0.0);
 
 	// create dataset:
 	GDALDataset *poDstDS;
@@ -579,6 +582,15 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 					warning("SetNoDataValue not supported by driver"); // #nocov
 					break; // #nocov
 				}
+			}
+		}
+		// set scale_offset
+		if (set_scale_offset) {
+			for (int band = 1; band <= dims(2); band++) { // unlike x & y, band is 1-based
+				GDALRasterBand *poBand = poDstDS->GetRasterBand( band );
+				if (poBand->SetScale(scale_offset[0]) != CE_None ||
+						poBand->SetOffset(scale_offset[1]) != CE_None)
+					warning("writing scale and/or offset failed (not supported by driver)"); // #nocov
 			}
 		}
 		// set descriptions:
@@ -632,6 +644,14 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 				x(_, i) = nv;
 			}
 			checkUserInterrupt();
+		}
+		if (set_scale_offset) {
+			for (int i = 0; i < x.ncol(); i++) {
+				NumericVector nv = x(_, i);
+				for (int j = 0; j < x.nrow(); j++)
+					nv[j] = (nv[j] - scale_offset[1]) / scale_offset[0]; // raw = (units - offset) / scale
+				x(_, i) = nv;
+			}
 		}
 		// write values:
 		// write the whole lot:
