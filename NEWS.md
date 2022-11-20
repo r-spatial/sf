@@ -1,6 +1,6 @@
 # version 1.0-10
 
-* drop the rownames in `st_coordinates()` reducing the output size
+* drop the rownames in `st_coordinates()`, to reduce the output size
 
 # version 1.0-9
 
