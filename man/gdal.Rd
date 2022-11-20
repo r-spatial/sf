@@ -35,7 +35,8 @@ gdal_write(
   type = "Float32",
   NA_value = NA_real_,
   geotransform,
-  update = FALSE
+  update = FALSE,
+  scale_offset = c(1, 0)
 )
 
 gdal_inv_geotransform(gt)
@@ -179,6 +180,8 @@ gdal_create(f, nxy, values, crs, xlim, ylim)
 \item{xlim}{numeric}
 
 \item{ylim}{numeric}
+
+\item{scale_offset;}{length 2 numeric; contains scale and offset values}
 }
 \value{
 object of class \code{crs}, see \link{st_crs}.
