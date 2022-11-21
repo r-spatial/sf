@@ -119,6 +119,8 @@ gdal_create(f, nxy, values, crs, xlim, ylim)
 
 \item{update}{logical; \code{TRUE} if in an existing raster file pixel values shall be updated.}
 
+\item{scale_offset}{length 2 numeric; contains scale and offset values}
+
 \item{gt}{double vector of length 6}
 
 \item{domain_item}{character vector of length 0, 1 (with domain), or 2 (with domain and item); use \code{""} for the default domain, use \code{NA_character_} to query the domain names.}
@@ -180,8 +182,6 @@ gdal_create(f, nxy, values, crs, xlim, ylim)
 \item{xlim}{numeric}
 
 \item{ylim}{numeric}
-
-\item{scale_offset;}{length 2 numeric; contains scale and offset values}
 }
 \value{
 object of class \code{crs}, see \link{st_crs}.

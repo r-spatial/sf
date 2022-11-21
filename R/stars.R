@@ -20,7 +20,7 @@ gdal_read = function(x, ..., options = character(0), driver = character(0), read
 #' @param type gdal write type
 #' @param geotransform length 6 numeric vector with GDAL geotransform parameters.
 #' @param update logical; \code{TRUE} if in an existing raster file pixel values shall be updated.
-#' @param scale_offset; length 2 numeric; contains scale and offset values
+#' @param scale_offset length 2 numeric; contains scale and offset values
 gdal_write = function(x, ..., file, driver = "GTiff", options = character(0), type = "Float32", 
 		NA_value = NA_real_, geotransform, update = FALSE, scale_offset = c(1.0, 0.0)) {
 
