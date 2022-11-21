@@ -100,7 +100,8 @@
 <span>  type <span class="op">=</span> <span class="st">"Float32"</span>,</span>
 <span>  NA_value <span class="op">=</span> <span class="cn">NA_real_</span>,</span>
 <span>  <span class="va">geotransform</span>,</span>
-<span>  update <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  update <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  scale_offset <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">gdal_inv_geotransform</span><span class="op">(</span><span class="va">gt</span><span class="op">)</span></span>
@@ -205,6 +206,10 @@
 
 <dt>update</dt>
 <dd><p>logical; <code>TRUE</code> if in an existing raster file pixel values shall be updated.</p></dd>
+
+
+<dt>scale_offset</dt>
+<dd><p>length 2 numeric; contains scale and offset values</p></dd>
 
 
 <dt>gt</dt>
