@@ -148,6 +148,9 @@ test_that("append errors work", {
 })
 
 test_that("non-spatial tables can be written to GPKG; #1345", {
+  # currently segfaults using the stream interface
+  skip_if(default_st_read_use_stream())
+  
   nc = system.file("gpkg/nc.gpkg", package = "sf")
   tf = tempfile(fileext = ".gpkg")
   file.copy(nc, tf)
