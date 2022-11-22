@@ -218,15 +218,15 @@ default_st_read_use_stream = function() {
 	)
 }
 
-process_cpl_read_ogr_stream = function(x, crs, num_features, fid_column_name,
-                                       ...) {
+process_cpl_read_ogr_stream = function(x, default_crs, num_features, fid_column_name,
+                                       crs = NULL, ...) {
     is_geometry_column = vapply(
 		x$get_schema()$children,
 		function(s) identical(s$metadata[["ARROW:extension:name"]], "ogc.wkb"),
 		logical(1)
 	)
 
-    crs = sf::st_crs(crs)
+    crs = if (is.null(crs)) st_crs(default_crs) else st_crs(crs)
 	if (num_features == -1) {
 		num_features = NULL
 	}
@@ -287,8 +287,8 @@ st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet 
 		stream = nanoarrow::nanoarrow_allocate_array_stream()
 		info = CPL_read_gdal_stream(stream, dsn, layer, query, as.character(options), quiet,
 		    drivers, wkt_filter, dsn_exists, dsn_isdb, fid_column_name, getOption("width"))
-		process_cpl_read_ogr_stream(stream, crs = info[[1]], num_features = info[[2]],
-		fid_column_name = fid_column_name, ...)
+		process_cpl_read_ogr_stream(stream, default_crs = info[[1]], num_features = info[[2]],
+		fid_column_name = fid_column_name, stringsAsFactors = stringsAsFactors, ...)
 	} else {
 		x = CPL_read_ogr(dsn, layer, query, as.character(options), quiet, type, fid_column_name,
 		    drivers, wkt_filter, promote_to_multi, int64_as_string, dsn_exists, dsn_isdb, getOption("width"))

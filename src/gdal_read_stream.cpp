@@ -106,7 +106,14 @@ Rcpp::List CPL_read_gdal_stream(
     }
 
     GDALStreamWrapper::Make(&stream_temp, prep, stream_out);
-    double num_features = (double) poLayer->GetFeatureCount(false);
+
+    // The reported feature count is incorrect if there is a query
+    double num_features;
+    if (query.size() == 0) {
+        num_features = (double) poLayer->GetFeatureCount(false);
+    } else {
+        num_features = -1;
+    }
 
     return Rcpp::List::create(wkt_str, Rcpp::NumericVector::create(num_features));
 }
