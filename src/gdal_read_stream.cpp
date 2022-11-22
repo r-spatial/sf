@@ -75,9 +75,16 @@ Rcpp::List CPL_read_gdal_stream(
 		Rcpp::CharacterVector query,
 		Rcpp::CharacterVector options, bool quiet, Rcpp::CharacterVector drivers,
 		Rcpp::CharacterVector wkt_filter,
-		bool dsn_exists = true,
-		bool dsn_isdb = false,
-		int width = 80) {
+		bool dsn_exists,
+		bool dsn_isdb,
+        Rcpp::CharacterVector fid_column,
+		int width) {
+    
+    const char* array_stream_options[] = {"INCLUDE_FID=NO", nullptr};
+    if (fid_column.size() == 1) {
+        array_stream_options[0] = "INCLUDE_FID=YES";
+    }
+
     Rcpp::List prep = CPL_ogr_layer_setup(datasource, layer, query, options,
 							quiet,  drivers,
 							wkt_filter,
@@ -94,7 +101,7 @@ Rcpp::List CPL_read_gdal_stream(
     CPLFree(wkt_out);
 
     struct ArrowArrayStream stream_temp;
-    if (!poLayer->GetArrowStream(&stream_temp, nullptr)) {
+    if (!poLayer->GetArrowStream(&stream_temp, array_stream_options)) {
         Rcpp::stop("Failed to open ArrayStream from Layer");
     }
 

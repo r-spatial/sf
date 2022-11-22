@@ -346,8 +346,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_read_gdal_stream
-Rcpp::List CPL_read_gdal_stream(Rcpp::RObject stream_xptr, Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, Rcpp::CharacterVector query, Rcpp::CharacterVector options, bool quiet, Rcpp::CharacterVector drivers, Rcpp::CharacterVector wkt_filter, bool dsn_exists, bool dsn_isdb, int width);
-RcppExport SEXP _sf_CPL_read_gdal_stream(SEXP stream_xptrSEXP, SEXP datasourceSEXP, SEXP layerSEXP, SEXP querySEXP, SEXP optionsSEXP, SEXP quietSEXP, SEXP driversSEXP, SEXP wkt_filterSEXP, SEXP dsn_existsSEXP, SEXP dsn_isdbSEXP, SEXP widthSEXP) {
+Rcpp::List CPL_read_gdal_stream(Rcpp::RObject stream_xptr, Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, Rcpp::CharacterVector query, Rcpp::CharacterVector options, bool quiet, Rcpp::CharacterVector drivers, Rcpp::CharacterVector wkt_filter, bool dsn_exists, bool dsn_isdb, Rcpp::CharacterVector fid_column, int width);
+RcppExport SEXP _sf_CPL_read_gdal_stream(SEXP stream_xptrSEXP, SEXP datasourceSEXP, SEXP layerSEXP, SEXP querySEXP, SEXP optionsSEXP, SEXP quietSEXP, SEXP driversSEXP, SEXP wkt_filterSEXP, SEXP dsn_existsSEXP, SEXP dsn_isdbSEXP, SEXP fid_columnSEXP, SEXP widthSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -361,8 +361,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type wkt_filter(wkt_filterSEXP);
     Rcpp::traits::input_parameter< bool >::type dsn_exists(dsn_existsSEXP);
     Rcpp::traits::input_parameter< bool >::type dsn_isdb(dsn_isdbSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type fid_column(fid_columnSEXP);
     Rcpp::traits::input_parameter< int >::type width(widthSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_read_gdal_stream(stream_xptr, datasource, layer, query, options, quiet, drivers, wkt_filter, dsn_exists, dsn_isdb, width));
+    rcpp_result_gen = Rcpp::wrap(CPL_read_gdal_stream(stream_xptr, datasource, layer, query, options, quiet, drivers, wkt_filter, dsn_exists, dsn_isdb, fid_column, width));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1464,6 +1465,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_get_layers", (DL_FUNC) &_sf_CPL_get_layers, 3},
     {"_sf_CPL_read_ogr", (DL_FUNC) &_sf_CPL_read_ogr, 14},
 <<<<<<< HEAD
+<<<<<<< HEAD
     {"_sf_CPL_gdalinfo", (DL_FUNC) &_sf_CPL_gdalinfo, 4},
     {"_sf_CPL_ogrinfo", (DL_FUNC) &_sf_CPL_ogrinfo, 4},
     {"_sf_CPL_gdaladdo", (DL_FUNC) &_sf_CPL_gdaladdo, 8},
@@ -1480,6 +1482,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_gdal_warper", (DL_FUNC) &_sf_CPL_gdal_warper, 7},
 =======
     {"_sf_CPL_read_gdal_stream", (DL_FUNC) &_sf_CPL_read_gdal_stream, 11},
+=======
+    {"_sf_CPL_read_gdal_stream", (DL_FUNC) &_sf_CPL_read_gdal_stream, 12},
+>>>>>>> 93da2e60 (start supporting more options)
     {"_sf_CPL_gdalinfo", (DL_FUNC) &_sf_CPL_gdalinfo, 3},
     {"_sf_CPL_gdaladdo", (DL_FUNC) &_sf_CPL_gdaladdo, 7},
     {"_sf_CPL_gdalwarp", (DL_FUNC) &_sf_CPL_gdalwarp, 7},
