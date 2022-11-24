@@ -276,3 +276,8 @@ test_that("rowwise_df class is retained on filtered rows", {
 	skip_if_not_installed("dplyr")
 	expect_true(nc %>% rowwise() %>% filter(AREA > .1) %>% inherits("rowwise_df"))
 })
+
+test_that("`group_split.sf()` ignores `.keep` for rowwise_df class", {
+	skip_if_not_installed("dplyr")
+	expect_no_warning(nc %>% rowwise() %>% group_split())
+})

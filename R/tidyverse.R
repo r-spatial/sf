@@ -25,7 +25,11 @@ dplyr_reconstruct.sf = function(data, template) {
 
 group_split.sf <- function(.tbl, ..., .keep = TRUE) {
 	 class(.tbl) = setdiff(class(.tbl), "sf")
-     lapply(dplyr::group_split(.tbl, ..., .keep = .keep), st_as_sf)
+	 if (inherits(.tbl, "rowwise_df")) {
+	 	lapply(dplyr::group_split(.tbl, ...), st_as_sf)
+	 } else {
+	 	lapply(dplyr::group_split(.tbl, ..., .keep = .keep), st_as_sf)	
+	 }
 }
 
 #' Tidyverse methods for sf objects (remove .sf suffix!)
