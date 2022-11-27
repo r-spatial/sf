@@ -1,6 +1,6 @@
 # version 1.0-10
 
-* `st_read()` substitutes CRS `"LOCAL_CS["Undefined Cartesian SRS"]"` with `st_crs(NA)`
+* add `st_can_transform()` to check whether a transformation between two CRS exists; see https://github.com/dieghernan/tidyterra/issues/64
 
 * drop the rownames in `st_coordinates()`, to reduce the output size
 
