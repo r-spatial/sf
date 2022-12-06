@@ -12,7 +12,7 @@ test_that("st_read and write handle date and time", {
     st_write(x[-4], shp[1], quiet = TRUE)
     x2 = st_read(shp[1], quiet = TRUE)
     expect_equal(x[-4], x2, check.attributes=FALSE)
-    expect_true(st_crs(x[-4])$wkt == st_crs(x2)$wkt)
+    expect_equal(st_crs(x[-4])$wkt, st_crs(x2)$wkt)
     
     st_write(x, gpkg, quiet = TRUE)
     x2 = st_read(gpkg, quiet = TRUE)
@@ -32,7 +32,7 @@ test_that("st_read and write handle date and time", {
     st_write(x[-4], shp[1], quiet = TRUE)
     x2 = st_read(shp[1], quiet = TRUE)
     expect_equal(x[-4], x2, check.attributes=FALSE)
-    expect_true(st_crs(x[-4])$wkt == st_crs(x2)$wkt)
+    expect_equal(st_crs(x[-4])$wkt, st_crs(x2)$wkt)
     
     st_write(x, gpkg, quiet = TRUE)
     x2 = st_read(gpkg, quiet = TRUE)
