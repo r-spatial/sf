@@ -296,7 +296,7 @@ crs_parameters = function(x, with_units = TRUE) {
 		ret$ud_unit = if (isTRUE(ret$IsGeographic))
 				as_units("arc_degree") # FIXME: is this always true?
 			else if (is.null(x$units))
-				as_units("m")
+				NA_character_ #2049
 			else if (is.character(udunits_from_proj[[x$units]]))
 				as_units(udunits_from_proj[[x$units]])
 			else
