@@ -6,10 +6,13 @@ test_that("st_read and write handle date and time", {
               geometry = structure(st_sfc(st_point(c(1,1)), st_point(c(2,2)))))
     shp <- paste0(tempfile(), ".shp")
     gpkg <- paste0(tempfile(), ".gpkg")
+
+   st_crs(x) = st_crs("ENGCRS[\"Undefined Cartesian SRS with unknown unit\",EDATUM[\"Unknown engineering datum\"],CS[Cartesian,2],AXIS[\"X\",unspecified,ORDER[1],LENGTHUNIT[\"unknown\",0]],AXIS[\"Y\",unspecified,ORDER[2],LENGTHUNIT[\"unknown\",0]]]")
     
     st_write(x[-4], shp[1], quiet = TRUE)
     x2 = st_read(shp[1], quiet = TRUE)
-    expect_equal(x[-4], x2)
+    expect_equal(x[-4], x2, check.attributes=FALSE)
+# WKT2 CRS do not roundtrip for ESRI Shapefile
     
     st_write(x, gpkg, quiet = TRUE)
     x2 = st_read(gpkg, quiet = TRUE)
@@ -23,10 +26,13 @@ test_that("st_read and write handle date and time", {
               geometry = structure(st_sfc(st_point(c(1,1)), st_point(c(2,2)))))
     shp <- paste0(tempfile(), ".shp")
     gpkg <- paste0(tempfile(), ".gpkg")
+
+   st_crs(x) = st_crs("ENGCRS[\"Undefined Cartesian SRS with unknown unit\",EDATUM[\"Unknown engineering datum\"],CS[Cartesian,2],AXIS[\"X\",unspecified,ORDER[1],LENGTHUNIT[\"unknown\",0]],AXIS[\"Y\",unspecified,ORDER[2],LENGTHUNIT[\"unknown\",0]]]")
     
     st_write(x[-4], shp[1], quiet = TRUE)
     x2 = st_read(shp[1], quiet = TRUE)
-    expect_equal(x[-4], x2)
+    expect_equal(x[-4], x2, check.attributes=FALSE)
+# WKT2 CRS do not roundtrip for ESRI Shapefile
     
     st_write(x, gpkg, quiet = TRUE)
     x2 = st_read(gpkg, quiet = TRUE)
