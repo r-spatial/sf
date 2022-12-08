@@ -1,5 +1,5 @@
 
-R version 4.1.3 (2022-03-10) -- "One Push-Up"
+R version 4.2.2 Patched (2022-11-10 r83330) -- "Innocent and Trusting"
 Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -144,8 +144,10 @@ Error : Cannot open "x.gpkg"; The file doesn't seem to exist.
 Error in UseMethod("st_write") : 
   no applicable method for 'st_write' applied to an object of class "character"
 > try(st_write(x, c("foo", "bar")))
+writing: substituting ENGCRS["Undefined Cartesian SRS with unknown unit"] for missing CRS
 Error in guess_driver(dns) : length(dsn) == 1 is not TRUE
 > try(st_write(x, "foo", driver = "foo"))
+writing: substituting ENGCRS["Undefined Cartesian SRS with unknown unit"] for missing CRS
 driver `foo' not available.
 Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  : 
   Driver not available.
@@ -160,11 +162,11 @@ Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  
 > 
 > geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2)))
 > st_write(geom, "geom.gpkg")
-writing GPKG: substituting LOCAL_CS["Undefined Cartesian SRS"] for missing CRS
+writing: substituting ENGCRS["Undefined Cartesian SRS with unknown unit"] for missing CRS
 Writing layer `geom' to data source `geom.gpkg' using driver `GPKG'
 Writing 2 features with 0 fields and geometry type Unknown (any).
 > st_write(geom, "geom1.gpkg", layer = "foo")
-writing GPKG: substituting LOCAL_CS["Undefined Cartesian SRS"] for missing CRS
+writing: substituting ENGCRS["Undefined Cartesian SRS with unknown unit"] for missing CRS
 Writing layer `foo' to data source `geom1.gpkg' using driver `GPKG'
 Writing 2 features with 0 fields and geometry type Unknown (any).
 > 
@@ -185,12 +187,12 @@ Writing 2 features with 0 fields and geometry type Unknown (any).
 +  y = st_read("x2.gpkg", quiet = TRUE)
 +  print(y)
 + }
-writing GPKG: substituting LOCAL_CS["Undefined Cartesian SRS"] for missing CRS
+writing: substituting ENGCRS["Undefined Cartesian SRS with unknown unit"] for missing CRS
 Simple feature collection with 5 features and 4 fields
 Geometry type: POINT
 Dimension:     XY
 Bounding box:  xmin: 1 ymin: 1 xmax: 5 ymax: 5
-Projected CRS: Undefined Cartesian SRS
+Projected CRS: Undefined Cartesian SRS with unknown unit
      a    b          c                   d        geom
 1    0    a 2001-01-01 2001-01-01 00:00:00 POINT (1 1)
 2    1    b       <NA>                <NA> POINT (2 2)
@@ -371,4 +373,4 @@ Error in CPL_read_ogr(dsn, layer, query, as.character(options), quiet,  :
 > 
 > proc.time()
    user  system elapsed 
-  1.409   0.087   1.500 
+  1.720   0.739   1.626 
