@@ -35,6 +35,16 @@ sanity_check = function(x) {
 		x # nocov
 }
 
+#' @export
+#' @name st_transform
+#' @param src source crs
+#' @param dst destination crs
+#' @details \code{st_can_transform} returns a boolean indicating whether
+#' coordinates with CRS src can be transformed into CRS dst
+st_can_transform = function(src, dst) {
+	CPL_can_transform(st_crs(src), st_crs(dst))
+}
+
 #' Transform or convert coordinates of simple feature
 #'
 #' Transform or convert coordinates of simple feature

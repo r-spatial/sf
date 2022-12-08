@@ -49,6 +49,10 @@ CPL_curve_to_linestring <- function(sfc) {
     .Call('_sf_CPL_curve_to_linestring', PACKAGE = 'sf', sfc)
 }
 
+CPL_can_transform <- function(src, dst) {
+    .Call('_sf_CPL_can_transform', PACKAGE = 'sf', src, dst)
+}
+
 CPL_transform <- function(sfc, crs, AOI, pipeline, reverse = FALSE, desired_accuracy = -1.0, allow_ballpark = TRUE) {
     .Call('_sf_CPL_transform', PACKAGE = 'sf', sfc, crs, AOI, pipeline, reverse, desired_accuracy, allow_ballpark)
 }

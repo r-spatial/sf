@@ -556,6 +556,28 @@ Rcpp::List CPL_curve_to_linestring(Rcpp::List sfc) { // need to pass more parame
 } // #nocov end
 
 // [[Rcpp::export]]
+Rcpp::LogicalVector CPL_can_transform(Rcpp::List src, Rcpp::List dst) {
+	if (src.size() != 2 || dst.size() != 2)
+		return false;
+	Rcpp::CharacterVector src_cv = src[0];
+	Rcpp::CharacterVector dst_cv = dst[0];
+	if (Rcpp::CharacterVector::is_na(src_cv[0]) || Rcpp::CharacterVector::is_na(dst_cv[0]))
+		return false;
+	OGRSpatialReference *srs_src = OGRSrs_from_crs(src);
+	OGRSpatialReference *srs_dst = OGRSrs_from_crs(dst);
+	unset_error_handler();
+	OGRCoordinateTransformation *ct = OGRCreateCoordinateTransformation(srs_src, srs_dst);
+	set_error_handler();
+	delete srs_src;
+	delete srs_dst;
+	if (ct) {
+		ct->DestroyCT(ct);
+		return true;
+	} else
+		return false;
+}
+
+// [[Rcpp::export]]
 Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 		Rcpp::NumericVector AOI, Rcpp::CharacterVector pipeline, bool reverse = false,
 		double desired_accuracy = -1.0, bool allow_ballpark = true) {

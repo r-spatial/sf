@@ -187,14 +187,8 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 	for (i in seq_along(lc.other))
 		x[[ nm.lc[i] ]] = list.cols[[i]]
 
-	for (i in seq_along(geom)) {
-		crs = attr(geom[[i]], "crs")
-		x[[ nm[i] ]] = st_sfc(geom[[i]], crs = crs) # computes bbox
-		if (crs == st_crs("LOCAL_CS[\"Undefined Cartesian SRS\"]")) {
-			message("substituting CRS NA for \"Undefined Cartesian SRS\"")
-			st_crs(x[[ nm[i] ]]) = NA_crs_
-		}
-	}
+	for (i in seq_along(geom))
+		x[[ nm[i] ]] = st_sfc(geom[[i]], crs = attr(geom[[i]], "crs")) # computes bbox
 
 	x = st_as_sf(x, ...,
 		sf_column_name = if (is.character(geometry_column)) geometry_column else nm[geometry_column],

@@ -143,6 +143,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_can_transform
+Rcpp::LogicalVector CPL_can_transform(Rcpp::List src, Rcpp::List dst);
+RcppExport SEXP _sf_CPL_can_transform(SEXP srcSEXP, SEXP dstSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type src(srcSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type dst(dstSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_can_transform(src, dst));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_transform
 Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs, Rcpp::NumericVector AOI, Rcpp::CharacterVector pipeline, bool reverse, double desired_accuracy, bool allow_ballpark);
 RcppExport SEXP _sf_CPL_transform(SEXP sfcSEXP, SEXP crsSEXP, SEXP AOISEXP, SEXP pipelineSEXP, SEXP reverseSEXP, SEXP desired_accuracySEXP, SEXP allow_ballparkSEXP) {
@@ -1385,6 +1397,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_multisurface_to_multipolygon", (DL_FUNC) &_sf_CPL_multisurface_to_multipolygon, 1},
     {"_sf_CPL_compoundcurve_to_linear", (DL_FUNC) &_sf_CPL_compoundcurve_to_linear, 1},
     {"_sf_CPL_curve_to_linestring", (DL_FUNC) &_sf_CPL_curve_to_linestring, 1},
+    {"_sf_CPL_can_transform", (DL_FUNC) &_sf_CPL_can_transform, 2},
     {"_sf_CPL_transform", (DL_FUNC) &_sf_CPL_transform, 7},
     {"_sf_CPL_wrap_dateline", (DL_FUNC) &_sf_CPL_wrap_dateline, 3},
     {"_sf_CPL_get_gdal_drivers", (DL_FUNC) &_sf_CPL_get_gdal_drivers, 1},

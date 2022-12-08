@@ -2,6 +2,7 @@
 % Please edit documentation in R/transform.R, R/proj.R
 \name{st_transform}
 \alias{st_transform}
+\alias{st_can_transform}
 \alias{st_transform.sfc}
 \alias{st_transform.sf}
 \alias{st_transform.sfg}
@@ -12,6 +13,8 @@
 \alias{sf_proj_info}
 \title{Transform or convert coordinates of simple feature}
 \usage{
+st_can_transform(src, dst)
+
 st_transform(x, crs, ...)
 
 \method{st_transform}{sfc}(
@@ -42,6 +45,10 @@ st_wrap_dateline(x, options, quiet)
 sf_proj_info(type = "proj", path)
 }
 \arguments{
+\item{src}{source crs}
+
+\item{dst}{destination crs}
+
 \item{x}{object of class sf, sfc or sfg}
 
 \item{crs}{target coordinate reference system: object of class `crs`, or input string for \link{st_crs}}
@@ -79,6 +86,9 @@ at least the one specified will be considered; a negative value disables this fe
 Transform or convert coordinates of simple feature
 }
 \details{
+\code{st_can_transform} returns a boolean indicating whether
+coordinates with CRS src can be transformed into CRS dst
+
 Transforms coordinates of object to new projection. 
 Features that cannot be transformed are returned as empty geometries.
 Transforms using the \code{pipeline=} argument may fail if there is

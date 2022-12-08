@@ -4,7 +4,7 @@
 [![Coverage Status](https://img.shields.io/codecov/c/github/r-spatial/sf/main.svg)](https://codecov.io/github/r-spatial/sf?branch=main)
 [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html)
 [![CRAN](http://www.r-pkg.org/badges/version/sf)](https://cran.r-project.org/package=sf)
-[![cran checks](https://cranchecks.info/badges/worst/sf)](https://cran.r-project.org/web/checks/check_results_sf.html)
+[![cran checks](https://badges.cranchecks.info/worst/sf.svg)](https://cran.r-project.org/web/checks/check_results_sf.html)
 [![Downloads](http://cranlogs.r-pkg.org/badges/sf?color=brightgreen)](http://www.r-pkg.org/pkg/sf)
 [![status](https://tinyverse.netlify.com/badge/sf)](https://CRAN.R-project.org/package=sf)
 <!-- badges: end -->
