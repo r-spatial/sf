@@ -1,10 +1,10 @@
 # version 1.0-10
 
-* clean up units handling for geometry measures (length, area, distance)
+* tidy unit handling for geometry measures (length, area, distance) and crs
 
-* `st_read()` substitutes CRS `"LOCAL_CS["Undefined Cartesian SRS"]"` with `st_crs(NA)`
+* `st_write()` substitutes an `NA` crs with `ENGCRS["Undefined Cartesian SRS with unknown unit"]`; #2049, #2054
 
-* add `st_can_transform()` to check whether a transformation between two CRS exists; see https://github.com/dieghernan/tidyterra/issues/64
+* `st_can_transform()` checks whether a transformation between two CRS exists; see https://github.com/dieghernan/tidyterra/issues/64; #2049
 
 * drop the rownames in `st_coordinates()`, to reduce the output size
 

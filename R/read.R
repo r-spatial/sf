@@ -463,10 +463,8 @@ st_write.sf = function(obj, dsn, layer = NULL, ...,
 	if (write_geometries <- inherits(obj, "sf")) {
 		geom = st_geometry(obj)
 		obj[[attr(obj, "sf_column")]] = NULL
-		if (#driver == "GPKG" && 
-                    is.na(st_crs(geom))) {
-			message(#'writing GPKG: substituting ENGCRS["Undefined Cartesian SRS with unknown unit"] for missing CRS')
-                            'writing: substituting ENGCRS["Undefined Cartesian SRS with unknown unit"] for missing CRS')
+		if (is.na(st_crs(geom))) {
+			message('writing: substituting ENGCRS["Undefined Cartesian SRS with unknown unit"] for missing CRS')
 			st_crs(geom) = st_crs("ENGCRS[\"Undefined Cartesian SRS with unknown unit\",EDATUM[\"Unknown engineering datum\"],CS[Cartesian,2],AXIS[\"X\",unspecified,ORDER[1],LENGTHUNIT[\"unknown\",0]],AXIS[\"Y\",unspecified,ORDER[2],LENGTHUNIT[\"unknown\",0]]]")
 		}
 	} else { # create fake geometries:
