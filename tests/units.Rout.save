@@ -1,6 +1,6 @@
 
-R version 3.5.3 (2019-03-11) -- "Great Truth"
-Copyright (C) 2019 The R Foundation for Statistical Computing
+R version 4.2.2 Patched (2022-11-10 r83330) -- "Innocent and Trusting"
+Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -25,7 +25,7 @@ Type 'q()' to quit R.
 > sf:::crs_parameters(ll)$ud_unit
 1 [arc_degree]
 > 
-> u = names(sf:::udunits_from_proj)
+> u = names(sf:::udunits_from_proj)[1:21]
 > 
 > unrecognized = NULL
 > out = sapply(u, function(x) { 
@@ -43,9 +43,9 @@ dm : 1 [dm]
 cm : 1 [cm]
 mm : 1 [mm]
 kmi : 1 [nautical_mile]
-in : 1 [in]
-ft : 1 [ft]
-yd : 1 [yd]
+in : 1 [inch]
+ft : 1 [foot]
+yd : 1 [yard]
 mi : 1 [mi]
 fath : 1 [fathom]
 ch : 1 [chain]
@@ -64,4 +64,4 @@ ind-ch : 1 [ind_ch]
 > 
 > proc.time()
    user  system elapsed 
-  0.426   0.012   0.429 
+  1.051   0.723   0.927 

@@ -1,5 +1,5 @@
 
-R version 4.2.1 (2022-06-23) -- "Funny-Looking Kid"
+R version 4.2.2 Patched (2022-11-10 r83330) -- "Innocent and Trusting"
 Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -837,9 +837,6 @@ The following object is masked from 'package:dplyr':
 
 xmin ymin xmax ymax 
 -180  -90  180   90 
-Warning message:
-In showSRID(uprojargs, format = "PROJ", multiline = "NO", prefer_proj = prefer_proj) :
-  Discarded datum Amersfoort in Proj4 definition
 > 
 > # st_to_s2
 > if (FALSE) { # stops working with GDAL 2.3.0 / PROJ 5.0.1:
@@ -1091,4 +1088,4 @@ CRS:           NA
 > 
 > proc.time()
    user  system elapsed 
-  8.907   0.852   8.874 
+  7.703   0.763   7.628 

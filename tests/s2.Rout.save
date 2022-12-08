@@ -1,5 +1,5 @@
 
-R version 4.2.0 (2022-04-22) -- "Vigorous Calisthenics"
+R version 4.2.2 Patched (2022-11-10 r83330) -- "Innocent and Trusting"
 Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -15,8 +15,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> library(sf)
-Linking to GEOS 3.10.2, GDAL 3.4.3, PROJ 8.2.0; sf_use_s2() is TRUE
+> suppressPackageStartupMessages(library(sf))
 > d = data.frame(z = 1:100, x = runif(100), y = runif(100))
 > n0 = st_as_sf(d, coords = c("x", "y"), crs = 4326)
 > n1 = st_transform(n0, 3857)
@@ -66,4 +65,4 @@ Linking to GEOS 3.10.2, GDAL 3.4.3, PROJ 8.2.0; sf_use_s2() is TRUE
 > 
 > proc.time()
    user  system elapsed 
-  1.829   0.063   1.885 
+  1.677   0.711   1.538 

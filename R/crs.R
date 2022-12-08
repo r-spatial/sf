@@ -262,7 +262,7 @@ st_is_longlat = function(x) {
 # a = "b" => a is the proj.4 unit (try: cs2cs -lu); "b" is the udunits2 unit
 udunits_from_proj = list(
 #   PROJ.4     UDUNITS
-	`km` =    as_units("km"),
+	`km` =     as_units("km"),
 	`m` =      as_units("m"),
 	`dm` =     as_units("dm"),
 	`cm` =     as_units("cm"),
@@ -282,7 +282,22 @@ udunits_from_proj = list(
 	`us-mi` =  as_units("US_survey_mile"),
 	`ind-yd` = as_units("ind_yd", check_is_valid = FALSE),
 	`ind-ft` = as_units("ind_ft", check_is_valid = FALSE),
-	`ind-ch` = as_units("ind_ch", check_is_valid = FALSE)
+	`ind-ch` = as_units("ind_ch", check_is_valid = FALSE),
+	`kilometre` =  as_units("km"),
+	`metre` =  as_units("m"),
+	`decimetre` =     as_units("dm"),
+	`centimetre` =     as_units("cm"),
+	`millimetre` =     as_units("mm"),
+	`nautical mile` = as_units("nautical_mile"),
+	`Statute mile` = as_units("mi"),
+ 	`US survey inch` =  as_units("us_in", check_is_valid = FALSE),
+	`US survey foot` =  as_units("US_survey_foot"),
+	`US survey yard` =  as_units("US_survey_yard"),
+	`US survey chain` =  as_units("chain"),
+	`US survey mile` =  as_units("US_survey_mile"),
+	`Indian yard (1937)` = as_units("ind_yd", check_is_valid = FALSE),
+	`Indian foot (1937)` = as_units("ind_ft", check_is_valid = FALSE),
+	`Indian chain` = as_units("ind_ch", check_is_valid = FALSE)
 )
 
 crs_parameters = function(x, with_units = TRUE) {
@@ -295,12 +310,16 @@ crs_parameters = function(x, with_units = TRUE) {
 	if (with_units)
 		ret$ud_unit = if (isTRUE(ret$IsGeographic))
 				as_units("arc_degree") # FIXME: is this always true?
-			else if (is.null(x$units))
-				NA_character_ #2049
-			else if (is.character(udunits_from_proj[[x$units]]))
-				as_units(udunits_from_proj[[x$units]])
-			else
-				udunits_from_proj[[x$units]]
+			else if (!is.null(ret$units_gdal)) {
+				u = udunits_from_proj[[ret$units_gdal]]
+				if (is.null(u)) {
+					u = try(as_units(ret$units_gdal), silent = TRUE)
+					if (inherits(u, "try-error"))
+						u = NULL
+				}
+				u
+			} else
+				NULL #2049
 	ret
 }
 

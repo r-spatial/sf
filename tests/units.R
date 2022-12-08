@@ -7,7 +7,7 @@ if (utils::packageVersion("units") >= "0.5-0")
 ll = st_crs(4326)
 sf:::crs_parameters(ll)$ud_unit
 
-u = names(sf:::udunits_from_proj)
+u = names(sf:::udunits_from_proj)[1:21]
 
 unrecognized = NULL
 out = sapply(u, function(x) { 

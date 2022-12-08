@@ -1,5 +1,5 @@
 
-R version 4.2.1 (2022-06-23) -- "Funny-Looking Kid"
+R version 4.2.2 Patched (2022-11-10 r83330) -- "Innocent and Trusting"
 Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -126,7 +126,7 @@ Type 'q()' to quit R.
 + all.equal(st_geometry(x), y)
 + }
 spatstat.geom 3.0-3
-spatstat.random 3.0-0
+spatstat.random 3.0-1
 Simple feature collection with 51 features and 1 field
 Geometry type: GEOMETRY
 Dimension:     XY
@@ -166,4 +166,4 @@ In st_as_sfc.owin(spatstat.geom::as.owin(x)) :
 > 
 > proc.time()
    user  system elapsed 
-  2.495   0.845   2.446 
+  2.383   0.830   2.360 

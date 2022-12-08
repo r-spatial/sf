@@ -1,5 +1,7 @@
 # version 1.0-10
 
+* clean up units handling for geometry measures (length, area, distance)
+
 * `st_read()` substitutes CRS `"LOCAL_CS["Undefined Cartesian SRS"]"` with `st_crs(NA)`
 
 * drop the rownames in `st_coordinates()`, to reduce the output size

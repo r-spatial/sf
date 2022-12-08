@@ -185,8 +185,8 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	if (srs == NULL)
 		Rcpp::stop("crs not found"); // #nocov
 
-	Rcpp::List out(15);
-	Rcpp::CharacterVector names(15);
+	Rcpp::List out(16);
+	Rcpp::CharacterVector names(16);
 	out(0) = Rcpp::NumericVector::create(srs->GetSemiMajor());
 	names(0) = "SemiMajor";
 
@@ -292,6 +292,33 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	} else
 		out(14) = Rcpp::CharacterVector::create(NA_STRING);
 	names(14) = "srid";
+
+	// axes, 15:
+	int ac = srs->GetAxesCount();
+	Rcpp::CharacterVector nms(ac);
+	Rcpp::IntegerVector orientation(ac);
+	Rcpp::NumericVector convfactor(ac);
+	for (int i = 0; i < ac; i++) {
+		OGRAxisOrientation peOrientation;
+		double pdfConvFactor;
+		const char *ret = srs->GetAxis(srs->IsGeographic() ? "GEOGCS" : "PROJCS", 
+						i, &peOrientation, &pdfConvFactor);
+		if (ret == NULL) {
+			nms[i] = NA_STRING;
+			orientation[i] = NA_INTEGER;
+			convfactor[i] = NA_REAL;
+		} else {
+			nms[i] = ret;
+			orientation[i] = (int) peOrientation;
+			convfactor[i] = pdfConvFactor;
+		}
+	}
+	Rcpp::DataFrame axes_df = Rcpp::DataFrame::create(
+		Rcpp::_["name"] = nms,
+		Rcpp::_["orientation"] = orientation,
+		Rcpp::_["convfactor"] = convfactor);
+	out(15) = axes_df;
+	names(15) = "axes";
 
 	set_error_handler();
 

@@ -1,4 +1,4 @@
-library(sf)
+suppressPackageStartupMessages(library(sf))
 d = data.frame(z = 1:100, x = runif(100), y = runif(100))
 n0 = st_as_sf(d, coords = c("x", "y"), crs = 4326)
 n1 = st_transform(n0, 3857)

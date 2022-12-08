@@ -45,11 +45,10 @@ st_area.sfc = function(x, ...) {
 		}
 	} else {
 		a = CPL_area(x) # ignores units: units of coordinates
-		if (! is.na(st_crs(x))) {
-			units(a) = crs_parameters(st_crs(x))$ud_unit^2 # coord units
-			if (!is.null(to_m <- st_crs(x)$to_meter))
-				a = a * to_m^2
-		}
+		if (!is.na(st_crs(x)) && !is.null(u <- st_crs(x)$ud_unit))
+			units(a) = u^2 # coord units
+		if (!is.null(to_m <- st_crs(x)$to_meter) && !is.na(to_m) && !inherits(a, "units"))
+			a = set_units(a * to_m^2, "m^2", mode = "standard")
 		a
 	}
 }
@@ -95,11 +94,10 @@ st_length = function(x, ...) {
 		ret = CPL_length(x)
 		ret[is.nan(ret)] = NA
 		crs = st_crs(x)
-		if (! is.na(crs)) {
-			units(ret) = crs_parameters(crs)$ud_unit
-			if (!is.null(to_m <- st_crs(x)$to_meter))
-				ret = ret * to_m
-		}
+		if (!is.na(crs) && !is.null(u <- crs$ud_unit))
+			units(ret) = u
+		if (!is.null(to_m <- st_crs(x)$to_meter) && !is.na(to_m) && !inherits(ret, "units"))
+			ret = set_units(ret * to_m, "m", mode = "standard")
 		ret
 	}
 }
@@ -175,10 +173,7 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE,
 				if (inherits(x, "sfc_POINT") && inherits(y, "sfc_POINT") && which == "Euclidean") {
 					xc = st_coordinates(x)
 					yc = st_coordinates(y)
-					d = sqrt((xc[,1] - yc[,1])^2 + (xc[,2] - yc[,2])^2)
-					if (! is.na(st_crs(x)))
-						units(d) = crs_parameters(st_crs(x))$ud_unit
-					d
+					sqrt((xc[,1] - yc[,1])^2 + (xc[,2] - yc[,2])^2)
 				} else
 					mapply(st_distance, x, y, by_element = FALSE, which = which, par = par)
 			} else {
@@ -187,8 +182,8 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE,
 				else
 					CPL_geos_dist(x, y, which, par)
 			}
-		if (! is.na(st_crs(x)))
-			units(d) = crs_parameters(st_crs(x))$ud_unit
+		if (!is.na(st_crs(x)) && !is.null(u <- st_crs(x)$ud_unit))
+			units(d) = u
 		d
 	}
 }
