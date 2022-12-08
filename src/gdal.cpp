@@ -294,25 +294,31 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	names(14) = "srid";
 
 	// axes, 15:
+#if GDAL_VERSION_NUM > 3000000
 	int ac = srs->GetAxesCount();
+#else
+	int ac = 0;
+#endif
 	Rcpp::CharacterVector nms(ac);
 	Rcpp::IntegerVector orientation(ac);
 	Rcpp::NumericVector convfactor(ac);
+#if GDAL_VERSION_NUM > 3000000
 	for (int i = 0; i < ac; i++) {
-		OGRAxisOrientation peOrientation;
 		double pdfConvFactor;
+		OGRAxisOrientation peOrientation;
 		const char *ret = srs->GetAxis(srs->IsGeographic() ? "GEOGCS" : "PROJCS", 
 						i, &peOrientation, &pdfConvFactor);
-		if (ret == NULL) {
-			nms[i] = NA_STRING;
-			orientation[i] = NA_INTEGER;
-			convfactor[i] = NA_REAL;
-		} else {
+		if (ret != NULL) {
 			nms[i] = ret;
 			orientation[i] = (int) peOrientation;
 			convfactor[i] = pdfConvFactor;
+		} else {
+			nms[i] = NA_STRING;
+			orientation[i] = NA_INTEGER;
+			convfactor[i] = NA_REAL;
 		}
 	}
+#endif
 	Rcpp::DataFrame axes_df = Rcpp::DataFrame::create(
 		Rcpp::_["name"] = nms,
 		Rcpp::_["orientation"] = orientation,

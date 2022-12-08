@@ -117,7 +117,8 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30,
 				stop("x does not have a crs set: can't convert units")
 			if (is.null(st_crs(x)$units))
 				stop("x has a crs without units: can't convert units")
-			units(dist) = crs_parameters(st_crs(x))$ud_unit
+			if (!is.null(st_crs(x)$ud_unit))
+				units(dist) = st_crs(x)$ud_unit
 		}
 		dist = rep(dist, length.out = length(x))
 		nQ = rep(nQuadSegs, length.out = length(x))
@@ -629,7 +630,7 @@ st_segmentize.sfc	= function(x, dfMaxLength, ...) {
 		lwgeom::st_geod_segmentize(x, dfMaxLength) # takes care of rad or degree units
 	} else {
 		if (! is.na(st_crs(x)) && inherits(dfMaxLength, "units"))
-			units(dfMaxLength) = units(crs_parameters(st_crs(x))$SemiMajor) # might convert
+			units(dfMaxLength) = units(st_crs(x)$SemiMajor) # might convert
 		st_sfc(CPL_gdal_segmentize(x, dfMaxLength), crs = st_crs(x))
 	}
 }
@@ -881,8 +882,8 @@ st_snap.sfg = function(x, y, tolerance)
 st_snap.sfc = function(x, y, tolerance) {
 	if (isTRUE(st_is_longlat(x)))
 		stop("st_snap for longitude/latitude data not supported; use st_transform first?")
-	else if (inherits(tolerance, "units") && !is.na(st_crs(x)))
-		units(tolerance) = crs_parameters(st_crs(x))$ud_unit # coordinate units
+	else if (inherits(tolerance, "units") && !is.null(st_crs(x)$ud_unit))
+		units(tolerance) = st_crs(x)$ud_unit # coordinate units
 	tolerance = rep(tolerance, length.out = length(x))
 	st_sfc(CPL_geos_snap(st_geometry(x), st_geometry(y), as.double(tolerance)))
 }
@@ -984,8 +985,8 @@ st_line_sample = function(x, n, density, type = "regular", sample = NULL) {
 	l = st_length(x)
 	distList = if (is.null(sample)) {
 		n = if (missing(n)) {
-			if (!is.na(st_crs(x)) && inherits(density, "units"))
-				units(density) = 1/crs_parameters(st_crs(x))$ud_unit # coordinate units
+			if (!is.null(st_crs(x)$ud_unit) && inherits(density, "units"))
+				units(density) = 1/st_crs(x)$ud_unit # coordinate units
 			round(rep(density, length.out = length(l)) * l)
 		} else
 			rep(n, length.out = length(l))

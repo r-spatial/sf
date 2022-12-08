@@ -110,8 +110,9 @@ the \code{$} method for \code{crs} objects retrieves named elements
 using the GDAL interface; named elements include
 \code{"SemiMajor"}, \code{"SemiMinor"}, \code{"InvFlattening"}, \code{"IsGeographic"},
 \code{"units_gdal"}, \code{"IsVertical"}, \code{"WktPretty"}, \code{"Wkt"},
-\code{"Name"}, \code{"proj4string"}, \code{"epsg"}, \code{"yx"} and
-\code{"ud_unit"} (this may be subject to changes in future GDAL versions).
+\code{"Name"}, \code{"proj4string"}, \code{"epsg"}, \code{"yx"}, 
+\code{"ud_unit"}, and \code{axes} (this may be subject to changes in future GDAL versions).
+\code{"ud_unit"} returns a valid \link[units]{units} object or \code{NULL} if units are missing.
 
 format.crs returns NA if the crs is missing valued, or else
 the name of a crs if it is different from "unknown", or

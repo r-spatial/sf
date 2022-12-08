@@ -1,10 +1,14 @@
 # version 1.0-10
 
-* tidy unit handling for geometry measures (length, area, distance) and crs
+* `st_crs()$axes` returns a `data.frame` with axes properties (name, orientation, conversion factor) if GDAL >= 3.0.0
+
+* clean up unit handling for geometry measures (length, area, distance) and crs; 
+
+* `st_crs(x)$ud_unit` returns `NULL` if units are unknown; #2049
 
 * `st_write()` substitutes an `NA` crs with `ENGCRS["Undefined Cartesian SRS with unknown unit"]`; #2049, #2054
 
-* `st_can_transform()` checks whether a transformation between two CRS exists; see https://github.com/dieghernan/tidyterra/issues/64; #2049
+* `st_can_transform()` checks whether a transformation between two crs exists; see https://github.com/dieghernan/tidyterra/issues/64; #2049
 
 * drop the rownames in `st_coordinates()`, to reduce the output size
 

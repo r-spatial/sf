@@ -271,7 +271,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 
 swap_axes_if_needed = function(x) {
 	crs = st_crs(x)
-	if (st_axis_order() && !is.na(crs) && crs_parameters(crs)$yx)
+	if (st_axis_order() && !is.na(crs) && crs$yx)
 		st_transform(x, pipeline = "+proj=pipeline +step +proj=axisswap +order=2,1")
 	else
 		x

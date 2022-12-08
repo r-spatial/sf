@@ -429,8 +429,8 @@ st_set_precision.sfc <- function(x, precision) {
     }
 
 	if (inherits(precision, "units")) {
-		u = st_crs(x, parameters=TRUE)$ud_unit
-		if (is.null(u) || !inherits(u, "units"))
+		u = st_crs(x)$ud_unit
+		if (is.null(u))
 			stop("cannot use precision expressed as units when target object has no units (CRS) set")
 		units(precision) = 1/u # convert
 		precision = as.numeric(precision)

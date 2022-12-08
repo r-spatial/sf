@@ -45,7 +45,7 @@ st_area.sfc = function(x, ...) {
 		}
 	} else {
 		a = CPL_area(x) # ignores units: units of coordinates
-		if (!is.na(st_crs(x)) && !is.null(u <- st_crs(x)$ud_unit))
+		if (!is.null(u <- st_crs(x)$ud_unit))
 			units(a) = u^2 # coord units
 		if (!is.null(to_m <- st_crs(x)$to_meter) && !is.na(to_m) && !inherits(a, "units"))
 			a = set_units(a * to_m^2, "m^2", mode = "standard")
@@ -93,8 +93,7 @@ st_length = function(x, ...) {
 	} else {
 		ret = CPL_length(x)
 		ret[is.nan(ret)] = NA
-		crs = st_crs(x)
-		if (!is.na(crs) && !is.null(u <- crs$ud_unit))
+		if (!is.null(u <- st_crs(x)$ud_unit))
 			units(ret) = u
 		if (!is.null(to_m <- st_crs(x)$to_meter) && !is.na(to_m) && !inherits(ret, "units"))
 			ret = set_units(ret * to_m, "m", mode = "standard")
@@ -163,7 +162,7 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE,
 					lwgeom::st_geod_distance(st_sfc(x, crs = crs), st_sfc(y, crs = crs),
 						tolerance = tolerance)
 				d = mapply(dist_ll, x, y, tolerance = tolerance)
-				units(d) = units(crs_parameters(st_crs(x))$SemiMajor)
+				units(d) = units(st_crs(x)$SemiMajor)
 				d
 			} else
 				lwgeom::st_geod_distance(x, y, tolerance)

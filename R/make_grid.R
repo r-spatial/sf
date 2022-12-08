@@ -59,15 +59,15 @@ st_make_grid = function(x,
 	} else
 		TRUE
 
-	if (inherits(cellsize, "units")) {
-		if (!is.na(crs))
+	if (!is.null(crs$ud_unit)) {
+		if (inherits(cellsize, "units")) {
 			units(cellsize) = units(crs$ud_unit)
-		cellsize = units::drop_units(cellsize)
-	}
-	if (inherits(offset, "units")) {
-		if (!is.na(crs))
+			cellsize = units::drop_units(cellsize)
+		}
+		if (inherits(offset, "units")) {
 			units(offset) = units(crs$ud_unit)
-		offset = units::drop_units(offset)
+			offset = units::drop_units(offset)
+		}
 	}
 
 	if (missing(n)) {

@@ -271,8 +271,8 @@ st_is_within_distance = function(x, y = x, dist, sparse = TRUE, ...) {
 			sgbp(r, predicate = "is_within_distance", region.id = seq_along(x), 
 				ncol = length(st_geometry(y)))
 		} else {
-			if (! is.na(st_crs(x)))
-				units(dist) = crs_parameters(st_crs(x))$ud_unit # might convert
+			if (!is.null(st_crs(x)$ud_unit))
+				units(dist) = st_crs(x)$ud_unit # might convert
 			st_geos_binop("is_within_distance", x, y, par = dist, sparse = sparse, ...)
 		}
 	if (!sparse)
