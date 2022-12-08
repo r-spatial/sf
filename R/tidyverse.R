@@ -571,10 +571,11 @@ unnest.sf = function(data, ..., .preserve = NULL) {
 #' @details see \link[pillar]{type_sum}
 type_sum.sfc <- function(x, ...) {
 	cls = substring(class(x)[1], 5)
-	if (is.na(st_is_longlat(x)))
+	u = st_crs(x, parameters = TRUE)$ud_unit
+	if (is.na(st_is_longlat(x)) || is.null(u))
 		cls
 	else
-		paste0(cls, " [", enc2utf8(as.character(units(st_crs(x, parameters = TRUE)$ud_unit))), "]")
+		paste0(cls, " [", enc2utf8(as.character(units(u))), "]")
 }
 
 #' Summarize simple feature item for tibble
