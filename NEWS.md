@@ -1,6 +1,6 @@
 # version 1.0-10
 
-* `st_crs()$axes` returns a `data.frame` with axes properties (name, orientation, conversion factor) if GDAL >= 3.0.0
+* `st_crs()$axes` returns a `data.frame` with axes properties (name, orientation, conversion factor) when GDAL >= 3.0.0
 
 * clean up unit handling for geometry measures (length, area, distance) and crs; 
 

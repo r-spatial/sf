@@ -181,7 +181,7 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE,
 				else
 					CPL_geos_dist(x, y, which, par)
 			}
-		if (!is.na(st_crs(x)) && !is.null(u <- st_crs(x)$ud_unit))
+		if (!is.null(u <- st_crs(x)$ud_unit))
 			units(d) = u
 		d
 	}
