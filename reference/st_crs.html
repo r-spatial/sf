@@ -196,8 +196,9 @@ place and a warning is raised to stress this.</p>
 using the GDAL interface; named elements include
 <code>"SemiMajor"</code>, <code>"SemiMinor"</code>, <code>"InvFlattening"</code>, <code>"IsGeographic"</code>,
 <code>"units_gdal"</code>, <code>"IsVertical"</code>, <code>"WktPretty"</code>, <code>"Wkt"</code>,
-<code>"Name"</code>, <code>"proj4string"</code>, <code>"epsg"</code>, <code>"yx"</code> and
-<code>"ud_unit"</code> (this may be subject to changes in future GDAL versions).</p>
+<code>"Name"</code>, <code>"proj4string"</code>, <code>"epsg"</code>, <code>"yx"</code>, 
+<code>"ud_unit"</code>, and <code>axes</code> (this may be subject to changes in future GDAL versions).
+<code>"ud_unit"</code> returns a valid <a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">units</a> object or <code>NULL</code> if units are missing.</p>
 <p>format.crs returns NA if the crs is missing valued, or else
 the name of a crs if it is different from "unknown", or
 else the user input if it was set, or else its "proj4string" representation;</p>

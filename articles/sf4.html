@@ -130,10 +130,10 @@ or <code>tbl_df</code>, operations on feature attributes work
 identically to how they work on <code>data.frame</code>s, e.g.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
-<span><span class="co">## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1; sf_use_s2() is TRUE</span></span>
+<span><span class="co">## Linking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE</span></span>
 <span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">## Reading layer `nc' from data source </span></span>
-<span><span class="co">##   `/tmp/RtmpXP4hqU/temp_libpath13a7d1df541c3/sf/shape/nc.shp' </span></span>
+<span><span class="co">##   `/tmp/RtmpwiXgpe/temp_libpath117874ae67c7e/sf/shape/nc.shp' </span></span>
 <span><span class="co">##   using driver `ESRI Shapefile'</span></span>
 <span><span class="co">## Simple feature collection with 100 features and 14 fields</span></span>
 <span><span class="co">## Geometry type: MULTIPOLYGON</span></span>
@@ -278,8 +278,8 @@ remaining ones. We can do this by:</p>
 <span><span class="co">## Bounding box:  xmin: 406262.2 ymin: 48374.87 xmax: 3052887 ymax: 1044158</span></span>
 <span><span class="co">## Projected CRS: NAD83 / North Carolina (ftUS)</span></span>
 <span><span class="co">##         frac74                       geometry</span></span>
-<span><span class="co">## 1 0.0020406588 MULTIPOLYGON (((2314396 161...</span></span>
-<span><span class="co">## 2 0.0009922276 POLYGON ((1402677 837742.5,...</span></span>
+<span><span class="co">## 1 0.0020406588 MULTIPOLYGON (((454152.6 58...</span></span>
+<span><span class="co">## 2 0.0009922276 POLYGON ((1372054 837052.3,...</span></span>
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">a</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="fl">.8</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="fl">.5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">Ashe</span><span class="op">)</span>, border <span class="op">=</span> <span class="st">'#ff8888'</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="sf4_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
