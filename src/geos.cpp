@@ -103,6 +103,18 @@ static void __countErrorHandler(const char *fmt, void *userdata) {
 }
 
 static void __emptyNoticeHandler(const char *fmt, void *userdata) { }
+
+static void __checkInterruptFn(void*) {
+	R_CheckUserInterrupt();
+}
+
+
+static void __checkInterrupt() {
+	// Adapted from Rcpp/Interrupt.h
+	if (!R_ToplevelExec(__checkInterruptFn, nullptr)) {
+		GEOS_interruptRequest();
+	}
+}
 // #nocov end
 
 GEOSContextHandle_t CPL_geos_init(void) {
@@ -110,6 +122,8 @@ GEOSContextHandle_t CPL_geos_init(void) {
 	GEOSContextHandle_t ctxt = GEOS_init_r();
 	GEOSContext_setNoticeHandler_r(ctxt, __warningHandler);
 	GEOSContext_setErrorHandler_r(ctxt, __errorHandler);
+	GEOS_interruptRegisterCallback(__checkInterrupt);
+
 	return ctxt;
 #else
 	return initGEOS_r((GEOSMessageHandler) __warningHandler, (GEOSMessageHandler) __errorHandler);
