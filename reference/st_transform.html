@@ -265,8 +265,7 @@ variable as numeric, previous versions return a character vector containing a nu
 <span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (-30 20)</span>
 <span class="r-in"><span><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpksLf5k/temp_libpath118107175a3c0/sf/shape/nc.shp' </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/Rtmp6hhG8A/temp_libpath391d9b0308/sf/shape/nc.shp' using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
@@ -278,7 +277,7 @@ variable as numeric, previous versions return a character vector containing a nu
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1137598162 [m^2]</span>
 <span class="r-in"><span><span class="fu"><a href="geos_measures.html">st_area</a></span><span class="op">(</span><span class="fu">st_transform</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span>, <span class="fl">2264</span><span class="op">)</span><span class="op">)</span> <span class="co"># NC state plane, US foot</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12244955726 [US_survey_foot^2]</span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-quantities/units/" class="external-link">units</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-quantities/units" class="external-link">units</a></span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> udunits database from /usr/share/xml/udunits/udunits2.xml</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/units/man/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="fu"><a href="geos_measures.html">st_area</a></span><span class="op">(</span><span class="fu">st_transform</span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="op">]</span>, <span class="fl">2264</span><span class="op">)</span><span class="op">)</span>, <span class="va">m</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1137598162 [m^2]</span>
