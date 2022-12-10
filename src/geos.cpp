@@ -1080,10 +1080,12 @@ Rcpp::List CPL_geos_nearest_points(Rcpp::List sfc0, Rcpp::List sfc1, bool pairwi
 		out = sfc_from_geometry(hGEOSCtxt, ls, dim);
 	} else {
 		std::vector<GeomPtr> ls(sfc0.size() * sfc1.size());
-		for (size_t i = 0; i < gmv0.size(); i++)
+		for (size_t i = 0; i < gmv0.size(); i++) {
 			for (size_t j = 0; j < gmv1.size(); j++)
 				ls[(i * gmv1.size()) + j] =
 					geos_ptr(GEOSGeom_createLineString_r(hGEOSCtxt, GEOSNearestPoints_r(hGEOSCtxt, gmv0[i].get(), gmv1[j].get())), hGEOSCtxt); // converts as LINESTRING
+			R_CheckUserInterrupt();
+		}
 		out = sfc_from_geometry(hGEOSCtxt, ls, dim);
 	}
 
