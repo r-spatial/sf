@@ -33,6 +33,8 @@ st_make_grid = function(x,
 		crs = if (missing(x)) NA_crs_ else st_crs(x),
 		what = "polygons", square = TRUE, flat_topped = FALSE) {
 
+	if (!inherits(crs, "crs"))
+		crs = st_crs(crs) # #2057
 	if (missing(x) && missing(cellsize) && missing(offset)
 			&& missing(n) && missing(crs)) # create global 10 x 10 degree grid
 		return(st_make_grid(cellsize = c(10,10), offset = c(-180,-90), n = c(36,18),
