@@ -497,6 +497,8 @@ nest.sf = function (.data, ...) {
 	if (!requireNamespace("tidyr", quietly = TRUE))
 		stop("tidyr required: install first?")
 
+	if (inherits(g <- st_geometry(.data), "sfc_POINT") && !is.null(attr(g, "points")))
+		st_geometry(.data) = g[] # realize
 	class(.data) <- setdiff(class(.data), "sf")
 	ret = tidyr::nest(.data, ...)
 	lst = which(sapply(ret, inherits, "list"))[1]
@@ -582,7 +584,7 @@ type_sum.sfc <- function(x, ...) {
 #' Summarize simple feature item for tibble
 #' @name tibble
 obj_sum.sfc <- function(x) {
-	vapply(x, function(sfg) format(sfg, width = 15L), "")
+	vapply(x[], function(sfg) format(sfg, width = 15L), "")
 }
 
 #' @name tibble

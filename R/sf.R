@@ -48,14 +48,20 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 		if (na.fail && any(is.na(cc)))
 			stop("missing values in coordinates not allowed")
 		# classdim = getClassDim(rep(0, length(coords)), length(coords), dim, "POINT")
-		x$geometry = structure( points_rcpp(as.matrix(cc), dim),
+		# x$geometry = structure( points_rcpp(attr(x, "points"), dim),
+		if (length(coords) == 2)
+			dim = "XY"
+		stopifnot(length(coords) == nchar(dim), dim %in% c("XY", "XYZ", "XYZM", "XYM"))
+		x$geometry = structure(vector("list", length = nrow(cc)),
+			points = as.matrix(cc),
+			points_dim = dim,
 			n_empty = 0L, precision = 0, crs = NA_crs_,
 			bbox = structure(
 				c(xmin = min(cc[[1]], na.rm = TRUE),
 				ymin = min(cc[[2]], na.rm = TRUE),
 				xmax = max(cc[[1]], na.rm = TRUE),
 				ymax = max(cc[[2]], na.rm = TRUE)), class = "bbox"),
-			class =  c("sfc_POINT", "sfc" ), names = NULL)
+			class =  c("sfc_POINT", "sfc"), names = NULL)
 
 		if (is.character(coords))
 			coords = match(coords, names(x))
@@ -406,9 +412,10 @@ print.sf = function(x, ..., n = getOption("sf_max_print", default = 10)) {
 		app = paste0(app, "\n", "Active geometry column: ", attr(x, "sf_column"))
 	print(st_geometry(x), n = 0, what = "Simple feature collection with", append = app)
 	if (n > 0) {
-		if (inherits(x, "tbl_df"))
+		if (inherits(x, "tbl_df")) {
+			st_geometry(x) = x[[attr(x, "sf_column")]][] # note the extra []: this reloads points
 			NextMethod()
-		else {
+		} else {
 			y <- x
 			if (nrow(y) > n) {
 				cat(paste("First", n, "features:\n"))

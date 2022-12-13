@@ -227,7 +227,7 @@ if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.5.0") > -1) {
  n = 100
  pts = st_as_sf(data.frame(matrix(runif(n), , 2), id = 1:(n/2)), coords = c("X1", "X2"))
  # compute Voronoi polygons:
- pols = st_collection_extract(st_voronoi(do.call(c, st_geometry(pts))))
+ pols = st_collection_extract(st_voronoi(st_combine(pts)))
  # match them to points:
  pts$pols = pols[unlist(st_intersects(pts, pols))]
  plot(pts["id"], pch = 16) # ID is color

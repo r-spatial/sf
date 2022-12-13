@@ -9,6 +9,10 @@ mb_wrap = function(mb) {
 	structure(mb, names = c("mmin", "mmax"), class = "m_range")
 }
 
+m_range.pointmatrix = function(obj, ...) {
+	mb_wrap(range(obj[,ncol(obj)]))
+}
+
 m_range.Set = function(obj, ...) {
 	sel = vapply(obj, function(x) { length(x) && !all(is.na(x)) }, TRUE)
 	if (! any(sel))
@@ -130,6 +134,8 @@ print.m_range = function(x, ...) {
 }
 
 compute_m_range = function(obj) {
+	if (!is.null(pts <- attr(obj, "points")))
+		m_range.pointmatrix(pts)
 	switch(class(obj)[1],
 		   sfc_POINT = mb_wrap(m_range.Set(obj)),
 		   sfc_MULTIPOINT = mb_wrap(m_range.MtrxSet(obj)),

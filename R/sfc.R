@@ -48,14 +48,24 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 		lst = lst[[1]]
 	stopifnot(is.numeric(crs) || is.character(crs) || inherits(crs, "crs"))
 
+	points_in_attr <- !is.null(attr(lst, "points"))
+
 	# check for NULLs:
 	a = attributes(lst)
-	is_null = sfc_is_null(lst)
+	is_null = if (points_in_attr)
+			rep(FALSE, length(lst))
+		else
+			sfc_is_null(lst)
 	lst = unclass(lst)
-	lst = lst[! is_null]
+	if (!points_in_attr)
+		lst = lst[! is_null]
+
 	attributes(lst) = a
 
-	dims_and_types = sfc_unique_sfg_dims_and_types(lst)
+	dims_and_types = if (points_in_attr)
+			list(class_dim = attr(lst, "points_dim"), class_type = "POINT")
+		else
+			sfc_unique_sfg_dims_and_types(lst)
 	
 	cls = if (length(lst) == 0) # empty set: no geometries read
 		c("sfc_GEOMETRY", "sfc")
@@ -140,8 +150,12 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 "[.sfc" = function(x, i, j, ..., op = st_intersects) {
 	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc") || inherits(i, "sfg")))
 		i = lengths(op(x, i, ...)) != 0
-	st_sfc(NextMethod(), crs = st_crs(x), precision = st_precision(x),
-		dim = if(length(x)) class(x[[1]])[1] else "XY")
+	if (inherits(x, "sfc_POINT") && !is.null(attr(x, "points")))
+		st_sfc(restore_points(x, i), crs = st_crs(x), precision = st_precision(x),
+			dim = if(length(x)) class(x[[1]])[1] else "XY")
+	else
+		st_sfc(NextMethod() , crs = st_crs(x), precision = st_precision(x),
+			dim = if(length(x)) class(x[[1]])[1] else "XY")
 }
 
 
@@ -487,8 +501,11 @@ st_coordinates.sfc = function(x, ...) {
 		return(matrix(nrow = 0, ncol = 2))
 
 	ret = switch(class(x)[1],
-		sfc_POINT = matrix(unlist(x, use.names = FALSE), nrow = length(x), byrow = TRUE,
-		     dimnames = NULL),
+		sfc_POINT = if (is.null(attr(x, "points"))) {
+					   matrix(unlist(x, use.names = FALSE), nrow = length(x), byrow = TRUE, dimnames = NULL)
+				} else {
+					attr(x, "points")
+				},
 		sfc_MULTIPOINT = ,
 		sfc_LINESTRING = coord_2(x),
 		sfc_MULTILINESTRING = ,
@@ -496,7 +513,10 @@ st_coordinates.sfc = function(x, ...) {
 		sfc_MULTIPOLYGON = coord_4(x),
 		stop(paste("not implemented for objects of class", class(x)[1]))
 	)
-	Dims = class(x[[1]])[1]
+	Dims = if (!is.null(attr(x, "points_dim")))
+			attr(x, "points_dim")
+		else
+			class(x[[1]])[1]
 	ncd = nchar(Dims)
 	colnames(ret)[1:ncd] = vapply(seq_len(ncd), function(i) substr(Dims, i, i), "")
 	ret
@@ -578,4 +598,23 @@ st_as_sfc.blob = function(x, ...) {
 st_as_sfc.bbox = function(x, ...) {
 	box = st_polygon(list(matrix(x[c(1, 2, 3, 2, 3, 4, 1, 4, 1, 2)], ncol = 2, byrow = TRUE)))
 	st_sfc(box, crs = st_crs(x))
+}
+
+#' @export
+`[[.sfc` = function(x, i, j, ..., exaxt = TRUE) {
+	if (inherits(x, "sfc_POINT") && !is.null(attr(x, "points")))
+		restore_point(x, i)
+	else
+		NextMethod()
+}
+
+restore_point = function(x, i = TRUE) {
+	restore_points(x, i)[[1]]
+}
+
+restore_points = function(x, i = TRUE) {
+	a = attributes(x)
+	structure(points_rcpp(a$points[i,,drop=FALSE], a$points_dim),
+		n_empty = 0L, precision = a$precision, crs = a$crs,
+		bbox = a$bbox, class = a$class, points = NULL, points_dim = NULL)
 }

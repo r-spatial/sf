@@ -9,6 +9,10 @@ bb_wrap = function(bb) {
 	structure(as.double(bb), names = c("xmin", "ymin", "xmax", "ymax"), class = "bbox")
 }
 
+bbox.pointmatrix = function(obj, ...) {
+	bb_wrap(as.vector(t(apply(obj[,1:2,drop=FALSE], 2, range))))
+}
+
 bbox.Set = function(obj, ...) {
 	sel = !sfc_is_empty(obj)
 	if (! any(sel))
@@ -134,7 +138,9 @@ print.bbox = function(x, ...) {
 }
 
 compute_bbox = function(obj) {
-	switch(class(obj)[1],
+	if (!is.null(pts <- attr(obj, "points")))
+		bbox.pointmatrix(pts)
+	else switch(class(obj)[1],
 		sfc_POINT = bb_wrap(bbox.Set(obj)),
 		sfc_MULTIPOINT = bb_wrap(bbox.MtrxSet(obj)),
 		sfc_LINESTRING = bb_wrap(bbox.MtrxSet(obj)),
