@@ -653,9 +653,11 @@ st_segmentize.sf = function(x, dfMaxLength, ...) {
 #' st_combine(nc)
 st_combine = function(x) {
 	x = st_geometry(x)
-	if (inherits(x, "sfc_POINT") && !is.null(attr(x, "points")))
-		x = x[]
-	st_sfc(do.call(c, x), crs = st_crs(x)) # flatten/merge
+	if (inherits(x, "sfc_POINT") && !is.null(pts <- attr(x, "points"))) {
+		mp = structure(list(st_multipoint(pts, attr(x, "point_dim"))), bbox = st_bbox(x))
+		st_sfc(mp, crs = st_crs(x))
+	} else
+		st_sfc(do.call(c, x), crs = st_crs(x)) # flatten/merge
 }
 
 # x: object of class sf
