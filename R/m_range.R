@@ -136,7 +136,7 @@ print.m_range = function(x, ...) {
 compute_m_range = function(obj) {
 	if (!is.null(pts <- attr(obj, "points")))
 		m_range.pointmatrix(pts)
-	switch(class(obj)[1],
+	else switch(class(obj)[1],
 		   sfc_POINT = mb_wrap(m_range.Set(obj)),
 		   sfc_MULTIPOINT = mb_wrap(m_range.MtrxSet(obj)),
 		   sfc_LINESTRING = mb_wrap(m_range.MtrxSet(obj)),

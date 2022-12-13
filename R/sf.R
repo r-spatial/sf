@@ -52,8 +52,10 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 		if (length(coords) == 2)
 			dim = "XY"
 		stopifnot(length(coords) == nchar(dim), dim %in% c("XY", "XYZ", "XYZM", "XYM"))
+		points = as.matrix(cc)
+		dimnames(points) = NULL
 		x$geometry = structure(vector("list", length = nrow(cc)),
-			points = as.matrix(cc),
+			points = points,
 			points_dim = dim,
 			n_empty = 0L, precision = 0, crs = NA_crs_,
 			bbox = structure(

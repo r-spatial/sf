@@ -502,7 +502,7 @@ st_coordinates.sfc = function(x, ...) {
 
 	ret = switch(class(x)[1],
 		sfc_POINT = if (is.null(attr(x, "points"))) {
-					   matrix(unlist(x, use.names = FALSE), nrow = length(x), byrow = TRUE, dimnames = NULL)
+					matrix(unlist(x, use.names = FALSE), nrow = length(x), byrow = TRUE, dimnames = NULL)
 				} else {
 					attr(x, "points")
 				},
@@ -614,7 +614,9 @@ restore_point = function(x, i = TRUE) {
 
 restore_points = function(x, i = TRUE) {
 	a = attributes(x)
-	structure(points_rcpp(a$points[i,,drop=FALSE], a$points_dim),
+	points = a$points[i, , drop=FALSE]
+	structure(points_rcpp(points, a$points_dim),
 		n_empty = 0L, precision = a$precision, crs = a$crs,
-		bbox = a$bbox, class = a$class, points = NULL, points_dim = NULL)
+		bbox = bbox.pointmatrix(points), class = a$class, 
+		points = NULL, points_dim = NULL)
 }

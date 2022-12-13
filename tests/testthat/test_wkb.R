@@ -36,7 +36,7 @@ test_that("Reading of big-endian and little-endian gives the same result", {
   y = structure(list("0x00200000010000714041061A800000000041145CAC00000000"), class = "WKB")
   expect_identical(st_as_sfc(x, EWKB = TRUE), st_as_sfc(y, EWKB = TRUE))
   expect_identical(st_as_sfc(x, EWKB = TRUE, pureR = TRUE), st_as_sfc(y, EWKB = TRUE, pureR = TRUE))
-  expect_identical(st_as_sfc(x, EWKB = TRUE), st_as_sfc(y, EWKB = TRUE, pureR = TRUE))
+  expect_identical(st_as_sfc(x, EWKB = TRUE)[], st_as_sfc(y, EWKB = TRUE, pureR = TRUE)) # [] realize
 })
 
 test_that("Reading of truncated buffers results in a proper error", {

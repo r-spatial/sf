@@ -11,6 +11,7 @@ test_that("st_read and write handle date and time", {
     
     st_write(x[-4], shp[1], quiet = TRUE)
     x2 = st_read(shp[1], quiet = TRUE)
+	x2$geometry = x2$geometry[] # realize
     expect_equal(x[-4], x2, check.attributes=FALSE)
 # WKT2 CRS do not roundtrip for ESRI Shapefile
     
@@ -31,6 +32,7 @@ test_that("st_read and write handle date and time", {
     
     st_write(x[-4], shp[1], quiet = TRUE)
     x2 = st_read(shp[1], quiet = TRUE)
+	x2$geometry = x2$geometry[] # realize
     expect_equal(x[-4], x2, check.attributes=FALSE)
 # WKT2 CRS do not roundtrip for ESRI Shapefile
     

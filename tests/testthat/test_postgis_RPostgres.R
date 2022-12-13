@@ -132,7 +132,7 @@ test_that("sf can write non-sf tables with geometries", {
     df <- as.data.frame(pts)
     expect_silent(st_write(df, pg, "df"))
     expect_silent(dfx <- st_read(pg, "df"))
-    expect_equal(df[["geometry"]], dfx[["geometry"]])
+    expect_equal(df$geometry, dfx$geometry)
     expect_silent(DBI::dbRemoveTable(pg, "df"))
 })
 
