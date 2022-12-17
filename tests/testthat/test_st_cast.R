@@ -115,6 +115,15 @@ test_that("st_cast can crack GEOMETRYCOLLECTION", {
   expect_error(st_cast(sfc, "LINESTRING"))
   expect_error(st_cast(sfc, "MULTILINESTRING"))
   expect_s3_class(st_cast(sfc) %>% st_cast("MULTILINESTRING"), "sfc_MULTILINESTRING")
+
+  # Can deal with GCs containing empty geometries - #1767
+  gc5 <- st_as_sfc(
+    c("GEOMETRYCOLLECTION (POLYGON ((5.5 0, 7 0, 7 -0.5, 6 -0.5, 5.5 0)))",
+      "GEOMETRYCOLLECTION (POLYGON EMPTY)"
+    )
+  )
+  expect_is(st_cast(gc5), "sfc_POLYGON")
+  expect_equal(st_is_empty(st_cast(gc5)), c(FALSE, TRUE))
   
   sfc2 <- st_sfc(gc1, gc2, gc4) 
   expect_s3_class(sfc2 %>% st_cast, "sfc_GEOMETRY")

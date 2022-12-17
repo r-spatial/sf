@@ -1,16 +1,3 @@
-skip_if_not_installed("rgeos")
-
-test_that("st_relate works", {
-  r1 = st_relate(st_sfc(st_point(c(0,0))), st_sfc(st_linestring(rbind(c(0,0),c(1,1)))))
-  library(sp)
-  p = SpatialPoints(matrix(0,1,2))
-  l = Lines(list(Line(rbind(c(0,0),c(1,1)))), "ID")
-  sl = SpatialLines(list(l))
-  library(rgeos)
-  r2 = gRelate(p, sl)
-  expect_true(all(r1 == r2))
-})
-
 test_that("CPL_geos_is_valid works", {
   expect_true( sf:::CPL_geos_is_valid(
   	st_sfc(st_polygon(list(cbind(c(0,1,1,0,0), c(0,0,1, 1,0)))))))
@@ -29,9 +16,6 @@ test_that("CPL_geos_is_valid works", {
 })
 
 test_that("geos ops give warnings and errors on longlat", {
-    # local modifications: jarodmeng@
-    # skip this test because lwgeom package is not available.
-    testthat::skip_if_not_installed("lwgeom")
     skip_if_not(!sf_use_s2())
 
 	nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
@@ -78,9 +62,6 @@ test_that("geos ops give warnings and errors on longlat", {
 })
 
 test_that("st_area() works on GEOMETRY in longlat (#131)", {
-  # local modifications: jarodmeng@
-  # skip this test because lwgeom package is not available.
-  testthat::skip_if_not_installed("lwgeom")
   single <- list(rbind(c(0,0), c(1,0), c(1, 1), c(0,1), c(0,0))) %>% st_polygon()
   multi <- list(single + 2, single + 4) %>% st_multipolygon()
 
@@ -88,9 +69,6 @@ test_that("st_area() works on GEOMETRY in longlat (#131)", {
   expect_equal(st_area(w), 1:2)
   expect_silent(st_area(st_set_crs(w, 4326))) # outcome might depend on backend used: lwgeom if proj.4 < 490, else proj.4
 })
-
-
-
 
 nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 pnc <- st_transform(nc[4:6, ], "+proj=laea +lon_0=-90")
@@ -192,17 +170,17 @@ test_that("st_difference works with partially overlapping geometries", {
 	pl3 = st_polygon(list(matrix(c(0, 1.25, 2, 1.25, 1, 2.5, 0, 1.25), byrow = TRUE, ncol = 2)))
 	in1 = st_sfc(list(pl1, pl2, pl3))
 	in2 = st_sf(order = c("A", "B", "C"), geometry = st_sfc(list(pl1, pl2, pl3), crs = 4326), agr = "constant")
-	if (sf_extSoftVersion()["GEOS"] < "3.9.0") {
-	    correct_geom = st_sfc(list(
+	if (package_version(gsub("[a-zA-Z]", "", sf_extSoftVersion()["GEOS"])) < "3.9.0") {
+		correct_geom = st_sfc(list(
 		st_polygon(list(matrix(c(0, 2, 1, 0, 0, 0, 1, 0), ncol = 2))),
 		st_polygon(list(matrix(c(0.5, 0, 1, 2, 1.5, 1, 0.5, 0.5, 0.5, 1.5, 0.5, 0.5, 1, 0.5), ncol = 2))),
 		st_polygon(list(matrix(c(0.75, 0, 1, 2, 1.25, 1, 0.75, 1.25, 1.25, 2.5, 1.25, 1.25, 1.5, 1.25), ncol = 2)))))
-        } else {
-	    correct_geom = st_sfc(list(
+	} else {
+		correct_geom = st_sfc(list(
 		st_polygon(list(matrix(c(0, 2, 1, 0, 0, 0, 1, 0), ncol = 2))),
 		st_polygon(list(matrix(c(0, 1, 2, 1.5, 1, 0.5, 0, 0.5, 1.5, 0.5, 0.5, 1, 0.5, 0.5), ncol = 2))),
 		st_polygon(list(matrix(c(0, 1, 2, 1.25, 1, 0.75, 0, 1.25, 2.5, 1.25, 1.25, 1.5, 1.25, 1.25), ncol = 2)))))
-        }
+	}
 	# erase overlaps
 	out1 = st_difference(in1)
 	out2 = st_difference(in2)

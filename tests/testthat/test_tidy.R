@@ -1,12 +1,14 @@
-suppressMessages(library(dplyr))
+suppressMessages(require(dplyr, quietly = TRUE))
 nc <- st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 
 test_that("select works", {
+  skip_if_not_installed("dplyr")
   expect_true(nc %>% select_("AREA", attr(., "sf_column"))  %>% inherits("sf"))
   expect_true(nc %>% select(AREA) %>% inherits("sf"))
 })
 
 test_that("filter to sfc works", {
+  skip_if_not_installed("dplyr")
   tbl = tibble(a = c("A", "B", "C"),
               geometry = st_sfc(st_point(c(1, 1)),
                                 st_point(),
@@ -18,14 +20,16 @@ test_that("filter to sfc works", {
                    d[1:2, ])
 })
 
-suppressMessages(library(tidyr))
+suppressMessages(require(tidyr, quietly = TRUE))
 test_that("separate and unite work", {
+  skip_if_not_installed("dplyr")
   expect_true(nc %>% separate(CNTY_ID, c("a", "b"), sep = 2) %>% inherits("sf"))
   expect_true(nc %>% separate(CNTY_ID, c("a", "b"), sep = 2) %>%
 	unite(CNTY_ID_NEW, c("a", "b"), sep = "") %>% inherits("sf"))
 })
 
 test_that("separate_rows work", {
+  skip_if_not_installed("dplyr")
   d <- st_as_sf(data.frame(
     x = seq_len(3),
     y = c("a", "d,e,f", "g,h"),
@@ -48,6 +52,7 @@ test_that("separate_rows work", {
 })
 
 test_that("group/ungroup works", {
+ skip_if_not_installed("dplyr")
  tbl = tibble(a = c(1,1,2,2), g = st_sfc(st_point(0:1), st_point(1:2), st_point(2:3), st_point(3:4)))
  d = st_sf(tbl)
  e <- d %>% group_by(a) %>% ungroup
@@ -55,6 +60,7 @@ test_that("group/ungroup works", {
 })
 
 test_that("sample_n etc work", {
+    skip_if_not_installed("dplyr")
 	tbl = tibble(a = c(1,1,2,2), g = st_sfc(st_point(0:1), st_point(1:2), st_point(2:3), st_point(3:4)))
 	d = st_sf(tbl)
 
@@ -97,6 +103,7 @@ test_that("st_intersection of tbl returns tbl", {
 })
 
 test_that("unnest works", {
+  skip_if_not_installed("dplyr")
   skip_if_not_installed("tidyr")
   skip_if_not(utils::packageVersion("tidyr") > "0.7.2")
   nc = read_sf(system.file("shape/nc.shp", package = "sf")) %>%
@@ -205,6 +212,7 @@ test_that("bind_cols() returns type of first input", {
 })
 
 test_that("can rename geometry column with `select()`", {
+    skip_if_not_installed("dplyr")
 	sf = st_sf(
 		x = 1,
 		geo = st_sfc(st_point(1:2)),
@@ -219,6 +227,7 @@ test_that("can rename geometry column with `select()`", {
 })
 
 test_that("can rename geometry column with `rename()` (#1431)", {
+    skip_if_not_installed("dplyr")
 	geo_pt = st_sfc(st_point())
 	geo_ln = st_sfc(st_linestring())
 	sf = st_sf(x = 1, geo2 = geo_pt, geo1 = geo_ln, sf_column_name = "geo1")
@@ -243,8 +252,44 @@ test_that("can rename geometry column with `rename()` (#1431)", {
 })
 
 test_that("`select()` and `transmute()` observe back-stickiness of geometry column (#1425)", {
+	skip_if_not_installed("dplyr")
 	sf = read_sf(system.file("shape/nc.shp", package = "sf"))
 	exp = sf[, c("NAME", "FIPS")]
 	expect_identical(dplyr::select(sf, NAME, FIPS), exp)
 	expect_identical(dplyr::transmute(sf, NAME, FIPS), exp)
+})
+
+test_that("rowwise_df class is retained on row slice", {
+	skip_if_not_installed("dplyr")
+	expect_true(nc %>% rowwise() %>% slice(1) %>% inherits("rowwise_df"))
+})
+
+test_that("grouped_df class is retained on row slice", {
+	skip_if_not_installed("dplyr")
+	expect_true(nc %>% group_by(PERIMETER > 2) %>% slice(1) %>% inherits("grouped_df"))
+})
+
+test_that("rowwise_df class is retained on filtered rows", {
+	skip_if_not_installed("dplyr")
+	expect_true(nc %>% rowwise() %>% filter(AREA > .1) %>% inherits("rowwise_df"))
+})
+
+test_that("`group_split.sf()` ignores `.keep` for rowwise_df class", {
+	skip_if_not_installed("dplyr")
+	expect_no_warning(nc %>% rowwise() %>% group_split())
+})
+
+test_that("group_split.sf()` does not ignore `.keep` for grouped_df class", {
+	skip_if_not_installed("dplyr")
+
+	nc_kept <- nc %>%
+		group_by(CNTY_ID) %>%
+		group_split(.keep = TRUE)
+
+	nc_notkept <- nc %>%
+		group_by(CNTY_ID) %>%
+		group_split(.keep = FALSE)
+
+	expect_identical(names(nc_kept[[1]]), names(nc))
+	expect_identical(names(nc_notkept[[1]]), setdiff(names(nc), "CNTY_ID"))
 })

@@ -140,12 +140,9 @@ test_that("guess_driver_can_write", {
 })
 
 test_that("driver operations", {
-  # local modifications: jarodmeng@
-  # skip this test because it requires GDAL drivers
-  testthat::skip_on_google()
   # These tests are driver specifics to GDAL version and OS.
   expect_error(guess_driver_can_write("x.e00"), "cannot write")
-  expect_error(guess_driver_can_write("x.gdb"), "cannot write")
+  # expect_error(guess_driver_can_write("x.gdb"), "cannot write") -> no longer the case when GDAL >= 3.6.0
 
   expect_equal(guess_driver_can_write("x.geojson"), c("geojson" = "GeoJSON"))
   expect_equal(guess_driver_can_write("x.csv"), c("csv" = "CSV"))
