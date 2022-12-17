@@ -1,5 +1,3 @@
-context("st_bbox")
-
 test_that("st_bbox", {
   p1 = st_point(1:3)
   bb = st_bbox(p1)

@@ -1,30 +1,22 @@
-context("sf: write")
-
-if (require(sp, quietly = TRUE)) {
 data(meuse, package = "sp")
 meuse <- st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
 drvs <- st_drivers()$name[sapply(st_drivers()$name,
 	function(x) is_driver_can(x, operation = "write"))] %>% as.character()
-}
 
 test_that("sf can write to all writable formats", {
-	skip_if_not_installed("sp")
 	# write to all formats available
 	tf <- tempfile()
 	excluded_drivers = c("gps", # requires options
 				"gtm", # doesn't handle attributes
 				"nc",  # requires appropriate datum -> but writes in 4326, see below
 				"map", # doesn't support points
-				"ods", # generates valgrind error
-				"gdb", # https://github.com/r-spatial/sf/issues/2027
-				"gpx") # needs specially named attributes
+				"ods") # generates valgrind error
     for (ext in setdiff(names(extension_map[extension_map %in% drvs]), excluded_drivers)) {
         expect_silent(st_write(meuse, paste0(tf, ".", ext), quiet = TRUE))
 	}
 })
 
 test_that("sf can write to netcdf", {
-	skip_if_not_installed("sp")
 	skip_on_os("windows")
 	tf <- tempfile()
 	if ("netCDF" %in% drvs) {
@@ -33,13 +25,15 @@ test_that("sf can write to netcdf", {
 })
 
 test_that("sf can write units (#264)", {
-	skip_if_not_installed("sp")
+    # local modifications: jarodmeng@
+    # skip this test because it requires GDAL drivers
+    testthat::skip_on_google()
     tf <- tempfile(fileext = ".gpkg")
     meuse[["length"]] <- meuse[["cadmium"]]
     units(meuse$length) <- units::as_units("km")
     st_write(meuse, tf, quiet = TRUE)
     disc <- st_read(tf, quiet = TRUE)
-    expect_is(disc[["length"]], "numeric")
+    expect_type(disc[["length"]], "double")
     expect_equal(as.numeric(meuse[["length"]]), disc[["length"]])
 })
 
@@ -52,7 +46,7 @@ test_that("delete and update work (#304)", {
   gpkg <- tempfile(fileext = ".gpkg")
   shp <- tempfile(fileext = ".shp")
 
-  x <- st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2)), crs = 'EPSG:3857'))
+  x <- st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2))))
   expect_error(st_write(x, gpkg, layer = c("a", "b"), driver = "GPKG", quiet = TRUE)) # error
   expect_error(st_write(x, gpkg,  driver = "foo", quiet = TRUE)) # error
   expect_warning(st_write(x, gpkg, update = NA, quiet = TRUE), "deprecated")
@@ -96,7 +90,6 @@ test_that("delete and update work (#304)", {
 })
 
 test_that("layer is deleted when fails to create features (#549)", {
-	skip_if_not_installed("sp")
 	skip_on_os("mac")
 	shp <- tempfile(fileext = ".shp")
 	x <- st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2))))
@@ -160,6 +153,8 @@ test_that("non-spatial tables can be written to GPKG; #1345", {
   #a = data.frame(a = c(1L,-3L), b = c("foo", "bar"))
   a = data.frame(a = c(1L,-3L), b = c(3.5, 7.33))
   # generates warnings on GDAL 3.1.1:
+  # local modification msquinn@: Skip test because of missing driver.
+  testthat::skip_on_google()
   write_sf(a, tf, 
            layer = "nonspatial_table1",
            driver = "GPKG",

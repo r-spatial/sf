@@ -1,5 +1,3 @@
-context("sf: wkb tests")
-
 test_that("well-known binary is read correctly", {
   wkb = structure(list("01010000204071000000000000801A064100000000AC5C1441"), class = "WKB")
   g = st_as_sfc(wkb, EWKB = TRUE)[[1]]
@@ -51,12 +49,11 @@ test_that("Reading of truncated buffers results in a proper error", {
 })
 
 test_that("st_as_sfc() honors crs argument", {
-  skip_if_not_installed("blob")
   raw = st_as_binary(st_point(c(26e5, 12e5)))
 
   list = list(raw)
   blob = blob::blob(raw)
-  wkb = structure(list, class = "WKB")
+  wkb = as_wkb(list)
 
   expect_identical(st_as_sfc(raw, crs = 2056), st_as_sfc(wkb, crs = 2056))
   expect_identical(st_as_sfc(list, crs = 2056), st_as_sfc(wkb, crs = 2056))

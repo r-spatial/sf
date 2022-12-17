@@ -1,5 +1,3 @@
-context("sf: subset")
-
 test_that("we can subset sf objects", {
   pt1 = st_point(1:2)
   pt2 = st_point(3:4)
@@ -20,7 +18,6 @@ test_that("we can subset sf objects", {
 })
 
 test_that("we can create points sf from data.frame", {
-  skip_if_not_installed("sp")
   data(meuse, package = "sp") # load data.frame from sp
   meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
   meuse_sf[1:5,]
@@ -64,7 +61,6 @@ test_that("rbind/cbind work", {
 })
 
 test_that("st_as_sf bulk points work", {
-  skip_if_not_installed("sp")
   data(meuse, package = "sp") # load data.frame from sp
   x <- meuse
   meuse_sf = st_as_sf(x, coords = c("x", "y"), crs = 28992)
@@ -75,16 +71,15 @@ test_that("st_as_sf bulk points work", {
   expect_identical(class(xyz_sf), c("sf", "data.frame"))
   expect_identical(class(xym_sf), c("sf", "data.frame"))
   expect_identical(class(xyzm_sf), c("sf", "data.frame"))
-  expect_that(length(unclass(st_geometry(meuse_sf)[[1]])), equals(2L))
-  expect_that(length(unclass(st_geometry(xyz_sf)[[1]])), equals(3L))
-  expect_that(length(unclass(st_geometry(xym_sf)[[1]])), equals(3L))
-  expect_that(length(unclass(st_geometry(xyzm_sf)[[1]])), equals(4L))
+  expect_length(unclass(st_geometry(meuse_sf)[[1]]), 2L)
+  expect_length(unclass(st_geometry(xyz_sf)[[1]]), 3L)
+  expect_length(unclass(st_geometry(xym_sf)[[1]]), 3L)
+  expect_length(unclass(st_geometry(xyzm_sf)[[1]]), 4L)
 
 
 })
 
 test_that("transform work", {
-  skip_if_not_installed("sp")
   data(meuse, package = "sp")
   x  = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
   x2 = transform(x, elev2 = elev^2, lead_zinc = lead/zinc)

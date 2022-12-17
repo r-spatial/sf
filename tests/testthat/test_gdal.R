@@ -1,29 +1,28 @@
-context("sf: gdal tests")
-
 test_that("st_transform works", {
   skip_if_not_installed("sp")
+  skip_if_not_installed("rgdal")
   library(sp)
 
   s = st_sfc(st_point(c(1,1)), st_point(c(10,10)), st_point(c(5,5)), crs = 4326)
   s1.tr = st_transform(s, 3857)
 
   sp = as(s, "Spatial")
-#  sp.tr = spTransform(sp, CRS("+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +nadgrids=@null +no_defs")) # web mercator
-#  s2.tr = st_as_sfc(sp.tr)
+  sp.tr = spTransform(sp, CRS("+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +nadgrids=@null +no_defs")) # web mercator
+  s2.tr = st_as_sfc(sp.tr)
   #attr(s1.tr, "crs")$proj4string = ""
   #attr(s2.tr, "crs")$proj4string = ""
   st_crs(s1.tr) = NA_crs_
-#  st_crs(s2.tr) = NA_crs_
-#  if (sf_extSoftVersion()["proj.4"] < "5.0.0") # FIXME:
-#    expect_equal(s1.tr, s2.tr)
+  st_crs(s2.tr) = NA_crs_
+  if (sf_extSoftVersion()["proj.4"] < "5.0.0") # FIXME:
+    expect_equal(s1.tr, s2.tr)
 
   toCrs = 3857
   s1.tr = st_transform(s, toCrs)
   #attr(s1.tr, "crs")$proj4string = ""
   st_crs(s1.tr) = NA_crs_
-#  st_crs(s2.tr) = NA_crs_
-#  if (sf_extSoftVersion()["proj.4"] < "5.0.0") # FIXME:
-#    expect_equal(s1.tr, s2.tr)
+  st_crs(s2.tr) = NA_crs_
+  if (sf_extSoftVersion()["proj.4"] < "5.0.0") # FIXME:
+    expect_equal(s1.tr, s2.tr)
 
   expect_silent({
     sf.tr = st_transform(st_sf(a=1:3, s), toCrs) # for sf
