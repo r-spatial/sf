@@ -53,16 +53,16 @@ test_that("as() can convert GEOMETRY to Spatial (#131)", {
 
 test_that("as_Spatial can convert sf (#519)", {
   skip_if_not_installed("sp")
-	h <- st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
+  h <- st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
 
-	u <- as(h, "Spatial")
-	s <- as_Spatial(h)
-	g <- as_Spatial(st_geometry(h))
+  u <- as(h, "Spatial")
+  s <- as_Spatial(h)
+  g <- as_Spatial(st_geometry(h))
 
-	identical(u, s)
-	expect_s4_class(s, "SpatialPolygonsDataFrame")
-	expect_s4_class(g, "SpatialPolygons")
-	expect_s4_class(as(st_geometry(h), "Spatial"), "SpatialPolygons")
+  identical(u, s)
+  expect_s4_class(s, "SpatialPolygonsDataFrame")
+  expect_s4_class(g, "SpatialPolygons")
+  expect_s4_class(as(st_geometry(h), "Spatial"), "SpatialPolygons")
 })
 
 test_that("Can convert `XY` objects to sp", {
