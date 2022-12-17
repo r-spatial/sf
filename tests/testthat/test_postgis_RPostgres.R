@@ -363,7 +363,7 @@ test_that("Can override local crs", {
 		wgs84 =       sf:::db_binary(st_set_crs(st_sfc(st_point(1:2)), 4326)),
 		unavailable = sf:::db_binary(st_set_crs(st_sfc(st_point(1:2)), sf:::make_empty_crs(1111))),
 		missing =     sf:::db_binary(st_sfc(st_point(1:2)))
-	:)
+	)
 
 	queries <- paste0("select st_srid('", ewkb, "'::geometry) as srid")
 

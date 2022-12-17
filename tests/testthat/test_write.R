@@ -31,14 +31,14 @@ test_that("sf can write to netcdf", {
 })
 
 test_that("sf can write units (#264)", {
-	  skip_if_not_installed("sp")
-    tf <- tempfile(fileext = ".gpkg")
-    meuse[["length"]] <- meuse[["cadmium"]]
-    units(meuse$length) <- units::as_units("km")
-    st_write(meuse, tf, quiet = TRUE)
-    disc <- st_read(tf, quiet = TRUE)
-    expect_type(disc[["length"]], "double")
-    expect_equal(as.numeric(meuse[["length"]]), disc[["length"]])
+  skip_if_not_installed("sp")
+  tf <- tempfile(fileext = ".gpkg")
+  meuse[["length"]] <- meuse[["cadmium"]]
+  units(meuse$length) <- units::as_units("km")
+  st_write(meuse, tf, quiet = TRUE)
+  disc <- st_read(tf, quiet = TRUE)
+  expect_type(disc[["length"]], "double")
+  expect_equal(as.numeric(meuse[["length"]]), disc[["length"]])
 })
 
 test_that("delete and update work (#304)", {
@@ -94,6 +94,7 @@ test_that("delete and update work (#304)", {
 })
 
 test_that("layer is deleted when fails to create features (#549)", {
+	skip_if_not_installed("sp")
 	skip_on_os("mac")
 	shp <- tempfile(fileext = ".shp")
 	x <- st_sf(a = 1:2, geom = st_sfc(st_point(0:1), st_multipoint(matrix(1:4,2,2))))

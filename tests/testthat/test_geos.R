@@ -16,6 +16,7 @@ test_that("CPL_geos_is_valid works", {
 })
 
 test_that("geos ops give warnings and errors on longlat", {
+
     skip_if_not(!sf_use_s2())
 
 	nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)

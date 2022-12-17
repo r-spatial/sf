@@ -52,6 +52,7 @@ test_that("as() can convert GEOMETRY to Spatial (#131)", {
 })
 
 test_that("as_Spatial can convert sf (#519)", {
+  skip_if_not_installed("sp")
 	h <- st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
 
 	u <- as(h, "Spatial")
@@ -66,16 +67,16 @@ test_that("as_Spatial can convert sf (#519)", {
 
 test_that("Can convert `XY` objects to sp", {
   skip_if_not_installed("sp")
-	expect_s4_class(as(st_point(1:2), "Spatial"), "SpatialPoints")
-	expect_error(as(st_point(1:3), "Spatial"))
-	expect_error(as(st_point(1:4), "Spatial"))
+  expect_s4_class(as(st_point(1:2), "Spatial"), "SpatialPoints")
+  expect_error(as(st_point(1:3), "Spatial"))
+  expect_error(as(st_point(1:4), "Spatial"))
 })
 
 test_that("Can't convert `M` dimension to sp", {
   skip_if_not_installed("sp")
-	skip_if_not(sf_extSoftVersion()[["GDAL"]] >= "2.1.0")
-	x <- read_sf(system.file("shape/storms_xyzm_feature.shp", package = "sf"), quiet = TRUE)
-	expect_error(as_Spatial(x), "not supported by sp")
+  skip_if_not(sf_extSoftVersion()[["GDAL"]] >= "2.1.0")
+  x <- read_sf(system.file("shape/storms_xyzm_feature.shp", package = "sf"), quiet = TRUE)
+  expect_error(as_Spatial(x), "not supported by sp")
 })
 
 test_that("conversion to sp breaks on empty geometries", {

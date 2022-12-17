@@ -124,8 +124,8 @@ test_that("st_cast can crack GEOMETRYCOLLECTION", {
   )
   expect_is(st_cast(gc5), "sfc_POLYGON")
   expect_equal(st_is_empty(st_cast(gc5)), c(FALSE, TRUE))
-  
-  sfc2 <- st_sfc(gc1, gc2, gc4) 
+
+  sfc2 <- st_sfc(gc1, gc2, gc4)
   expect_s3_class(sfc2 %>% st_cast, "sfc_GEOMETRY")
   expect_equal(sapply(sfc2 %>% st_cast, class)[2, ], c("LINESTRING", "MULTILINESTRING", "MULTIPOINT"))
 })

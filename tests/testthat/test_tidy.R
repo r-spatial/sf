@@ -60,19 +60,19 @@ test_that("group/ungroup works", {
 })
 
 test_that("sample_n etc work", {
-    skip_if_not_installed("dplyr")
-	tbl = tibble(a = c(1,1,2,2), g = st_sfc(st_point(0:1), st_point(1:2), st_point(2:3), st_point(3:4)))
-	d = st_sf(tbl)
+  skip_if_not_installed("dplyr")
+  tbl = tibble(a = c(1,1,2,2), g = st_sfc(st_point(0:1), st_point(1:2), st_point(2:3), st_point(3:4)))
+  d = st_sf(tbl)
 
-	expect_sampled <- function(x) {
-		expect_true(inherits(x, c("sf", "tbl_df")))
-		expect_named(x, c("a", "g"))
-		expect_equal(nrow(x), 2)
-		expect_true(inherits(x$g, "sfc_POINT"))
-	}
+  expect_sampled <- function(x) {
+    expect_true(inherits(x, c("sf", "tbl_df")))
+    expect_named(x, c("a", "g"))
+    expect_equal(nrow(x), 2)
+    expect_true(inherits(x$g, "sfc_POINT"))
+  }
 
-	expect_sampled(sample_n(d, 2))
-	expect_sampled(sample_frac(d, .5))
+  expect_sampled(sample_n(d, 2))
+  expect_sampled(sample_frac(d, .5))
 })
 
 test_that("nest() works", {
@@ -227,28 +227,28 @@ test_that("can rename geometry column with `select()`", {
 })
 
 test_that("can rename geometry column with `rename()` (#1431)", {
-    skip_if_not_installed("dplyr")
-	geo_pt = st_sfc(st_point())
-	geo_ln = st_sfc(st_linestring())
-	sf = st_sf(x = 1, geo2 = geo_pt, geo1 = geo_ln, sf_column_name = "geo1")
+  skip_if_not_installed("dplyr")
+  geo_pt = st_sfc(st_point())
+  geo_ln = st_sfc(st_linestring())
+  sf = st_sf(x = 1, geo2 = geo_pt, geo1 = geo_ln, sf_column_name = "geo1")
 
-	expect_identical(
-		dplyr::rename(sf, y = x),
-		st_sf(y = 1, geo2 = geo_pt, geo1 = geo_ln, sf_column_name = "geo1")
-	)
+  expect_identical(
+    dplyr::rename(sf, y = x),
+    st_sf(y = 1, geo2 = geo_pt, geo1 = geo_ln, sf_column_name = "geo1")
+  )
 
-	expect_identical(
-		dplyr::rename(sf, foo = geo1),
-		st_sf(x = 1, geo2 = geo_pt, foo = geo_ln, sf_column_name = "foo")
-	)
-	expect_identical(
-		dplyr::rename(sf, foo = geo1, y = x),
-		st_sf(y = 1, geo2 = geo_pt, foo = geo_ln, sf_column_name = "foo")
-	)
-	expect_identical(
-		dplyr::rename(sf, foo = geo1, y = x, bar = geo2),
-		st_sf(y = 1, bar = geo_pt, foo = geo_ln, sf_column_name = "foo")
-	)
+  expect_identical(
+    dplyr::rename(sf, foo = geo1),
+    st_sf(x = 1, geo2 = geo_pt, foo = geo_ln, sf_column_name = "foo")
+  )
+  expect_identical(
+    dplyr::rename(sf, foo = geo1, y = x),
+    st_sf(y = 1, geo2 = geo_pt, foo = geo_ln, sf_column_name = "foo")
+  )
+  expect_identical(
+    dplyr::rename(sf, foo = geo1, y = x, bar = geo2),
+    st_sf(y = 1, bar = geo_pt, foo = geo_ln, sf_column_name = "foo")
+  )
 })
 
 test_that("`select()` and `transmute()` observe back-stickiness of geometry column (#1425)", {
