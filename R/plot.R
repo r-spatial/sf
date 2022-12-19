@@ -75,6 +75,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 	max_plot_missing = missing(max.plot)
 	dots = list(...)
 	col_missing = is.null(dots$col)
+	breaks_numeric = is.numeric(breaks)
 
 	x = swap_axes_if_needed(x)
 
@@ -198,7 +199,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 
 						cuts = if (all(is.na(values)))
 								rep(NA_integer_, length(values))
-							else if (diff(range(values, na.rm = TRUE)) == 0)
+							else if (!breaks_numeric && diff(range(values, na.rm = TRUE)) == 0)
 								ifelse(is.na(values), NA_integer_, 1L)
 							else
 								cut(values, breaks, include.lowest = TRUE)
@@ -216,7 +217,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 			}
 
 			if (!isTRUE(dots$add) && !is.null(key.pos) && !all(is.na(values)) &&
-					(is.factor(values) || length(unique(na.omit(values))) > 1) &&
+					(is.factor(values) || length(unique(na.omit(values))) > 1 || breaks_numeric) && # 2065
 					length(col) > 1) { # plot key?
 
 				switch(key.pos,
