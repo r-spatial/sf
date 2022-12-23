@@ -1,5 +1,3 @@
-context("sf: vctrs implementations")
-
 test_that("`sfc` vectors are treated as vectors", {
 	expect_true(vctrs::vec_is(st_sfc(st_point())))
 })

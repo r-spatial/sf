@@ -1,5 +1,3 @@
-context("sf: dplyr syntax")
-
 suppressMessages(require(dplyr, quietly = TRUE))
 nc <- st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 
@@ -62,19 +60,19 @@ test_that("group/ungroup works", {
 })
 
 test_that("sample_n etc work", {
-	skip_if_not_installed("dplyr")
-	tbl = tibble(a = c(1,1,2,2), g = st_sfc(st_point(0:1), st_point(1:2), st_point(2:3), st_point(3:4)))
-	d = st_sf(tbl)
+  skip_if_not_installed("dplyr")
+  tbl = tibble(a = c(1,1,2,2), g = st_sfc(st_point(0:1), st_point(1:2), st_point(2:3), st_point(3:4)))
+  d = st_sf(tbl)
 
-	expect_sampled <- function(x) {
-		expect_true(inherits(x, c("sf", "tbl_df")))
-		expect_named(x, c("a", "g"))
-		expect_equal(nrow(x), 2)
-		expect_true(inherits(x$g, "sfc_POINT"))
-	}
+  expect_sampled <- function(x) {
+    expect_true(inherits(x, c("sf", "tbl_df")))
+    expect_named(x, c("a", "g"))
+    expect_equal(nrow(x), 2)
+    expect_true(inherits(x$g, "sfc_POINT"))
+  }
 
-	expect_sampled(sample_n(d, 2))
-	expect_sampled(sample_frac(d, .5))
+  expect_sampled(sample_n(d, 2))
+  expect_sampled(sample_frac(d, .5))
 })
 
 test_that("nest() works", {
@@ -101,8 +99,8 @@ test_that("st_intersection of tbl returns tbl", {
  nc = read_sf(system.file("shape/nc.shp", package="sf"))
  nc = st_transform(nc[1:3,], 3857)
  st_agr(nc) = "constant"
- expect_is(nc, "tbl_df")
- expect_is(st_intersection(nc[1:3], nc[4:6]), "tbl_df")
+ expect_s3_class(nc, "tbl_df")
+ expect_s3_class(st_intersection(nc[1:3], nc[4:6]), "tbl_df")
 })
 
 test_that("unnest works", {
@@ -215,7 +213,7 @@ test_that("bind_cols() returns type of first input", {
 })
 
 test_that("can rename geometry column with `select()`", {
-	skip_if_not_installed("dplyr")
+    skip_if_not_installed("dplyr")
 	sf = st_sf(
 		x = 1,
 		geo = st_sfc(st_point(1:2)),
@@ -230,28 +228,28 @@ test_that("can rename geometry column with `select()`", {
 })
 
 test_that("can rename geometry column with `rename()` (#1431)", {
-	skip_if_not_installed("dplyr")
-	geo_pt = st_sfc(st_point())
-	geo_ln = st_sfc(st_linestring())
-	sf = st_sf(x = 1, geo2 = geo_pt, geo1 = geo_ln, sf_column_name = "geo1")
+  skip_if_not_installed("dplyr")
+  geo_pt = st_sfc(st_point())
+  geo_ln = st_sfc(st_linestring())
+  sf = st_sf(x = 1, geo2 = geo_pt, geo1 = geo_ln, sf_column_name = "geo1")
 
-	expect_identical(
-		dplyr::rename(sf, y = x),
-		st_sf(y = 1, geo2 = geo_pt, geo1 = geo_ln, sf_column_name = "geo1")
-	)
+  expect_identical(
+    dplyr::rename(sf, y = x),
+    st_sf(y = 1, geo2 = geo_pt, geo1 = geo_ln, sf_column_name = "geo1")
+  )
 
-	expect_identical(
-		dplyr::rename(sf, foo = geo1),
-		st_sf(x = 1, geo2 = geo_pt, foo = geo_ln, sf_column_name = "foo")
-	)
-	expect_identical(
-		dplyr::rename(sf, foo = geo1, y = x),
-		st_sf(y = 1, geo2 = geo_pt, foo = geo_ln, sf_column_name = "foo")
-	)
-	expect_identical(
-		dplyr::rename(sf, foo = geo1, y = x, bar = geo2),
-		st_sf(y = 1, bar = geo_pt, foo = geo_ln, sf_column_name = "foo")
-	)
+  expect_identical(
+    dplyr::rename(sf, foo = geo1),
+    st_sf(x = 1, geo2 = geo_pt, foo = geo_ln, sf_column_name = "foo")
+  )
+  expect_identical(
+    dplyr::rename(sf, foo = geo1, y = x),
+    st_sf(y = 1, geo2 = geo_pt, foo = geo_ln, sf_column_name = "foo")
+  )
+  expect_identical(
+    dplyr::rename(sf, foo = geo1, y = x, bar = geo2),
+    st_sf(y = 1, bar = geo_pt, foo = geo_ln, sf_column_name = "foo")
+  )
 })
 
 test_that("`select()` and `transmute()` observe back-stickiness of geometry column (#1425)", {
@@ -284,15 +282,15 @@ test_that("`group_split.sf()` ignores `.keep` for rowwise_df class", {
 
 test_that("group_split.sf()` does not ignore `.keep` for grouped_df class", {
 	skip_if_not_installed("dplyr")
-	
+
 	nc_kept <- nc %>%
 		group_by(CNTY_ID) %>%
 		group_split(.keep = TRUE)
-	
+
 	nc_notkept <- nc %>%
 		group_by(CNTY_ID) %>%
 		group_split(.keep = FALSE)
-	
+
 	expect_identical(names(nc_kept[[1]]), names(nc))
 	expect_identical(names(nc_notkept[[1]]), setdiff(names(nc), "CNTY_ID"))
 })

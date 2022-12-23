@@ -1,5 +1,3 @@
-context("sfc")
-
 test_that("we can print sfc objects", {
   pt1 = st_point(1:2)
   pt2 = st_point(3:4)

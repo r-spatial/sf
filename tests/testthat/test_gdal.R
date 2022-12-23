@@ -1,5 +1,3 @@
-context("sf: gdal tests")
-
 test_that("st_transform works", {
   skip_if_not_installed("sp")
   library(sp)
