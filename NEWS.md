@@ -1,5 +1,7 @@
 # version 1.0-10
 
+* fix importing legacy `SpatialPolygon` objects without comments; #2063, #2069, https://github.com/rstudio/leaflet/issues/833
+
 * `st_read()` not longer errors on mixes of `XY` and `XYZ` geometries; #2046 #1592
 
 * in `plot.sf()`, when numeric `breaks` are given a legend key is always plotted; #2065

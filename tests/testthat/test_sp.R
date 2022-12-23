@@ -1,5 +1,3 @@
-context("sf: sp conversion tests")
-
 test_that("we can convert points & lines to and from sp objects", {
   skip_if_not_installed("sp")
   pt1 = st_point(1:2)
@@ -62,53 +60,53 @@ test_that("as() can convert GEOMETRY to Spatial (#131)", {
   # polygons
   w <- st_sfc(single, multi)
   # class is GEOMETRY
-  expect_is(as(w, "Spatial"), "SpatialPolygons")
-  expect_is(as(st_cast(w, "MULTIPOLYGON"), "Spatial"), "SpatialPolygons")
+  expect_s4_class(as(w, "Spatial"), "SpatialPolygons")
+  expect_s4_class(as(st_cast(w, "MULTIPOLYGON"), "Spatial"), "SpatialPolygons")
 
   # lines
   lns <- st_cast(w, "MULTILINESTRING")
-  expect_is(as(lns, "Spatial"), "SpatialLines")
+  expect_s4_class(as(lns, "Spatial"), "SpatialLines")
 
   expect_warning(ln <- st_cast(w, "LINESTRING"), "first ring")
-  expect_is(as(ln, "Spatial"), "SpatialLines")
+  expect_s4_class(as(ln, "Spatial"), "SpatialLines")
 
   # points
   expect_warning(pt <- st_cast(w, "POINT"), "first coordinate")
-  expect_is(as(pt, "Spatial"), "SpatialPoints")
+  expect_s4_class(as(pt, "Spatial"), "SpatialPoints")
 
   pts <- st_cast(w, "MULTIPOINT")
-  expect_is(as(pts, "Spatial"), "SpatialMultiPoints")
+  expect_s4_class(as(pts, "Spatial"), "SpatialMultiPoints")
 
   expect_warning(pt <- st_cast(w, "POINT"), "first coordinate")
-  expect_is(as(pt, "Spatial"), "SpatialPoints")
+  expect_s4_class(as(pt, "Spatial"), "SpatialPoints")
 })
 
 test_that("as_Spatial can convert sf (#519)", {
-    skip_if_not_installed("sp")
-	h <- st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
+  skip_if_not_installed("sp")
+  h <- st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
 
-	u <- as(h, "Spatial")
-	s <- as_Spatial(h)
-	g <- as_Spatial(st_geometry(h))
+  u <- as(h, "Spatial")
+  s <- as_Spatial(h)
+  g <- as_Spatial(st_geometry(h))
 
-	identical(u, s)
-	expect_is(s, "SpatialPolygonsDataFrame")
-	expect_is(g, "SpatialPolygons")
-	expect_is(as(st_geometry(h), "Spatial"), "SpatialPolygons")
+  identical(u, s)
+  expect_s4_class(s, "SpatialPolygonsDataFrame")
+  expect_s4_class(g, "SpatialPolygons")
+  expect_s4_class(as(st_geometry(h), "Spatial"), "SpatialPolygons")
 })
 
 test_that("Can convert `XY` objects to sp", {
-    skip_if_not_installed("sp")
-	expect_is(as(st_point(1:2), "Spatial"), "SpatialPoints")
-	expect_error(as(st_point(1:3), "Spatial"))
-	expect_error(as(st_point(1:4), "Spatial"))
+  skip_if_not_installed("sp")
+  expect_s4_class(as(st_point(1:2), "Spatial"), "SpatialPoints")
+  expect_error(as(st_point(1:3), "Spatial"))
+  expect_error(as(st_point(1:4), "Spatial"))
 })
 
 test_that("Can't convert `M` dimension to sp", {
-    skip_if_not_installed("sp")
-	skip_if_not(sf_extSoftVersion()[["GDAL"]] >= "2.1.0")
-	x <- read_sf(system.file("shape/storms_xyzm_feature.shp", package = "sf"), quiet = TRUE)
-	expect_error(as_Spatial(x), "not supported by sp")
+  skip_if_not_installed("sp")
+  skip_if_not(sf_extSoftVersion()[["GDAL"]] >= "2.1.0")
+  x <- read_sf(system.file("shape/storms_xyzm_feature.shp", package = "sf"), quiet = TRUE)
+  expect_error(as_Spatial(x), "not supported by sp")
 })
 
 test_that("conversion to sp breaks on empty geometries", {

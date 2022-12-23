@@ -1,5 +1,3 @@
-context("sf: st_crs tests")
-
 test_that("st_crs works", {
   nc1 = st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267, quiet = TRUE)
   nc2 = st_read(system.file("shape/nc.shp", package="sf"), "nc", quiet = TRUE)

@@ -100,7 +100,7 @@ Suggests:
     spatstat.utils,
     stars (>= 0.2-0),
     terra,
-    testthat,
+    testthat (>= 3.0.0),
     tibble (>= 1.4.1),
     tidyr (>= 1.2.0),
     tidyselect (>= 1.0.0),
@@ -113,6 +113,7 @@ VignetteBuilder:
     knitr
 Encoding: UTF-8
 RoxygenNote: 7.2.3
+Config/testhat/edition: 3
 SystemRequirements: C++11, GDAL (>= 2.0.1), GEOS (>= 3.4.0),
     PROJ (>= 4.8.0), sqlite3
 Collate: 

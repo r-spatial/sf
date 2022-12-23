@@ -1,5 +1,3 @@
-context("st_shift_longitude")
-
 test_that("st_shift_longitude", {
 	pt1 = st_point(c(-170, 50))
 	pt2 = st_point(c(170, 50))

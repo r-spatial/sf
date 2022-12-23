@@ -1,6 +1,4 @@
 skip_if_not_installed("s2")
-context("sf: s2")
-
 test_that("s2 roundtrips work", {
   library(s2)
   nc = st_geometry(st_read(system.file("shape/nc.shp", package="sf")))
