@@ -41,7 +41,9 @@ test_that("we can convert SpatialPolygons objects without SF comments to sfc and
   p11 <- Polygon(cbind(x=c(24.25, 24.25, 25.75, 25.75, 24.25), y=c(24.25, 25.75, 25.75, 24.25, 24.25)), hole=TRUE) # H
   p12 <- Polygon(cbind(x=c(24.5, 24.5, 25.5, 25.5, 24.5), y=c(24.5, 25.5, 25.5, 24.5, 24.5)), hole=FALSE) # I
   p13 <- Polygon(cbind(x=c(24.75, 24.75, 25.25, 25.25, 24.75), y=c(24.75, 25.25, 25.25, 24.75, 24.75)), hole=TRUE) # H
-  lp <- list(p1, p2, p13, p7, p6, p5, p4, p3, p8, p11, p12, p9, p10)
+  p9a <- Polygon(cbind(x=c(1, 1, 2, 2, 1), y=c(6, 7, 7, 6, 6)), hole=TRUE) # H
+  p7a <- Polygon(cbind(x=c(14, 14, 15, 15, 14), y=c(13, 14, 14, 13, 13)), hole=TRUE) # H
+  lp <- list(p1, p2, p13, p7, p7a, p6, p5, p4, p3, p8, p11, p12, p9, p9a, p10)
   spls <- SpatialPolygons(list(Polygons(lp, ID="1")))
   expect_equal(comment(spls), "FALSE")
   expect_true(is.null(comment(slot(spls, "polygons")[[1]])))
