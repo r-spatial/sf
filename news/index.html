@@ -77,7 +77,8 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.0-10" id="version-10-10">version 1.0-10<a class="anchor" aria-label="anchor" href="#version-10-10"></a></h2>
-<ul><li><p>if <code><a href="../reference/plot.html">plot.sf()</a></code>, if <code>breaks</code> are given (numerically), always plot a legend key; <a href="https://github.com/r-spatial/sf/issues/2065" class="external-link">#2065</a></p></li>
+<ul><li><p><code><a href="../reference/st_read.html">st_read()</a></code> not longer errors on mixes of <code>XY</code> and <code>XYZ</code> geometries; <a href="https://github.com/r-spatial/sf/issues/2046" class="external-link">#2046</a> <a href="https://github.com/r-spatial/sf/issues/1592" class="external-link">#1592</a></p></li>
+<li><p>in <code><a href="../reference/plot.html">plot.sf()</a></code>, when numeric <code>breaks</code> are given a legend key is always plotted; <a href="https://github.com/r-spatial/sf/issues/2065" class="external-link">#2065</a></p></li>
 <li><p><code>st_crs()$axes</code> returns a <code>data.frame</code> with axes properties (name, orientation, conversion factor) when GDAL &gt;= 3.0.0</p></li>
 <li><p>clean up unit handling for geometry measures (length, area, distance) and crs;</p></li>
 <li><p><code>st_crs(x)$ud_unit</code> returns <code>NULL</code> if units are unknown; <a href="https://github.com/r-spatial/sf/issues/2049" class="external-link">#2049</a></p></li>
