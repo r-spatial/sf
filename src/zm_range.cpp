@@ -4,7 +4,7 @@
 
 int get_m_position(Rcpp::NumericVector& pt) {
 	if( pt.size() < 3 ) {
-		Rcpp::stop("m error - expecting at least three coordinates");
+		return -1;
 	}
 	int pos = pt.size() == 3 ? 2 : 3;
 	return pos;
@@ -12,7 +12,7 @@ int get_m_position(Rcpp::NumericVector& pt) {
 
 int get_m_position(Rcpp::NumericMatrix& nm) {
 	if( nm.ncol() < 3 ) {
-		Rcpp::stop("m error - expecting at least three columns");
+		return -1;
 	}
 	int pos = nm.ncol() == 3 ? 2 : 3;
 	return pos;
@@ -20,14 +20,14 @@ int get_m_position(Rcpp::NumericMatrix& nm) {
 
 int get_z_position(Rcpp::NumericVector& pt) {
 	if( pt.size() < 3 ) {
-		Rcpp::stop("z error - expecting three coordinates");
+		return -1;
 	}
 	return 2;
 }
 
 int get_z_position(Rcpp::NumericMatrix& nm) {
 	if( nm.ncol() < 3 ) {
-		Rcpp::stop("z error - expecting three columns;");
+		return -1;
 	}
 	return 2;
 }
@@ -35,6 +35,8 @@ int get_z_position(Rcpp::NumericMatrix& nm) {
 // [[Rcpp::export]]
 Rcpp::NumericVector CPL_get_z_range(Rcpp::List sf, int depth) {
 
+	Rcpp::NumericVector bb_na(2);
+	bb_na[0] = bb_na[1] = NA_REAL;
 	Rcpp::NumericVector bb(2);
 	bb[0] = bb[1] = NA_REAL;
 	auto n = sf.size();
@@ -44,7 +46,9 @@ Rcpp::NumericVector CPL_get_z_range(Rcpp::List sf, int depth) {
 		for (decltype(n) i = 0; i < n; i++) {
 			Rcpp::NumericVector pt = sf[i];
 			int pos = get_z_position(pt);
-			if (i == 0) {
+			if (i == -1)
+				return bb_na;
+			else if (i == 0) {
 				bb[0] = pt[pos];
 				bb[1] = pt[pos];
 			} else {
@@ -59,6 +63,8 @@ Rcpp::NumericVector CPL_get_z_range(Rcpp::List sf, int depth) {
 			for (decltype(n) i = 0; i < n; i++) {
 				Rcpp::NumericMatrix m = sf[i];
 				int pos = get_z_position(m);
+				if (pos == -1)
+					return bb_na;
 				auto rows = m.nrow();
 	
 				if (rows > 0) {
@@ -97,6 +103,8 @@ Rcpp::NumericVector CPL_get_z_range(Rcpp::List sf, int depth) {
 // [[Rcpp::export]]
 Rcpp::NumericVector CPL_get_m_range(Rcpp::List sf, int depth) {
 
+	Rcpp::NumericVector bb_na(2);
+	bb_na[0] = bb_na[1] = NA_REAL;
 	Rcpp::NumericVector bb(2);
 	bb[0] = bb[1] = NA_REAL;
 	auto n = sf.size();
@@ -106,7 +114,9 @@ Rcpp::NumericVector CPL_get_m_range(Rcpp::List sf, int depth) {
 		for (decltype(n) i = 0; i < n; i++) {
 			Rcpp::NumericVector pt = sf[i];
 			int pos = get_m_position(pt);
-			if (i == 0) {
+			if (i == -1)
+				return bb_na;
+			else if (i == 0) {
 				bb[0] = pt[pos];
 				bb[1] = pt[pos];
 			} else {
@@ -121,6 +131,8 @@ Rcpp::NumericVector CPL_get_m_range(Rcpp::List sf, int depth) {
 			for (decltype(n) i = 0; i < n; i++) {
 				Rcpp::NumericMatrix m = sf[i];
 				int pos = get_m_position(m);
+				if (pos == -1)
+					return bb_na;
 				auto rows = m.nrow();
 	
 				if (rows > 0) {
@@ -155,4 +167,3 @@ Rcpp::NumericVector CPL_get_m_range(Rcpp::List sf, int depth) {
 	}
 	return bb;
 }
-
