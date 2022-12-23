@@ -1,4 +1,3 @@
-context("normalize")
 set.seed(1)
 test_that("normalize", {
   p0 <- st_point(c(0,1))

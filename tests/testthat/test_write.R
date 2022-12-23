@@ -1,5 +1,3 @@
-context("sf: write")
-
 if (require(sp, quietly = TRUE)) {
 data(meuse, package = "sp")
 meuse <- st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
@@ -33,14 +31,14 @@ test_that("sf can write to netcdf", {
 })
 
 test_that("sf can write units (#264)", {
-	skip_if_not_installed("sp")
-    tf <- tempfile(fileext = ".gpkg")
-    meuse[["length"]] <- meuse[["cadmium"]]
-    units(meuse$length) <- units::as_units("km")
-    st_write(meuse, tf, quiet = TRUE)
-    disc <- st_read(tf, quiet = TRUE)
-    expect_is(disc[["length"]], "numeric")
-    expect_equal(as.numeric(meuse[["length"]]), disc[["length"]])
+  skip_if_not_installed("sp")
+  tf <- tempfile(fileext = ".gpkg")
+  meuse[["length"]] <- meuse[["cadmium"]]
+  units(meuse$length) <- units::as_units("km")
+  st_write(meuse, tf, quiet = TRUE)
+  disc <- st_read(tf, quiet = TRUE)
+  expect_type(disc[["length"]], "double")
+  expect_equal(as.numeric(meuse[["length"]]), disc[["length"]])
 })
 
 test_that("delete and update work (#304)", {

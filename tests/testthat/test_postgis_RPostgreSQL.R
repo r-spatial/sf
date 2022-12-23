@@ -3,7 +3,6 @@ library(sf)
 library(DBI)
 library(RPostgreSQL)
 library(testthat)
-context("sf: postgis using RPostgreSQL")
 
 can_con <- function(x) inherits(x, "PostgreSQLConnection")
 
@@ -88,7 +87,7 @@ test_that("sf can write units to database (#264)", {
 	units(ptsu[["u"]]) <- units::as_units("km")
 	expect_silent(st_write(ptsu, pg, "sf_units__", overwrite = TRUE))
 	r <- st_read(pg, "sf_units__")
-	expect_is(r[["u"]], "numeric")
+	expect_type(r[["u"]], "double")
 	expect_equal(sort(r[["u"]]), sort(as.numeric(ptsu[["u"]])))
 	dbRemoveTable(pg, "sf_units__")
 })

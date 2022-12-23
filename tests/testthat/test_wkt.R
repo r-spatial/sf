@@ -1,5 +1,3 @@
-context("sf: wkt")
-
 test_that("well-known text", {
   gcol <- st_geometrycollection(list(st_point(1:2), st_linestring(matrix(1:4,2))))
   expect_message(x <- print(gcol), 

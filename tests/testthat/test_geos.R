@@ -1,5 +1,3 @@
-context("sf: geos tests")
-
 test_that("CPL_geos_is_valid works", {
   expect_true( sf:::CPL_geos_is_valid(
   	st_sfc(st_polygon(list(cbind(c(0,1,1,0,0), c(0,0,1, 1,0)))))))
@@ -90,8 +88,8 @@ test_that("geom operations work on sfg or sfc or sf", {
 	expect_silent(st_buffer(gpnc[[1L]], 1000, joinStyle = "MITRE", mitreLimit = 0.2))
 
 	expect_silent(st_boundary(pnc))
-	expect_that(st_boundary(gpnc), is_a("sfc_MULTILINESTRING"))
-	expect_that(st_boundary(gpnc[[1L]]), is_a("MULTILINESTRING"))
+	expect_s3_class(st_boundary(gpnc), "sfc_MULTILINESTRING")
+	expect_s3_class(st_boundary(gpnc[[1L]]), "MULTILINESTRING")
 
 	expect_true(inherits(st_convex_hull(pnc)$geometry, "sfc_POLYGON"))
 	expect_true(inherits(st_convex_hull(gpnc), "sfc_POLYGON"))
@@ -103,25 +101,25 @@ test_that("geom operations work on sfg or sfc or sf", {
 
 	if (sf:::CPL_geos_version() >= "3.4.0") {
 		expect_silent(st_triangulate(pnc))
-		expect_that(st_triangulate(gpnc), is_a("sfc_GEOMETRYCOLLECTION"))
-		expect_that(st_triangulate(gpnc[[1]]), is_a("GEOMETRYCOLLECTION"))
+		expect_s3_class(st_triangulate(gpnc), "sfc_GEOMETRYCOLLECTION")
+		expect_s3_class(st_triangulate(gpnc[[1]]), "GEOMETRYCOLLECTION")
 	}
 
 	expect_silent(st_polygonize(lnc))
 	expect_silent(st_polygonize(glnc))
 	expect_silent(st_polygonize(glnc[[1]]))
 
-	expect_that(st_line_merge(lnc), is_a("sf"))
-	expect_that(st_line_merge(glnc), is_a("sfc"))
-	expect_that(st_line_merge(glnc[[3]]), is_a("sfg"))
+	expect_s3_class(st_line_merge(lnc), "sf")
+	expect_s3_class(st_line_merge(glnc), "sfc")
+	expect_s3_class(st_line_merge(glnc[[3]]), "sfg")
 
 	expect_warning(st_centroid(lnc)) # was: silent
-	expect_that(st_centroid(glnc),  is_a("sfc_POINT"))
-	expect_that(st_centroid(glnc[[1]]),  is_a("POINT"))
+	expect_s3_class(st_centroid(glnc),  "sfc_POINT")
+	expect_s3_class(st_centroid(glnc[[1]]),  "POINT")
 
 	expect_warning(st_point_on_surface(lnc)) # was: silent
-	expect_that(st_point_on_surface(glnc),  is_a("sfc_POINT"))
-	expect_that(st_point_on_surface(glnc[[1]]),  is_a("POINT"))
+	expect_s3_class(st_point_on_surface(glnc),  "sfc_POINT")
+	expect_s3_class(st_point_on_surface(glnc[[1]]),  "POINT")
 
 	expect_silent(st_segmentize(lnc, 10000))
 	expect_silent(st_segmentize(glnc, 10000))
@@ -188,8 +186,8 @@ test_that("st_difference works with partially overlapping geometries", {
 	out1 = st_difference(in1)
 	out2 = st_difference(in2)
 	# check that output class is correct
-	expect_is(out1, "sfc")
-	expect_is(out2, "sf")
+	expect_s3_class(out1, "sfc")
+	expect_s3_class(out2, "sf")
 	# check that output geometries are valid
 	expect_true(all(sf::st_is_valid(out1)))
 	expect_true(all(sf::st_is_valid(out2)))
@@ -218,8 +216,8 @@ test_that("st_difference works with fully contained geometries", {
 	out1 = st_difference(in1)
 	out2 = st_difference(in2)
 	# check that output class is correct
-	expect_is(out1, "sfc")
-	expect_is(out2, "sf")
+	expect_s3_class(out1, "sfc")
+	expect_s3_class(out2, "sf")
 	# check that output geometries are valid
 	expect_true(all(sf::st_is_valid(out1)))
 	expect_true(all(sf::st_is_valid(out2)))
@@ -249,11 +247,11 @@ test_that("binary operations work on sf objects with common column names", {
 	sf1 <- st_sf(id = 1, pol1)
 	sf2 <- st_sf(id = 2, pol2)
 	# Test as regular data.frames
-	expect_is(st_intersection(sf1, sf2), "sf")
+	expect_s3_class(st_intersection(sf1, sf2), "sf")
 	# Convert to tibbles
 	sf1 <- st_as_sf(tibble::as_tibble(sf1))
 	sf2 <- st_as_sf(tibble::as_tibble(sf2))
-	expect_is(st_intersection(sf1, sf2), c("sf", "tbl_df"))
+	expect_s3_class(st_intersection(sf1, sf2), c("sf", "tbl_df"))
 })
 
 test_that("binary operations on empty sfg objects return NA", {
