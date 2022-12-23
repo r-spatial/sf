@@ -127,6 +127,10 @@ st_join = function(x, y, join, ...) UseMethod("st_join")
 #' text(st_coordinates(st_centroid(nc_j)), labels = nc_j$label, cex = .8)
 #' plot(st_geometry(gr), border = 'green', add = TRUE)
 #' par(opar)
+#' # st_filter keeps the geometries in x where .predicate(x,y) returns any match in y for x
+#' st_filter(a, b)
+#' # for an anti-join, use the union of y
+#' st_filter(a, st_union(b), .predicate = st_disjoint)
 #' @export
 st_join.sf = function(x, y, join = st_intersects, ..., suffix = c(".x", ".y"), 
 		left = TRUE, largest = FALSE) {
