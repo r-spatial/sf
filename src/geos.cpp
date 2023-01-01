@@ -281,7 +281,8 @@ log_fn which_geom_fn(const std::string op) {
 		return GEOSCovers_r;
 	else if (op == "covered_by")
 		return GEOSCoveredBy_r;
-	Rcpp::stop("wrong value for op"); // unlikely to happen unless user wants to #nocov
+	Rcpp::stop("wrong value for op: please report as issue"); // unlikely to happen unless user wants to #nocov
+	return GEOSCoveredBy_r; // never reached; satisfy -Wreturn-type
 }
 
 log_prfn which_prep_geom_fn(const std::string op) {
@@ -308,6 +309,7 @@ log_prfn which_prep_geom_fn(const std::string op) {
 	else if (op == "covered_by")
 		return GEOSPreparedCoveredBy_r;
 	Rcpp::stop("wrong value for op"); // unlikely to happen unless user wants to #nocov
+	return GEOSPreparedCoveredBy_r; // never reached; satisfy -Wreturn-type
 }
 
 /*

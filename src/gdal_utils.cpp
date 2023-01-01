@@ -377,13 +377,12 @@ Rcpp::CharacterVector CPL_gdalmdiminfo(Rcpp::CharacterVector obj, Rcpp::Characte
 	char *ret_val = GDALMultiDimInfo(ds, opt);
 	GDALMultiDimInfoOptionsFree(opt);
 	GDALClose(ds);
-	if (ret_val != NULL) {
-		Rcpp::CharacterVector ret(1);
-		ret[0] = ret_val;
-		CPLFree(ret_val);
-		return ret;
-	} else
+	if (ret_val == NULL)
 		Rcpp::stop("GDALMultiDimInfo returned NULL");
+	Rcpp::CharacterVector ret(1);
+	ret[0] = ret_val;
+	CPLFree(ret_val);
+	return ret;
 }
 
 // [[Rcpp::export]]
