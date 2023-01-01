@@ -8,7 +8,7 @@ inline unsigned char char2int(char c) {
 	if (c >= 'A' && c <= 'F')
 		return c - 'A' + 10;
 	Rcpp::stop("char2int: unrecognized character in hex string");
-	return '0'; // never reached, satisfy -Wreturn-type
+	return '0'; // never reached, satisfy -Wreturn-type #nocov
 }
 
 // [[Rcpp::export]]
