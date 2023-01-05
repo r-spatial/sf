@@ -2,7 +2,7 @@
 
 * fix importing legacy `SpatialPolygon` objects without comments; #2063, #2069, https://github.com/rstudio/leaflet/issues/833
 
-* `st_read()` not longer errors on mixes of `XY` and `XYZ` geometries; #2046 #1592
+* `st_read()` no longer errors on mixes of `XY` and `XYZ` geometries; #2046 #1592
 
 * in `plot.sf()`, when numeric `breaks` are given a legend key is always plotted; #2065
 
@@ -16,7 +16,7 @@
 
 * `st_can_transform()` checks whether a transformation between two crs exists; see https://github.com/dieghernan/tidyterra/issues/64; #2049
 
-* drop the rownames in `st_coordinates()`, to reduce the output size
+* the matrix returned by `st_coordinates()` has no row names, to reduce output size
 
 # version 1.0-9
 
