@@ -716,7 +716,7 @@ sf.colors = function (n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorica
 		} else
 			key.pos
 
-	m = matrix(1 : (nrow * ncol), nrow, ncol, byrow = TRUE)
+	m = matrix(seq_len(nrow * ncol), nrow, ncol, byrow = TRUE)
 	if (!is.null(ret$key.pos) && ret$key.pos != 0) {
 		k = key.length
 		n = nrow * ncol + 1
