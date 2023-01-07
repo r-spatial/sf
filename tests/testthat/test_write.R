@@ -86,8 +86,8 @@ test_that("delete and update work (#304)", {
   expect_silent(x <- st_read(gpkg, quiet = TRUE))
   x <- st_sf(a = 1:2, geom = st_sfc(st_linestring(matrix(1:4,2,2)),
 	st_multilinestring(list(matrix(1:4,2,2), matrix(10:13,2,2)))))
-  expect_silent(write_sf(x, shp, "x"))
-  expect_silent(write_sf(x, shp, delete_dsn = TRUE))
+  expect_message(write_sf(x, shp, "x"), "writing: substituting ENGCRS")
+  expect_message(write_sf(x, shp, delete_dsn = TRUE), "writing: substituting ENGCRS")
   expect_silent(x <- st_read(shp, quiet = TRUE))
   expect_silent(x <- read_sf(shp))
   expect_error(st_write(x, shp, driver = character(0), quiet = TRUE)) # err

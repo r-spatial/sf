@@ -1,5 +1,5 @@
 
-R version 4.2.0 (2022-04-22) -- "Vigorous Calisthenics"
+R version 4.2.2 Patched (2022-11-10 r83330) -- "Innocent and Trusting"
 Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -213,4 +213,4 @@ GEOGCRS["WGS 84",
 > 
 > proc.time()
    user  system elapsed 
-  1.297   0.072   1.380 
+  1.324   0.757   1.181 

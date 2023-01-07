@@ -64,7 +64,7 @@ Driver: OSM
 Available layers:
         layer_name       geometry_type features fields crs_name
 1           points               Point       NA     10   WGS 84
-2            lines         Line String       NA      9   WGS 84
+2            lines         Line String       NA     10   WGS 84
 3 multilinestrings   Multi Line String       NA      4   WGS 84
 4    multipolygons       Multi Polygon       NA     25   WGS 84
 5  other_relations Geometry Collection       NA      4   WGS 84
@@ -72,7 +72,7 @@ Driver: OSM
 Available layers:
         layer_name       geometry_type features fields crs_name
 1           points               Point        0     10   WGS 84
-2            lines         Line String        0      9   WGS 84
+2            lines         Line String        0     10   WGS 84
 3 multilinestrings   Multi Line String        0      4   WGS 84
 4    multipolygons       Multi Polygon        3     25   WGS 84
 5  other_relations Geometry Collection        0      4   WGS 84
@@ -336,6 +336,11 @@ First 3 features:
 [1] 22 11
 [1] 644  25
 [1] 644  25
+Warning messages:
+1: In CPL_read_ogr(dsn, layer, query, as.character(options), quiet,  :
+  GDAL Message 1: Field with same name (identifier) already exists in (PointTimeSeriesObservation). Skipping newer ones
+2: In CPL_read_ogr(dsn, layer, query, as.character(options), quiet,  :
+  GDAL Message 1: Field with same name (name) already exists in (PointTimeSeriesObservation). Skipping newer ones
 > 
 > # logical:
 > if ("GPKG" %in% st_drivers()$name) {
@@ -373,4 +378,4 @@ Error in CPL_read_ogr(dsn, layer, query, as.character(options), quiet,  :
 > 
 > proc.time()
    user  system elapsed 
-  1.720   0.739   1.626 
+  1.640   0.796   1.554 
