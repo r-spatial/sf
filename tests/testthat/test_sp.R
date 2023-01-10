@@ -24,7 +24,7 @@ test_that("we can convert points & lines to and from sp objects", {
 
 test_that("we can convert SpatialPolygons objects without SF comments to sfc and back", {
   skip_if_not_installed("sp")
-  skip_if_not(package_version(sf_extSoftVersion()["GEOS"]) >= "3.11.0")
+  # skip_if_not(package_version(sf_extSoftVersion()["GEOS"]) >= "3.11.0"); #2079
   library(sp)
 # nested holes https://github.com/r-spatial/evolution/issues/9
   p1 <- Polygon(cbind(x=c(0, 0, 10, 10, 0), y=c(0, 10, 10, 0, 0)), hole=FALSE) # I
