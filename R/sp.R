@@ -181,8 +181,11 @@ st_as_sfc.SpatialPolygons = function(x, ..., precision = 0.0, forceMulti = FALSE
 					}
 					if (any(!hole_assigned))
 					  warning("orphaned hole, cannot find containing polygon")
-					raw <- st_as_sfc(wkts)
-					val <- st_union(st_make_valid(raw))
+					raw0 <- st_as_sfc(wkts)
+                                        raw1 <- st_make_valid(raw0)
+                                        if (any(st_is(raw1, "GEOMETRYCOLLECTION"))) 
+                                          raw1 <- st_collection_extract(raw1, "POLYGON")
+					val <- st_union(raw1)
 				}
 				if (inherits(val, "sfc_GEOMETRYCOLLECTION"))
 					val = st_collection_extract(val, "POLYGON")
