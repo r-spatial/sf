@@ -25,6 +25,11 @@ S3 Ops Group Generic Functions for simple feature geometries
 in case \code{e2} is numeric, +, -, *, /, %% and %/% add, subtract, multiply, divide, modulo, or integer-divide by \code{e2}. In case \code{e2} is an n x n matrix, * matrix-multiplies and / multiplies by its inverse. If \code{e2} is an \code{sfg} object, |, /, & and %/% result in the geometric union, difference, intersection and symmetric difference respectively, and \code{==} and \code{!=} return geometric (in)equality, using \link{st_equals}.
 
 If \code{e1} is of class \code{sfc}, and \code{e2} is a length 2 numeric, then it is considered a two-dimensional point (and if needed repeated as such) only for operations \code{+} and \code{-}, in other cases the individual numbers are repeated; see commented examples.
+
+It has been reported (https://github.com/r-spatial/sf/issues/2067) that
+certain ATLAS versions result in invalid polygons, where the final point
+in a ring is no longer equal to the first point. In that case, setting
+the precisions with \link{st_set_precision} may help.
 }
 \examples{
 st_point(c(1,2,3)) + 4
