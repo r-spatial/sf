@@ -110,6 +110,10 @@
     <h2>Details</h2>
     <p>in case <code>e2</code> is numeric, +, -, *, /, <!-- %% and %/% add, subtract, multiply, divide, modulo, or integer-divide by \code{e2}. In case \code{e2} is an n x n matrix, * matrix-multiplies and / multiplies by its inverse. If \code{e2} is an \code{sfg} object, |, /, &amp; and %/% result in the geometric union, difference, intersection and symmetric difference respectively, and \code{==} and \code{!=} return geometric (in)equality, using \link{st_equals}. --></p>
 <p>If <code>e1</code> is of class <code>sfc</code>, and <code>e2</code> is a length 2 numeric, then it is considered a two-dimensional point (and if needed repeated as such) only for operations <code>+</code> and <code>-</code>, in other cases the individual numbers are repeated; see commented examples.</p>
+<p>It has been reported (https://github.com/r-spatial/sf/issues/2067) that
+certain ATLAS versions result in invalid polygons, where the final point
+in a ring is no longer equal to the first point. In that case, setting
+the precisions with <a href="st_precision.html">st_set_precision</a> may help.</p>
     </div>
 
     <div id="ref-examples">
@@ -175,7 +179,7 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (6 9)</span>
 <span class="r-in"><span><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_transform.html">st_transform</a></span><span class="op">(</span><span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"gpkg/nc.gpkg"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span>, <span class="fl">32119</span><span class="op">)</span> <span class="co"># nc state plane, m</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc.gpkg' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/Rtmp9uk8iL/temp_libpath133754d5440c9/sf/gpkg/nc.gpkg' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/Rtmpm2Hy8Z/temp_libpath43e14575b010/sf/gpkg/nc.gpkg' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `GPKG'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
