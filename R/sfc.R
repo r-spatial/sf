@@ -159,6 +159,7 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 #' @export
 c.sfc = function(..., recursive = FALSE) {
 	lst = list(...)
+	chk_equal_crs(lst)
 	classes = sapply(lst, function(x) class(x)[1])
 	le = lengths(lst)
 	if (any(le > 0))
