@@ -35,7 +35,6 @@ st_shift_longitude = function(x) {
 st_shift_longitude.sfc = function(x, ...) {
 	xcrs = st_crs(x)
 	g = (x + c(360, 90)) %% c(360) - c(0, 90)
-	st_wrap_dateline(st_set_crs(g - c(180, 0), xcrs)) + c(180, 0)
 	st_set_crs(g, xcrs)
 }
 
