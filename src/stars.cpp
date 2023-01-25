@@ -284,8 +284,9 @@ List get_rat(GDALRasterAttributeTable *tbl) {
 
 // [[Rcpp::export]]
 List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVector driver,
-		bool read_data, NumericVector NA_value, List RasterIO_parameters) {
-// reads and returns data set metadata, and if read_data is true, adds data array
+		bool read_data, NumericVector NA_value, List RasterIO_parameters, double max_cells) {
+// reads and returns data set metadata, and adds data array if read_data is true, or less 
+// than max_cells are to be read
 	GDALDataset *poDataset = (GDALDataset *) GDALOpenEx(fname[0], GA_ReadOnly,
 		driver.size() ? create_options(driver).data() : NULL,
 		options.size() ? create_options(options).data() : NULL,
@@ -409,6 +410,9 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	int nBufXSize = get_from_list(RasterIO_parameters, "nBufXSize", nXSize);
 	int nBufYSize = get_from_list(RasterIO_parameters, "nBufYSize", nYSize);
 
+	if (max_cells > 0) 
+		read_data = (bands.size() * nBufXSize * nBufYSize) < max_cells;
+
 	// resampling method:
 	GDALRasterIOExtraArg resample;
 	INIT_RASTERIO_EXTRA_ARG(resample);
@@ -457,7 +461,8 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		_["ranges"] = ranges,
 		_["blocksizes"] = blocksizes,
 		_["descriptions"] = descriptions,
-		_["default_geotransform"] = default_geotransform
+		_["default_geotransform"] = default_geotransform,
+		_["proxy"] = LogicalVector::create(!read_data)
 	);
 	if (read_data) {
 		ReturnList.attr("data") = read_gdal_data(poDataset, nodatavalue, nXOff, nYOff,

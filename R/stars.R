@@ -11,9 +11,15 @@
 #' @name gdal
 #' @export
 gdal_read = function(x, ..., options = character(0), driver = character(0), read_data = TRUE, NA_value = NA_real_,
-		RasterIO_parameters = list())
+		RasterIO_parameters = list()) {
+	if (is.numeric(read_data)) {
+		max_cells = as.double(read_data)
+		read_data = FALSE
+	} else
+		max_cells = as.double(-1.)
 	CPL_read_gdal(as.character(x), as.character(options), as.character(driver), 
-		as.logical(read_data), as.double(NA_value), RasterIO_parameters)
+		as.logical(read_data), as.double(NA_value), RasterIO_parameters, max_cells)
+}
 
 #' @name gdal
 #' @export
