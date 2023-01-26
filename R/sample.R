@@ -159,18 +159,22 @@ st_poly_sample = function(x, size, ..., type = "random",
 		} else if (type == "Fibonacci")
 			stop("Fibonacci sampling requires geographic (longlat) coordinates")
 
-		a0 = as.numeric(st_area(st_make_grid(x, n = c(1,1))))
-		a1 = as.numeric(sum(st_area(x)))
-		# st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90))))
-		# for instance has 0 st_area
-		if (is.finite(a0) && is.finite(a1) && a0 > a0 * 0.0 && a1 > a1 * 0.0) {
-			r = round(size * a0 / a1)
-			size = if (r == 0)
-					rbinom(1, 1, size * a0 / a1)
-				else
-					r
-		}
 		bb = st_bbox(x)
+		if (st_is_longlat(x) && (d <- diff(bb[c(1,3)]) / 360) > 0.5) {
+			w = s2::s2_area(s2::as_s2_geography(TRUE)) * d # world * longitude fraction of 360
+			stop("w.i.p.")
+		} else {
+			a0 = as.numeric(st_area(st_as_sfc(st_bbox(x))))
+			a1 = as.numeric(sum(st_area(x)))
+			# we're sampling from a box, so n should be size_desired * a0 / a1
+			if (is.finite(a0) && is.finite(a1) && a0 > a0 * 0.0 && a1 > a1 * 0.0) {
+				r = size * a0 / a1
+				size = if (round(r) == 0)
+						rbinom(1, 1, r)
+					else
+						round(r)
+			}
+		}
 
 		pts = if (type == "hexagonal") {
 				dx = sqrt(a0 / size / (sqrt(3)/2))
