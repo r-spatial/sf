@@ -77,7 +77,7 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.0-10" id="version-10-10">version 1.0-10<a class="anchor" aria-label="anchor" href="#version-10-10"></a></h2>
-<ul><li><p><code>c.sfc()</code> (and, consequently, <code><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">dplyr::bind_rows()</a></code>) gives an error if components have different CRS; <a href="https://github.com/r-spatial/sf/issues/1884" class="external-link">#1884</a></p></li>
+<ul><li><p><code>c.sfc()</code> (and, consequently, <code><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">dplyr::bind_rows()</a></code>) gives an error if components have different CRS; <a href="https://github.com/r-spatial/sf/issues/1884" class="external-link">#1884</a></p></li>
 <li><p>data imported from <code>maps</code> are associated with the Clark 1866 ellipsoid; <a href="https://github.com/r-spatial/sf/issues/2080" class="external-link">#2080</a></p></li>
 <li><p>fix importing legacy <code>SpatialPolygon</code> objects without comments; <a href="https://github.com/r-spatial/sf/issues/2063" class="external-link">#2063</a>, <a href="https://github.com/r-spatial/sf/issues/2069" class="external-link">#2069</a>, <a href="https://github.com/rstudio/leaflet/issues/833" class="external-link uri">https://github.com/rstudio/leaflet/issues/833</a></p></li>
 <li><p><code><a href="../reference/st_read.html">st_read()</a></code> no longer errors on mixes of <code>XY</code> and <code>XYZ</code> geometries; <a href="https://github.com/r-spatial/sf/issues/2046" class="external-link">#2046</a> <a href="https://github.com/r-spatial/sf/issues/1592" class="external-link">#1592</a></p></li>
@@ -581,7 +581,7 @@
 <li><p>add a <code>nest_</code> method for <code>sf</code> objects</p></li>
 <li><p><code>st_relate</code> gets a <code>pattern</code> parameter, same as <code>rgeos::gRelate</code>; add examples to get rook and queen neighbour lists using this; <a href="https://github.com/r-spatial/sf/issues/234" class="external-link">#234</a></p></li>
 <li><p>support for direct reading of spatialite and sqlite geometry wkb blobs</p></li>
-<li><p>build proper support for <code>cbind</code> and <code>rbind</code> methods for <code>sf</code>, which work (as documented) when <em>all</em> arguments are of class <code>sf</code>; <code><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">dplyr::bind_cols</a></code> or <code>st_sf(data.frame(sf, df))</code> work for binding <code>data.frame</code>s to an <code>sf</code> object.</p></li>
+<li><p>build proper support for <code>cbind</code> and <code>rbind</code> methods for <code>sf</code>, which work (as documented) when <em>all</em> arguments are of class <code>sf</code>; <code><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">dplyr::bind_cols</a></code> or <code>st_sf(data.frame(sf, df))</code> work for binding <code>data.frame</code>s to an <code>sf</code> object.</p></li>
 <li><p><code><a href="../reference/geos_unary.html">st_segmentize()</a></code> and <code><a href="../reference/st_line_sample.html">st_line_sample()</a></code> accept units arguments</p></li>
 <li><p>document problem reading shapefiles from USB drives on OSX; <a href="https://github.com/r-spatial/sf/issues/252" class="external-link">#252</a></p></li>
 <li><p>improve docs of <code>st_is_valid</code> and <code>st_make_valid</code>; <a href="https://github.com/r-spatial/sf/issues/296" class="external-link">#296</a></p></li>
