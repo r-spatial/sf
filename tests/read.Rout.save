@@ -134,7 +134,7 @@ First 10 features:
 > 
 > try(st_layers("foo")) # cannot open datasource
 Cannot open data source foo
-Error in CPL_get_layers(dsn, options, do_count) : Open failed.
+Error : Open failed.
 
 > try(st_read("foo")) # cannot open datasource
 Error : Cannot open "foo"; The file doesn't seem to exist.
@@ -149,8 +149,7 @@ Error in guess_driver(dns) : length(dsn) == 1 is not TRUE
 > try(st_write(x, "foo", driver = "foo"))
 writing: substituting ENGCRS["Undefined Cartesian SRS with unknown unit"] for missing CRS
 driver `foo' not available.
-Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  : 
-  Driver not available.
+Error : Driver not available.
 
 > if (Sys.getenv("USER") == "travis") {
 + 	try(st_write(x, "/x", driver = "ESRI Shapefile"))
@@ -370,12 +369,11 @@ Geodetic CRS:  NAD27
 > nc_filtered = read_sf(system.file("gpkg/nc.gpkg", package="sf"), wkt_filter = wkt)
 > try(read_sf(system.file("gpkg/nc.gpkg", package="sf"), wkt_filter = "wrong"))
 Cannot create geometry from: wrong
-Error in CPL_read_ogr(dsn, layer, query, as.character(options), quiet,  : 
-  wkt parse error.
+Error : wkt parse error.
 
 > nc_filtered$NAME
 [1] "Watauga"   "Ashe"      "Wilkes"    "Alleghany"
 > 
 > proc.time()
    user  system elapsed 
-  1.640   0.796   1.554 
+  2.288   0.818   2.281 

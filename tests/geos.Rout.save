@@ -240,8 +240,7 @@ was `relate_pattern'
 > 
 > #if (Sys.getenv("USER") %in% c("edzer", "travis")) { # memory leaks:
 >   try(st_relate(st_point(), st_point(), pattern = "FF*FF****")) # error: use st_disjoint
-Error in CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern,  : 
-  use st_disjoint for this pattern
+Error : use st_disjoint for this pattern
 > #}
 > 
 > a = st_is_within_distance(nc[c(1:3,20),], nc[1:3,], 100000, sparse = FALSE)
@@ -667,4 +666,4 @@ CRS:           NA
 > 
 > proc.time()
    user  system elapsed 
- 14.200   0.775  14.085 
+ 19.725   0.860  19.747 

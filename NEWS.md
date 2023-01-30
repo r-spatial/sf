@@ -1,5 +1,7 @@
 # version 1.0-10
 
+* drop C++11 as a system requirement
+
 * `c.sfc()` (and, consequently, `dplyr::bind_rows()`) gives an error if components have different CRS; #1884
 
 * data imported from `maps` are associated with the Clark 1866 ellipsoid; #2080
