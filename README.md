@@ -117,7 +117,7 @@ However, to get more up-to-date versions of dependencies such as GDAL, we recomm
 ```sh
 sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 sudo apt-get update
-sudo apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev 
+sudo apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev libsqlite0-dev
 ```
 
 Adding this PPA is required for installing `sf` on older versions of Ubuntu (e.g. Xenial).
