@@ -1,5 +1,7 @@
 # version 1.0-10
 
+* `st_drivers()` has an argument `reprex` to filter on driver (long) name; #2090
+
 * drop C++11 as a system requirement
 
 * `c.sfc()` (and, consequently, `dplyr::bind_rows()`) gives an error if components have different CRS; #1884
