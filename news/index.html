@@ -77,7 +77,8 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.0-10" id="version-10-10">version 1.0-10<a class="anchor" aria-label="anchor" href="#version-10-10"></a></h2>
-<ul><li><p>drop C++11 as a system requirement</p></li>
+<ul><li><p><code><a href="../reference/st_drivers.html">st_drivers()</a></code> has an argument <code>reprex</code> to filter on driver (long) name; <a href="https://github.com/r-spatial/sf/issues/2090" class="external-link">#2090</a></p></li>
+<li><p>drop C++11 as a system requirement</p></li>
 <li><p><code>c.sfc()</code> (and, consequently, <code><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">dplyr::bind_rows()</a></code>) gives an error if components have different CRS; <a href="https://github.com/r-spatial/sf/issues/1884" class="external-link">#1884</a></p></li>
 <li><p>data imported from <code>maps</code> are associated with the Clark 1866 ellipsoid; <a href="https://github.com/r-spatial/sf/issues/2080" class="external-link">#2080</a></p></li>
 <li><p>fix importing legacy <code>SpatialPolygon</code> objects without comments; <a href="https://github.com/r-spatial/sf/issues/2063" class="external-link">#2063</a>, <a href="https://github.com/r-spatial/sf/issues/2069" class="external-link">#2069</a>, <a href="https://github.com/rstudio/leaflet/issues/833" class="external-link uri">https://github.com/rstudio/leaflet/issues/833</a></p></li>
