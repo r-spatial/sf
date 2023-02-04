@@ -218,14 +218,15 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 		cat(paste0("CRS:           NA\n"))
 	else {
 		p = crs_parameters(crs)
+		if (p$Name == "unknown") {
+			if (is.character(crs$input) && !is.na(crs$input) && crs$input != "unknown")
+				p$Name = crs$input
+			else
+				p$Name = crs$proj4string
+		}
 		if (p$IsGeographic)
 			cat(paste0("Geodetic CRS:  ", p$Name, "\n"))
-		else if (p$Name == "unknown") {
-			if (!is.character(crs$input) || is.na(crs$input))
-				cat(paste0("proj4string:   ", crs$proj4string, "\n"))
-			else
-				cat(paste0("CRS:           ", crs$input, "\n"))
-		} else
+		else
 			cat(paste0("Projected CRS: ", p$Name, "\n"))
 	}
 	if (attr(x, "precision") != 0.0) {
