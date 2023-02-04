@@ -163,10 +163,13 @@ st_poly_sample = function(x, size, ..., type = "random",
 		bb = st_bbox(x)
 		if (isTRUE(st_is_longlat(x))) {
 			R = s2::s2_earth_radius_meters()
-			h1 = sin(bb["ymax"] / 180 * pi)
-			h2 = sin(bb["ymin"] / 180 * pi)
+			toRad = pi / 180
+			h1 = sin(bb["ymax"] * toRad)
+			h2 = sin(bb["ymin"] * toRad)
 			a0 = 2 * pi * R^2. * (h1 - h2) * (bb["xmax"] - bb["xmin"]) / 360.
 			a1 = as.numeric(sum(st_area(x)))
+			if (!is.finite(a1))
+				stop("One or more geometries have a non-finite area")
 			if (a1 < 1) { # global polygon FIXME: 
 				a1 = a0
 				global = TRUE
@@ -206,11 +209,12 @@ st_poly_sample = function(x, size, ..., type = "random",
 						} else
 							runif(size, bb[2], bb[4])
 						structure(cbind(lon, lat), dimnames = NULL)
-					} else if (type == "Fibonacci") {
+					} else if (type == "Fibonacci")
 						fiboGrid(size %/% 2, bb[c("xmin", "xmax")], bb[c("ymin", "ymax")])
-					} else
+					else
 						stop("unknown value for type")
-				st_sfc(lapply(seq_len(nrow(m)), function(i) st_point(m[i,])), crs = st_crs(x)) # FIXME: optimize?
+				# st_sfc(lapply(seq_len(nrow(m)), function(i) st_point(m[i,])), crs = st_crs(x))
+				st_as_sf(as.data.frame(m), coords = 1:2, crs = st_crs(x))[["geometry"]]
 			}
 		if (global)
 			pts
