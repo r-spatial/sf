@@ -8,6 +8,11 @@
 #'
 #' If \code{e1} is of class \code{sfc}, and \code{e2} is a length 2 numeric, then it is considered a two-dimensional point (and if needed repeated as such) only for operations \code{+} and \code{-}, in other cases the individual numbers are repeated; see commented examples.
 #'
+#' @details
+#' It has been reported (https://github.com/r-spatial/sf/issues/2067) that
+#' certain ATLAS versions result in invalid polygons, where the final point
+#' in a ring is no longer equal to the first point. In that case, setting
+#' the precisions with \link{st_set_precision} may help.
 #' @return object of class \code{sfg}
 #' @export
 #'

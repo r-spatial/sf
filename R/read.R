@@ -538,6 +538,8 @@ write_sf <- function(..., quiet = TRUE, append = FALSE, delete_layer = !append) 
 #' Get a list of the available GDAL drivers
 #' @param what character: `"vector"` or `"raster"`, anything else will return all
 #'   drivers.
+#' @param regex character; regular expression to filter the `name` and `long_name`
+#'  fields on
 #' @details The drivers available will depend on the installation of GDAL/OGR,
 #'   and can vary; the `st_drivers()` function shows all the drivers that are
 #'   readable, and which may be written. The field `vsi` refers to the driver's
@@ -549,13 +551,20 @@ write_sf <- function(..., quiet = TRUE, append = FALSE, delete_layer = !append) 
 #' @md
 #' @examples
 #' st_drivers()
-st_drivers = function(what = "vector") {
+#' st_drivers("raster", "GeoT")
+st_drivers = function(what = "vector", regex) {
 	ret = CPL_get_gdal_drivers(0)
 	row.names(ret) = ret$name
-	switch(what,
+	ret = switch(what,
 		vector = ret[ret$is_vector,],
 		raster = ret[ret$is_raster,],
 		ret)
+	if (missing(regex))
+		ret
+	else {
+		fn = function(x, pattern) any(grepl(x, pattern = pattern))
+		ret[apply(ret[c("name", "long_name")], 1, fn, pattern = regex), ]
+	}
 }
 
 #' @export

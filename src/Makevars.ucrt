@@ -3,7 +3,7 @@ PKG_CPPFLAGS = \
 	-DHAVE_PROJ_H
 
 PKG_LIBS =  \
--lgdal -lblosc -lkea -lhdf5_cpp -lhdf5 -lpoppler -llcms2 -lfreetype -lharfbuzz -lfreetype -llz4 -lpcre2-8 -lxml2 -lopenjp2 -lnetcdf -lmysqlclient -lspatialite -lgeos_c -lgeos -lminizip -lgeos -ljson-c -lgta -lfreexl -lexpat -lssl -lpsapi -lgif -lmfhdf -lhdf5_hl -lcrypto -lportablexdr -ldf -lhdf5 -lsz -lpng16 -lpng -lpoppler -llcms2 -lfreetype -lharfbuzz -lfreetype -llz4 -lpcre2-8 -lpcre -lcurl -lrtmp -lssl -lssh2 -lidn2 -lunistring -liconv -lgcrypt -lcrypto -lgpg-error -lws2_32 -ltiff -llzma -ljpeg -lz -lcfitsio -lzstd -lwebpdecoder -lwebp -lsbml-static -lgeotiff -lproj -lsqlite3 -lbz2 -lcrypt32 -lwldap32 -lsecur32
+-fopenmp -lgdal -larmadillo -lopenblas -lgfortran -lquadmath -lpq -lpgcommon -lpgport -lodbc32 -lodbccp32 -lblosc -lkea -lhdf5_cpp -lhdf5 -lpoppler -llcms2 -lfreetype -lharfbuzz -lfreetype -llz4 -lpcre2-8 -lxml2 -lopenjp2 -lnetcdf -lmysqlclient -lspatialite -lgeos_c -lgeos -lminizip -lgeos -ljson-c -lgta -lfreexl -lexpat -lssl -lpsapi -lgif -lmfhdf -lhdf5_hl -lcrypto -lportablexdr -ldf -lhdf5 -lsz -lpng16 -lpng -lpoppler -llcms2 -lfreetype -lharfbuzz -lfreetype -llz4 -lpcre2-8 -lpcre -lcurl -lbcrypt -lrtmp -lssl -lssh2 -lidn2 -lunistring -liconv -lgcrypt -lcrypto -lgpg-error -lws2_32 -ltiff -llzma -ljpeg -lz -lcfitsio -lzstd -lwebpdecoder -lwebp -lsbml-static -lgeotiff -lproj -lsqlite3 -lbz2 -lcrypt32 -lwldap32 -lsecur32
 
 all: clean winlibs
 
@@ -11,7 +11,7 @@ winlibs:
 	cp -r "$(R_TOOLS_SOFT)/share/gdal" ../inst/
 	cp -r "$(R_TOOLS_SOFT)/share/proj" ../inst/
 
-CXX_STD = CXX11
+CXX_STD = CXX
 
 clean:
 	rm -f $(SHLIB) $(OBJECTS)

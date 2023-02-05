@@ -1,5 +1,5 @@
 
-R version 4.2.0 (2022-04-22) -- "Vigorous Calisthenics"
+R version 4.2.2 Patched (2022-11-10 r83330) -- "Innocent and Trusting"
 Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -31,7 +31,7 @@ Simple feature collection with 1627 features and 1 field
 Geometry type: MULTIPOLYGON
 Dimension:     XY
 Bounding box:  xmin: -180 ymin: -85.19218 xmax: 190.2708 ymax: 83.59961
-Geodetic CRS:  WGS 84
+CRS:           +proj=longlat +ellps=clrk66 +no_defs +type=crs
 First 10 features:
                                   ID                           geom
 1                              Aruba MULTIPOLYGON (((-69.89912 1...
@@ -47,4 +47,4 @@ First 10 features:
 > 
 > proc.time()
    user  system elapsed 
-  1.891   0.063   1.947 
+  2.265   0.777   2.241 

@@ -1,5 +1,13 @@
 # version 1.0-10
 
+* `st_drivers()` has an argument `reprex` to filter on driver (long) name; #2090
+
+* drop C++11 as a system requirement
+
+* `c.sfc()` (and, consequently, `dplyr::bind_rows()`) gives an error if components have different CRS; #1884
+
+* data imported from `maps` are associated with the Clark 1866 ellipsoid; #2080
+
 * fix importing legacy `SpatialPolygon` objects without comments; #2063, #2069, https://github.com/rstudio/leaflet/issues/833
 
 * `st_read()` no longer errors on mixes of `XY` and `XYZ` geometries; #2046 #1592

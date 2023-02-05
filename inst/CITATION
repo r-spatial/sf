@@ -18,7 +18,7 @@ citEntry(entry="Book",
   title = "{Spatial Data Science: With applications in R}",
   year = 2023,
   publisher = "{Chapman and Hall/CRC}",
-  url = "https://r-spatial.org/book",
+  url = "https://r-spatial.org/book/",
   pages = 352,
   textVersion = "Pebesma, E., & Bivand, R. (2023). Spatial Data Science: With Applications in R (1st ed.). Chapman and Hall/CRC. https://doi.org/10.1201/9780429459016"
 )

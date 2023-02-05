@@ -4,11 +4,14 @@
 \alias{st_drivers}
 \title{Get GDAL drivers}
 \usage{
-st_drivers(what = "vector")
+st_drivers(what = "vector", regex)
 }
 \arguments{
 \item{what}{character: \code{"vector"} or \code{"raster"}, anything else will return all
 drivers.}
+
+\item{regex}{character; regular expression to filter the \code{name} and \code{long_name}
+fields on}
 }
 \value{
 A \code{data.frame} with driver metadata.
@@ -24,4 +27,5 @@ capability to read/create datasets through the VSI*L API. \href{https://gdal.org
 }
 \examples{
 st_drivers()
+st_drivers("raster", "GeoT")
 }

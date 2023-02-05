@@ -173,6 +173,7 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 #' @export
 c.sfc = function(..., recursive = FALSE) {
 	lst = list(...)
+	chk_equal_crs(lst)
 	classes = sapply(lst, function(x) class(x)[1])
 	le = lengths(lst)
 	if (any(le > 0))
@@ -232,16 +233,15 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 	else {
 		p = crs_parameters(crs)
 		if (p$Name == "unknown") {
-			if (!is.character(crs$input) || is.na(crs$input))
-				cat(paste0("proj4string:   ", crs$proj4string, "\n"))
+			if (is.character(crs$input) && !is.na(crs$input) && crs$input != "unknown")
+				p$Name = crs$input
 			else
-				cat(paste0("CRS:           ", crs$input, "\n"))
-		} else if (p$IsGeographic)
+				p$Name = crs$proj4string
+		}
+		if (p$IsGeographic)
 			cat(paste0("Geodetic CRS:  ", p$Name, "\n"))
 		else
 			cat(paste0("Projected CRS: ", p$Name, "\n"))
-#		if (!is.na(crs$epsg))
-#			cat(paste0("epsg (SRID):    ", crs$epsg, "\n"))
 	}
 	if (attr(x, "precision") != 0.0) {
 		cat(    paste0("Precision:     "))

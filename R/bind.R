@@ -1,3 +1,15 @@
+chk_equal_crs = function(dots) {
+	if (length(dots) > 1L) {
+		crs0 = st_crs(dots[[1]])
+		vapply(dots[-1L], function(x) {
+				if (st_crs(x) != crs0) 
+					stop("arguments have different crs", call. = FALSE)
+				TRUE
+			}, TRUE)
+	}
+	NULL
+}
+
 #' Bind rows (features) of sf objects
 #'
 #' Bind rows (features) of sf objects
@@ -23,12 +35,8 @@ rbind.sf = function(..., deparse.level = 1) {
 			attr(dots[[ which(nr > 0)[1] ]], "sf_column")
 		else
 			NULL
+	chk_equal_crs(dots)
 	crs0 = st_crs(dots[[1]])
-	if (length(dots) > 1L) { # check all crs are equal...
-		equal_crs = vapply(dots[-1L], function(x) st_crs(x) == crs0, TRUE)
-		if (!all(equal_crs))
-			stop("arguments have different crs", call. = FALSE)
-	}
 	for (i in seq_along(dots)) {
 		if (all(sapply(unclass(st_geometry(dots[[i]])), is.null)))
 			st_geometry(dots[[i]]) = st_geometry(dots[[i]])[] # realize

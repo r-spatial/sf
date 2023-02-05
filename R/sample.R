@@ -158,19 +158,35 @@ st_poly_sample = function(x, size, ..., type = "random",
 				stop("hexagonal sampling on geographic coordinates not supported; consider projecting first")
 		} else if (type == "Fibonacci")
 			stop("Fibonacci sampling requires geographic (longlat) coordinates")
-
-		a0 = as.numeric(st_area(st_make_grid(x, n = c(1,1))))
-		a1 = as.numeric(sum(st_area(x)))
-		# st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90))))
-		# for instance has 0 st_area
-		if (is.finite(a0) && is.finite(a1) && a0 > a0 * 0.0 && a1 > a1 * 0.0) {
-			r = round(size * a0 / a1)
-			size = if (r == 0)
-					rbinom(1, 1, size * a0 / a1)
-				else
-					r
-		}
+		
+		global = FALSE
 		bb = st_bbox(x)
+		if (isTRUE(st_is_longlat(x))) {
+			R = s2::s2_earth_radius_meters()
+			toRad = pi / 180
+			h1 = sin(bb["ymax"] * toRad)
+			h2 = sin(bb["ymin"] * toRad)
+			a0 = 2 * pi * R^2. * (h1 - h2) * (bb["xmax"] - bb["xmin"]) / 360.
+			a1 = as.numeric(sum(st_area(x)))
+			if (!is.finite(a1))
+				stop("One or more geometries have a non-finite area")
+			if (a1 < 1) { # global polygon FIXME: 
+				a1 = a0
+				global = TRUE
+			}
+			size = size * a0 / a1
+		} else {
+			a0 = as.numeric(st_area(st_as_sfc(bb)))
+			a1 = as.numeric(sum(st_area(x)))
+			# we're sampling from a box, so n should be size_desired * a0 / a1
+			if (is.finite(a0) && is.finite(a1) && a0 > a0 * 0.0 && a1 > a1 * 0.0) { # FIXME: can be removed, now we handle long/lat separately?
+				r = size * a0 / a1
+				size = if (round(r) == 0)
+						rbinom(1, 1, r)
+					else
+						round(r)
+			}
+		}
 
 		pts = if (type == "hexagonal") {
 				dx = sqrt(a0 / size / (sqrt(3)/2))
@@ -181,25 +197,29 @@ st_poly_sample = function(x, size, ..., type = "random",
 					(offset[2] - bb["ymin"]) %% dx) + bb[c("xmin", "ymin")]
 				n = c(round((bb["xmax"] - offset[1])/dx), round((bb["ymax"] - offset[2])/dx))
 				st_make_grid(x, cellsize = c(dx, dx), offset = offset, n = n, what = "corners")
-			} else if (type == "random") {
-				lon = runif(size, bb[1], bb[3])
-				lat = if (isTRUE(st_is_longlat(x))) { # sampling on the sphere:
-					toRad = pi/180
-					lat0 = (sin(bb[2] * toRad) + 1)/2
-					lat1 = (sin(bb[4] * toRad) + 1)/2
-					y = runif(size, lat0, lat1)
-					asin(2 * y - 1) / toRad # http://mathworld.wolfram.com/SpherePointPicking.html
-				} else
-					runif(size, bb[2], bb[4])
-				m = cbind(lon, lat)
-				colnames(m) = NULL
-				st_sfc(lapply(seq_len(nrow(m)), function(i) st_point(m[i,])), crs = st_crs(x))
-			} else if (type == "Fibonacci") {
-				bb = st_bbox(x)
-				m = fiboGrid(size %/% 2, bb[c("xmin", "xmax")], bb[c("ymin", "ymax")])
-				st_sfc(lapply(seq_len(nrow(m)), function(i) st_point(m[i,])), crs = st_crs(x))
+			} else { 
+				m = if (type == "random") {
+						lon = runif(size, bb[1], bb[3])
+						lat = if (isTRUE(st_is_longlat(x))) { # sampling on the sphere:
+							toRad = pi/180
+							lat0 = (sin(bb[2] * toRad) + 1)/2
+							lat1 = (sin(bb[4] * toRad) + 1)/2
+							y = runif(size, lat0, lat1)
+							asin(2 * y - 1) / toRad # http://mathworld.wolfram.com/SpherePointPicking.html
+						} else
+							runif(size, bb[2], bb[4])
+						structure(cbind(lon, lat), dimnames = NULL)
+					} else if (type == "Fibonacci")
+						fiboGrid(size %/% 2, bb[c("xmin", "xmax")], bb[c("ymin", "ymax")])
+					else
+						stop("unknown value for type")
+				# st_sfc(lapply(seq_len(nrow(m)), function(i) st_point(m[i,])), crs = st_crs(x))
+				st_as_sf(as.data.frame(m), coords = 1:2, crs = st_crs(x))[["geometry"]]
 			}
-		pts[x] # cut out x from bbox
+		if (global)
+			pts
+		else
+			pts[x] # cut out x from bbox
 	} else { # try to go into spatstat
 		if (!requireNamespace("spatstat.random", quietly = TRUE))
 			stop("package spatstat.random required, please install it (or the full spatstat package) first")
