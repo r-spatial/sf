@@ -81,15 +81,22 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 					SetNull(poFeature, j);
 				} break;
 			case OFTInteger: {
-				Rcpp::IntegerVector iv;
-				iv = obj[j];
-				if (! Rcpp::IntegerVector::is_na(iv[i])) {
-					if (shape)
+				const OGRFieldDefn *def = poFeature->GetFieldDefnRef(j);
+				if (def->GetSubType() == OFSTBoolean) {
+					Rcpp::LogicalVector lv;
+					lv = obj[j];
+					if (! Rcpp::LogicalVector::is_na(lv[i]))
+						poFeature->SetField(j, (int) lv[i]);
+					else
+						SetNull(poFeature, j); // #nocov
+				} else { // integer:
+					Rcpp::IntegerVector iv;
+					iv = obj[j];
+					if (! Rcpp::IntegerVector::is_na(iv[i]))
 						poFeature->SetField(j, (int) iv[i]);
 					else
-						poFeature->SetField(nm[j], (int) iv[i]);
-				} else
-					SetNull(poFeature, j); // #nocov
+						SetNull(poFeature, j); // #nocov
+				}
 				} break;
 			case OFTReal: {
 				Rcpp::NumericVector nv;
