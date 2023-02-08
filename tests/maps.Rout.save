@@ -31,7 +31,7 @@ Simple feature collection with 1627 features and 1 field
 Geometry type: MULTIPOLYGON
 Dimension:     XY
 Bounding box:  xmin: -180 ymin: -85.19218 xmax: 190.2708 ymax: 83.59961
-CRS:           +proj=longlat +ellps=clrk66 +no_defs +type=crs
+Geodetic CRS:  +proj=longlat +ellps=clrk66 +no_defs +type=crs
 First 10 features:
                                   ID                           geom
 1                              Aruba MULTIPOLYGON (((-69.89912 1...
@@ -47,4 +47,4 @@ First 10 features:
 > 
 > proc.time()
    user  system elapsed 
-  2.265   0.777   2.241 
+  1.792   0.819   1.713 

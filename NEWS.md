@@ -1,5 +1,7 @@
 # version 1.0-10
 
+* fix slow writing of logical vectors in `st_write()`; #1409; #1689
+
 * `st_drivers()` has an argument `reprex` to filter on driver (long) name; #2090
 
 * drop C++11 as a system requirement
