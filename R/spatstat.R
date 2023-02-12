@@ -8,15 +8,20 @@
 #		st_cast(p0, "POLYGON")
 # }
 
+check_spatstat_ll = function(x) {
+	if (isTRUE(st_is_longlat(x)))
+		stop(strwrap("Only projected coordinates may be converted to spatstat class objects"), .call = FALSE)
+}
+
 check_spatstat <- function(pkg, X = NULL) {
 	if (!requireNamespace(pkg, quietly = TRUE))
 		stop("package ", pkg, " required, please install it (or the full spatstat package) first")
 	spst_ver <- try(packageVersion("spatstat"), silent = TRUE)
 	if (!inherits(spst_ver, "try-error") && spst_ver < 2.0-0)
-		stop("You have an old version of spatstat installed which is incompatible with ", pkg, 
-			". Please update spatstat (or uninstall it).")
-	if (!is.null(X) && isTRUE(st_is_longlat(X)))
-		stop("Only projected coordinates may be converted to spatstat class objects", call. = FALSE)
+		stop(strwrap(paste("You have an old version of spatstat installed which is incompatible with ", pkg, 
+			". Please update spatstat (or uninstall it)."))
+	if (!is.null(X))
+		check_spatstat_ll(X)
 }
 
 #' @name st_as_sf
@@ -163,8 +168,7 @@ as.owin.MULTIPOLYGON = function(W, ..., fatal, check_polygons = TRUE) {
 }
 
 as.owin.sfc_POLYGON = function(W, ..., fatal, check_polygons = TRUE) {
-	if (isTRUE(st_is_longlat(W)))
-		stop("Only projected coordinates may be converted to spatstat class objects")
+	check_spatstat_ll(W)
 	if (check_polygons)
 		W = check_ring_dir(W)
 	as.owin.MULTIPOLYGON(W, check_polygons = FALSE)
@@ -172,8 +176,7 @@ as.owin.sfc_POLYGON = function(W, ..., fatal, check_polygons = TRUE) {
 }
 
 as.owin.sfc_MULTIPOLYGON = function(W, ..., fatal, check_polygons = TRUE) {
-	if (isTRUE(st_is_longlat(W)))
-		stop("Only projected coordinates may be converted to spatstat class objects")
+	check_spatstat_ll(W)
 	if (check_polygons)
 		W = check_ring_dir(W)
 	as.owin.sfc_POLYGON(st_cast(W, "POLYGON"), check_polygons = FALSE)
