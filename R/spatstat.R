@@ -19,7 +19,7 @@ check_spatstat <- function(pkg, X = NULL) {
 	spst_ver <- try(packageVersion("spatstat"), silent = TRUE)
 	if (!inherits(spst_ver, "try-error") && spst_ver < 2.0-0)
 		stop(strwrap(paste("You have an old version of spatstat installed which is incompatible with ", pkg, 
-			". Please update spatstat (or uninstall it)."))
+			". Please update spatstat (or uninstall it).")))
 	if (!is.null(X))
 		check_spatstat_ll(X)
 }
