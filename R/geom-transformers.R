@@ -511,7 +511,7 @@ st_centroid.sfc = function(x, ..., of_largest_polygon = FALSE) {
 #' @export
 st_centroid.sf = function(x, ..., of_largest_polygon = FALSE) {
 	if (any(st_dimension(x) > 0) && !all_constant(x))
-		warning("st_centroid assumes attributes are constant over geometries", .call = FALSE)
+		warning("st_centroid assumes attributes are constant over geometries", call. = FALSE)
 	ret = st_set_geometry(x,
 		st_centroid(st_geometry(x), of_largest_polygon = of_largest_polygon))
 	agr = st_agr(ret)
@@ -543,7 +543,7 @@ st_point_on_surface.sfc = function(x) {
 #' @export
 st_point_on_surface.sf = function(x) {
 	if (any(st_dimension(x) > 0) && !all_constant(x))
-		warning("st_point_on_surface assumes attributes are constant over geometries", .call = FALSE)
+		warning("st_point_on_surface assumes attributes are constant over geometries", call. = FALSE)
 	st_set_geometry(x, st_point_on_surface(st_geometry(x)))
 }
 
