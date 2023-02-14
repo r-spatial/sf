@@ -23,6 +23,7 @@ test_that("filter to sfc works", {
 suppressMessages(require(tidyr, quietly = TRUE))
 test_that("separate and unite work", {
   skip_if_not_installed("dplyr")
+  skip_if_not_installed("tidyr")
   expect_true(nc %>% separate(CNTY_ID, c("a", "b"), sep = 2) %>% inherits("sf"))
   expect_true(nc %>% separate(CNTY_ID, c("a", "b"), sep = 2) %>%
 	unite(CNTY_ID_NEW, c("a", "b"), sep = "") %>% inherits("sf"))
