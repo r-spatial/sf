@@ -26,6 +26,7 @@ readable, and which may be written. The field \code{vsi} refers to the driver's
 capability to read/create datasets through the VSI*L API. \href{https://gdal.org/drivers/vector/index.html}{See GDAL website for additional details on driver support}.
 }
 \examples{
+# The following driver lists depend on the GDAL setup and platform used:
 st_drivers()
 st_drivers("raster", "GeoT")
 }

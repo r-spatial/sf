@@ -550,6 +550,7 @@ write_sf <- function(..., quiet = TRUE, append = FALSE, delete_layer = !append) 
 #' @export
 #' @md
 #' @examples
+#' # The following driver lists depend on the GDAL setup and platform used:
 #' st_drivers()
 #' st_drivers("raster", "GeoT")
 st_drivers = function(what = "vector", regex) {
