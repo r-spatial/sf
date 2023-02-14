@@ -30,6 +30,7 @@ test_that("separate and unite work", {
 
 test_that("separate_rows work", {
   skip_if_not_installed("dplyr")
+  skip_if_not_installed("tidyr")
   d <- st_as_sf(data.frame(
     x = seq_len(3),
     y = c("a", "d,e,f", "g,h"),
