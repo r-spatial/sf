@@ -77,6 +77,7 @@ test_that("sample_n etc work", {
 
 test_that("nest() works", {
 	skip_if_not_installed("dplyr")
+	skip_if_not_installed("tidyr")
 	tbl = tibble(a = c(1,1,2,2), g = st_sfc(st_point(0:1), st_point(1:2), st_point(2:3), st_point(3:4)))
 	d = st_sf(tbl)
 	out = d %>% group_by(a) %>% nest()
