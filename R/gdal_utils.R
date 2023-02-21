@@ -27,6 +27,7 @@ resampling_method = function(option = "near") {
 #' @param source character; name of input layer(s); for \code{warp}, \code{buidvrt} or \code{mdimtranslate} this can be more than one
 #' @param destination character; name of output layer
 #' @param options character; options for the utility
+#' @param config_options named character vector with GDAL config options, like \code{c(option1=value1, option2=value2)}
 #' @param quiet logical; if \code{TRUE}, suppress printing the output for \code{info} and \code{mdiminfo}, and suppress printing progress
 #' @param processing character; processing options for \code{demprocessing}
 #' @param colorfilename character; name of color file for \code{demprocessing} (mandatory if \code{processing="color-relief"})
@@ -73,8 +74,10 @@ resampling_method = function(option = "near") {
 #' }
 gdal_utils = function(util = "info", source, destination, options = character(0),
 		quiet = !(util %in% c("info", "mdiminfo")) || ("-multi" %in% options),
-		processing = character(0), colorfilename = character(0)) {
+		processing = character(0), colorfilename = character(0),
+		config_options = character(0)) {
 
+	stopifnot(is.character(options), is.character(config_options))
 	if (!quiet && "-multi" %in% options)
 		stop("with -multi quiet should be set to FALSE")
 #	if ("-co" %in% options)
@@ -98,24 +101,24 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 	quiet = as.logical(quiet)
 
 	ret = switch(util,
-			info = CPL_gdalinfo(if (missing(source)) character(0) else source, options, oo),
-			warp = CPL_gdalwarp(source, destination, options, oo, doo, quiet, "-overwrite" %in% options),
+			info = CPL_gdalinfo(if (missing(source)) character(0) else source, options, oo, config_options),
+			warp = CPL_gdalwarp(source, destination, options, oo, doo, config_options, quiet, "-overwrite" %in% options),
 			warper = CPL_gdal_warper(source, destination, as.integer(resampling_method(options)),
 				oo, doo, quiet), # nocov
 			rasterize = {  # nocov start
 				overwrite = any(options %in% c("-of", "-a_nodata", "-init", "-a_srs", "-co",
 						"-te", "-tr", "-tap", "-ts", "-ot")) # https://gdal.org/programs/gdal_rasterize.html
-				CPL_gdalrasterize(source, destination, options, oo, doo, overwrite, quiet)
+				CPL_gdalrasterize(source, destination, options, oo, doo, config_options, overwrite, quiet)
 			}, # nocov end
-			translate = CPL_gdaltranslate(source, destination, options, oo, quiet),
-			vectortranslate = CPL_gdalvectortranslate(source, destination, options, oo, doo, quiet),
-			buildvrt = CPL_gdalbuildvrt(source, destination, options, oo, quiet),
-			demprocessing = CPL_gdaldemprocessing(source, destination, options, 
+			translate = CPL_gdaltranslate(source, destination, options, oo, config_options, quiet),
+			vectortranslate = CPL_gdalvectortranslate(source, destination, options, oo, doo, config_options, quiet),
+			buildvrt = CPL_gdalbuildvrt(source, destination, options, oo, config_options, quiet),
+			demprocessing = CPL_gdaldemprocessing(source, destination, options, config_options, 
 				processing, colorfilename, oo, quiet),
-			nearblack = CPL_gdalnearblack(source, destination, options, oo, doo, quiet),
-			grid = CPL_gdalgrid(source, destination, options, oo, quiet),
-			mdiminfo = CPL_gdalmdiminfo(source, options, oo),
-			mdimtranslate = CPL_gdalmdimtranslate(source, destination, options, oo, quiet),
+			nearblack = CPL_gdalnearblack(source, destination, options, oo, config_options, doo, quiet),
+			grid = CPL_gdalgrid(source, destination, options, oo, config_options, quiet),
+			mdiminfo = CPL_gdalmdiminfo(source, options, oo, config_options),
+			mdimtranslate = CPL_gdalmdimtranslate(source, destination, options, oo, config_options, quiet),
 			stop(paste("unknown util value for gdal_utils:", util))
 		)
 
