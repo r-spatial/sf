@@ -1,6 +1,6 @@
 citHeader("To cite package sf in publications, please use:")
 
-citEntry(entry="Article",
+bibentry(entry="Article",
   author = "Edzer Pebesma",
   title = "{Simple Features for R: Standardized Support for Spatial Vector Data}",
   year = 2018,
@@ -13,7 +13,7 @@ citEntry(entry="Article",
   textVersion = "Pebesma, E., 2018. Simple Features for R: Standardized Support for Spatial Vector Data. The R Journal 10 (1), 439-446, https://doi.org/10.32614/RJ-2018-009"
 )
 
-citEntry(entry="Book",
+bibentry(entry="Book",
   author= "Edzer Pebesma and Roger Bivand",
   title = "{Spatial Data Science: With applications in R}",
   year = 2023,
