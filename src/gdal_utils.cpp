@@ -43,24 +43,6 @@ int CPL_STDCALL GDALRProgress( double dfComplete,
     return TRUE;
 }
 
-void set_config_options(Rcpp::CharacterVector ConfigOptions) {
-	if (ConfigOptions.size()) {
-		if (ConfigOptions.attr("names") == R_NilValue)
-			Rcpp::stop("config_options should be a character vector with names, as in c(key=\"value\")");
-		Rcpp::CharacterVector names = ConfigOptions.attr("names");
-		for (int i = 0; i < ConfigOptions.size(); i++)
-			CPLSetConfigOption(names[i], ConfigOptions[i]);
-	}
-}
-
-void unset_config_options(Rcpp::CharacterVector ConfigOptions) {
-	if (ConfigOptions.size()) {
-		Rcpp::CharacterVector names = ConfigOptions.attr("names");
-		for (int i = 0; i < ConfigOptions.size(); i++)
-			CPLSetConfigOption(names[i], NULL);
-	}
-}
-
 #if GDAL_VERSION_NUM >= 2010000
 # include "gdal_utils.h" // requires >= 2.1
 

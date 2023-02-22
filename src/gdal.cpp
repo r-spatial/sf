@@ -112,6 +112,24 @@ void handle_error(OGRErr err) {
 	}
 }
 
+void set_config_options(Rcpp::CharacterVector ConfigOptions) {
+	if (ConfigOptions.size()) {
+		if (ConfigOptions.attr("names") == R_NilValue)
+			Rcpp::stop("config_options should be a character vector with names, as in c(key=\"value\")");
+		Rcpp::CharacterVector names = ConfigOptions.attr("names");
+		for (int i = 0; i < ConfigOptions.size(); i++)
+			CPLSetConfigOption(names[i], ConfigOptions[i]);
+	}
+}
+
+void unset_config_options(Rcpp::CharacterVector ConfigOptions) {
+	if (ConfigOptions.size()) {
+		Rcpp::CharacterVector names = ConfigOptions.attr("names");
+		for (int i = 0; i < ConfigOptions.size(); i++)
+			CPLSetConfigOption(names[i], NULL);
+	}
+}
+
 Rcpp::CharacterVector wkt_from_spatial_reference(const OGRSpatialReference *srs) { // FIXME: add options?
 	char *cp;
 #if GDAL_VERSION_MAJOR >= 3
