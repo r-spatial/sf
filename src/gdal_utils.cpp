@@ -43,9 +43,6 @@ int CPL_STDCALL GDALRProgress( double dfComplete,
     return TRUE;
 }
 
-#if GDAL_VERSION_NUM >= 2010000
-# include "gdal_utils.h" // requires >= 2.1
-
 void set_config_options(Rcpp::CharacterVector ConfigOptions) {
 	if (ConfigOptions.size()) {
 		if (ConfigOptions.attr("names") == R_NilValue)
@@ -63,6 +60,9 @@ void unset_config_options(Rcpp::CharacterVector ConfigOptions) {
 			CPLSetConfigOption(names[i], NULL);
 	}
 }
+
+#if GDAL_VERSION_NUM >= 2010000
+# include "gdal_utils.h" // requires >= 2.1
 
 // [[Rcpp::export]]
 Rcpp::CharacterVector CPL_gdalinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options, 
