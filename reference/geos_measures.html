@@ -119,7 +119,7 @@
 
 
 <dt>by_element</dt>
-<dd><p>logical; if <code>TRUE</code>, return a vector with distance between the first elements of <code>x</code> and <code>y</code>, the second, etc. if <code>FALSE</code>, return the dense matrix with all pairwise distances.</p></dd>
+<dd><p>logical; if <code>TRUE</code>, return a vector with distance between the first elements of <code>x</code> and <code>y</code>, the second, etc; an error is raised if <code>x</code> and <code>y</code> are not the same length. If <code>FALSE</code>, return the dense matrix with all pairwise distances.</p></dd>
 
 
 <dt>which</dt>
@@ -149,7 +149,7 @@
 
 <p>If <code>by_element</code> is <code>FALSE</code></p>
 <p></p>
-<p><code>st_distance</code> returns a dense numeric matrix of dimension length(x) by length(y); otherwise it returns a numeric vector of length <code>x</code> or <code>y</code>, the shorter one being recycled. Distances involving empty geometries are <code>NA</code>.</p>
+<p><code>st_distance</code> returns a dense numeric matrix of dimension length(x) by length(y); otherwise it returns a numeric vector the same length as <code>x</code> and <code>y</code> with an error raised if the lengths of <code>x</code> and <code>y</code> are unequal. Distances involving empty geometries are <code>NA</code>.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
