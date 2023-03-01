@@ -574,12 +574,12 @@ The following objects are masked from 'package:base':
 
     intersect, setdiff, setequal, union
 
-Joining, by = "b"
-Joining, by = "b"
-Joining, by = "b"
-Joining, by = "b"
-Joining, by = "b"
-Joining, by = "b"
+Joining with `by = join_by(b)`
+Joining with `by = join_by(b)`
+Joining with `by = join_by(b)`
+Joining with `by = join_by(b)`
+Joining with `by = join_by(b)`
+Joining with `by = join_by(b)`
 Simple feature collection with 3 features and 4 fields
 Geometry type: POINT
 Dimension:     XY
@@ -1088,4 +1088,4 @@ CRS:           NA
 > 
 > proc.time()
    user  system elapsed 
-  6.826   0.851   6.786 
+  6.753   0.822   6.686 

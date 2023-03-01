@@ -1,5 +1,7 @@
 # version 1.0-10
 
+* `gdal_utils()` has a `config_options` argument to set further GDAL options, just like `st_write()`; #2003
+
 * fix slow writing of logical vectors in `st_write()`; #1409; #1689
 
 * `st_drivers()` has an argument `reprex` to filter on driver (long) name; #2090

@@ -8,18 +8,20 @@
 #		st_cast(p0, "POLYGON")
 # }
 
+wrp = function(x) paste(strwrap(x), collapse = "\n")
+
 check_spatstat_ll = function(x) {
 	if (isTRUE(st_is_longlat(x)))
-		stop(strwrap("Only projected coordinates may be converted to spatstat class objects"), .call = FALSE)
+		stop(wrp("Only projected coordinates may be converted to spatstat class objects"), call. = FALSE)
 }
 
 check_spatstat <- function(pkg, X = NULL) {
 	if (!requireNamespace(pkg, quietly = TRUE))
-		stop("package ", pkg, " required, please install it (or the full spatstat package) first")
+		stop("package ", pkg, " required, please install it (or the full spatstat package) first", call. = FALSE)
 	spst_ver <- try(packageVersion("spatstat"), silent = TRUE)
 	if (!inherits(spst_ver, "try-error") && spst_ver < 2.0-0)
-		stop(strwrap(paste("You have an old version of spatstat installed which is incompatible with ", pkg, 
-			". Please update spatstat (or uninstall it).")))
+		stop(wrp(paste("You have an old version of spatstat installed which is incompatible with ", pkg, 
+			". Please update spatstat (or uninstall it).")), call. = FALSE)
 	if (!is.null(X))
 		check_spatstat_ll(X)
 }

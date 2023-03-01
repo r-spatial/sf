@@ -48,7 +48,8 @@ int CPL_STDCALL GDALRProgress( double dfComplete,
 
 // [[Rcpp::export]]
 Rcpp::CharacterVector CPL_gdalinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options, 
-		Rcpp::CharacterVector oo) {
+		Rcpp::CharacterVector oo, Rcpp::CharacterVector co) {
+	set_config_options(co);
 	std::vector <char *> options_char = create_options(options, true);
 	std::vector <char *> oo_char = create_options(oo, true); // open options
 	GDALInfoOptions* opt = GDALInfoOptionsNew(options_char.data(), NULL);
@@ -63,14 +64,16 @@ Rcpp::CharacterVector CPL_gdalinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVec
 	GDALInfoOptionsFree(opt);
 	if (ds)
 		GDALClose(ds);
+	unset_config_options(co);
 	return ret;
 }
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdaladdo(Rcpp::CharacterVector obj, Rcpp::CharacterVector method, 
 		Rcpp::IntegerVector overviews, Rcpp::IntegerVector bands, Rcpp::CharacterVector oo,
-		bool clean = false, bool read_only = false) {
+		Rcpp::CharacterVector co, bool clean = false, bool read_only = false) {
 
+	set_config_options(co);
 	/*
 	std::vector <char *> options_char = create_options(options, true);
 	GDALInfoOptions* opt = GDALInfoOptionsNew(options_char.data(), NULL);
@@ -99,6 +102,7 @@ Rcpp::LogicalVector CPL_gdaladdo(Rcpp::CharacterVector obj, Rcpp::CharacterVecto
 		}
 	}
 	GDALClose(ds);
+	unset_config_options(co);
 	return true;
 }
 
@@ -107,10 +111,11 @@ Rcpp::LogicalVector CPL_gdaladdo(Rcpp::CharacterVector obj, Rcpp::CharacterVecto
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdalwarp(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
 		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo,
-		bool quiet = true, bool overwrite = false) {
+		Rcpp::CharacterVector co, bool quiet = true, bool overwrite = false) {
 
 	int err = 0;
 
+	set_config_options(co);
 	std::vector <char *> oo_char = create_options(oo, true); // open options
 	std::vector<GDALDatasetH> src_pt(src.size());
 	for (int i = 0; i < src.size(); i++)
@@ -142,14 +147,16 @@ Rcpp::LogicalVector CPL_gdalwarp(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 			GDALClose(src_pt[i]);
 	if (result != NULL)
 		GDALClose(result);
+	unset_config_options(co);
 	return result == NULL || err;
 }
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdalrasterize(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
 		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo,
-		bool overwrite = false, bool quiet = true) {
+		Rcpp::CharacterVector co, bool overwrite = false, bool quiet = true) {
 
+	set_config_options(co);
 	int err = 0;
 	std::vector <char *> options_char = create_options(options, true);
 	std::vector <char *> oo_char = create_options(oo, true); // open options
@@ -177,6 +184,7 @@ Rcpp::LogicalVector CPL_gdalrasterize(Rcpp::CharacterVector src, Rcpp::Character
 		GDALClose(src_pt);
 	if (result != NULL)
 		GDALClose(result);
+	unset_config_options(co);
 	return result == NULL || err;
 }
 // #nocov end
@@ -184,8 +192,10 @@ Rcpp::LogicalVector CPL_gdalrasterize(Rcpp::CharacterVector src, Rcpp::Character
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdaltranslate(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, bool quiet = true) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector co,
+		bool quiet = true) {
 
+	set_config_options(co);
 	int err = 0;
 	std::vector <char *> options_char = create_options(options, true);
 	std::vector <char *> oo_char = create_options(oo, true);
@@ -206,14 +216,16 @@ Rcpp::LogicalVector CPL_gdaltranslate(Rcpp::CharacterVector src, Rcpp::Character
 		GDALClose(result);
 	if (src_pt != NULL)
 		GDALClose(src_pt);
+	unset_config_options(co);
 	return result == NULL || err;
 }
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdalvectortranslate(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
 		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo,
-		bool quiet = true) {
+		Rcpp::CharacterVector co, bool quiet = true) {
 
+	set_config_options(co);
 	int err = 0;
 	std::vector <char *> options_char = create_options(options, true);
 	GDALVectorTranslateOptions* opt =  GDALVectorTranslateOptionsNew(options_char.data(), NULL);
@@ -237,13 +249,16 @@ Rcpp::LogicalVector CPL_gdalvectortranslate(Rcpp::CharacterVector src, Rcpp::Cha
 	GDALClose(src_pt);
 	if (result != NULL)
 		GDALClose(result);
+	unset_config_options(co);
 	return result == NULL || err;
 }
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdalbuildvrt(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, bool quiet = true) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, 
+		Rcpp::CharacterVector co, bool quiet = true) {
 
+	set_config_options(co);
 	int err = 0;
 	std::vector <char *> options_char = create_options(options, true);
 	GDALBuildVRTOptions* opt = GDALBuildVRTOptionsNew(options_char.data(), NULL);
@@ -276,15 +291,18 @@ Rcpp::LogicalVector CPL_gdalbuildvrt(Rcpp::CharacterVector src, Rcpp::CharacterV
 	GDALBuildVRTOptionsFree(opt);
 	if (result != NULL)
 		GDALClose(result);
+	unset_config_options(co);
 	return result == NULL || err;
 }
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdaldemprocessing(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
 		Rcpp::CharacterVector options, Rcpp::CharacterVector processing, 
-		Rcpp::CharacterVector colorfilename, Rcpp::CharacterVector oo, bool quiet = true) {
+		Rcpp::CharacterVector colorfilename, Rcpp::CharacterVector oo, 
+		Rcpp::CharacterVector co, bool quiet = true) {
 
 	int err = 0;
+	set_config_options(co);
 	std::vector <char *> options_char = create_options(options, true);
 	std::vector <char *> oo_char = create_options(oo, true); // open options
 	GDALDEMProcessingOptions* opt =  GDALDEMProcessingOptionsNew(options_char.data(), NULL);
@@ -306,14 +324,16 @@ Rcpp::LogicalVector CPL_gdaldemprocessing(Rcpp::CharacterVector src, Rcpp::Chara
 		GDALClose(result);
 	if (src_pt != NULL)
 		GDALClose(src_pt);
+	unset_config_options(co);
 	return result == NULL || err;
 }
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdalnearblack(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
 		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo, 
-		bool quiet = true) {
+		Rcpp::CharacterVector co, bool quiet = true) {
 
+	set_config_options(co);
 	int err = 0;
 	std::vector <char *> options_char = create_options(options, true);
 	std::vector <char *> oo_char = create_options(oo, true); // open options
@@ -333,14 +353,16 @@ Rcpp::LogicalVector CPL_gdalnearblack(Rcpp::CharacterVector src, Rcpp::Character
 		GDALClose(src_pt);
 	if (result != NULL)
 		GDALClose(result);
+	unset_config_options(co);
 	return result == NULL || err;
 }
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdalgrid(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
 		Rcpp::CharacterVector options, Rcpp::CharacterVector oo,
-		bool quiet = true) {
+		Rcpp::CharacterVector co, bool quiet = true) {
 
+	set_config_options(co);
 	int err = 0;
 	std::vector <char *> options_char = create_options(options, true);
 	std::vector <char *> oo_char = create_options(oo, true); // open options
@@ -358,6 +380,7 @@ Rcpp::LogicalVector CPL_gdalgrid(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 		GDALClose(src_pt);
 	if (result != NULL)
 		GDALClose(result);
+	unset_config_options(co);
 	return result == NULL || err;
 }
 
@@ -365,7 +388,8 @@ Rcpp::LogicalVector CPL_gdalgrid(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 #if GDAL_VERSION_NUM >= 3010000
 // [[Rcpp::export]]
 Rcpp::CharacterVector CPL_gdalmdiminfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options,
-		Rcpp::CharacterVector oo) { 
+		Rcpp::CharacterVector oo, Rcpp::CharacterVector co) { 
+	set_config_options(co);
 	std::vector <char *> oo_char = create_options(oo, true);
 	GDALDatasetH ds = GDALOpenEx((const char *) obj[0], GDAL_OF_MULTIDIM_RASTER | GDAL_OF_VERBOSE_ERROR , NULL, oo_char.data(), NULL);
 	if (ds == NULL) {
@@ -382,13 +406,16 @@ Rcpp::CharacterVector CPL_gdalmdiminfo(Rcpp::CharacterVector obj, Rcpp::Characte
 	Rcpp::CharacterVector ret(1);
 	ret[0] = ret_val;
 	CPLFree(ret_val);
+	unset_config_options(co);
 	return ret;
 }
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdalmdimtranslate(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, bool quiet = true) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector co,
+		bool quiet = true) {
 
+	set_config_options(co);
 	int err = 0;
 	std::vector <char *> options_char = create_options(options, true);
 	std::vector <char *> oo_char = create_options(oo, true);
@@ -415,6 +442,7 @@ Rcpp::LogicalVector CPL_gdalmdimtranslate(Rcpp::CharacterVector src, Rcpp::Chara
 		Rcpp::stop("failed to open destination data set");
 	for (int i = 0; i < src.size(); i++)
 		GDALClose(srcpt[i]);
+	unset_config_options(co);
 	return result == NULL || err;
 }
 #else
@@ -432,59 +460,59 @@ Rcpp::LogicalVector CPL_gdalmdimtranslate(Rcpp::CharacterVector src, Rcpp::Chara
 #include "Rcpp.h"
 
 Rcpp::CharacterVector CPL_gdalinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options, 
-		Rcpp::CharacterVector oo) {
+		Rcpp::CharacterVector oo, Rcpp::CharacterVector co) {
 	Rcpp::stop("GDAL version >= 2.1 required for gdal_utils");
 }
 
 Rcpp::LogicalVector CPL_gdalwarp(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo, Rcpp::CharacterVector co) {
 	Rcpp::stop("GDAL version >= 2.1 required for gdal_utils");
 }
 
 Rcpp::LogicalVector CPL_gdalrasterize(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo,
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo, Rcpp::CharacterVector co,
 		bool overwrite = false) {
 	Rcpp::stop("GDAL version >= 2.1 required for gdal_utils");
 }
 
 Rcpp::LogicalVector CPL_gdaltranslate(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector co) {
 	Rcpp::stop("GDAL version >= 2.1 required for gdal_utils");
 }
 
 Rcpp::LogicalVector CPL_gdalvectortranslate(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo, Rcpp::CharacterVector co) {
 	Rcpp::stop("GDAL version >= 2.1 required for gdal_utils");
 }
 
 Rcpp::LogicalVector CPL_gdalbuildvrt(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector co) {
 	Rcpp::stop("GDAL version >= 2.1 required for gdal_utils");
 }
 
 Rcpp::LogicalVector CPL_gdaldemprocessing(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
 		Rcpp::CharacterVector options, Rcpp::CharacterVector processing, Rcpp::CharacterVector colorfilename,
-		Rcpp::CharacterVector oo) {
+		Rcpp::CharacterVector oo, Rcpp::CharacterVector co) {
 	Rcpp::stop("GDAL version >= 2.1 required for gdal_utils");
 }
 
 Rcpp::LogicalVector CPL_gdalnearblack(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo, Rcpp::CharacterVector co) {
 	Rcpp::stop("GDAL version >= 2.1 required for gdal_utils");
 }
 
 Rcpp::LogicalVector CPL_gdalgrid(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector co) {
 	Rcpp::stop("GDAL version >= 2.1 required for gdal_utils");
 }
 
 Rcpp::CharacterVector CPL_gdalmdiminfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options, 
-		Rcpp::CharacterVector oo) {
+		Rcpp::CharacterVector oo, Rcpp::CharacterVector co) {
 	Rcpp::stop("GDAL version >= 3.1 required for mdiminfo");
 }
 
 Rcpp::LogicalVector CPL_gdalmdimtranslate(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector co) {
 	Rcpp::stop("GDAL version >= 3.1 required for mdimtranslate");
 }
 #endif
@@ -494,8 +522,9 @@ Rcpp::LogicalVector CPL_gdalmdimtranslate(Rcpp::CharacterVector src, Rcpp::Chara
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::CharacterVector outfile,
 		Rcpp::IntegerVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo,
-		bool quiet = true) {
+		Rcpp::CharacterVector co, bool quiet = true) {
 
+	set_config_options(co);
 	std::vector <char *> oo_char = create_options(oo, true); // open options
 	GDALDatasetH  hSrcDS, hDstDS;
 	// Open input and output files.
@@ -574,6 +603,7 @@ Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::Characte
 		GDALClose( hDstDS );
 	if (hSrcDS)
 		GDALClose( hSrcDS );
+	unset_config_options(co);
 	return false;
 }
 // #nocov end

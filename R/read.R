@@ -350,8 +350,8 @@ abbreviate_shapefile_names = function(x) {
 #' The default for \code{st_write} is \code{FALSE} which raises an error if the layer exists.
 #' The default for \code{write_sf} is \code{TRUE}.
 #' @param fid_column_name character, name of column with feature IDs; if
-#' @param config_options character, named vector with GDAL config options
 #' specified, this column is no longer written as feature attribute.
+#' @param config_options character, named vector with GDAL config options
 #' @details
 #' Columns (variables) of a class not supported are dropped with a warning.
 #'
@@ -550,6 +550,7 @@ write_sf <- function(..., quiet = TRUE, append = FALSE, delete_layer = !append) 
 #' @export
 #' @md
 #' @examples
+#' # The following driver lists depend on the GDAL setup and platform used:
 #' st_drivers()
 #' st_drivers("raster", "GeoT")
 st_drivers = function(what = "vector", regex) {

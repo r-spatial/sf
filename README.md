@@ -80,20 +80,20 @@ brew install gdal
 Once gdal is installed, you will be able to install `sf` package from source in R. With the current version of `proj` on homebrew, installation requires additional configuration:
 
 ```r
-install.packages("sf", configure.args = "--with-proj-lib=/usr/local/lib/")
+install.packages("sf", type = "source", configure.args = "--with-proj-lib=$(brew --prefix)/lib/")
 ```
 
 Or the development version:
 
 ```r
 library(remotes)
-install_github("r-spatial/sf", configure.args = "--with-proj-lib=/usr/local/lib/")
+install_github("r-spatial/sf", configure.args = "--with-proj-lib=$(brew --prefix)/lib/")
 ```
 
 If you are using `sf` and `rgdal` together, it is necessary to install `rgdal` from source using this configuration:
 
 ```r
-install.packages("rgdal", configure.args = c("--with-proj-lib=/usr/local/lib/", "--with-proj-include=/usr/local/include/"))
+install.packages("rgdal", type = "source", configure.args = c("--with-proj-lib=$(brew --prefix)/lib/", "--with-proj-include=$(brew --prefix)/include/"))
 ```
 
 Alternatively, [these instructions](https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html) explain how to install gdal using kyngchaos frameworks.
