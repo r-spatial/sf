@@ -199,7 +199,7 @@ std::vector<GeomPtr> geometries_from_sfc(GEOSContextHandle_t hGEOSCtxt, Rcpp::Li
 		}
 #ifdef HAVE_390
 		else if (set_precision)
-			g[i] = geos_ptr(GEOSGeom_setPrecision_r(hGEOSCtxt, g[i].get(), precision, 0), hGEOSCtxt);
+			g[i] = geos_ptr(GEOSGeom_setPrecision_r(hGEOSCtxt, g[i].get(), precision, GEOS_PREC_VALID_OUTPUT), hGEOSCtxt);
 #endif
 	}
 	GEOSWKBReader_destroy_r(hGEOSCtxt, wkb_reader);

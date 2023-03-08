@@ -1,3 +1,9 @@
+# version 1.0-11
+
+* clean up the retrieval of length or angle units from WKT representations
+
+* conversion to GEOS uses the `GEOS_PREC_VALID_OUTPUT` flag, which makes sure that the "[o]utput is always valid. Collapsed geometry elements (including both polygons and lines) are removed."
+
 # version 1.0-10
 
 * `gdal_utils()` has a `config_options` argument to set further GDAL options, just like `st_write()`; #2003

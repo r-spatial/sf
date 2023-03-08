@@ -304,17 +304,12 @@ crs_ud_unit = function(x) {
 	if (is.na(x))
 		return(NULL)
 
-	epsg_units = x$units
 	x = crs_parameters(x)
-	if (isTRUE(x$IsGeographic))
-		as_units("arc_degree") # FIXME: is this always true?
-	else if (!is.null(x$units_gdal)) {
+	if (!is.null(x$units_gdal)) {
 		u = udunits_from_proj[[x$units_gdal]]
 		if (is.null(u)) {
 			u = try(as_units(x$units_gdal), silent = TRUE)
-			if (inherits(u, "try-error") && !is.null(epsg_units))
-				u = try(as_units(epsg_units)) # from epsg string
-			if (inherits(u, "try-error")) # still:
+			if (inherits(u, "try-error"))
 				u = NULL
 		}
 		u
