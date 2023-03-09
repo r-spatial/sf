@@ -104,7 +104,7 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 			info = CPL_gdalinfo(if (missing(source)) character(0) else source, options, oo, config_options),
 			warp = CPL_gdalwarp(source, destination, options, oo, doo, config_options, quiet, "-overwrite" %in% options),
 			warper = CPL_gdal_warper(source, destination, as.integer(resampling_method(options)),
-				oo, doo, quiet), # nocov
+				oo, doo, config_options, quiet), # nocov
 			rasterize = {  # nocov start
 				overwrite = any(options %in% c("-of", "-a_nodata", "-init", "-a_srs", "-co",
 						"-te", "-tr", "-tap", "-ts", "-ot")) # https://gdal.org/programs/gdal_rasterize.html
@@ -113,8 +113,7 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 			translate = CPL_gdaltranslate(source, destination, options, oo, config_options, quiet),
 			vectortranslate = CPL_gdalvectortranslate(source, destination, options, oo, doo, config_options, quiet),
 			buildvrt = CPL_gdalbuildvrt(source, destination, options, oo, config_options, quiet),
-			demprocessing = CPL_gdaldemprocessing(source, destination, options, config_options, 
-				processing, colorfilename, oo, quiet),
+			demprocessing = CPL_gdaldemprocessing(source, destination, options, processing, colorfilename, oo, config_options, quiet),
 			nearblack = CPL_gdalnearblack(source, destination, options, oo, config_options, doo, quiet),
 			grid = CPL_gdalgrid(source, destination, options, oo, config_options, quiet),
 			mdiminfo = CPL_gdalmdiminfo(source, options, oo, config_options),

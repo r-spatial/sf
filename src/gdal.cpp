@@ -224,8 +224,12 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	out(3) = Rcpp::LogicalVector::create((bool) srs->IsGeographic());
 	names(3) = "IsGeographic";
 
-	const char *unit = srs->GetAttrValue("UNIT", 0);
-	if (unit == NULL)
+	const char *unit;
+	if (srs->IsGeographic())
+		srs->GetAngularUnits(&unit);
+	else
+		srs->GetLinearUnits(&unit);
+	if (unit == NULL || strncmp(unit, "unknown", 8) == 0)
 		out(4) = Rcpp::CharacterVector::create(NA_STRING);
 	else
 		out(4) = Rcpp::CharacterVector::create(unit);

@@ -1,10 +1,16 @@
+# version 1.0-11
+
+* clean up the retrieval of length or angle units from WKT representations
+
+* conversion to GEOS uses the `GEOS_PREC_VALID_OUTPUT` flag, which makes sure that the "[o]utput is always valid. Collapsed geometry elements (including both polygons and lines) are removed."
+
 # version 1.0-10
 
 * `gdal_utils()` has a `config_options` argument to set further GDAL options, just like `st_write()`; #2003
 
 * fix slow writing of logical vectors in `st_write()`; #1409; #1689
 
-* `st_drivers()` has an argument `reprex` to filter on driver (long) name; #2090
+* `st_drivers()` has an argument `regex` to filter on driver (long) name; #2090
 
 * drop C++11 as a system requirement
 
