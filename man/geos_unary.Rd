@@ -135,7 +135,7 @@ See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.ht
 
 \code{st_triangulate} triangulates set of points (not constrained). \code{st_triangulate} requires GEOS version 3.4 or above
 
-\code{st_triangulate_constrained} returns the constrained Delauney triangulation of polygons; requires GEOS version 3.10 or above
+\code{st_triangulate_constrained} returns the constrained delaunay triangulation of polygons; requires GEOS version 3.10 or above
 
 \code{st_inscribed_circle} returns the maximum inscribed circle for polygon geometries. 
 For \code{st_inscribed_circle}, if \code{nQuadSegs} is 0 a 2-point LINESTRING is returned with the
@@ -229,6 +229,13 @@ plot(st_simplify(nc_g_planar[1], dTolerance = 1e3)) # 1000 foot
 plot(st_simplify(nc_g_planar[1], dTolerance = 5e3)) # 5000 foot
 par(op)
 
+pts = rbind(c(0,0), c(1,0), c(1,1), c(.5,.5), c(0,1), c(0,0))
+po = st_polygon(list(pts))
+co = st_triangulate_constrained(po)
+tr = st_triangulate(po)
+plot(po, col = NA, border = 'grey', lwd = 15)
+plot(tr, border = 'green', col = NA, lwd = 5, add = TRUE)
+plot(co, border = 'red', col = 'NA', add = TRUE)
 if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.9.0") > -1) {
   nc_t = st_transform(nc, 'EPSG:2264')
   x = st_inscribed_circle(st_geometry(nc_t))

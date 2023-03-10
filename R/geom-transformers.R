@@ -322,6 +322,14 @@ st_triangulate.sf = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 #' @name geos_unary
 #' @export
 #' @details \code{st_triangulate_constrained} returns the constrained delaunay triangulation of polygons; requires GEOS version 3.10 or above
+#' @examples
+#' pts = rbind(c(0,0), c(1,0), c(1,1), c(.5,.5), c(0,1), c(0,0))
+#' po = st_polygon(list(pts))
+#' co = st_triangulate_constrained(po)
+#' tr = st_triangulate(po)
+#' plot(po, col = NA, border = 'grey', lwd = 15)
+#' plot(tr, border = 'green', col = NA, lwd = 5, add = TRUE)
+#' plot(co, border = 'red', col = 'NA', add = TRUE)
 st_triangulate_constrained = function(x)
 	UseMethod("st_triangulate_constrained")
 

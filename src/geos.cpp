@@ -24,12 +24,12 @@
 #  define HAVE390
 # endif
 # if GEOS_VERSION_MINOR == 10
-#  define HAVE310
 #  if GEOS_VERSION_PATCH >= 1
 #   define HAVE3101
 #  endif
 # endif
 # if GEOS_VERSION_MINOR >= 10
+#  define HAVE310
 #  define HAVE3101
 # endif
 # if GEOS_VERSION_MINOR >= 11
