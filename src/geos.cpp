@@ -24,12 +24,16 @@
 #  define HAVE390
 # endif
 # if GEOS_VERSION_MINOR == 10
+#  define HAVE310
 #  if GEOS_VERSION_PATCH >= 1
 #   define HAVE3101
 #  endif
 # endif
 # if GEOS_VERSION_MINOR >= 10
 #  define HAVE3101
+# endif
+# if GEOS_VERSION_MINOR >= 11
+#  define HAVE311
 # endif
 #else
 # if GEOS_VERSION_MAJOR > 3
@@ -39,7 +43,9 @@
 #  define HAVE361
 #  define HAVE380
 #  define HAVE390
+#  define HAVE310
 #  define HAVE3101
+#  define HAVE311
 # endif
 #endif
 
@@ -797,6 +803,15 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 	} else if (op == "boundary") {
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = geos_ptr(chkNULL(GEOSBoundary_r(hGEOSCtxt, g[i].get())), hGEOSCtxt);
+	} else if (op == "concave_hull") {
+		double ratio = bufferDist[0];
+		unsigned int allowHoles = preserveTopology[0];
+#ifdef HAVE311
+		for (size_t i = 0; i < g.size(); i++)
+			out[i] = geos_ptr(chkNULL(GEOSConcaveHull_r(hGEOSCtxt, g[i].get(), ratio, allowHoles)), hGEOSCtxt);
+#else
+		Rcpp::stop("st_concave_hull requires GEOS >= 3.11");
+#endif
 	} else if (op == "convex_hull") {
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = geos_ptr(chkNULL(GEOSConvexHull_r(hGEOSCtxt, g[i].get())), hGEOSCtxt);
@@ -834,6 +849,13 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = geos_ptr(chkNULL(GEOSDelaunayTriangulation_r(hGEOSCtxt, g[i].get(),
 				dTolerance[i], bOnlyEdges)), hGEOSCtxt);
+	} else
+#endif
+#ifdef HAVE310
+	if (op == "triangulate_constrained") {
+		for (size_t i = 0; i < g.size(); i++)
+			out[i] = geos_ptr(chkNULL(GEOSConstrainedDelaunayTriangulation_r(hGEOSCtxt, g[i].get())), 
+							hGEOSCtxt);
 	} else
 #endif
 #ifdef HAVE370
