@@ -76,8 +76,10 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="1.0-11" id="version-10-11">version 1.0-11<a class="anchor" aria-label="anchor" href="#version-10-11"></a></h2>
-<ul><li><p>clean up the retrieval of length or angle units from WKT representations</p></li>
+<h2 class="page-header" data-toc-text="1.0-11" id="probably-version-10-11">probably version 1.0-11<a class="anchor" aria-label="anchor" href="#probably-version-10-11"></a></h2>
+<ul><li><p>add <code><a href="../reference/geos_unary.html">st_concave_hull()</a></code>, for concave hulls, if GEOS &gt;= 3.11.0; <a href="https://github.com/r-spatial/sf/issues/1964" class="external-link">#1964</a></p></li>
+<li><p>add <code><a href="../reference/geos_unary.html">st_triangulate_constrained()</a></code>, for constrained Delaunay triangulation, if GEOS &gt;= 3.10.0; <a href="https://github.com/r-spatial/sf/issues/1964" class="external-link">#1964</a></p></li>
+<li><p>clean up the retrieval of length or angle units from WKT representations; <a href="https://lists.osgeo.org/pipermail/gdal-dev/2023-March/056994.html" class="external-link uri">https://lists.osgeo.org/pipermail/gdal-dev/2023-March/056994.html</a></p></li>
 <li><p>conversion to GEOS uses the <code>GEOS_PREC_VALID_OUTPUT</code> flag, which makes sure that the “[o]utput is always valid. Collapsed geometry elements (including both polygons and lines) are removed.”</p></li>
 </ul></div>
     <div class="section level2">

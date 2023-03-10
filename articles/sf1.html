@@ -384,7 +384,7 @@ contained in the <code>sf</code> package:</p>
 <span><span class="co">## Linking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE</span></span>
 <span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">## Reading layer `nc' from data source </span></span>
-<span><span class="co">##   `/tmp/RtmpNX65Wp/temp_libpathf26135e2a02c/sf/shape/nc.shp' </span></span>
+<span><span class="co">##   `/tmp/Rtmptqh8ff/temp_libpath2b6f18bfcc4a/sf/shape/nc.shp' </span></span>
 <span><span class="co">##   using driver `ESRI Shapefile'</span></span>
 <span><span class="co">## Simple feature collection with 100 features and 14 fields</span></span>
 <span><span class="co">## Geometry type: MULTIPOLYGON</span></span>
@@ -443,29 +443,30 @@ and an abridged version of the geometry</p>
 <span><span class="co">## [25] st_bbox                      st_boundary                 </span></span>
 <span><span class="co">## [27] st_break_antimeridian        st_buffer                   </span></span>
 <span><span class="co">## [29] st_cast                      st_centroid                 </span></span>
-<span><span class="co">## [31] st_collection_extract        st_convex_hull              </span></span>
-<span><span class="co">## [33] st_coordinates               st_crop                     </span></span>
-<span><span class="co">## [35] st_crs                       st_crs&lt;-                    </span></span>
-<span><span class="co">## [37] st_difference                st_drop_geometry            </span></span>
-<span><span class="co">## [39] st_filter                    st_geometry                 </span></span>
-<span><span class="co">## [41] st_geometry&lt;-                st_inscribed_circle         </span></span>
-<span><span class="co">## [43] st_interpolate_aw            st_intersection             </span></span>
-<span><span class="co">## [45] st_intersects                st_is_valid                 </span></span>
-<span><span class="co">## [47] st_is                        st_join                     </span></span>
-<span><span class="co">## [49] st_line_merge                st_m_range                  </span></span>
-<span><span class="co">## [51] st_make_valid                st_minimum_rotated_rectangle</span></span>
-<span><span class="co">## [53] st_nearest_points            st_node                     </span></span>
-<span><span class="co">## [55] st_normalize                 st_point_on_surface         </span></span>
-<span><span class="co">## [57] st_polygonize                st_precision                </span></span>
-<span><span class="co">## [59] st_reverse                   st_sample                   </span></span>
-<span><span class="co">## [61] st_segmentize                st_set_precision            </span></span>
-<span><span class="co">## [63] st_shift_longitude           st_simplify                 </span></span>
-<span><span class="co">## [65] st_snap                      st_sym_difference           </span></span>
-<span><span class="co">## [67] st_transform                 st_triangulate              </span></span>
-<span><span class="co">## [69] st_union                     st_voronoi                  </span></span>
-<span><span class="co">## [71] st_wrap_dateline             st_write                    </span></span>
-<span><span class="co">## [73] st_z_range                   st_zm                       </span></span>
-<span><span class="co">## [75] transform                   </span></span>
+<span><span class="co">## [31] st_collection_extract        st_concave_hull             </span></span>
+<span><span class="co">## [33] st_convex_hull               st_coordinates              </span></span>
+<span><span class="co">## [35] st_crop                      st_crs                      </span></span>
+<span><span class="co">## [37] st_crs&lt;-                     st_difference               </span></span>
+<span><span class="co">## [39] st_drop_geometry             st_filter                   </span></span>
+<span><span class="co">## [41] st_geometry                  st_geometry&lt;-               </span></span>
+<span><span class="co">## [43] st_inscribed_circle          st_interpolate_aw           </span></span>
+<span><span class="co">## [45] st_intersection              st_intersects               </span></span>
+<span><span class="co">## [47] st_is_valid                  st_is                       </span></span>
+<span><span class="co">## [49] st_join                      st_line_merge               </span></span>
+<span><span class="co">## [51] st_m_range                   st_make_valid               </span></span>
+<span><span class="co">## [53] st_minimum_rotated_rectangle st_nearest_points           </span></span>
+<span><span class="co">## [55] st_node                      st_normalize                </span></span>
+<span><span class="co">## [57] st_point_on_surface          st_polygonize               </span></span>
+<span><span class="co">## [59] st_precision                 st_reverse                  </span></span>
+<span><span class="co">## [61] st_sample                    st_segmentize               </span></span>
+<span><span class="co">## [63] st_set_precision             st_shift_longitude          </span></span>
+<span><span class="co">## [65] st_simplify                  st_snap                     </span></span>
+<span><span class="co">## [67] st_sym_difference            st_transform                </span></span>
+<span><span class="co">## [69] st_triangulate_constrained   st_triangulate              </span></span>
+<span><span class="co">## [71] st_union                     st_voronoi                  </span></span>
+<span><span class="co">## [73] st_wrap_dateline             st_write                    </span></span>
+<span><span class="co">## [75] st_z_range                   st_zm                       </span></span>
+<span><span class="co">## [77] transform                   </span></span>
 <span><span class="co">## see '?methods' for accessing help and source code</span></span></code></pre></div>
 <p>It is also possible to create <code>data.frame</code> objects with
 geometry list-columns that are not of class <code>sf</code>, e.g. by</p>
@@ -565,27 +566,28 @@ exterior) for the geometry of feature 4 by</p>
 <span><span class="co">## [21] st_boundary                  st_break_antimeridian       </span></span>
 <span><span class="co">## [23] st_buffer                    st_cast                     </span></span>
 <span><span class="co">## [25] st_centroid                  st_collection_extract       </span></span>
-<span><span class="co">## [27] st_convex_hull               st_coordinates              </span></span>
-<span><span class="co">## [29] st_crop                      st_crs                      </span></span>
-<span><span class="co">## [31] st_crs&lt;-                     st_difference               </span></span>
-<span><span class="co">## [33] st_geometry                  st_inscribed_circle         </span></span>
-<span><span class="co">## [35] st_intersection              st_intersects               </span></span>
-<span><span class="co">## [37] st_is_valid                  st_is                       </span></span>
-<span><span class="co">## [39] st_line_merge                st_m_range                  </span></span>
-<span><span class="co">## [41] st_make_valid                st_minimum_rotated_rectangle</span></span>
-<span><span class="co">## [43] st_nearest_points            st_node                     </span></span>
-<span><span class="co">## [45] st_normalize                 st_point_on_surface         </span></span>
-<span><span class="co">## [47] st_polygonize                st_precision                </span></span>
-<span><span class="co">## [49] st_reverse                   st_sample                   </span></span>
-<span><span class="co">## [51] st_segmentize                st_set_precision            </span></span>
-<span><span class="co">## [53] st_shift_longitude           st_simplify                 </span></span>
-<span><span class="co">## [55] st_snap                      st_sym_difference           </span></span>
-<span><span class="co">## [57] st_transform                 st_triangulate              </span></span>
-<span><span class="co">## [59] st_union                     st_voronoi                  </span></span>
-<span><span class="co">## [61] st_wrap_dateline             st_write                    </span></span>
-<span><span class="co">## [63] st_z_range                   st_zm                       </span></span>
-<span><span class="co">## [65] str                          summary                     </span></span>
-<span><span class="co">## [67] vec_cast.sfc                 vec_ptype2.sfc              </span></span>
+<span><span class="co">## [27] st_concave_hull              st_convex_hull              </span></span>
+<span><span class="co">## [29] st_coordinates               st_crop                     </span></span>
+<span><span class="co">## [31] st_crs                       st_crs&lt;-                    </span></span>
+<span><span class="co">## [33] st_difference                st_geometry                 </span></span>
+<span><span class="co">## [35] st_inscribed_circle          st_intersection             </span></span>
+<span><span class="co">## [37] st_intersects                st_is_valid                 </span></span>
+<span><span class="co">## [39] st_is                        st_line_merge               </span></span>
+<span><span class="co">## [41] st_m_range                   st_make_valid               </span></span>
+<span><span class="co">## [43] st_minimum_rotated_rectangle st_nearest_points           </span></span>
+<span><span class="co">## [45] st_node                      st_normalize                </span></span>
+<span><span class="co">## [47] st_point_on_surface          st_polygonize               </span></span>
+<span><span class="co">## [49] st_precision                 st_reverse                  </span></span>
+<span><span class="co">## [51] st_sample                    st_segmentize               </span></span>
+<span><span class="co">## [53] st_set_precision             st_shift_longitude          </span></span>
+<span><span class="co">## [55] st_simplify                  st_snap                     </span></span>
+<span><span class="co">## [57] st_sym_difference            st_transform                </span></span>
+<span><span class="co">## [59] st_triangulate_constrained   st_triangulate              </span></span>
+<span><span class="co">## [61] st_union                     st_voronoi                  </span></span>
+<span><span class="co">## [63] st_wrap_dateline             st_write                    </span></span>
+<span><span class="co">## [65] st_z_range                   st_zm                       </span></span>
+<span><span class="co">## [67] str                          summary                     </span></span>
+<span><span class="co">## [69] vec_cast.sfc                 vec_ptype2.sfc              </span></span>
 <span><span class="co">## see '?methods' for accessing help and source code</span></span></code></pre></div>
 <p>Coordinate reference systems (<code>st_crs</code> and
 <code>st_transform</code>) are discussed in the section on <a href="#crs">coordinate reference systems</a>. <code>st_as_wkb</code> and
@@ -814,7 +816,7 @@ be done by</p>
 <code class="sourceCode R"><span><span class="va">filename</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span></span>
 <span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">filename</span><span class="op">)</span></span>
 <span><span class="co">## Reading layer `nc' from data source </span></span>
-<span><span class="co">##   `/tmp/RtmpNX65Wp/temp_libpathf26135e2a02c/sf/shape/nc.shp' </span></span>
+<span><span class="co">##   `/tmp/Rtmptqh8ff/temp_libpath2b6f18bfcc4a/sf/shape/nc.shp' </span></span>
 <span><span class="co">##   using driver `ESRI Shapefile'</span></span>
 <span><span class="co">## Simple feature collection with 100 features and 14 fields</span></span>
 <span><span class="co">## Geometry type: MULTIPOLYGON</span></span>
@@ -1231,7 +1233,7 @@ time:</p>
 <span>        CRESS_ID <span class="op">=</span> <span class="st">"identity"</span>, BIR74 <span class="op">=</span> <span class="st">"aggregate"</span>, SID74 <span class="op">=</span> <span class="st">"aggregate"</span>, NWBIR74 <span class="op">=</span> <span class="st">"aggregate"</span>,</span>
 <span>        BIR79 <span class="op">=</span> <span class="st">"aggregate"</span>, SID79 <span class="op">=</span> <span class="st">"aggregate"</span>, NWBIR79 <span class="op">=</span> <span class="st">"aggregate"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">## Reading layer `nc' from data source </span></span>
-<span><span class="co">##   `/tmp/RtmpNX65Wp/temp_libpathf26135e2a02c/sf/shape/nc.shp' </span></span>
+<span><span class="co">##   `/tmp/Rtmptqh8ff/temp_libpath2b6f18bfcc4a/sf/shape/nc.shp' </span></span>
 <span><span class="co">##   using driver `ESRI Shapefile'</span></span>
 <span><span class="co">## Simple feature collection with 100 features and 14 fields</span></span>
 <span><span class="co">## Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity</span></span>

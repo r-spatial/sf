@@ -96,9 +96,13 @@
 <span></span>
 <span><span class="fu">st_convex_hull</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">st_concave_hull</span><span class="op">(</span><span class="va">x</span>, <span class="va">ratio</span>, <span class="va">...</span>, <span class="va">allow_holes</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">st_simplify</span><span class="op">(</span><span class="va">x</span>, <span class="va">preserveTopology</span>, dTolerance <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">st_triangulate</span><span class="op">(</span><span class="va">x</span>, dTolerance <span class="op">=</span> <span class="fl">0</span>, bOnlyEdges <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">st_triangulate_constrained</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">st_inscribed_circle</span><span class="op">(</span><span class="va">x</span>, <span class="va">dTolerance</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
@@ -158,6 +162,14 @@ in which case negative <code>dist</code> values give buffers on the right-hand s
 <dd><p>ignored</p></dd>
 
 
+<dt>ratio</dt>
+<dd><p>numeric; fraction convex: 1 returns the convex hulls, 0 maximally concave hulls</p></dd>
+
+
+<dt>allow_holes</dt>
+<dd><p>logical; if <code>TRUE</code>, the resulting concave hull may have holes</p></dd>
+
+
 <dt>preserveTopology</dt>
 <dd><p>logical; carry out topology preserving
 simplification? May be specified for each, or for all feature geometries.
@@ -209,8 +221,10 @@ If a negative buffer returns empty polygons instead of shrinking, set st_use_s2(
 See <a href="https://postgis.net/docs/ST_Buffer.html" class="external-link">postgis.net/docs/ST_Buffer.html</a> for details.</p>
 <p><code>st_boundary</code> returns the boundary of a geometry</p>
 <p><code>st_convex_hull</code> creates the convex hull of a set of points</p>
+<p><code>st_concave_hull</code> creates the concave hull of a geometry</p>
 <p><code>st_simplify</code> simplifies lines by removing vertices.</p>
 <p><code>st_triangulate</code> triangulates set of points (not constrained). <code>st_triangulate</code> requires GEOS version 3.4 or above</p>
+<p><code>st_triangulate_constrained</code> returns the constrained Delauney triangulation of polygons; requires GEOS version 3.10 or above</p>
 <p><code>st_inscribed_circle</code> returns the maximum inscribed circle for polygon geometries. 
 For <code>st_inscribed_circle</code>, if <code>nQuadSegs</code> is 0 a 2-point LINESTRING is returned with the
 center point and a boundary point of every circle, otherwise a circle (buffer) is returned where
@@ -278,7 +292,7 @@ point) a linestring or point is returned.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">op</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `nc' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpNX65Wp/temp_libpathf26135e2a02c/sf/shape/nc.shp' </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/Rtmptqh8ff/temp_libpath2b6f18bfcc4a/sf/shape/nc.shp' </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   using driver `ESRI Shapefile'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 100 features and 14 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: MULTIPOLYGON</span>
@@ -289,6 +303,16 @@ point) a linestring or point is returned.</p>
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="fu">st_convex_hull</span><span class="op">(</span><span class="va">nc_g</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">nc_g</span>, border <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/gray.html" class="external-link">grey</a></span><span class="op">(</span><span class="fl">.5</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="geos_unary-3.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">131</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/compareVersion.html" class="external-link">compareVersion</a></span><span class="op">(</span><span class="fu"><a href="sf_extSoftVersion.html">sf_extSoftVersion</a></span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="st">"GEOS"</span><span class="op">]</span><span class="op">]</span>, <span class="st">"3.11.0"</span><span class="op">)</span> <span class="op">&gt;</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span> <span class="va">pts</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="va">m</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_multipoint</a></span><span class="op">(</span><span class="va">pts</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="va">co</span> <span class="op">=</span> <span class="fu">sf</span><span class="fu">:::</span><span class="fu">st_concave_hull</span><span class="op">(</span><span class="va">m</span>, <span class="fl">0.3</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="va">coh</span> <span class="op">=</span> <span class="fu">sf</span><span class="fu">:::</span><span class="fu">st_concave_hull</span><span class="op">(</span><span class="va">m</span>, <span class="fl">0.3</span>, allow_holes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">co</span>, col <span class="op">=</span> <span class="st">'grey'</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">coh</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">'red'</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">m</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># st_simplify examples:</span></span></span>
 <span class="r-in"><span><span class="va">op</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></span>
