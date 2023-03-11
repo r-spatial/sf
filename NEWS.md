@@ -1,5 +1,7 @@
 # probably version 1.0-11
 
+* `st_make_grid()` also accepts area units for `cellsize`, for square and hexagonal grids; #1505
+
 * add `st_concave_hull()`, for concave hulls, if GEOS >= 3.11.0; #1964
 
 * add `st_triangulate_constrained()`, for constrained Delaunay triangulation, if GEOS >= 3.10.0; #1964

@@ -2,7 +2,7 @@
 #'
 #' Create a square or hexagonal grid covering the bounding box of the geometry of an sf or sfc object
 #' @param x object of class \link{sf} or \link{sfc}
-#' @param cellsize target cellsize
+#' @param cellsize numeric of length 1 or 2 with target cellsize: for square or rectangular cells the width and height, for hexagonal cells the distance between opposite edges (edge length is cellsize/sqrt(3)). A length units object can be passed, or an area unit object with area size of the square or hexagonal cell.
 #' @param offset numeric of length 2; lower left corner coordinates (x, y) of the grid
 #' @param n integer of length 1 or 2, number of grid cells in x and y direction (columns, rows)
 #' @param crs object of class \code{crs}; coordinate reference system of the target of the target grid in case argument \code{x} is missing, if \code{x} is not missing, its crs is inherited.
@@ -41,6 +41,21 @@ st_make_grid = function(x,
 			crs = st_crs(4326), what = what))
 
 	if (! square) { # hexagons:
+		if (!is.null(crs$ud_unit)) {
+			if (inherits(cellsize, "units")) {
+				if (units::ud_are_convertible(units(cellsize), "m^2")) { # size in area
+					# convert: https://github.com/r-spatial/sf/issues/1505
+					a = sqrt(cellsize * 2 / (3 * sqrt(3)))
+					cellsize = a * sqrt(3)
+				}
+				units(cellsize) = units(crs$ud_unit)
+				cellsize = units::drop_units(cellsize)
+			}
+			if (inherits(offset, "units")) {
+				units(offset) = units(crs$ud_unit)
+				offset = units::drop_units(offset)
+			}
+		}
 		hex = make_hex_grid(x, dx = cellsize[1]/sqrt(3), pt = offset, what = what, 
 			flat_topped = flat_topped)
 		if (what == "corners")
@@ -63,6 +78,8 @@ st_make_grid = function(x,
 
 	if (!is.null(crs$ud_unit)) {
 		if (inherits(cellsize, "units")) {
+			if (units::ud_are_convertible(units(cellsize), "m^2")) # size in area
+				cellsize = sqrt(cellsize)
 			units(cellsize) = units(crs$ud_unit)
 			cellsize = units::drop_units(cellsize)
 		}
