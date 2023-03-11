@@ -23,7 +23,7 @@ if (file.exists("nc.shp"))
 [Simple features](https://en.wikipedia.org/wiki/Simple_Features) or [_simple feature access_](https://www.ogc.org/standard/sfa/) refers to a formal standard (ISO 19125-1:2004) that describes how objects in the real world can be represented in computers, with emphasis on the _spatial_ geometry of these objects. It also describes how such objects can be stored in and retrieved from databases, and which geometrical operations should be defined for them.
 
 The standard is widely implemented in spatial
-databases (such as PostGIS), commercial GIS (e.g., [ESRI
+databases (such as [PostGIS](https://postgis.net/)), commercial GIS (e.g., [ESRI
 ArcGIS](https://www.esri.com/en-us/home)) and forms the vector data basis for
 libraries such as [GDAL](https://gdal.org/). A subset of
 simple features forms the [GeoJSON](https://geojson.org/) standard.
@@ -41,16 +41,16 @@ long term.
 
 This vignette:
 
-* explains what is meant by features, and by simple features
+* explains what is meant by features, and by `simple features`
 * shows how they are implemented in R
 * provides examples of how you can work with them
-* shows how they can be read from and written to external files or resources
-* discusses how they can be converted to and from sp objects
-* shows how they can be used for meaningful spatial analysis
+* shows how they can be read from and written to external files or resources (I/O)
+* discusses how they can be converted to and from `sp` objects
+* shows how they can be used for meaningful and applied spatial analysis
 
 # What is a feature?
 
-A feature is thought of as a thing, or an object in the real world,
+A `feature` is thought of as a thing, or an object in the real world,
 such as a building or a tree. As is the case with objects,
 they often consist of other objects. This is the case with features
 too: a set of features can form a single feature. A forest stand can
@@ -128,7 +128,7 @@ Note that `CIRCULASTRING`, `COMPOUNDCURVE` and `CURVEPOLYGON` are not described 
 ## Coordinate reference system
 
 Coordinates can only be placed on the Earth's surface when their coordinate
-reference system (CRS) is known; this may be a spheroid CRS such as WGS84, a projected, two-dimensional (Cartesian) CRS such as a UTM zone or Web Mercator, or a CRS
+reference system (CRS) is known; this may be a spheroid CRS such as [WGS84](https://en.wikipedia.org/wiki/World_Geodetic_Syste), a projected, two-dimensional (Cartesian) CRS such as a UTM zone or Web Mercator, or a CRS
 in three-dimensions, or including time. Similarly, M-coordinates need an attribute reference
 system, e.g. a [measurement unit](https://CRAN.R-project.org/package=units).
 
@@ -159,7 +159,7 @@ We will now discuss each of these three classes.
 
 ## sf: objects with simple features
 
-As we usually do not work with geometries of single simple features,
+As we usually do not work with geometries of single _simple features_,
 but with datasets consisting of sets of features with attributes, the
 two are put together in `sf` (simple feature) objects.  The following
 command reads the `nc` dataset from a file that is contained in the
@@ -202,12 +202,12 @@ In the output we see:
 * in red a simple feature list-column (an object of class `sfc`, which is a column in the `data.frame`)
 * that although geometries are native R objects, they are printed as [well-known text](#wkb)
 
-Methods for `sf` objects are
+Methods for `sf` objects are:
 ```{r}
 methods(class = "sf")
 ```
 
-It is also possible to create `data.frame` objects with geometry list-columns that are not of class `sf`, e.g. by
+It is also possible to create `data.frame` objects with geometry list-columns that are not of class `sf`, e.g. by:
 ```{r}
 nc.no_sf <- as.data.frame(nc)
 class(nc.no_sf)
@@ -230,7 +230,7 @@ more general way uses `st_geometry`:
 ```
 
 Geometries are printed in abbreviated form, but we can
-view a complete geometry by selecting it, e.g. the first one by
+view a complete geometry by selecting it, e.g. the first one by:
 
 ```{r}
 nc_geom[[1]]
@@ -246,7 +246,7 @@ plot(nc[1], reset = FALSE) # reset = FALSE: we want to add to a plot with a lege
 plot(nc[1,1], col = 'grey', add = TRUE)
 ```
 
-but some of the polygons in this dataset have multiple exterior rings; they can be identified by
+but some of the polygons in this dataset have multiple exterior rings; they can be identified by:
 ```{r fig.height=3.5}
 par(mar = c(0,0,1,0))
 (w <- which(sapply(nc_geom, length) > 1))
@@ -255,7 +255,7 @@ plot(nc[w,1], col = 2:7)
 
 Following the `MULTIPOLYGON` datastructure, in R we have a list of lists of lists of matrices. For instance,
 we get the first 3 coordinate pairs of the second exterior ring (first ring is always exterior) for the geometry
-of feature 4 by
+of feature 4 by:
 
 ```{r}
 nc_geom[[4]][[2]][[1]][1:3,]
@@ -267,7 +267,7 @@ Geometry columns have their own class,
 class(nc_geom)
 ```
 
-Methods for geometry list-columns include
+Methods for geometry list-columns include:
 ```{r}
 methods(class = 'sfc')
 ```
@@ -276,7 +276,7 @@ Coordinate reference systems (`st_crs` and `st_transform`) are discussed in the 
 `st_as_wkb` and `st_as_text` convert geometry list-columns into well-known-binary or well-known-text, explained [below](#wkb).
 `st_bbox` retrieves the coordinate bounding box.
 
-Attributes include
+Attributes include:
 ```{r}
 attributes(nc_geom)
 ```
@@ -453,7 +453,7 @@ may require some experimenting.
 
 ## Reading and writing
 
-As we've seen above, reading spatial data from an external file can be done by
+As we've seen above, reading spatial data from an external file can be done by:
 
 ```{r}
 filename <- system.file("shape/nc.shp", package="sf")
@@ -472,7 +472,7 @@ st_write(nc, "nc.shp")
 ```
 
 If we repeat this, we get an error message that the file already
-exists, and we can overwrite by
+exists, and we can overwrite by:
 
 ```{r}
 st_write(nc, "nc.shp", delete_layer = TRUE)
@@ -491,7 +491,7 @@ denote a data source name and optionally a layer name.  Their exact
 interpretation as well as the options they support vary per driver,
 the [GDAL driver documentation](https://gdal.org/drivers/vector/index.html)
 is best consulted for this.  For instance, a PostGIS table in
-database `postgis` might be read by
+database `postgis` might be read by:
 
 ```{r eval=FALSE}
 meuse <- st_read("PG:dbname=postgis", "meuse")
@@ -521,7 +521,7 @@ st_layers(system.file("osm/overpass.osm", package="sf"))
 ```
 we see that in this case, the number of features is `NA` because
 for this xml file the whole file needs to be read, which may be
-costly for large files. We can force counting by
+costly for large files. We can force counting by:
 ```{r}
 Sys.setenv(OSM_USE_CUSTOM_INDEXING="NO")
 st_layers(system.file("osm/overpass.osm", package="sf"), do_count = TRUE)
@@ -535,6 +535,7 @@ download.file(u_shp, "biketrails.zip")
 unzip("biketrails.zip")
 u_kmz <- "http://coagisweb.cabq.gov/datadownload/BikePaths.kmz"
 download.file(u_kmz, "BikePaths.kmz")
+
 # Read file formats
 biketrails_shp <- st_read("biketrails.shp")
 if(Sys.info()[1] == "Linux") # may not work if not Linux
@@ -602,7 +603,7 @@ but may help reproducibility.
 
 Coordinate reference system transformations can be carried out using
 `st_transform`, e.g. converting longitudes/latitudes in NAD27 to
-web mercator (EPSG:3857) can be done by
+web mercator (EPSG:3857) can be done by:
 
 ```{r}
 nc.web_mercator <- st_transform(nc, 3857)
@@ -617,9 +618,11 @@ st_geometry(nc.web_mercator)[[4]][[2]][[1]][1:3,]
 showMethods("coerce", classes = "sf")
 methods(st_as_sf)
 methods(st_as_sfc)
+
 # anticipate that sp::CRS will expand proj4strings:
 p4s <- "+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"
 st_crs(nc) <- p4s
+
 # anticipate geometry column name changes:
 names(nc)[15] = "geometry"
 attr(nc, "sf_column") = "geometry"
@@ -779,7 +782,7 @@ st_agr(meuse_sf)
 ```
 
 When not specified, this field is filled with `NA` values, but if non-`NA`, it has one
-of three possibilities
+of three possibilities:
 
 | value | meaning                           |
 |-------| ----------------------------------|
