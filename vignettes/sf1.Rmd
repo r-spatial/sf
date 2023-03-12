@@ -159,7 +159,7 @@ We will now discuss each of these three classes.
 
 ## sf: objects with simple features
 
-As we usually do not work with geometries of single _simple features_,
+As we usually do not work with geometries of single `simple features`,
 but with datasets consisting of sets of features with attributes, the
 two are put together in `sf` (simple feature) objects.  The following
 command reads the `nc` dataset from a file that is contained in the
