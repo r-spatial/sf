@@ -1,8 +1,22 @@
+# version 1.0-11
+
+* `st_make_grid()` also accepts area units for `cellsize`, for square and hexagonal grids; #1505
+
+* add `st_concave_hull()`, for concave hulls, if GEOS >= 3.11.0; #1964
+
+* add `st_triangulate_constrained()`, for constrained Delaunay triangulation, if GEOS >= 3.10.0; #1964
+
+* clean up the retrieval of length or angle units from WKT representations; https://lists.osgeo.org/pipermail/gdal-dev/2023-March/056994.html
+
+* conversion to GEOS uses the `GEOS_PREC_VALID_OUTPUT` flag, which makes sure that the "[o]utput is always valid. Collapsed geometry elements (including both polygons and lines) are removed."
+
 # version 1.0-10
+
+* `gdal_utils()` has a `config_options` argument to set further GDAL options, just like `st_write()`; #2003
 
 * fix slow writing of logical vectors in `st_write()`; #1409; #1689
 
-* `st_drivers()` has an argument `reprex` to filter on driver (long) name; #2090
+* `st_drivers()` has an argument `regex` to filter on driver (long) name; #2090
 
 * drop C++11 as a system requirement
 

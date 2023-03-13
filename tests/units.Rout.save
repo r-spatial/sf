@@ -22,7 +22,7 @@ Type 'q()' to quit R.
 + 	units_options(auto_convert_names_to_symbols = FALSE)
 > 
 > st_crs(4326)$ud_unit
-1 [arc_degree]
+1 [degree]
 > 
 > u = names(sf:::udunits_from_proj)[1:21]
 > 
@@ -63,4 +63,4 @@ ind-ch : 1 [ind_ch]
 > 
 > proc.time()
    user  system elapsed 
-  1.061   0.691   0.931 
+  1.154   0.786   1.052 

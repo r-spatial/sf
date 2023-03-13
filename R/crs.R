@@ -305,9 +305,7 @@ crs_ud_unit = function(x) {
 		return(NULL)
 
 	x = crs_parameters(x)
-	if (isTRUE(x$IsGeographic))
-		as_units("arc_degree") # FIXME: is this always true?
-	else if (!is.null(x$units_gdal)) {
+	if (!is.null(x$units_gdal)) {
 		u = udunits_from_proj[[x$units_gdal]]
 		if (is.null(u)) {
 			u = try(as_units(x$units_gdal), silent = TRUE)

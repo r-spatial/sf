@@ -18,7 +18,7 @@ st_make_grid(
 \arguments{
 \item{x}{object of class \link{sf} or \link{sfc}}
 
-\item{cellsize}{target cellsize}
+\item{cellsize}{numeric of length 1 or 2 with target cellsize: for square or rectangular cells the width and height, for hexagonal cells the distance between opposite edges (edge length is cellsize/sqrt(3)). A length units object can be passed, or an area unit object with area size of the square or hexagonal cell.}
 
 \item{offset}{numeric of length 2; lower left corner coordinates (x, y) of the grid}
 

@@ -112,6 +112,24 @@ void handle_error(OGRErr err) {
 	}
 }
 
+void set_config_options(Rcpp::CharacterVector ConfigOptions) {
+	if (ConfigOptions.size()) {
+		if (ConfigOptions.attr("names") == R_NilValue)
+			Rcpp::stop("config_options should be a character vector with names, as in c(key=\"value\")");
+		Rcpp::CharacterVector names = ConfigOptions.attr("names");
+		for (int i = 0; i < ConfigOptions.size(); i++)
+			CPLSetConfigOption(names[i], ConfigOptions[i]);
+	}
+}
+
+void unset_config_options(Rcpp::CharacterVector ConfigOptions) {
+	if (ConfigOptions.size()) {
+		Rcpp::CharacterVector names = ConfigOptions.attr("names");
+		for (int i = 0; i < ConfigOptions.size(); i++)
+			CPLSetConfigOption(names[i], NULL);
+	}
+}
+
 Rcpp::CharacterVector wkt_from_spatial_reference(const OGRSpatialReference *srs) { // FIXME: add options?
 	char *cp;
 #if GDAL_VERSION_MAJOR >= 3
@@ -206,8 +224,12 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	out(3) = Rcpp::LogicalVector::create((bool) srs->IsGeographic());
 	names(3) = "IsGeographic";
 
-	const char *unit = srs->GetAttrValue("UNIT", 0);
-	if (unit == NULL)
+	const char *unit;
+	if (srs->IsGeographic())
+		srs->GetAngularUnits(&unit);
+	else
+		srs->GetLinearUnits(&unit);
+	if (unit == NULL || strncmp(unit, "unknown", 8) == 0)
 		out(4) = Rcpp::CharacterVector::create(NA_STRING);
 	else
 		out(4) = Rcpp::CharacterVector::create(unit);
@@ -302,7 +324,7 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	Rcpp::CharacterVector nms(ac);
 	Rcpp::IntegerVector orientation(ac);
 	Rcpp::NumericVector convfactor(ac);
-#if GDAL_VERSION_NUM > 3000000
+#if GDAL_VERSION_NUM > 3040000
 	for (int i = 0; i < ac; i++) {
 		double pdfConvFactor;
 		OGRAxisOrientation peOrientation;

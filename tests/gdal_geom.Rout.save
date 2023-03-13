@@ -67,12 +67,10 @@ Error : argument dfMaxLength should be positive
 > 
 > x = st_centroid(nc_tr)
 Warning message:
-In st_centroid.sf(nc_tr) :
-  st_centroid assumes attributes are constant over geometries of x
+st_centroid assumes attributes are constant over geometries 
 > x = st_point_on_surface(nc_tr)
 Warning message:
-In st_point_on_surface.sf(nc_tr) :
-  st_point_on_surface assumes attributes are constant over geometries of x
+st_point_on_surface assumes attributes are constant over geometries 
 > 
 > a = nc[1:5,]
 > b = nc[4:10,]
@@ -333,4 +331,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-  2.156   0.775   2.096 
+  1.531   0.765   1.415 

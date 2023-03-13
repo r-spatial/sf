@@ -166,15 +166,8 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 	bool quiet, Rcpp::LogicalVector append, bool delete_dsn = false, bool delete_layer = false,
 	bool write_geometries = true, int width = 80) {
 
-	if (ConfigOptions.size()) {
-		if (ConfigOptions.attr("names") == R_NilValue)
-			Rcpp::stop("config_options should be a character vector with names, as in c(key=\"value\")");
-		Rcpp::CharacterVector names = ConfigOptions.attr("names");
-		for (int i = 0; i < ConfigOptions.size(); i++)
-			CPLSetConfigOption(names[i], ConfigOptions[i]);
-	}
-
 	// init:
+	set_config_options(ConfigOptions);
 	if (driver.size() != 1 || dsn.size() != 1 || layer.size() != 1)
 		Rcpp::stop("argument dsn, layer or driver not of length 1.\n");
 
@@ -354,9 +347,10 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 			        Rcpp::Rcout << "Deleting layer `" << layer[0] << "' failed" << std::endl;
 			} // #nocov end
 			OGRFeature::DestroyFeature(poFeature);
-			if (transaction)
+			if (transaction) {
+				unset_config_options(ConfigOptions);
 				return 1; // try once more, writing to tmp file and copy #nocov
-			else
+			} else
 				Rcpp::stop("Feature creation failed.\n");
 		}
 		OGRFeature::DestroyFeature(poFeature); // deletes geom[i] as well
@@ -367,11 +361,7 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 		Rcpp::stop("CommitTransaction() failed.\n"); 
 	} // #nocov end
 	GDALClose(poDS);
-	if (ConfigOptions.size()) {
-		Rcpp::CharacterVector names = ConfigOptions.attr("names");
-		for (int i = 0; i < ConfigOptions.size(); i++)
-			CPLSetConfigOption(names[i], NULL);
-	}
+	unset_config_options(ConfigOptions);
 	return 0; // all O.K.
 }
 

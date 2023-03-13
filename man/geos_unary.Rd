@@ -5,8 +5,10 @@
 \alias{st_buffer}
 \alias{st_boundary}
 \alias{st_convex_hull}
+\alias{st_concave_hull}
 \alias{st_simplify}
 \alias{st_triangulate}
+\alias{st_triangulate_constrained}
 \alias{st_inscribed_circle}
 \alias{st_minimum_rotated_rectangle}
 \alias{st_voronoi}
@@ -34,9 +36,13 @@ st_boundary(x)
 
 st_convex_hull(x)
 
+st_concave_hull(x, ratio, ..., allow_holes)
+
 st_simplify(x, preserveTopology, dTolerance = 0)
 
 st_triangulate(x, dTolerance = 0, bOnlyEdges = FALSE)
+
+st_triangulate_constrained(x)
 
 st_inscribed_circle(x, dTolerance, ...)
 
@@ -77,6 +83,10 @@ st_segmentize(x, dfMaxLength, ...)
 in which case negative \code{dist} values give buffers on the right-hand side, positive on the left.}
 
 \item{...}{ignored}
+
+\item{ratio}{numeric; fraction convex: 1 returns the convex hulls, 0 maximally concave hulls}
+
+\item{allow_holes}{logical; if \code{TRUE}, the resulting concave hull may have holes}
 
 \item{preserveTopology}{logical; carry out topology preserving
 simplification? May be specified for each, or for all feature geometries.
@@ -119,9 +129,13 @@ See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.ht
 
 \code{st_convex_hull} creates the convex hull of a set of points
 
+\code{st_concave_hull} creates the concave hull of a geometry
+
 \code{st_simplify} simplifies lines by removing vertices.
 
 \code{st_triangulate} triangulates set of points (not constrained). \code{st_triangulate} requires GEOS version 3.4 or above
+
+\code{st_triangulate_constrained} returns the constrained delaunay triangulation of polygons; requires GEOS version 3.10 or above
 
 \code{st_inscribed_circle} returns the maximum inscribed circle for polygon geometries. 
 For \code{st_inscribed_circle}, if \code{nQuadSegs} is 0 a 2-point LINESTRING is returned with the
@@ -193,6 +207,16 @@ nc = st_read(system.file("shape/nc.shp", package="sf"))
 nc_g = st_geometry(nc)
 plot(st_convex_hull(nc_g))
 plot(nc_g, border = grey(.5), add = TRUE)
+set.seed(131)
+if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.11.0") > -1) {
+ pts = cbind(runif(100), runif(100))
+ m = st_multipoint(pts)
+ co = sf:::st_concave_hull(m, 0.3)
+ coh = sf:::st_concave_hull(m, 0.3, allow_holes = TRUE)
+ plot(co, col = 'grey')
+ plot(coh, add = TRUE, border = 'red')
+ plot(m, add = TRUE)
+}
 
 # st_simplify examples:
 op = par(mfrow = c(2, 3), mar = rep(0, 4))
@@ -205,6 +229,13 @@ plot(st_simplify(nc_g_planar[1], dTolerance = 1e3)) # 1000 foot
 plot(st_simplify(nc_g_planar[1], dTolerance = 5e3)) # 5000 foot
 par(op)
 
+pts = rbind(c(0,0), c(1,0), c(1,1), c(.5,.5), c(0,1), c(0,0))
+po = st_polygon(list(pts))
+co = st_triangulate_constrained(po)
+tr = st_triangulate(po)
+plot(po, col = NA, border = 'grey', lwd = 15)
+plot(tr, border = 'green', col = NA, lwd = 5, add = TRUE)
+plot(co, border = 'red', col = 'NA', add = TRUE)
 if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.9.0") > -1) {
   nc_t = st_transform(nc, 'EPSG:2264')
   x = st_inscribed_circle(st_geometry(nc_t))
