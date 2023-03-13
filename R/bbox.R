@@ -10,7 +10,10 @@ bb_wrap = function(bb) {
 }
 
 bbox.pointmatrix = function(obj, ...) {
-	bb_wrap(as.vector(t(apply(obj[,1:2,drop=FALSE], 2, range))))
+	if (nrow(obj) == 0)
+		bb_wrap(rep(NA_real_, 4))
+	else
+		bb_wrap(as.vector(t(apply(obj[,1:2,drop=FALSE], 2, range))))
 }
 
 bbox.Set = function(obj, ...) {
