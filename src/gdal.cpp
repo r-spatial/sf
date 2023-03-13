@@ -324,7 +324,7 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	Rcpp::CharacterVector nms(ac);
 	Rcpp::IntegerVector orientation(ac);
 	Rcpp::NumericVector convfactor(ac);
-#if GDAL_VERSION_NUM > 3000000
+#if GDAL_VERSION_NUM > 3040000
 	for (int i = 0; i < ac; i++) {
 		double pdfConvFactor;
 		OGRAxisOrientation peOrientation;
