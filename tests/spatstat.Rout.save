@@ -125,7 +125,7 @@ Type 'q()' to quit R.
 + (y = st_as_sfc(as.psp(sf)))
 + all.equal(st_geometry(x), y)
 + }
-spatstat.geom 3.0-6
+spatstat.geom 3.1-0
 spatstat.random 3.1-3
 Simple feature collection with 51 features and 1 field
 Geometry type: GEOMETRY
@@ -166,4 +166,4 @@ In st_as_sfc.owin(spatstat.geom::as.owin(x)) :
 > 
 > proc.time()
    user  system elapsed 
-  2.483   0.854   2.444 
+  2.528   0.860   2.495 
