@@ -32,7 +32,7 @@ the protruding geometries will also be split using the same \code{tol=}
 values; in this case empty geometries will be dropped first.
 }
 \examples{
-## sf
+\donttest{
 if (require("maps", quietly=TRUE)) {
  opar = par(mfrow=c(3, 2))
  wld = st_as_sf(map(fill=FALSE, interior=FALSE, plot=FALSE), fill=FALSE)
@@ -43,5 +43,5 @@ if (require("maps", quietly=TRUE)) {
  }
  par(opar)
 }
-
+}
 }
