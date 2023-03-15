@@ -1,3 +1,5 @@
+# version 1.0-12
+
 # version 1.0-11
 
 * `st_make_grid()` also accepts area units for `cellsize`, for square and hexagonal grids; #1505
