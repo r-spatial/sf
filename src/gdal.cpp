@@ -224,7 +224,11 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	out(3) = Rcpp::LogicalVector::create((bool) srs->IsGeographic());
 	names(3) = "IsGeographic";
 
+#if GDAL_VERSION_NUM > 2030000
 	const char *unit;
+#else
+	char *unit;
+#endif
 	if (srs->IsGeographic())
 		srs->GetAngularUnits(&unit);
 	else
