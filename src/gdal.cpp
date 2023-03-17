@@ -183,8 +183,8 @@ OGRSpatialReference *OGRSrs_from_crs(Rcpp::List crs) {
 		dest = new OGRSpatialReference;
 		dest = handle_axis_order(dest);
 		char *cp = wkt[0];
-#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
-// #if GDAL_VERSION_NUM <= 2020000 FIXME: breaks on gh actions
+// #if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
+#if GDAL_VERSION_NUM <= 2020000 // FIXME: breaks on gh actions
 		handle_error(dest->importFromWkt(&cp));
 #else
 		handle_error(dest->importFromWkt((const char *) cp));
@@ -290,7 +290,9 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 		out(12) = Rcpp::CharacterVector::create(cp);
 		CPLFree(cp);
 	} else
-		out(12) = "";
+		out(12) = NA_STRING;
+#else
+	out(12) = NA_STRING;
 #endif
 	names(12) = "ProjJson";
 
@@ -717,7 +719,8 @@ Rcpp::List CPL_sfc_from_wkt(Rcpp::CharacterVector wkt) {
 	OGRGeometryFactory f;
 	for (int i = 0; i < wkt.size(); i++) {
 		char *wkt_str = wkt(i);
-#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
+// #if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
+#if GDAL_VERSION_NUM < 2020000
 		handle_error(f.createFromWkt(&wkt_str, NULL, &(g[i])));
 #else
 		handle_error(f.createFromWkt( (const char*) wkt_str, NULL, &(g[i])));
