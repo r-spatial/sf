@@ -87,6 +87,7 @@
 <span>  method <span class="op">=</span> <span class="st">"NEAREST"</span>,</span>
 <span>  layers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
 <span>  options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  config_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
 <span>  clean <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  read_only <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -112,6 +113,10 @@
 
 <dt>options</dt>
 <dd><p>character; dataset opening options</p></dd>
+
+
+<dt>config_options</dt>
+<dd><p>named character vector with GDAL config options, like <code>c(option1=value1, option2=value2)</code></p></dd>
 
 
 <dt>clean</dt>
