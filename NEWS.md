@@ -1,6 +1,18 @@
+# version 1.0-12
+
+* fix call in `gdal_addo()`; #2124
+
+* fix issues that came up with older GDAL version; #2123 #2121 #2119
+
 # version 1.0-11
 
-* clean up the retrieval of length or angle units from WKT representations
+* `st_make_grid()` also accepts area units for `cellsize`, for square and hexagonal grids; #1505
+
+* add `st_concave_hull()`, for concave hulls, if GEOS >= 3.11.0; #1964
+
+* add `st_triangulate_constrained()`, for constrained Delaunay triangulation, if GEOS >= 3.10.0; #1964
+
+* clean up the retrieval of length or angle units from WKT representations; https://lists.osgeo.org/pipermail/gdal-dev/2023-March/056994.html
 
 * conversion to GEOS uses the `GEOS_PREC_VALID_OUTPUT` flag, which makes sure that the "[o]utput is always valid. Collapsed geometry elements (including both polygons and lines) are removed."
 

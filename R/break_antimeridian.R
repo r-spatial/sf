@@ -17,7 +17,7 @@
 #' @export
 #' @name st_break_antimeridian
 #' @examples
-#' ## sf
+#' \donttest{
 #' if (require("maps", quietly=TRUE)) {
 #'  opar = par(mfrow=c(3, 2))
 #'  wld = st_as_sf(map(fill=FALSE, interior=FALSE, plot=FALSE), fill=FALSE)
@@ -28,7 +28,7 @@
 #'  }
 #'  par(opar)
 #' }
-#'
+#' }
 st_break_antimeridian = function(x, lon_0=0, tol=0.0001, ...) {
 	ll = st_is_longlat(x)
 	if (!ll | is.na(ll))

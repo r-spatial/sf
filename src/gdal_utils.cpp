@@ -446,12 +446,13 @@ Rcpp::LogicalVector CPL_gdalmdimtranslate(Rcpp::CharacterVector src, Rcpp::Chara
 	return result == NULL || err;
 }
 #else
-Rcpp::CharacterVector CPL_gdalmdiminfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options, 
-		Rcpp::CharacterVector oo) {
+Rcpp::CharacterVector CPL_gdalmdiminfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options,
+		Rcpp::CharacterVector oo, Rcpp::CharacterVector co) { 
 	Rcpp::stop("GDAL version >= 3.1 required for mdiminfo");
 }
 Rcpp::LogicalVector CPL_gdalmdimtranslate(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
-		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, bool quiet = true) {
+		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector co,
+		bool quiet = true) {
 	Rcpp::stop("GDAL version >= 3.1 required for mdimtranslate");
 }
 #endif

@@ -324,7 +324,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	bool geo_transform_set = (err == CE_None);
 
 	// CRS, projection:
-#if GDAL_VERSION_MAJOR >= 3
+#if GDAL_VERSION_NUM >= 3000000
 	const OGRSpatialReference *sr = poDataset->GetSpatialRef();
 	// sr = handle_axis_order(sr); -- should be done by GDAL; xy
 	Rcpp::List crs = create_crs(sr, true);
@@ -444,7 +444,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		_["cols"] = NumericVector::create(nXOff + 1, nXOff + nBufXSize),
 		_["rows"] = NumericVector::create(nYOff + 1, nYOff + nBufYSize),
 		_["bands"] = bands,
-#if GDAL_VERSION_MAJOR >= 3
+#if GDAL_VERSION_NUM >= 3000000
 		_["crs"] = crs,
 #else
 		_["proj_wkt"] = wkt,
@@ -568,7 +568,7 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 		if (p4s[0] != NA_STRING) {
 			OGRSpatialReference oSRS;
 			oSRS.SetFromUserInput((const char *) p4s[0]); // handles wkt too
-#if GDAL_VERSION_MAJOR >= 3
+#if GDAL_VERSION_NUM >= 3000000
 			poDstDS->SetSpatialRef(&oSRS);
 #else
 			char *pszSRS_WKT = NULL;

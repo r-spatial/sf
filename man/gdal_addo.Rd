@@ -10,6 +10,7 @@ gdal_addo(
   method = "NEAREST",
   layers = integer(0),
   options = character(0),
+  config_options = character(0),
   clean = FALSE,
   read_only = FALSE
 )
@@ -24,6 +25,8 @@ gdal_addo(
 \item{layers}{integer; layers to create overviews for (default: all)}
 
 \item{options}{character; dataset opening options}
+
+\item{config_options}{named character vector with GDAL config options, like \code{c(option1=value1, option2=value2)}}
 
 \item{clean}{logical; if \code{TRUE} only remove overviews, do not add}
 

@@ -196,6 +196,40 @@ st_convex_hull.sf = function(x) {
 
 #' @name geos_unary
 #' @export
+#' @details \code{st_concave_hull} creates the concave hull of a geometry
+#' @param ratio numeric; fraction convex: 1 returns the convex hulls, 0 maximally concave hulls
+#' @param allow_holes logical; if \code{TRUE}, the resulting concave hull may have holes
+#' @examples
+#' set.seed(131)
+#' if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.11.0") > -1) {
+#'  pts = cbind(runif(100), runif(100))
+#'  m = st_multipoint(pts)
+#'  co = sf:::st_concave_hull(m, 0.3)
+#'  coh = sf:::st_concave_hull(m, 0.3, allow_holes = TRUE)
+#'  plot(co, col = 'grey')
+#'  plot(coh, add = TRUE, border = 'red')
+#'  plot(m, add = TRUE)
+#' }
+st_concave_hull = function(x, ratio, ..., allow_holes)
+	UseMethod("st_concave_hull")
+
+#' @export
+st_concave_hull.sfg = function(x, ratio, ..., allow_holes = FALSE)
+	get_first_sfg(st_concave_hull(st_sfc(x), ratio, allow_holes))
+
+#' @export
+st_concave_hull.sfc = function(x, ratio, ..., allow_holes = FALSE) {
+	stopifnot(!missing(ratio), ratio >= 0, ratio <= 1.0, is.logical(allow_holes), !is.na(allow_holes))
+	st_sfc(CPL_geos_op("concave_hull", x, ratio, integer(0), numeric(0), allow_holes))
+}
+
+#' @export
+st_concave_hull.sf = function(x, ratio, ..., allow_holes = FALSE) {
+	st_set_geometry(x, st_concave_hull(st_geometry(x), ratio, allow_holes))
+}
+
+#' @name geos_unary
+#' @export
 #' @details \code{st_simplify} simplifies lines by removing vertices. 
 #' @param preserveTopology logical; carry out topology preserving
 #'   simplification? May be specified for each, or for all feature geometries.
@@ -283,6 +317,41 @@ st_triangulate.sfc = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 #' @export
 st_triangulate.sf = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 	st_set_geometry(x, st_triangulate(st_geometry(x), dTolerance, bOnlyEdges))
+}
+
+#' @name geos_unary
+#' @export
+#' @details \code{st_triangulate_constrained} returns the constrained delaunay triangulation of polygons; requires GEOS version 3.10 or above
+#' @examples
+#' if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.10.0") > -1) {
+#'  pts = rbind(c(0,0), c(1,0), c(1,1), c(.5,.5), c(0,1), c(0,0))
+#'  po = st_polygon(list(pts))
+#'  co = st_triangulate_constrained(po)
+#'  tr = st_triangulate(po)
+#'  plot(po, col = NA, border = 'grey', lwd = 15)
+#'  plot(tr, border = 'green', col = NA, lwd = 5, add = TRUE)
+#'  plot(co, border = 'red', col = 'NA', add = TRUE)
+#' }
+st_triangulate_constrained = function(x)
+	UseMethod("st_triangulate_constrained")
+
+#' @export
+st_triangulate_constrained.sfg = function(x)
+	get_first_sfg(st_triangulate_constrained(st_sfc(x)))
+
+#' @export
+st_triangulate_constrained.sfc = function(x) {
+	if (compareVersion(CPL_geos_version(), "3.10.0") > -1) { # >= ; see https://github.com/r-spatial/sf/issues/1653
+		if (isTRUE(st_is_longlat(x)))
+			warning("st_triangulate does not correctly triangulate longitude/latitude data")
+		st_sfc(CPL_geos_op("triangulate_constrained", x, numeric(0), integer(0), numeric(0), logical(0)))
+	} else
+		stop("for triangulate_constrained, GEOS version 3.10.0 or higher is required")
+}
+
+#' @export
+st_triangulate_constrained.sf = function(x) {
+	st_set_geometry(x, st_triangulate_constrained(st_geometry(x)))
 }
 
 #' @name geos_unary
