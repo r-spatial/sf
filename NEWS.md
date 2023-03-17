@@ -1,5 +1,9 @@
 # version 1.0-12
 
+* fix call in `gdal_addo()`; #2124
+
+* fix various issues that came up with older GDAL version; #2123 #2121
+
 # version 1.0-11
 
 * `st_make_grid()` also accepts area units for `cellsize`, for square and hexagonal grids; #1505

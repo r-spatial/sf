@@ -330,7 +330,7 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	Rcpp::NumericVector convfactor(ac);
 #if GDAL_VERSION_NUM > 3040000
 	for (int i = 0; i < ac; i++) {
-		double pdfConvFactor;
+		double pdfConvFactor = 1.0;
 		OGRAxisOrientation peOrientation;
 		const char *ret = srs->GetAxis(srs->IsGeographic() ? "GEOGCS" : "PROJCS", 
 						i, &peOrientation, &pdfConvFactor);
