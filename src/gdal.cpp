@@ -327,28 +327,21 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 #endif
 	Rcpp::CharacterVector nms(ac);
 	Rcpp::IntegerVector orientation(ac);
-	Rcpp::NumericVector convfactor(ac);
-#if GDAL_VERSION_NUM > 3040000
 	for (int i = 0; i < ac; i++) {
-		double pdfConvFactor = 1.0;
 		OGRAxisOrientation peOrientation;
 		const char *ret = srs->GetAxis(srs->IsGeographic() ? "GEOGCS" : "PROJCS", 
-						i, &peOrientation, &pdfConvFactor);
+						i, &peOrientation);
 		if (ret != NULL) {
 			nms[i] = ret;
 			orientation[i] = (int) peOrientation;
-			convfactor[i] = pdfConvFactor;
 		} else {
 			nms[i] = NA_STRING;
 			orientation[i] = NA_INTEGER;
-			convfactor[i] = NA_REAL;
 		}
 	}
-#endif
 	Rcpp::DataFrame axes_df = Rcpp::DataFrame::create(
 		Rcpp::_["name"] = nms,
-		Rcpp::_["orientation"] = orientation,
-		Rcpp::_["convfactor"] = convfactor);
+		Rcpp::_["orientation"] = orientation);
 	out(15) = axes_df;
 	names(15) = "axes";
 

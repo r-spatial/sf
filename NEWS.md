@@ -2,7 +2,7 @@
 
 * fix call in `gdal_addo()`; #2124
 
-* fix various issues that came up with older GDAL version; #2123 #2121
+* fix issues that came up with older GDAL version; #2123 #2121 #2119
 
 # version 1.0-11
 
