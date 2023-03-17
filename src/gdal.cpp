@@ -183,7 +183,7 @@ OGRSpatialReference *OGRSrs_from_crs(Rcpp::List crs) {
 		dest = new OGRSpatialReference;
 		dest = handle_axis_order(dest);
 		char *cp = wkt[0];
-#if GDAL_VERSION_NUM >= 2030000
+#if GDAL_VERSION_NUM < 2030000
 		handle_error(dest->importFromWkt(&cp));
 #else
 		handle_error(dest->importFromWkt((const char *) cp));
@@ -718,7 +718,7 @@ Rcpp::List CPL_sfc_from_wkt(Rcpp::CharacterVector wkt) {
 	OGRGeometryFactory f;
 	for (int i = 0; i < wkt.size(); i++) {
 		char *wkt_str = wkt(i);
-#if GDAL_VERSION_NUM >= 2030000
+#if GDAL_VERSION_NUM < 2030000
 		handle_error(f.createFromWkt(&wkt_str, NULL, &(g[i])));
 #else
 		handle_error(f.createFromWkt( (const char*) wkt_str, NULL, &(g[i])));
