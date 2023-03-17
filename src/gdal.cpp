@@ -132,7 +132,7 @@ void unset_config_options(Rcpp::CharacterVector ConfigOptions) {
 
 Rcpp::CharacterVector wkt_from_spatial_reference(const OGRSpatialReference *srs) { // FIXME: add options?
 	char *cp;
-#if GDAL_VERSION_MAJOR >= 3
+#if GDAL_VERSION_NUM >= 3000000
 	const char *options[3] = { "MULTILINE=YES", "FORMAT=WKT2", NULL };
 	OGRErr err = srs->exportToWkt(&cp, options);
 #else
@@ -257,7 +257,7 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 		out(7) = "";
 	names(7) = "Wkt";
 
-#if GDAL_VERSION_MAJOR >= 3
+#if GDAL_VERSION_NUM >= 3000000
 	out(8) = Rcpp::CharacterVector::create(srs->GetName());
 #else
 	out(8) = Rcpp::CharacterVector::create("unknown");
@@ -296,7 +296,7 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	names(12) = "ProjJson";
 
 	// WKT1_ESRI
-#if GDAL_VERSION_MAJOR >= 3
+#if GDAL_VERSION_NUM >= 3000000
 	const char *options[3] = { "MULTILINE=YES", "FORMAT=WKT1_ESRI", NULL };
 	if (srs->exportToWkt(&cp, options) != OGRERR_NONE)
 		out(13) = Rcpp::CharacterVector::create(NA_STRING); // FIXME: CPLFree() in this case?
@@ -384,7 +384,7 @@ Rcpp::LogicalVector CPL_crs_equivalent(Rcpp::List crs1, Rcpp::List crs2) {
 		delete srs1;
 		return Rcpp::LogicalVector::create(false);
 	} // #nocov end
-#if GDAL_VERSION_MAJOR >= 3
+#if GDAL_VERSION_NUM >= 3000000
 	const char *options[3] = { NULL, NULL, NULL };
 	if (axis_order_authority_compliant) {
 		options[0] = "IGNORE_DATA_AXIS_TO_SRS_AXIS_MAPPING=NO";
@@ -460,7 +460,7 @@ Rcpp::List create_crs(const OGRSpatialReference *ref, bool set_input) {
 		crs(1) = Rcpp::CharacterVector::create(NA_STRING);
 	} else {
 		if (set_input) {
-#if GDAL_VERSION_MAJOR >= 3
+#if GDAL_VERSION_NUM >= 3000000
 			crs(0) = Rcpp::CharacterVector::create(ref->GetName());
 #else
 			const char *cp;
@@ -618,13 +618,13 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 	if (pipeline.size() == 0 && !(dest = OGRSrs_from_crs(crs)))
 		Rcpp::stop("crs not found: is it missing?"); // #nocov
 
-#if GDAL_VERSION_MAJOR >= 3
+#if GDAL_VERSION_NUM >= 3000000
 	OGRCoordinateTransformationOptions *options = new OGRCoordinateTransformationOptions;
 	if (pipeline.size() && !options->SetCoordinateOperation(pipeline[0], reverse))
 		Rcpp::stop("pipeline value not accepted");
 	if (AOI.size() == 4 && !options->SetAreaOfInterest(AOI[0], AOI[1], AOI[2], AOI[3]))
 		Rcpp::stop("values for area of interest not accepted");
-#if GDAL_VERSION_MINOR >= 3
+#if GDAL_VERSION_NUM >= 3030000
 	options->SetDesiredAccuracy(desired_accuracy);
 	options->SetBallparkAllowed(allow_ballpark);
 #endif
