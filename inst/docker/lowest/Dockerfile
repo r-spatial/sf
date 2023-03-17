@@ -113,7 +113,7 @@ RUN echo "ok"
 #RUN R -e 'install.packages("sf")'
 RUN R -e 'install.packages(c("Rcpp", "s2", "e1071", "classInt", "units", "magrittr", "DBI"))'
 RUN ls
-RUN echo "ok"
+RUN echo "xxyyzz"
 RUN R -e 'remotes::install_github("r-spatial/sf")'
 RUN R -e 'library(sf)'
 
