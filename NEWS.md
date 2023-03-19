@@ -1,8 +1,10 @@
 # version 1.0-12
 
+* update NAMESPACE to `useDynLib(sf, .registration=TRUE)`; #2127 thanks to @eddelbuettel
+
 * fix call in `gdal_addo()`; #2124
 
-* fix issues that came up with older GDAL version; #2123 #2121 #2119
+* fix issues that came up with older GDAL version, use `GDAL_VERSION_NUM` consistently; #2123 #2121 #2119
 
 # version 1.0-11
 
