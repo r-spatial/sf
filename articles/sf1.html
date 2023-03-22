@@ -123,8 +123,7 @@ computers, with emphasis on the <em>spatial</em> geometry of these
 objects. It also describes how such objects can be stored in and
 retrieved from databases, and which geometrical operations should be
 defined for them.</p>
-<p>The standard is widely implemented in spatial databases (such as
-PostGIS), commercial GIS (e.g., <a href="https://www.esri.com/en-us/home" class="external-link">ESRI ArcGIS</a>) and forms the
+<p>The standard is widely implemented in spatial databases (such as <a href="https://postgis.net/" class="external-link">PostGIS</a>), commercial GIS (e.g., <a href="https://www.esri.com/en-us/home" class="external-link">ESRI ArcGIS</a>) and forms the
 vector data basis for libraries such as <a href="https://gdal.org/" class="external-link">GDAL</a>. A subset of simple features forms the
 <a href="https://geojson.org/" class="external-link">GeoJSON</a> standard.</p>
 <p>R has well-supported classes for storing spatial data (<a href="https://CRAN.R-project.org/package=sp" class="external-link">sp</a>) and interfacing to
@@ -136,23 +135,27 @@ and aims at succeeding <a href="https://CRAN.R-project.org/package=sp" class="ex
 term.</p>
 <p>This vignette:</p>
 <ul>
-<li>explains what is meant by features, and by simple features</li>
+<li>explains what is meant by features, and by
+<code>simple features</code>
+</li>
 <li>shows how they are implemented in R</li>
 <li>provides examples of how you can work with them</li>
 <li>shows how they can be read from and written to external files or
-resources</li>
-<li>discusses how they can be converted to and from sp objects</li>
-<li>shows how they can be used for meaningful spatial analysis</li>
+resources (I/O)</li>
+<li>discusses how they can be converted to and from <code>sp</code>
+objects</li>
+<li>shows how they can be used for meaningful and applied spatial
+analysis</li>
 </ul>
 <div class="section level2">
 <h2 id="what-is-a-feature">What is a feature?<a class="anchor" aria-label="anchor" href="#what-is-a-feature"></a>
 </h2>
-<p>A feature is thought of as a thing, or an object in the real world,
-such as a building or a tree. As is the case with objects, they often
-consist of other objects. This is the case with features too: a set of
-features can form a single feature. A forest stand can be a feature, a
-forest can be a feature, a city can be a feature. A satellite image
-pixel can be a feature, a complete image can be a feature too.</p>
+<p>A <code>feature</code> is thought of as a thing, or an object in the
+real world, such as a building or a tree. As is the case with objects,
+they often consist of other objects. This is the case with features too:
+a set of features can form a single feature. A forest stand can be a
+feature, a forest can be a feature, a city can be a feature. A satellite
+image pixel can be a feature, a complete image can be a feature too.</p>
 <p>Features have a <em>geometry</em> describing <em>where</em> on Earth
 the feature is located, and they have attributes, which describe other
 properties. The geometry of a tree can be the delineation of its crown,
@@ -333,10 +336,10 @@ manual</a>.</p>
 </h3>
 <p>Coordinates can only be placed on the Earth’s surface when their
 coordinate reference system (CRS) is known; this may be a spheroid CRS
-such as WGS84, a projected, two-dimensional (Cartesian) CRS such as a
-UTM zone or Web Mercator, or a CRS in three-dimensions, or including
-time. Similarly, M-coordinates need an attribute reference system,
-e.g. a <a href="https://CRAN.R-project.org/package=units" class="external-link">measurement
+such as <a href="https://gisgeography.com/wgs84-world-geodetic-system/" class="external-link">WGS84</a>,
+a projected, two-dimensional (Cartesian) CRS such as a UTM zone or Web
+Mercator, or a CRS in three-dimensions, or including time. Similarly,
+M-coordinates need an attribute reference system, e.g. a <a href="https://CRAN.R-project.org/package=units" class="external-link">measurement
 unit</a>.</p>
 </div>
 </div>
@@ -374,17 +377,19 @@ feature.</li>
 <div class="section level3">
 <h3 id="sf-objects-with-simple-features">sf: objects with simple features<a class="anchor" aria-label="anchor" href="#sf-objects-with-simple-features"></a>
 </h3>
-<p>As we usually do not work with geometries of single simple features,
-but with datasets consisting of sets of features with attributes, the
-two are put together in <code>sf</code> (simple feature) objects. The
-following command reads the <code>nc</code> dataset from a file that is
-contained in the <code>sf</code> package:</p>
+<p>As we usually do not work with geometries of single
+<code>simple features</code>, but with datasets consisting of sets of
+features with attributes, the two are put together in <code>sf</code>
+(simple feature) objects. The following command reads the
+<code>nc</code> dataset from a file that is contained in the
+<code>sf</code> package:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span><span class="co">## Linking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE</span></span>
 <span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">## Reading layer `nc' from data source </span></span>
-<span><span class="co">##   `/tmp/Rtmp4CqFjk/temp_libpath2e8377196e2/sf/shape/nc.shp' using driver `ESRI Shapefile'</span></span>
+<span><span class="co">##   `/tmp/Rtmprj9iZy/temp_libpath2e2173b5fa1b/sf/shape/nc.shp' </span></span>
+<span><span class="co">##   using driver `ESRI Shapefile'</span></span>
 <span><span class="co">## Simple feature collection with 100 features and 14 fields</span></span>
 <span><span class="co">## Geometry type: MULTIPOLYGON</span></span>
 <span><span class="co">## Dimension:     XY</span></span>
@@ -424,7 +429,7 @@ and an abridged version of the geometry</p>
 <a href="#wkb">well-known text</a>
 </li>
 </ul>
-<p>Methods for <code>sf</code> objects are</p>
+<p>Methods for <code>sf</code> objects are:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/methods.html" class="external-link">methods</a></span><span class="op">(</span>class <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span></span>
 <span><span class="co">##  [1] [                            [[&lt;-                        </span></span>
@@ -468,7 +473,8 @@ and an abridged version of the geometry</p>
 <span><span class="co">## [77] transform                   </span></span>
 <span><span class="co">## see '?methods' for accessing help and source code</span></span></code></pre></div>
 <p>It is also possible to create <code>data.frame</code> objects with
-geometry list-columns that are not of class <code>sf</code>, e.g. by</p>
+geometry list-columns that are not of class <code>sf</code>,
+e.g. by:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nc.no_sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">nc.no_sf</span><span class="op">)</span></span>
@@ -504,7 +510,7 @@ geometry list-column in this case by <code>nc$geom</code> or
 <span><span class="co">## MULTIPOLYGON (((-76.00897 36.3196, -76.01735 36...</span></span>
 <span><span class="co">## MULTIPOLYGON (((-77.21767 36.24098, -77.23461 3...</span></span></code></pre></div>
 <p>Geometries are printed in abbreviated form, but we can view a
-complete geometry by selecting it, e.g. the first one by</p>
+complete geometry by selecting it, e.g. the first one by:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nc_geom</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="co">## MULTIPOLYGON (((-81.47276 36.23436, -81.54084 36.27251, -81.56198 36.27359, -81.63306 36.34069, -81.74107 36.39178, -81.69828 36.47178, -81.7028 36.51934, -81.67 36.58965, -81.3453 36.57286, -81.34754 36.53791, -81.32478 36.51368, -81.31332 36.4807, -81.26624 36.43721, -81.26284 36.40504, -81.24069 36.37942, -81.23989 36.36536, -81.26424 36.35241, -81.32899 36.3635, -81.36137 36.35316, -81.36569 36.33905, -81.35413 36.29972, -81.36745 36.2787, -81.40639 36.28505, -81.41233 36.26729, -81.43104 36.26072, -81.45289 36.23959, -81.47276 36.23436)))</span></span></code></pre></div>
@@ -528,7 +534,7 @@ parentheses.</p>
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">]</span>, col <span class="op">=</span> <span class="st">'grey'</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="sf1_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 <p>but some of the polygons in this dataset have multiple exterior
-rings; they can be identified by</p>
+rings; they can be identified by:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">(</span><span class="va">w</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">nc_geom</span>, <span class="va">length</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
@@ -538,7 +544,7 @@ rings; they can be identified by</p>
 <p>Following the <code>MULTIPOLYGON</code> datastructure, in R we have a
 list of lists of lists of matrices. For instance, we get the first 3
 coordinate pairs of the second exterior ring (first ring is always
-exterior) for the geometry of feature 4 by</p>
+exterior) for the geometry of feature 4 by:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nc_geom</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span></span>
 <span><span class="co">##           [,1]     [,2]</span></span>
@@ -549,7 +555,7 @@ exterior) for the geometry of feature 4 by</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">nc_geom</span><span class="op">)</span></span>
 <span><span class="co">## [1] "sfc_MULTIPOLYGON" "sfc"</span></span></code></pre></div>
-<p>Methods for geometry list-columns include</p>
+<p>Methods for geometry list-columns include:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/methods.html" class="external-link">methods</a></span><span class="op">(</span>class <span class="op">=</span> <span class="st">'sfc'</span><span class="op">)</span></span>
 <span><span class="co">##  [1] [                            [&lt;-                         </span></span>
@@ -593,7 +599,7 @@ exterior) for the geometry of feature 4 by</p>
 <code>st_as_text</code> convert geometry list-columns into
 well-known-binary or well-known-text, explained <a href="#wkb">below</a>. <code>st_bbox</code> retrieves the coordinate
 bounding box.</p>
-<p>Attributes include</p>
+<p>Attributes include:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">nc_geom</span><span class="op">)</span></span>
 <span><span class="co">## $n_empty</span></span>
@@ -810,12 +816,13 @@ may require some experimenting.</p>
 <h3 id="reading-and-writing">Reading and writing<a class="anchor" aria-label="anchor" href="#reading-and-writing"></a>
 </h3>
 <p>As we’ve seen above, reading spatial data from an external file can
-be done by</p>
+be done by:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">filename</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span></span>
 <span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">filename</span><span class="op">)</span></span>
 <span><span class="co">## Reading layer `nc' from data source </span></span>
-<span><span class="co">##   `/tmp/Rtmp4CqFjk/temp_libpath2e8377196e2/sf/shape/nc.shp' using driver `ESRI Shapefile'</span></span>
+<span><span class="co">##   `/tmp/Rtmprj9iZy/temp_libpath2e2173b5fa1b/sf/shape/nc.shp' </span></span>
+<span><span class="co">##   using driver `ESRI Shapefile'</span></span>
 <span><span class="co">## Simple feature collection with 100 features and 14 fields</span></span>
 <span><span class="co">## Geometry type: MULTIPOLYGON</span></span>
 <span><span class="co">## Dimension:     XY</span></span>
@@ -832,7 +839,7 @@ or by using the otherwise nearly identical but more quiet</p>
 <span><span class="co">## Writing layer `nc' to data source `nc.shp' using driver `ESRI Shapefile'</span></span>
 <span><span class="co">## Writing 100 features with 14 fields and geometry type Multi Polygon.</span></span></code></pre></div>
 <p>If we repeat this, we get an error message that the file already
-exists, and we can overwrite by</p>
+exists, and we can overwrite by:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/st_write.html">st_write</a></span><span class="op">(</span><span class="va">nc</span>, <span class="st">"nc.shp"</span>, delete_layer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">## Deleting layer `nc' using driver `ESRI Shapefile'</span></span>
@@ -849,7 +856,7 @@ exists, and we can overwrite by</p>
 and optionally a layer name. Their exact interpretation as well as the
 options they support vary per driver, the <a href="https://gdal.org/drivers/vector/index.html" class="external-link">GDAL driver
 documentation</a> is best consulted for this. For instance, a PostGIS
-table in database <code>postgis</code> might be read by</p>
+table in database <code>postgis</code> might be read by:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">meuse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"PG:dbname=postgis"</span>, <span class="st">"meuse"</span><span class="op">)</span></span></code></pre></div>
 <p>where the <code>PG:</code> string indicates this concerns the PostGIS
@@ -881,7 +888,7 @@ type for each layer:</p>
 <span><span class="co">## 5  other_relations Geometry Collection       NA      4   WGS 84</span></span></code></pre></div>
 <p>we see that in this case, the number of features is <code>NA</code>
 because for this xml file the whole file needs to be read, which may be
-costly for large files. We can force counting by</p>
+costly for large files. We can force counting by:</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>OSM_USE_CUSTOM_INDEXING<span class="op">=</span><span class="st">"NO"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/st_layers.html">st_layers</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"osm/overpass.osm"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>, do_count <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -901,6 +908,7 @@ costly for large files. We can force counting by</p>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span><span class="st">"biketrails.zip"</span><span class="op">)</span></span>
 <span><span class="va">u_kmz</span> <span class="op">&lt;-</span> <span class="st">"http://coagisweb.cabq.gov/datadownload/BikePaths.kmz"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span><span class="va">u_kmz</span>, <span class="st">"BikePaths.kmz"</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># Read file formats</span></span>
 <span><span class="va">biketrails_shp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"biketrails.shp"</span><span class="op">)</span></span>
 <span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.info.html" class="external-link">Sys.info</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">==</span> <span class="st">"Linux"</span><span class="op">)</span> <span class="co"># may not work if not Linux</span></span>
@@ -976,7 +984,7 @@ the possibility to benefit from such improvements, and limit some of the
 provenance of datasets, but may help reproducibility.</p>
 <p>Coordinate reference system transformations can be carried out using
 <code>st_transform</code>, e.g. converting longitudes/latitudes in NAD27
-to web mercator (EPSG:3857) can be done by</p>
+to web mercator (EPSG:3857) can be done by:</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nc.web_mercator</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">nc</span>, <span class="fl">3857</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc.web_mercator</span><span class="op">)</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span></span>
@@ -1014,9 +1022,11 @@ ways:</p>
 <span><span class="co">## [17] st_as_sfc.SpatialPoints*      st_as_sfc.SpatialPolygons*   </span></span>
 <span><span class="co">## [19] st_as_sfc.tess*               st_as_sfc.WKB*               </span></span>
 <span><span class="co">## see '?methods' for accessing help and source code</span></span>
+<span></span>
 <span><span class="co"># anticipate that sp::CRS will expand proj4strings:</span></span>
 <span><span class="va">p4s</span> <span class="op">&lt;-</span> <span class="st">"+proj=longlat +datum=NAD27 +no_defs +ellps=clrk66 +nadgrids=@conus,@alaska,@ntv2_0.gsb,@ntv1_can.dat"</span></span>
 <span><span class="fu"><a href="../reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">p4s</span></span>
+<span></span>
 <span><span class="co"># anticipate geometry column name changes:</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">[</span><span class="fl">15</span><span class="op">]</span> <span class="op">=</span> <span class="st">"geometry"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">nc</span>, <span class="st">"sf_column"</span><span class="op">)</span> <span class="op">=</span> <span class="st">"geometry"</span></span>
@@ -1231,7 +1241,8 @@ time:</p>
 <span>        CRESS_ID <span class="op">=</span> <span class="st">"identity"</span>, BIR74 <span class="op">=</span> <span class="st">"aggregate"</span>, SID74 <span class="op">=</span> <span class="st">"aggregate"</span>, NWBIR74 <span class="op">=</span> <span class="st">"aggregate"</span>,</span>
 <span>        BIR79 <span class="op">=</span> <span class="st">"aggregate"</span>, SID79 <span class="op">=</span> <span class="st">"aggregate"</span>, NWBIR79 <span class="op">=</span> <span class="st">"aggregate"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">## Reading layer `nc' from data source </span></span>
-<span><span class="co">##   `/tmp/Rtmp4CqFjk/temp_libpath2e8377196e2/sf/shape/nc.shp' using driver `ESRI Shapefile'</span></span>
+<span><span class="co">##   `/tmp/Rtmprj9iZy/temp_libpath2e2173b5fa1b/sf/shape/nc.shp' </span></span>
+<span><span class="co">##   using driver `ESRI Shapefile'</span></span>
 <span><span class="co">## Simple feature collection with 100 features and 14 fields</span></span>
 <span><span class="co">## Attribute-geometry relationship: 0 constant, 8 aggregate, 6 identity</span></span>
 <span><span class="co">## Geometry type: MULTIPOLYGON</span></span>
@@ -1253,7 +1264,7 @@ time:</p>
 <span><span class="co">## constant constant constant constant </span></span>
 <span><span class="co">## Levels: constant aggregate identity</span></span></code></pre></div>
 <p>When not specified, this field is filled with <code>NA</code> values,
-but if non-<code>NA</code>, it has one of three possibilities</p>
+but if non-<code>NA</code>, it has one of three possibilities:</p>
 <table class="table">
 <colgroup>
 <col width="17%">
