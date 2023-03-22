@@ -55,10 +55,13 @@
 #' }
 #' @export
 st_as_sf.Spatial = function(x, ...) {
-	if ("data" %in% slotNames(x))
+	if ("data" %in% slotNames(x)) {
+                if (!isTRUE(all.equal(row.names(x@data), row.names(x))))
+                    row.names(x@data) <- row.names(x)
 		df = x@data
-	else
+	} else {
 		df = data.frame(row.names = row.names(x)) # empty
+        }
 	if ("geometry" %in% names(df))
 		warning("column \"geometry\" will be overwritten by geometry column")
 	if (! requireNamespace("sp", quietly = TRUE))
