@@ -23,6 +23,7 @@ test_that("filter to sfc works", {
 suppressMessages(require(tidyr, quietly = TRUE))
 test_that("separate and unite work", {
   skip_if_not_installed("dplyr")
+  skip_if_not_installed("tidyr")
   expect_true(nc %>% separate(CNTY_ID, c("a", "b"), sep = 2) %>% inherits("sf"))
   expect_true(nc %>% separate(CNTY_ID, c("a", "b"), sep = 2) %>%
 	unite(CNTY_ID_NEW, c("a", "b"), sep = "") %>% inherits("sf"))
@@ -30,6 +31,7 @@ test_that("separate and unite work", {
 
 test_that("separate_rows work", {
   skip_if_not_installed("dplyr")
+  skip_if_not_installed("tidyr")
   d <- st_as_sf(data.frame(
     x = seq_len(3),
     y = c("a", "d,e,f", "g,h"),
@@ -77,6 +79,7 @@ test_that("sample_n etc work", {
 
 test_that("nest() works", {
 	skip_if_not_installed("dplyr")
+	skip_if_not_installed("tidyr")
 	tbl = tibble(a = c(1,1,2,2), g = st_sfc(st_point(0:1), st_point(1:2), st_point(2:3), st_point(3:4)))
 	d = st_sf(tbl)
 	out = d %>% group_by(a) %>% nest()
