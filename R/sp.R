@@ -300,8 +300,11 @@ as_Spatial = function(from, cast = TRUE, IDs = paste0("ID", seq_along(from))) {
 	if (inherits(from, "sf")) {
 		geom = st_geometry(from)
 		from[[attr(from, "sf_column")]] = NULL # remove sf column list
-		sp::addAttrToGeom(as_Spatial(geom, cast = cast, IDs = row.names(from)),
+		if (ncol(from))
+			sp::addAttrToGeom(as_Spatial(geom, cast = cast, IDs = row.names(from)),
 						  data.frame(from), match.ID = FALSE)
+		else
+			.as_Spatial(from, cast, IDs)
 	} else {
 		.as_Spatial(from, cast, IDs)
 	}
