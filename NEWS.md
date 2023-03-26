@@ -1,3 +1,7 @@
+# version 1.0-13
+
+* fix random sampling on the sphere; #2133
+
 # version 1.0-12
 
 * update NAMESPACE to `useDynLib(sf, .registration=TRUE)`; #2127 thanks to @eddelbuettel
