@@ -610,7 +610,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 
 	// transform geometries:
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
-	if (g.size() == 0)
+	if (g.empty())
 		return sfc_from_ogr(g, true); // destroys g
 
 	OGRSpatialReference *dest = NULL;
