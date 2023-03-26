@@ -24,9 +24,9 @@ st_graticule(
 
 \item{...}{ignored}
 
-\item{lon}{numeric; degrees east for the meridians}
+\item{lon}{numeric; values in degrees East for the meridians, associated with \code{datum}}
 
-\item{lat}{numeric; degrees north for the parallels}
+\item{lat}{numeric; values in degrees North for the parallels, associated with \code{datum}}
 
 \item{ndiscr}{integer; number of points to discretize a parallel or meridian}
 

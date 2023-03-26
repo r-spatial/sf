@@ -16,8 +16,8 @@
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg} or numeric vector with bounding box given as (minx, miny, maxx, maxy).
 #' @param crs object of class \code{crs}, with the display coordinate reference system
 #' @param datum either an object of class \code{crs} with the coordinate reference system for the graticules, or \code{NULL} in which case a grid in the coordinate system of \code{x} is drawn, or \code{NA}, in which case an empty \code{sf} object is returned.
-#' @param lon numeric; degrees east for the meridians
-#' @param lat numeric; degrees north for the parallels
+#' @param lon numeric; values in degrees East for the meridians, associated with \code{datum}
+#' @param lat numeric; values in degrees North for the parallels, associated with \code{datum}
 #' @param ndiscr integer; number of points to discretize a parallel or meridian
 #' @param margin numeric; small number to trim a longlat bounding box that touches or
 #'  crosses +/-180 long or +/-90 latitude.
