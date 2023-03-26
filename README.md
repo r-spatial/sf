@@ -32,7 +32,7 @@ Package sf:
 
 <a href="https://gist.github.com/edzer/442d74a5775abcd5068cf3e73b23687b"><img align="left" src="https://user-images.githubusercontent.com/520851/50280460-e35c1880-044c-11e9-9ed7-cc46754e49db.jpg" /></a>
 
-(Illustration (c) by <a href="https://twitter.com/allison_horst/status/1071456081308614656">Allison Horst</a>)
+(Illustration (c) 2018 by <a href="https://twitter.com/allison_horst/status/1071456081308614656">Allison Horst</a>)
 
 ## Blogs, presentations, vignettes, sp-sf wiki
 
