@@ -1,5 +1,7 @@
 # version 1.0-13
 
+* don't repeat longlat messages in `summarise.sf()`; #1519
+
 * fix random sampling on the sphere; #2133
 
 # version 1.0-12
