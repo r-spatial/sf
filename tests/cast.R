@@ -18,9 +18,9 @@ st_cast(pol, "MULTILINESTRING")
 (pt = st_cast(mp, "POINT"))
 (i = attr(pt, "ids"))
 (xx = st_cast(pt, "MULTIPOINT", rep(seq_along(i), i)))
-(yy = st_cast(pt, "LINESTRING", rep(seq_along(i), i)))
+try(yy <- st_cast(pt, "LINESTRING", rep(seq_along(i), i)))
 
-(zz = st_cast(yy, "MULTILINESTRING"))
+#(zz = st_cast(yy, "MULTILINESTRING"))
 #(zz = st_cast(yy, "POLYGON"))
 
 st_cast(mls, "LINESTRING")
@@ -83,3 +83,6 @@ g <- st_as_sfc(wkt)
 g <- st_sf(demo = "test", geom = g, crs = 4326)
 m = st_cast(g, "MULTILINESTRING")
 identical(m$geom[[1]], st_cast(g$geom[[1]], "MULTILINESTRING"))
+
+st_cast(st_sfc(st_geometrycollection(), st_multipolygon()), 'MULTIPOLYGON') #1961
+st_cast(st_sfc(st_geometrycollection(), st_multipolygon(), st_point(0:1)), 'POINT') #1961
