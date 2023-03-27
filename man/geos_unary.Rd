@@ -71,16 +71,16 @@ st_segmentize(x, dfMaxLength, ...)
 \code{dist} is a \code{units} object, it should be convertible to \code{arc_degree} if
 \code{x} has geographic coordinates, and to \code{st_crs(x)$units} otherwise}
 
-\item{nQuadSegs}{integer; number of segments per quadrant (fourth of a circle), for all or per-feature}
+\item{nQuadSegs}{integer; number of segments per quadrant (fourth of a circle), for all or per-feature; see details}
 
-\item{endCapStyle}{character; style of line ends, one of 'ROUND', 'FLAT', 'SQUARE'}
+\item{endCapStyle}{character; style of line ends, one of 'ROUND', 'FLAT', 'SQUARE'; see details}
 
-\item{joinStyle}{character; style of line joins, one of 'ROUND', 'MITRE', 'BEVEL'}
+\item{joinStyle}{character; style of line joins, one of 'ROUND', 'MITRE', 'BEVEL'; see details}
 
-\item{mitreLimit}{numeric; limit of extension for a join if \code{joinStyle} 'MITRE' is used (default 1.0, minimum 0.0)}
+\item{mitreLimit}{numeric; limit of extension for a join if \code{joinStyle} 'MITRE' is used (default 1.0, minimum 0.0); see details}
 
 \item{singleSide}{logical; if \code{TRUE}, single-sided buffers are returned for linear geometries,
-in which case negative \code{dist} values give buffers on the right-hand side, positive on the left.}
+in which case negative \code{dist} values give buffers on the right-hand side, positive on the left; see details}
 
 \item{...}{ignored}
 
@@ -124,6 +124,10 @@ Geometric unary operations on simple feature geometries. These are all generics,
 the underlying 'buffer with style' GEOS function is used.
 If a negative buffer returns empty polygons instead of shrinking, set st_use_s2() to FALSE
 See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.html} for details.
+
+\code{nQuadSegs}, \code{endCapsStyle}, \code{joinStyle}, \code{mitreLimit} and \code{singleSide} only
+work when the GEOS back-end is used: for projected coordinates or when \code{sf_use_s2()} is set
+to \code{FALSE}.
 
 \code{st_boundary} returns the boundary of a geometry
 
