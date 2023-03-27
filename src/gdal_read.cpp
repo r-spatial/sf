@@ -228,7 +228,7 @@ Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
 		// feature attribute fields:
 		for (int iField = 0; iField < poFDefn->GetFieldCount(); iField++ ) {
 			OGRFieldDefn *poFieldDefn = poFDefn->GetFieldDefn( iField );
-#if (GDAL_VERSION_MINOR >= 2 || GDAL_VERSION_MAJOR > 2)
+#if GDAL_VERSION_NUM >= 2020000
 			int not_NA = poFeature->IsFieldSetAndNotNull(iField);
 #else
 			int not_NA = poFeature->IsFieldSet(iField);
@@ -576,7 +576,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	if (wkt_filter.size()) {
 		char *wkt = wkt_filter[0];
 		OGRGeometry *new_geom;
-#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
+#if GDAL_VERSION_NUM < 2030000
 		OGRErr err = OGRGeometryFactory::createFromWkt(&wkt, poLayer->GetSpatialRef(), &new_geom);
 #else
 		OGRErr err = OGRGeometryFactory::createFromWkt((const char *) wkt, poLayer->GetSpatialRef(), &new_geom);

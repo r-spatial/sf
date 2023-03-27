@@ -27,7 +27,7 @@ st_make_valid(x, ...)
   x,
   ...,
   oriented = FALSE,
-  s2_options = s2::s2_options(snap = s2::s2_snap_precision(1e+07)),
+  s2_options = s2::s2_options(snap = s2::s2_snap_precision(1e+07), ...),
   geos_method = "valid_structure",
   geos_keep_collapsed = TRUE
 )
@@ -35,7 +35,7 @@ st_make_valid(x, ...)
 \arguments{
 \item{x}{object of class \code{sfg}, \code{sfg} or \code{sf}}
 
-\item{...}{ignored}
+\item{...}{passed on to \link[s2]{s2_options}}
 
 \item{NA_on_exception}{logical; if TRUE, for polygons that would otherwise raise a GEOS error (exception, e.g. for a POLYGON having more than zero but less than 4 points, or a LINESTRING having one point) return an \code{NA} rather than raising an error, and suppress warning messages (e.g. about self-intersection); if FALSE, regular GEOS errors and warnings will be emitted.}
 

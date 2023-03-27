@@ -51,7 +51,7 @@ Rcpp::NumericVector get_dbl6(Rcpp::List in) {
 }
 
 void SetNull(OGRFeature *poFeature, size_t field) {
-#if (GDAL_VERSION_MINOR >= 2 || GDAL_VERSION_MAJOR > 2)
+#if GDAL_VERSION_NUM >= 2020000
 	poFeature->SetFieldNull(field);
 #else
 	poFeature->UnsetField(field);

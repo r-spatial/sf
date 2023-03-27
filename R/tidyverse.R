@@ -162,7 +162,11 @@ select.sf <- function(.data, ...) {
 		stop("internal error: can't find sf column") # nocov
 
 	agr = st_agr(.data)
-	vars = names(.data)[setdiff(loc, sf_column_loc)]
+	#vars = names(.data)[setdiff(loc, sf_column_loc)] # see #1886, change into:
+	lloc = loc
+	if (sf_column_loc %in% loc)
+		lloc = lloc[loc != sf_column_loc]
+	vars = names(.data)[lloc]
 
 	sf_column_loc_loc = match(sf_column_loc, loc)
 	if (is.na(sf_column_loc_loc)) {
@@ -279,7 +283,12 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE
 				i = dplyr::group_indices(.data)
 				# geom = st_geometry(.data)
 				geom = if (do_union)
-						lapply(sort(unique(i)), function(x) st_union(geom[i == x], is_coverage = is_coverage))
+						lapply(sort(unique(i)), function(x) {
+							if (x == 1)
+								st_union(geom[i == x], is_coverage = is_coverage)
+							else
+								suppressMessages(st_union(geom[i == x], is_coverage = is_coverage))
+						})
 					else
 						lapply(sort(unique(i)), function(x) st_combine(geom[i == x]))
 				geom = unlist(geom, recursive = FALSE)

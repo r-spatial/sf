@@ -81,7 +81,7 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
 		sr = new OGRSpatialReference;
 		sr = handle_axis_order(sr);
 		char **ppt = (char **) &wkt;
-#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
+#if GDAL_VERSION_NUM < 2030000
 		sr->importFromWkt(ppt);
 #else
 		sr->importFromWkt( (const char**) ppt);

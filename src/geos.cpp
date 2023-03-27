@@ -804,9 +804,9 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = geos_ptr(chkNULL(GEOSBoundary_r(hGEOSCtxt, g[i].get())), hGEOSCtxt);
 	} else if (op == "concave_hull") {
+#ifdef HAVE311
 		double ratio = bufferDist[0];
 		unsigned int allowHoles = preserveTopology[0];
-#ifdef HAVE311
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = geos_ptr(chkNULL(GEOSConcaveHull_r(hGEOSCtxt, g[i].get(), ratio, allowHoles)), hGEOSCtxt);
 #else

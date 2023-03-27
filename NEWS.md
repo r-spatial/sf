@@ -1,3 +1,23 @@
+# version 1.0-13
+
+* `select.sf()` allows selecting the same column twice under different names; #1886
+
+* `st_as_sf.ppplist()` is deprecated; #1926
+
+* `st_cast()` handles empty geometries; #1961
+
+* don't repeat longlat messages in `summarise.sf()`; #1519
+
+* fix random sampling on the sphere; #2133
+
+# version 1.0-12
+
+* update NAMESPACE to `useDynLib(sf, .registration=TRUE)`; #2127 thanks to @eddelbuettel
+
+* fix call in `gdal_addo()`; #2124
+
+* fix issues that came up with older GDAL version, use `GDAL_VERSION_NUM` consistently; #2123 #2121 #2119
+
 # version 1.0-11
 
 * `st_make_grid()` also accepts area units for `cellsize`, for square and hexagonal grids; #1505

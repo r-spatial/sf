@@ -135,6 +135,18 @@ copy_sfc_attributes_from = function(x, ret) {
 		bbox = attr(x, "bbox"), crs = attr(x, "crs"), n_empty = attr(x, "n_empty"))
 }
 
+empty_sfg <- function(to) {
+	switch(to,
+		   GEOMETRYCOLLECTION = st_geometrycollection(),
+		   MULTIPOLYGON = st_multipolygon(),
+		   POLYGON = st_polygon(),
+		   MULTILINESTRING = st_multilinestring(),
+		   LINESTRING = st_linestring(),
+		   MULTIPOINT = st_multipoint(),
+		   POINT = st_point()
+	   )
+}
+
 
 #' @name st_cast
 #' @param ids integer vector, denoting how geometries should be grouped (default: no grouping)
@@ -148,10 +160,20 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 	if (missing(to))
 		return(st_cast_sfc_default(x))
 
+	e = rep(FALSE, length(x))
+	if (!inherits(x, c("sfc_MULTICURVE", "sfc_COMPOUNDCURVE"))) {
+		e = st_is_empty(x)
+		if (all(e)) {
+			x[e] = empty_sfg(to)
+			return(x) # RETURNS
+		}
+	}
+	if (any(e))
+		x = x[!e]
 	from_cls = substr(class(x)[1], 5, 100)
 	from_col = which_sfc_col(from_cls)
 	to_col = which_sfc_col(to)
-	if (from_cls == to)
+	ret = if (from_cls == to)
 		x # returns x: do nothing
 	else if (to == "GEOMETRY") # we can always do that:
 		structure(x, class = c("sfc_GEOMETRY", "sfc"))
@@ -201,6 +223,14 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 		# EJP: FIXME:
 		structure(reclass(ret, to, need_close(to)), ids = get_lengths(x))
 	}
+	if (any(e)) {
+		crs = st_crs(x)
+		x = vector("list", length = length(e))
+		x[e] = list(empty_sfg(to))
+		x[!e] = ret
+		st_set_crs(do.call(st_sfc, x), crs)
+	} else
+		ret
 }
 
 #' @name st_cast

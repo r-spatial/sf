@@ -9,12 +9,12 @@
 #' @param dist numeric; buffer distance for all, or for each of the elements in \code{x}; in case
 #' \code{dist} is a \code{units} object, it should be convertible to \code{arc_degree} if
 #' \code{x} has geographic coordinates, and to \code{st_crs(x)$units} otherwise
-#' @param nQuadSegs integer; number of segments per quadrant (fourth of a circle), for all or per-feature
-#' @param endCapStyle character; style of line ends, one of 'ROUND', 'FLAT', 'SQUARE'
-#' @param joinStyle character; style of line joins, one of 'ROUND', 'MITRE', 'BEVEL'
-#' @param mitreLimit numeric; limit of extension for a join if \code{joinStyle} 'MITRE' is used (default 1.0, minimum 0.0)
+#' @param nQuadSegs integer; number of segments per quadrant (fourth of a circle), for all or per-feature; see details
+#' @param endCapStyle character; style of line ends, one of 'ROUND', 'FLAT', 'SQUARE'; see details
+#' @param joinStyle character; style of line joins, one of 'ROUND', 'MITRE', 'BEVEL'; see details
+#' @param mitreLimit numeric; limit of extension for a join if \code{joinStyle} 'MITRE' is used (default 1.0, minimum 0.0); see details
 #' @param singleSide logical; if \code{TRUE}, single-sided buffers are returned for linear geometries,
-#' in which case negative \code{dist} values give buffers on the right-hand side, positive on the left.
+#' in which case negative \code{dist} values give buffers on the right-hand side, positive on the left; see details
 #' @param ... passed on to \code{s2_buffer_cells}
 #' @return an object of the same class of \code{x}, with manipulated geometry.
 #' @export
@@ -23,6 +23,10 @@
 #' the underlying 'buffer with style' GEOS function is used.
 #' If a negative buffer returns empty polygons instead of shrinking, set st_use_s2() to FALSE
 #' See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.html} for details.
+#' 
+#' \code{nQuadSegs}, \code{endCapsStyle}, \code{joinStyle}, \code{mitreLimit} and \code{singleSide} only
+#' work when the GEOS back-end is used: for projected coordinates or when \code{sf_use_s2()} is set
+#' to \code{FALSE}.
 #' @examples
 #'
 #' ## st_buffer, style options (taken from rgeos gBuffer)
@@ -323,13 +327,15 @@ st_triangulate.sf = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 #' @export
 #' @details \code{st_triangulate_constrained} returns the constrained delaunay triangulation of polygons; requires GEOS version 3.10 or above
 #' @examples
-#' pts = rbind(c(0,0), c(1,0), c(1,1), c(.5,.5), c(0,1), c(0,0))
-#' po = st_polygon(list(pts))
-#' co = st_triangulate_constrained(po)
-#' tr = st_triangulate(po)
-#' plot(po, col = NA, border = 'grey', lwd = 15)
-#' plot(tr, border = 'green', col = NA, lwd = 5, add = TRUE)
-#' plot(co, border = 'red', col = 'NA', add = TRUE)
+#' if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.10.0") > -1) {
+#'  pts = rbind(c(0,0), c(1,0), c(1,1), c(.5,.5), c(0,1), c(0,0))
+#'  po = st_polygon(list(pts))
+#'  co = st_triangulate_constrained(po)
+#'  tr = st_triangulate(po)
+#'  plot(po, col = NA, border = 'grey', lwd = 15)
+#'  plot(tr, border = 'green', col = NA, lwd = 5, add = TRUE)
+#'  plot(co, border = 'red', col = 'NA', add = TRUE)
+#' }
 st_triangulate_constrained = function(x)
 	UseMethod("st_triangulate_constrained")
 

@@ -74,7 +74,9 @@ st_as_sf.map = function(x, ..., fill = TRUE, group = TRUE) {
 			map2pol(xyList, ID)
 		else
 			map2lin(xyList, ID)
-	st_sf(ID = unique(ID), geom = geom, crs = "+proj=longlat +ellps=clrk66 +no_defs +type=crs")
+	ID = unique(ID)
+	stopifnot(length(ID) == length(geom))
+	st_sf(ID = ID, geom = geom, crs = "+proj=longlat +ellps=clrk66 +no_defs +type=crs", row.names = ID)
 }
 
 

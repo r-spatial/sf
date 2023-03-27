@@ -162,6 +162,9 @@ st_poly_sample = function(x, size, ..., type = "random",
 		global = FALSE
 		bb = st_bbox(x)
 		if (isTRUE(st_is_longlat(x))) {
+			if (sf_use_s2())
+				bb = st_bbox(st_segmentize(st_as_sfc(bb), 
+										   units::set_units(1, "degree", mode = "standard"))) # get coordinate range on S2
 			R = s2::s2_earth_radius_meters()
 			toRad = pi / 180
 			h1 = sin(bb["ymax"] * toRad)
@@ -174,12 +177,12 @@ st_poly_sample = function(x, size, ..., type = "random",
 				a1 = a0
 				global = TRUE
 			}
-			size = size * a0 / a1
+			size = round(size * a0 / a1)
 		} else {
 			a0 = as.numeric(st_area(st_as_sfc(bb)))
 			a1 = as.numeric(sum(st_area(x)))
 			# we're sampling from a box, so n should be size_desired * a0 / a1
-			if (is.finite(a0) && is.finite(a1) && a0 > a0 * 0.0 && a1 > a1 * 0.0) { # FIXME: can be removed, now we handle long/lat separately?
+			if (is.finite(a0) && is.finite(a1) && a0 > a0 * 0.0 && a1 > a1 * 0.0) { # FIXME: reqs can be removed, now we handle long/lat separately?
 				r = size * a0 / a1
 				size = if (round(r) == 0)
 						rbinom(1, 1, r)
