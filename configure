@@ -2380,7 +2380,6 @@ printf "%s\n" "no" >&6; }
   fi
 fi
 
-
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking gdal-config usability" >&5
 printf %s "checking gdal-config usability... " >&6; }
 if test `${GDAL_CONFIG} --version`;
@@ -2415,6 +2414,8 @@ printf "%s\n" "$as_me: GDAL: ${GDAL_VERSION}" >&6;}
 printf %s "checking GDAL version >= 2.0.1... " >&6; }
 
 GDAL_MAJ_VER=`echo $GDAL_VERSION | cut -d "." -f1`
+GDAL_MIN_VER=`echo $GDAL_VERSION | cut -d "." -f2`
+GDAL_PATCH_VER=`echo $GDAL_VERSION | cut -d "." -f3`
 if test ${GDAL_MAJ_VER} -lt 2 ; then
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
@@ -2422,6 +2423,10 @@ printf "%s\n" "no" >&6; }
 else
    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
+fi
+
+if test ${GDAL_MAJ_VER} -eq 3 -a ${GDAL_MIN_VER} -eq 6 -a ${GDAL_PATCH_VER} -eq 0 ; then
+  as_fn_error $? "GDAL version 3.6.0 has been withdrawn, please update GDAL" "$LINENO" 5
 fi
 
 INLIBS="${LIBS}"

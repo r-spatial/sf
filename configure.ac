@@ -79,7 +79,6 @@ else
   fi
 fi
 
-
 AC_MSG_CHECKING(gdal-config usability)
 if test `${GDAL_CONFIG} --version`;
 then
@@ -109,11 +108,17 @@ AC_MSG_NOTICE([GDAL: ${GDAL_VERSION}])
 AC_MSG_CHECKING([GDAL version >= 2.0.1])
 
 GDAL_MAJ_VER=`echo $GDAL_VERSION | cut -d "." -f1`
+GDAL_MIN_VER=`echo $GDAL_VERSION | cut -d "." -f2`
+GDAL_PATCH_VER=`echo $GDAL_VERSION | cut -d "." -f3`
 if test ${GDAL_MAJ_VER} -lt 2 ; then
   AC_MSG_RESULT(no)
   AC_MSG_ERROR([sf is not compatible with GDAL versions below 2.0.1])
 else
    AC_MSG_RESULT(yes)
+fi
+
+if test [${GDAL_MAJ_VER} -eq 3] -a [${GDAL_MIN_VER} -eq 6] -a [${GDAL_PATCH_VER} -eq 0] ; then
+  AC_MSG_ERROR([GDAL version 3.6.0 has been withdrawn, please update GDAL])
 fi
 
 INLIBS="${LIBS}"
