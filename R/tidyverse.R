@@ -162,7 +162,11 @@ select.sf <- function(.data, ...) {
 		stop("internal error: can't find sf column") # nocov
 
 	agr = st_agr(.data)
-	vars = names(.data)[setdiff(loc, sf_column_loc)]
+	#vars = names(.data)[setdiff(loc, sf_column_loc)] # see #1886, change into:
+	lloc = loc
+	if (sf_column_loc %in% loc)
+		lloc = lloc[loc != sf_column_loc]
+	vars = names(.data)[lloc]
 
 	sf_column_loc_loc = match(sf_column_loc, loc)
 	if (is.na(sf_column_loc_loc)) {

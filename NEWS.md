@@ -1,5 +1,7 @@
 # version 1.0-13
 
+* `select.sf()` allows selecting the same column twice under different names; #1886
+
 * `st_as_sf.ppplist()` is deprecated; #1926
 
 * `st_cast()` handles empty geometries; #1961
