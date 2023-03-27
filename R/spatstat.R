@@ -56,6 +56,7 @@ st_as_sf.ppp = function(x, ...) {
 
 #' @export
 st_as_sf.ppplist = function(x, ...) {
+	.Deprecated(msg = "see https://github.com/r-spatial/sf/issues/1926") # sf 1.0-13, Mar 27 2023
 	w = st_geometry(st_as_sf(x[[1]]))[1]
 	sim = st_sfc(lapply(x, function(p) do.call(c, st_geometry(st_as_sf(p))[-1])))
 	st_sf(label = c("window", names(x)), geom = c(w, sim))

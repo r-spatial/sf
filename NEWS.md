@@ -1,5 +1,7 @@
 # version 1.0-13
 
+* `st_as_sf.ppplist()` is deprecated; #1926
+
 * `st_cast()` handles empty geometries; #1961
 
 * don't repeat longlat messages in `summarise.sf()`; #1519
