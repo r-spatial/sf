@@ -149,10 +149,11 @@ which comes shipped with the <code>sf</code> package by:</p>
 <span><span class="co">## Linking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE</span></span>
 <span><span class="va">fname</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span></span>
 <span><span class="va">fname</span></span>
-<span><span class="co">## [1] "/home/runner/work/_temp/Library/sf/shape/nc.shp"</span></span>
+<span><span class="co">## [1] "/tmp/RtmpnWdqEi/temp_libpath2dae377e614b/sf/shape/nc.shp"</span></span>
 <span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">fname</span><span class="op">)</span></span>
 <span><span class="co">## Reading layer `nc' from data source </span></span>
-<span><span class="co">##   `/home/runner/work/_temp/Library/sf/shape/nc.shp' using driver `ESRI Shapefile'</span></span>
+<span><span class="co">##   `/tmp/RtmpnWdqEi/temp_libpath2dae377e614b/sf/shape/nc.shp' </span></span>
+<span><span class="co">##   using driver `ESRI Shapefile'</span></span>
 <span><span class="co">## Simple feature collection with 100 features and 14 fields</span></span>
 <span><span class="co">## Geometry type: MULTIPOLYGON</span></span>
 <span><span class="co">## Dimension:     XY</span></span>
@@ -220,7 +221,8 @@ argument <code>stringsAsFactors</code> can be set to
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">fname</span><span class="op">)</span></span>
 <span><span class="co">## Reading layer `nc' from data source </span></span>
-<span><span class="co">##   `/home/runner/work/_temp/Library/sf/shape/nc.shp' using driver `ESRI Shapefile'</span></span>
+<span><span class="co">##   `/tmp/RtmpnWdqEi/temp_libpath2dae377e614b/sf/shape/nc.shp' </span></span>
+<span><span class="co">##   using driver `ESRI Shapefile'</span></span>
 <span><span class="co">## Simple feature collection with 100 features and 14 fields</span></span>
 <span><span class="co">## Geometry type: MULTIPOLYGON</span></span>
 <span><span class="co">## Dimension:     XY</span></span>
