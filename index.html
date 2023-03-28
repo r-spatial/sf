@@ -162,7 +162,7 @@
 <p>Install development versions from GitHub with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://remotes.r-lib.org" class="external-link">remotes</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"r-spatial/sf"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">install_github</span><span class="op">(</span><span class="st">"r-spatial/sf"</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="windows">Windows<a class="anchor" aria-label="anchor" href="#windows"></a>
 </h3>
@@ -181,7 +181,7 @@ brew install gdal</code></pre>
 <p>Or the development version:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://remotes.r-lib.org" class="external-link">remotes</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"r-spatial/sf"</span>, configure.args <span class="op">=</span> <span class="st">"--with-proj-lib=$(brew --prefix)/lib/"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">install_github</span><span class="op">(</span><span class="st">"r-spatial/sf"</span>, configure.args <span class="op">=</span> <span class="st">"--with-proj-lib=$(brew --prefix)/lib/"</span><span class="op">)</span></span></code></pre></div>
 <p>If you are using <code>sf</code> and <code>rgdal</code> together, it is necessary to install <code>rgdal</code> from source using this configuration:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"rgdal"</span>, type <span class="op">=</span> <span class="st">"source"</span>, configure.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"--with-proj-lib=$(brew --prefix)/lib/"</span>, <span class="st">"--with-proj-include=$(brew --prefix)/include/"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -298,9 +298,10 @@ yay/pacaur/yaourt/whatever -S udunits</code></pre>
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
+<li><a href="https://github.com/r-spatial/sf/actions/workflows/rcmdcheck.yml" class="external-link"><img src="https://github.com/r-spatial/sf/actions/workflows/rcmdcheck.yml/badge.svg?branch=main" alt="rcmdcheck"></a></li>
 <li><a href="https://github.com/r-spatial/sf/actions" class="external-link"><img src="https://github.com/r-spatial/sf/workflows/tic/badge.svg?branch=main" alt="tic"></a></li>
 <li><a href="https://github.com/r-spatial/sf/actions" class="external-link"><img src="https://github.com/r-spatial/sf/workflows/tic-db/badge.svg?branch=main" alt="tic-db"></a></li>
-<li><a href="https://codecov.io/github/r-spatial/sf?branch=main" class="external-link"><img src="https://img.shields.io/codecov/c/github/r-spatial/sf/main.svg" alt="Coverage Status"></a></li>
+<li><a href="https://app.codecov.io/gh/r-spatial/sf" class="external-link"><img src="https://img.shields.io/codecov/c/github/r-spatial/sf/main.svg" alt="Coverage Status"></a></li>
 <li><a href="http://www.gnu.org/licenses/gpl-2.0.html" class="external-link"><img src="http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat" alt="License"></a></li>
 <li><a href="https://cran.r-project.org/package=sf" class="external-link"><img src="http://www.r-pkg.org/badges/version/sf" alt="CRAN"></a></li>
 <li><a href="https://cran.r-project.org/web/checks/check_results_sf.html" class="external-link"><img src="https://badges.cranchecks.info/worst/sf.svg" alt="cran checks"></a></li>
