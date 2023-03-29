@@ -41,6 +41,12 @@
 #' When setting \code{reset} to \code{FALSE}, the original device parameters are lost, and the device must be reset using \code{dev.off()} in order to reset it.
 #'
 #' parameter \code{at} can be set to specify where labels are placed along the key; see examples.
+#' 
+#' The features are plotted in the same order as they order in the sf object. If a different plotting order is wanted
+#' (for example to plot smaller polygons on top of larger polygons if they are overlapping), this can be achieved
+#' by reordering the sf-object, either permanently (x = x[order(st_area(x), decreasing = TRUE),]) or on-the-fly with dplyr,
+#' such as:   x %>% arrange(desc(st_area(x))) |> ggplot(aes(fill = column_name)) + geom_sf() .
+#' 
 #'
 #' @examples
 #' nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)
