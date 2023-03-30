@@ -42,11 +42,7 @@
 #'
 #' parameter \code{at} can be set to specify where labels are placed along the key; see examples.
 #' 
-#' The features are plotted in the same order as they order in the sf object. If a different plotting order is wanted
-#' (for example to plot smaller polygons on top of larger polygons if they are overlapping), this can be achieved
-#' by reordering the sf-object, either permanently (x = x[order(st_area(x), decreasing = TRUE),]) or on-the-fly with dplyr,
-#' such as:   x %>% arrange(desc(st_area(x))) |> ggplot(aes(fill = column_name)) + geom_sf() .
-#' 
+#' The features are plotted in the order as they apppear in the sf object. See examples for when a different plotting order is wanted.
 #'
 #' @examples
 #' nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)
@@ -68,6 +64,11 @@
 #' layout(matrix(1:2, ncol = 2), widths = c(1, lcm(2)))
 #' plot(1)
 #' .image_scale(1:10, col = sf.colors(9), key.length = lcm(8), key.pos = 4, at = 1:10)
+#' # manipulate plotting order, plot largest polygons first:
+#' p = st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0))))
+#' x = st_sf(a=1:4, st_sfc(p, p * 2, p * 3, p * 4)) # plot(x, col=2:5) only shows the largest polygon!
+#' plot(x[order(st_area(x), decreasing = TRUE),], col = 2:5) # plot largest polygons first
+#' 
 #' @export
 plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty",
 		max.plot = if(is.null(n <- getOption("sf_max.plot"))) 9 else n,
