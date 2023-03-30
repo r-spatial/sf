@@ -257,6 +257,11 @@ When setting \code{reset} to \code{FALSE}, the original device parameters are lo
 
 parameter \code{at} can be set to specify where labels are placed along the key; see examples.
 
+The features are plotted in the same order as they order in the sf object. If a different plotting order is wanted
+(for example to plot smaller polygons on top of larger polygons if they are overlapping), this can be achieved
+by reordering the sf-object, either permanently (x = x[order(st_area(x), decreasing = TRUE),]) or on-the-fly with dplyr,
+such as:   x %>% arrange(desc(st_area(x))) |> ggplot(aes(fill = column_name)) + geom_sf() .
+
 \code{plot_sf} sets up the plotting area, axes, graticule, or webmap background; it
 is called by all \code{plot} methods before anything is drawn.
 
