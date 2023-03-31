@@ -99,3 +99,8 @@ test_that("empty agr attribute is named after subset", {
 	agr = attr(out, "agr")
 	expect_identical(names(agr), character())
 })
+test_that("duplicated work",{
+	sf = st_sf(data.frame(x = st_sfc(st_point(1:2))[rep(1,4)], a=gl(2,2), b=as.numeric(gl(2,2))))
+	expect_identical(duplicated(sf), c(FALSE,TRUE,FALSE,TRUE))
+	expect_s3_class(unique(sf),'sf')
+})
