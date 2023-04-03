@@ -451,6 +451,23 @@ as.data.frame.sf = function(x, ...) {
 }
 
 #' @export
+duplicated.sf <- function(x, incomparables = FALSE, fromLast = FALSE, ...) {
+  if (length(x) != 1L) {
+    if (any(i <- vapply(x, is.factor, NA))) {
+      for (j in names(i[i])) {
+        x[[j]] <- lapply(x[[j]], as.numeric)
+      }
+    }
+    if (any(i <- (lengths(lapply(x, dim)) == 2L))) {
+      for (j in names(i[i])) {
+        x[[j]] <- lapply(x[[j]], split.data.frame, seq_len(nrow(x)))
+      }
+    }
+  }
+  NextMethod()
+}
+
+#' @export
 #' @name st_geometry
 #' @details if \code{x} is of class \code{sf}, \code{st_drop_geometry} drops the geometry of its argument, and reclasses it accordingly; otherwise it returns \code{x} unmodified. 
 st_drop_geometry = function(x, ...) UseMethod("st_drop_geometry")
