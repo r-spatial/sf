@@ -3660,8 +3660,8 @@ printf "%s\n" "$as_me: Install failure: compilation and/or linkage problems." >&
    as_fn_error $? "cannot link projection code" "$LINENO" 5
 fi
 
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking GDAL: checking whether PROJ is available fur running:" >&5
-printf %s "checking GDAL: checking whether PROJ is available fur running:... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking GDAL: checking whether PROJ is available for running:" >&5
+printf %s "checking GDAL: checking whether PROJ is available for running:... " >&6; }
 ./gdal_proj
 if test `echo $?` -ne 0 ; then
 gdal_has_proj=no
