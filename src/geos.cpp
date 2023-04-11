@@ -62,6 +62,7 @@ typedef char (* log_fn)(GEOSContextHandle_t, const GEOSGeometry *, const GEOSGeo
 typedef char (* log_prfn)(GEOSContextHandle_t, const GEOSPreparedGeometry *,
 	const GEOSGeometry *);
 typedef GEOSGeom (* geom_fn)(GEOSContextHandle_t, const GEOSGeom, const GEOSGeom);
+typedef GEOSGeom (* geom_fnp)(GEOSContextHandle_t, const GEOSGeom, const GEOSGeom, double grid_size);
 
 static int notice = 0; // global var to silently catch notice of illegal geoms, e.g. non-closed rings
 
@@ -170,6 +171,17 @@ static std::vector<GEOSGeometry*> to_raw(std::vector<GeomPtr> & g) {
 	return raw;
 }
 
+double geos_grid_size(Rcpp::List x) {
+	double precision = x.attr("precision");
+	if (precision != 0.0)
+		precision = 1. / precision;
+	return precision;
+}
+
+double geos_grid_size_xy(Rcpp::List x, Rcpp::List y) {
+	return std::max(geos_grid_size(x), geos_grid_size(y));
+}
+
 std::vector<GeomPtr> geometries_from_sfc(GEOSContextHandle_t hGEOSCtxt, Rcpp::List sfc, int *dim = NULL, bool stop_on_NULL = true) {
 
 	Rcpp::List sfc_cls = get_dim_sfc(sfc);
@@ -185,10 +197,8 @@ std::vector<GeomPtr> geometries_from_sfc(GEOSContextHandle_t hGEOSCtxt, Rcpp::Li
 		Rcpp::stop("GEOS does not support XYM or XYZM geometries; use st_zm() to drop M\n"); // #nocov
 
 #ifdef HAVE_390
-	double precision = sfc.attr("precision");
-	bool set_precision = precision != 0.0;
-	if (set_precision)
-		precision = 1/precision;
+	double grid_size = geos_grid_size(sfc);
+	bool set_precision = grid_size != 0.0;
 	sfc.attr("precision") = 0.0; // so that CPL_write_wkb doesn't do the rounding;
 #endif
 	Rcpp::List wkblst = CPL_write_wkb(sfc, true);
@@ -205,7 +215,7 @@ std::vector<GeomPtr> geometries_from_sfc(GEOSContextHandle_t hGEOSCtxt, Rcpp::Li
 		}
 #ifdef HAVE_390
 		else if (set_precision)
-			g[i] = geos_ptr(GEOSGeom_setPrecision_r(hGEOSCtxt, g[i].get(), precision, GEOS_PREC_VALID_OUTPUT), hGEOSCtxt);
+			g[i] = geos_ptr(GEOSGeom_setPrecision_r(hGEOSCtxt, g[i].get(), grid_size, GEOS_PREC_VALID_OUTPUT), hGEOSCtxt);
 #endif
 	}
 	GEOSWKBReader_destroy_r(hGEOSCtxt, wkb_reader);
@@ -933,6 +943,7 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 	std::vector<GeomPtr> out;
 	std::vector<double> index_x, index_y;
 	std::vector<size_t> items(x.size());
+	double grid_size = geos_grid_size_xy(sfcx, sfcy);
 
 	if (op == "intersection") {
 
@@ -955,7 +966,11 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 			std::sort(sel.begin(), sel.end());
 			for (size_t item = 0; item < sel.size(); item++) {
 				size_t j = sel[item];
+#ifndef HAVE_390
 				GeomPtr geom = geos_ptr(GEOSIntersection_r(hGEOSCtxt, x[j].get(), y[i].get()), hGEOSCtxt);
+#else
+				GeomPtr geom = geos_ptr(GEOSIntersectionPrec_r(hGEOSCtxt, x[j].get(), y[i].get(), grid_size), hGEOSCtxt);
+#endif
 				if (geom == nullptr)
 					Rcpp::stop("GEOS exception"); // #nocov
 				if (! chk_(GEOSisEmpty_r(hGEOSCtxt, geom.get()))) {
@@ -968,6 +983,7 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 		}
 
 	} else {
+#ifndef HAVE_390
 		geom_fn geom_function;
 		if (op == "union")
 			geom_function = (geom_fn) GEOSUnion_r;
@@ -975,12 +991,25 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 			geom_function = (geom_fn) GEOSDifference_r;
 		else if (op == "sym_difference")
 			geom_function = (geom_fn) GEOSSymDifference_r;
+#else
+		geom_fnp geom_function;
+		if (op == "union")
+			geom_function = (geom_fn) GEOSUnionPrec_r;
+		else if (op == "difference")
+			geom_function = (geom_fn) GEOSDifferencePrec_r;
+		else if (op == "sym_difference")
+			geom_function = (geom_fn) GEOSSymDifferencePrec_r;
+#endif
 		else
 			Rcpp::stop("invalid operation"); // #nocov
 
 		for (size_t i = 0; i < y.size(); i++) {
 			for (size_t j = 0; j < x.size(); j++) {
+#ifndef HAVE_390
 				GeomPtr geom = geos_ptr(geom_function(hGEOSCtxt, x[j].get(), y[i].get()), hGEOSCtxt);
+#else
+				GeomPtr geom = geos_ptr(geom_function(hGEOSCtxt, x[j].get(), y[i].get(), grid_size), hGEOSCtxt);
+#endif
 				if (geom == nullptr)
 					Rcpp::stop("GEOS exception"); // #nocov
 				if (! chk_(GEOSisEmpty_r(hGEOSCtxt, geom.get()))) {
@@ -1156,6 +1185,7 @@ Rcpp::List CPL_nary_difference(Rcpp::List sfc) {
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 	std::vector<GeomPtr> x = geometries_from_sfc(hGEOSCtxt, sfc, &dim);
 	std::vector<GeomPtr> out;
+	double grid_size = geos_grid_size(sfc);
 	// initialize trees to find overlapping areas quickly
 	for (size_t i = 0; i < x.size(); i++) {
 		// if i'th geometry in x is empty then skip it
@@ -1185,7 +1215,11 @@ Rcpp::List CPL_nary_difference(Rcpp::List sfc) {
 					// test if the items intersect with geom
 					if (chk_(GEOSIntersects_r(hGEOSCtxt, geom.get(), out[tree_sel[j]].get()))) {
 						// if they do then erase overlapping parts from geom
+#ifndef HAVE_390
 						geom = geos_ptr(GEOSDifference_r(hGEOSCtxt, geom.get(), out[tree_sel[j]].get()), hGEOSCtxt);
+#else
+						geom = geos_ptr(GEOSDifferencePrec_r(hGEOSCtxt, geom.get(), out[tree_sel[j]].get(), grid_size), hGEOSCtxt);
+#endif
 						if (geom == nullptr)
 							Rcpp::stop("GEOS exception"); // #nocov
 						// ensure that geom is valid
@@ -1221,6 +1255,7 @@ Rcpp::List CPL_nary_intersection(Rcpp::List sfc) {
 	std::vector<GeomPtr> x = geometries_from_sfc(hGEOSCtxt, sfc, &dim);
 	std::vector<GeomPtr> out;
 	int errors = 0;
+	double grid_size = geos_grid_size(sfc);
 #ifdef HAVE350
 	notice = 0;
 	GEOSContext_setNoticeMessageHandler_r(hGEOSCtxt,
@@ -1249,7 +1284,11 @@ Rcpp::List CPL_nary_intersection(Rcpp::List sfc) {
 				// iterate over items in query and erase overlapping areas in geom
 				for (size_t j = 0; j < tree_sel.size(); j++) {
 					size_t k = tree_sel[j];
+#ifndef HAVE_390
 					GeomPtr inters = geos_ptr(GEOSIntersection_r(hGEOSCtxt, out[k].get(), geom.get()), hGEOSCtxt);
+#else
+					GeomPtr inters = geos_ptr(GEOSIntersectionPrec_r(hGEOSCtxt, out[k].get(), geom.get(), grid_size), hGEOSCtxt);
+#endif
 					if (geom.get() != nullptr) {
 						if (inters == nullptr)
 							errors++;
@@ -1259,7 +1298,11 @@ Rcpp::List CPL_nary_intersection(Rcpp::List sfc) {
 							if (geom == nullptr)
 								Rcpp::stop("GEOS exception"); // #nocov
 							// cut out inters from out[k]:
+#ifndef HAVE_390
 							GeomPtr g = geos_ptr(GEOSDifference_r(hGEOSCtxt, out[k].get(), inters.get()), hGEOSCtxt); 
+#else
+							GeomPtr g = geos_ptr(GEOSDifferencePrec_r(hGEOSCtxt, out[k].get(), inters.get(), grid_size), hGEOSCtxt); 
+#endif
 							if (g == nullptr)
 								Rcpp::warning("GEOS difference returns NULL"); // #nocov
 							else {
