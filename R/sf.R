@@ -409,7 +409,7 @@ print.sf = function(x, ..., n = getOption("sf_max_print", default = 10)) {
 	nf = length(x) - length(geoms)
 	app = paste("and", nf, ifelse(nf == 1, "field", "fields"))
 	if (any(!is.na(st_agr(x))))
-		app = paste0(app, "\n", "Attribute-geometry relationship: ", summarize_agr(x))
+		app = paste0(app, "\n", "Attribute-geometry relationship", ifelse(nf > 1, "s: ", ": "), summarize_agr(x))
 	if (length(geoms) > 1)
 		app = paste0(app, "\n", "Active geometry column: ", attr(x, "sf_column"))
 	print(st_geometry(x), n = 0, what = "Simple feature collection with", append = app)
@@ -457,6 +457,23 @@ merge.sf = function(x, y, ...) {
 as.data.frame.sf = function(x, ...) {
 	class(x) <- setdiff(class(x), "sf")
 	NextMethod()
+}
+
+#' @export
+duplicated.sf <- function(x, incomparables = FALSE, fromLast = FALSE, ...) {
+  if (length(x) != 1L) {
+    if (any(i <- vapply(x, is.factor, NA))) {
+      for (j in names(i[i])) {
+        x[[j]] <- lapply(x[[j]], as.numeric)
+      }
+    }
+    if (any(i <- (lengths(lapply(x, dim)) == 2L))) {
+      for (j in names(i[i])) {
+        x[[j]] <- lapply(x[[j]], split.data.frame, seq_len(nrow(x)))
+      }
+    }
+  }
+  NextMethod()
 }
 
 #' @export

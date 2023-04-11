@@ -257,6 +257,8 @@ When setting \code{reset} to \code{FALSE}, the original device parameters are lo
 
 parameter \code{at} can be set to specify where labels are placed along the key; see examples.
 
+The features are plotted in the order as they apppear in the sf object. See examples for when a different plotting order is wanted.
+
 \code{plot_sf} sets up the plotting area, axes, graticule, or webmap background; it
 is called by all \code{plot} methods before anything is drawn.
 
@@ -291,5 +293,10 @@ plot(st_geometry(nc)[1], col = 'red', add = TRUE)
 layout(matrix(1:2, ncol = 2), widths = c(1, lcm(2)))
 plot(1)
 .image_scale(1:10, col = sf.colors(9), key.length = lcm(8), key.pos = 4, at = 1:10)
+# manipulate plotting order, plot largest polygons first:
+p = st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0))))
+x = st_sf(a=1:4, st_sfc(p, p * 2, p * 3, p * 4)) # plot(x, col=2:5) only shows the largest polygon!
+plot(x[order(st_area(x), decreasing = TRUE),], col = 2:5) # plot largest polygons first
+
 sf.colors(10)
 }

@@ -1,5 +1,9 @@
 # version 1.0-13
 
+* use GEOS' overlayNG routines for (GEOS) Intersection, Difference, Union and SymDifference; #2143
+
+* added `duplicated.sf()`; #2138, #2140, thanks to @bart1
+
 * `select.sf()` allows selecting the same column twice under different names; #1886
 
 * `st_as_sf.ppplist()` is deprecated; #1926

@@ -366,6 +366,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	CharacterVector descriptions(bands.size());
 	NumericMatrix ranges(bands.size(), 4);
 	IntegerMatrix blocksizes(bands.size(), 2);
+	IntegerVector colorInterp(bands.size());
 	for (int i = 0; i < bands.size(); i++) {
 		if ((poBand = poDataset->GetRasterBand(bands(i))) == NULL)
 			stop("trying to read a band that is not present");
@@ -391,6 +392,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		poBand->GetBlockSize(&nBlockXSize, &nBlockYSize);
 		blocksizes(i, 0) = nBlockXSize;
 		blocksizes(i, 1) = nBlockYSize;
+		colorInterp(i) = (int) poBand->GetColorInterpretation();
 	}
 
 	// get metadata items:
@@ -462,7 +464,8 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		_["blocksizes"] = blocksizes,
 		_["descriptions"] = descriptions,
 		_["default_geotransform"] = default_geotransform,
-		_["proxy"] = LogicalVector::create(!read_data)
+		_["proxy"] = LogicalVector::create(!read_data),
+		_["colorInterp"] = colorInterp
 	);
 	if (read_data) {
 		ReturnList.attr("data") = read_gdal_data(poDataset, nodatavalue, nXOff, nYOff,
