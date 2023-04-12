@@ -284,8 +284,9 @@ List get_rat(GDALRasterAttributeTable *tbl) {
 
 // [[Rcpp::export]]
 List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVector driver,
-		bool read_data, NumericVector NA_value, List RasterIO_parameters) {
-// reads and returns data set metadata, and if read_data is true, adds data array
+		bool read_data, NumericVector NA_value, List RasterIO_parameters, double max_cells) {
+// reads and returns data set metadata, and adds data array if read_data is true, or less 
+// than max_cells are to be read
 	GDALDataset *poDataset = (GDALDataset *) GDALOpenEx(fname[0], GA_ReadOnly,
 		driver.size() ? create_options(driver).data() : NULL,
 		options.size() ? create_options(options).data() : NULL,
@@ -323,7 +324,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	bool geo_transform_set = (err == CE_None);
 
 	// CRS, projection:
-#if GDAL_VERSION_MAJOR >= 3
+#if GDAL_VERSION_NUM >= 3000000
 	const OGRSpatialReference *sr = poDataset->GetSpatialRef();
 	// sr = handle_axis_order(sr); -- should be done by GDAL; xy
 	Rcpp::List crs = create_crs(sr, true);
@@ -365,6 +366,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	CharacterVector descriptions(bands.size());
 	NumericMatrix ranges(bands.size(), 4);
 	IntegerMatrix blocksizes(bands.size(), 2);
+	IntegerVector colorInterp(bands.size());
 	for (int i = 0; i < bands.size(); i++) {
 		if ((poBand = poDataset->GetRasterBand(bands(i))) == NULL)
 			stop("trying to read a band that is not present");
@@ -390,6 +392,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		poBand->GetBlockSize(&nBlockXSize, &nBlockYSize);
 		blocksizes(i, 0) = nBlockXSize;
 		blocksizes(i, 1) = nBlockYSize;
+		colorInterp(i) = (int) poBand->GetColorInterpretation();
 	}
 
 	// get metadata items:
@@ -408,6 +411,9 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	int nYSize = get_from_list(RasterIO_parameters, "nYSize", poDataset->GetRasterYSize() - nYOff);
 	int nBufXSize = get_from_list(RasterIO_parameters, "nBufXSize", nXSize);
 	int nBufYSize = get_from_list(RasterIO_parameters, "nBufYSize", nYSize);
+
+	if (max_cells > 0) 
+		read_data = (bands.size() * nBufXSize * nBufYSize) < max_cells;
 
 	// resampling method:
 	GDALRasterIOExtraArg resample;
@@ -440,7 +446,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		_["cols"] = NumericVector::create(nXOff + 1, nXOff + nBufXSize),
 		_["rows"] = NumericVector::create(nYOff + 1, nYOff + nBufYSize),
 		_["bands"] = bands,
-#if GDAL_VERSION_MAJOR >= 3
+#if GDAL_VERSION_NUM >= 3000000
 		_["crs"] = crs,
 #else
 		_["proj_wkt"] = wkt,
@@ -457,7 +463,9 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 		_["ranges"] = ranges,
 		_["blocksizes"] = blocksizes,
 		_["descriptions"] = descriptions,
-		_["default_geotransform"] = default_geotransform
+		_["default_geotransform"] = default_geotransform,
+		_["proxy"] = LogicalVector::create(!read_data),
+		_["colorInterp"] = colorInterp
 	);
 	if (read_data) {
 		ReturnList.attr("data") = read_gdal_data(poDataset, nodatavalue, nXOff, nYOff,
@@ -563,7 +571,7 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 		if (p4s[0] != NA_STRING) {
 			OGRSpatialReference oSRS;
 			oSRS.SetFromUserInput((const char *) p4s[0]); // handles wkt too
-#if GDAL_VERSION_MAJOR >= 3
+#if GDAL_VERSION_NUM >= 3000000
 			poDstDS->SetSpatialRef(&oSRS);
 #else
 			char *pszSRS_WKT = NULL;

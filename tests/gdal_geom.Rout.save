@@ -1,5 +1,5 @@
 
-R version 4.2.1 (2022-06-23) -- "Funny-Looking Kid"
+R version 4.2.2 Patched (2022-11-10 r83330) -- "Innocent and Trusting"
 Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -62,18 +62,15 @@ Type 'q()' to quit R.
 > x = st_segmentize(nc_tr, 5e4)
 > 
 > try(x <- st_segmentize(nc_tr, -0.1))
-Error in CPL_gdal_segmentize(x, dfMaxLength) : 
-  argument dfMaxLength should be positive
+Error : argument dfMaxLength should be positive
 
 > 
 > x = st_centroid(nc_tr)
 Warning message:
-In st_centroid.sf(nc_tr) :
-  st_centroid assumes attributes are constant over geometries of x
+st_centroid assumes attributes are constant over geometries 
 > x = st_point_on_surface(nc_tr)
 Warning message:
-In st_point_on_surface.sf(nc_tr) :
-  st_point_on_surface assumes attributes are constant over geometries of x
+st_point_on_surface assumes attributes are constant over geometries 
 > 
 > a = nc[1:5,]
 > b = nc[4:10,]
@@ -256,11 +253,11 @@ POINT Z (6378137 0 0)
 > 
 > cbind(st_area(nc_tr[1:5,]), a$AREA)
            [,1]  [,2]
-[1,] 1760244967 0.114
-[2,]  946435667 0.061
-[3,] 2202248253 0.143
-[4,] 1074351919 0.070
-[5,] 2352539533 0.153
+[1,] 1760230516 0.114
+[2,]  946417787 0.061
+[3,] 2202223078 0.143
+[4,] 1074332698 0.070
+[5,] 2352528086 0.153
 > 
 > st_area(st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0)))))
 [1] 1
@@ -334,4 +331,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-  1.591   0.808   1.507 
+  1.531   0.765   1.415 

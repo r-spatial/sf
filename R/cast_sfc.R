@@ -135,6 +135,18 @@ copy_sfc_attributes_from = function(x, ret) {
 		bbox = attr(x, "bbox"), crs = attr(x, "crs"), n_empty = attr(x, "n_empty"))
 }
 
+empty_sfg <- function(to) {
+	switch(to,
+		   GEOMETRYCOLLECTION = st_geometrycollection(),
+		   MULTIPOLYGON = st_multipolygon(),
+		   POLYGON = st_polygon(),
+		   MULTILINESTRING = st_multilinestring(),
+		   LINESTRING = st_linestring(),
+		   MULTIPOINT = st_multipoint(),
+		   POINT = st_point()
+	   )
+}
+
 
 #' @name st_cast
 #' @param ids integer vector, denoting how geometries should be grouped (default: no grouping)
@@ -143,15 +155,33 @@ copy_sfc_attributes_from = function(x, ret) {
 #' @export
 #' @return In case \code{to} is missing, \code{st_cast.sfc} will coerce combinations of "POINT" and "MULTIPOINT", "LINESTRING" and "MULTILINESTRING", "POLYGON" and "MULTIPOLYGON" into their "MULTI..." form, or in case all geometries are "GEOMETRYCOLLECTION" will return a list of all the contents of the "GEOMETRYCOLLECTION" objects, or else do nothing. In case \code{to} is specified, if \code{to} is "GEOMETRY", geometries are not converted, else, \code{st_cast} will try to coerce all elements into \code{to}; \code{ids} may be specified to group e.g. "POINT" objects into a "MULTIPOINT", if not specified no grouping takes place. If e.g. a "sfc_MULTIPOINT" is cast to a "sfc_POINT", the objects are split, so no information gets lost, unless \code{group_or_split} is \code{FALSE}.
 #' @details When converting a GEOMETRYCOLLECTION to COMPOUNDCURVE, MULTISURFACE or CURVEPOLYGON, the user is responsible for the validity of the resulting object: no checks are being carried out by the software.
-#'
+#' 
+#' When converting mixed, GEOMETRY sets, it may help to first convert to the MULTI-type, see examples
+#' @examples
+#' # https://github.com/r-spatial/sf/issues/1930:
+#' pt1 <- st_point(c(0,1))
+#' pt23 <- st_multipoint(matrix(c(1,2,3,4), ncol = 2, byrow = TRUE))
+#' d <- st_sf(geom = st_sfc(pt1, pt23))
+#' st_cast(d, "POINT") # will not convert the entire MULTIPOINT, and warns
+#' st_cast(d, "MULTIPOINT") %>% st_cast("POINT")
 st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 	if (missing(to))
 		return(st_cast_sfc_default(x))
 
+	e = rep(FALSE, length(x))
+	if (!inherits(x, c("sfc_MULTICURVE", "sfc_COMPOUNDCURVE", "sfc_CURVEPOLYGON"))) { # for which GEOS has no st_is_empty()
+		e = st_is_empty(x)
+		if (all(e)) {
+			x[e] = empty_sfg(to)
+			return(x) # RETURNS
+		}
+	}
+	if (any(e))
+		x = x[!e]
 	from_cls = substr(class(x)[1], 5, 100)
 	from_col = which_sfc_col(from_cls)
 	to_col = which_sfc_col(to)
-	if (from_cls == to)
+	ret = if (from_cls == to)
 		x # returns x: do nothing
 	else if (to == "GEOMETRY") # we can always do that:
 		structure(x, class = c("sfc_GEOMETRY", "sfc"))
@@ -201,6 +231,14 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 		# EJP: FIXME:
 		structure(reclass(ret, to, need_close(to)), ids = get_lengths(x))
 	}
+	if (any(e)) {
+		crs = st_crs(x)
+		x = vector("list", length = length(e))
+		x[e] = list(empty_sfg(to))
+		x[!e] = ret
+		st_set_crs(do.call(st_sfc, x), crs)
+	} else
+		ret
 }
 
 #' @name st_cast

@@ -256,7 +256,7 @@ sf_use_s2(TRUE)
 # Measures
 
 ## Area
-```{r}
+```{r eval=require("lwgeom", quietly = TRUE)}
 library(sf)
 library(units)
 nc = read_sf(system.file("gpkg/nc.gpkg", package="sf"))

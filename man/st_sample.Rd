@@ -69,6 +69,8 @@ As parameter called \code{offset} can be passed to control ("fix") regular or he
 Fibonacci sampling see: Alvaro Gonzalez, 2010. Measurement of Areas on a Sphere Using Fibonacci and Latitude-Longitude Lattices. 
 Mathematical Geosciences 42(1), p. 49-64
 
+For regular sampling on the sphere, see also \code{geosphere::regularCoordinates}.
+
 Sampling methods from package \code{spatstat} are interfaced (see examples), and need their own parameters to be set. 
 For instance, to use \code{spatstat.random::rThomas()}, set \code{type = "Thomas"}.
 }

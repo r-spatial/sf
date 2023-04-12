@@ -20,25 +20,17 @@ RVER_MINOR=`echo ${RVER} | cut  -f2 -d"."`
 RVER_PATCH=`echo ${RVER} | cut  -f3 -d"."`
 
 if test [$RVER_MAJOR = "development"]; then
-    CXX11=`"${RBIN}" CMD config CXX11`
-    CXX11STD=`"${RBIN}" CMD config CXX11STD`
+    CXX=`"${RBIN}" CMD config CXX`
 else
     if test [$RVER_MAJOR -lt 3] -o [$RVER_MAJOR -eq 3 -a $RVER_MINOR -lt 3]; then
         AC_MSG_ERROR([sf is not compatible with R versions before 3.3.0])
     else
-        if test [$RVER_MAJOR -eq 3 -a $RVER_MINOR -eq 3]; then
-            CXX11=`"${RBIN}" CMD config CXX1X`
-            CXX11STD=`"${RBIN}" CMD config CXX1XSTD`
-        else
-            CXX11=`"${RBIN}" CMD config CXX11`
-            CXX11STD=`"${RBIN}" CMD config CXX11STD`
-        fi
+        CXX=`"${RBIN}" CMD config CXX`
     fi
 fi
 
 # pick all flags for testing from R
 : ${CC=`"${RBIN}" CMD config CC`}
-: ${CXX=${CXX11} ${CXX11STD}}
 : ${CFLAGS=`"${RBIN}" CMD config CFLAGS`}
 : ${CPPFLAGS=`"${RBIN}" CMD config CPPFLAGS`}
 : ${CXXFLAGS=`"${RBIN}" CMD config CXXFLAGS`}
@@ -87,7 +79,6 @@ else
   fi
 fi
 
-
 AC_MSG_CHECKING(gdal-config usability)
 if test `${GDAL_CONFIG} --version`;
 then
@@ -117,11 +108,17 @@ AC_MSG_NOTICE([GDAL: ${GDAL_VERSION}])
 AC_MSG_CHECKING([GDAL version >= 2.0.1])
 
 GDAL_MAJ_VER=`echo $GDAL_VERSION | cut -d "." -f1`
+GDAL_MIN_VER=`echo $GDAL_VERSION | cut -d "." -f2`
+GDAL_PATCH_VER=`echo $GDAL_VERSION | cut -d "." -f3`
 if test ${GDAL_MAJ_VER} -lt 2 ; then
   AC_MSG_RESULT(no)
   AC_MSG_ERROR([sf is not compatible with GDAL versions below 2.0.1])
 else
    AC_MSG_RESULT(yes)
+fi
+
+if test [${GDAL_MAJ_VER} -eq 3] -a [${GDAL_MIN_VER} -eq 6] -a [${GDAL_PATCH_VER} -eq 0] ; then
+  AC_MSG_ERROR([GDAL version 3.6.0 has been withdrawn, please update GDAL])
 fi
 
 INLIBS="${LIBS}"
@@ -291,7 +288,7 @@ if test "${gdal_has_proj}" = no; then
    AC_MSG_ERROR([cannot link projection code])
 fi
 
-AC_MSG_CHECKING(GDAL: checking whether PROJ is available fur running:)
+AC_MSG_CHECKING(GDAL: checking whether PROJ is available for running:)
 ./gdal_proj
 if test `echo $?` -ne 0 ; then
 gdal_has_proj=no

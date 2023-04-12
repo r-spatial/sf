@@ -1,6 +1,58 @@
+# version 1.0-13
+
+* use GEOS' overlayNG routines for (GEOS) Intersection, Difference, Union and SymDifference; #2143
+
+* added `duplicated.sf()`; #2138, #2140, thanks to @bart1
+
+* `select.sf()` allows selecting the same column twice under different names; #1886
+
+* `st_as_sf.ppplist()` is deprecated; #1926
+
+* `st_cast()` handles empty geometries; #1961
+
+* don't repeat longlat messages in `summarise.sf()`; #1519
+
+* fix random sampling on the sphere; #2133
+
+# version 1.0-12
+
+* update NAMESPACE to `useDynLib(sf, .registration=TRUE)`; #2127 thanks to @eddelbuettel
+
+* fix call in `gdal_addo()`; #2124
+
+* fix issues that came up with older GDAL version, use `GDAL_VERSION_NUM` consistently; #2123 #2121 #2119
+
+# version 1.0-11
+
+* `st_make_grid()` also accepts area units for `cellsize`, for square and hexagonal grids; #1505
+
+* add `st_concave_hull()`, for concave hulls, if GEOS >= 3.11.0; #1964
+
+* add `st_triangulate_constrained()`, for constrained Delaunay triangulation, if GEOS >= 3.10.0; #1964
+
+* clean up the retrieval of length or angle units from WKT representations; https://lists.osgeo.org/pipermail/gdal-dev/2023-March/056994.html
+
+* conversion to GEOS uses the `GEOS_PREC_VALID_OUTPUT` flag, which makes sure that the "[o]utput is always valid. Collapsed geometry elements (including both polygons and lines) are removed."
+
 # version 1.0-10
 
-* if `plot.sf()`, if `breaks` are given (numerically), always plot a legend key; #2065
+* `gdal_utils()` has a `config_options` argument to set further GDAL options, just like `st_write()`; #2003
+
+* fix slow writing of logical vectors in `st_write()`; #1409; #1689
+
+* `st_drivers()` has an argument `regex` to filter on driver (long) name; #2090
+
+* drop C++11 as a system requirement
+
+* `c.sfc()` (and, consequently, `dplyr::bind_rows()`) gives an error if components have different CRS; #1884
+
+* data imported from `maps` are associated with the Clark 1866 ellipsoid; #2080
+
+* fix importing legacy `SpatialPolygon` objects without comments; #2063, #2069, https://github.com/rstudio/leaflet/issues/833
+
+* `st_read()` no longer errors on mixes of `XY` and `XYZ` geometries; #2046 #1592
+
+* in `plot.sf()`, when numeric `breaks` are given a legend key is always plotted; #2065
 
 * `st_crs()$axes` returns a `data.frame` with axes properties (name, orientation, conversion factor) when GDAL >= 3.0.0
 
@@ -12,7 +64,7 @@
 
 * `st_can_transform()` checks whether a transformation between two crs exists; see https://github.com/dieghernan/tidyterra/issues/64; #2049
 
-* drop the rownames in `st_coordinates()`, to reduce the output size
+* the matrix returned by `st_coordinates()` has no row names, to reduce output size
 
 # version 1.0-9
 

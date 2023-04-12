@@ -77,6 +77,8 @@ Cast geometry to another type: either simplify, or cast explicitly
 \details{
 When converting a GEOMETRYCOLLECTION to COMPOUNDCURVE, MULTISURFACE or CURVEPOLYGON, the user is responsible for the validity of the resulting object: no checks are being carried out by the software.
 
+When converting mixed, GEOMETRY sets, it may help to first convert to the MULTI-type, see examples
+
 the \code{st_cast} method for \code{sf} objects can only split geometries, e.g. cast \code{MULTIPOINT} into multiple \code{POINT} features.  In case of splitting, attributes are repeated and a warning is issued when non-constant attributes are assigned to sub-geometries. To merge feature geometries and attribute values, use \link[sf:aggregate.sf]{aggregate} or \link[sf:tidyverse]{summarise}.
 }
 \examples{
@@ -112,4 +114,10 @@ pt <- st_cast(nc$geometry[[4]], "POINT")
 st_sfc(lapply(c("POINT", "MULTIPOINT"), function(x) st_cast(pt, x)))
 s = st_multipoint(rbind(c(1,0)))
 st_cast(s, "POINT")
+# https://github.com/r-spatial/sf/issues/1930:
+pt1 <- st_point(c(0,1))
+pt23 <- st_multipoint(matrix(c(1,2,3,4), ncol = 2, byrow = TRUE))
+d <- st_sf(geom = st_sfc(pt1, pt23))
+st_cast(d, "POINT") # will not convert the entire MULTIPOINT, and warns
+st_cast(d, "MULTIPOINT") \%>\% st_cast("POINT")
 }

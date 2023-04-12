@@ -55,10 +55,13 @@
 #' }
 #' @export
 st_as_sf.Spatial = function(x, ...) {
-	if ("data" %in% slotNames(x))
+	if ("data" %in% slotNames(x)) {
+                if (!isTRUE(all.equal(row.names(x@data), row.names(x))))
+                    row.names(x@data) <- row.names(x)
 		df = x@data
-	else
+	} else {
 		df = data.frame(row.names = row.names(x)) # empty
+        }
 	if ("geometry" %in% names(df))
 		warning("column \"geometry\" will be overwritten by geometry column")
 	if (! requireNamespace("sp", quietly = TRUE))
@@ -137,6 +140,7 @@ st_as_sfc.SpatialLines = function(x, ..., precision = 0.0, forceMulti = FALSE) {
 
 #' @name st_as_sfc
 #' @export
+
 st_as_sfc.SpatialPolygons = function(x, ..., precision = 0.0, forceMulti = FALSE) {
 	lst = if (forceMulti || any(sapply(x@polygons, function(x) moreThanOneOuterRing(x@Polygons)))) {
 		if (is.null(comment(x)) || comment(x) == "FALSE") {
@@ -149,14 +153,60 @@ st_as_sfc.SpatialPolygons = function(x, ..., precision = 0.0, forceMulti = FALSE
 			process_pl_comment <- function(pl) {
 				ID <- slot(pl, "ID")
 				crds <- lapply(slot(pl, "Polygons"), function(xx) slot(xx, "coords"))
-				raw <- st_sfc(st_polygon(crds))
-				val <- st_make_valid(raw)
+				holes <- sapply(slot(pl, "Polygons"), slot, "hole")
+				raw0 <- st_sfc(lapply(crds, function(x) st_polygon(list(x))))
+				if (!any(holes)) {
+					val <- st_union(st_make_valid(raw0))
+				} else {
+					wkts <- vector("list", sum(!holes))
+					for (i in seq_along(wkts)) {
+						wkts[[i]] <- st_as_text(raw0[!holes][i])
+					}
+					cp0 <- st_contains(raw0[!holes], raw0[holes])
+					areas <- sapply(slot(pl, "Polygons"), slot, "area")
+					hole_assigned <- rep(FALSE, sum(holes))
+					names(cp0) <- 1:length(cp0)
+                                        cp1 <- cp0[order(areas[!holes])]
+					for (i in seq_along(cp1)) {
+                                          cp1i <- cp1[[i]]
+					  tgt <- as.integer(names(cp1[i]))
+                                          if (length(cp1i) > 0L) {
+                                            for (j in cp1i) {
+					      wkts[[tgt]] <- paste(sub("))", "),", wkts[[tgt]]), sub("POLYGON \\(", "", st_as_text(raw0[holes][j])))
+					      hole_assigned[j] <- TRUE
+					    }
+                                          }
+					  for (ii in i:length(cp1)) {
+                                            for (j in cp1i) {
+					      cp1[[ii]] <- setdiff(cp1[[ii]], j)
+					    }
+					  }
+					}
+					if (any(!hole_assigned))
+					  warning("orphaned hole, cannot find containing polygon")
+					raw0 <- st_as_sfc(wkts)
+                                        raw1 <- st_make_valid(raw0)
+                                        if (any(st_is(raw1, "GEOMETRYCOLLECTION"))) 
+                                          raw1 <- st_collection_extract(raw1, "POLYGON")
+					val <- st_union(raw1)
+				}
 				if (inherits(val, "sfc_GEOMETRYCOLLECTION"))
 					val = st_collection_extract(val, "POLYGON")
 				res <- slot(as(val, "Spatial"), "polygons")[[1]]
 				slot(res, "ID") <- ID
 				res
 			}
+#			process_pl_comment <- function(pl) {
+#				ID <- slot(pl, "ID")
+#				crds <- lapply(slot(pl, "Polygons"), function(xx) slot(xx, "coords"))
+#				raw <- st_sfc(st_polygon(crds))
+#				val <- st_make_valid(raw)
+#				if (inherits(val, "sfc_GEOMETRYCOLLECTION"))
+#					val = st_collection_extract(val, "POLYGON")
+#				res <- slot(as(val, "Spatial"), "polygons")[[1]]
+#				slot(res, "ID") <- ID
+#				res
+#			}
 			slot(x, "polygons") <- lapply(slot(x, "polygons"), process_pl_comment)
 			comment(x) <- "TRUE"
 		}
@@ -253,8 +303,11 @@ as_Spatial = function(from, cast = TRUE, IDs = paste0("ID", seq_along(from))) {
 	if (inherits(from, "sf")) {
 		geom = st_geometry(from)
 		from[[attr(from, "sf_column")]] = NULL # remove sf column list
-		sp::addAttrToGeom(as_Spatial(geom, cast = cast, IDs = row.names(from)),
+		if (ncol(from))
+			sp::addAttrToGeom(as_Spatial(geom, cast = cast, IDs = row.names(from)),
 						  data.frame(from), match.ID = FALSE)
+		else
+			.as_Spatial(from, cast, IDs)
 	} else {
 		.as_Spatial(from, cast, IDs)
 	}

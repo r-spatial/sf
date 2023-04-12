@@ -112,9 +112,27 @@ void handle_error(OGRErr err) {
 	}
 }
 
+void set_config_options(Rcpp::CharacterVector ConfigOptions) {
+	if (ConfigOptions.size()) {
+		if (ConfigOptions.attr("names") == R_NilValue)
+			Rcpp::stop("config_options should be a character vector with names, as in c(key=\"value\")");
+		Rcpp::CharacterVector names = ConfigOptions.attr("names");
+		for (int i = 0; i < ConfigOptions.size(); i++)
+			CPLSetConfigOption(names[i], ConfigOptions[i]);
+	}
+}
+
+void unset_config_options(Rcpp::CharacterVector ConfigOptions) {
+	if (ConfigOptions.size()) {
+		Rcpp::CharacterVector names = ConfigOptions.attr("names");
+		for (int i = 0; i < ConfigOptions.size(); i++)
+			CPLSetConfigOption(names[i], NULL);
+	}
+}
+
 Rcpp::CharacterVector wkt_from_spatial_reference(const OGRSpatialReference *srs) { // FIXME: add options?
 	char *cp;
-#if GDAL_VERSION_MAJOR >= 3
+#if GDAL_VERSION_NUM >= 3000000
 	const char *options[3] = { "MULTILINE=YES", "FORMAT=WKT2", NULL };
 	OGRErr err = srs->exportToWkt(&cp, options);
 #else
@@ -165,8 +183,7 @@ OGRSpatialReference *OGRSrs_from_crs(Rcpp::List crs) {
 		dest = new OGRSpatialReference;
 		dest = handle_axis_order(dest);
 		char *cp = wkt[0];
-#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
-// #if GDAL_VERSION_NUM <= 2020000 FIXME: breaks on gh actions
+#if GDAL_VERSION_NUM < 2030000
 		handle_error(dest->importFromWkt(&cp));
 #else
 		handle_error(dest->importFromWkt((const char *) cp));
@@ -206,8 +223,16 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	out(3) = Rcpp::LogicalVector::create((bool) srs->IsGeographic());
 	names(3) = "IsGeographic";
 
-	const char *unit = srs->GetAttrValue("UNIT", 0);
-	if (unit == NULL)
+#if GDAL_VERSION_NUM > 2030000
+	const char *unit;
+#else
+	char *unit;
+#endif
+	if (srs->IsGeographic())
+		srs->GetAngularUnits(&unit);
+	else
+		srs->GetLinearUnits(&unit);
+	if (unit == NULL || strncmp(unit, "unknown", 8) == 0)
 		out(4) = Rcpp::CharacterVector::create(NA_STRING);
 	else
 		out(4) = Rcpp::CharacterVector::create(unit);
@@ -232,7 +257,7 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 		out(7) = "";
 	names(7) = "Wkt";
 
-#if GDAL_VERSION_MAJOR >= 3
+#if GDAL_VERSION_NUM >= 3000000
 	out(8) = Rcpp::CharacterVector::create(srs->GetName());
 #else
 	out(8) = Rcpp::CharacterVector::create("unknown");
@@ -264,12 +289,14 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 		out(12) = Rcpp::CharacterVector::create(cp);
 		CPLFree(cp);
 	} else
-		out(12) = "";
+		out(12) = NA_STRING;
+#else
+	out(12) = NA_STRING;
 #endif
 	names(12) = "ProjJson";
 
 	// WKT1_ESRI
-#if GDAL_VERSION_MAJOR >= 3
+#if GDAL_VERSION_NUM >= 3000000
 	const char *options[3] = { "MULTILINE=YES", "FORMAT=WKT1_ESRI", NULL };
 	if (srs->exportToWkt(&cp, options) != OGRERR_NONE)
 		out(13) = Rcpp::CharacterVector::create(NA_STRING); // FIXME: CPLFree() in this case?
@@ -301,28 +328,21 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 #endif
 	Rcpp::CharacterVector nms(ac);
 	Rcpp::IntegerVector orientation(ac);
-	Rcpp::NumericVector convfactor(ac);
-#if GDAL_VERSION_NUM > 3000000
 	for (int i = 0; i < ac; i++) {
-		double pdfConvFactor;
 		OGRAxisOrientation peOrientation;
 		const char *ret = srs->GetAxis(srs->IsGeographic() ? "GEOGCS" : "PROJCS", 
-						i, &peOrientation, &pdfConvFactor);
+						i, &peOrientation);
 		if (ret != NULL) {
 			nms[i] = ret;
 			orientation[i] = (int) peOrientation;
-			convfactor[i] = pdfConvFactor;
 		} else {
 			nms[i] = NA_STRING;
 			orientation[i] = NA_INTEGER;
-			convfactor[i] = NA_REAL;
 		}
 	}
-#endif
 	Rcpp::DataFrame axes_df = Rcpp::DataFrame::create(
 		Rcpp::_["name"] = nms,
-		Rcpp::_["orientation"] = orientation,
-		Rcpp::_["convfactor"] = convfactor);
+		Rcpp::_["orientation"] = orientation);
 	out(15) = axes_df;
 	names(15) = "axes";
 
@@ -364,7 +384,7 @@ Rcpp::LogicalVector CPL_crs_equivalent(Rcpp::List crs1, Rcpp::List crs2) {
 		delete srs1;
 		return Rcpp::LogicalVector::create(false);
 	} // #nocov end
-#if GDAL_VERSION_MAJOR >= 3
+#if GDAL_VERSION_NUM >= 3000000
 	const char *options[3] = { NULL, NULL, NULL };
 	if (axis_order_authority_compliant) {
 		options[0] = "IGNORE_DATA_AXIS_TO_SRS_AXIS_MAPPING=NO";
@@ -440,7 +460,7 @@ Rcpp::List create_crs(const OGRSpatialReference *ref, bool set_input) {
 		crs(1) = Rcpp::CharacterVector::create(NA_STRING);
 	} else {
 		if (set_input) {
-#if GDAL_VERSION_MAJOR >= 3
+#if GDAL_VERSION_NUM >= 3000000
 			crs(0) = Rcpp::CharacterVector::create(ref->GetName());
 #else
 			const char *cp;
@@ -590,7 +610,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 
 	// transform geometries:
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
-	if (g.size() == 0)
+	if (g.empty())
 		return sfc_from_ogr(g, true); // destroys g
 
 	OGRSpatialReference *dest = NULL;
@@ -598,13 +618,13 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 	if (pipeline.size() == 0 && !(dest = OGRSrs_from_crs(crs)))
 		Rcpp::stop("crs not found: is it missing?"); // #nocov
 
-#if GDAL_VERSION_MAJOR >= 3
+#if GDAL_VERSION_NUM >= 3000000
 	OGRCoordinateTransformationOptions *options = new OGRCoordinateTransformationOptions;
 	if (pipeline.size() && !options->SetCoordinateOperation(pipeline[0], reverse))
 		Rcpp::stop("pipeline value not accepted");
 	if (AOI.size() == 4 && !options->SetAreaOfInterest(AOI[0], AOI[1], AOI[2], AOI[3]))
 		Rcpp::stop("values for area of interest not accepted");
-#if GDAL_VERSION_MINOR >= 3
+#if GDAL_VERSION_NUM >= 3030000
 	options->SetDesiredAccuracy(desired_accuracy);
 	options->SetBallparkAllowed(allow_ballpark);
 #endif
@@ -698,7 +718,7 @@ Rcpp::List CPL_sfc_from_wkt(Rcpp::CharacterVector wkt) {
 	OGRGeometryFactory f;
 	for (int i = 0; i < wkt.size(); i++) {
 		char *wkt_str = wkt(i);
-#if GDAL_VERSION_MAJOR <= 2 && GDAL_VERSION_MINOR <= 2
+#if GDAL_VERSION_NUM < 2030000
 		handle_error(f.createFromWkt(&wkt_str, NULL, &(g[i])));
 #else
 		handle_error(f.createFromWkt( (const char*) wkt_str, NULL, &(g[i])));

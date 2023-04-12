@@ -1,5 +1,3 @@
-context("sf: subset")
-
 test_that("we can subset sf objects", {
   pt1 = st_point(1:2)
   pt2 = st_point(3:4)
@@ -75,10 +73,10 @@ test_that("st_as_sf bulk points work", {
   expect_identical(class(xyz_sf), c("sf", "data.frame"))
   expect_identical(class(xym_sf), c("sf", "data.frame"))
   expect_identical(class(xyzm_sf), c("sf", "data.frame"))
-  expect_that(length(unclass(st_geometry(meuse_sf)[[1]])), equals(2L))
-  expect_that(length(unclass(st_geometry(xyz_sf)[[1]])), equals(3L))
-  expect_that(length(unclass(st_geometry(xym_sf)[[1]])), equals(3L))
-  expect_that(length(unclass(st_geometry(xyzm_sf)[[1]])), equals(4L))
+  expect_length(unclass(st_geometry(meuse_sf)[[1]]), 2L)
+  expect_length(unclass(st_geometry(xyz_sf)[[1]]), 3L)
+  expect_length(unclass(st_geometry(xym_sf)[[1]]), 3L)
+  expect_length(unclass(st_geometry(xyzm_sf)[[1]]), 4L)
 
 
 })
@@ -100,4 +98,9 @@ test_that("empty agr attribute is named after subset", {
 	out = sf[, "geometry"]
 	agr = attr(out, "agr")
 	expect_identical(names(agr), character())
+})
+test_that("duplicated work",{
+	sf = st_sf(data.frame(x = st_sfc(st_point(1:2))[rep(1,4)], a=gl(2,2), b=as.numeric(gl(2,2))))
+	expect_identical(duplicated(sf), c(FALSE,TRUE,FALSE,TRUE))
+	expect_s3_class(unique(sf),'sf')
 })

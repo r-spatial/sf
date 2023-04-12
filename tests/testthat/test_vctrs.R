@@ -1,5 +1,3 @@
-context("sf: vctrs implementations")
-
 test_that("`sfc` vectors are treated as vectors", {
 	expect_true(vctrs::vec_is(st_sfc(st_point())))
 })
@@ -59,5 +57,7 @@ test_that("`precision` and `crs` attributes of `sfc` vectors are combined", {
 	expect_identical(vctrs::vec_c(x, y), c(x, y))
 
 	y = st_sfc(st_point(c(0, 0)), precision = 1e-4, crs = 4326)
-	expect_identical(vctrs::vec_c(x, y), c(x, y))
+	# expect_identical(vctrs::vec_c(x, y), c(x, y))
+	expect_error(vctrs::vec_c(x, y), "arguments have different crs")
+	expect_error(c(x, y),            "arguments have different crs")
 })

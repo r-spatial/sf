@@ -100,4 +100,8 @@ plot(st_geometry(nc_j), border = 'black', col = nc_j$col)
 text(st_coordinates(st_centroid(nc_j)), labels = nc_j$label, cex = .8)
 plot(st_geometry(gr), border = 'green', add = TRUE)
 par(opar)
+# st_filter keeps the geometries in x where .predicate(x,y) returns any match in y for x
+st_filter(a, b)
+# for an anti-join, use the union of y
+st_filter(a, st_union(b), .predicate = st_disjoint)
 }

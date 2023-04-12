@@ -1,6 +1,6 @@
 
-R version 4.0.4 (2021-02-15) -- "Lost Library Book"
-Copyright (C) 2021 The R Foundation for Statistical Computing
+R version 4.2.3 (2023-03-15) -- "Shortstop Beagle"
+Copyright (C) 2023 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -84,29 +84,9 @@ MULTIPOINT ((1 3))
 MULTIPOINT ((10 13))
 MULTIPOINT ((11 14))
 MULTIPOINT ((12 15))
-> (yy = st_cast(pt, "LINESTRING", rep(seq_along(i), i)))
-Geometry set for 5 features 
-Geometry type: LINESTRING
-Dimension:     XY
-Bounding box:  xmin: 0 ymin: 2 xmax: 12 ymax: 15
-CRS:           NA
-LINESTRING (0 2)
-LINESTRING (1 3)
-LINESTRING (10 13)
-LINESTRING (11 14)
-LINESTRING (12 15)
+> try(yy <- st_cast(pt, "LINESTRING", rep(seq_along(i), i)))
 > 
-> (zz = st_cast(yy, "MULTILINESTRING"))
-Geometry set for 5 features 
-Geometry type: MULTILINESTRING
-Dimension:     XY
-Bounding box:  xmin: 0 ymin: 2 xmax: 12 ymax: 15
-CRS:           NA
-MULTILINESTRING ((0 2))
-MULTILINESTRING ((1 3))
-MULTILINESTRING ((10 13))
-MULTILINESTRING ((11 14))
-MULTILINESTRING ((12 15))
+> #(zz = st_cast(yy, "MULTILINESTRING"))
 > #(zz = st_cast(yy, "POLYGON"))
 > 
 > st_cast(mls, "LINESTRING")
@@ -235,6 +215,24 @@ POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (5 5, 5 6, 6 6, 6 5, 5 5))
 > identical(m$geom[[1]], st_cast(g$geom[[1]], "MULTILINESTRING"))
 [1] TRUE
 > 
+> st_cast(st_sfc(st_geometrycollection(), st_multipolygon()), 'MULTIPOLYGON') #1961
+Geometry set for 2 features  (with 2 geometries empty)
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: NA ymin: NA xmax: NA ymax: NA
+CRS:           NA
+MULTIPOLYGON EMPTY
+MULTIPOLYGON EMPTY
+> st_cast(st_sfc(st_geometrycollection(), st_multipolygon(), st_point(0:1)), 'POINT') #1961
+Geometry set for 3 features  (with 2 geometries empty)
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 0 ymin: 1 xmax: 0 ymax: 1
+CRS:           NA
+POINT EMPTY
+POINT EMPTY
+POINT (0 1)
+> 
 > proc.time()
    user  system elapsed 
-  0.937   0.044   0.974 
+  1.501   0.751   1.420 

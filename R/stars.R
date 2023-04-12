@@ -11,9 +11,15 @@
 #' @name gdal
 #' @export
 gdal_read = function(x, ..., options = character(0), driver = character(0), read_data = TRUE, NA_value = NA_real_,
-		RasterIO_parameters = list())
+		RasterIO_parameters = list()) {
+	if (is.numeric(read_data)) {
+		max_cells = as.double(read_data)
+		read_data = FALSE
+	} else
+		max_cells = as.double(-1.)
 	CPL_read_gdal(as.character(x), as.character(options), as.character(driver), 
-		as.logical(read_data), as.double(NA_value), RasterIO_parameters)
+		as.logical(read_data), as.double(NA_value), RasterIO_parameters, max_cells)
+}
 
 #' @name gdal
 #' @export
@@ -385,14 +391,15 @@ gdal_create = function(f, nxy, values, crs, xlim, ylim) {
 #' @param method character; method to create overview; one of: nearest, average, rms, gauss, cubic, cubicspline, lanczos, average_mp, average_magphase, mode
 #' @param layers integer; layers to create overviews for (default: all)
 #' @param options character; dataset opening options
+#' @param config_options named character vector with GDAL config options, like \code{c(option1=value1, option2=value2)}
 #' @param clean logical; if \code{TRUE} only remove overviews, do not add
 #' @param read_only logical; if \code{TRUE}, add overviews to another file with extension \code{.ovr} added to \code{file}
 #' @return \code{TRUE}, invisibly, on success
 #' @seealso \link{gdal_utils} for access to other gdal utilities that have a C API
 #' @export
 gdal_addo = function(file, overviews = c(2,4,8,16), method = "NEAREST", layers = integer(0), 
-					 options = character(0), clean = FALSE, read_only = FALSE) {
+					 options = character(0), config_options = character(0), clean = FALSE, read_only = FALSE) {
 	stopifnot(length(method) == 1, is.character(method), is.numeric(overviews))
 	invisible(CPL_gdaladdo(file, method, as.integer(overviews), as.integer(layers), as.character(options), 
-				 as.logical(clean)[1], as.logical(read_only)[1]))
+				 as.character(config_options), as.logical(clean)[1], as.logical(read_only)[1]))
 }

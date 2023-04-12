@@ -11,7 +11,8 @@ gdal_utils(
   options = character(0),
   quiet = !(util \%in\% c("info", "mdiminfo")) || ("-multi" \%in\% options),
   processing = character(0),
-  colorfilename = character(0)
+  colorfilename = character(0),
+  config_options = character(0)
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ gdal_utils(
 \item{processing}{character; processing options for \code{demprocessing}}
 
 \item{colorfilename}{character; name of color file for \code{demprocessing} (mandatory if \code{processing="color-relief"})}
+
+\item{config_options}{named character vector with GDAL config options, like \code{c(option1=value1, option2=value2)}}
 }
 \value{
 \code{info} returns a character vector with the raster metadata; all other utils return (invisibly) a logical indicating success (i.e., \code{TRUE}); in case of failure, an error is raised.

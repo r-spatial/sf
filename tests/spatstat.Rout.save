@@ -125,31 +125,32 @@ Type 'q()' to quit R.
 + (y = st_as_sfc(as.psp(sf)))
 + all.equal(st_geometry(x), y)
 + }
-spatstat.geom 3.0-3
-spatstat.random 3.0-1
+spatstat.geom 3.1-0
+spatstat.random 3.1-4
 Simple feature collection with 51 features and 1 field
 Geometry type: GEOMETRY
 Dimension:     XY
-Bounding box:  xmin: 123829 ymin: 14744.69 xmax: 930521.8 ymax: 318259.9
+Bounding box:  xmin: 123829.8 ymin: 14740.06 xmax: 930518.6 ymax: 318255.5
 CRS:           NA
 First 10 features:
     label                           geom
-1  window MULTIPOLYGON (((886136 3141...
-2   point      POINT (339121.3 257815.9)
-3   point      POINT (827443.1 246572.7)
-4   point          POINT (451340 207948)
-5   point      POINT (268749.6 203327.8)
-6   point      POINT (516677.7 198560.6)
-7   point        POINT (692368 238647.5)
-8   point        POINT (843281.2 287246)
-9   point        POINT (648479.4 235471)
-10  point      POINT (852595.8 267252.6)
+1  window MULTIPOLYGON (((886135.8 31...
+2   point      POINT (339121.1 257811.6)
+3   point      POINT (827440.4 246568.3)
+4   point      POINT (451339.2 207943.6)
+5   point      POINT (268749.7 203323.4)
+6   point      POINT (516676.5 198556.1)
+7   point        POINT (692366 238643.1)
+8   point      POINT (843278.5 287241.6)
+9   point      POINT (648477.7 235466.6)
+10  point        POINT (852593 267248.3)
 Error in st_poly_sample(x, size = size, ..., type = type, by_polygon = by_polygon) : 
   rthomas is not an exported function from spatstat.random.
 Error in st_poly_sample(x, size = size, ..., type = type, by_polygon = by_polygon) : 
   The spatstat function rThomas did not return a valid result. Consult the help file.
 Error message from spatstat:
-Error : 'scale' should be a single number
+Error in check.1.real(scale) : 
+  argument "scale" is missing, with no default
 
 Error : Only projected coordinates may be converted to spatstat class objects
 Error in `marks<-.ppp`(`*tmp*`, value = value) : 
@@ -157,8 +158,7 @@ Error in `marks<-.ppp`(`*tmp*`, value = value) :
 In addition: Warning messages:
 1: In as.ppp.sf(sf) : only first attribute column is used for marks
 2: 1 point was rejected as lying outside the specified window 
-Error in as.owin.sfc_MULTIPOLYGON(st_cast(W, "MULTIPOLYGON"), ...) : 
-  Only projected coordinates may be converted to spatstat class objects
+Error : Only projected coordinates may be converted to spatstat class objects
 [1] TRUE
 Warning message:
 In st_as_sfc.owin(spatstat.geom::as.owin(x)) :
@@ -166,4 +166,4 @@ In st_as_sfc.owin(spatstat.geom::as.owin(x)) :
 > 
 > proc.time()
    user  system elapsed 
-  2.383   0.830   2.360 
+  2.547   0.812   2.462 

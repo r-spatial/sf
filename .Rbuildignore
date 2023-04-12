@@ -21,3 +21,4 @@ NOTES
 ^\.github$
 ^tic\.R$
 vignettes.awk
+^\.gitattributes$

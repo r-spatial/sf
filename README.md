@@ -1,7 +1,8 @@
 <!-- badges: start -->
+[![rcmdcheck](https://github.com/r-spatial/sf/actions/workflows/rcmdcheck.yml/badge.svg?branch=main)](https://github.com/r-spatial/sf/actions/workflows/rcmdcheck.yml)
 [![tic](https://github.com/r-spatial/sf/workflows/tic/badge.svg?branch=main)](https://github.com/r-spatial/sf/actions)
 [![tic-db](https://github.com/r-spatial/sf/workflows/tic-db/badge.svg?branch=main)](https://github.com/r-spatial/sf/actions)
-[![Coverage Status](https://img.shields.io/codecov/c/github/r-spatial/sf/main.svg)](https://codecov.io/github/r-spatial/sf?branch=main)
+[![Coverage Status](https://img.shields.io/codecov/c/github/r-spatial/sf/main.svg)](https://app.codecov.io/gh/r-spatial/sf)
 [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html)
 [![CRAN](http://www.r-pkg.org/badges/version/sf)](https://cran.r-project.org/package=sf)
 [![cran checks](https://badges.cranchecks.info/worst/sf.svg)](https://cran.r-project.org/web/checks/check_results_sf.html)
@@ -32,7 +33,7 @@ Package sf:
 
 <a href="https://gist.github.com/edzer/442d74a5775abcd5068cf3e73b23687b"><img align="left" src="https://user-images.githubusercontent.com/520851/50280460-e35c1880-044c-11e9-9ed7-cc46754e49db.jpg" /></a>
 
-(Illustration (c) by <a href="https://twitter.com/allison_horst/status/1071456081308614656">Allison Horst</a>)
+(Illustration (c) 2018 by <a href="https://twitter.com/allison_horst/status/1071456081308614656">Allison Horst</a>)
 
 ## Blogs, presentations, vignettes, sp-sf wiki
 
@@ -80,20 +81,20 @@ brew install gdal
 Once gdal is installed, you will be able to install `sf` package from source in R. With the current version of `proj` on homebrew, installation requires additional configuration:
 
 ```r
-install.packages("sf", configure.args = "--with-proj-lib=/usr/local/lib/")
+install.packages("sf", type = "source", configure.args = "--with-proj-lib=$(brew --prefix)/lib/")
 ```
 
 Or the development version:
 
 ```r
 library(remotes)
-install_github("r-spatial/sf", configure.args = "--with-proj-lib=/usr/local/lib/")
+install_github("r-spatial/sf", configure.args = "--with-proj-lib=$(brew --prefix)/lib/")
 ```
 
 If you are using `sf` and `rgdal` together, it is necessary to install `rgdal` from source using this configuration:
 
 ```r
-install.packages("rgdal", configure.args = c("--with-proj-lib=/usr/local/lib/", "--with-proj-include=/usr/local/include/"))
+install.packages("rgdal", type = "source", configure.args = c("--with-proj-lib=$(brew --prefix)/lib/", "--with-proj-include=$(brew --prefix)/include/"))
 ```
 
 Alternatively, [these instructions](https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html) explain how to install gdal using kyngchaos frameworks.
@@ -117,7 +118,7 @@ However, to get more up-to-date versions of dependencies such as GDAL, we recomm
 ```sh
 sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 sudo apt-get update
-sudo apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev 
+sudo apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev libsqlite0-dev
 ```
 
 Adding this PPA is required for installing `sf` on older versions of Ubuntu (e.g. Xenial).
@@ -135,7 +136,7 @@ sudo dnf install gdal-devel proj-devel geos-devel sqlite-devel udunits2-devel
 Get gdal, proj and geos from the main repos, and udunits from the AUR:
 
 ```
-pacman -S gdal proj geos
+pacman -S gdal proj geos arrow podofo
 yay/pacaur/yaourt/whatever -S udunits
 ```
 

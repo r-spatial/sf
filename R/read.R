@@ -350,8 +350,8 @@ abbreviate_shapefile_names = function(x) {
 #' The default for \code{st_write} is \code{FALSE} which raises an error if the layer exists.
 #' The default for \code{write_sf} is \code{TRUE}.
 #' @param fid_column_name character, name of column with feature IDs; if
-#' @param config_options character, named vector with GDAL config options
 #' specified, this column is no longer written as feature attribute.
+#' @param config_options character, named vector with GDAL config options
 #' @details
 #' Columns (variables) of a class not supported are dropped with a warning.
 #'
@@ -538,6 +538,8 @@ write_sf <- function(..., quiet = TRUE, append = FALSE, delete_layer = !append) 
 #' Get a list of the available GDAL drivers
 #' @param what character: `"vector"` or `"raster"`, anything else will return all
 #'   drivers.
+#' @param regex character; regular expression to filter the `name` and `long_name`
+#'  fields on
 #' @details The drivers available will depend on the installation of GDAL/OGR,
 #'   and can vary; the `st_drivers()` function shows all the drivers that are
 #'   readable, and which may be written. The field `vsi` refers to the driver's
@@ -548,14 +550,22 @@ write_sf <- function(..., quiet = TRUE, append = FALSE, delete_layer = !append) 
 #' @export
 #' @md
 #' @examples
+#' # The following driver lists depend on the GDAL setup and platform used:
 #' st_drivers()
-st_drivers = function(what = "vector") {
+#' st_drivers("raster", "GeoT")
+st_drivers = function(what = "vector", regex) {
 	ret = CPL_get_gdal_drivers(0)
 	row.names(ret) = ret$name
-	switch(what,
+	ret = switch(what,
 		vector = ret[ret$is_vector,],
 		raster = ret[ret$is_raster,],
 		ret)
+	if (missing(regex))
+		ret
+	else {
+		fn = function(x, pattern) any(grepl(x, pattern = pattern))
+		ret[apply(ret[c("name", "long_name")], 1, fn, pattern = regex), ]
+	}
 }
 
 #' @export

@@ -64,7 +64,7 @@ Driver: OSM
 Available layers:
         layer_name       geometry_type features fields crs_name
 1           points               Point       NA     10   WGS 84
-2            lines         Line String       NA      9   WGS 84
+2            lines         Line String       NA     10   WGS 84
 3 multilinestrings   Multi Line String       NA      4   WGS 84
 4    multipolygons       Multi Polygon       NA     25   WGS 84
 5  other_relations Geometry Collection       NA      4   WGS 84
@@ -72,7 +72,7 @@ Driver: OSM
 Available layers:
         layer_name       geometry_type features fields crs_name
 1           points               Point        0     10   WGS 84
-2            lines         Line String        0      9   WGS 84
+2            lines         Line String        0     10   WGS 84
 3 multilinestrings   Multi Line String        0      4   WGS 84
 4    multipolygons       Multi Polygon        3     25   WGS 84
 5  other_relations Geometry Collection        0      4   WGS 84
@@ -134,7 +134,7 @@ First 10 features:
 > 
 > try(st_layers("foo")) # cannot open datasource
 Cannot open data source foo
-Error in CPL_get_layers(dsn, options, do_count) : Open failed.
+Error : Open failed.
 
 > try(st_read("foo")) # cannot open datasource
 Error : Cannot open "foo"; The file doesn't seem to exist.
@@ -149,8 +149,7 @@ Error in guess_driver(dns) : length(dsn) == 1 is not TRUE
 > try(st_write(x, "foo", driver = "foo"))
 writing: substituting ENGCRS["Undefined Cartesian SRS with unknown unit"] for missing CRS
 driver `foo' not available.
-Error in CPL_write_ogr(obj, dsn, layer, driver, as.character(dataset_options),  : 
-  Driver not available.
+Error : Driver not available.
 
 > if (Sys.getenv("USER") == "travis") {
 + 	try(st_write(x, "/x", driver = "ESRI Shapefile"))
@@ -336,6 +335,11 @@ First 3 features:
 [1] 22 11
 [1] 644  25
 [1] 644  25
+Warning messages:
+1: In CPL_read_ogr(dsn, layer, query, as.character(options), quiet,  :
+  GDAL Message 1: Field with same name (identifier) already exists in (PointTimeSeriesObservation). Skipping newer ones
+2: In CPL_read_ogr(dsn, layer, query, as.character(options), quiet,  :
+  GDAL Message 1: Field with same name (name) already exists in (PointTimeSeriesObservation). Skipping newer ones
 > 
 > # logical:
 > if ("GPKG" %in% st_drivers()$name) {
@@ -365,12 +369,11 @@ Geodetic CRS:  NAD27
 > nc_filtered = read_sf(system.file("gpkg/nc.gpkg", package="sf"), wkt_filter = wkt)
 > try(read_sf(system.file("gpkg/nc.gpkg", package="sf"), wkt_filter = "wrong"))
 Cannot create geometry from: wrong
-Error in CPL_read_ogr(dsn, layer, query, as.character(options), quiet,  : 
-  wkt parse error.
+Error : wkt parse error.
 
 > nc_filtered$NAME
 [1] "Watauga"   "Ashe"      "Wilkes"    "Alleghany"
 > 
 > proc.time()
    user  system elapsed 
-  1.720   0.739   1.626 
+  2.288   0.818   2.281 
