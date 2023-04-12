@@ -173,7 +173,7 @@ see also <a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class
 <span class="r-in"><span><span class="co"># two ways to aggregate y's attribute values outcome over x's geometries:</span></span></span>
 <span class="r-in"><span><span class="fu">st_join</span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="aggregate.sf.html">aggregate</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">.</span><span class="op">$</span><span class="va">a.x</span><span class="op">)</span>, <span class="va">mean</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 3 features and 3 fields</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Attribute-geometry relationship: 0 constant, 2 aggregate, 1 identity</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Attribute-geometry relationships: aggregate (2), identity (1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 1 ymin: 1 xmax: 3 ymax: 3</span>
