@@ -259,15 +259,15 @@ st_is_within_distance = function(x, y = x, dist, sparse = TRUE, ...) {
 	ret = if (isTRUE(st_is_longlat(x))) {
 			units(dist) = as_units("m") # might convert
 			r = if (sf_use_s2()) {
-				if (inherits(dist, "units"))
-					dist = drop_units(dist)
-				s2::s2_dwithin_matrix(x, y, dist, ...)
-			} else {
-				if (!requireNamespace("lwgeom", quietly = TRUE) || 
-						utils::packageVersion("lwgeom") <= "0.1-2")
-					stop("lwgeom > 0.1-2 required: install first?")
-				lwgeom::st_geod_distance(x, y, tolerance = dist, sparse = TRUE)
-			}
+					if (inherits(dist, "units"))
+						dist = drop_units(dist)
+					s2::s2_dwithin_matrix(x, y, dist, ...)
+				} else {
+					if (!requireNamespace("lwgeom", quietly = TRUE) || 
+							utils::packageVersion("lwgeom") <= "0.1-2")
+						stop("lwgeom > 0.1-2 required: install first?")
+					lwgeom::st_geod_distance(x, y, tolerance = dist, sparse = TRUE)
+				}
 			sgbp(r, predicate = "is_within_distance", region.id = seq_along(x), 
 				ncol = length(st_geometry(y)))
 		} else {
