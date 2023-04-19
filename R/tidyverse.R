@@ -235,6 +235,18 @@ rename.sf <- function(.data, ...) {
 	st_set_agr(st_as_sf(ret, sf_column_name = sf_column), agr)
 }
 
+rename_with.sf = function(.data, .fn, .cols = everything(), ...) {
+	if (!requireNamespace("rlang", quietly = TRUE))
+		stop("rlang required: install that first") # nocov
+	.fn = rlang::as_function(.fn)
+	agr = st_agr(.data)
+	ret = NextMethod()
+	names(agr) = .fn(names(agr))
+	st_agr(ret) = agr
+	ret
+}
+
+
 #' @name tidyverse
 #' @examples
 #' if (require(dplyr, quietly = TRUE)) {
@@ -632,6 +644,7 @@ register_all_s3_methods = function() {
 	register_s3_method("dplyr", "left_join", "sf")
 	register_s3_method("dplyr", "mutate", "sf")
 	register_s3_method("dplyr", "rename", "sf")
+	register_s3_method("dplyr", "rename_with", "sf")
 	register_s3_method("dplyr", "right_join", "sf")
 	register_s3_method("dplyr", "rowwise", "sf")
 	register_s3_method("dplyr", "sample_frac", "sf")

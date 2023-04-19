@@ -1,5 +1,7 @@
 # version 1.0-13
 
+* add `rename_with.sf()` method; #1472
+
 * use GEOS' overlayNG routines for (GEOS) Intersection, Difference, Union and SymDifference; #2143
 
 * added `duplicated.sf()`; #2138, #2140, thanks to @bart1
