@@ -235,7 +235,7 @@ rename.sf <- function(.data, ...) {
 	st_set_agr(st_as_sf(ret, sf_column_name = sf_column), agr)
 }
 
-rename_with.sf = function(.data, .fn, .cols = everything(), ...) {
+rename_with.sf = function(.data, .fn, .cols, ...) {
 	if (!requireNamespace("rlang", quietly = TRUE))
 		stop("rlang required: install that first") # nocov
 	.fn = rlang::as_function(.fn)
