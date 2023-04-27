@@ -239,7 +239,7 @@ view a complete geometry by selecting it, e.g. the first one by:
 nc_geom[[1]]
 ```
 
-The way this is printed is called _well-known text_, and is part of the standards. The word `MULTIPOLYGON` is followed by three parentheses, because it can consist of multiple polygons, in the form of `MULTIPOLYGON(POL1,POL2)`, where `POL1` might consist of an exterior ring and zero or more interior rings, as of `(EXT1,HOLE1,HOLE2)`. Sets of coordinates are held together with parentheses, so we get `((crds_ext)(crds_hole1)(crds_hole2))` where `crds_` is a comma-separated set of coordinates of a ring. This leads to the case above, where `MULTIPOLYGON(((crds_ext)))` refers to the exterior ring (1), without holes (2), of the first polygon (3) - hence three parentheses.
+The way this is printed is called _well-known text_, and is part of the standards. The word `MULTIPOLYGON` is followed by three parentheses, because it can consist of multiple polygons, in the form of `MULTIPOLYGON(POL1,POL2)`, where `POL1` might consist of an exterior ring and zero or more interior rings, as of `(EXT1,HOLE1,HOLE2)`. Sets of coordinates belonging to from a single polygon are held together with parentheses, so we get `((crds_ext)(crds_hole1)(crds_hole2))` where `crds_` is a comma-separated set of coordinates of a ring. This leads to the case above, where `MULTIPOLYGON(((crds_ext)))` refers to the exterior ring (1), without holes (2), of the first polygon (3) - hence three parentheses.
 
 We can see there is a single polygon with no rings:
 
@@ -559,7 +559,7 @@ creates, and has the following arguments to control update and delete:
 * `update=TRUE` causes an existing data source to be updated, if it
 exists; this option is by default `TRUE` for all database drivers,
 where the database is updated by adding a table.
-* `delete_layer=TRUE` causes `st_write` try to open the the data
+* `delete_layer=TRUE` causes `st_write` try to open the data
 source and delete the layer; no errors are given if the data source is
 not present, or the layer does not exist in the data source.
 * `delete_dsn=TRUE` causes `st_write` to delete the data source when
