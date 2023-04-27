@@ -367,16 +367,23 @@ List CPL_write_mdim(CharacterVector name, CharacterVector driver, IntegerVector 
 	std::vector<std::shared_ptr<GDALDimension>> all_dims;
 	for (int i = dimensions.size() - 1; i >= 0; i--) { // backwards, for whatever reason
 		std::string type;
+		std::string direction = "";
 		if (dimnames[i] == xy[0]) // "x"
 			type = "HORIZONTAL_X";
 		else if (dimnames[i] == xy[1]) // "y"
 			type = "HORIZONTAL_Y";
-		else if (dimnames[i] == "time")
+		else if (dimnames[i] == "depth") {
+			type = "VERTICAL";
+			direction = "DOWN";
+		} else if (dimnames[i] == "height") {
+			type = "VERTICAL";
+			direction = "UP";
+		} else if (dimnames[i] == "time")
 			type = "TEMPORAL";
 		else
 			type = "";
 		const char *name = dimnames[i];
-		std::shared_ptr<GDALDimension> d = g->CreateDimension(name, type, "", dimensions[i], nullptr);
+		std::shared_ptr<GDALDimension> d = g->CreateDimension(name, type, direction, dimensions[i], nullptr);
 		if (d == nullptr)
 			stop("creation of dimension failed");
 		all_dims.push_back(d);

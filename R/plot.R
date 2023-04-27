@@ -788,10 +788,13 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 #' @param axes ignore
 #' @param logz ignore
 #' @param ... ignore
+#' @param lab ignore
 .image_scale = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
-		at = NULL, ..., axes = FALSE, key.length, logz = FALSE) {
+		at = NULL, ..., axes = FALSE, key.length, logz = FALSE, lab = "") {
 	if (!is.null(breaks) && length(breaks) != (length(col) + 1))
 		stop("must have one more break than colour")
+	stopifnot(is.character(lab) || is.expression(lab))
+	lab_set = (is.character(lab) && lab != "") || is.expression(lab)
 	zlim = range(z, na.rm = TRUE)
 	if (is.null(breaks))
 		breaks = seq(zlim[1], zlim[2], length.out = length(col) + 1)
@@ -819,14 +822,16 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 		xlim = c(0, 1)
 		mar = c(ifelse(axes, 2.1, 1), 0, 1.2, 0)
 	}
-	mar[key.pos] = 2.1
+	mar[key.pos] = 2.1 + 1.5 * lab_set
 	par(mar = mar)
 
+	plot(1, 1, t = "n", ylim = ylim, xlim = xlim, axes = FALSE,
+		xlab = "", ylab = "", xaxs = "i", yaxs = "i")
+	if (lab != "")
+		mtext(lab, side = key.pos, line = 2.5, cex = .8)
 	poly = vector(mode="list", length(col))
 	for (i in seq(poly))
 		poly[[i]] = c(breaks[i], breaks[i+1], breaks[i+1], breaks[i])
-	plot(1, 1, t = "n", ylim = ylim, xlim = xlim, axes = FALSE,
-		xlab = "", ylab = "", xaxs = "i", yaxs = "i")
 	offset = 0.2
 	offs = switch(key.pos,
 		c(0,0,-offset,-offset),

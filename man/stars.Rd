@@ -22,7 +22,8 @@
   ...,
   axes = FALSE,
   key.length,
-  logz = FALSE
+  logz = FALSE,
+  lab = ""
 )
 
 .image_scale_factor(
@@ -76,6 +77,8 @@
 \item{axes}{ignore}
 
 \item{logz}{ignore}
+
+\item{lab}{ignore}
 
 \item{key.width}{ignore}
 }
