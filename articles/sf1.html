@@ -498,8 +498,8 @@ part of the standards. The word <code>MULTIPOLYGON</code> is followed by
 three parentheses, because it can consist of multiple polygons, in the
 form of <code>MULTIPOLYGON(POL1,POL2)</code>, where <code>POL1</code>
 might consist of an exterior ring and zero or more interior rings, as of
-<code>(EXT1,HOLE1,HOLE2)</code>. Sets of coordinates are held together
-with parentheses, so we get
+<code>(EXT1,HOLE1,HOLE2)</code>. Sets of coordinates belonging to a
+single polygon are held together with parentheses, so we get
 <code>((crds_ext)(crds_hole1)(crds_hole2))</code> where
 <code>crds_</code> is a comma-separated set of coordinates of a ring.
 This leads to the case above, where
@@ -911,8 +911,8 @@ all database drivers, where the database is updated by adding a
 table.</li>
 <li>
 <code>delete_layer=TRUE</code> causes <code>st_write</code> try to
-open the the data source and delete the layer; no errors are given if
-the data source is not present, or the layer does not exist in the data
+open the data source and delete the layer; no errors are given if the
+data source is not present, or the layer does not exist in the data
 source.</li>
 <li>
 <code>delete_dsn=TRUE</code> causes <code>st_write</code> to delete
