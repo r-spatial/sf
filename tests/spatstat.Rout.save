@@ -1,6 +1,6 @@
 
-R version 4.2.2 Patched (2022-11-10 r83330) -- "Innocent and Trusting"
-Copyright (C) 2022 The R Foundation for Statistical Computing
+R version 4.3.0 (2023-04-21) -- "Already Tomorrow"
+Copyright (C) 2023 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -149,7 +149,7 @@ Error in st_poly_sample(x, size = size, ..., type = type, by_polygon = by_polygo
 Error in st_poly_sample(x, size = size, ..., type = type, by_polygon = by_polygon) : 
   The spatstat function rThomas did not return a valid result. Consult the help file.
 Error message from spatstat:
-Error in check.1.real(scale) : 
+Error in spatstat_fun(..., win = spatstat.geom::as.owin(x)) : 
   argument "scale" is missing, with no default
 
 Error : Only projected coordinates may be converted to spatstat class objects
@@ -166,4 +166,4 @@ In st_as_sfc.owin(spatstat.geom::as.owin(x)) :
 > 
 > proc.time()
    user  system elapsed 
-  2.547   0.812   2.462 
+  2.366   0.868   2.343 

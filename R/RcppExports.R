@@ -399,5 +399,5 @@ CPL_get_m_range <- function(sf, depth) {
 
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
-    .Call(`_sf_RcppExport_registerCCallable`)
+    .Call('_sf_RcppExport_registerCCallable', PACKAGE = 'sf')
 })
