@@ -23,7 +23,7 @@ resampling_method = function(option = "near") {
 
 #' Native interface to gdal utils
 #' @name gdal_utils
-#' @param util character; one of \code{info}, \code{warp}, \code{rasterize}, \code{translate}, \code{vectortranslate} (for ogr2ogr), \code{buildvrt}, \code{demprocessing}, \code{nearblack}, \code{grid}, \code{mdiminfo} and \code{mdimtranslate} (the last two requiring GDAL 3.1)
+#' @param util character; one of \code{info}, \code{warp}, \code{rasterize}, \code{translate}, \code{vectortranslate} (for ogr2ogr), \code{buildvrt}, \code{demprocessing}, \code{nearblack}, \code{grid}, \code{mdiminfo} and \code{mdimtranslate} (the last two requiring GDAL 3.1), \code{ogrinfo} (requiring GDAL 3.7)
 #' @param source character; name of input layer(s); for \code{warp}, \code{buidvrt} or \code{mdimtranslate} this can be more than one
 #' @param destination character; name of output layer
 #' @param options character; options for the utility
@@ -38,7 +38,7 @@ resampling_method = function(option = "near") {
 #'
 #' if (sf_extSoftVersion()["GDAL"] > "2.1.0") {
 #' # info utils can be used to list information about about a raster
-#' # dataset. More info: https://gdal.org/programs/gdalinfo.html
+#' # dataset. More info: https://gdal.org/programs/ngdalinfo.html
 #' in_file <- system.file("tif/geomatrix.tif", package = "sf")
 #' gdal_utils("info", in_file, options = c("-mm", "-proj4"))
 #'
@@ -101,7 +101,8 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 	quiet = as.logical(quiet)
 
 	ret = switch(util,
-			info = CPL_gdalinfo(if (missing(source)) character(0) else source, options, oo, config_options),
+			gdalinfo =, info = CPL_gdalinfo(if (missing(source)) character(0) else source, options, oo, config_options),
+			vectorinfo =, ogrinfo = CPL_ogrinfo(if (missing(source)) character(0) else source, options, oo, config_options),
 			warp = CPL_gdalwarp(source, destination, options, oo, doo, config_options, quiet, "-overwrite" %in% options),
 			warper = CPL_gdal_warper(source, destination, as.integer(resampling_method(options)),
 				oo, doo, config_options, quiet), # nocov

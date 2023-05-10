@@ -69,6 +69,33 @@ Rcpp::CharacterVector CPL_gdalinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVec
 }
 
 // [[Rcpp::export]]
+Rcpp::CharacterVector CPL_ogrinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options, 
+		Rcpp::CharacterVector oo, Rcpp::CharacterVector co) {
+	set_config_options(co);
+	std::vector <char *> options_char = create_options(options, true);
+	std::vector <char *> oo_char = create_options(oo, true); // open options
+	GDALDatasetH ds = NULL;
+	if (obj.size())
+		ds = GDALOpenEx((const char *) obj[0], GA_ReadOnly, NULL, oo_char.data(), NULL);
+#if GDAL_VERSION_NUM >= 3070000
+	GDALVectorInfoOptions* opt = GDALVectorInfoOptionsNew(options_char.data(), NULL);
+	char *ret_val = GDALVectorInfo(ds, opt);
+	if (ret_val == NULL)
+		return Rcpp::CharacterVector::create();
+	Rcpp::CharacterVector ret = ret_val; // copies
+	CPLFree(ret_val);
+	GDALVectorInfoOptionsFree(opt);
+#else
+	Rcpp::CharacterVector ret;
+	Rcpp::stop("ogrinfo util requires GDAL >= 3.7.0");
+#endif
+	if (ds)
+		GDALClose(ds);
+	unset_config_options(co);
+	return ret;
+}
+
+// [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdaladdo(Rcpp::CharacterVector obj, Rcpp::CharacterVector method, 
 		Rcpp::IntegerVector overviews, Rcpp::IntegerVector bands, Rcpp::CharacterVector oo,
 		Rcpp::CharacterVector co, bool clean = false, bool read_only = false) {
