@@ -73,7 +73,8 @@ resampling_method = function(option = "near") {
 #' st_read(in_file)
 #' }
 gdal_utils = function(util = "info", source, destination, options = character(0),
-		quiet = !(util %in% c("info", "mdiminfo")) || ("-multi" %in% options),
+		quiet = !(util %in% c("info", "gdalinfo", "ogrinfo", "vectorinfo", 
+							  "mdiminfo")) || ("-multi" %in% options),
 		processing = character(0), colorfilename = character(0),
 		config_options = character(0)) {
 
@@ -122,7 +123,7 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 			stop(paste("unknown util value for gdal_utils:", util))
 		)
 
-	if (util %in% c("info", "mdiminfo")) {
+	if (util %in% c("info", "gdalinfo", "ogrinfo", "vectorinfo", "mdiminfo")) {
 		if (! quiet)
 			cat(ret)
 		invisible(ret)

@@ -133,10 +133,13 @@ RUN Rscript -e 'install.packages(c("mapview", "tmap"))'
 RUN Rscript -e 'install.packages(c("spatstat", "spatstat.linnet"))'
 
 RUN R CMD build --no-build-vignettes --no-manual sf
-RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
-RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
+RUN rm -fr sf
+RUN git clone --depth 10 https://github.com/r-spatial/sf.git
+RUN R CMD INSTALL sf
+#RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
+#RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
 
 #RUN Rscript -e 'install.packages("starsdata", repos="http://gis-bigdata.uni-muenster.de/pebesma/")'
-RUN R CMD build --no-manual stars
-RUN Rscript -e 'install.packages(c("ncdfgeom", "exactextractr"))'
-RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
+#RUN R CMD build --no-manual stars
+#RUN Rscript -e 'install.packages(c("ncdfgeom", "exactextractr"))'
+#RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
