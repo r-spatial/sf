@@ -9,14 +9,15 @@ gdal_utils(
   source,
   destination,
   options = character(0),
-  quiet = !(util \%in\% c("info", "mdiminfo")) || ("-multi" \%in\% options),
+  quiet = !(util \%in\% c("info", "gdalinfo", "ogrinfo", "vectorinfo", "mdiminfo")) ||
+    ("-multi" \%in\% options),
   processing = character(0),
   colorfilename = character(0),
   config_options = character(0)
 )
 }
 \arguments{
-\item{util}{character; one of \code{info}, \code{warp}, \code{rasterize}, \code{translate}, \code{vectortranslate} (for ogr2ogr), \code{buildvrt}, \code{demprocessing}, \code{nearblack}, \code{grid}, \code{mdiminfo} and \code{mdimtranslate} (the last two requiring GDAL 3.1)}
+\item{util}{character; one of \code{info}, \code{warp}, \code{rasterize}, \code{translate}, \code{vectortranslate} (for ogr2ogr), \code{buildvrt}, \code{demprocessing}, \code{nearblack}, \code{grid}, \code{mdiminfo} and \code{mdimtranslate} (the last two requiring GDAL 3.1), \code{ogrinfo} (requiring GDAL 3.7)}
 
 \item{source}{character; name of input layer(s); for \code{warp}, \code{buidvrt} or \code{mdimtranslate} this can be more than one}
 
@@ -42,7 +43,7 @@ Native interface to gdal utils
 
 if (sf_extSoftVersion()["GDAL"] > "2.1.0") {
 # info utils can be used to list information about about a raster
-# dataset. More info: https://gdal.org/programs/gdalinfo.html
+# dataset. More info: https://gdal.org/programs/ngdalinfo.html
 in_file <- system.file("tif/geomatrix.tif", package = "sf")
 gdal_utils("info", in_file, options = c("-mm", "-proj4"))
 

@@ -27,8 +27,10 @@ Package sf:
 * interfaces to [PRØJ](http://proj.org/) for coordinate reference system conversion and transformation
 * uses [well-known-binary](https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary) serialisations written in C++/Rcpp for fast I/O with GDAL and GEOS 
 * reads from and writes to spatial databases such as [PostGIS](http://postgis.net/) using [DBI](https://cran.r-project.org/web/packages/DBI/index.html)
-* is extended by [lwgeom](https://github.com/r-spatial/lwgeom/) for selected liblwgeom/PostGIS functions
-* is extended by [stars](https://github.com/r-spatial/stars/) for raster data, and raster or vector data cubes (spatial time series)
+* is extended by 
+    * [lwgeom](https://github.com/r-spatial/lwgeom/) for selected liblwgeom/PostGIS functions
+    * [stars](https://github.com/r-spatial/stars/) for raster data, and raster or vector data cubes (spatial time series)
+    * [sfnetworks](https://luukvdmeer.github.io/sfnetworks/) for geospatial network data
 
 <a href="https://gist.github.com/edzer/442d74a5775abcd5068cf3e73b23687b"><img align="left" src="https://user-images.githubusercontent.com/520851/50280460-e35c1880-044c-11e9-9ed7-cc46754e49db.jpg" /></a>
 

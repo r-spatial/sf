@@ -117,6 +117,10 @@ CPL_gdalinfo <- function(obj, options, oo, co) {
     .Call(`_sf_CPL_gdalinfo`, obj, options, oo, co)
 }
 
+CPL_ogrinfo <- function(obj, options, oo, co) {
+    .Call(`_sf_CPL_ogrinfo`, obj, options, oo, co)
+}
+
 CPL_gdaladdo <- function(obj, method, overviews, bands, oo, co, clean = FALSE, read_only = FALSE) {
     .Call(`_sf_CPL_gdaladdo`, obj, method, overviews, bands, oo, co, clean, read_only)
 }
