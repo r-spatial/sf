@@ -22,3 +22,4 @@ NOTES
 ^tic\.R$
 vignettes.awk
 ^\.gitattributes$
+_pkgdown.yml
