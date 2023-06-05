@@ -557,10 +557,11 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 						poDriver->GetMetadataItem(GDAL_DCAP_CREATECOPY) != NULL) {
 			GDALDriver *memDriver = GetGDALDriverManager()->GetDriverByName("MEM");
 			GDALDataset *memDS;
-			if ((memDS = memDriver->Create(fname[0], dims[0], dims[1], dims[2], eType,
-					create_options(options).data())) == NULL)
+			if ((memDS = memDriver->Create(fname[0], dims[0], dims[1], dims[2], eType, NULL)) == NULL)
 				stop("cannot create copy in memory"); // #nocov
-			if ((poDstDS = poDriver->CreateCopy(fname[0], memDS, FALSE, NULL, NULL, NULL)) == NULL) {
+			options.push_back("APPEND_SUBDATASET=YES");
+			if ((poDstDS = poDriver->CreateCopy(fname[0], memDS, FALSE, 
+										create_options(options).data(), NULL, NULL)) == NULL) {
 				GDALClose(memDS);
 				stop("cannot CreateCopy from memory dataset");
 			} else
