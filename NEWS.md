@@ -1,5 +1,9 @@
 # version 1.0-13
 
+* `gdal_utils()` adds `"ogrinfo"` utility (requires GDAL >= 3.7.0); #2160
+
+* `st_as_sf()` catches errors when setting invalid crs values, raised by Jon Skøien
+
 * add `rename_with.sf()` method; #1472
 
 * use GEOS' overlayNG routines for (GEOS) Intersection, Difference, Union and SymDifference; #2143

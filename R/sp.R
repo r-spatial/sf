@@ -307,8 +307,11 @@ as_Spatial = function(from, cast = TRUE, IDs = paste0("ID", seq_along(from))) {
 		if (ncol(from))
 			sp::addAttrToGeom(as_Spatial(geom, cast = cast, IDs = row.names(from)),
 						  data.frame(from), match.ID = FALSE)
-		else
-			.as_Spatial(from, cast, IDs)
+		else {
+			if (missing(IDs))
+				IDs = paste0("ID", seq_along(geom))
+			as_Spatial(geom, cast, IDs)
+		}
 	} else {
 		.as_Spatial(from, cast, IDs)
 	}

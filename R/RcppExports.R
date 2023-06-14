@@ -117,6 +117,10 @@ CPL_gdalinfo <- function(obj, options, oo, co) {
     .Call(`_sf_CPL_gdalinfo`, obj, options, oo, co)
 }
 
+CPL_ogrinfo <- function(obj, options, oo, co) {
+    .Call(`_sf_CPL_ogrinfo`, obj, options, oo, co)
+}
+
 CPL_gdaladdo <- function(obj, method, overviews, bands, oo, co, clean = FALSE, read_only = FALSE) {
     .Call(`_sf_CPL_gdaladdo`, obj, method, overviews, bands, oo, co, clean, read_only)
 }
@@ -399,5 +403,5 @@ CPL_get_m_range <- function(sf, depth) {
 
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
-    .Call(`_sf_RcppExport_registerCCallable`)
+    .Call('_sf_RcppExport_registerCCallable', PACKAGE = 'sf')
 })

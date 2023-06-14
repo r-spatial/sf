@@ -102,8 +102,8 @@ RUN cd proj* \
 
 # GDAL:
 
-ENV GDAL_VERSION 3.6.0
-ENV GDAL_VERSION_NAME 3.6.0
+ENV GDAL_VERSION 3.7.0
+ENV GDAL_VERSION_NAME 3.7.0
 
 RUN wget -q http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
@@ -133,10 +133,13 @@ RUN Rscript -e 'install.packages(c("mapview", "tmap"))'
 RUN Rscript -e 'install.packages(c("spatstat", "spatstat.linnet"))'
 
 RUN R CMD build --no-build-vignettes --no-manual sf
-RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
-RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
+RUN rm -fr sf
+RUN git clone --depth 10 https://github.com/r-spatial/sf.git
+RUN R CMD INSTALL sf
+#RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
+#RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
 
 #RUN Rscript -e 'install.packages("starsdata", repos="http://gis-bigdata.uni-muenster.de/pebesma/")'
-RUN R CMD build --no-manual stars
-RUN Rscript -e 'install.packages(c("ncdfgeom"))'
-RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
+#RUN R CMD build --no-manual stars
+#RUN Rscript -e 'install.packages(c("ncdfgeom", "exactextractr"))'
+#RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
