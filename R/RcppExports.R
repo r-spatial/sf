@@ -333,8 +333,8 @@ CPL_proj_info <- function(type) {
     .Call(`_sf_CPL_proj_info`, type)
 }
 
-CPL_xy2sfc <- function(cc, dim, to_points, which) {
-    .Call(`_sf_CPL_xy2sfc`, cc, dim, to_points, which)
+CPL_xy2sfc <- function(cc, dim, to_points, which, cc_has_NAs) {
+    .Call(`_sf_CPL_xy2sfc`, cc, dim, to_points, which, cc_has_NAs)
 }
 
 sfc_is_null <- function(sfc) {

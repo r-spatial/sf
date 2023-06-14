@@ -114,7 +114,7 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 			}, # nocov end
 			translate = CPL_gdaltranslate(source, destination, options, oo, config_options, quiet),
 			vectortranslate = CPL_gdalvectortranslate(source, destination, options, oo, doo, config_options, quiet),
-			buildvrt = CPL_gdalbuildvrt(source, destination, options, oo, config_options, quiet),
+			buildvrt = CPL_gdalbuildvrt(if (missing(source)) character(0) else source, destination, options, oo, config_options, quiet),
 			demprocessing = CPL_gdaldemprocessing(source, destination, options, processing, colorfilename, oo, config_options, quiet),
 			nearblack = CPL_gdalnearblack(source, destination, options, oo, config_options, doo, quiet),
 			grid = CPL_gdalgrid(source, destination, options, oo, config_options, quiet),

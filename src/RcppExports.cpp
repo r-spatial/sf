@@ -1126,8 +1126,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_xy2sfc
-List CPL_xy2sfc(NumericMatrix cc, IntegerVector dim, bool to_points, IntegerVector which);
-RcppExport SEXP _sf_CPL_xy2sfc(SEXP ccSEXP, SEXP dimSEXP, SEXP to_pointsSEXP, SEXP whichSEXP) {
+List CPL_xy2sfc(NumericMatrix cc, IntegerVector dim, bool to_points, IntegerVector which, bool cc_has_NAs);
+RcppExport SEXP _sf_CPL_xy2sfc(SEXP ccSEXP, SEXP dimSEXP, SEXP to_pointsSEXP, SEXP whichSEXP, SEXP cc_has_NAsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -1135,7 +1135,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< IntegerVector >::type dim(dimSEXP);
     Rcpp::traits::input_parameter< bool >::type to_points(to_pointsSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type which(whichSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_xy2sfc(cc, dim, to_points, which));
+    Rcpp::traits::input_parameter< bool >::type cc_has_NAs(cc_has_NAsSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_xy2sfc(cc, dim, to_points, which, cc_has_NAs));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1496,7 +1497,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_have_datum_files", (DL_FUNC) &_sf_CPL_have_datum_files, 1},
     {"_sf_CPL_proj_direct", (DL_FUNC) &_sf_CPL_proj_direct, 5},
     {"_sf_CPL_proj_info", (DL_FUNC) &_sf_CPL_proj_info, 1},
-    {"_sf_CPL_xy2sfc", (DL_FUNC) &_sf_CPL_xy2sfc, 4},
+    {"_sf_CPL_xy2sfc", (DL_FUNC) &_sf_CPL_xy2sfc, 5},
     {"_sf_sfc_is_null", (DL_FUNC) &_sf_sfc_is_null, 1},
     {"_sf_sfc_unique_sfg_dims_and_types", (DL_FUNC) &_sf_sfc_unique_sfg_dims_and_types, 1},
     {"_sf_sfc_is_empty", (DL_FUNC) &_sf_sfc_is_empty, 1},
