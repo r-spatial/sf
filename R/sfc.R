@@ -43,6 +43,8 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 	# if we have only one arg, which is already a list with sfg's, but NOT a geometrycollection:
 	# (this is the old form of calling st_sfc; it is way faster to call st_sfc(lst) if lst
 	# already contains a zillion sfg objects, than do.call(st_sfc, lst) ...
+	if (length(lst) && inherits(lst[[1]], "sf"))
+		stop("use st_as_sfc() to extract geometries from an sf object")
 	if (length(lst) == 1 && is.list(lst[[1]]) && !inherits(lst[[1]], "sfg")
 			&& (length(lst[[1]]) == 0 || inherits(lst[[1]][[1]], "sfg") || is.null(lst[[1]][[1]])))
 		lst = lst[[1]]
