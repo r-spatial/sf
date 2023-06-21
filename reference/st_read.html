@@ -237,7 +237,9 @@ basis; <code>type</code> may be specified for each geometry column.</p>
 <p>Note that stray files in data source directories (such as <code>*.dbf</code>) may
 lead to spurious errors that accompanying <code>*.shp</code> are missing.</p>
 <p>In case of problems reading shapefiles from USB drives on OSX, please see
-<a href="https://github.com/r-spatial/sf/issues/252" class="external-link">https://github.com/r-spatial/sf/issues/252</a>.</p>
+<a href="https://github.com/r-spatial/sf/issues/252" class="external-link">https://github.com/r-spatial/sf/issues/252</a>. Reading shapefiles (or other
+data sources) directly from zip files can be done by prepending the path 
+with <code>/vsizip/</code>, see also <a href="https://github.com/r-spatial/sf/pull/1514" class="external-link">https://github.com/r-spatial/sf/pull/1514</a></p>
 <p>For <code>query</code> with a character <code>dsn</code> the query text is handed to
 'ExecuteSQL' on the GDAL/OGR data set and will result in the creation of a
 new layer (and <code>layer</code> is ignored). See 'OGRSQL'
