@@ -150,7 +150,7 @@ sf_proj_pipelines = function(source_crs, target_crs, authority = character(0), A
 		as.numeric(desired_accuracy), as.logical(strict_containment), 
 		as.logical(axis_order_authority_compliant))
 	if (nrow(ret)) {
-		if (substr(ret$definition[1], 1, 1) != "+") # paste + to every word
+		if (!startsWith(ret$definition[1], "+")) # paste + to every word
 			ret$definition = 
 				sapply(strsplit(ret$definition, " "), 
 					function(x) paste0(paste0("+", x), collapse=" "))
