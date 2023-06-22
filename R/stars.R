@@ -110,7 +110,7 @@ xy_from_colrow = function(x, geotransform, inverse = FALSE) {
 # Yp = geotransform[3] + P*geotransform[4] + L*geotransform[5];
 	if (inverse) {
 		geotransform = gdal_inv_geotransform(geotransform) # nocov start
-		if (any(is.na(geotransform)))
+		if (anyNA(geotransform))
 			stop("geotransform not invertible") # nocov end
 	}
 	stopifnot(ncol(x) == 2)

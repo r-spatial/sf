@@ -192,7 +192,7 @@ schema_table <- function(conn, table, public = "public") {
 	else if (length(table) > 2)
 		stop("table cannot be longer than 2 (schema, table)", call. = FALSE)
 
-	if (any(is.na(table)))
+	if (anyNA(table))
 		stop("table and schema cannot be NA", call. = FALSE)
 
 	return(table)
