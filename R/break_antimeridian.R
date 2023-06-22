@@ -43,7 +43,7 @@ st_break_antimeridian = function(x, lon_0=0, tol=0.0001, ...) {
 st_break_antimeridian.sf = function(x, lon_0=0, tol=0.0001, ...) {
 	type = st_geometry_type(x)
         if (all(grepl("CURVE", grep("LINESTRING|POLYGON", type, value=TRUE),
-            fixed=TRUE, invert=TRUE))) stop("'st_break_antimeridian' requires linestring or polygon objects", call. = FALSE)
+            fixed=TRUE))) stop("'st_break_antimeridian' requires linestring or polygon objects", call. = FALSE)
 	bb0 = st_bbox(x)
         low = bb0[1] < -(180+tol)
 	high = bb0[3] > (180+tol)
