@@ -1,5 +1,7 @@
 # version 1.0-13
 
+* fix many lintr suggestions, thanks go Michael Chirico (#2181 - #2191)
+
 * `gdal_utils()` adds `"ogrinfo"` utility (requires GDAL >= 3.7.0); #2160
 
 * `st_as_sf()` catches errors when setting invalid crs values, raised by Jon Skøien
