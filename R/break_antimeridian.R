@@ -31,7 +31,7 @@
 #' }
 st_break_antimeridian = function(x, lon_0=0, tol=0.0001, ...) {
 	ll = st_is_longlat(x)
-	if (!ll | is.na(ll))
+	if (!isTRUE(ll))
 		stop("'st_break_antimeridian' requires non-projected geographic coordinates",
 			 call. = FALSE)
 

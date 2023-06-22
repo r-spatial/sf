@@ -119,7 +119,7 @@ st_sample.sfc = function(x, size, ..., type = "random", exact = TRUE, warn_if_no
 					 st_multipoints_sample(do.call(c, x), size = size, ..., type = type),
 					 st_ll_sample(st_cast(x, "LINESTRING"), size = size, ..., type = type),
 					 st_poly_sample(x, size = size, ..., type = type, by_polygon = by_polygon))
-		if (exact & type == "random" & all(st_geometry_type(res) == "POINT")) {
+		if (exact && type == "random" && all(st_geometry_type(res) == "POINT")) {
 			diff = size - length(res)
 			if (diff > 0) { # too few points
 				res_additional = st_sample_exact(x = x, size = diff, ..., 

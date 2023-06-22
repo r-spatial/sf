@@ -265,7 +265,7 @@ st_sf = function(..., agr = NA_agr_, row.names,
 			x
 		else if (length(x) == 1) # ONLY one sfc
 			data.frame(row.names = row.names)
-		else if (!sfc_last & inherits(x, "data.frame"))
+		else if (!sfc_last && inherits(x, "data.frame"))
 			x
 		else if (sfc_last && inherits(x, "data.frame"))
 			x[-all_sfc_columns]
