@@ -126,7 +126,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 				nbreaks = length(breaks) - 1
 			}
 		}
-		if (missing(nbreaks) && is.numeric(breaks))
+		if (nbreaks.missing && is.numeric(breaks))
 			nbreaks = length(breaks) - 1
 
 		# loop over each map to plot:
