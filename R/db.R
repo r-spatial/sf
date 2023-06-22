@@ -242,7 +242,7 @@ db_find_srid = function(conn, crs_local = st_crs(srid), srid = epsg(crs_local), 
     }
     crs_found <- st_crs(db_crs[["srtext"]])
     crs_found[["input"]] <- build_epsg(srid)
-    if(validate && crs_found != crs_local & !is.na(crs_local)) {
+    if(validate && crs_found != crs_local && !is.na(crs_local)) {
     	# TODO: pretty print db_spatial_ref
         warning("Local crs different from database crs. You can inspect the ",
                 "database crs using `dbReadtable(conn, \"spatial_ref_sys\")` ",
