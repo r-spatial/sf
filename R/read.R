@@ -310,7 +310,7 @@ abbreviate_shapefile_names = function(x) {
 	if (length(wh. <- grep("\\.", fld_names) > 0))
 		fld_names[wh.] <- gsub("\\.", "_", fld_names[wh.])
 
-	if (length(fld_names) != length(unique(fld_names)))
+	if (anyDuplicated(fld_names))
 		stop("Non-unique field names") # nocov
 
 	names(x) = fld_names
