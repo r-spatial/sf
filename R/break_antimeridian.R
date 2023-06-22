@@ -100,7 +100,7 @@ st_within_pm180 <- function(x, tol=0.0001) {
         xcrs = st_crs(x)
         xnames = names(x)
 	xnames = xnames[grep(attr(x, "sf_column"), xnames, invert=TRUE)]
-	x$st_within_pm180_ID = as.character(1:nrow(x))
+	x$st_within_pm180_ID = as.character(seq_len(nrow(x)))
         s2_status = sf_use_s2()
 	sf_use_s2(FALSE) # avoid s2 because we need a planar bounding box
 	bb0 = st_bbox(x)

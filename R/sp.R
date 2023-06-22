@@ -165,7 +165,7 @@ st_as_sfc.SpatialPolygons = function(x, ..., precision = 0.0, forceMulti = FALSE
 					cp0 <- st_contains(raw0[!holes], raw0[holes])
 					areas <- sapply(slot(pl, "Polygons"), slot, "area")
 					hole_assigned <- rep(FALSE, sum(holes))
-					names(cp0) <- 1:length(cp0)
+					names(cp0) <- seq_along(cp0)
                                         cp1 <- cp0[order(areas[!holes])]
 					for (i in seq_along(cp1)) {
                                           cp1i <- cp1[[i]]
