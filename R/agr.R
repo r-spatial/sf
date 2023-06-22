@@ -92,5 +92,5 @@ summarize_agr = function(x) {
 
 all_constant = function(x) {
 	x = attr(x, "agr")
-	!(any(is.na(x)) || any(!(x %in% c("identity", "constant"))))
+	!anyNA(x) && all(x %in% c("identity", "constant"))
 }

@@ -98,12 +98,12 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 
 	# compute bbox, if not set:
 	bb = attr(lst, "bbox")
-	if (is.null(bb) || any(is.na(bb)) || recompute_bbox)
+	if (is.null(bb) || anyNA(bb) || recompute_bbox)
 		attr(lst, "bbox") = compute_bbox(lst)
 
 	# compute z_range, if dims permit and not set
 	zr = attr(lst, "z_range")
-	if (is.null(zr) || any(is.na(zr))) {
+	if (is.null(zr) || anyNA(zr)) {
 		u <- dims_and_types[[1]]
 		if( "XYZM" %in% u ) {
 			attr(lst, "z_range") = compute_z_range(lst)
