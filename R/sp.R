@@ -172,7 +172,7 @@ st_as_sfc.SpatialPolygons = function(x, ..., precision = 0.0, forceMulti = FALSE
 					  tgt <- as.integer(names(cp1[i]))
                                           if (length(cp1i) > 0L) {
                                             for (j in cp1i) {
-					      wkts[[tgt]] <- paste(sub("))", "),", wkts[[tgt]]), sub("POLYGON \\(", "", st_as_text(raw0[holes][j])))
+					      wkts[[tgt]] <- paste(sub("))", "),", wkts[[tgt]], fixed = TRUE), sub("POLYGON (", "", st_as_text(raw0[holes][j]), fixed = TRUE))
 					      hole_assigned[j] <- TRUE
 					    }
                                           }
