@@ -38,7 +38,7 @@ MtrxSet = function(x, dim = "XYZ", type, needClosed = FALSE) {
 
 # creates object of class c(dim, type, "sfg") from list x, d, possibly checking rings are closed
 MtrxSetSet = function(x, dim = "XYZ", type, needClosed = FALSE) {
-	stopifnot(is.list(x) && all(vapply(x, is.list, TRUE)))
+	stopifnot(is.list(x), vapply(x, is.list, TRUE))
 	if (length(x)) {
 		nc = unique(unlist(lapply(x, function(y) vapply(y, ncol, 0L))))
 		if (length(nc) != 1)

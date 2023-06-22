@@ -90,7 +90,7 @@ st_graticule = function(x = c(-180,-90,180,90), crs = st_crs(x),
 		st_bbox(x)
 	else
 		x
-	stopifnot(is.numeric(bb) && length(bb) == 4)
+	stopifnot(is.numeric(bb), length(bb) == 4)
 
 	if (isTRUE(st_is_longlat(crs)))
 		bb = trim_bb(bb, margin)
@@ -206,7 +206,7 @@ graticule_attributes = function(df) {
 }
 
 trim_bb = function(bb = c(-180, -90, 180, 90), margin, wrap=c(-180,180)) {
-	stopifnot(margin > 0 && margin <= 1.0)
+	stopifnot(margin > 0, margin <= 1.0)
 	fr = 1.0 - margin
 	if (min(bb[c(1,3)]) >= -15. && max(bb[c(1,3)]) > 195.) { # 0-360 span:
 		wrap=c(0., 360.)
