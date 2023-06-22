@@ -335,7 +335,7 @@ crs_parameters = function(x) {
 epsg = function(x) {
 	if (is.na(x))
 		NA_integer_
-	else if (grepl("^EPSG:", x[["input"]]))
+	else if (startsWith(x[["input"]], "EPSG:"))
 		as.integer(gsub("^EPSG:(\\d+)\\b.*$", "\\1", x[["input"]]))
 	else
 		crs_parameters(x)[["epsg"]]
