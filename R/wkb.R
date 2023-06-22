@@ -6,7 +6,7 @@
 #
 hex_to_raw = function(y) {
 	stopifnot((nchar(y) %% 2) == 0)
-	if (substr(y, 1, 2) == "0x")
+	if (startsWith(y, "0x"))
 		y = substr(y, 3, nchar(y))
 	as.raw(as.numeric(paste0("0x", vapply(seq_len(nchar(y)/2),
 		function(x) substr(y, (x-1)*2+1, x*2), "")))) # SLOW, hence the Rcpp implementation
@@ -15,7 +15,7 @@ hex_to_raw = function(y) {
 skip0x = function(x) {
 	if (is.na(x))
 		"010700000000000000" # empty GeometryCollection, st_as_binary(st_geometrycollection())
-	else if (substr(x, 1, 2) == "0x")
+	else if (startsWith(x, "0x"))
 		substr(x, 3, nchar(x))
 	else
 		x
