@@ -1,6 +1,6 @@
 # benchmark, comparing reading of largish simple feature objects from WKB
 WKB_LINESTRING = function(m = 1, n) {
-	stopifnot(m > 0 && n > 1)
+	stopifnot(m > 0, n > 1)
 	l = lapply(seq_len(m), function(x) {
 		con = rawConnection(raw(0), "w")
 		writeBin(as.raw(1), con) # "little"
