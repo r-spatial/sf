@@ -1009,10 +1009,14 @@ ways:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">[</span><span class="fl">15</span><span class="op">]</span> <span class="op">=</span> <span class="st">"geometry"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">nc</span>, <span class="st">"sf_column"</span><span class="op">)</span> <span class="op">=</span> <span class="st">"geometry"</span></span>
 <span><span class="va">nc.sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/coerce-methods.html">as</a></span><span class="op">(</span><span class="va">nc</span>, <span class="st">"Spatial"</span><span class="op">)</span></span>
-<span><span class="co">## The legacy packages maptools, rgdal, and rgeos, underpinning this package</span></span>
-<span><span class="co">## will retire shortly. Please refer to R-spatial evolution reports on</span></span>
-<span><span class="co">## https://r-spatial.org/r/2023/05/15/evolution4.html for details.</span></span>
-<span><span class="co">## This package is now running under evolution status 0</span></span>
+<span><span class="co">## The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,</span></span>
+<span><span class="co">## which was just loaded, will retire in October 2023.</span></span>
+<span><span class="co">## Please refer to R-spatial evolution reports for details, especially</span></span>
+<span><span class="co">## https://r-spatial.org/r/2023/05/15/evolution4.html.</span></span>
+<span><span class="co">## It may be desirable to make the sf package available;</span></span>
+<span><span class="co">## package maintainers should consider adding sf to Suggests:.</span></span>
+<span><span class="co">## The sp package is now running under evolution status 2</span></span>
+<span><span class="co">##      (status 2 uses the sf package in place of rgdal)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">nc.sp</span><span class="op">)</span></span>
 <span><span class="co">## [1] "SpatialPolygonsDataFrame"</span></span>
 <span><span class="co">## attr(,"package")</span></span>
