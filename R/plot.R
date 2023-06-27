@@ -117,7 +117,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 				values = as.factor(values)
 			if (logz)
 				values = log10(values)
-			if (is.character(breaks) && is.numeric(values))) { # compute breaks from values:
+			if (is.character(breaks) && is.numeric(values)) { # compute breaks from values:
 				v0 = values[!is.na(values)]
 				n.unq = length(unique(v0))
 				breaks = if (! all(is.na(values)) && n.unq > 1)
