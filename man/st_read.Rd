@@ -138,7 +138,12 @@ Note that stray files in data source directories (such as \code{*.dbf}) may
 lead to spurious errors that accompanying \code{*.shp} are missing.
 
 In case of problems reading shapefiles from USB drives on OSX, please see
-\url{https://github.com/r-spatial/sf/issues/252}.
+\url{https://github.com/r-spatial/sf/issues/252}. Reading shapefiles (or other
+data sources) directly from zip files can be done by prepending the path 
+with \code{/vsizip/}. This is part of the GDAL Virtual File Systems interface
+that also supports .gz, curl, and other operations, including chaining; see
+\url{https://gdal.org/user/virtual_file_systems.html} for a complete
+description and examples.
 
 For \code{query} with a character \code{dsn} the query text is handed to
 'ExecuteSQL' on the GDAL/OGR data set and will result in the creation of a

@@ -15,7 +15,7 @@
 #' @export
 st_shift_longitude = function(x) {
 	ll = st_is_longlat(x)
-	if (!ll | is.na(ll))
+	if (!isTRUE(ll))
 		stop("'st_shift_longitude' requires non-projected geographic coordinates",
 			 call. = FALSE)
 

@@ -166,7 +166,7 @@ st_as_sfc.SpatialPolygons = function(x, ..., precision = 0.0, forceMulti = FALSE
 					cp0 <- st_contains(raw0[!holes], raw0[holes])
 					areas <- sapply(slot(pl, "Polygons"), slot, "area")
 					hole_assigned <- rep(FALSE, sum(holes))
-					names(cp0) <- 1:length(cp0)
+					names(cp0) <- seq_along(cp0)
                                         cp1 <- cp0[order(areas[!holes])]
 					for (i in seq_along(cp1)) {
                                           cp1i <- cp1[[i]]
@@ -307,8 +307,11 @@ as_Spatial = function(from, cast = TRUE, IDs = paste0("ID", seq_along(from))) {
 		if (ncol(from))
 			sp::addAttrToGeom(as_Spatial(geom, cast = cast, IDs = row.names(from)),
 						  data.frame(from), match.ID = FALSE)
-		else
-			.as_Spatial(from, cast, IDs)
+		else {
+			if (missing(IDs))
+				IDs = paste0("ID", seq_along(geom))
+			as_Spatial(geom, cast, IDs)
+		}
 	} else {
 		.as_Spatial(from, cast, IDs)
 	}

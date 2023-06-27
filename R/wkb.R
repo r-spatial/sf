@@ -6,7 +6,7 @@
 #
 hex_to_raw = function(y) {
 	stopifnot((nchar(y) %% 2) == 0)
-	if (substr(y, 1, 2) == "0x")
+	if (startsWith(y, "0x"))
 		y = substr(y, 3, nchar(y))
 	as.raw(as.numeric(paste0("0x", vapply(seq_len(nchar(y)/2),
 		function(x) substr(y, (x-1)*2+1, x*2), "")))) # SLOW, hence the Rcpp implementation
@@ -15,7 +15,7 @@ hex_to_raw = function(y) {
 skip0x = function(x) {
 	if (is.na(x))
 		"010700000000000000" # empty GeometryCollection, st_as_binary(st_geometrycollection())
-	else if (substr(x, 1, 2) == "0x")
+	else if (startsWith(x, "0x"))
 		substr(x, 3, nchar(x))
 	else
 		x
@@ -43,7 +43,7 @@ st_as_sfc.WKB = function(x, ..., EWKB = FALSE, spatialite = FALSE, pureR = FALSE
 			else
 				structure(CPL_hex_to_raw(vapply(x, skip0x, USE.NAMES = FALSE, "")), class = "WKB")
 	} else # direct call with raw:
-		stopifnot(inherits(x, "WKB") && all(vapply(x, is.raw, TRUE))) # WKB as raw
+		stopifnot(inherits(x, "WKB"), vapply(x, is.raw, TRUE)) # WKB as raw
 	if (any(lengths(x) == 0))
 		stop("cannot read WKB object from zero-length raw vector")
 	ret = if (pureR)

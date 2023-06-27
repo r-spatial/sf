@@ -5,7 +5,7 @@
 is.na.z_range = function(x) identical(x, NA_z_range_)
 
 zb_wrap = function(zb) {
-	stopifnot(is.numeric(zb) && length(zb) == 2)
+	stopifnot(is.numeric(zb), length(zb) == 2)
 	structure(zb, names = c("zmin", "zmax"), class = "z_range")
 }
 

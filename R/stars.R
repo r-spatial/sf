@@ -110,7 +110,7 @@ xy_from_colrow = function(x, geotransform, inverse = FALSE) {
 # Yp = geotransform[3] + P*geotransform[4] + L*geotransform[5];
 	if (inverse) {
 		geotransform = gdal_inv_geotransform(geotransform) # nocov start
-		if (any(is.na(geotransform)))
+		if (anyNA(geotransform))
 			stop("geotransform not invertible") # nocov end
 	}
 	stopifnot(ncol(x) == 2)
@@ -192,10 +192,14 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 		}
 	}
 	dims = dim(x) + !as_points
-	if (use_cpp)
-		structure(CPL_xy2sfc(cc, as.integer(dims), as_points, as.integer(which)), 
-			crs = st_crs(xd$refsys), n_empty = 0L, bbox = bbox.Mtrx(cc))
-	else
+	if (use_cpp) {
+		bb = if (cc_has_NAs <- anyNA(cc))
+				bbox.Mtrx(na.omit(cc))
+			else
+				bbox.Mtrx(cc)
+		structure(CPL_xy2sfc(cc, as.integer(dims), as_points, as.integer(which), cc_has_NAs), 
+			crs = st_crs(xd$refsys), n_empty = 0L, bbox = bb)
+	} else
 		st_sfc(xy2sfc(cc, dims, as_points), crs = xd$refsys)
 }
 

@@ -506,8 +506,8 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 
 	// can this driver Create()?
 	char **papszMetadata = poDriver->GetMetadata();
-	if (!CSLFetchBoolean( papszMetadata, GDAL_DCAP_CREATE, FALSE ) )
-		stop("driver does not support Create() method."); // #nocov
+	if (!CSLFetchBoolean( papszMetadata, GDAL_DCAP_CREATE, FALSE ) && !CSLFetchBoolean( papszMetadata, GDAL_DCAP_CREATECOPY, FALSE ) )
+		stop("driver does not support Create() or CreateCopy() method."); // #nocov
 
 	// figure out eType:
 	GDALDataType eType = GDT_Unknown;
@@ -552,7 +552,21 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 	if (create) {
 		if (from[0] != 0 || from[1] != 0)
 			stop("from values should be zero when creating a dataset"); // #nocov
-		if ((poDstDS = poDriver->Create( fname[0], dims[0], dims[1], dims[2], eType,
+
+		if (poDriver->GetMetadataItem(GDAL_DCAP_CREATE) == NULL && 
+						poDriver->GetMetadataItem(GDAL_DCAP_CREATECOPY) != NULL) {
+			GDALDriver *memDriver = GetGDALDriverManager()->GetDriverByName("MEM");
+			GDALDataset *memDS;
+			if ((memDS = memDriver->Create(fname[0], dims[0], dims[1], dims[2], eType, NULL)) == NULL)
+				stop("cannot create copy in memory"); // #nocov
+			options.push_back("APPEND_SUBDATASET=YES");
+			if ((poDstDS = poDriver->CreateCopy(fname[0], memDS, FALSE, 
+										create_options(options).data(), NULL, NULL)) == NULL) {
+				GDALClose(memDS);
+				stop("cannot CreateCopy from memory dataset");
+			} else
+				GDALClose(memDS);
+		} else if ((poDstDS = poDriver->Create( fname[0], dims[0], dims[1], dims[2], eType,
 				create_options(options).data())) == NULL)
 			stop("creating dataset failed"); // #nocov
 

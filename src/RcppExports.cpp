@@ -359,6 +359,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_ogrinfo
+Rcpp::CharacterVector CPL_ogrinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector co);
+RcppExport SEXP _sf_CPL_ogrinfo(SEXP objSEXP, SEXP optionsSEXP, SEXP ooSEXP, SEXP coSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type obj(objSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type options(optionsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type oo(ooSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type co(coSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_ogrinfo(obj, options, oo, co));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_gdaladdo
 Rcpp::LogicalVector CPL_gdaladdo(Rcpp::CharacterVector obj, Rcpp::CharacterVector method, Rcpp::IntegerVector overviews, Rcpp::IntegerVector bands, Rcpp::CharacterVector oo, Rcpp::CharacterVector co, bool clean, bool read_only);
 RcppExport SEXP _sf_CPL_gdaladdo(SEXP objSEXP, SEXP methodSEXP, SEXP overviewsSEXP, SEXP bandsSEXP, SEXP ooSEXP, SEXP coSEXP, SEXP cleanSEXP, SEXP read_onlySEXP) {
@@ -1112,8 +1126,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_xy2sfc
-List CPL_xy2sfc(NumericMatrix cc, IntegerVector dim, bool to_points, IntegerVector which);
-RcppExport SEXP _sf_CPL_xy2sfc(SEXP ccSEXP, SEXP dimSEXP, SEXP to_pointsSEXP, SEXP whichSEXP) {
+List CPL_xy2sfc(NumericMatrix cc, IntegerVector dim, bool to_points, IntegerVector which, bool cc_has_NAs);
+RcppExport SEXP _sf_CPL_xy2sfc(SEXP ccSEXP, SEXP dimSEXP, SEXP to_pointsSEXP, SEXP whichSEXP, SEXP cc_has_NAsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -1121,7 +1135,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< IntegerVector >::type dim(dimSEXP);
     Rcpp::traits::input_parameter< bool >::type to_points(to_pointsSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type which(whichSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_xy2sfc(cc, dim, to_points, which));
+    Rcpp::traits::input_parameter< bool >::type cc_has_NAs(cc_has_NAsSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_xy2sfc(cc, dim, to_points, which, cc_has_NAs));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1428,6 +1443,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_get_layers", (DL_FUNC) &_sf_CPL_get_layers, 3},
     {"_sf_CPL_read_ogr", (DL_FUNC) &_sf_CPL_read_ogr, 14},
     {"_sf_CPL_gdalinfo", (DL_FUNC) &_sf_CPL_gdalinfo, 4},
+    {"_sf_CPL_ogrinfo", (DL_FUNC) &_sf_CPL_ogrinfo, 4},
     {"_sf_CPL_gdaladdo", (DL_FUNC) &_sf_CPL_gdaladdo, 8},
     {"_sf_CPL_gdalwarp", (DL_FUNC) &_sf_CPL_gdalwarp, 8},
     {"_sf_CPL_gdalrasterize", (DL_FUNC) &_sf_CPL_gdalrasterize, 8},
@@ -1481,7 +1497,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_have_datum_files", (DL_FUNC) &_sf_CPL_have_datum_files, 1},
     {"_sf_CPL_proj_direct", (DL_FUNC) &_sf_CPL_proj_direct, 5},
     {"_sf_CPL_proj_info", (DL_FUNC) &_sf_CPL_proj_info, 1},
-    {"_sf_CPL_xy2sfc", (DL_FUNC) &_sf_CPL_xy2sfc, 4},
+    {"_sf_CPL_xy2sfc", (DL_FUNC) &_sf_CPL_xy2sfc, 5},
     {"_sf_sfc_is_null", (DL_FUNC) &_sf_sfc_is_null, 1},
     {"_sf_sfc_unique_sfg_dims_and_types", (DL_FUNC) &_sf_sfc_unique_sfg_dims_and_types, 1},
     {"_sf_sfc_is_empty", (DL_FUNC) &_sf_sfc_is_empty, 1},

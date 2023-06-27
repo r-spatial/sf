@@ -1,6 +1,6 @@
 
-R version 4.2.2 Patched (2022-11-10 r83330) -- "Innocent and Trusting"
-Copyright (C) 2022 The R Foundation for Statistical Computing
+R version 4.3.0 (2023-04-21) -- "Already Tomorrow"
+Copyright (C) 2023 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -451,7 +451,7 @@ Levels: constant aggregate identity
 > y <- x %>% st_set_agr("constant")
 > y
 Simple feature collection with 2 features and 2 fields
-Attribute-geometry relationship: 2 constant, 0 aggregate, 0 identity
+Attribute-geometry relationships: constant (2)
 Geometry type: POINT
 Dimension:     XY
 Bounding box:  xmin: -90 ymin: 35 xmax: -80 ymax: 36
@@ -1088,4 +1088,4 @@ CRS:           NA
 > 
 > proc.time()
    user  system elapsed 
-  6.753   0.822   6.686 
+  6.642   0.811   6.564 

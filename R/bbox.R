@@ -5,7 +5,7 @@
 is.na.bbox = function(x) identical(x, NA_bbox_)
 
 bb_wrap = function(bb) {
-	stopifnot(is.numeric(bb) && length(bb) == 4)
+	stopifnot(is.numeric(bb), length(bb) == 4)
 	structure(as.double(bb), names = c("xmin", "ymin", "xmax", "ymax"), class = "bbox")
 }
 

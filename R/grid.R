@@ -8,7 +8,7 @@ st_as_grob = function(x, ...) UseMethod("st_as_grob")
 
 #' @export
 st_as_grob.POINT = function(x, pch = 1, size = unit(1, "char"), default.units = "native", name = NULL, gp = gpar(), vp = NULL, ...) {
-	if (any(is.na(x)))
+	if (anyNA(x))
 		nullGrob()
 	else
 		pointsGrob(x[1], x[2], pch = pch, size = size, default.units = default.units, name = name, gp = gp, vp = vp)

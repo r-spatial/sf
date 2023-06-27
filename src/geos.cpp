@@ -943,7 +943,9 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 	std::vector<GeomPtr> out;
 	std::vector<double> index_x, index_y;
 	std::vector<size_t> items(x.size());
+#ifdef HAVE_390
 	double grid_size = geos_grid_size_xy(sfcx, sfcy);
+#endif
 
 	if (op == "intersection") {
 
@@ -1185,7 +1187,9 @@ Rcpp::List CPL_nary_difference(Rcpp::List sfc) {
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 	std::vector<GeomPtr> x = geometries_from_sfc(hGEOSCtxt, sfc, &dim);
 	std::vector<GeomPtr> out;
+#ifdef HAVE_390
 	double grid_size = geos_grid_size(sfc);
+#endif
 	// initialize trees to find overlapping areas quickly
 	for (size_t i = 0; i < x.size(); i++) {
 		// if i'th geometry in x is empty then skip it
@@ -1255,7 +1259,9 @@ Rcpp::List CPL_nary_intersection(Rcpp::List sfc) {
 	std::vector<GeomPtr> x = geometries_from_sfc(hGEOSCtxt, sfc, &dim);
 	std::vector<GeomPtr> out;
 	int errors = 0;
+#ifdef HAVE_390
 	double grid_size = geos_grid_size(sfc);
+#endif
 #ifdef HAVE350
 	notice = 0;
 	GEOSContext_setNoticeMessageHandler_r(hGEOSCtxt,

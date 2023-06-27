@@ -126,7 +126,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 				nbreaks = length(breaks) - 1
 			}
 		}
-		if (missing(nbreaks) && is.numeric(breaks))
+		if (nbreaks.missing && is.numeric(breaks))
 			nbreaks = length(breaks) - 1
 
 		# loop over each map to plot:
@@ -290,7 +290,7 @@ swap_axes_if_needed = function(x) {
 #' @export
 get_key_pos = function(x, ...) {
 	bb = st_bbox(x)
-	if (any(is.na(bb)) || (inherits(x, "sf") && ncol(x) > 2))
+	if (anyNA(bb) || (inherits(x, "sf") && ncol(x) > 2))
 		NULL
 	else {
 		pin = par("pin") # (width, height)
@@ -581,7 +581,7 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = pa
 	if (is.na(asp))
 		asp <- ifelse(isTRUE(st_is_longlat(x)), 1/cos((mean(ylim) * pi)/180), 1.0)
 
-	if (any(is.na(bbox)))
+	if (anyNA(bbox))
 		stop("NA value(s) in bounding box. Trying to plot empty geometries?")
 
 	plot.new()

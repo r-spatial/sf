@@ -61,7 +61,10 @@ st_crs.sf = function(x, ...) st_crs(st_geometry(x), ...)
 #' @name st_crs
 #' @export
 st_crs.numeric = function(x, ...) {
-    make_crs(paste0("EPSG:", x))
+	if (is.na(x))
+		NA_crs_
+	else
+    	make_crs(paste0("EPSG:", x))
 }
 
 
@@ -332,7 +335,7 @@ crs_parameters = function(x) {
 epsg = function(x) {
 	if (is.na(x))
 		NA_integer_
-	else if (grepl("^EPSG:", x[["input"]]))
+	else if (startsWith(x[["input"]], "EPSG:"))
 		as.integer(gsub("^EPSG:(\\d+)\\b.*$", "\\1", x[["input"]]))
 	else
 		crs_parameters(x)[["epsg"]]

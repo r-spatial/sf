@@ -85,7 +85,7 @@ st_buffer.sfg = function(x, dist, nQuadSegs = 30,
 	if (is.na(mitreLimit) || !mitreLimit > 0) stop("mitreLimit must be > 0")
 	if (is.na(ecs)) stop("endCapStyle must be 'ROUND', 'FLAT', or 'SQUARE'")
 	if (is.na(js))  stop("joinStyle must be 'ROUND', 'MITRE', or 'BEVEL'")
-	if (any(is.na(singleSide))) stop("singleSide should be TRUE or FALSE")
+	if (anyNA(singleSide)) stop("singleSide should be TRUE or FALSE")
 	styls$with_styles = TRUE
 	styls$endCapStyle = ecs
 	styls$joinStyle = js

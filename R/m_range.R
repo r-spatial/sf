@@ -5,7 +5,7 @@
 is.na.m_range = function(x) identical(x, NA_m_range_)
 
 mb_wrap = function(mb) {
-	stopifnot(is.numeric(mb) && length(mb) == 2)
+	stopifnot(is.numeric(mb), length(mb) == 2)
 	structure(mb, names = c("mmin", "mmax"), class = "m_range")
 }
 

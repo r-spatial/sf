@@ -69,18 +69,18 @@ jobs:
       # set date/week for use in cache creation
       # https://github.community/t5/GitHub-Actions/How-to-set-and-access-a-Workflow-variable/m-p/42970
       # - cache R packages daily
-      - name: "[Cache] Prepare daily timestamp for cache"
-        if: runner.os != 'Windows'
-        id: date
-        run: echo "::set-output name=date::$(date '+%d-%m')"
+#     - name: "[Cache] Prepare daily timestamp for cache"
+#       if: runner.os != 'Windows'
+#       id: date
+#       run: echo "::set-output name=date::$(date '+%d-%m')"
 
-      - name: "[Cache] Cache R packages"
-        if: runner.os != 'Windows'
-        uses: pat-s/always-upload-cache@v2
-        with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-r-${{ matrix.config.r }}-${{steps.date.outputs.date}}
-          restore-keys: ${{ runner.os }}-r-${{ matrix.config.r }}-${{steps.date.outputs.date}}
+#     - name: "[Cache] Cache R packages"
+#       if: runner.os != 'Windows'
+#       uses: pat-s/always-upload-cache@v2
+#       with:
+#         path: ${{ env.R_LIBS_USER }}
+#         key: ${{ runner.os }}-r-${{ matrix.config.r }}-${{steps.date.outputs.date}}
+#         restore-keys: ${{ runner.os }}-r-${{ matrix.config.r }}-${{steps.date.outputs.date}}
 
       - name: "[Stage] [Linux] Install required system libs"
         if: runner.os == 'Linux'
