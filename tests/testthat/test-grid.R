@@ -51,7 +51,7 @@ test_that("polygon grob construction work", {
 	g1 <- st_as_grob(p1)
 	expect_s3_class(g1, c('pathgrob', 'grob'))
 	g2 <- st_as_grob(p3, gp = grid::gpar(fill = c('red', 'blue')))
-	if (getRversion() < 3.6) {
+	if (getRversion() <  as.numeric_version("3.6")) {
 		expect_s3_class(g2, 'gList')
 		expect_equal(g2[[1]]$gp$fill, 'red')
 		expect_equal(g2[[2]]$gp$fill, 'blue')
