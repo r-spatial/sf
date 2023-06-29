@@ -378,34 +378,34 @@ test_that("Can safely manipulate crs", {
     crs <- st_crs(srid)
     expect_true(sf:::db_find_srid(pg, srid = srid) == st_crs(srid))
     expect_true(sf:::db_find_srtext(pg, crs) == st_crs(srid))
-    expect_error(db_insert_crs(pg, st_crs(srid)), "already exists")
+    expect_error(sf:::db_insert_crs(pg, st_crs(srid)), "already exists")
     expect_warning(expect_true(is.na(st_crs(sf:::get_new_postgis_srid(pg)))), "not found")
     new_crs <- sf:::make_empty_crs(
     	epsg = sf:::get_new_postgis_srid(pg),
     	text = "+proj=longlat +datum=WGS84 +no_defs"
     )
-    expect_message(db_insert_crs(pg, new_crs, auth_name = "sf_test"), "Inserted local crs")
-    expect_error(db_insert_crs(pg, new_crs), "duplicate key")
-    expect_equal(delete_postgis_crs(pg, new_crs), 1)
-    expect_equal(delete_postgis_crs(pg, new_crs), 0)
+    expect_message(sf:::db_insert_crs(pg, new_crs, auth_name = "sf_test"), "Inserted local crs")
+    expect_error(sf:::db_insert_crs(pg, new_crs), "duplicate key")
+    expect_equal(sf:::delete_postgis_crs(pg, new_crs), 1)
+    expect_equal(sf:::delete_postgis_crs(pg, new_crs), 0)
 
     # set and delete
     new_crs <- sf:::make_empty_crs(
     	epsg = NA,
     	text = st_as_text(st_crs(epsg_31370))
     )
-    expect_message(new_srid <- db_insert_crs(pg, new_crs), "Inserted local crs")
-    expect_error(delete_postgis_crs(pg, new_crs), "Missing SRID")
+    expect_message(new_srid <- sf:::db_insert_crs(pg, new_crs), "Inserted local crs")
+    expect_error(sf:::delete_postgis_crs(pg, new_crs), "Missing SRID")
 
-    crs2 <- sf:::make_empty_crs(epsg(new_srid), st_as_text(st_crs(3857)))
-    expect_equal(delete_postgis_crs(pg, crs2), 0)  # crs doesn't match any crs
-    expect_equal(delete_postgis_crs(pg, new_srid), 1)
+    crs2 <- sf:::make_empty_crs(sf:::epsg(new_srid), st_as_text(st_crs(3857)))
+    expect_equal(sf:::delete_postgis_crs(pg, crs2), 0)  # crs doesn't match any crs
+    expect_equal(sf:::delete_postgis_crs(pg, new_srid), 1)
 
     # udpate
-    expect_message(db_insert_crs(pg, new_srid), "Inserted local crs")
+    expect_message(sf:::db_insert_crs(pg, new_srid), "Inserted local crs")
     new_srid[["wkt"]] <- crs2[["wkt"]]
-    expect_error(db_insert_crs(pg, new_srid), "already exists")
-    expect_message(db_insert_crs(pg, new_srid, update = TRUE), "Inserted local crs")
+    expect_error(sf:::db_insert_crs(pg, new_srid), "already exists")
+    expect_message(sf:::db_insert_crs(pg, new_srid, update = TRUE), "Inserted local crs")
 })
 
 
