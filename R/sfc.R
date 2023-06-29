@@ -186,8 +186,17 @@ c.sfc = function(..., recursive = FALSE) {
 		else
 			c(ucls, "sfc")
 
+	points_attr = sapply(lst, function(x) !is.null(attr(x, "points")))
+	if (any(points_attr) && !all(points_attr)) {
+		for (i in seq_along(lst))
+			lst[[i]] = lst[[i]][] # realize
+		points_attr = FALSE
+	}
+
 	ret = unlist(lapply(lst, unclass), recursive = FALSE)
 	attributes(ret) = attributes(lst[[1]]) # crs
+	if (all(points_attr))
+		attr(ret, "points") = do.call(rbind, lapply(lst, attr, "points"))
 	class(ret) = cls
 	attr(ret, "bbox") = compute_bbox(ret) # dispatch on class
 	attr(ret, "n_empty") = sum(sapply(lst, attr, which = "n_empty"))
