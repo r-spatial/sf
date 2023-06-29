@@ -1,6 +1,10 @@
-# version 1.0-13
+# version 1.0-14
 
-* fix many lintr suggestions, thanks go Michael Chirico (#2181 - #2191)
+* fix use of `as.numeric_version` in a test, for upcoming change in r-devel
+
+* code tidy-ing: fix many lintr suggestions, thanks to Michael Chirico (#2181 - #2191)
+
+# version 1.0-13
 
 * `gdal_utils()` adds `"ogrinfo"` utility (requires GDAL >= 3.7.0); #2160
 
