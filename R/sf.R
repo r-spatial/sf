@@ -44,31 +44,24 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 		else
 			x$geometry = st_as_sfc(as.character(x[[wkt]]))
 	} else if (! missing(coords)) {
-		cc = if (length(coords) == 1) {
-				stopifnot(is.matrix(x[[coords]]), is.numeric(x[[coords]]))
-				x[[coords]]
-			} else {
-				if (length(coords) == 2)
-					dim = "XY"
-				stopifnot(length(coords) == nchar(dim), dim %in% c("XY", "XYZ", "XYZM", "XYM"))
-				as.data.frame(lapply(x[coords], as.numeric))
-			}
-		if (na.fail && anyNA(cc))
-			stop("missing values in coordinates not allowed")
-		# classdim = getClassDim(rep(0, length(coords)), length(coords), dim, "POINT")
-		# x$geometry = structure( points_rcpp(attr(x, "points"), dim),
-		points = as.matrix(cc)
-		dimnames(points) = NULL
+		if (length(coords) == 1) {
+			stopifnot(is.matrix(x[[coords]]), is.numeric(x[[coords]]))
+			cc = x[[coords]]
+		} else {
+			if (length(coords) == 2)
+				dim = "XY"
+			stopifnot(length(coords) == nchar(dim), dim %in% c("XY", "XYZ", "XYZM", "XYM"))
+			cc = do.call(cbind, lapply(x[coords], as.numeric))
+			if (na.fail && anyNA(cc))
+				stop("missing values in coordinates not allowed")
+		}
+		dimnames(cc) = NULL
 		x$geometry = structure(vector("list", length = nrow(cc)),
-			points = points,
+			points = cc,
 			points_dim = dim,
 			n_empty = 0L, precision = 0, crs = NA_crs_,
-			bbox = structure(
-				c(xmin = min(cc[[1]], na.rm = TRUE),
-				ymin = min(cc[[2]], na.rm = TRUE),
-				xmax = max(cc[[1]], na.rm = TRUE),
-				ymax = max(cc[[2]], na.rm = TRUE)), class = "bbox"),
-			class =  c("sfc_POINT", "sfc"), names = NULL)
+			bbox = bbox.pointmatrix(cc),
+			class = c("sfc_POINT", "sfc"), names = NULL)
 
 		if (is.character(coords))
 			coords = match(coords, names(x))
