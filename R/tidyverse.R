@@ -52,8 +52,13 @@ group_split.sf <- function(.tbl, ..., .keep = TRUE) {
 #' }
 filter.sf <- function(.data, ..., .dots) {
 	agr = st_agr(.data)
+	g = st_geometry(.data)
 	class(.data) <- setdiff(class(.data), "sf")
-	.re_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"), agr)
+	if (inherits(g, "sfc_POINT") && !is.null(pts <- attr(g, "points"))) {
+		.data[[ attr(.data, "sf_column") ]] = pts
+		st_as_sf(NextMethod(), coords = attr(.data, "sf_column"), agr = agr, remove = FALSE) # FIXME: doesn't handle tibble?
+	} else
+		.re_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"), agr)
 }
 
 #' @name tidyverse

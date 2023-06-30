@@ -162,12 +162,24 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 
 
 #' @export
-#"[<-.sfc" = function (x, i, j, value) {
 "[<-.sfc" = function (x, i, value) {
-	if (is.null(value) || inherits(value, "sfg"))
+	if (is.null(value) || inherits(value, "sfg")) {
+		is_points = inherits(value, "POINT")
 		value = list(value)
+	} else
+		is_points = inherits(value, "sfc_POINT")
+	if (inherits(x, "sfc_POINT") && !is.null(attr(x, "points"))) {
+		if (is_points) {
+			repl = if (!is.null(pts <- attr(value, "points")))
+					pts
+				else
+					do.call(rbind, value)
+			attr(x, "points")[i, ] = repl
+			return(structure(x, n_empty = sum(is.na(attr(x, "points")[,1])))) # RETURNS
+		} else
+			x = x[] # realize
+	} 
 	x = unclass(x) # becomes a list, but keeps attributes
-
 	ret = st_sfc(NextMethod(), recompute_bbox = TRUE)
 	structure(ret, n_empty = sum(sfc_is_empty(ret)))
 }
