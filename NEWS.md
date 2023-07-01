@@ -1,5 +1,7 @@
 # version 1.0-14
 
+* fix `plot.sf()` when using a key for multiple factor variables; #2196, #2195
+
 * fix use of `as.numeric_version` in a test, for upcoming change in r-devel
 
 * code tidy-ing: fix many lintr suggestions, thanks to Michael Chirico (#2181 - #2191)
