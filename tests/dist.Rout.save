@@ -1,6 +1,6 @@
 
-R version 4.2.0 (2022-04-22) -- "Vigorous Calisthenics"
-Copyright (C) 2022 The R Foundation for Statistical Computing
+R version 4.3.1 (2023-06-16) -- "Beagle Scouts"
+Copyright (C) 2023 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -35,7 +35,7 @@ Type 'q()' to quit R.
 + crs = 4326
 + )
 > 
-> if (require(sp, quietly = TRUE)) {
+> if (suppressPackageStartupMessages(require(sp, quietly = TRUE))) {
 +  d.sf = st_distance(x, y)
 +  d.sp = spDists(as(x, "Spatial"), as(y, "Spatial"))
 +  units(d.sp) = as_units("km")
@@ -109,4 +109,4 @@ Error in st_line_sample(ls, density = 1/1000) :
 > 
 > proc.time()
    user  system elapsed 
-  1.343   0.096   1.431 
+  1.257   0.770   1.138 

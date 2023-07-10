@@ -1,5 +1,5 @@
 
-R version 4.2.3 (2023-03-15) -- "Shortstop Beagle"
+R version 4.3.1 (2023-06-16) -- "Beagle Scouts"
 Copyright (C) 2023 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -82,7 +82,7 @@ POINT (111319.5 111325.1)
 + }
 [1] "datum files installed"
 > 
-> if (require(sp, quietly = TRUE)) {
+> if (suppressPackageStartupMessages(require(sp, quietly = TRUE))) {
 +  x0 = sp::CRS("+init=epsg:4326")
 +  cat(sp::wkt(x0), "\n")
 +  x = st_crs(x0)
@@ -196,6 +196,9 @@ GEOGCRS["WGS 84",
         AREA["World."],
         BBOX[-90,-180,90,180]],
     ID["EPSG",4326]] 
+Warning message:
+In CPL_crs_from_input(x) :
+  GDAL Message 1: +init=epsg:XXXX syntax is deprecated. It might return a CRS with a non-EPSG compliant axis order.
 > 
 > # https://github.com/r-spatial/sf/issues/1170
 > g = st_as_sfc("POLYGON ((-61.66957 10.69214, -61.565 10.75728, -61.37453 10.77654, -61.40721 10.60681, -61.66957 10.69214))")
@@ -213,4 +216,4 @@ GEOGCRS["WGS 84",
 > 
 > proc.time()
    user  system elapsed 
-  1.345   0.712   1.171 
+  1.344   0.669   1.160 

@@ -1,6 +1,6 @@
 
-R version 4.2.2 (2022-10-31) -- "Innocent and Trusting"
-Copyright (C) 2022 The R Foundation for Statistical Computing
+R version 4.3.1 (2023-06-16) -- "Beagle Scouts"
+Copyright (C) 2023 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -29,7 +29,7 @@ Type 'q()' to quit R.
 > mp = list(pol1,pol2,pol3)
 > mp1 = st_multipolygon(mp)
 > sf = st_sf(a=1, st_sfc(mp1))
-> if (require(sp, quietly = TRUE)) {
+> if (suppressPackageStartupMessages(require(sp, quietly = TRUE))) {
 +  a = as(sf, "Spatial")
 +  print(class(a))
 +  b = st_as_sf(a)
@@ -83,7 +83,10 @@ attr(,"package")
 + 
 + detach("package:sp")
 + }
+Warning message:
+In CPL_crs_from_input(x) :
+  GDAL Message 1: +init=epsg:XXXX syntax is deprecated. It might return a CRS with a non-EPSG compliant axis order.
 > 
 > proc.time()
    user  system elapsed 
-  1.364   0.068   1.434 
+  1.666   0.736   1.524 

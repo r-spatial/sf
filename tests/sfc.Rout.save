@@ -1,5 +1,5 @@
 
-R version 4.3.0 (2023-04-21) -- "Already Tomorrow"
+R version 4.3.1 (2023-06-16) -- "Beagle Scouts"
 Copyright (C) 2023 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -821,7 +821,7 @@ CRS:           NA
 POINT (-0.0500922 0.992953)
 > 
 > # st_bbox:
-> if (require(sp, quietly = TRUE) && require(raster, quietly = TRUE)) {
+> if (suppressPackageStartupMessages(require(sp, quietly = TRUE)) && require(raster, quietly = TRUE)) {
 + demo(meuse, ask = FALSE, echo = FALSE)
 + suppressWarnings(st_bbox(meuse))
 + crs = suppressWarnings(st_crs(meuse))
@@ -1088,4 +1088,4 @@ CRS:           NA
 > 
 > proc.time()
    user  system elapsed 
-  6.642   0.811   6.564 
+  6.713   0.877   6.702 

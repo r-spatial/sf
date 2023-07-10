@@ -18,7 +18,7 @@ st_point(c(4,0)),
 crs = 4326
 )
 
-if (require(sp, quietly = TRUE)) {
+if (suppressPackageStartupMessages(require(sp, quietly = TRUE))) {
  d.sf = st_distance(x, y)
  d.sp = spDists(as(x, "Spatial"), as(y, "Spatial"))
  units(d.sp) = as_units("km")

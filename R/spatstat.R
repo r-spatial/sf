@@ -19,8 +19,8 @@ check_spatstat <- function(pkg, X = NULL) {
 	if (!requireNamespace(pkg, quietly = TRUE))
 		stop("package ", pkg, " required, please install it (or the full spatstat package) first", call. = FALSE)
 	spst_ver <- try(packageVersion("spatstat"), silent = TRUE)
-	if (!inherits(spst_ver, "try-error") && spst_ver < 2.0-0)
-		stop(wrp(paste("You have an old version of spatstat installed which is incompatible with ", pkg, 
+	if (!inherits(spst_ver, "try-error") && spst_ver < "2.0-0")
+		stop(wrp(paste0("You have an old version of spatstat installed that is incompatible with ", pkg, 
 			". Please update spatstat (or uninstall it).")), call. = FALSE)
 	if (!is.null(X))
 		check_spatstat_ll(X)

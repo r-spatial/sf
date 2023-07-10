@@ -41,7 +41,7 @@ if (sf_extSoftVersion()["USE_PROJ_H"] == "true" || sf_proj_info("have_datum_file
   "datum files not installed"
 }
 
-if (require(sp, quietly = TRUE)) {
+if (suppressPackageStartupMessages(require(sp, quietly = TRUE))) {
  x0 = sp::CRS("+init=epsg:4326")
  cat(sp::wkt(x0), "\n")
  x = st_crs(x0)
