@@ -138,9 +138,9 @@ as.ppp.sfc = function(X, W = NULL, ..., check = TRUE) {
 	spatstat.geom::ppp(cc[,1], cc[,2], window = W, marks = NULL, check = check)
 }
 
-as.ppp.sf = function(X) {
+as.ppp.sf = function(X, ...) {
 	check_spatstat("spatstat.geom", X)
-	pp = spatstat.geom::as.ppp(st_geometry(X))
+	pp = spatstat.geom::as.ppp(st_geometry(X), ...)
 	if (st_dimension(X[1,]) == 2)
 		X = X[-1,]
 	st_geometry(X) = NULL # remove geometry column
