@@ -1,6 +1,6 @@
 
-R version 4.2.2 Patched (2022-11-10 r83330) -- "Innocent and Trusting"
-Copyright (C) 2022 The R Foundation for Statistical Computing
+R version 4.3.1 (2023-06-16) -- "Beagle Scouts"
+Copyright (C) 2023 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -153,9 +153,9 @@ BIR79        319.000  1606.000  3108.000 4.852046e+03  5400.000 30757.000 30904
 SID79          0.000     3.000     6.000 9.584098e+00    13.000    57.000 30904
 NWBIR79        3.000   360.000  1058.000 1.604642e+03  1524.000 11631.000 30904
 dimension(s):
-  from  to   offset      delta refsys point x/y
-x    1 461 -84.3239  0.0192484  NAD27 FALSE [x]
-y    1 141  36.5896 -0.0192484  NAD27 FALSE [y]
+  from  to offset    delta refsys point x/y
+x    1 461 -84.32  0.01925  NAD27 FALSE [x]
+y    1 141  36.59 -0.01925  NAD27 FALSE [y]
 Simple feature collection with 34097 features and 12 fields
 Geometry type: POLYGON
 Dimension:     XY
@@ -261,4 +261,4 @@ First 10 features:
 > 
 > proc.time()
    user  system elapsed 
-  3.042   2.167   2.592 
+  3.195   2.107   2.719 
