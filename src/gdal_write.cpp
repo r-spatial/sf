@@ -37,6 +37,8 @@ std::vector<OGRFieldType> SetupFields(OGRLayer *poLayer, Rcpp::List obj, bool up
 				Rcpp::stop("Layer creation failed.\n");
 			} // #nocov end
 		} else {
+			// otherwise, one could check the type?
+			// some type conversion, e.g. int -> char seems to be done by GDAL, see #2202
 		}
 	}
 	return ret;
@@ -61,25 +63,32 @@ void SetNull(OGRFeature *poFeature, size_t field) {
 #endif
 }
 
-void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List obj, size_t i) {
+std::vector<int> GetFieldIndex(OGRLayer *poLayer, Rcpp::List obj) {
+	std::vector<int> ret(obj.size());
 	Rcpp::CharacterVector nm  = obj.attr("names");
-	for (size_t j = 0; j < tp.size(); j++) {
-		size_t fld = poFeature->GetFieldIndex(nm[j]);
-		if (i == 0 && fld == -1) {
-			Rcpp::Rcout << "Unknown field name `" << nm[j] << 
+	for (int i = 0; i < obj.size(); i++) {
+		ret[i] = poLayer->FindFieldIndex(nm[i], TRUE);
+		if (ret[i] == -1) {
+			Rcpp::Rcout << "Unknown field name `" << nm[i] << 
 				"': updating a layer with improper field name(s)?" << std::endl;
 			Rcpp::stop("Write error\n");
 		}
-		if (j == (size_t) poFeature->GetFieldCount())
+	}
+	return ret;
+}
+
+void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List obj, size_t i, std::vector<int> fld) {
+	for (size_t j = 0; j < tp.size(); j++) {
+		if (j >= (size_t) poFeature->GetFieldCount())
 			Rcpp::stop("Impossible: field count reached\n"); // #nocov
 		switch (tp[j]) {
 			case OFTString: {
 				Rcpp::CharacterVector cv;
 				cv = obj[j];
 				if (! Rcpp::CharacterVector::is_na(cv[i]))
-					poFeature->SetField(fld, (const char *) cv[i]);
+					poFeature->SetField(fld[j], (const char *) cv[i]);
 				else
-					SetNull(poFeature, fld);
+					SetNull(poFeature, fld[j]);
 				} break;
 			case OFTInteger: {
 				const OGRFieldDefn *def = poFeature->GetFieldDefnRef(j);
@@ -87,31 +96,31 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 					Rcpp::LogicalVector lv;
 					lv = obj[j];
 					if (! Rcpp::LogicalVector::is_na(lv[i]))
-						poFeature->SetField(fld, (int) lv[i]);
+						poFeature->SetField(fld[j], (int) lv[i]);
 					else
-						SetNull(poFeature, fld); // #nocov
+						SetNull(poFeature, fld[j]); // #nocov
 				} else { // integer:
 					Rcpp::IntegerVector iv;
 					iv = obj[j];
 					if (! Rcpp::IntegerVector::is_na(iv[i]))
-						poFeature->SetField(fld, (int) iv[i]);
+						poFeature->SetField(fld[j], (int) iv[i]);
 					else
-						SetNull(poFeature, fld); // #nocov
+						SetNull(poFeature, fld[j]); // #nocov
 				}
 				} break;
 			case OFTReal: {
 				Rcpp::NumericVector nv;
 				nv = obj[j];
 				if (! Rcpp::NumericVector::is_na(nv[i]))
-					poFeature->SetField(fld, (double) nv[i]);
+					poFeature->SetField(fld[j], (double) nv[i]);
 				else
-					SetNull(poFeature, fld);
+					SetNull(poFeature, fld[j]);
 				} break;
 			case OFTDate: {
 				Rcpp::NumericVector nv;
 				nv = obj[j];
 				if (Rcpp::NumericVector::is_na(nv[i])) {
-					SetNull(poFeature, fld);
+					SetNull(poFeature, fld[j]);
 					break;
 				}
 				Rcpp::NumericVector nv0(1);
@@ -119,13 +128,13 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 				nv0.attr("class") = "Date";
 				Rcpp::Function as_POSIXlt_Date("as.POSIXlt.Date");
 				Rcpp::NumericVector ret = get_dbl6(as_POSIXlt_Date(nv0));
-				poFeature->SetField(fld, 1900 + (int) ret[5], (int) ret[4] + 1, (int) ret[3]);
+				poFeature->SetField(fld[j], 1900 + (int) ret[5], (int) ret[4] + 1, (int) ret[3]);
 				} break;
 			case OFTDateTime: {
 				Rcpp::NumericVector nv;
 				nv = obj[j];
 				if (Rcpp::NumericVector::is_na(nv[i])) {
-					SetNull(poFeature, fld);
+					SetNull(poFeature, fld[j]);
 					break;
 				}
 				Rcpp::NumericVector nv0(1);
@@ -133,7 +142,7 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 				nv0.attr("tzone") = "UTC";
 				Rcpp::Function as_POSIXlt_POSIXct("as.POSIXlt.POSIXct");
 				Rcpp::NumericVector rd = get_dbl6(as_POSIXlt_POSIXct(nv0)); // use R
-				poFeature->SetField(fld, 1900 + (int) rd[5], (int) rd[4] + 1, // #nocov start
+				poFeature->SetField(fld[j], 1900 + (int) rd[5], (int) rd[4] + 1, // #nocov start
 						(int) rd[3], (int) rd[2], (int) rd[1],
 						(float) rd[0], 100); // nTZFlag: 0=unkown, 1=local, 100=GMT; #nocov end
 				} break;
@@ -145,11 +154,11 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 				Rcpp::RawVector rv;
 				rv = lv(0);
 				if (rv.size() == 0)
-					SetNull(poFeature, fld); // #nocov
+					SetNull(poFeature, fld[j]); // #nocov
 				else {
 					const void *ptr = &(rv[0]);
 					int size = rv.size();
-					poFeature->SetField(fld, size, ptr);
+					poFeature->SetField(fld[j], size, ptr);
 				}
 				} break;
 #endif
@@ -332,9 +341,11 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 		Rcpp::Rcout << "." << std::endl;
 	}
 
+	std::vector<int> fieldIndex = GetFieldIndex(poLayer, obj);
+
 	for (size_t i = 0; i < geomv.size(); i++) { // create all features & add to layer:
 		OGRFeature *poFeature = OGRFeature::CreateFeature(poLayer->GetLayerDefn());
-		SetFields(poFeature, fieldTypes, obj, i);
+		SetFields(poFeature, fieldTypes, obj, i, fieldIndex);
 		if (write_geometries)
 			poFeature->SetGeometryDirectly(geomv[i]);
 		if (fids.size() > (int) i)

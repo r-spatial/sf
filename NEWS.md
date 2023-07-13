@@ -1,3 +1,7 @@
+# version 1.0-15
+
+* `st_write()` matches fields on name first, than on position; this matters for formats that have pre-defined names, such as GPX; #2202 
+
 # version 1.0-14
 
 * fix `plot.sf()` when using a key for multiple factor variables; #2196, #2195
