@@ -147,6 +147,15 @@ empty_sfg <- function(to) {
 	   )
 }
 
+has_curves = function(x) {
+	if (inherits(x, c("sfc_MULTICURVE", "sfc_COMPOUNDCURVE", "sfc_CURVEPOLYGON"))) # for which GEOS has no st_is_empty()
+		TRUE
+	else if(inherits(x, "sfc_GEOMETRY")) {
+		cls = sapply(x, class)
+		any(cls[2,] %in% c("MULTICURVE", "COMPOUNDCURVE", "CURVEPOLYGON"))
+	} else
+		FALSE
+}
 
 #' @name st_cast
 #' @param ids integer vector, denoting how geometries should be grouped (default: no grouping)
@@ -169,7 +178,7 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 		return(st_cast_sfc_default(x))
 
 	e = rep(FALSE, length(x))
-	if (!inherits(x, c("sfc_MULTICURVE", "sfc_COMPOUNDCURVE", "sfc_CURVEPOLYGON"))) { # for which GEOS has no st_is_empty()
+	if (!has_curves(x)) { # for which GEOS has no st_is_empty()
 		e = st_is_empty(x)
 		if (all(e)) {
 			x[e] = empty_sfg(to)
