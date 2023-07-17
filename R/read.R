@@ -307,8 +307,8 @@ abbreviate_shapefile_names = function(x) {
 			fld_names <- abbreviate(fld_names, minlength = 5) # nocov
 	}
 # fix for dots in DBF field names 121124
-	if (length(wh. <- grep("\\.", fld_names) > 0))
-		fld_names[wh.] <- gsub("\\.", "_", fld_names[wh.])
+	if (any(wh. <- grepl(".", fld_names, fixed = TRUE)))
+		fld_names[wh.] <- gsub(".", "_", fld_names[wh.], fixed = TRUE)
 
 	if (anyDuplicated(fld_names))
 		stop("Non-unique field names") # nocov
