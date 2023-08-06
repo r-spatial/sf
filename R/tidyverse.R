@@ -333,6 +333,8 @@ distinct.sf <- function(.data, ..., .keep_all = FALSE) {
 	sf_column = attr(.data, "sf_column")
 	geom = st_geometry(.data)
 	eq = sapply(st_equals(.data), head, n = 1)
+	if (is.list(eq) && length(eq) == 0) # empty list: geometry was empty set
+		eq = integer(0)
 	empties = which(lengths(eq) == 0)
 	eq[ empties ] = empties[1] # first empty record
 	.data[[ sf_column ]] = unlist(eq)

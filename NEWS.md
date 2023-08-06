@@ -1,5 +1,7 @@
 # version 1.0-15
 
+* `distinct.sf` is type-safe for `sf` objects with zero rows; #2204
+
 * `summarise.sf` raises an error if `.by` is given but no `across()` on the geometry; #2207
 
 * `st_write()` matches fields on name first, than on position; this matters for formats that have pre-defined names, such as GPX; #2202 
