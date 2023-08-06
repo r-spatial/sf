@@ -58,7 +58,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0-15" id="version-10-15">version 1.0-15<a class="anchor" aria-label="anchor" href="#version-10-15"></a></h2>
-<ul><li><p><code>summarise.sf</code> raises an error if <code>.by</code> is given but no <code><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across()</a></code> on the geometry; <a href="https://github.com/r-spatial/sf/issues/2207" class="external-link">#2207</a></p></li>
+<ul><li><p><code>distinct.sf</code> is type-safe for <code>sf</code> objects with zero rows; <a href="https://github.com/r-spatial/sf/issues/2204" class="external-link">#2204</a></p></li>
+<li><p><code>summarise.sf</code> raises an error if <code>.by</code> is given but no <code><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across()</a></code> on the geometry; <a href="https://github.com/r-spatial/sf/issues/2207" class="external-link">#2207</a></p></li>
 <li><p><code><a href="../reference/st_write.html">st_write()</a></code> matches fields on name first, than on position; this matters for formats that have pre-defined names, such as GPX; <a href="https://github.com/r-spatial/sf/issues/2202" class="external-link">#2202</a></p></li>
 </ul></div>
     <div class="section level2">
