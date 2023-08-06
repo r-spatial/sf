@@ -308,6 +308,8 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE
 					geom = list() #676 #nocov
 				do.call(st_sfc, c(geom, crs = list(crs), precision = precision))
 			} else { # single group:
+				if (nrow(ret) > 1)
+					stop(paste0("when using .by, also add across(", sf_column, ", st_union) as argument")) # https://github.com/r-spatial/sf/issues/2207
 				if (do_union)
 					st_union(geom, is_coverage = is_coverage)
 				else
