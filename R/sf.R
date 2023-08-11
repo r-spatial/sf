@@ -293,8 +293,13 @@ st_sf = function(..., agr = NA_agr_, row.names,
 	st_agr(df) = agr
 	if (! missing(crs))
 		st_crs(df) = crs
+	
+	attr(df, ".sf_namespace") <- .sf_namespace
+	
 	df
 }
+
+.sf_namespace <- function() NULL
 
 #' @name sf
 #' @param x object of class \code{sf}
