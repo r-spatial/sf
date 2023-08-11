@@ -1,5 +1,7 @@
 # version 1.0-15
 
+* `sf` objects get a new attribute, `.sf_namespace`, which forces loading the `sf` namespace when it has not been loaded so far, e.g. for proper printing or plotting of an `sf` object; #2212 by Mike Mahoney
+
 * `distinct.sf` is type-safe for `sf` objects with zero rows; #2204
 
 * `summarise.sf` raises an error if `.by` is given but no `across()` on the geometry; #2207
