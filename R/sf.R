@@ -374,6 +374,11 @@ st_sf = function(..., agr = NA_agr_, row.names,
 }
 
 #' @export
+"[<-.sf" = function(x, i, j, value) {
+	st_set_agr(NextMethod())
+}
+
+#' @export
 "[[<-.sf" = function(x, i, value) {
 	agr = st_agr(x)
 	setting_geom = (i == attr(x, "sf_column")) || inherits(value, "sfc")
