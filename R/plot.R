@@ -790,8 +790,10 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 #' @param logz ignore
 #' @param ... ignore
 #' @param lab ignore
+#' @param cex.axis see \link{par}
 .image_scale = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
-		at = NULL, ..., axes = FALSE, key.length, logz = FALSE, lab = "") {
+		at = NULL, ..., axes = FALSE, key.length, logz = FALSE, lab = "", 
+		cex.axis = 1) {
 	if (!is.null(breaks) && length(breaks) != (length(col) + 1))
 		stop("must have one more break than colour")
 	stopifnot(is.character(lab) || is.expression(lab))
@@ -861,14 +863,14 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 			TRUE
 
 	if (add.axis)
-		axis(key.pos, at = at, labels = labels)
+		axis(key.pos, at = at, labels = labels, cex.axis = cex.axis)
 }
 
 #' @name stars
 #' @export
 #' @param key.width ignore
 .image_scale_factor = function(z, col, key.pos, add.axis = TRUE,
-	..., axes = FALSE, key.width, key.length) {
+	..., axes = FALSE, key.width, key.length, cex.axis = 1) {
 
 	n = length(z)
 	# TODO:
@@ -918,7 +920,7 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 
 	if (add.axis) {
 		opar = par(las = 1)
-		axis(key.pos, at = 1:n, labels = z)
+		axis(key.pos, at = 1:n, labels = z, cex.axis = cex.axis)
 		par(opar)
 	}
 }
