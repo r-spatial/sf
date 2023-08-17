@@ -24,7 +24,7 @@
   key.length,
   logz = FALSE,
   lab = "",
-  cex.axis = 1
+  cex.axis = par("cex.axis")
 )
 
 .image_scale_factor(
@@ -36,7 +36,7 @@
   axes = FALSE,
   key.width,
   key.length,
-  cex.axis = 1
+  cex.axis = par("cex.axis")
 )
 }
 \arguments{

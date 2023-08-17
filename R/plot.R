@@ -793,7 +793,7 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 #' @param cex.axis see \link{par}
 .image_scale = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
 		at = NULL, ..., axes = FALSE, key.length, logz = FALSE, lab = "", 
-		cex.axis = 1) {
+		cex.axis = par("cex.axis")) {
 	if (!is.null(breaks) && length(breaks) != (length(col) + 1))
 		stop("must have one more break than colour")
 	stopifnot(is.character(lab) || is.expression(lab))
@@ -870,7 +870,7 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 #' @export
 #' @param key.width ignore
 .image_scale_factor = function(z, col, key.pos, add.axis = TRUE,
-	..., axes = FALSE, key.width, key.length, cex.axis = 1) {
+	..., axes = FALSE, key.width, key.length, cex.axis = par("cex.axis")) {
 
 	n = length(z)
 	# TODO:
