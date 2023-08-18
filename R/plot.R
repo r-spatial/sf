@@ -933,7 +933,7 @@ xy_from_r = function(r, l, o) {
 			xlab = "", ylab = "", xaxs = "i", yaxs = "i")
 		},
 		error = function(x) {
-			sz = max(strwidth(z, "inches")) * 2.54 + par("ps")/12 # cm
+			sz = max(strwidth(z, "inches")) * 2.54 * 1.1 + par("ps")/12 # cm
 			stop(paste0("key.width too small, try key.width = lcm(", signif(sz, 3), ")"), call. = FALSE)
 		}
 	)

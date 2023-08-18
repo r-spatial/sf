@@ -81,7 +81,7 @@ Keys for factor variables are a bit different, as we typically don't want to rot
 
 ```{r}
 nc$f = cut(nc$AREA, 10)
-plot(nc["f"], axes = TRUE, key.pos = 4, pal = sf.colors(10), key.width = lcm(4.5))
+plot(nc["f"], axes = TRUE, key.pos = 4, pal = sf.colors(10), key.width = lcm(5))
 ```
 
 # Class intervals
