@@ -1,6 +1,6 @@
 # version 1.0-15
 
-* `plot.sf()`: `key.width` is sensitive to pointsize graphics parameter, `key.pos` can hold a second value in [0, 1] determining the relative position of the key in the available space
+* `plot.sf()`: `key.width` is sensitive to pointsize graphics parameter, `key.pos` can hold a second value in [0, 1] determining the relative position of the key in the available space; keys with factor levels suggest a proper size if they won't fit.
 
 * `[<-.sf` fixes the `agr` attribute when it is broken; #2211
 

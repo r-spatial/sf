@@ -896,8 +896,7 @@ xy_from_r = function(r, l, o) {
 	..., axes = FALSE, key.width, key.length, cex.axis = par("cex.axis")) {
 
 	n = length(z)
-	# TODO:
-	ksz = as.numeric(gsub(" cm", "", key.width)) * 2
+	ksz = max(strwidth(z, "inches")) / par("cin")[1] # in "mar" lines
 	breaks = (0:n) + 0.5
 	offset = 0.5
 	if (length(key.pos) == 2) {
@@ -921,15 +920,24 @@ xy_from_r = function(r, l, o) {
 		ylim = xy_from_r(range(breaks), key.length, offset)
 		xlim = c(0, 1)
 		mar = c(ifelse(axes, 2.1, 1), 0, 1.2, 0)
-		mar[key.pos] = max(ksz - 1.3, 0.0)
+		mar[key.pos] = ksz
 	}
 	par(mar = mar)
 
 	poly = vector(mode="list", length(col))
 	for (i in seq(poly))
 		poly[[i]] = c(breaks[i], breaks[i+1], breaks[i+1], breaks[i])
-	plot(1, 1, t = "n", ylim = ylim, xlim = xlim, axes = FALSE,
-		xlab = "", ylab = "", xaxs = "i", yaxs = "i")
+
+	tryCatch({
+		plot(1, 1, t = "n", ylim = ylim, xlim = xlim, axes = FALSE,
+			xlab = "", ylab = "", xaxs = "i", yaxs = "i")
+		},
+		error = function(x) {
+			sz = max(strwidth(z, "inches")) * 2.54 + par("ps")/12 # cm
+			stop(paste0("key.width too small, try key.width = lcm(", signif(sz, 3), ")"), call. = FALSE)
+		}
+	)
+
 	for(i in seq_along(poly)) {
 		if (key.pos %in% c(1,3))
 			polygon(poly[[i]], c(0, 0, 1, 1), col = col[i], border = NA)
