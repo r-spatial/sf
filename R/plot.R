@@ -780,19 +780,19 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 	axis(side, at = at, labels = labels, ...)
 }
 
-# given range r = (a,b), return a value range that:
-#  * scales such that (b-a)/(y-x)=l
-#  * shifts linearly within [x,y] such that a==x if o==0, or b==y if o==1
+# find out where to place the legend key:
+# given range r = (a, b), key.length l, key offset o, return a value range that:
+#  * scales such that (b - a) / (y - x) = l
+#  * shifts linearly within [x, y] from a = x when o = 0 to b = y when o = 1
 xy_from_r = function(r, l, o) {
 	stopifnot(length(r) == 2, l <= 1, l > 0, o >= 0, o <= 1)
-	a = r[1]
-	b = r[2]
+	a = r[1]; b = r[2]
 	if (o == 1) {
 		y = b
-		x = b - (b-a)/l
+		x = b - (b - a)/l
 	} else {
-		i = o / (o-1)
-		y = (a + (b-a)/l - i * b)/(1 - i)
+		i = o / (o - 1)
+		y = (a + (b - a)/l - i * b)/(1 - i)
 		x = i * (y - b) + a
 	}
 	c(x, y)
