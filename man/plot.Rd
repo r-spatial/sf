@@ -29,7 +29,7 @@
   max.plot = if (is.null(n <- getOption("sf_max.plot"))) 9 else n,
   key.pos = get_key_pos(x, ...),
   key.length = 0.618,
-  key.width = lcm(1.8),
+  key.width = lcm(1.8 * par("ps")/12),
   reset = TRUE,
   logz = FALSE,
   extent = x,

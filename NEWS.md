@@ -1,6 +1,8 @@
 # version 1.0-15
 
-* `[<-.sf` fixes the `agr` attribute if it is broken; #2211
+* `plot.sf()`: `key.width` is sensitive to pointsize graphics parameter, `key.pos` can hold a second value in [0, 1] determining the relative position of the key in the available space
+
+* `[<-.sf` fixes the `agr` attribute when it is broken; #2211
 
 * `sf` objects get a new attribute, `.sf_namespace`, which forces loading the `sf` namespace when it has not been loaded so far, e.g. for proper printing or plotting of an `sf` object; #2212 by Mike Mahoney
 
