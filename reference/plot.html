@@ -248,7 +248,7 @@ Plot sf object</p>
 
 
 <dt>key.pos</dt>
-<dd><p>integer; side to plot a color key: 1 bottom, 2 left, 3 top, 4 right; set to <code>NULL</code> to omit key completely, 0 to only not plot the key, or -1 to select automatically. If multiple columns are plotted in a single function call by default no key is plotted and every submap is stretched individually; if a key is requested (and <code>col</code> is missing) all maps are colored according to a single key. Auto select depends on plot size, map aspect, and, if set, parameter <code>asp</code>.</p></dd>
+<dd><p>numeric; side to plot a color key: 1 bottom, 2 left, 3 top, 4 right; set to <code>NULL</code> to omit key completely, 0 to only not plot the key, or -1 to select automatically. If multiple columns are plotted in a single function call by default no key is plotted and every submap is stretched individually; if a key is requested (and <code>col</code> is missing) all maps are colored according to a single key. Auto select depends on plot size, map aspect, and, if set, parameter <code>asp</code>. If it has lenght 2, the second value, ranging from 0 to 1, determines where the key is placed in the available space (default: 0.5, center).</p></dd>
 
 
 <dt>key.length</dt>
