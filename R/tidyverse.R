@@ -239,10 +239,19 @@ rename_with.sf = function(.data, .fn, .cols, ...) {
 	if (!requireNamespace("rlang", quietly = TRUE))
 		stop("rlang required: install that first") # nocov
 	.fn = rlang::as_function(.fn)
+	
+	sf_column = attr(.data, "sf_column")
+	sf_column_loc = match(sf_column, names(.data))
+	
+	if (length(sf_column_loc) != 1 || is.na(sf_column_loc))
+		stop("internal error: can't find sf column") # nocov
+	
 	agr = st_agr(.data)
+	
 	ret = NextMethod()
 	names(agr) = .fn(names(agr))
 	st_agr(ret) = agr
+	st_geometry(ret) = names(ret)[sf_column_loc]
 	ret
 }
 
