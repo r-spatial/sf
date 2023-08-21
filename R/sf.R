@@ -303,7 +303,7 @@ st_sf = function(..., agr = NA_agr_, row.names,
 
 #' @name sf
 #' @param x object of class \code{sf}
-#' @param i record selection, see \link{[.data.frame}
+#' @param i record selection, see \link{[.data.frame}, or a \code{sf} object to work with the \code{op} argument
 #' @param j variable selection, see \link{[.data.frame}
 #' @param drop logical, default \code{FALSE}; if \code{TRUE} drop the geometry column and return a \code{data.frame}, else make the geometry sticky and return a \code{sf} object.
 #' @param op function; geometrical binary predicate function to apply when \code{i} is a simple feature object
