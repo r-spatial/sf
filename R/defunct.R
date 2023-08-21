@@ -13,9 +13,8 @@
 #' it will try to cast all the character columns, which can be long for very wide
 #' tables.
 #' @inheritParams st_read
-#' @docType package
 #' @export  st_read_db st_write_db
-#' @aliases st_read_db, st_write_db
+#' @aliases sf-package st_read_db, st_write_db
 #' @section Details:
 #' \tabular{rl}{
 #'   \code{st_read_db} \tab now a synonym for \code{\link{st_read}}\cr
