@@ -299,12 +299,17 @@ st_sf = function(..., agr = NA_agr_, row.names,
 	st_agr(df) = agr
 	if (! missing(crs))
 		st_crs(df) = crs
+	
+	attr(df, ".sf_namespace") <- .sf_namespace
+	
 	df
 }
 
+.sf_namespace <- function() NULL
+
 #' @name sf
 #' @param x object of class \code{sf}
-#' @param i record selection, see \link{[.data.frame}
+#' @param i record selection, see \link{[.data.frame}, or a \code{sf} object to work with the \code{op} argument
 #' @param j variable selection, see \link{[.data.frame}
 #' @param drop logical, default \code{FALSE}; if \code{TRUE} drop the geometry column and return a \code{data.frame}, else make the geometry sticky and return a \code{sf} object.
 #' @param op function; geometrical binary predicate function to apply when \code{i} is a simple feature object
@@ -372,6 +377,11 @@ st_sf = function(..., agr = NA_agr_, row.names,
 		x[[i]] = value
 		x
 	}
+}
+
+#' @export
+"[<-.sf" = function(x, i, j, value) {
+	st_set_agr(NextMethod())
 }
 
 #' @export

@@ -241,7 +241,7 @@ plot(st_jitter(st_geometry(nc), factor = .01), add = TRUE, col = '#ff8888')
 st_jitter(st_sfc(st_point(0:1)), amount = .1)
 
 # st_bbox:
-if (require(sp, quietly = TRUE) && require(raster, quietly = TRUE)) {
+if (suppressPackageStartupMessages(require(sp, quietly = TRUE)) && require(raster, quietly = TRUE)) {
 demo(meuse, ask = FALSE, echo = FALSE)
 suppressWarnings(st_bbox(meuse))
 crs = suppressWarnings(st_crs(meuse))

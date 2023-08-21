@@ -255,6 +255,17 @@ test_that("can rename geometry column with `rename()` (#1431)", {
   )
 })
 
+test_that("`rename_with()` correctly changes the sf_column attribute (#2215)", {
+	skip_if_not_installed("dplyr")
+	
+	sf_column = attr(nc, "sf_column")
+	fn = function(x) paste0(x, "_renamed")
+	
+	expect_equal(nc %>% rename_with(fn) %>% attr("sf_column"), fn(sf_column))
+	expect_equal(nc %>% rename_with(fn, "NAME") %>% attr("sf_column"), sf_column)
+	expect_equal(nc %>% rename_with(fn, "geometry") %>% attr("sf_column"), fn(sf_column))
+})
+
 test_that("`select()` and `transmute()` observe back-stickiness of geometry column (#1425)", {
 	skip_if_not_installed("dplyr")
 	sf = read_sf(system.file("shape/nc.shp", package = "sf"))

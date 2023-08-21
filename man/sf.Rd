@@ -45,7 +45,7 @@ there is more than one and \code{sf_column_name} is \code{NULL}, the first one i
 
 \item{x}{object of class \code{sf}}
 
-\item{i}{record selection, see \link{[.data.frame}}
+\item{i}{record selection, see \link{[.data.frame}, or a \code{sf} object to work with the \code{op} argument}
 
 \item{j}{variable selection, see \link{[.data.frame}}
 

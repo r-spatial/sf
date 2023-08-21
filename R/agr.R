@@ -80,7 +80,15 @@ st_agr.default = function(x = NA_character_, ...) {
 #' @name st_agr
 #' @export
 st_set_agr = function(x, value) { 
-	st_agr(x) = value
+	if (!missing(value))
+		st_agr(x) = value
+	else { # needs repair?
+		value = st_agr(x)
+		if (any(is.na(names(value))) && length(value) == length(x) - 1) {
+			names(value) = setdiff(names(x), attr(x, "sf_column"))
+			st_agr(x) = value
+		}
+	}
 	x
 }
 

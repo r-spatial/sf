@@ -19,8 +19,8 @@ check_spatstat <- function(pkg, X = NULL) {
 	if (!requireNamespace(pkg, quietly = TRUE))
 		stop("package ", pkg, " required, please install it (or the full spatstat package) first", call. = FALSE)
 	spst_ver <- try(packageVersion("spatstat"), silent = TRUE)
-	if (!inherits(spst_ver, "try-error") && spst_ver < 2.0-0)
-		stop(wrp(paste("You have an old version of spatstat installed which is incompatible with ", pkg, 
+	if (!inherits(spst_ver, "try-error") && spst_ver < "2.0-0")
+		stop(wrp(paste0("You have an old version of spatstat installed that is incompatible with ", pkg, 
 			". Please update spatstat (or uninstall it).")), call. = FALSE)
 	if (!is.null(X))
 		check_spatstat_ll(X)
@@ -138,9 +138,9 @@ as.ppp.sfc = function(X, W = NULL, ..., check = TRUE) {
 	spatstat.geom::ppp(cc[,1], cc[,2], window = W, marks = NULL, check = check)
 }
 
-as.ppp.sf = function(X) {
+as.ppp.sf = function(X, ...) {
 	check_spatstat("spatstat.geom", X)
-	pp = spatstat.geom::as.ppp(st_geometry(X))
+	pp = spatstat.geom::as.ppp(st_geometry(X), ...)
 	if (st_dimension(X[1,]) == 2)
 		X = X[-1,]
 	st_geometry(X) = NULL # remove geometry column

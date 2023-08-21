@@ -12,7 +12,7 @@ pol3 = list(outer + 24)
 mp = list(pol1,pol2,pol3)
 mp1 = st_multipolygon(mp)
 sf = st_sf(a=1, st_sfc(mp1))
-if (require(sp, quietly = TRUE)) {
+if (suppressPackageStartupMessages(require(sp, quietly = TRUE))) {
  a = as(sf, "Spatial")
  print(class(a))
  b = st_as_sf(a)

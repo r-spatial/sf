@@ -1,6 +1,6 @@
 
-R version 4.2.0 (2022-04-22) -- "Vigorous Calisthenics"
-Copyright (C) 2022 The R Foundation for Statistical Computing
+R version 4.3.1 (2023-06-16) -- "Beagle Scouts"
+Copyright (C) 2023 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -32,7 +32,7 @@ Type 'q()' to quit R.
 > invisible(lapply(st_geometry(nc), function(x) grid.draw(st_as_grob(x, gp = gpar(fill = 'red')))))
 > 
 > # POINTS:
-> if (require(sp, quietly = TRUE)) {
+> if (suppressPackageStartupMessages(require(sp, quietly = TRUE))) {
 +  data(meuse, package = "sp")
 +  meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, agr = "constant")
 +  grid.newpage()
@@ -80,4 +80,4 @@ Type 'q()' to quit R.
 > 
 > proc.time()
    user  system elapsed 
-  1.496   0.059   1.566 
+  1.462   0.800   1.365 

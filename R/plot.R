@@ -11,7 +11,7 @@
 #' @param nbreaks number of colors breaks (ignored for \code{factor} or \code{character} variables)
 #' @param breaks either a numeric vector with the actual breaks, or a name of a method accepted by the \code{style} argument of \link[classInt]{classIntervals}
 #' @param max.plot integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overriden by setting the global option \code{sf_max.plot}, e.g. \code{options(sf_max.plot=2)}
-#' @param key.pos integer; side to plot a color key: 1 bottom, 2 left, 3 top, 4 right; set to \code{NULL} to omit key completely, 0 to only not plot the key, or -1 to select automatically. If multiple columns are plotted in a single function call by default no key is plotted and every submap is stretched individually; if a key is requested (and \code{col} is missing) all maps are colored according to a single key. Auto select depends on plot size, map aspect, and, if set, parameter \code{asp}.
+#' @param key.pos numeric; side to plot a color key: 1 bottom, 2 left, 3 top, 4 right; set to \code{NULL} to omit key completely, 0 to only not plot the key, or -1 to select automatically. If multiple columns are plotted in a single function call by default no key is plotted and every submap is stretched individually; if a key is requested (and \code{col} is missing) all maps are colored according to a single key. Auto select depends on plot size, map aspect, and, if set, parameter \code{asp}. If it has lenght 2, the second value, ranging from 0 to 1, determines where the key is placed in the available space (default: 0.5, center).
 #' @param key.width amount of space reserved for the key (incl. labels), thickness/width of the scale bar
 #' @param key.length amount of space reserved for the key along its axis, length of the scale bar
 #' @param pch plotting symbol
@@ -72,7 +72,7 @@
 #' @export
 plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty",
 		max.plot = if(is.null(n <- getOption("sf_max.plot"))) 9 else n,
-		key.pos = get_key_pos(x, ...), key.length = .618, key.width = lcm(1.8),
+		key.pos = get_key_pos(x, ...), key.length = .618, key.width = lcm(1.8 * par("ps")/12),
 		reset = TRUE, logz = FALSE, extent = x, xlim = st_bbox(extent)[c(1,3)],
 		ylim = st_bbox(extent)[c(2,4)]) {
 
@@ -89,8 +89,9 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 	opar = par()
 	if (ncol(x) > 2 && !isTRUE(dots$add)) { # multiple maps to plot...
 		cols = setdiff(names(x), attr(x, "sf_column"))
-		lt = .get_layout(st_bbox(x), min(max.plot, length(cols)), par("din"), key.pos, key.width)
-		key.pos = lt$key.pos
+		lt = .get_layout(st_bbox(x), min(max.plot, length(cols)), par("din"), key.pos[1], key.width)
+		if (key.pos.missing || key.pos == -1)
+			key.pos = lt$key.pos
 		layout(lt$m, widths = lt$widths, heights = lt$heights, respect = FALSE)
 
 		if (isTRUE(dots$axes))
@@ -113,9 +114,11 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 
 		if (!is.null(key.pos)) {
 			values = do.call(c, as.data.frame(x)[cols])
+			if (is.character(values))
+				values = as.factor(values)
 			if (logz)
 				values = log10(values)
-			if (is.character(breaks)) { # compute breaks from values:
+			if (is.character(breaks) && is.numeric(values)) { # compute breaks from values:
 				v0 = values[!is.na(values)]
 				n.unq = length(unique(v0))
 				breaks = if (! all(is.na(values)) && n.unq > 1)
@@ -138,7 +141,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 			plot.new()
 
 		# plot key?
-		if (!is.null(key.pos) && key.pos != 0 && col_missing) {
+		if (!is.null(key.pos) && key.pos[1] != 0 && col_missing) {
 			if (is.null(pal))
 				pal = function(n) sf.colors(n, categorical = is.factor(values))
 			colors = if (is.function(pal))
@@ -227,7 +230,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 					(is.factor(values) || length(unique(na.omit(values))) > 1 || breaks_numeric) && # 2065
 					length(col) > 1) { # plot key?
 
-				switch(key.pos,
+				switch(key.pos[1],
 					layout(matrix(c(2,1), nrow = 2, ncol = 1),
 						widths = 1, heights = c(1, key.width)), # 1 bottom
 					layout(matrix(c(1,2), nrow = 1, ncol = 2),
@@ -778,6 +781,24 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 	axis(side, at = at, labels = labels, ...)
 }
 
+# find out where to place the legend key:
+# given range r = (a, b), key.length l, key offset o, return a value range that:
+#  * scales such that (b - a) / (y - x) = l
+#  * shifts linearly within [x, y] from a = x when o = 0 to b = y when o = 1
+xy_from_r = function(r, l, o) {
+	stopifnot(length(r) == 2, l <= 1, l > 0, o >= 0, o <= 1)
+	a = r[1]; b = r[2]
+	if (o == 1) {
+		y = b
+		x = b - (b - a)/l
+	} else {
+		i = o / (o - 1)
+		y = (a + (b - a)/l - i * b)/(1 - i)
+		x = i * (y - b) + a
+	}
+	c(x, y)
+}
+
 #' @name stars
 #' @export
 #' @param z ignore
@@ -789,8 +810,10 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 #' @param logz ignore
 #' @param ... ignore
 #' @param lab ignore
+#' @param cex.axis see \link{par}
 .image_scale = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
-		at = NULL, ..., axes = FALSE, key.length, logz = FALSE, lab = "") {
+		at = NULL, ..., axes = FALSE, key.length, logz = FALSE, lab = "", 
+		cex.axis = par("cex.axis")) {
 	if (!is.null(breaks) && length(breaks) != (length(col) + 1))
 		stop("must have one more break than colour")
 	stopifnot(is.character(lab) || is.expression(lab))
@@ -798,6 +821,11 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 	zlim = range(z, na.rm = TRUE)
 	if (is.null(breaks))
 		breaks = seq(zlim[1], zlim[2], length.out = length(col) + 1)
+	offset = 0.5
+	if (length(key.pos) == 2) {
+		offset = key.pos[2]
+		key.pos = key.pos[1]
+	}
 	if (is.character(key.length)) {
 		kl = as.numeric(gsub(" cm", "", key.length))
 		sz = if (key.pos %in% c(1,3))
@@ -811,14 +839,13 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 		at = pretty(br)
 		at = at[at > br[1] & at < br[2]]
 	}
-	kl_lim = function(r, kl) { m = mean(r); (r - m)/kl + m }
 	if (key.pos %in% c(1,3)) {
 		ylim = c(0, 1)
-		xlim = kl_lim(range(breaks), key.length)
+		xlim = xy_from_r(range(breaks), key.length, offset)
 		mar = c(0, ifelse(axes, 2.1, 1), 0, 1)
 	}
 	if (key.pos %in% c(2,4)) {
-		ylim = kl_lim(range(breaks), key.length)
+		ylim = xy_from_r(range(breaks), key.length, offset)
 		xlim = c(0, 1)
 		mar = c(ifelse(axes, 2.1, 1), 0, 1.2, 0)
 	}
@@ -860,19 +887,23 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 			TRUE
 
 	if (add.axis)
-		axis(key.pos, at = at, labels = labels)
+		axis(key.pos, at = at, labels = labels, cex.axis = cex.axis)
 }
 
 #' @name stars
 #' @export
 #' @param key.width ignore
 .image_scale_factor = function(z, col, key.pos, add.axis = TRUE,
-	..., axes = FALSE, key.width, key.length) {
+	..., axes = FALSE, key.width, key.length, cex.axis = par("cex.axis")) {
 
 	n = length(z)
-	# TODO:
-	ksz = as.numeric(gsub(" cm", "", key.width)) * 2
+	ksz = max(strwidth(z, "inches")) / par("cin")[1] # in "mar" lines
 	breaks = (0:n) + 0.5
+	offset = 0.5
+	if (length(key.pos) == 2) {
+		offset = key.pos[2]
+		key.pos = key.pos[1]
+	}
 	if (is.character(key.length)) {
 		kl = as.numeric(gsub(" cm", "", key.length))
 		sz = if (key.pos %in% c(1,3))
@@ -881,26 +912,33 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 				dev.size("cm")[2]
 		key.length = kl/sz
 	}
-	kl_lim = function(r, kl) { m = mean(r); (r - m)/kl + m }
 	if (key.pos %in% c(1,3)) {
 		ylim = c(0, 1)
-		xlim = kl_lim(range(breaks), key.length)
+		xlim = xy_from_r(range(breaks), key.length, offset)
 		mar = c(0, ifelse(axes, 2.1, 1), 0, 1)
 		mar[key.pos] = 2.1
 	} else {
-		ylim = kl_lim(range(breaks), key.length)
+		ylim = xy_from_r(range(breaks), key.length, offset)
 		xlim = c(0, 1)
 		mar = c(ifelse(axes, 2.1, 1), 0, 1.2, 0)
-		#mar[key.pos] = 2.1
-		mar[key.pos] = max(ksz - 1.3, 0.0)
+		mar[key.pos] = ksz
 	}
 	par(mar = mar)
 
 	poly = vector(mode="list", length(col))
 	for (i in seq(poly))
 		poly[[i]] = c(breaks[i], breaks[i+1], breaks[i+1], breaks[i])
-	plot(1, 1, t = "n", ylim = ylim, xlim = xlim, axes = FALSE,
-		xlab = "", ylab = "", xaxs = "i", yaxs = "i")
+
+	tryCatch({
+		plot(1, 1, t = "n", ylim = ylim, xlim = xlim, axes = FALSE,
+			xlab = "", ylab = "", xaxs = "i", yaxs = "i")
+		},
+		error = function(x) {
+			sz = max(strwidth(z, "inches")) * 2.54 * 1.1 + par("ps")/12 # cm
+			stop(paste0("key.width too small, try key.width = lcm(", signif(sz, 3), ")"), call. = FALSE)
+		}
+	)
+
 	for(i in seq_along(poly)) {
 		if (key.pos %in% c(1,3))
 			polygon(poly[[i]], c(0, 0, 1, 1), col = col[i], border = NA)
@@ -917,7 +955,7 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 
 	if (add.axis) {
 		opar = par(las = 1)
-		axis(key.pos, at = 1:n, labels = z)
+		axis(key.pos, at = 1:n, labels = z, cex.axis = cex.axis)
 		par(opar)
 	}
 }

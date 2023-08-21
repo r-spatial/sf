@@ -1,5 +1,5 @@
 
-R version 4.3.0 (2023-04-21) -- "Already Tomorrow"
+R version 4.3.1 (2023-06-16) -- "Beagle Scouts"
 Copyright (C) 2023 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -347,7 +347,7 @@ use `st_zm(...)` to coerce to XY dimensions
 > 
 > sf_extSoftVersion()[1:3]
     GEOS     GDAL   proj.4 
-"3.11.1"  "3.6.2"  "9.1.1" 
+"3.11.1"  "3.6.4"  "9.1.1" 
 > 
 > # Ops.sfc:
 > ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))))
@@ -437,6 +437,7 @@ Classes 'sf' and 'data.frame':	100 obs. of  15 variables:
  - attr(*, "sf_column")= chr "geometry"
  - attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...
   ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...
+ - attr(*, ".sf_namespace")=function ()  
 > bb = st_as_sfc(st_bbox(nc))
 > format(st_bbox(nc))
 [1] "((-84.32385,33.88199),(-75.45698,36.58965))"
@@ -821,7 +822,7 @@ CRS:           NA
 POINT (-0.0500922 0.992953)
 > 
 > # st_bbox:
-> if (require(sp, quietly = TRUE) && require(raster, quietly = TRUE)) {
+> if (suppressPackageStartupMessages(require(sp, quietly = TRUE)) && require(raster, quietly = TRUE)) {
 + demo(meuse, ask = FALSE, echo = FALSE)
 + suppressWarnings(st_bbox(meuse))
 + crs = suppressWarnings(st_crs(meuse))
@@ -1088,4 +1089,4 @@ CRS:           NA
 > 
 > proc.time()
    user  system elapsed 
-  6.642   0.811   6.564 
+  4.676   0.117   4.784 

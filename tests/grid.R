@@ -15,7 +15,7 @@ pushViewport(st_viewport(nc))
 invisible(lapply(st_geometry(nc), function(x) grid.draw(st_as_grob(x, gp = gpar(fill = 'red')))))
 
 # POINTS:
-if (require(sp, quietly = TRUE)) {
+if (suppressPackageStartupMessages(require(sp, quietly = TRUE))) {
  data(meuse, package = "sp")
  meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992, agr = "constant")
  grid.newpage()

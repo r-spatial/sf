@@ -23,7 +23,8 @@
   axes = FALSE,
   key.length,
   logz = FALSE,
-  lab = ""
+  lab = "",
+  cex.axis = par("cex.axis")
 )
 
 .image_scale_factor(
@@ -34,7 +35,8 @@
   ...,
   axes = FALSE,
   key.width,
-  key.length
+  key.length,
+  cex.axis = par("cex.axis")
 )
 }
 \arguments{
@@ -79,6 +81,8 @@
 \item{logz}{ignore}
 
 \item{lab}{ignore}
+
+\item{cex.axis}{see \link{par}}
 
 \item{key.width}{ignore}
 }

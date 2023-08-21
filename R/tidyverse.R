@@ -244,10 +244,19 @@ rename_with.sf = function(.data, .fn, .cols, ...) {
 	if (!requireNamespace("rlang", quietly = TRUE))
 		stop("rlang required: install that first") # nocov
 	.fn = rlang::as_function(.fn)
+	
+	sf_column = attr(.data, "sf_column")
+	sf_column_loc = match(sf_column, names(.data))
+	
+	if (length(sf_column_loc) != 1 || is.na(sf_column_loc))
+		stop("internal error: can't find sf column") # nocov
+	
 	agr = st_agr(.data)
+	
 	ret = NextMethod()
 	names(agr) = .fn(names(agr))
 	st_agr(ret) = agr
+	st_geometry(ret) = names(ret)[sf_column_loc]
 	ret
 }
 
@@ -313,6 +322,8 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE
 					geom = list() #676 #nocov
 				do.call(st_sfc, c(geom, crs = list(crs), precision = precision))
 			} else { # single group:
+				if (nrow(ret) > 1)
+					stop(paste0("when using .by, also add across(", sf_column, ", st_union) as argument")) # https://github.com/r-spatial/sf/issues/2207
 				if (do_union)
 					st_union(geom, is_coverage = is_coverage)
 				else
@@ -336,6 +347,8 @@ distinct.sf <- function(.data, ..., .keep_all = FALSE) {
 	sf_column = attr(.data, "sf_column")
 	geom = st_geometry(.data)
 	eq = sapply(st_equals(.data), head, n = 1)
+	if (is.list(eq) && length(eq) == 0) # empty list: geometry was empty set
+		eq = integer(0)
 	empties = which(lengths(eq) == 0)
 	eq[ empties ] = empties[1] # first empty record
 	.data[[ sf_column ]] = unlist(eq)

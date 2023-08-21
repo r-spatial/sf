@@ -6,7 +6,7 @@ s = st_sf(a = 1:2, geom = st_sfc(pl1, pl2))
 (a = aggregate(s, list(c(1,1)), mean, do_union = FALSE))
 (a = aggregate(s, list(c(1,1)), mean, do_union = TRUE))
 # expect_warning(st_cast(a, "POINT"))
-if (require(sp, quietly = TRUE)) {
+if (suppressPackageStartupMessages(require(sp, quietly = TRUE))) {
  demo(meuse_sf, echo = FALSE, ask = FALSE)
  a = aggregate(meuse_sf, list(meuse_sf$soil), mean)
  print(attributes(a)$agr)

@@ -1,6 +1,6 @@
 
-R version 4.2.0 (2022-04-22) -- "Vigorous Calisthenics"
-Copyright (C) 2022 The R Foundation for Statistical Computing
+R version 4.3.1 (2023-06-16) -- "Beagle Scouts"
+Copyright (C) 2023 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -27,7 +27,9 @@ Type 'q()' to quit R.
 + s = st_sf(a=2:4, b=st_sfc(l1,l2,l3))
 + plot(s, col = s$a, axes = FALSE)
 + plot(s, col = s$a)
-+ attr(s$b, "proj4string") = sp::CRS("+proj=longlat +ellps=WGS84 +no_defs")@projargs
++ if (suppressPackageStartupMessages(require(sp, quietly = TRUE))) {
++   attr(s$b, "proj4string") = sp::CRS("+proj=longlat +ellps=WGS84 +no_defs")@projargs
++ }
 + plot(s, col = s$a, axes = TRUE)
 + plot(s, col = s$a, lty = s$a, lwd = s$a, pch = s$a, type = 'b')
 + l4 = st_linestring(matrix(runif(6),,2))
@@ -148,4 +150,4 @@ There were 13 warnings (use warnings() to see them)
 > 
 > proc.time()
    user  system elapsed 
-  5.863   0.119   6.022 
+  4.822   0.828   4.857 

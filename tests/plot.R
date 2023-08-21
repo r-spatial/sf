@@ -10,7 +10,9 @@ l3 = st_linestring(matrix(runif(6)-0.5,,2))
 s = st_sf(a=2:4, b=st_sfc(l1,l2,l3))
 plot(s, col = s$a, axes = FALSE)
 plot(s, col = s$a)
-attr(s$b, "proj4string") = sp::CRS("+proj=longlat +ellps=WGS84 +no_defs")@projargs
+if (suppressPackageStartupMessages(require(sp, quietly = TRUE))) {
+  attr(s$b, "proj4string") = sp::CRS("+proj=longlat +ellps=WGS84 +no_defs")@projargs
+}
 plot(s, col = s$a, axes = TRUE)
 plot(s, col = s$a, lty = s$a, lwd = s$a, pch = s$a, type = 'b')
 l4 = st_linestring(matrix(runif(6),,2))

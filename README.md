@@ -137,7 +137,7 @@ sudo dnf install gdal-devel proj-devel geos-devel sqlite-devel udunits2-devel
 Get gdal, proj and geos from the main repos, and udunits from the AUR:
 
 ```
-pacman -S gdal proj geos arrow podofo
+pacman -S gdal proj geos arrow podofo-0.9
 yay/pacaur/yaourt/whatever -S udunits
 ```
 
@@ -160,11 +160,13 @@ Functions and methods that require `liblwgeom`, including `st_make_valid` and al
 
 ## How to cite
 
-Package `sf` can be cited as: Edzer Pebesma, 2018.
-Simple Features for R: Standardized Support
-for Spatial Vector Data. The R Journal [10:1,
-439-446.](https://journal.r-project.org/archive/2018/RJ-2018-009/index.html)
+Package `sf` can be cited as: 
 
+* Edzer Pebesma, 2018.  Simple Features for R: Standardized Support
+for Spatial Vector Data. The R Journal [10:1, 439-446.](https://journal.r-project.org/archive/2018/RJ-2018-009/index.html)
+
+* Pebesma, E.; Bivand, R. (2023). [Spatial Data Science: With Applications in R](https://r-spatial.org/book) 
+(1st ed.). 314 pages. [Chapman and Hall/CRC](https://doi.org/10.1201/9780429459016).
 
 ## Acknowledgment
 

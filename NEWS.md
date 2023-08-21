@@ -1,4 +1,20 @@
+# version 1.0-15
+
+* `plot.sf()`: `key.width` is sensitive to pointsize graphics parameter, `key.pos` can hold a second value in [0, 1] determining the relative position of the key in the available space; keys with factor levels suggest a proper size if they won't fit.
+
+* `[<-.sf` fixes the `agr` attribute when it is broken; #2211
+
+* `sf` objects get a new attribute, `.sf_namespace`, which forces loading the `sf` namespace when it has not been loaded so far, e.g. for proper printing or plotting of an `sf` object; #2212 by Mike Mahoney
+
+* `distinct.sf` is type-safe for `sf` objects with zero rows; #2204
+
+* `summarise.sf` raises an error if `.by` is given but no `across()` on the geometry; #2207
+
+* `st_write()` matches fields on name first, than on position; this matters for formats that have pre-defined names, such as GPX; #2202 
+
 # version 1.0-14
+
+* fix `plot.sf()` when using a key for multiple factor variables; #2196, #2195
 
 * fix use of `as.numeric_version` in a test, for upcoming change in r-devel
 
