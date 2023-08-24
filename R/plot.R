@@ -786,6 +786,7 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 #  * shifts linearly within [x, y] from a = x when o = 0 to b = y when o = 1
 xy_from_r = function(r, l, o) {
 	stopifnot(length(r) == 2, l <= 1, l > 0, o >= 0, o <= 1)
+	r = as.numeric(r)
 	a = r[1]; b = r[2]
 	if (o == 1) {
 		y = b
