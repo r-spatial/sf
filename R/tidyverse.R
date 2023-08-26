@@ -464,32 +464,60 @@ pivot_longer.sf <- function (data, cols, names_to = "name", names_prefix = NULL,
 #' @name tidyverse
 #' @export
 #' @param id_cols see original function docs
+#' @param id_expand see original function docs
 #' @param names_from see original function docs
 #' @param names_prefix see original function docs
 #' @param names_sep see original function docs
 #' @param names_glue see original function docs
 #' @param names_sort see original function docs
+#' @param names_vary see original function docs
+#' @param names_expand see original function docs
 #' @param names_repair see original function docs
 #' @param values_from see original function docs
 #' @param values_fill see original function docs
 #' @param values_fn see original function docs
-pivot_wider.sf = function(data,
-                          id_cols = NULL,
-                          names_from, # = name,
-                          names_prefix = "",
-                          names_sep = "_",
-                          names_glue = NULL,
-                          names_sort = FALSE,
-                          names_repair = "check_unique",
-                          values_from, # = value,
-                          values_fill = NULL,
-                          values_fn = NULL,
-                          ...) {
+#' @param unused_fn see original function docs
+pivot_wider.sf = function(data, 
+						  ..., 
+						  id_cols = NULL, 
+						  id_expand = FALSE, 
+						  names_from = name, 
+						  names_prefix = "", 
+						  names_sep = "_", 
+						  names_glue = NULL, 
+						  names_sort = FALSE, 
+						  names_vary = "fastest", 
+						  names_expand = FALSE, 
+						  names_repair = "check_unique", 
+						  values_from = value, 
+						  values_fill = NULL, 
+						  values_fn = NULL, 
+						  unused_fn = NULL) {
 
 	agr = st_agr(data)
 	sf_column_name = attr(data, "sf_column")
-	class(data) = setdiff(class(data), "sf")
-	.re_sf(NextMethod(), sf_column_name = sf_column_name, agr)
+	data = as.data.frame(data)
+	if (!requireNamespace("tidyr", quietly = TRUE))
+		stop("tidyr required: install first?")
+	ret = tidyr::pivot_wider(
+		data = data, 
+		..., 
+		id_cols = {{ id_cols }}, 
+		id_expand = id_expand, 
+		names_from = {{ names_from }}, 
+		names_prefix = names_prefix, 
+		names_sep = names_sep, 
+		names_glue = names_glue, 
+		names_sort = names_sort, 
+		names_vary = names_vary, 
+		names_expand = names_expand, 
+		names_repair = names_repair, 
+		values_from = {{ values_from }}, 
+		values_fill = values_fill, 
+		values_fn = values_fn, 
+		unused_fn = unused_fn
+	)
+	st_as_sf(ret, sf_column_name = sf_column_name, agr = agr)
 }
 
 
