@@ -318,3 +318,33 @@ test_that("group_split.sf()` does not ignore `.keep` for grouped_df class", {
 	expect_identical(names(nc_kept[[1]]), names(nc))
 	expect_identical(names(nc_notkept[[1]]), setdiff(names(nc), "CNTY_ID"))
 })
+
+test_that("`pivot_wider()` works", {
+	skip_if_not_installed("dplyr")
+	skip_if_not_installed("tidyr")
+
+	# Work for unquoted arguments (#2220)
+	expect_identical(nc %>%
+					 	tidyr::pivot_wider(names_from = NAME,
+					 					   values_from = AREA),
+					 nc %>%
+					 	tidyr::pivot_wider(names_from = "NAME",
+					 					   values_from = "AREA"))
+	
+	# Pivot data from long sf to wide sf
+	nc2 = nc %>%
+		mutate(name1 = "value_1",
+			   name2 = "value_2",
+			   name3 = "value_3") %>%
+		as_tibble() %>%
+		st_as_sf() 
+	nc2_longer = nc2 %>%
+		tidyr::pivot_longer(c(name1, name2, name3),
+							names_to = "foo",
+							values_to = "bar")
+	nc2_wider = nc2_longer %>%
+		tidyr::pivot_wider(names_from = foo,
+						   values_from = bar)
+	expect_identical(st_geometry(nc2), st_geometry(nc2_wider))
+	expect_identical(st_drop_geometry(nc2), st_drop_geometry(nc2_wider))
+})
