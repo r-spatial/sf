@@ -248,10 +248,29 @@ rename_with.sf = function(.data, .fn, .cols, ...) {
 	
 	agr = st_agr(.data)
 	
-	ret = NextMethod()
+	.data = as.data.frame(.data)
+	ret = if (missing(.cols)) {
+		if (!requireNamespace("tidyselect", quietly = TRUE)) {
+			stop("tidyselect required: install that first") # nocov
+		}
+		dplyr::rename_with(
+			.data = .data,
+			.fn = .fn,
+			.cols = tidyselect::everything(), 
+			...
+		)
+	} else {
+		dplyr::rename_with(
+			.data = .data,
+			.fn = .fn,
+			.cols = {{ .cols }}, 
+			...
+		)
+	}
+	ret = st_as_sf(ret, sf_column_name = names(ret)[sf_column_loc])
+	
 	names(agr) = .fn(names(agr))
 	st_agr(ret) = agr
-	st_geometry(ret) = names(ret)[sf_column_loc]
 	ret
 }
 
