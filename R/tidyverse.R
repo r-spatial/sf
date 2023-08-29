@@ -290,35 +290,35 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE
 	precision = st_precision(.data)
 	crs = st_crs(.data)
 	geom = st_geometry(.data)
+	
+	if (!requireNamespace("dplyr", quietly = TRUE))
+		stop("dplyr required: install that first") # nocov
 	class(.data) = setdiff(class(.data), "sf")
-	ret = NextMethod()
-	if (!missing(do_union))
-		ret$do_union = NULL
-	if (!missing(is_coverage))
-		ret$is_coverage = NULL
+	.data$.rows = vctrs::vec_seq_along(.data)
+	ret = dplyr::summarise(
+		.data = .data,
+		...,
+		.rows = list(.rows)
+	)
+	.rows = ret$.rows
+	ret = ret[names(ret) != ".rows"]
 
 	if (! any(sapply(ret, inherits, what = "sfc"))) {
-		geom = if (inherits(.data, "grouped_df") || inherits(.data, "grouped_dt")) {
-				if (!requireNamespace("dplyr", quietly = TRUE))
-					stop("dplyr required: install that first") # nocov
-				i = dplyr::group_indices(.data)
-				# geom = st_geometry(.data)
+		geom = if (nrow(ret) > 1) {
 				geom = if (do_union)
-						lapply(sort(unique(i)), function(x) {
-							if (x == 1)
-								st_union(geom[i == x], is_coverage = is_coverage)
+						lapply(.rows, function(x) {
+							if (1 %in% x)
+								st_union(geom[x], is_coverage = is_coverage)
 							else
-								suppressMessages(st_union(geom[i == x], is_coverage = is_coverage))
+								suppressMessages(st_union(geom[x], is_coverage = is_coverage))
 						})
 					else
-						lapply(sort(unique(i)), function(x) st_combine(geom[i == x]))
+						lapply(.rows, function(x) st_combine(geom[x]))
 				geom = unlist(geom, recursive = FALSE)
 				if (is.null(geom))
 					geom = list() #676 #nocov
 				do.call(st_sfc, c(geom, crs = list(crs), precision = precision))
 			} else { # single group:
-				if (nrow(ret) > 1)
-					stop(paste0("when using .by, also add across(", sf_column, ", st_union) as argument")) # https://github.com/r-spatial/sf/issues/2207
 				if (do_union)
 					st_union(geom, is_coverage = is_coverage)
 				else

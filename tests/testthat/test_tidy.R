@@ -308,3 +308,42 @@ test_that("group_split.sf()` does not ignore `.keep` for grouped_df class", {
 	expect_identical(names(nc_kept[[1]]), names(nc))
 	expect_identical(names(nc_notkept[[1]]), setdiff(names(nc), "CNTY_ID"))
 })
+
+test_that("`summarise()` works", {
+	skip_if_not_installed("dplyr")
+	
+	nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
+	
+	# When `do_union = TRUE`
+	unioned = nc %>%
+		group_by(area_cl) %>%
+		summarise(AREA = mean(AREA)) %>%
+		arrange(area_cl)
+	geom_unioned = lapply(sort(unique(nc$area_cl)), function(area_cl) {
+		st_union(nc$geometry[nc$area_cl == area_cl])
+	}) %>% 
+		vctrs::list_unchop()
+	expect_identical(unioned$geometry, geom_unioned)
+	
+	# When `do_union = FALSE`
+	combined = nc %>%
+		group_by(area_cl) %>%
+		summarise(AREA = mean(AREA), do_union = FALSE) %>%
+		arrange(area_cl)
+	geom_combined = lapply(sort(unique(nc$area_cl)), function(area_cl) {
+		st_combine(nc$geometry[nc$area_cl == area_cl])
+	}) %>% 
+		vctrs::list_unchop()
+	expect_identical(combined$geometry, geom_combined)
+	
+	# `.by` argument works (#2207)
+	unioned_by_1 = nc %>%
+		summarise(AREA = mean(AREA), .by = area_cl) %>%
+		arrange(area_cl)
+	unioned_by_2 = nc %>%
+		summarise(AREA = mean(AREA), across(geometry, st_union), .by = area_cl) %>%
+		arrange(area_cl)
+	
+	expect_identical(st_geometry(unioned_by_1), st_geometry(unioned))
+	expect_identical(st_geometry(unioned_by_2), st_geometry(unioned))
+})
