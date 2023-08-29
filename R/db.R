@@ -466,22 +466,27 @@ setMethod("dbWriteTable", c("PostgreSQLConnection", "character", "sf"),
 #' to PostgreSQL. See `dbDataType()` for details.
 #' @md
 #' @rdname dbWriteTable
-#' @importMethodsFrom DBI dbWriteTable
+#' @importMethodsFrom DBI dbWriteTable dbExistsTable
 #' @export
 setMethod("dbWriteTable", c("DBIObject", "character", "sf"),
-          function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE,
-                   append = FALSE, field.types = NULL, binary = TRUE) {
-          	if (is.null(field.types)) field.types <- dbDataType(conn, value)
-              # DBI cannot set field types with append
-              if (append) field.types <- NULL
-              #tryCatch({
-                  dbWriteTable(conn, name, to_postgis(conn, value, binary),..., row.names = row.names,
-                               overwrite = overwrite, append = append,
-                               field.types = field.types)
-              # }, warning=function(w) {
-              #     stop(conditionMessage(w), call. = FALSE)  # nocov
-              # })
-          }
+		  function(conn, name, value, ..., row.names = FALSE, overwrite = FALSE,
+		  		 append = FALSE, field.types = NULL, binary = TRUE) {
+		  	if (is.null(field.types)) field.types <- dbDataType(conn, value)
+
+		   	# DBI cannot set field types with append, but if the table does not exist,
+		  	# we need to set the field type.
+		  	if (append) {
+		  		if (!dbExistsTable(conn, name)) {
+		  			append <- FALSE
+		  		} else {
+		  			field.types <- NULL
+		  		}
+		  	}
+		  	
+		  	dbWriteTable(conn, name, to_postgis(conn, value, binary),..., row.names = row.names,
+		  				 overwrite = overwrite, append = append,
+		  				 field.types = field.types)
+		  }
 )
 
 to_postgis <- function(conn, x, binary) {

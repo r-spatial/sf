@@ -69,6 +69,15 @@ test_that("can write to db", {
     expect_silent(write_sf(pts, pg, "sf_meuse__", delete_layer = TRUE))
 })
 
+test_that("can create a missing table even if append is TRUE (#2206)", {
+	skip_if_not(can_con(pg), "could not connect to postgis database")
+	x <- st_sf(geometry = st_sfc(st_point(1:2)))
+	dbWriteTable(pg, "x", x, append = TRUE, temporary = TRUE)
+	col_type <- dbGetQuery(pg, "SELECT pg_typeof(geometry) as col_type FROM x")
+	expect_equal(unclass(col_type[["col_type"]]), "geometry")
+	dbExecute(pg, "drop table if exists x")
+})
+
 test_that("can handle multiple geom columns", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
     multi <- cbind(pts[["geometry"]], st_transform(pts, 4326))
