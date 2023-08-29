@@ -100,15 +100,21 @@ Write sf object to Database"><meta property="og:image" content="https://r-spatia
 
 
 <dt>name</dt>
-<dd><p>character vector of names (table names, fields, keywords).</p></dd>
+<dd><p>The table name, passed on to <code><a href="https://dbi.r-dbi.org/reference/dbQuoteIdentifier.html" class="external-link">dbQuoteIdentifier()</a></code>. Options are:</p><ul><li><p>a character string with the unquoted DBMS table name,
+e.g. <code>"table_name"</code>,</p></li>
+<li><p>a call to <code><a href="https://dbi.r-dbi.org/reference/Id.html" class="external-link">Id()</a></code> with components to the fully qualified table name,
+e.g. <code>Id(schema = "my_schema", table = "table_name")</code></p></li>
+<li><p>a call to <code><a href="https://dbi.r-dbi.org/reference/SQL.html" class="external-link">SQL()</a></code> with the quoted and fully qualified table name
+given verbatim, e.g. <code>SQL('"my_schema"."table_name"')</code></p></li>
+</ul></dd>
 
 
 <dt>value</dt>
-<dd><p>a data.frame.</p></dd>
+<dd><p>a <a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a> (or coercible to data.frame).</p></dd>
 
 
 <dt>...</dt>
-<dd><p>placeholder for future use.</p></dd>
+<dd><p>Other parameters passed on to methods.</p></dd>
 
 
 <dt>row.names</dt>
