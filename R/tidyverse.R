@@ -56,7 +56,8 @@ filter.sf <- function(.data, ..., .dots) {
 	class(.data) <- setdiff(class(.data), "sf")
 	if (inherits(g, "sfc_POINT") && !is.null(pts <- attr(g, "points"))) {
 		.data[[ attr(.data, "sf_column") ]] = pts
-		st_as_sf(NextMethod(), coords = attr(.data, "sf_column"), agr = agr, remove = FALSE) # FIXME: doesn't handle tibble?
+		st_as_sf(NextMethod(), coords = attr(.data, "sf_column"), agr = agr, remove = FALSE,
+			crs = st_crs(g)) # FIXME: doesn't handle tibble?
 	} else
 		.re_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"), agr)
 }
