@@ -118,17 +118,21 @@
 <span></span>
 <span><span class="fu">pivot_wider.sf</span><span class="op">(</span></span>
 <span>  <span class="va">data</span>,</span>
+<span>  <span class="va">...</span>,</span>
 <span>  id_cols <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">names_from</span>,</span>
+<span>  id_expand <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  names_from <span class="op">=</span> <span class="va">name</span>,</span>
 <span>  names_prefix <span class="op">=</span> <span class="st">""</span>,</span>
 <span>  names_sep <span class="op">=</span> <span class="st">"_"</span>,</span>
 <span>  names_glue <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  names_sort <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  names_vary <span class="op">=</span> <span class="st">"fastest"</span>,</span>
+<span>  names_expand <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  names_repair <span class="op">=</span> <span class="st">"check_unique"</span>,</span>
-<span>  <span class="va">values_from</span>,</span>
+<span>  values_from <span class="op">=</span> <span class="va">value</span>,</span>
 <span>  values_fill <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  values_fn <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">...</span></span>
+<span>  unused_fn <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">spread.sf</span><span class="op">(</span></span>
@@ -302,6 +306,10 @@ more details.</p></dd>
 <dd><p>see original function docs</p></dd>
 
 
+<dt>id_expand</dt>
+<dd><p>see original function docs</p></dd>
+
+
 <dt>names_from</dt>
 <dd><p>see original function docs</p></dd>
 
@@ -314,6 +322,14 @@ more details.</p></dd>
 <dd><p>see original function docs</p></dd>
 
 
+<dt>names_vary</dt>
+<dd><p>see original function docs</p></dd>
+
+
+<dt>names_expand</dt>
+<dd><p>see original function docs</p></dd>
+
+
 <dt>values_from</dt>
 <dd><p>see original function docs</p></dd>
 
@@ -323,6 +339,10 @@ more details.</p></dd>
 
 
 <dt>values_fn</dt>
+<dd><p>see original function docs</p></dd>
+
+
+<dt>unused_fn</dt>
 <dd><p>see original function docs</p></dd>
 
 
