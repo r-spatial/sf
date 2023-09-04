@@ -91,17 +91,21 @@ pivot_longer.sf(
 
 pivot_wider.sf(
   data,
+  ...,
   id_cols = NULL,
-  names_from,
+  id_expand = FALSE,
+  names_from = name,
   names_prefix = "",
   names_sep = "_",
   names_glue = NULL,
   names_sort = FALSE,
+  names_vary = "fastest",
+  names_expand = FALSE,
   names_repair = "check_unique",
-  values_from,
+  values_from = value,
   values_fill = NULL,
   values_fn = NULL,
-  ...
+  unused_fn = NULL
 )
 
 spread.sf(
@@ -217,17 +221,25 @@ more details.}
 
 \item{id_cols}{see original function docs}
 
+\item{id_expand}{see original function docs}
+
 \item{names_from}{see original function docs}
 
 \item{names_glue}{see original function docs}
 
 \item{names_sort}{see original function docs}
 
+\item{names_vary}{see original function docs}
+
+\item{names_expand}{see original function docs}
+
 \item{values_from}{see original function docs}
 
 \item{values_fill}{see original function docs}
 
 \item{values_fn}{see original function docs}
+
+\item{unused_fn}{see original function docs}
 
 \item{fill}{see original function docs}
 
