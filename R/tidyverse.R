@@ -460,6 +460,7 @@ pivot_longer.sf <- function (data, cols, names_to = "name", names_prefix = NULL,
   st_as_sf(out, sf_column_name = sf_column_name)
 }
 
+globalVariables(c("name", "value"))
 # https://github.com/r-spatial/sf/issues/1915
 #' @name tidyverse
 #' @export

@@ -52,13 +52,13 @@ st_sample = function(x, size, ...) UseMethod("st_sample")
 #' if (sf_extSoftVersion()["proj.4"] >= "4.9.0")
 #'   plot(p <- st_sample(x, 1000), add = TRUE)
 #' if (require(lwgeom, quietly = TRUE)) { # for st_segmentize()
-#' x2 = st_transform(st_segmentize(x, 1e4), st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
-#' g = st_transform(st_graticule(), st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
-#' plot(x2, graticule = g)
-#' if (sf_extSoftVersion()["proj.4"] >= "4.9.0") {
-#'   p2 = st_transform(p, st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
-#'   plot(p2, add = TRUE)
-#' }
+#'   x2 = st_transform(st_segmentize(x, 1e4), st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
+#'   g = st_transform(st_graticule(), st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
+#'   plot(x2, graticule = g)
+#'   if (sf_extSoftVersion()["proj.4"] >= "4.9.0") {
+#'     p2 = st_transform(p, st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
+#'     plot(p2, add = TRUE)
+#'   }
 #' }
 #' x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,10),c(0,90),c(0,0))))) # NOT long/lat:
 #' plot(x)
@@ -90,9 +90,9 @@ st_sample = function(x, size, ...) UseMethod("st_sample")
 #' plot(st_sample(ls, 80))
 #' # spatstat example:
 #' if (require(spatstat.random)) {
-#'  x <- sf::st_sfc(sf::st_polygon(list(rbind(c(0, 0), c(10, 0), c(10, 10), c(0, 0)))))
-#'  # for spatstat.random::rThomas(), set type = "Thomas":
-#'  pts <- st_sample(x, kappa = 1, mu = 10, scale = 0.1, type = "Thomas") 
+#'   x <- sf::st_sfc(sf::st_polygon(list(rbind(c(0, 0), c(10, 0), c(10, 10), c(0, 0)))))
+#'   # for spatstat.random::rThomas(), set type = "Thomas":
+#'   pts <- st_sample(x, kappa = 1, mu = 10, scale = 0.1, type = "Thomas") 
 #' }
 #' @export
 #' @name st_sample
@@ -164,9 +164,13 @@ st_poly_sample = function(x, size, ..., type = "random",
 		global = FALSE
 		bb = st_bbox(x)
 		if (isTRUE(st_is_longlat(x))) {
-			if (sf_use_s2())
-				bb = st_bbox(st_segmentize(st_as_sfc(bb), 
+			if (sf_use_s2()) { # if FALSE, the user wants the coord ranges to be the bbox
+				if (!requireNamespace("lwgeom", quietly = TRUE))
+					warning("coordinate ranges not computed along great circles; install package lwgeom to get rid of this warning")
+				else 
+					bb = st_bbox(st_segmentize(st_as_sfc(bb), 
 										   units::set_units(1, "degree", mode = "standard"))) # get coordinate range on S2
+			}
 			R = s2::s2_earth_radius_meters()
 			toRad = pi / 180
 			h1 = sin(bb["ymax"] * toRad)
