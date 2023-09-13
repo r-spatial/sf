@@ -120,7 +120,7 @@ st_axis_order(authority_compliant = logical(0))</code></pre></div>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
-<dd><p>numeric, character, or object of class <a href="sf.html">sf</a> or <a href="sfc.html">sfc</a></p></dd>
+<dd><p>numeric, character, or object of class <a href="sf-package.html">sf</a> or <a href="sfc.html">sfc</a></p></dd>
 
 
 <dt>...</dt>
@@ -196,7 +196,7 @@ The return value is the current state of this (<code>FALSE</code>, by default).<
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">sfc</span> <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">sf</span> <span class="op">=</span> <span class="fu"><a href="sf.html">st_sf</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, geom <span class="op">=</span> <span class="va">sfc</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sf</span> <span class="op">=</span> <span class="fu">st_sf</span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, geom <span class="op">=</span> <span class="va">sfc</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">st_crs</span><span class="op">(</span><span class="va">sf</span><span class="op">)</span> <span class="op">=</span> <span class="fl">4326</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">sf</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 2 features </span>

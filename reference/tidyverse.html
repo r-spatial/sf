@@ -201,7 +201,7 @@
 
 
 <dt>.data</dt>
-<dd><p>data object of class <a href="sf.html">sf</a></p></dd>
+<dd><p>data object of class <a href="sf-package.html">sf</a></p></dd>
 
 
 <dt>...</dt>
@@ -440,7 +440,7 @@ Should be a character vector of length 2.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>an object of class <a href="sf.html">sf</a></p>
+<p>an object of class <a href="sf-package.html">sf</a></p>
 
 
     </div>
@@ -573,7 +573,7 @@ Should be a character vector of length 2.</p></dd>
 <span class="r-in"><span> <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">storms.sf</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">name</span>, <span class="va">year</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">nest</span></span></span>
 <span class="r-in"><span> <span class="va">trs</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">data</span>, <span class="kw">function</span><span class="op">(</span><span class="va">tr</span><span class="op">)</span> <span class="fu"><a href="st_cast.html">st_cast</a></span><span class="op">(</span><span class="fu"><a href="geos_combine.html">st_combine</a></span><span class="op">(</span><span class="va">tr</span><span class="op">)</span>, <span class="st">"LINESTRING"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span>crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></span>
-<span class="r-in"><span> <span class="va">trs.sf</span> <span class="op">=</span> <span class="fu"><a href="sf.html">st_sf</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span>, <span class="va">trs</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="va">trs.sf</span> <span class="op">=</span> <span class="fu">st_sf</span><span class="op">(</span><span class="va">x</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span>, <span class="va">trs</span><span class="op">)</span></span></span>
 <span class="r-in"><span> <span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">trs.sf</span><span class="op">[</span><span class="st">"year"</span><span class="op">]</span>, axes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-plt img"><img src="tidyverse-4.png" alt="" width="700" height="433"></span>
