@@ -194,6 +194,7 @@ list_column_to_sfc = function(x) {
 #'
 #' Create sf, which extends data.frame-like objects with a simple feature list column
 #' @name sf-object
+#' @aliases st_sf
 #' @param ... column elements to be binded into an \code{sf} object or a single \code{list} or \code{data.frame} with such columns; at least one of these columns shall be a geometry list-column of class \code{sfc} or be a list-column that can be converted into an \code{sfc} by \link{st_as_sfc}.
 #' @param crs coordinate reference system, something suitable as input to \link{st_crs}
 #' @param agr character vector; see details below.
