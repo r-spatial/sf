@@ -3,7 +3,6 @@
 \name{sf-defunct}
 \alias{sf-defunct}
 \alias{st_read_db}
-\alias{sf-package}
 \alias{st_read_db,}
 \alias{st_write_db}
 \title{Deprecated functions in \code{sf}}

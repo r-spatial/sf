@@ -14,7 +14,7 @@
 #' tables.
 #' @inheritParams st_read
 #' @export  st_read_db st_write_db
-#' @aliases sf-package st_read_db, st_write_db
+#' @aliases st_read_db, st_write_db
 #' @section Details:
 #' \tabular{rl}{
 #'   \code{st_read_db} \tab now a synonym for \code{\link{st_read}}\cr
