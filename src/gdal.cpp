@@ -508,6 +508,7 @@ Rcpp::List CPL_crs_from_input(Rcpp::CharacterVector input) {
 	OGRSpatialReference *ref = new OGRSpatialReference;
 	handle_axis_order(ref);
 	Rcpp::List crs;
+	// const char *options[3] = {"ALLOW_NETWORK_ACCESS=YES", "ALLOW_FILE_ACCESS=YES", NULL}; -> defaults
 	if (ref->SetFromUserInput(input[0]) == OGRERR_NONE) {
 		crs = create_crs(ref, false);
 		crs(0) = input;
