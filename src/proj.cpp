@@ -188,6 +188,10 @@ Rcpp::CharacterVector CPL_get_data_dir(bool b = false) {
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_is_network_enabled(bool b = false) {
 #if PROJ_VERSION_MAJOR >= 7
+#if GDAL_VERSION_NUM >= 3040000
+	if (OSRGetPROJEnableNetwork() != proj_context_is_network_enabled(PJ_DEFAULT_CTX))
+		Rcpp::warning("GDAL and PROJ have different settings for network enablement; use sf_use_network() to sync them");
+#endif
 	return Rcpp::LogicalVector::create(proj_context_is_network_enabled(PJ_DEFAULT_CTX));
 #else
 	return Rcpp::LogicalVector::create(false);
