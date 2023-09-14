@@ -73,16 +73,19 @@ Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVect
 	if (grid_availability.size() == 1) {
 		if (grid_availability[0] == "USED")
 			proj_operation_factory_context_set_grid_availability_use(PJ_DEFAULT_CTX, factory_ctx, 
-				PROJ_GRID_AVAILABILITY_USED_FOR_SORTING); // Grid availability is only used for sorting results. Operations where some grids are missing will be sorted last.
+				PROJ_GRID_AVAILABILITY_USED_FOR_SORTING); // Grid availability is only used for sorting results. 
+														  // Operations where some grids are missing will be sorted last.
 		else if (grid_availability[0] == "DISCARD")
-			proj_operation_factory_context_set_grid_availability_use(PJ_DEFAULT_CTX, factory_ctx,
-PROJ_GRID_AVAILABILITY_DISCARD_OPERATION_IF_MISSING_GRID); // Completely discard an operation if a required grid is missing.
+			proj_operation_factory_context_set_grid_availability_use(PJ_DEFAULT_CTX, factory_ctx, 
+							PROJ_GRID_AVAILABILITY_DISCARD_OPERATION_IF_MISSING_GRID); // Completely discard an operation if a required grid is missing.
 		else if (grid_availability[0] == "IGNORED")
-			proj_operation_factory_context_set_grid_availability_use(PJ_DEFAULT_CTX, factory_ctx,
-PROJ_GRID_AVAILABILITY_IGNORED); // Ignore grid availability at all. Results will be presented as if all grids were available.
+			proj_operation_factory_context_set_grid_availability_use(PJ_DEFAULT_CTX, factory_ctx, 
+							PROJ_GRID_AVAILABILITY_IGNORED); // Ignore grid availability at all. Results will be presented as if all grids were available.
 		else if (grid_availability[0] == "AVAILABLE")
-			proj_operation_factory_context_set_grid_availability_use(PJ_DEFAULT_CTX, factory_ctx,
-PROJ_GRID_AVAILABILITY_KNOWN_AVAILABLE); // Results will be presented as if grids known to PROJ (that is registered in the grid_alternatives table of its database) were available. Used typically when networking is enabled.
+			proj_operation_factory_context_set_grid_availability_use(PJ_DEFAULT_CTX, factory_ctx, 
+							PROJ_GRID_AVAILABILITY_KNOWN_AVAILABLE); // Results will be presented as if grids known to PROJ 
+																	 // (that is registered in the grid_alternatives table of its database) 
+																	 // were available. Used typically when networking is enabled.
 		else
 			Rcpp::stop("Unknown value for grid_availability");
 	}
