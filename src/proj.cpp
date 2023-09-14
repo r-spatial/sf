@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include <ogr_srs_api.h>
+
 #include "Rcpp.h"
 
 // [[Rcpp::export]]
@@ -197,11 +199,17 @@ Rcpp::CharacterVector CPL_enable_network(Rcpp::CharacterVector url, bool enable 
 #ifdef HAVE_71
 	if (enable) {
 		proj_context_set_enable_network(PJ_DEFAULT_CTX, 1);
+#if GDAL_VERSION_NUM >= 3040000
+		OSRSetPROJEnableNetwork(1);
+#endif
 		if (url.size())
 			proj_context_set_url_endpoint(PJ_DEFAULT_CTX, url[0]);
 		return Rcpp::CharacterVector::create(proj_context_get_url_endpoint(PJ_DEFAULT_CTX));
 	} else { // disable:
 		proj_context_set_enable_network(PJ_DEFAULT_CTX, 0);
+#if GDAL_VERSION_NUM >= 3040000
+		OSRSetPROJEnableNetwork(0);
+#endif
 		return Rcpp::CharacterVector::create();
 	}
 #else

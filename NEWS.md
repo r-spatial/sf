@@ -1,5 +1,7 @@
 # version 1.0-15
 
+* `st_transform()` properly responds to in-session changes to `sf_proj_network()`; #2166
+
 * `plot.sf()`: `key.width` is sensitive to pointsize graphics parameter `par("ps")`; keys with factor levels suggest a proper size if they won't fit.
 
 * `plot.sf()`: `key.pos` can hold a second value in [0, 1] determining the relative position of the key in the available space 

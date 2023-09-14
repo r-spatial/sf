@@ -1,5 +1,5 @@
 
-R version 4.3.0 (2023-04-21) -- "Already Tomorrow"
+R version 4.3.1 (2023-06-16) -- "Beagle Scouts"
 Copyright (C) 2023 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -125,8 +125,8 @@ Type 'q()' to quit R.
 + (y = st_as_sfc(as.psp(sf)))
 + all.equal(st_geometry(x), y)
 + }
-spatstat.geom 3.2-1
-spatstat.random 3.1-5
+spatstat.geom 3.2-5
+spatstat.random 3.1-6
 Simple feature collection with 51 features and 1 field
 Geometry type: GEOMETRY
 Dimension:     XY
@@ -166,4 +166,4 @@ In st_as_sfc.owin(spatstat.geom::as.owin(x)) :
 > 
 > proc.time()
    user  system elapsed 
-  2.366   0.868   2.343 
+  2.011   0.116   2.121 
