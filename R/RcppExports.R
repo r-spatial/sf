@@ -113,22 +113,12 @@ CPL_read_ogr <- function(datasource, layer, query, options, quiet, toTypeUser, f
     .Call(`_sf_CPL_read_ogr`, datasource, layer, query, options, quiet, toTypeUser, fid_column_name, drivers, wkt_filter, promote_to_multi, int64_as_string, dsn_exists, dsn_isdb, width)
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-CPL_gdalinfo <- function(obj, options, oo, co) {
-    .Call(`_sf_CPL_gdalinfo`, obj, options, oo, co)
-=======
-CPL_read_gdal_stream <- function(stream_xptr, datasource, layer, query, options, quiet, drivers, wkt_filter, dsn_exists = TRUE, dsn_isdb = FALSE, width = 80L) {
-    .Call('_sf_CPL_read_gdal_stream', PACKAGE = 'sf', stream_xptr, datasource, layer, query, options, quiet, drivers, wkt_filter, dsn_exists, dsn_isdb, width)
-=======
 CPL_read_gdal_stream <- function(stream_xptr, datasource, layer, query, options, quiet, drivers, wkt_filter, dsn_exists, dsn_isdb, fid_column, width) {
-    .Call('_sf_CPL_read_gdal_stream', PACKAGE = 'sf', stream_xptr, datasource, layer, query, options, quiet, drivers, wkt_filter, dsn_exists, dsn_isdb, fid_column, width)
->>>>>>> 93da2e60 (start supporting more options)
+    .Call(`_sf_CPL_read_gdal_stream`, stream_xptr, datasource, layer, query, options, quiet, drivers, wkt_filter, dsn_exists, dsn_isdb, fid_column, width)
 }
 
-CPL_gdalinfo <- function(obj, options, oo) {
-    .Call('_sf_CPL_gdalinfo', PACKAGE = 'sf', obj, options, oo)
->>>>>>> 6829782b (start to add stream interface)
+CPL_gdalinfo <- function(obj, options, oo, co) {
+    .Call(`_sf_CPL_gdalinfo`, obj, options, oo, co)
 }
 
 CPL_ogrinfo <- function(obj, options, oo, co) {
