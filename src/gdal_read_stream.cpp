@@ -79,7 +79,7 @@ Rcpp::List CPL_read_gdal_stream(
 		bool dsn_isdb,
         Rcpp::CharacterVector fid_column,
 		int width) {
-    
+
     const char* array_stream_options[] = {"INCLUDE_FID=NO", nullptr};
     if (fid_column.size() == 1) {
         array_stream_options[0] = "INCLUDE_FID=YES";
@@ -89,7 +89,6 @@ Rcpp::List CPL_read_gdal_stream(
 							quiet,  drivers,
 							wkt_filter,
 							dsn_exists, dsn_isdb, width);
-    OGRDataSource* poDS = (OGRDataSource*)(R_ExternalPtrAddr(prep[0]));
 	OGRLayer* poLayer = (OGRLayer*)R_ExternalPtrAddr(prep[1]);
     auto stream_out = reinterpret_cast<struct ArrowArrayStream*>(
         R_ExternalPtrAddr(stream_xptr));
