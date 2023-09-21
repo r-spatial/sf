@@ -4,7 +4,7 @@
 #define RCPP_DEFAULT_INCLUDE_CALL false
 #include "Rcpp.h"
 
-#if (GDAL_VERSION_MAJOR >= 3 && GDAL_VERSION_MINOR >= 6)
+#if GDAL_VERSION_NUM >= GDAL_COMPUTE_VERSION(3,6,0)
 
 #include <ogr_recordbatch.h>
 #include "gdal_read.h"
