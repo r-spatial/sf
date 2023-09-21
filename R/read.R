@@ -233,8 +233,8 @@ process_cpl_read_ogr_stream = function(x, default_crs, num_features, fid_column_
 	df = suppressWarnings(nanoarrow::convert_array_stream(x, size = num_features))
 
 	df[is_geometry_column] = lapply(df[is_geometry_column], function(x) {
-		x = sf::st_as_sfc(wk::as_wkb(x))
-		st_set_crs(x, crs)
+		attributes(x) <- NULL
+		sf::st_as_sfc(wk::new_wk_wkb(x, crs = crs))
 	})
 
 	# Prefer "geometry" as the geometry column name
