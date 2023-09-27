@@ -26,7 +26,7 @@ st_read(dsn, layer, ...)
   drivers = character(0),
   wkt_filter = character(0),
   optional = FALSE,
-  use_stream = FALSE
+  use_stream = default_st_read_use_stream()
 )
 
 read_sf(..., quiet = TRUE, stringsAsFactors = FALSE, as_tibble = TRUE)

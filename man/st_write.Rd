@@ -111,7 +111,7 @@ When deleting layers or data sources is not successful, no error is emitted.
 \code{delete_dsn} and \code{delete_layer} should be
 handled with care; the former may erase complete directories or databases.
 
-st_delete deletes layer(s) in a data source, or a data source if layers are 
+st_delete deletes layer(s) in a data source, or a data source if layers are
 omitted; it returns TRUE on success, FALSE on failure, invisibly.
 }
 \examples{
