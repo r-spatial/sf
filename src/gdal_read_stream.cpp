@@ -68,6 +68,8 @@ private:
     }
 };
 
+#endif
+
 // [[Rcpp::export]]
 Rcpp::List CPL_read_gdal_stream(
         Rcpp::RObject stream_xptr,
@@ -79,6 +81,8 @@ Rcpp::List CPL_read_gdal_stream(
 		bool dsn_isdb,
         Rcpp::CharacterVector fid_column,
 		int width) {
+
+#if GDAL_VERSION_NUM >= GDAL_COMPUTE_VERSION(3,6,0)
 
     const char* array_stream_options[] = {"INCLUDE_FID=NO", nullptr};
     if (fid_column.size() == 1) {
@@ -115,18 +119,11 @@ Rcpp::List CPL_read_gdal_stream(
     }
 
     return Rcpp::List::create(wkt_str, Rcpp::NumericVector::create(num_features));
-}
 
 #else
 
-Rcpp::RObject CPL_read_gdal_stream(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer,
-		Rcpp::CharacterVector query,
-		Rcpp::CharacterVector options, bool quiet, Rcpp::CharacterVector drivers,
-		Rcpp::CharacterVector wkt_filter,
-		bool dsn_exists = true,
-		bool dsn_isdb = false,
-		int width = 80) {
     Rcpp::stop("read_stream() requires GDAL >= 3.6");
-}
 
 #endif
+
+}
