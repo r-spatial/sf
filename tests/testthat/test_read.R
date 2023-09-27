@@ -174,8 +174,6 @@ test_that("we get a warning when not specifying one of multiple layers", {
 
 test_that("reading non-spatial table works", {
     skip_if_not(sf_extSoftVersion()[["GDAL"]] >= "2.2.0") # error on OSX for 2.1.3
-    # currently segfaults using the stream interface
-    skip_if(default_st_read_use_stream())
 
     expect_warning(st_read(system.file("gpkg/nospatial.gpkg", package = "sf")),
                    "no simple feature geometries present")

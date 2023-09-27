@@ -104,8 +104,6 @@ test_that("Can convert `XY` objects to sp", {
 })
 
 test_that("Can't convert `M` dimension to sp", {
-  # Segfaults using the stream interface
-  skip_if(default_st_read_use_stream())
   skip_if_not_installed("sp")
   skip_if_not(sf_extSoftVersion()[["GDAL"]] >= "2.1.0")
   x <- read_sf(system.file("shape/storms_xyzm_feature.shp", package = "sf"), quiet = TRUE)

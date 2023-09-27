@@ -98,10 +98,14 @@ Rcpp::List CPL_read_gdal_stream(
         R_ExternalPtrAddr(stream_xptr));
 
     OGRSpatialReference* crs = poLayer->GetSpatialRef();
-    char* wkt_out;
-    crs->exportToWkt(&wkt_out);
-    std::string wkt_str(wkt_out);
-    CPLFree(wkt_out);
+
+    Rcpp::String wkt_str = NA_STRING;
+    if (crs != nullptr) {
+        char* wkt_out;
+        crs->exportToWkt(&wkt_out);
+        wkt_str = wkt_out;
+        CPLFree(wkt_out);
+    }
 
     struct ArrowArrayStream stream_temp;
     if (!poLayer->GetArrowStream(&stream_temp, array_stream_options)) {
