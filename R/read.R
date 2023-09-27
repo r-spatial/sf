@@ -233,18 +233,25 @@ process_cpl_read_ogr_stream = function(x, default_crs, num_features, fid_column_
 	df = suppressWarnings(nanoarrow::convert_array_stream(x, size = num_features))
 
 	df[is_geometry_column] = lapply(df[is_geometry_column], function(x) {
-		attributes(x) <- NULL
-		sf::st_as_sfc(wk::new_wk_wkb(x, crs = crs))
+		class(x) <- "WKB"
+		x <- st_as_sfc(x)
+		st_set_crs(x, crs)	
 	})
 
 	# Prefer "geometry" as the geometry column name
 	if (any(is_geometry_column) && !("geometry" %in% names(df))) {
 		names(df)[which(is_geometry_column)[1]] = "geometry"
 	}
-
-	# Rename OGC_FID to fid_column_name
+	
+	# Rename OGC_FID to fid_column_name and move to end
 	if (length(fid_column_name) == 1 && "OGC_FID" %in% names(df)) {
+		df <- df[c(setdiff(names(df), "OGC_FID"), "OGC_FID")]
 		names(df)[names(df) == "OGC_FID"] = fid_column_name
+	}
+	
+	# Move geometry to the end
+	if ("geometry" %in% names(df)) {
+		df <- df[c(setdiff(names(df), "geometry"), "geometry")]
 	}
 
 	process_cpl_read_ogr(df, ...)
@@ -288,7 +295,7 @@ st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet 
 		info = CPL_read_gdal_stream(stream, dsn, layer, query, as.character(options), quiet,
 		    drivers, wkt_filter, dsn_exists, dsn_isdb, fid_column_name, getOption("width"))
 		process_cpl_read_ogr_stream(stream, default_crs = info[[1]], num_features = info[[2]],
-		fid_column_name = fid_column_name, stringsAsFactors = stringsAsFactors, ...)
+		fid_column_name = fid_column_name, stringsAsFactors = stringsAsFactors, quiet = quiet, ...)
 	} else {
 		x = CPL_read_ogr(dsn, layer, query, as.character(options), quiet, type, fid_column_name,
 		    drivers, wkt_filter, promote_to_multi, int64_as_string, dsn_exists, dsn_isdb, getOption("width"))
