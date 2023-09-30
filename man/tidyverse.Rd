@@ -347,14 +347,11 @@ if (require(dplyr, quietly = TRUE)) {
  nc2 <- nc \%>\% mutate(area10 = AREA/10)
 }
 if (require(dplyr, quietly = TRUE)) {
- nc \%>\% transmute(AREA = AREA/10, geometry = geometry) \%>\% class()
  nc \%>\% transmute(AREA = AREA/10) \%>\% class()
 }
 if (require(dplyr, quietly = TRUE)) {
  nc \%>\% select(SID74, SID79) \%>\% names()
- nc \%>\% select(SID74, SID79, geometry) \%>\% names()
  nc \%>\% select(SID74, SID79) \%>\% class()
- nc \%>\% select(SID74, SID79, geometry) \%>\% class()
 }
 if (require(dplyr, quietly = TRUE)) {
  nc2 <- nc \%>\% rename(area = AREA)
@@ -372,10 +369,10 @@ if (require(dplyr, quietly = TRUE)) {
 if (require(dplyr, quietly = TRUE)) {
  nc[c(1:100, 1:10), ] \%>\% distinct() \%>\% nrow()
 }
-if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE)) {
+if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE) && "geometry" \%in\% names(nc)) {
  nc \%>\% select(SID74, SID79) \%>\% gather("VAR", "SID", -geometry) \%>\% summary()
 }
-if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE)) {
+if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE) && "geometry" \%in\% names(nc)) {
  nc$row = 1:100 # needed for spread to work
  nc \%>\% select(SID74, SID79, geometry, row) \%>\%
 	gather("VAR", "SID", -geometry, -row) \%>\%

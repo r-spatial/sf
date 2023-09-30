@@ -238,10 +238,10 @@ process_cpl_read_ogr_stream = function(x, default_crs, num_features, fid_column_
 		st_set_crs(x, crs)	
 	})
 
-	# Prefer "geometry" as the geometry column name
-	if (any(is_geometry_column) && !("geometry" %in% names(df))) {
-		names(df)[which(is_geometry_column)[1]] = "geometry"
-	}
+#	# Prefer "geometry" as the geometry column name
+#	if (any(is_geometry_column) && !("geometry" %in% names(df))) {
+#		names(df)[which(is_geometry_column)[1]] = "geometry"
+#	}
 	
 	# Rename OGC_FID to fid_column_name and move to end
 	if (length(fid_column_name) == 1 && "OGC_FID" %in% names(df)) {
@@ -250,9 +250,11 @@ process_cpl_read_ogr_stream = function(x, default_crs, num_features, fid_column_
 	}
 	
 	# Move geometry to the end
-	if ("geometry" %in% names(df)) {
-		df <- df[c(setdiff(names(df), "geometry"), "geometry")]
-	}
+#	if ("geometry" %in% names(df)) {
+#		df <- df[c(setdiff(names(df), "geometry"), "geometry")]
+#	}
+	gc1 = which(is_geometry_column)[1]
+	df = df[c(setdiff(seq_along(df), gc1), gc1)]
 
 	process_cpl_read_ogr(df, ...)
 }
