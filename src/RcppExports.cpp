@@ -345,6 +345,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_read_gdal_stream
+Rcpp::List CPL_read_gdal_stream(Rcpp::RObject stream_xptr, Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, Rcpp::CharacterVector query, Rcpp::CharacterVector options, bool quiet, Rcpp::CharacterVector drivers, Rcpp::CharacterVector wkt_filter, bool dsn_exists, bool dsn_isdb, Rcpp::CharacterVector fid_column, int width);
+RcppExport SEXP _sf_CPL_read_gdal_stream(SEXP stream_xptrSEXP, SEXP datasourceSEXP, SEXP layerSEXP, SEXP querySEXP, SEXP optionsSEXP, SEXP quietSEXP, SEXP driversSEXP, SEXP wkt_filterSEXP, SEXP dsn_existsSEXP, SEXP dsn_isdbSEXP, SEXP fid_columnSEXP, SEXP widthSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type stream_xptr(stream_xptrSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type datasource(datasourceSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type layer(layerSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type query(querySEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type options(optionsSEXP);
+    Rcpp::traits::input_parameter< bool >::type quiet(quietSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type drivers(driversSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type wkt_filter(wkt_filterSEXP);
+    Rcpp::traits::input_parameter< bool >::type dsn_exists(dsn_existsSEXP);
+    Rcpp::traits::input_parameter< bool >::type dsn_isdb(dsn_isdbSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type fid_column(fid_columnSEXP);
+    Rcpp::traits::input_parameter< int >::type width(widthSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_read_gdal_stream(stream_xptr, datasource, layer, query, options, quiet, drivers, wkt_filter, dsn_exists, dsn_isdb, fid_column, width));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_gdalinfo
 Rcpp::CharacterVector CPL_gdalinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector co);
 RcppExport SEXP _sf_CPL_gdalinfo(SEXP objSEXP, SEXP optionsSEXP, SEXP ooSEXP, SEXP coSEXP) {
@@ -1442,6 +1464,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_gdal_linestring_sample", (DL_FUNC) &_sf_CPL_gdal_linestring_sample, 2},
     {"_sf_CPL_get_layers", (DL_FUNC) &_sf_CPL_get_layers, 3},
     {"_sf_CPL_read_ogr", (DL_FUNC) &_sf_CPL_read_ogr, 14},
+    {"_sf_CPL_read_gdal_stream", (DL_FUNC) &_sf_CPL_read_gdal_stream, 12},
     {"_sf_CPL_gdalinfo", (DL_FUNC) &_sf_CPL_gdalinfo, 4},
     {"_sf_CPL_ogrinfo", (DL_FUNC) &_sf_CPL_ogrinfo, 4},
     {"_sf_CPL_gdaladdo", (DL_FUNC) &_sf_CPL_gdaladdo, 8},

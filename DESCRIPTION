@@ -73,6 +73,7 @@ Imports:
     utils
 Suggests:
     blob,
+    nanoarrow,
     covr,
     dplyr (>= 0.8-3),
     ggplot2,

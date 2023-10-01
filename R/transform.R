@@ -25,6 +25,7 @@ chk_mpol = function(x) {
 sanity_check = function(x) {
 	d = st_dimension(x) # flags empty geoms as NA
 	if (any(d == 2, na.rm = TRUE)) { # the polygon stuff
+		x = st_cast(x[d == 2]) # convert GEOMETRY to POLYGON or MULTIPOLYGON, if possible
 		if (inherits(x, "sfc_POLYGON"))
 			st_sfc(lapply(x, chk_pol), crs = st_crs(x))
 		else if (inherits(x, "sfc_MULTIPOLYGON"))

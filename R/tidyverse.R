@@ -129,7 +129,6 @@ mutate.sf <- function(.data, ..., .dots) {
 #' @name tidyverse
 #' @examples
 #' if (require(dplyr, quietly = TRUE)) {
-#'  nc %>% transmute(AREA = AREA/10, geometry = geometry) %>% class()
 #'  nc %>% transmute(AREA = AREA/10) %>% class()
 #' }
 transmute.sf <- function(.data, ..., .dots) {
@@ -144,9 +143,7 @@ transmute.sf <- function(.data, ..., .dots) {
 #' @examples
 #' if (require(dplyr, quietly = TRUE)) {
 #'  nc %>% select(SID74, SID79) %>% names()
-#'  nc %>% select(SID74, SID79, geometry) %>% names()
 #'  nc %>% select(SID74, SID79) %>% class()
-#'  nc %>% select(SID74, SID79, geometry) %>% class()
 #' }
 #' @details \code{select} keeps the geometry regardless whether it is selected or not; to deselect it, first pipe through \code{as.data.frame} to let dplyr's own \code{select} drop it.
 select.sf <- function(.data, ...) {
@@ -391,7 +388,7 @@ distinct.sf <- function(.data, ..., .keep_all = FALSE) {
 #' @param na.rm see original function docs
 #' @param factor_key see original function docs
 #' @examples
-#' if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE)) {
+#' if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE) && "geometry" %in% names(nc)) {
 #'  nc %>% select(SID74, SID79) %>% gather("VAR", "SID", -geometry) %>% summary()
 #' }
 gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, factor_key = FALSE) {
@@ -527,7 +524,7 @@ pivot_wider.sf = function(data,
 #' @param fill see original function docs
 #' @param drop see original function docs
 #' @examples
-#' if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE)) {
+#' if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE) && "geometry" %in% names(nc)) {
 #'  nc$row = 1:100 # needed for spread to work
 #'  nc %>% select(SID74, SID79, geometry, row) %>%
 #'		gather("VAR", "SID", -geometry, -row) %>%

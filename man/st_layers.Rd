@@ -15,7 +15,7 @@ folder, or contain the name and access credentials of a database)}
 \item{do_count}{logical; if TRUE, count the features by reading them, even if their count is not reported by the driver}
 }
 \value{
-list object of class \code{sf_layers} with elements 
+list object of class \code{sf_layers} with elements
 \describe{
   \item{name}{name of the layer}
   \item{geomtype}{list with for each layer the geometry types}
