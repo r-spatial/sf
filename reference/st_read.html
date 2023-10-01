@@ -91,7 +91,8 @@ Well-Know Binary geometries to sfc</p>
 <span>  fid_column_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
 <span>  drivers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
 <span>  wkt_filter <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
-<span>  optional <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  optional <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  use_stream <span class="op">=</span> <span class="fu">default_st_read_use_stream</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">read_sf</span><span class="op">(</span><span class="va">...</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span>, as_tibble <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -171,7 +172,7 @@ all to the Multi variety; defaults to <code>TRUE</code></p></dd>
 
 <dt>stringsAsFactors</dt>
 <dd><p>logical; logical: should character vectors be
-  converted to factors?  Default for <code>read_sf</code> or R version &gt;= 4.1.0 is 
+  converted to factors?  Default for <code>read_sf</code> or R version &gt;= 4.1.0 is
 <code>FALSE</code>, for <code>st_read</code> and R version &lt; 4.1.0 equal to
 <code><a href="https://rdrr.io/r/base/base-defunct.html" class="external-link">default.stringsAsFactors()</a></code></p></dd>
 
@@ -202,6 +203,10 @@ clockwise, holes clockwise)</p></dd>
 
 <dt>optional</dt>
 <dd><p>logical; passed to <a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a>; always <code>TRUE</code> when <code>as_tibble</code> is <code>TRUE</code></p></dd>
+
+
+<dt>use_stream</dt>
+<dd><p>Use TRUE to use the experimental columnar interface introduced in GDAL 3.6.</p></dd>
 
 
 <dt>as_tibble</dt>
