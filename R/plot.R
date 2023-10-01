@@ -28,6 +28,7 @@
 #' @param extent object with an \code{st_bbox} method to define plot extent; defaults to \code{x}
 #' @param xlim numeric; x-axis limits; overrides \code{extent}
 #' @param ylim numeric; y-axis limits; overrides \code{extent}
+#' @param compact logical; compact sub-plots over plotting space?
 #' @method plot sf
 #' @name plot
 #' @details \code{plot.sf} maximally plots \code{max.plot} maps with colors following from attribute columns,
@@ -71,10 +72,10 @@
 #' 
 #' @export
 plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty",
-		max.plot = if(is.null(n <- getOption("sf_max.plot"))) 9 else n,
+		max.plot = getOption("sf_max.plot", default = 9),
 		key.pos = get_key_pos(x, ...), key.length = .618, key.width = lcm(1.8 * par("ps")/12),
 		reset = TRUE, logz = FALSE, extent = x, xlim = st_bbox(extent)[c(1,3)],
-		ylim = st_bbox(extent)[c(2,4)]) {
+		ylim = st_bbox(extent)[c(2,4)], compact = FALSE) {
 
 	stopifnot(missing(y))
 	nbreaks.missing = missing(nbreaks)
@@ -83,16 +84,17 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 	dots = list(...)
 	col_missing = is.null(dots$col)
 	breaks_numeric = is.numeric(breaks)
+	reset_layout_needed = reset
 
 	x = swap_axes_if_needed(x)
 
-	opar = par()
+	opar = par(no.readonly = TRUE)
 	if (ncol(x) > 2 && !isTRUE(dots$add)) { # multiple maps to plot...
 		cols = setdiff(names(x), attr(x, "sf_column"))
 		lt = .get_layout(st_bbox(x), min(max.plot, length(cols)), par("din"), key.pos[1], key.width)
 		if (key.pos.missing || key.pos == -1)
 			key.pos = lt$key.pos
-		layout(lt$m, widths = lt$widths, heights = lt$heights, respect = FALSE)
+		layout(lt$m, widths = lt$widths, heights = lt$heights, respect = compact)
 
 		if (isTRUE(dots$axes))
 			par(mar = c(2.1, 2.1, 1.2, 0))
@@ -157,11 +159,10 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 		}
 
 	} else { # single map, or dots$add == TRUE:
-		if (!isTRUE(dots$add) && reset)
-			layout(matrix(1)) # reset
-		if (ncol(x) == 1) # no attributes to choose colors from: plot geometry
+		if (ncol(x) == 1) { # no attributes to choose colors from: plot geometry
 			plot(st_geometry(x), xlim = xlim, ylim = ylim, ...)
-		else { # generate plot with colors and possibly key
+			reset_layout_needed = FALSE
+		} else { # generate plot with colors and possibly key
 			if (ncol(x) > 2) { # add = TRUE
 				warning("ignoring all but the first attribute")
 				x = x[,1]
@@ -247,7 +248,8 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 				} else
 					.image_scale(values, colors, breaks = breaks, key.pos = key.pos,
 						key.length = key.length, logz = logz, ...)
-			}
+			} else
+				reset_layout_needed = FALSE # as we didn't call layout()
 			# plot the map:
 			if (!isTRUE(dots$add)) {
 				mar = c(1, 1, 1.2, 1)
@@ -273,11 +275,12 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 			localTitle(main, ...)
 		}
 	}
-	if (!isTRUE(dots$add) && reset && ncol(x) > 1) { # reset device:
-		layout(matrix(1))
-		desel = which(names(opar) %in% c("cin", "cra", "csi", "cxy", "din", "page", "fig"))
-		par(opar[-desel])
-	}
+	if (!isTRUE(dots$add) && reset) { # reset device: 
+		if (reset_layout_needed) 
+			layout(matrix(1))
+		par(opar)
+	} 
+	invisible()
 }
 
 swap_axes_if_needed = function(x) {
@@ -678,40 +681,57 @@ sf.colors = function (n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorica
 	}
 }
 
-#' @export
-#' @name stars
-#' @param bb ignore
-#' @param n ignore
-#' @param total_size ignore
-#' @param key.length ignore
-#' @param mfrow length-2 integer vector with number of rows, columns
-.get_layout = function(bb, n, total_size, key.pos, key.length, mfrow = NULL) {
-# return list with "m" matrix, "key.pos", "widths" and "heights" fields
-# if key.pos = -1, it will be a return value, "optimally" placed
+# get the aspect ratio of a bounding box, for geodetic coords true scale at mid latitude:
+get_asp = function(bb) {
 	asp = diff(bb[c(2,4)])/diff(bb[c(1,3)])
 	if (!is.finite(asp)) # 0/0
 		asp = 1
 	if (isTRUE(st_is_longlat(bb)))
 		asp = asp / cos(mean(bb[c(2,4)]) * pi /180)
-	if (is.null(mfrow)) {
-		size = function(nrow, n, asp) {
-			ncol = ceiling(n / nrow)
-			xsize = total_size[1] / ncol
-			ysize = xsize  * asp
-			if (xsize * ysize * n > prod(total_size)) {
-				ysize = total_size[2] / nrow
-				xsize = ysize / asp
-			}
-			xsize * ysize
+	asp
+}
+
+
+#' @export
+#' @name stars
+#' @param bb ignore
+#' @param n ignore
+#' @param total_size ignore
+#' @param key.width ignore
+#' @param key.length ignore
+#' @param mfrow length-2 integer vector with number of rows, columns
+#' @param main main or sub title
+.get_layout = function(bb, n, total_size, key.pos, key.width, mfrow = NULL, main = NULL) {
+# return list with "m" matrix, "key.pos", "widths" and "heights" fields
+# if key.pos = -1 on input, it will be a return value, "optimally" placed
+	asp = get_asp(bb)
+	strip = if (is.character(main))
+			# strheight(main, "inches") 
+			par("cin")[2]
+		else 
+			0.0
+	size = function(nrow, n, asp, strip = 0) { # given nrow n asp, what size does a single tile occupy?
+		ncol = ceiling(n / nrow)
+		xsize = total_size[1] / ncol
+		ysize = xsize  * asp + strip
+		if (xsize * ysize * n > prod(total_size)) {
+			ysize = total_size[2] / nrow - strip
+			xsize = ysize / asp
 		}
-		sz = vapply(1:n, function(x) size(x, n, asp), 0.0)
-		nrow = which.max(sz)
+		c(xsize, ysize)
+	}
+	sz = vapply(1:n, function(nrow) size(nrow, n, asp, strip), c(0.0, 0.0))
+	if (is.null(mfrow)) {
+		nrow = which.max(apply(sz, 2, prod))
 		ncol = ceiling(n / nrow)
 	} else {
 		stopifnot(is.numeric(mfrow), length(mfrow) == 2)
 		nrow = mfrow[1]
 		ncol = mfrow[2]
 	}
+	xsize = sz[1, nrow]
+	ysize = sz[2, nrow]
+	asp = ysize / xsize
 
 	ret = list()
 	ret$mfrow = c(nrow, ncol)
@@ -719,26 +739,26 @@ sf.colors = function (n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorica
 	# the following is right now only used by stars; FIXME:
 	# nocov start
 	ret$key.pos = if (!is.null(key.pos) && key.pos == -1L) { # figure out here: right or bottom?
-			newasp = asp * ncol / nrow # of the composition
-			dispasp = total_size[1] / total_size[2]
-			ifelse(newasp > dispasp, 1, 4) # > or < ? oh dear,
+			newasp = asp * nrow / ncol # of the composition
+			dispasp = total_size[2] / total_size[1]
+			ifelse(newasp > dispasp, 4, 1)
 		} else
 			key.pos
 
 	m = matrix(seq_len(nrow * ncol), nrow, ncol, byrow = TRUE)
-	if (!is.null(ret$key.pos) && ret$key.pos != 0) {
-		k = key.length
+	if (!is.null(ret$key.pos) && ret$key.pos != 0) { # add key row or column:
+		k = key.width
 		n = nrow * ncol + 1
 		switch(ret$key.pos,
-			{ ret$m = rbind(m, n); ret$widths = c(rep(1, ncol)); ret$heights = c(rep(1, nrow), k) },
-			{ ret$m = cbind(n, m); ret$widths = c(k, rep(1, ncol)); ret$heights = c(rep(1, nrow)) },
-			{ ret$m = rbind(n, m); ret$widths = c(rep(1, ncol)); ret$heights = c(k, rep(1, nrow)) },
-			{ ret$m = cbind(m, n); ret$widths = c(rep(1, ncol), k); ret$heights = c(rep(1, nrow)) }
+			{ ret$m = rbind(m, n); ret$widths = c(rep(1, ncol)); ret$heights = c(rep(asp, nrow), k) },
+			{ ret$m = cbind(n, m); ret$widths = c(k, rep(1, ncol)); ret$heights = c(rep(asp, nrow)) },
+			{ ret$m = rbind(n, m); ret$widths = c(rep(1, ncol)); ret$heights = c(k, rep(asp, nrow)) },
+			{ ret$m = cbind(m, n); ret$widths = c(rep(1, ncol), k); ret$heights = c(rep(asp, nrow)) }
 		)
 	} else {
 		ret$m = m
 		ret$widths = rep(1, ncol)
-		ret$heights = rep(1, nrow)
+		ret$heights = rep(asp, nrow)
 	}
 	# nocov end
 	ret
@@ -816,7 +836,7 @@ xy_from_r = function(r, l, o) {
 		cex.axis = par("cex.axis")) {
 	if (!is.null(breaks) && length(breaks) != (length(col) + 1))
 		stop("must have one more break than colour")
-	stopifnot(is.character(lab) || is.expression(lab))
+	stopifnot(is.null(lab) || is.character(lab) || is.expression(lab))
 	lab_set = (is.character(lab) && lab != "") || is.expression(lab)
 	zlim = range(z, na.rm = TRUE)
 	if (is.null(breaks))
@@ -854,7 +874,7 @@ xy_from_r = function(r, l, o) {
 
 	plot(1, 1, t = "n", ylim = ylim, xlim = xlim, axes = FALSE,
 		xlab = "", ylab = "", xaxs = "i", yaxs = "i")
-	if (lab != "")
+	if (!is.null(lab) && lab != "")
 		mtext(lab, side = key.pos, line = 2.5, cex = .8)
 	poly = vector(mode="list", length(col))
 	for (i in seq(poly))

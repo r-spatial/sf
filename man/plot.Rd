@@ -26,7 +26,7 @@
   pal = NULL,
   nbreaks = 10,
   breaks = "pretty",
-  max.plot = if (is.null(n <- getOption("sf_max.plot"))) 9 else n,
+  max.plot = getOption("sf_max.plot", default = 9),
   key.pos = get_key_pos(x, ...),
   key.length = 0.618,
   key.width = lcm(1.8 * par("ps")/12),
@@ -34,7 +34,8 @@
   logz = FALSE,
   extent = x,
   xlim = st_bbox(extent)[c(1, 3)],
-  ylim = st_bbox(extent)[c(2, 4)]
+  ylim = st_bbox(extent)[c(2, 4)],
+  compact = FALSE
 )
 
 get_key_pos(x, ...)
@@ -185,6 +186,8 @@ sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE)
 \item{xlim}{see \link{plot.window}}
 
 \item{ylim}{see \link{plot.window}}
+
+\item{compact}{logical; compact sub-plots over plotting space?}
 
 \item{pch}{plotting symbol}
 
