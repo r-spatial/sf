@@ -1,5 +1,7 @@
 # version 1.0-15
 
+* merged @paleolimbot's PR for stream reading, use `use_stream = TRUE` in `st_read()`; #2238
+
 * `st_transform()` responds to in-session changes to `sf_proj_network()`; #2166
 
 * `plot.sf()`: `key.width` is sensitive to pointsize graphics parameter `par("ps")`; keys with factor levels suggest a proper size if they won't fit.
