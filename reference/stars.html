@@ -63,7 +63,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">.get_layout</span><span class="op">(</span><span class="va">bb</span>, <span class="va">n</span>, <span class="va">total_size</span>, <span class="va">key.pos</span>, <span class="va">key.length</span>, mfrow <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">.get_layout</span><span class="op">(</span><span class="va">bb</span>, <span class="va">n</span>, <span class="va">total_size</span>, <span class="va">key.pos</span>, <span class="va">key.width</span>, mfrow <span class="op">=</span> <span class="cn">NULL</span>, main <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">.degAxis</span><span class="op">(</span><span class="va">side</span>, <span class="va">at</span>, <span class="va">labels</span>, <span class="va">...</span>, <span class="va">lon</span>, <span class="va">lat</span>, <span class="va">ndiscr</span>, <span class="va">reset</span><span class="op">)</span></span>
 <span></span>
@@ -113,12 +113,16 @@
 <dd><p>ignore</p></dd>
 
 
-<dt>key.length</dt>
+<dt>key.width</dt>
 <dd><p>ignore</p></dd>
 
 
 <dt>mfrow</dt>
 <dd><p>length-2 integer vector with number of rows, columns</p></dd>
+
+
+<dt>main</dt>
+<dd><p>main or sub title</p></dd>
 
 
 <dt>side</dt>
@@ -173,6 +177,10 @@
 <dd><p>ignore</p></dd>
 
 
+<dt>key.length</dt>
+<dd><p>ignore</p></dd>
+
+
 <dt>logz</dt>
 <dd><p>ignore</p></dd>
 
@@ -183,10 +191,6 @@
 
 <dt>cex.axis</dt>
 <dd><p>see <a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></p></dd>
-
-
-<dt>key.width</dt>
-<dd><p>ignore</p></dd>
 
 </dl></div>
 
