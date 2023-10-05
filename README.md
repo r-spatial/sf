@@ -22,7 +22,7 @@ Package sf:
 
 * represents simple features as records in a `data.frame` or `tibble` with a geometry list-column
 * represents natively in R all 17 simple feature types for all dimensions (XY, XYZ, XYM, XYZM)
-* interfaces to [GEOS](https://libgeos.org) for geometrical operations on projected coordinates, and to [s2geometry](https://s2geometry.io/) for geometrical operations on ellipsoidal coordinates
+* interfaces to [GEOS](https://libgeos.org) for geometrical operations on projected coordinates, and (through R package [s2](https://cran.r-project.org/package=s2)) to [s2geometry](https://s2geometry.io/) for geometrical operations on ellipsoidal coordinates
 * interfaces to [GDAL](http://www.gdal.org/), supporting all driver options, `Date` and `POSIXct` and list-columns
 * interfaces to [PRØJ](http://proj.org/) for coordinate reference system conversion and transformation
 * uses [well-known-binary](https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary) serialisations written in C++/Rcpp for fast I/O with GDAL and GEOS 
@@ -150,7 +150,7 @@ If you use dynamic linking (installation from source) and have multiple versions
 
 ### lwgeom
 
-Functions and methods that require `liblwgeom`, including `st_make_valid` and all spherical or ellipsoidal metrics (area, distances), have since sf 0.5-5 been moved to their own package, [lwgeom](https://github.com/r-spatial/lwgeom), which is also on [CRAN](https://cran.r-project.org/package=lwgeom).
+Functions and methods that require `liblwgeom`, including ellipsoidal (not spherical or Eucledian) metrics (area, distances), are provide by and used from [lwgeom](https://github.com/r-spatial/lwgeom), which is also on [CRAN](https://cran.r-project.org/package=lwgeom).
 
 ## Contributing
 

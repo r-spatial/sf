@@ -297,7 +297,7 @@ st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet 
 		info = CPL_read_gdal_stream(stream, dsn, layer, query, as.character(options), quiet,
 		    drivers, wkt_filter, dsn_exists, dsn_isdb, fid_column_name, getOption("width"))
 		process_cpl_read_ogr_stream(stream, default_crs = info[[1]], num_features = info[[2]],
-		fid_column_name = fid_column_name, stringsAsFactors = stringsAsFactors, quiet = quiet, ...)
+			fid_column_name = fid_column_name, stringsAsFactors = stringsAsFactors, quiet = quiet, ...)
 	} else {
 		x = CPL_read_ogr(dsn, layer, query, as.character(options), quiet, type, fid_column_name,
 		    drivers, wkt_filter, promote_to_multi, int64_as_string, dsn_exists, dsn_isdb, getOption("width"))
