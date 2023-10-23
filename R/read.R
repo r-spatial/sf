@@ -219,7 +219,7 @@ default_st_read_use_stream = function() {
 }
 
 process_cpl_read_ogr_stream = function(x, default_crs, num_features, fid_column_name,
-                                       crs = NULL, ...) {
+                                       crs = NULL, promote_to_multi = TRUE, ...) {
     is_geometry_column = vapply(
 		x$get_schema()$children,
 		function(s) identical(s$metadata[["ARROW:extension:name"]], "ogc.wkb"),
@@ -233,8 +233,9 @@ process_cpl_read_ogr_stream = function(x, default_crs, num_features, fid_column_
 	df = suppressWarnings(nanoarrow::convert_array_stream(x, size = num_features))
 
 	df[is_geometry_column] = lapply(df[is_geometry_column], function(x) {
-		class(x) <- "WKB"
-		x <- st_as_sfc(x)
+		attributes(x) <- NULL
+		
+		x <- wk::wk_handle(wk::new_wk_wkb(x), wk::sfc_writer(promote_multi = promote_to_multi))
 		st_set_crs(x, crs)	
 	})
 
@@ -297,7 +298,8 @@ st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet 
 		info = CPL_read_gdal_stream(stream, dsn, layer, query, as.character(options), quiet,
 		    drivers, wkt_filter, dsn_exists, dsn_isdb, fid_column_name, getOption("width"))
 		process_cpl_read_ogr_stream(stream, default_crs = info[[1]], num_features = info[[2]],
-		fid_column_name = fid_column_name, stringsAsFactors = stringsAsFactors, quiet = quiet, ...)
+			fid_column_name = fid_column_name, stringsAsFactors = stringsAsFactors, quiet = quiet,
+			promote_to_multi = promote_to_multi, ...)
 	} else {
 		x = CPL_read_ogr(dsn, layer, query, as.character(options), quiet, type, fid_column_name,
 		    drivers, wkt_filter, promote_to_multi, int64_as_string, dsn_exists, dsn_isdb, getOption("width"))
