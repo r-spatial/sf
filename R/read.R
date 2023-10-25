@@ -239,7 +239,8 @@ process_cpl_read_ogr_stream = function(x, default_crs, num_features, fid_column_
 		st_set_crs(x, crs)	
 	})
 
-	# Prefer "geometry" as the geometry column name instead of "wkb_geometry"
+	# Prefer "geometry" as the geometry column name instead of "wkb_geometry",
+	# which is what happens when the geometry column doesn't have a name
 	if (any(is_geometry_column) && !("geometry" %in% names(df))) {
 		geometry_column_name <- names(df)[which(is_geometry_column)[1]]
 		if (identical(geometry_column_name, "wkb_geometry")) {
