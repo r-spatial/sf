@@ -89,7 +89,7 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, bool int64
 	return out;
 }
 
-int to_multi_what(std::vector<OGRGeometry *> gv) {
+OGRwkbGeometryType to_multi_what(std::vector<OGRGeometry *> gv) {
 	bool points = false, multipoints = false,
 		lines = false, multilines = false,
 		polygons = false, multipolygons = false;
@@ -106,7 +106,7 @@ int to_multi_what(std::vector<OGRGeometry *> gv) {
 			case wkbMultiLineString: multilines = true; break;
 			case wkbPolygon: polygons = true; break;
 			case wkbMultiPolygon: multipolygons = true; break;
-			default: return 0; // #nocov
+			default: return wkbUnknown; // #nocov
 		}
 	}
 	int sum = points + multipoints + lines + multilines + polygons + multipolygons;
@@ -119,7 +119,7 @@ int to_multi_what(std::vector<OGRGeometry *> gv) {
 			return wkbMultiPolygon;
 	}
 	// another mix or single type:
-	return 0;
+	return wkbUnknown;
 }
 
 size_t count_features(OGRLayer *poLayer) {
@@ -432,12 +432,12 @@ Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
 		for (i = 0; i < n; i++)
 			poGeom[i] = poGeometryV[i + n * iGeom];
 
-		int toType = 0, toTypeU = 0;
+		OGRwkbGeometryType toType = wkbUnknown, toTypeU = wkbUnknown;
 		if (toTypeUser.size() == poFDefn->GetGeomFieldCount())
-			toTypeU = toTypeUser[iGeom];
+			toTypeU = (OGRwkbGeometryType) toTypeUser[iGeom];
 		else
-			toTypeU = toTypeUser[0];
-		if (promote_to_multi && toTypeU == 0)
+			toTypeU = (OGRwkbGeometryType) toTypeUser[0];
+		if (promote_to_multi && toTypeU == wkbUnknown)
 			toType = to_multi_what(poGeom);
 		else
 			toType = toTypeU;
