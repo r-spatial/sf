@@ -196,14 +196,19 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
 }
 
 Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
-		Rcpp::NumericVector toTypeUser, Rcpp::CharacterVector fid_column, bool promote_to_multi = true) {
+		Rcpp::NumericVector toTypeUser, Rcpp::CharacterVector fid_column, 
+		bool promote_to_multi = true, int nfeatures = -1) {
 
-	double n_d = (double) poLayer->GetFeatureCount();
-	if (n_d > INT_MAX)
-		Rcpp::stop("Cannot read layer with more than MAX_INT features"); // #nocov
-	if (n_d < 0)
-		n_d = (double) count_features(poLayer);
-	size_t n = (size_t) n_d; // what is List's max length?
+	size_t n = 0;
+	if (nfeatures == -1) {
+		double n_d = (double) poLayer->GetFeatureCount();
+		if (n_d > INT_MAX)
+			Rcpp::stop("Cannot read layer with more than MAX_INT features"); // #nocov
+		if (n_d < 0)
+			n_d = (double) count_features(poLayer);
+		n = (size_t) n_d; // what is List's max length?
+	 } else
+		n = nfeatures;
 
 	std::vector<OGRFeature *> poFeatureV(n); // full archive
 	Rcpp::CharacterVector fids(n);
@@ -420,6 +425,11 @@ Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
 		poFeatureV[i] = poFeature;
 		i++;
 	} // all read...
+	if (i < n) { // re-read with preset n:
+		Rcpp::Rcout << "resetting feature count to " << i << std::endl;
+		return sf_from_ogrlayer(poLayer, quiet, int64_as_string,
+			toTypeUser, fid_column, promote_to_multi, i);
+	}
 
 	// add feature IDs if needed:
 	if (fid_column.size())
@@ -639,7 +649,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	OGRLayer* poLayer = (OGRLayer*)R_ExternalPtrAddr(prep[1]);
 
 	Rcpp::List out = sf_from_ogrlayer(poLayer, quiet, int64_as_string, toTypeUser, fid_column_name,
-		promote_to_multi);
+		promote_to_multi, -1);
 
 	// clean up if SQL was used https://www.gdal.org/classGDALDataset.html#ab2c2b105b8f76a279e6a53b9b4a182e0
 	if (! Rcpp::CharacterVector::is_na(query[0]))
