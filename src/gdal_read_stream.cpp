@@ -97,14 +97,32 @@ Rcpp::List CPL_read_gdal_stream(
     auto stream_out = reinterpret_cast<struct ArrowArrayStream*>(
         R_ExternalPtrAddr(stream_xptr));
 
-    OGRSpatialReference* crs = poLayer->GetSpatialRef();
+    OGRFeatureDefn* poFDefn = poLayer->GetLayerDefn();
+    Rcpp::CharacterVector geom_field_name(poFDefn->GetGeomFieldCount());
+    Rcpp::CharacterVector geom_field_crs(poFDefn->GetGeomFieldCount());
 
-    Rcpp::String wkt_str = NA_STRING;
-    if (crs != nullptr) {
-        char* wkt_out;
-        crs->exportToWkt(&wkt_out);
-        wkt_str = wkt_out;
-        CPLFree(wkt_out);
+    for (int i = 0; i < poFDefn->GetGeomFieldCount(); i++) {
+        OGRGeomFieldDefn* poGFDefn = poFDefn->GetGeomFieldDefn(i);
+		if (poGFDefn == nullptr) {
+			Rcpp::stop("GeomFieldDefn error"); // #nocov
+        }
+
+        const char* name = poGFDefn->GetNameRef();
+        if (strlen(name) == 0) {
+            name = "geometry";
+        }
+
+        const OGRSpatialReference* crs = poGFDefn->GetSpatialRef();
+        Rcpp::String wkt_str = NA_STRING;
+        if (crs != nullptr) {
+            char* wkt_out;
+            crs->exportToWkt(&wkt_out);
+            wkt_str = wkt_out;
+            CPLFree(wkt_out);
+        }
+
+        geom_field_name[i] = name;
+        geom_field_crs[i] = wkt_str;
     }
 
     struct ArrowArrayStream stream_temp;
@@ -122,7 +140,10 @@ Rcpp::List CPL_read_gdal_stream(
         num_features = -1;
     }
 
-    return Rcpp::List::create(wkt_str, Rcpp::NumericVector::create(num_features));
+    return Rcpp::List::create(
+        geom_field_name,
+        geom_field_crs,
+        Rcpp::NumericVector::create(num_features));
 
 #else
 
