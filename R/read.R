@@ -258,9 +258,9 @@ process_cpl_read_ogr_stream = function(x, geom_column_info, num_features, fid_co
 		names(df)[names(df) == "OGC_FID"] = fid_column_name
 	}
 	
-	gc1 = which(is_geometry_column)[1]
-	df = df[c(setdiff(seq_along(df), gc1), gc1)]
-
+	# All geometry columns to the end
+	df = df[c(setdiff(seq_along(df), geom_column_info$index), geom_column_info$index)]
+	
 	process_cpl_read_ogr(df, ...)
 }
 
