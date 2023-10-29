@@ -89,7 +89,7 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, bool int64
 	return out;
 }
 
-int to_multi_what(std::vector<OGRGeometry *> gv) {
+OGRwkbGeometryType to_multi_what(std::vector<OGRGeometry *> gv) {
 	bool points = false, multipoints = false,
 		lines = false, multilines = false,
 		polygons = false, multipolygons = false;
@@ -106,7 +106,7 @@ int to_multi_what(std::vector<OGRGeometry *> gv) {
 			case wkbMultiLineString: multilines = true; break;
 			case wkbPolygon: polygons = true; break;
 			case wkbMultiPolygon: multipolygons = true; break;
-			default: return 0; // #nocov
+			default: return wkbUnknown; // #nocov
 		}
 	}
 	int sum = points + multipoints + lines + multilines + polygons + multipolygons;
@@ -119,7 +119,7 @@ int to_multi_what(std::vector<OGRGeometry *> gv) {
 			return wkbMultiPolygon;
 	}
 	// another mix or single type:
-	return 0;
+	return wkbUnknown;
 }
 
 size_t count_features(OGRLayer *poLayer) {
@@ -196,14 +196,19 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
 }
 
 Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
-		Rcpp::NumericVector toTypeUser, Rcpp::CharacterVector fid_column, bool promote_to_multi = true) {
+		Rcpp::NumericVector toTypeUser, Rcpp::CharacterVector fid_column, 
+		bool promote_to_multi = true, int nfeatures = -1) {
 
-	double n_d = (double) poLayer->GetFeatureCount();
-	if (n_d > INT_MAX)
-		Rcpp::stop("Cannot read layer with more than MAX_INT features"); // #nocov
-	if (n_d < 0)
-		n_d = (double) count_features(poLayer);
-	size_t n = (size_t) n_d; // what is List's max length?
+	size_t n = 0;
+	if (nfeatures == -1) {
+		double n_d = (double) poLayer->GetFeatureCount();
+		if (n_d > INT_MAX)
+			Rcpp::stop("Cannot read layer with more than MAX_INT features"); // #nocov
+		if (n_d < 0)
+			n_d = (double) count_features(poLayer);
+		n = (size_t) n_d; // what is List's max length?
+	 } else
+		n = nfeatures;
 
 	std::vector<OGRFeature *> poFeatureV(n); // full archive
 	Rcpp::CharacterVector fids(n);
@@ -420,86 +425,91 @@ Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
 		poFeatureV[i] = poFeature;
 		i++;
 	} // all read...
+	if (i < n) { // re-read with preset n: see https://github.com/r-spatial/sf/issues/2248
+		Rcpp::Rcout << "Re-reading with feature count reset from " << n << " to " << i << std::endl;
+		return sf_from_ogrlayer(poLayer, quiet, int64_as_string, toTypeUser, fid_column, promote_to_multi, i);
+	} else { 
 
-	// add feature IDs if needed:
-	if (fid_column.size())
-		out[ poFDefn->GetFieldCount() ] = fids;
+		// add feature IDs if needed:
+		if (fid_column.size())
+			out[ poFDefn->GetFieldCount() ] = fids;
 
-	std::vector<OGRGeometry *> to_be_freed;
-	for (int iGeom = 0; iGeom < poFDefn->GetGeomFieldCount(); iGeom++ ) {
+		std::vector<OGRGeometry *> to_be_freed;
+		for (int iGeom = 0; iGeom < poFDefn->GetGeomFieldCount(); iGeom++ ) {
 
-		std::vector<OGRGeometry *> poGeom(n);
-		for (i = 0; i < n; i++)
-			poGeom[i] = poGeometryV[i + n * iGeom];
+			std::vector<OGRGeometry *> poGeom(n);
+			for (i = 0; i < n; i++)
+				poGeom[i] = poGeometryV[i + n * iGeom];
 
-		int toType = 0, toTypeU = 0;
-		if (toTypeUser.size() == poFDefn->GetGeomFieldCount())
-			toTypeU = toTypeUser[iGeom];
-		else
-			toTypeU = toTypeUser[0];
-		if (promote_to_multi && toTypeU == 0)
-			toType = to_multi_what(poGeom);
-		else
-			toType = toTypeU;
+			OGRwkbGeometryType toType = wkbUnknown, toTypeU = wkbUnknown;
+			if (toTypeUser.size() == poFDefn->GetGeomFieldCount())
+				toTypeU = (OGRwkbGeometryType) toTypeUser[iGeom];
+			else
+				toTypeU = (OGRwkbGeometryType) toTypeUser[0];
+			if (promote_to_multi && toTypeU == wkbUnknown)
+				toType = to_multi_what(poGeom);
+			else
+				toType = toTypeU;
 
-		if (toType != 0) { // coerce to toType:
-			// OGRGeomFieldDefn *poGFDefn = poFDefn->GetGeomFieldDefn(i);
-			for (i = 0; i < poFeatureV.size(); i++) {
-				OGRGeometry *geom = poFeatureV[i]->StealGeometry(iGeom); // transfer ownership
-				if (geom == NULL)
-					geom = OGRGeometryFactory::createGeometry((OGRwkbGeometryType) toType); // #nocov
-				else if ((geom =
-						OGRGeometryFactory::forceTo(geom, (OGRwkbGeometryType) toType, NULL))
-						== NULL)
-					Rcpp::stop("OGRGeometryFactory::forceTo returned NULL"); // #nocov
-				handle_error(poFeatureV[i]->SetGeomFieldDirectly(iGeom, geom));
-				poGeom[i] = poFeatureV[i]->GetGeomFieldRef(iGeom);
-				if (poGeom[i] == NULL)
-					Rcpp::stop("GetGeomFieldRef returned NULL"); // #nocov
-			}
-		} else if (has_null_geometries) {
-			if (! quiet)
-				Rcpp::Rcout << "replacing null geometries with empty geometries" << std::endl; // #nocov
-
-			// replace null's with empty:
-			OGRwkbGeometryType gt = wkbGeometryCollection;
-			for (i = 0; i < poGeom.size(); i++) {
-				if (poGeom[i] != NULL) {
-					gt = poGeom[i]->getGeometryType(); // first non-NULL
-					break;
-				}
-			}
-			for (i = 0; i < poGeom.size(); i++) {
-				if (poGeom[i] == NULL) {
-					poGeom[i] = OGRGeometryFactory::createGeometry(gt);
+			if (toType != 0) { // coerce to toType:
+				// OGRGeomFieldDefn *poGFDefn = poFDefn->GetGeomFieldDefn(i);
+				for (i = 0; i < poFeatureV.size(); i++) {
+					OGRGeometry *geom = poFeatureV[i]->StealGeometry(iGeom); // transfer ownership
+					if (geom == NULL)
+						geom = OGRGeometryFactory::createGeometry((OGRwkbGeometryType) toType); // #nocov
+					else if ((geom =
+							OGRGeometryFactory::forceTo(geom, (OGRwkbGeometryType) toType, NULL))
+							== NULL)
+						Rcpp::stop("OGRGeometryFactory::forceTo returned NULL"); // #nocov
+					handle_error(poFeatureV[i]->SetGeomFieldDirectly(iGeom, geom));
+					poGeom[i] = poFeatureV[i]->GetGeomFieldRef(iGeom);
 					if (poGeom[i] == NULL)
-						Rcpp::stop("createGeometry returned NULL"); // #nocov
-					else
-						to_be_freed.push_back(poGeom[i]);
+						Rcpp::stop("GetGeomFieldRef returned NULL"); // #nocov
+				}
+			} else if (has_null_geometries) {
+				if (! quiet)
+					Rcpp::Rcout << "replacing null geometries with empty geometries" << std::endl; // #nocov
+
+				// replace null's with empty:
+				OGRwkbGeometryType gt = wkbGeometryCollection;
+				for (i = 0; i < poGeom.size(); i++) {
+					if (poGeom[i] != NULL) {
+						gt = poGeom[i]->getGeometryType(); // first non-NULL
+						break;
+					}
+				}
+				for (i = 0; i < poGeom.size(); i++) {
+					if (poGeom[i] == NULL) {
+						poGeom[i] = OGRGeometryFactory::createGeometry(gt);
+						if (poGeom[i] == NULL)
+							Rcpp::stop("createGeometry returned NULL"); // #nocov
+						else
+							to_be_freed.push_back(poGeom[i]);
+					}
 				}
 			}
+			if (! quiet && toTypeU != 0 && n > 0)
+				Rcpp::Rcout << "converted into: " << poGeom[0]->getGeometryName() << std::endl; // #nocov
+			// convert to R:
+			Rcpp::List sfc = sfc_from_ogr(poGeom, false); // don't destroy
+			OGRGeomFieldDefn *fdfn = poFDefn->GetGeomFieldDefn(iGeom);
+			sfc.attr("crs") = create_crs(fdfn->GetSpatialRef()); // overwrite: see #449 for the reason why
+			out[iGeom + poFDefn->GetFieldCount() + fid_column.size()] = sfc;
 		}
-		if (! quiet && toTypeU != 0 && n > 0)
-			Rcpp::Rcout << "converted into: " << poGeom[0]->getGeometryName() << std::endl; // #nocov
-		// convert to R:
-		Rcpp::List sfc = sfc_from_ogr(poGeom, false); // don't destroy
-		OGRGeomFieldDefn *fdfn = poFDefn->GetGeomFieldDefn(iGeom);
-		sfc.attr("crs") = create_crs(fdfn->GetSpatialRef()); // overwrite: see #449 for the reason why
-		out[iGeom + poFDefn->GetFieldCount() + fid_column.size()] = sfc;
+
+		if (warn_int64)
+			Rcpp::Rcout << "Integer64 values larger than " << dbl_max_int64 <<
+				" lost significance after conversion to double;" << std::endl <<
+				"use argument int64_as_string = TRUE to import them lossless, as character" << std::endl;
+
+		// clean up:
+		for (i = 0; i < n; i++)
+			OGRFeature::DestroyFeature(poFeatureV[i]);
+		for (i = 0; i < to_be_freed.size(); i++)
+			OGRGeometryFactory::destroyGeometry(to_be_freed[i]);
+
+		return out;
 	}
-
-	if (warn_int64)
-		Rcpp::Rcout << "Integer64 values larger than " << dbl_max_int64 <<
-			" lost significance after conversion to double;" << std::endl <<
-			"use argument int64_as_string = TRUE to import them lossless, as character" << std::endl;
-
-	// clean up:
-	for (i = 0; i < n; i++)
-		OGRFeature::DestroyFeature(poFeatureV[i]);
-	for (i = 0; i < to_be_freed.size(); i++)
-		OGRGeometryFactory::destroyGeometry(to_be_freed[i]);
-
-	return out;
 }
 
 static void finalize_dataset_xptr(SEXP dataset_xptr) {
@@ -639,7 +649,7 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 	OGRLayer* poLayer = (OGRLayer*)R_ExternalPtrAddr(prep[1]);
 
 	Rcpp::List out = sf_from_ogrlayer(poLayer, quiet, int64_as_string, toTypeUser, fid_column_name,
-		promote_to_multi);
+		promote_to_multi, -1);
 
 	// clean up if SQL was used https://www.gdal.org/classGDALDataset.html#ab2c2b105b8f76a279e6a53b9b4a182e0
 	if (! Rcpp::CharacterVector::is_na(query[0]))

@@ -95,7 +95,7 @@ st_set_agr = function(x, value) {
 summarize_agr = function(x) {
 	su = summary(st_agr(x))
 	su = su[su > 0]
-	paste(paste0(names(su), " (", su, ")"), collapse = ", ")
+	paste0(names(su), " (", su, ")", collapse = ", ")
 }
 
 all_constant = function(x) {
