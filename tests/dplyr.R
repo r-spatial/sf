@@ -4,12 +4,6 @@ if (require(dplyr, quietly = TRUE)) {
  options(dplyr.summarise.inform=FALSE)
  read_sf(system.file("shape/nc.shp", package="sf"), quiet = TRUE) %>%
 	st_transform(3857) -> nc
- if ((gc <- attr(nc, "sf_column")) != "geometry") {
-   nc$geometry = st_geometry(nc)
-   nc = as.data.frame(nc)
-   nc[gc] = NULL
-   nc = st_as_sf(nc)
- }
  nc = st_as_sf(nc, sf_column_name = "geometry")
  nc %>% filter(AREA > .1) %>% plot()
 
