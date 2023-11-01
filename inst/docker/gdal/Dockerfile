@@ -136,10 +136,14 @@ RUN R CMD build --no-build-vignettes --no-manual sf
 RUN rm -fr sf
 RUN git clone --depth 10 https://github.com/r-spatial/sf.git
 RUN R CMD INSTALL sf
-#RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
-#RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
+RUN Rscript -e 'install.packages(c("nanoarrow"))'
+RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
+RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
 
-#RUN Rscript -e 'install.packages("starsdata", repos="http://gis-bigdata.uni-muenster.de/pebesma/")'
-#RUN R CMD build --no-manual stars
-#RUN Rscript -e 'install.packages(c("ncdfgeom", "exactextractr"))'
-#RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
+RUN Rscript -e 'install.packages("starsdata", repos="http://gis-bigdata.uni-muenster.de/pebesma/")'
+RUN R CMD build --no-manual stars
+RUN Rscript -e 'install.packages(c("ncdfgeom", "exactextractr"))'
+RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
+RUN Rscript -e "install.packages(c('leaflet.extras2', 'mapdeck', 'plainview', 'poorman', 'rstudioapi', 'tinytest', 'webshot', 'webshot2'))"
+RUN wget -q https://cran.r-project.org/src/contrib/mapview_2.11.2.tar.gz
+RUN R CMD check mapview*gz
