@@ -672,7 +672,7 @@ sf.colors = function (n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorica
 			cb = paste0(cb, as.hexmode(ceiling(alpha * 255)))
 		rep(cb, length.out = n)
 	} else {
-		i = seq(0.5 * cutoff.tails[1], 1 - 0.5 * cutoff.tails[2], length = n)
+		i = seq(0.5 * cutoff.tails[1], 1 - 0.5 * cutoff.tails[2], length.out = n)
    		r = ifelse(i < .25, 0, ifelse(i < .57, i / .32 - .78125, 1))
    		g = ifelse(i < .42, 0, ifelse(i < .92, 2 * i - .84, 1))
    		b = ifelse(i < .25, 4 * i, ifelse(i < .42, 1,
@@ -872,7 +872,7 @@ xy_from_r = function(r, l, o) {
 	mar[key.pos] = 2.1 + 1.5 * lab_set
 	par(mar = mar)
 
-	plot(1, 1, t = "n", ylim = ylim, xlim = xlim, axes = FALSE,
+	plot(1, 1, type = "n", ylim = ylim, xlim = xlim, axes = FALSE,
 		xlab = "", ylab = "", xaxs = "i", yaxs = "i")
 	if (!is.null(lab) && lab != "")
 		mtext(lab, side = key.pos, line = 2.5, cex = .8)
@@ -950,7 +950,7 @@ xy_from_r = function(r, l, o) {
 		poly[[i]] = c(breaks[i], breaks[i+1], breaks[i+1], breaks[i])
 
 	tryCatch({
-		plot(1, 1, t = "n", ylim = ylim, xlim = xlim, axes = FALSE,
+		plot(1, 1, type = "n", ylim = ylim, xlim = xlim, axes = FALSE,
 			xlab = "", ylab = "", xaxs = "i", yaxs = "i")
 		},
 		error = function(x) {
