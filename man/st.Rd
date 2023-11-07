@@ -41,7 +41,7 @@ st_geometrycollection(x = list(), dims = "XY")
 \method{as.matrix}{sfg}(x, ...)
 }
 \arguments{
-\item{x}{for \code{st_point}, numeric vector (or one-row-matrix) of length 2, 3 or 4; for \code{st_linestring} and \code{st_multipoint}, numeric matrix with points in rows; for \code{st_polygon} and \code{st_multilinestring}, list with numeric matrices with points in rows; for \code{st_multipolygon}, list of lists with numeric matrices; for \code{st_geometrycollection} list with (non-geometrycollection) simple feature objects}
+\item{x}{for \code{st_point}, numeric vector (or one-row-matrix) of length 2, 3 or 4; for \code{st_linestring} and \code{st_multipoint}, numeric matrix with points in rows; for \code{st_polygon} and \code{st_multilinestring}, list with numeric matrices with points in rows; for \code{st_multipolygon}, list of lists with numeric matrices; for \code{st_geometrycollection} list with (non-geometrycollection) simple feature geometry (sfg) objects; see examples below}
 
 \item{dim}{character, indicating dimensions: "XY", "XYZ", "XYM", or "XYZM"; only really needed for three-dimensional points (which can be either XYZ or XYM) or empty geometries; see details}
 
