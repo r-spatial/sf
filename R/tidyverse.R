@@ -236,6 +236,7 @@ rename_with.sf = function(.data, .fn, .cols, ...) {
 	if (!requireNamespace("rlang", quietly = TRUE))
 		stop("rlang required: install that first") # nocov
 	.fn = rlang::as_function(.fn)
+	is_tibble = inherits(.data, "tbl")
 	
 	sf_column = attr(.data, "sf_column")
 	sf_column_loc = match(sf_column, names(.data))
@@ -264,6 +265,8 @@ rename_with.sf = function(.data, .fn, .cols, ...) {
 			...
 		)
 	}
+	if (is_tibble)
+		ret = dplyr::as_tibble(ret)
 	ret = st_as_sf(ret, sf_column_name = names(ret)[sf_column_loc])
 	
 	names(agr) = .fn(names(agr))
