@@ -1008,13 +1008,29 @@ st_union.sfc = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 			st_sfc(CPL_geos_union(x, by_feature, is_coverage))
 		}
 	} else {
+		y = st_geometry(y)
 		stopifnot(st_crs(x) == st_crs(y))
-		if (ll && sf_use_s2())
-			st_as_sfc(s2::s2_union(x, y, ...), crs = st_crs(x)) 
-		else {
-			if (ll)
-				message_longlat("st_union")
-			geos_op2_geom("union", x, y, ...)
+		if (by_feature) {
+			stopifnot(length(x) == length(y))
+			if (ll && sf_use_s2())
+				st_as_sfc(s2::s2_union(x, y, ...), crs = st_crs(x)) 
+			else {
+				if (ll)
+					message_longlat("st_union")
+				st_as_sfc(mapply(st_union, x, y, MoreArgs = list(is_coverage = is_coverage), SIMPLIFY = FALSE),
+						  crs = st_crs(x), precision = st_precision(x))
+			}
+		} else {
+			if (ll && sf_use_s2()) {
+				i = rep(seq_along(x), each = length(y))
+				j = rep(seq_along(y), length(x))
+				st_as_sfc(s2::s2_union(x[i], y[j], ...), crs = st_crs(x),
+					precision = st_precision(x)) 
+			} else {
+				if (ll)
+					message_longlat("st_union")
+				geos_op2_geom("union", x, y, ...)
+			}
 		}
 	}
 }

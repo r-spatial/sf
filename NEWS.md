@@ -1,5 +1,9 @@
 # version 1.0-15
 
+* `st_union.sfc()` with `x` and `y` given works consistent across geodetic and projected objects; #2262
+
+* `st_union.sf()` with `x` and `y` given unions pairwise if `by_feature=TRUE`; #2259
+
 * `st_read()` work around issue with GPKG driver if `wkt_filter` is set; #2248
 
 * `st_read()` uses GDAL's stream reading when `use_stream = TRUE`; #2238 by @paleolimbot
