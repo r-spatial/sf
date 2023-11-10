@@ -2,7 +2,7 @@
 
 * `st_read()` work around issue with GPKG driver if `wkt_filter` is set; #2248
 
-* merged @paleolimbot's PR for stream reading, use `use_stream = TRUE` in `st_read()`; #2238
+* `st_read()` uses GDAL's stream reading when `use_stream = TRUE`; #2238 by @paleolimbot
 
 * `st_transform()` responds to in-session changes to `sf_proj_network()`; #2166
 
