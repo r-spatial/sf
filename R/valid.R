@@ -47,7 +47,7 @@ st_is_valid.sfg = function(x, ...) {
 #'
 #' Checks whether a geometry is valid, or makes an invalid geometry valid
 #' @name valid
-#' @param x object of class \code{sfg}, \code{sfg} or \code{sf}
+#' @param x object of class \code{sfg}, \code{sfc} or \code{sf}
 #' @return Object of the same class as \code{x}
 #' @details For projected geometries, \code{st_make_valid} uses the \code{lwgeom_makevalid} method also used by the PostGIS command \code{ST_makevalid} if the GEOS version linked to is smaller than 3.8.0, and otherwise the version shipped in GEOS; for geometries having ellipsoidal coordinates \code{s2::s2_rebuild} is being used.
 #' @examples
