@@ -59,7 +59,7 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0-15" id="version-10-15">version 1.0-15<a class="anchor" aria-label="anchor" href="#version-10-15"></a></h2>
 <ul><li><p><code><a href="../reference/st_read.html">st_read()</a></code> work around issue with GPKG driver if <code>wkt_filter</code> is set; <a href="https://github.com/r-spatial/sf/issues/2248" class="external-link">#2248</a></p></li>
-<li><p>merged <a href="https://github.com/paleolimbot" class="external-link">@paleolimbot</a>’s PR for stream reading, use <code>use_stream = TRUE</code> in <code><a href="../reference/st_read.html">st_read()</a></code>; <a href="https://github.com/r-spatial/sf/issues/2238" class="external-link">#2238</a></p></li>
+<li><p><code><a href="../reference/st_read.html">st_read()</a></code> uses GDAL’s stream reading when <code>use_stream = TRUE</code>; <a href="https://github.com/r-spatial/sf/issues/2238" class="external-link">#2238</a> by <a href="https://github.com/paleolimbot" class="external-link">@paleolimbot</a></p></li>
 <li><p><code><a href="../reference/st_transform.html">st_transform()</a></code> responds to in-session changes to <code><a href="../reference/proj_tools.html">sf_proj_network()</a></code>; <a href="https://github.com/r-spatial/sf/issues/2166" class="external-link">#2166</a></p></li>
 <li><p><code><a href="../reference/plot.html">plot.sf()</a></code>: <code>key.width</code> is sensitive to pointsize graphics parameter <code>par("ps")</code>; keys with factor levels suggest a proper size if they won’t fit.</p></li>
 <li><p><code><a href="../reference/plot.html">plot.sf()</a></code>: <code>key.pos</code> can hold a second value in [0, 1] determining the relative position of the key in the available space</p></li>
