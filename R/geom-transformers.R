@@ -967,7 +967,7 @@ st_snap.sf = function(x, y, tolerance)
 
 #' @name geos_combine
 #' @export
-#' @param by_feature logical; if TRUE, union each feature, if FALSE return a single feature that is the geometric union of the set of features
+#' @param by_feature logical; if TRUE, union each feature if \code{y} is missing or else each pair of features; if FALSE return a single feature that is the geometric union of the set of features in \code{x} if \code{y} is missing, or else the unions of each of the elements of the Cartesian product of both sets
 #' @param is_coverage logical; if TRUE, use an optimized algorithm for features that form a polygonal coverage (have no overlaps)
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg} (optional)
 #' @param ... ignored
@@ -1005,16 +1005,20 @@ st_union.sfc = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 		} else {
 			if (ll)
 				message_longlat("st_union")
-			st_sfc(CPL_geos_union(st_geometry(x), by_feature, is_coverage))
+			st_sfc(CPL_geos_union(x, by_feature, is_coverage))
 		}
 	} else {
 		stopifnot(st_crs(x) == st_crs(y))
-		if (ll && sf_use_s2())
-			st_as_sfc(s2::s2_union(x, y, ...), crs = st_crs(x)) 
+		if (by_feature)
+			st_as_sfc(mapply(st_union, x, y, MoreArgs = list(is_coverage = is_coverage), SIMPLIFY = FALSE), crs = st_crs(x))
 		else {
-			if (ll)
-				message_longlat("st_union")
-			geos_op2_geom("union", x, y, ...)
+			if (ll && sf_use_s2())
+				st_as_sfc(s2::s2_union(x, y, ...), crs = st_crs(x)) 
+			else {
+				if (ll)
+					message_longlat("st_union")
+				geos_op2_geom("union", x, y, ...)
+			}
 		}
 	}
 }
