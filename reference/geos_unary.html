@@ -94,7 +94,7 @@
 <span></span>
 <span><span class="fu">st_polygonize</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">st_line_merge</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="fu">st_line_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">st_centroid</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, of_largest_polygon <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
@@ -178,6 +178,10 @@ meters.</p></dd>
 
 <dt>envelope</dt>
 <dd><p>object of class <code>sfc</code> or <code>sfg</code> containing a <code>POLYGON</code> with the envelope for a voronoi diagram; this only takes effect when it is larger than the default envelope, chosen when <code>envelope</code> is an empty polygon</p></dd>
+
+
+<dt>directed</dt>
+<dd><p>logical; if <code>TRUE</code>, lines with opposite directions will not be merged</p></dd>
 
 
 <dt>of_largest_polygon</dt>
