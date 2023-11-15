@@ -514,26 +514,30 @@ st_polygonize.sf = function(x) {
 
 #' @name geos_unary
 #' @export
+#' @param directed logical; if \code{TRUE}, lines with opposite directions will not be merged
 #' @details \code{st_line_merge} merges lines. In case of \code{st_line_merge}, \code{x} must be an object of class \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
 #' @examples
 #' mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
 #' st_line_merge(st_sfc(mls))
-st_line_merge = function(x)
+st_line_merge = function(x, ..., directed = FALSE)
 	UseMethod("st_line_merge")
 
 #' @export
-st_line_merge.sfg = function(x)
-	get_first_sfg(st_line_merge(st_sfc(x)))
+st_line_merge.sfg = function(x, ..., directed = FALSE)
+	get_first_sfg(st_line_merge(st_sfc(x), directed = directed, ...))
 
 #' @export
-st_line_merge.sfc = function(x) {
+st_line_merge.sfc = function(x, ..., directed = FALSE) {
 	stopifnot(inherits(x, "sfc_MULTILINESTRING"))
-	st_sfc(CPL_geos_op("linemerge", x, numeric(0), integer(0), numeric(0), logical(0)))
+	if (directed)
+		st_sfc(CPL_geos_op("linemergedirected", x, numeric(0), integer(0), numeric(0), logical(0)))
+	else
+		st_sfc(CPL_geos_op("linemerge", x, numeric(0), integer(0), numeric(0), logical(0)))
 }
 
 #' @export
-st_line_merge.sf = function(x) {
-	st_set_geometry(x, st_line_merge(st_geometry(x)))
+st_line_merge.sf = function(x, ..., directed = FALSE) {
+	st_set_geometry(x, st_line_merge(st_geometry(x), directed = directed, ...))
 }
 
 #' @name geos_unary

@@ -1,5 +1,7 @@
 # version 1.0-15
 
+* add `directed` argument to `st_line_merge()`; #2264
+
 * `st_union.sfc()` with `x` and `y` given works consistent across geodetic and projected objects; #2262
 
 * `st_union.sf()` with `x` and `y` given unions pairwise if `by_feature=TRUE`; #2259

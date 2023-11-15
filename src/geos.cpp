@@ -835,6 +835,13 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 	} else if (op == "linemerge") {
 		for (size_t i = 0; i < g.size(); i++)
 			out[i] = geos_ptr(chkNULL(GEOSLineMerge_r(hGEOSCtxt, g[i].get())), hGEOSCtxt);
+	} else if (op == "linemergedirected") {
+#ifdef HAVE311
+		for (size_t i = 0; i < g.size(); i++)
+			out[i] = geos_ptr(chkNULL(GEOSLineMergeDirected_r(hGEOSCtxt, g[i].get())), hGEOSCtxt);
+#else
+		Rcpp::stop("directed line merge requires GEOS >= 3.11");
+#endif
 	} else if (op == "polygonize") {
 		for (size_t i = 0; i < g.size(); i++) {
 			const GEOSGeometry* gi = g[i].get();

@@ -52,7 +52,7 @@ st_voronoi(x, envelope, dTolerance = 0, bOnlyEdges = FALSE)
 
 st_polygonize(x)
 
-st_line_merge(x)
+st_line_merge(x, ..., directed = FALSE)
 
 st_centroid(x, ..., of_largest_polygon = FALSE)
 
@@ -107,6 +107,8 @@ meters.}
 \item{bOnlyEdges}{logical; if TRUE, return lines, else return polygons}
 
 \item{envelope}{object of class \code{sfc} or \code{sfg} containing a \code{POLYGON} with the envelope for a voronoi diagram; this only takes effect when it is larger than the default envelope, chosen when \code{envelope} is an empty polygon}
+
+\item{directed}{logical; if \code{TRUE}, lines with opposite directions will not be merged}
 
 \item{of_largest_polygon}{logical; for \code{st_centroid}: if \code{TRUE}, return centroid of the largest (sub)polygon of a \code{MULTIPOLYGON} rather than of the whole \code{MULTIPOLYGON}}
 
