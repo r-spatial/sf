@@ -60,18 +60,18 @@ the object if \code{size} is a single number, or the specified number of points
 in each feature if \code{size} is a vector of integers equal in length to the geometry
 of \code{x}.
 
-if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{http://mathworld.wolfram.com/SpherePointPicking.html}. 
+if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{http://mathworld.wolfram.com/SpherePointPicking.html}.
 
 For \code{regular} or \code{hexagonal} sampling of polygons, the resulting size is only an approximation.
 
 As parameter called \code{offset} can be passed to control ("fix") regular or hexagonal sampling: for polygons a length 2 numeric vector (by default: a random point from \code{st_bbox(x)}); for lines use a number like \code{runif(1)}.
 
-Fibonacci sampling see: Alvaro Gonzalez, 2010. Measurement of Areas on a Sphere Using Fibonacci and Latitude-Longitude Lattices. 
+Fibonacci sampling see: Alvaro Gonzalez, 2010. Measurement of Areas on a Sphere Using Fibonacci and Latitude-Longitude Lattices.
 Mathematical Geosciences 42(1), p. 49-64
 
 For regular sampling on the sphere, see also \code{geosphere::regularCoordinates}.
 
-Sampling methods from package \code{spatstat} are interfaced (see examples), and need their own parameters to be set. 
+Sampling methods from package \code{spatstat} are interfaced (see examples), and need their own parameters to be set.
 For instance, to use \code{spatstat.random::rThomas()}, set \code{type = "Thomas"}.
 }
 \examples{

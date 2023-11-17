@@ -24,7 +24,7 @@ st_nearest_feature(
 \item{longlat}{logical; does \code{x} have ellipsoidal coordinates?}
 }
 \value{
-for each feature (geometry) in \code{x} the index of the nearest feature (geometry) in 
+for each feature (geometry) in \code{x} the index of the nearest feature (geometry) in
 set \code{y}, or in the remaining set of \code{x} if \code{y} is missing;
 empty geometries result in \code{NA} indexes
 }

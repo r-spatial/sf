@@ -143,7 +143,7 @@ to \code{FALSE}.
 
 \code{st_triangulate_constrained} returns the constrained delaunay triangulation of polygons; requires GEOS version 3.10 or above
 
-\code{st_inscribed_circle} returns the maximum inscribed circle for polygon geometries. 
+\code{st_inscribed_circle} returns the maximum inscribed circle for polygon geometries.
 For \code{st_inscribed_circle}, if \code{nQuadSegs} is 0 a 2-point LINESTRING is returned with the
 center point and a boundary point of every circle, otherwise a circle (buffer) is returned where
 \code{nQuadSegs} controls the number of points per quadrant to approximate the circle.

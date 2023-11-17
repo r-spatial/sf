@@ -24,7 +24,7 @@ st_union(x, y, ..., by_feature = FALSE, is_coverage = FALSE)
 \value{
 \code{st_combine} returns a single, combined geometry, with no resolved boundaries; returned geometries may well be invalid.
 
-If \code{y} is missing, \code{st_union(x)} returns a single geometry with resolved boundaries, else the geometries for all unioned pairs of x[i] and y[j].
+If \code{y} is missing, \code{st_union(x)} returns a single geometry with resolved boundaries, else the geometries for all unioned pairs of x\link{i} and y\link{j}.
 }
 \description{
 Combine several feature geometries into one, without unioning or resolving internal boundaries
@@ -32,7 +32,7 @@ Combine several feature geometries into one, without unioning or resolving inter
 \details{
 \code{st_combine} combines geometries without resolving borders, using \link{c.sfg} (analogous to \link[base]{c} for ordinary vectors).
 
-If \code{st_union} is called with a single argument, \code{x}, (with \code{y} missing) and \code{by_feature} is \code{FALSE} all geometries are unioned together and an \code{sfg} or single-geometry \code{sfc} object is returned. If \code{by_feature} is \code{TRUE} each feature geometry is unioned individually. This can for instance be used to resolve internal boundaries after polygons were combined using \code{st_combine}. If \code{y} is provided, all elements of \code{x} and \code{y} are unioned, pairwise if \code{by_feature} is TRUE, or else as the Cartesian product of both sets. 
+If \code{st_union} is called with a single argument, \code{x}, (with \code{y} missing) and \code{by_feature} is \code{FALSE} all geometries are unioned together and an \code{sfg} or single-geometry \code{sfc} object is returned. If \code{by_feature} is \code{TRUE} each feature geometry is unioned individually. This can for instance be used to resolve internal boundaries after polygons were combined using \code{st_combine}. If \code{y} is provided, all elements of \code{x} and \code{y} are unioned, pairwise if \code{by_feature} is TRUE, or else as the Cartesian product of both sets.
 
 Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together). Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context "fully noded" means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input. "Dissolved" means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.	Unioning a set of Points has the effect of merging all identical points (producing a set with no duplicates).
 }

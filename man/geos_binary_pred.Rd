@@ -85,13 +85,13 @@ If \code{prepared} is \code{TRUE}, and \code{x} contains POINT geometries and \c
 For most predicates, a spatial index is built on argument \code{x}; see \url{https://r-spatial.org/r/2017/06/22/spatial-index.html}.
 Specifically, \code{st_intersects}, \code{st_disjoint}, \code{st_touches} \code{st_crosses}, \code{st_within}, \code{st_contains}, \code{st_contains_properly}, \code{st_overlaps}, \code{st_equals}, \code{st_covers} and \code{st_covered_by} all build spatial indexes for more efficient geometry calculations. \code{st_relate}, \code{st_equals_exact}, and do not; \code{st_is_within_distance} uses a spatial index for geographic coordinates when \code{sf_use_s2()} is true.
 
-If \code{y} is missing, `st_predicate(x, x)` is effectively called, and a square matrix is returned with diagonal elements `st_predicate(x[i], x[i])`.
+If \code{y} is missing, \code{st_predicate(x, x)} is effectively called, and a square matrix is returned with diagonal elements \code{st_predicate(x[i], x[i])}.
 
 Sparse geometry binary predicate (\code{\link{sgbp}}) lists have the following attributes: \code{region.id} with the \code{row.names} of \code{x} (if any, else \code{1:n}), \code{ncol} with the number of features in \code{y}, and \code{predicate} with the name of the predicate used.
 
 for \code{model}, see https://github.com/r-spatial/s2/issues/32
 
-`st_contains_properly(A,B)` is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A.
+\code{st_contains_properly(A,B)} is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A.
 
 See also \link{st_relate} and \url{https://en.wikipedia.org/wiki/DE-9IM} for a more detailed description of the underlying algorithms.
 
