@@ -183,7 +183,7 @@ test_that("reading non-spatial table works", {
         "no simple feature geometries"
     )
 #   expect_warning(
-#       expect_is(read_sf(system.file("gpkg/nospatial.gpkg", package = "sf")),
+#       expect_s3_class(read_sf(system.file("gpkg/nospatial.gpkg", package = "sf")),
 #             "tbl_df"),
 #       "no simple feature geometries"
 #   )
