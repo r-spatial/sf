@@ -53,8 +53,8 @@ Description: Support for simple features, a standardized way to
     projection conversions and datum transformations. Uses by default the 's2'
     package for spherical geometry operations on ellipsoidal (long/lat) coordinates.
 License: GPL-2 | MIT + file LICENSE
-URL: https://r-spatial.github.io/sf/, https://github.com/r-spatial/sf/
-BugReports: https://github.com/r-spatial/sf/issues/
+URL: https://r-spatial.github.io/sf/, https://github.com/r-spatial/sf
+BugReports: https://github.com/r-spatial/sf/issues
 Depends:
     methods,
     R (>= 3.3.0)
