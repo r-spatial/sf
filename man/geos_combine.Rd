@@ -24,7 +24,7 @@ st_union(x, y, ..., by_feature = FALSE, is_coverage = FALSE)
 \value{
 \code{st_combine} returns a single, combined geometry, with no resolved boundaries; returned geometries may well be invalid.
 
-If \code{y} is missing, \code{st_union(x)} returns a single geometry with resolved boundaries, else the geometries for all unioned pairs of x\link{i} and y\link{j}.
+If \code{y} is missing, \code{st_union(x)} returns a single geometry with resolved boundaries, else the geometries for all unioned pairs of \code{x[i]} and \code{y[j]}.
 }
 \description{
 Combine several feature geometries into one, without unioning or resolving internal boundaries

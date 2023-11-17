@@ -237,9 +237,9 @@ or object returned by \link{st_graticule}}
 
 \item{n}{integer; number of colors}
 
-\item{cutoff.tails}{numeric, in \link{0,0.5} start and end values}
+\item{cutoff.tails}{numeric, in \verb{[0,0.5]} start and end values}
 
-\item{alpha}{numeric, in \link{0,1}, transparency}
+\item{alpha}{numeric, in \verb{[0,1]}, transparency}
 
 \item{categorical}{logical; do we want colors for a categorical variable? (see details)}
 }

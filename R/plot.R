@@ -651,8 +651,8 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = pa
 
 
 #' @param n integer; number of colors
-#' @param cutoff.tails numeric, in [0,0.5] start and end values
-#' @param alpha numeric, in [0,1], transparency
+#' @param cutoff.tails numeric, in `[0,0.5]` start and end values
+#' @param alpha numeric, in `[0,1]`, transparency
 #' @param categorical logical; do we want colors for a categorical variable? (see details)
 #' @name plot
 #' @export

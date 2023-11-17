@@ -27,7 +27,7 @@ to permit plotting of (usually world) line or polygon objects centred
 on the chosen central longitude. The method may only be used with
 non-projected, geographical coordinates and linestring or polygon objects.
 s2 is turned off internally to permit the use of a rectangular bounding
-box. If the input geometries go outside \link{-180, 180} degrees longitude,
+box. If the input geometries go outside \verb{[-180, 180]} degrees longitude,
 the protruding geometries will also be split using the same \code{tol=}
 values; in this case empty geometries will be dropped first.
 }
