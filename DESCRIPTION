@@ -115,7 +115,7 @@ VignetteBuilder:
 Encoding: UTF-8
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
-Config/testthat/edition: 3
+Config/testthat/edition: 2
 SystemRequirements: GDAL (>= 2.0.1), GEOS (>= 3.4.0),
     PROJ (>= 4.8.0), sqlite3
 Collate: 
