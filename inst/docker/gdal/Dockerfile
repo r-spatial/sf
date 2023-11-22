@@ -64,7 +64,7 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	libtiff5-dev
 
 # GEOS:
-ENV GEOS_VERSION 3.11.1
+ENV GEOS_VERSION 3.11.2
 
 RUN wget -q http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
   && bzip2 -d geos-*bz2 \
@@ -80,7 +80,7 @@ RUN wget -q http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
 
 #RUN git clone --depth 1 https://github.com/OSGeo/PROJ.git
 # https://download.osgeo.org/proj/proj-9.0.0RC1.tar.gz
-ENV PROJ_VERSION 9.1.0
+ENV PROJ_VERSION 9.3.0
 RUN wget -q http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz
 RUN tar zxvf proj-${PROJ_VERSION}.tar.gz
 RUN cd proj* \
@@ -103,7 +103,7 @@ RUN cd proj* \
 # GDAL:
 
 ENV GDAL_VERSION 3.8.0
-ENV GDAL_VERSION_NAME 3.8.0beta1
+ENV GDAL_VERSION_NAME 3.8.0
 
 RUN wget -q http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
