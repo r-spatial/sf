@@ -2,9 +2,9 @@
 
 * add `directed` argument to `st_line_merge()`; #2264
 
-* `st_union.sfc()` with `x` and `y` given works consistent across geodetic and projected objects; #2262
+* `st_union.sfc()` given `x` and `y` works consistently across geodetic and projected objects; #2262
 
-* `st_union.sf()` with `x` and `y` given unions pairwise if `by_feature=TRUE`; #2259
+* `st_union.sf()` given `x` and `y` unions pairwise if `by_feature = TRUE`; #2259
 
 * `st_read()` work around issue with GPKG driver if `wkt_filter` is set; #2248
 
