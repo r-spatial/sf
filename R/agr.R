@@ -37,8 +37,9 @@ st_agr.factor = function(x, ...) {
 }
 
 #' @export
-st_agr.default = function(x = NA_character_, ...) { 
-	stopifnot(all(is.na(x)))
+st_agr.default = function(x = NA_character_, ...) {
+	if (is.data.frame(x) && !is.null(attr(x, "agr")))
+		x = attr(x, "agr")
 	structure(st_agr(as.character(x)), names = names(x))
 }
 
