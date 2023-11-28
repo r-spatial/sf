@@ -148,9 +148,10 @@ empty_sfg <- function(to) {
 }
 
 is_exotic = function(x) {
+	stopifnot(length(x) > 0)
 	if (inherits(x, c("sfc_MULTICURVE", "sfc_COMPOUNDCURVE", "sfc_CURVEPOLYGON", "sfc_MULTISURFACE"))) # for which GEOS has no st_is_empty()
 		TRUE
-	else if(inherits(x, "sfc_GEOMETRY")) {
+	else if (inherits(x, "sfc_GEOMETRY")) {
 		cls = sapply(x, class)
 		any(cls[2,] %in% c("MULTICURVE", "COMPOUNDCURVE", "CURVEPOLYGON", "MULTISURFACE"))
 	} else
@@ -174,7 +175,7 @@ is_exotic = function(x) {
 #' st_cast(d, "POINT") # will not convert the entire MULTIPOINT, and warns
 #' st_cast(d, "MULTIPOINT") %>% st_cast("POINT")
 st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
-	if (missing(to))
+	if (missing(to) || length(x) == 0)
 		return(st_cast_sfc_default(x))
 
 	e = rep(FALSE, length(x))
