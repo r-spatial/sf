@@ -295,7 +295,8 @@ st_sf = function(..., agr = NA_agr_, row.names,
 	if (! missing(crs))
 		st_crs(df) = crs
 	
-	attr(df, ".sf_namespace") <- .sf_namespace
+	if (Sys.getenv("ADD_SF_NAMESPACE") == "true")
+		attr(df, ".sf_namespace") <- .sf_namespace
 	
 	df
 }
