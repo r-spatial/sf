@@ -18,7 +18,7 @@
 
 * `[<-.sf` fixes the `agr` attribute when it is broken; #2211
 
-* `sf` objects get a new attribute, `.sf_namespace`, which forces loading the `sf` namespace when it has not been loaded so far, e.g. for proper printing or plotting of an `sf` object; #2212 by Mike Mahoney
+* if the env. variable `ADD_SF_NAMESPACE` is set to `true`, `sf` objects get a new attribute, `.sf_namespace`, which forces loading the `sf` namespace when it has not been loaded so far, e.g. for proper printing or plotting of an `sf` object; #2212 by Mike Mahoney
 
 * `distinct.sf` is type-safe for `sf` objects with zero rows; #2204
 
