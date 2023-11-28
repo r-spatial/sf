@@ -181,7 +181,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 			if (is.null(pal))
 				pal = function(n) sf.colors(n, categorical = is.factor(values))
 			else if (! col_missing)
-				stop("specify only one of col and pal")
+				stop("specify only one of `col' and `pal'")
 
 			if (col_missing) { # compute colors from values:
 				col = if (is.factor(values)) {
@@ -483,7 +483,7 @@ plot_gc = function(x, pch, cex, bg, border = 1, lty, lwd, col, add) {
 			CURVEPOLYGON = plot.sfc_GEOMETRYCOLLECTION,
 			COMPOUNDCURVE = plot.sfc_GEOMETRYCOLLECTION,
 			GEOMETRYCOLLECTION = plot.sfc_GEOMETRYCOLLECTION,
-			stop(paste("plotting of", class(x)[2], "not yet supported: please file an issue"))
+			stop(paste("plotting of", class(x)[2], "not yet supported: use st_cast?"))
 		)
 		do.call(fn, args)
 	})
@@ -802,8 +802,8 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 
 # find out where to place the legend key:
 # given range r = (a, b), key.length l, key offset o, return a value range that:
-#  * scales such that (b - a) / (y - x) = l
-#  * shifts linearly within [x, y] from a = x when o = 0 to b = y when o = 1
+#  (i)  scales such that (b - a) / (y - x) = l, and
+#  (ii) shifts linearly within [x, y] from a = x when o = 0 to b = y when o = 1
 xy_from_r = function(r, l, o) {
 	stopifnot(length(r) == 2, l <= 1, l > 0, o >= 0, o <= 1)
 	r = as.numeric(r)
@@ -881,10 +881,10 @@ xy_from_r = function(r, l, o) {
 		poly[[i]] = c(breaks[i], breaks[i+1], breaks[i+1], breaks[i])
 	offset = 0.2
 	offs = switch(key.pos,
-		c(0,0,-offset,-offset),
-		c(0,0,-offset,-offset),
-		c(offset,offset,0,0),
-		c(offset,offset,0,0))
+		c(0, 0, -offset, -offset),
+		c(0, 0, -offset, -offset),
+		c(offset, offset, 0, 0),
+		c(offset, offset, 0, 0))
 	for(i in seq_along(poly)) {
 		if (key.pos %in% c(1,3))
 			polygon(poly[[i]], c(0, 0, 1, 1) + offs, col = col[i], border = NA)
@@ -894,9 +894,9 @@ xy_from_r = function(r, l, o) {
 
 	# box() now would draw around [0,1]:
 	bx = c(breaks[1], rep(tail(breaks, 1), 2), breaks[1])
-	if (key.pos %in% c(1,3))
+	if (key.pos %in% c(1, 3))
 		polygon(bx, c(0, 0, 1, 1) + offs, col = NA, border = 'black')
-	if (key.pos %in% c(2,4))
+	if (key.pos %in% c(2, 4))
 		polygon(c(0, 0, 1, 1) + offs, bx, col = NA, border = 'black')
 
 	labels = if (logz)
@@ -926,13 +926,13 @@ xy_from_r = function(r, l, o) {
 	}
 	if (is.character(key.length)) {
 		kl = as.numeric(gsub(" cm", "", key.length))
-		sz = if (key.pos %in% c(1,3))
+		sz = if (key.pos %in% c(1, 3))
 				dev.size("cm")[1]
 			else
 				dev.size("cm")[2]
 		key.length = kl/sz
 	}
-	if (key.pos %in% c(1,3)) {
+	if (key.pos %in% c(1, 3)) {
 		ylim = c(0, 1)
 		xlim = xy_from_r(range(breaks), key.length, offset)
 		mar = c(0, ifelse(axes, 2.1, 1), 0, 1)
@@ -960,9 +960,9 @@ xy_from_r = function(r, l, o) {
 	)
 
 	for(i in seq_along(poly)) {
-		if (key.pos %in% c(1,3))
+		if (key.pos %in% c(1, 3))
 			polygon(poly[[i]], c(0, 0, 1, 1), col = col[i], border = NA)
-		if (key.pos %in% c(2,4))
+		if (key.pos %in% c(2, 4))
 			polygon(c(0, 0, 1, 1), poly[[i]], col = col[i], border = NA)
 	}
 
