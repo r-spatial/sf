@@ -1,3 +1,17 @@
+kw_dflt = function(x, key.pos) {
+	if (is.null(key.pos) || key.pos <= 0)
+		lcm(0)
+	else if (key.pos %in% c(2, 4) && (is.character(x[[1]]) || is.factor(x[[1]]))) {
+		strings = if (is.factor(x[[1]]))
+				levels(x[[1]])
+			else
+				x[[1]]
+		lcm(cm(max(strwidth(strings, "inches"))) * 1.3 + par("ps")/12) # cm
+	} else
+		lcm(1.8 * par("ps")/12)
+}
+
+
 #' plot sf object
 #'
 #' plot one or more attributes of an sf object on a map
@@ -73,7 +87,7 @@
 #' @export
 plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty",
 		max.plot = getOption("sf_max.plot", default = 9),
-		key.pos = get_key_pos(x, ...), key.length = .618, key.width = lcm(1.8 * par("ps")/12),
+		key.pos = get_key_pos(x, ...), key.length = .618, key.width = kw_dflt(x, key.pos),
 		reset = TRUE, logz = FALSE, extent = x, xlim = st_bbox(extent)[c(1,3)],
 		ylim = st_bbox(extent)[c(2,4)], compact = FALSE) {
 
@@ -916,8 +930,16 @@ xy_from_r = function(r, l, o) {
 .image_scale_factor = function(z, col, key.pos, add.axis = TRUE,
 	..., axes = FALSE, key.width, key.length, cex.axis = par("cex.axis")) {
 
+	to_num = function(x) as.numeric(gsub(" cm", "", x))
 	n = length(z)
-	ksz = max(strwidth(z, "inches")) / par("cin")[1] # in "mar" lines
+	if ((kw <- to_num(key.width)) < to_num(kw_dflt(list(z), key.pos))) { # cut z until it fits:
+		m = max(nchar(z))
+		while(kw < to_num(kw_dflt(list(z), key.pos))) { # cut z:
+			m = m - 1
+			z = substr(z, 1, m)
+		}
+	}
+	ksz = max(1.5 + max(nchar(z))/2, max(strwidth(z, "inches")) / par("cin")[1]) # in "mar" lines
 	breaks = (0:n) + 0.5
 	offset = 0.5
 	if (length(key.pos) == 2) {
@@ -925,7 +947,7 @@ xy_from_r = function(r, l, o) {
 		key.pos = key.pos[1]
 	}
 	if (is.character(key.length)) {
-		kl = as.numeric(gsub(" cm", "", key.length))
+		kl = to_num(key.length)
 		sz = if (key.pos %in% c(1, 3))
 				dev.size("cm")[1]
 			else
@@ -954,7 +976,7 @@ xy_from_r = function(r, l, o) {
 			xlab = "", ylab = "", xaxs = "i", yaxs = "i")
 		},
 		error = function(x) {
-			sz = max(strwidth(z, "inches")) * 2.54 * 1.1 + par("ps")/12 # cm
+			sz = cm(max(strwidth(z, "inches"))) * 1.3 + par("ps")/12 # cm
 			stop(paste0("key.width too small, try key.width = lcm(", signif(sz, 3), ")"), call. = FALSE)
 		}
 	)
