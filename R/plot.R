@@ -8,7 +8,8 @@ kw_dflt = function(x, key.pos) {
 				x[[1]]
 		lcm(cm(max(strwidth(strings, "inches"))) * 1.3 + par("ps")/12) # cm
 	} else
-		lcm(1.8 * par("ps")/12)
+		# lcm(1.8 * par("ps")/12)
+		lcm(1.8)
 }
 
 
