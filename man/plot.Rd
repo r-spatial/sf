@@ -29,7 +29,7 @@
   max.plot = getOption("sf_max.plot", default = 9),
   key.pos = get_key_pos(x, ...),
   key.length = 0.618,
-  key.width = lcm(1.8 * par("ps")/12),
+  key.width = kw_dflt(x, key.pos),
   reset = TRUE,
   logz = FALSE,
   extent = x,
