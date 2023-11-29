@@ -1,15 +1,19 @@
 kw_dflt = function(x, key.pos) {
-	if (is.null(key.pos) || key.pos <= 0)
-		lcm(0)
+	if (is.null(key.pos) || key.pos == 0) # no key:
+		return(lcm(0))
+
+	font_scale = par("ps") / 12
+	if (key.pos == -1)
+		lcm(1.8 * font_scale)
 	else if (key.pos %in% c(2, 4) && (is.character(x[[1]]) || is.factor(x[[1]]))) {
 		strings = if (is.factor(x[[1]]))
 				levels(x[[1]])
 			else
 				x[[1]]
-		lcm(cm(max(strwidth(strings, "inches"))) * 1.3 + par("ps")/12) # cm
+		lcm(cm(max(strwidth(strings, "inches"))) * 1.3 + font_scale) # cm
+		#lcm(cm(max(strwidth(strings, "inches"))) * 1.3) # cm
 	} else
-		# lcm(1.8 * par("ps")/12)
-		lcm(1.8)
+		lcm(1.8 * font_scale)
 }
 
 

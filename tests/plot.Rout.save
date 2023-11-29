@@ -1,5 +1,5 @@
 
-R version 4.3.1 (2023-06-16) -- "Beagle Scouts"
+R version 4.3.2 (2023-10-31) -- "Eye Holes"
 Copyright (C) 2023 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -88,9 +88,11 @@ Type 'q()' to quit R.
 + plot(nc, axes = TRUE)
 + plot(nc, col="lightgrey") 
 + plot(st_centroid(nc), add = TRUE, col = 1)
-+ nc %>% 
++ if ("geometry" %in% names(nc)) {
++  nc %>% 
 +   select(geometry) %>% 
 +   plot()
++ }
 + 
 + nc$f = cut(nc[[1]], 5)
 + plot(nc["f"], key.pos = 1)
@@ -150,4 +152,4 @@ There were 13 warnings (use warnings() to see them)
 > 
 > proc.time()
    user  system elapsed 
-  4.822   0.828   4.857 
+  3.111   1.417   3.015 

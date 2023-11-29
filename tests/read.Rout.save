@@ -1,6 +1,6 @@
 
-R version 4.2.2 Patched (2022-11-10 r83330) -- "Innocent and Trusting"
-Copyright (C) 2022 The R Foundation for Statistical Computing
+R version 4.3.2 (2023-10-31) -- "Eye Holes"
+Copyright (C) 2023 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -327,10 +327,10 @@ First 3 features:
 > 
 > if ("GML" %in% st_drivers()$name) {
 +   gml = system.file("gml/fmi_test.gml", package = "sf")
-+   print(dim(st_read(gml, quiet = TRUE)))
++   print(dim(st_read(gml, quiet = TRUE, use_stream = FALSE)))
 +   gml = system.file("gml/20170930_OB_530964_UKSH.xml.gz", package = "sf")
-+   print(dim(st_read(gml, layer = "Parcely", quiet = TRUE)))
-+   print(dim(st_read(gml, layer = "Parcely", int64_as_string=TRUE, quiet = TRUE)))
++   print(dim(st_read(gml, layer = "Parcely", quiet = TRUE, use_stream = FALSE)))
++   print(dim(st_read(gml, layer = "Parcely", int64_as_string=TRUE, quiet = TRUE, use_stream = FALSE)))
 + }
 [1] 22 11
 [1] 644  25
@@ -376,4 +376,4 @@ Error : wkt parse error.
 > 
 > proc.time()
    user  system elapsed 
-  2.288   0.818   2.281 
+  1.255   1.397   1.179 
