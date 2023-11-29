@@ -78,7 +78,7 @@ Plot sf object</p>
 <span>  max.plot <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"sf_max.plot"</span>, default <span class="op">=</span> <span class="fl">9</span><span class="op">)</span>,</span>
 <span>  key.pos <span class="op">=</span> <span class="fu">get_key_pos</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>,</span>
 <span>  key.length <span class="op">=</span> <span class="fl">0.618</span>,</span>
-<span>  key.width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/graphics/layout.html" class="external-link">lcm</a></span><span class="op">(</span><span class="fl">1.8</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="st">"ps"</span><span class="op">)</span><span class="op">/</span><span class="fl">12</span><span class="op">)</span>,</span>
+<span>  key.width <span class="op">=</span> <span class="fu">kw_dflt</span><span class="op">(</span><span class="va">x</span>, <span class="va">key.pos</span><span class="op">)</span>,</span>
 <span>  reset <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  logz <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  extent <span class="op">=</span> <span class="va">x</span>,</span>
