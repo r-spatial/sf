@@ -107,13 +107,47 @@ message_longlat = function(caller) {
 	message(paste0(m, collapse = "\n"))
 }
 
+
+#' @name geos_measures
+#' @export
+#' @examples
+#' st_perimeter(poly)
+#' st_perimeter(mpoly)
+st_perimeter = function(x, ...) {
+	x = st_geometry(x)
+	
+	# for spherical geometries we use s2 
+	if (isTRUE(st_is_longlat(x))) {
+		
+		if (!requireNamespace("s2", quietly = TRUE)) {
+			stop("package s2 required to calculate the perimeter of spherical geometries")
+		}
+		
+		# ensure units are set to meters 
+		units::set_units(
+			s2::s2_perimeter(x, ...), 
+			"m", 
+			mode = "standard"
+		)
+		
+		# non-spherical geometries use lwgeom	
+	} else {
+		if (!requireNamespace("lwgeom", quietly = TRUE)) {
+			stop("package lwgeom required, please install it first")
+		}
+		
+		# note that units are handled appropriately by lwgeom
+		lwgeom::st_perimeter(x)
+	}
+}
+
 #' Compute geometric measurements
 #'
-#' Compute Euclidian or great circle distance between pairs of geometries; compute, the area or the length of a set of geometries.
+#' Compute Euclidean or great circle distance between pairs of geometries; compute, the area or the length of a set of geometries.
 #' @name geos_measures
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}
-#' @param ... passed on to \link[s2]{s2_distance} or \link[s2]{s2_distance_matrix}
+#' @param ... passed on to \link[s2]{s2_distance}, \link[s2]{s2_distance_matrix}, or \link[s2]{s2_perimeter}
 #' @param dist_fun deprecated
 #' @param by_element logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc; an error is raised if \code{x} and \code{y} are not the same length. If \code{FALSE}, return the dense matrix with all pairwise distances.
 #' @param which character; for Cartesian coordinates only: one of \code{Euclidean}, \code{Hausdorff} or \code{Frechet}; for geodetic coordinates, great circle distances are computed; see details
