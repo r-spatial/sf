@@ -5,6 +5,7 @@
 \alias{st_area}
 \alias{st_area.sfc}
 \alias{st_length}
+\alias{st_perimeter}
 \alias{st_distance}
 \title{Compute geometric measurements}
 \usage{
@@ -13,6 +14,8 @@ st_area(x, ...)
 \method{st_area}{sfc}(x, ...)
 
 st_length(x, ...)
+
+st_perimeter(x, ...)
 
 st_distance(
   x,
@@ -28,7 +31,7 @@ st_distance(
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
-\item{...}{passed on to \link[s2]{s2_distance} or \link[s2]{s2_distance_matrix}}
+\item{...}{passed on to \link[s2]{s2_distance}, \link[s2]{s2_distance_matrix}, or \link[s2]{s2_perimeter}}
 
 \item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}}
 
@@ -52,7 +55,7 @@ st_length returns the length of a \code{LINESTRING} or \code{MULTILINESTRING} ge
 If \code{by_element} is \code{FALSE} \code{st_distance} returns a dense numeric matrix of dimension length(x) by length(y); otherwise it returns a numeric vector the same length as \code{x} and \code{y} with an error raised if the lengths of \code{x} and \code{y} are unequal. Distances involving empty geometries are \code{NA}.
 }
 \description{
-Compute Euclidian or great circle distance between pairs of geometries; compute, the area or the length of a set of geometries.
+Compute Euclidean or great circle distance between pairs of geometries; compute, the area or the length of a set of geometries.
 }
 \details{
 great circle distance calculations use by default spherical distances (\link[s2]{s2_distance} or \link[s2]{s2_distance_matrix}); if \code{sf_use_s2()} is \code{FALSE}, ellipsoidal distances are computed using \link[lwgeom]{st_geod_distance} which uses function \code{geod_inverse} from GeographicLib (part of PROJ); see Karney, Charles FF, 2013, Algorithms for geodesics, Journal of Geodesy 87(1), 43--55
@@ -77,6 +80,8 @@ mpoly = st_multipolygon(list(
 ))
 
 st_length(st_sfc(poly, mpoly))
+st_perimeter(poly)
+st_perimeter(mpoly)
 p = st_sfc(st_point(c(0,0)), st_point(c(0,1)), st_point(c(0,2)))
 st_distance(p, p)
 st_distance(p, p, by_element = TRUE)
