@@ -139,6 +139,19 @@ st_sample.sfg = function(x, size, ...) {
 	st_sample(st_geometry(x), size, ...)
 }
 
+#' @export
+#' @name st_sample
+#' @examples
+#' bbox = st_bbox(
+#'	c(xmin = 16.1, xmax = 16.6, ymax = 48.6, ymin = 47.9),
+#' 	crs = st_crs(4326)
+#' )
+#' 
+#' st_sample(bbox, 5)
+st_sample.bbox = function(x, size, ...) {
+	st_sample(st_as_sfc(x), size, ...)
+}
+
 st_poly_sample = function(x, size, ..., type = "random",
                           offset = st_sample(st_as_sfc(st_bbox(x)), 1)[[1]],
 						  by_polygon = FALSE) {
