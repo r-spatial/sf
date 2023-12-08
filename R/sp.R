@@ -238,17 +238,17 @@ Polygons2POLYGON = function(PolygonsLst) {
 
 #' @name as
 #' @rdname coerce-methods
-#' @aliases coerce,Spatial,sf-method
+#' @aliases coerce Spatial sf-method
 setAs("Spatial", "sf", function(from) st_as_sf(from))
 
 #' @name as
 #' @rdname coerce-methods
-#' @aliases coerce,Spatial,sfc-method
+#' @aliases coerce Spatial sfc-method
 setAs("Spatial", "sfc", function(from) st_as_sfc(from))
 
 #' @name as
 #' @rdname coerce-methods
-#' @aliases coerce,sf,Spatial-method
+#' @aliases coerce sf Spatial-method
 setAs("sf", "Spatial", function(from) {
 	if (!requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
@@ -260,7 +260,7 @@ setAs("sf", "Spatial", function(from) {
 
 #' @name as
 #' @rdname coerce-methods
-#' @aliases coerce,sfc,Spatial-method
+#' @aliases coerce sfc Spatial-method
 setAs("sfc", "Spatial", function(from) as_Spatial(from))
 
 # create empy class
@@ -402,7 +402,7 @@ get_comment = function(mp) { # for MULTIPOLYGON
 
 #' @name as
 #' @rdname coerce-methods
-#' @aliases coerce,crs,CRS-method
+#' @aliases coerce crs CRS-method
 setAs("crs", "CRS", function(from) CRS_from_crs(from))
 CRS_from_crs = function(from) {
 	if (! requireNamespace("sp", quietly = TRUE))

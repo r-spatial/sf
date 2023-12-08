@@ -2,12 +2,16 @@
 % Please edit documentation in R/sp.R
 \name{as}
 \alias{as}
-\alias{coerce,Spatial,sf-method}
-\alias{coerce,Spatial,sfc-method}
-\alias{coerce,sf,Spatial-method}
-\alias{coerce,sfc,Spatial-method}
+\alias{coerce}
+\alias{Spatial}
+\alias{sf-method}
+\alias{sfc-method}
+\alias{sf}
+\alias{Spatial-method}
+\alias{sfc}
 \alias{as_Spatial}
-\alias{coerce,crs,CRS-method}
+\alias{crs}
+\alias{CRS-method}
 \title{Methods to coerce simple features to \verb{Spatial*} and \code{Spatial*DataFrame} objects}
 \usage{
 as_Spatial(from, cast = TRUE, IDs = paste0("ID", seq_along(from)))
