@@ -148,10 +148,10 @@ of <code>x</code>.</p>
 <p>if <code>x</code> has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. <a href="http://mathworld.wolfram.com/SpherePointPicking.html" class="external-link">http://mathworld.wolfram.com/SpherePointPicking.html</a>.</p>
 <p>For <code>regular</code> or <code>hexagonal</code> sampling of polygons, the resulting size is only an approximation.</p>
 <p>As parameter called <code>offset</code> can be passed to control ("fix") regular or hexagonal sampling: for polygons a length 2 numeric vector (by default: a random point from <code>st_bbox(x)</code>); for lines use a number like <code>runif(1)</code>.</p>
-<p>Fibonacci sampling see: Alvaro Gonzalez, 2010. Measurement of Areas on a Sphere Using Fibonacci and Latitude-Longitude Lattices. 
+<p>Fibonacci sampling see: Alvaro Gonzalez, 2010. Measurement of Areas on a Sphere Using Fibonacci and Latitude-Longitude Lattices.
 Mathematical Geosciences 42(1), p. 49-64</p>
 <p>For regular sampling on the sphere, see also <code>geosphere::regularCoordinates</code>.</p>
-<p>Sampling methods from package <code>spatstat</code> are interfaced (see examples), and need their own parameters to be set. 
+<p>Sampling methods from package <code>spatstat</code> are interfaced (see examples), and need their own parameters to be set.
 For instance, to use <code><a href="https://rdrr.io/pkg/spatstat.random/man/rThomas.html" class="external-link">spatstat.random::rThomas()</a></code>, set <code>type = "Thomas"</code>.</p>
     </div>
 

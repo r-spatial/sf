@@ -172,7 +172,7 @@ all to the Multi variety; defaults to <code>TRUE</code></p></dd>
 
 <dt>stringsAsFactors</dt>
 <dd><p>logical; logical: should character vectors be
-  converted to factors?  Default for <code>read_sf</code> or R version &gt;= 4.1.0 is
+converted to factors?  Default for <code>read_sf</code> or R version &gt;= 4.1.0 is
 <code>FALSE</code>, for <code>st_read</code> and R version &lt; 4.1.0 equal to
 <code><a href="https://rdrr.io/r/base/base-defunct.html" class="external-link">default.stringsAsFactors()</a></code></p></dd>
 
@@ -223,10 +223,10 @@ clockwise, holes clockwise)</p></dd>
     
 
 <p>object of class <a href="sf-package.html">sf</a> when a layer was successfully read; in case
-  argument <code>layer</code> is missing and data source <code>dsn</code> does not
-  contain a single layer, an object of class <code>sf_layers</code> is returned
-  with the layer names, each with their geometry type(s). Note that the
-  number of layers may also be zero.</p>
+argument <code>layer</code> is missing and data source <code>dsn</code> does not
+contain a single layer, an object of class <code>sf_layers</code> is returned
+with the layer names, each with their geometry type(s). Note that the
+number of layers may also be zero.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -243,7 +243,7 @@ basis; <code>type</code> may be specified for each geometry column.</p>
 lead to spurious errors that accompanying <code>*.shp</code> are missing.</p>
 <p>In case of problems reading shapefiles from USB drives on OSX, please see
 <a href="https://github.com/r-spatial/sf/issues/252" class="external-link">https://github.com/r-spatial/sf/issues/252</a>. Reading shapefiles (or other
-data sources) directly from zip files can be done by prepending the path 
+data sources) directly from zip files can be done by prepending the path
 with <code>/vsizip/</code>. This is part of the GDAL Virtual File Systems interface
 that also supports .gz, curl, and other operations, including chaining; see
 <a href="https://gdal.org/user/virtual_file_systems.html" class="external-link">https://gdal.org/user/virtual_file_systems.html</a> for a complete
@@ -263,12 +263,12 @@ modified default arguments.
 about the data source. <code>read_sf</code> returns an sf-tibble rather than an sf-data.frame.
 <code>write_sf</code> delete layers by default: it overwrites existing files without asking or warning.</p>
 <p>if <code>table</code> is not given but <code>query</code> is, the spatial
-  reference system (crs) of the table queried is only available in case it
-  has been stored into each geometry record (e.g., by PostGIS, when using
-  EWKB)</p>
-<p>The function will automatically find the `geometry` type columns for
-  drivers that support it. For the other drivers, it will try to cast all the
-  character columns, which can be slow for very wide tables.</p>
+reference system (crs) of the table queried is only available in case it
+has been stored into each geometry record (e.g., by PostGIS, when using
+EWKB)</p>
+<p>The function will automatically find the <code>geometry</code> type columns for
+drivers that support it. For the other drivers, it will try to cast all the
+character columns, which can be slow for very wide tables.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>

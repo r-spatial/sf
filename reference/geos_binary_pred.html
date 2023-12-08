@@ -154,10 +154,10 @@
     <p>If <code>prepared</code> is <code>TRUE</code>, and <code>x</code> contains POINT geometries and <code>y</code> contains polygons, then the polygon geometries are prepared, rather than the points.</p>
 <p>For most predicates, a spatial index is built on argument <code>x</code>; see <a href="https://r-spatial.org/r/2017/06/22/spatial-index.html" class="external-link">https://r-spatial.org/r/2017/06/22/spatial-index.html</a>.
 Specifically, <code>st_intersects</code>, <code>st_disjoint</code>, <code>st_touches</code> <code>st_crosses</code>, <code>st_within</code>, <code>st_contains</code>, <code>st_contains_properly</code>, <code>st_overlaps</code>, <code>st_equals</code>, <code>st_covers</code> and <code>st_covered_by</code> all build spatial indexes for more efficient geometry calculations. <code>st_relate</code>, <code>st_equals_exact</code>, and do not; <code>st_is_within_distance</code> uses a spatial index for geographic coordinates when <code><a href="s2.html">sf_use_s2()</a></code> is true.</p>
-<p>If <code>y</code> is missing, `st_predicate(x, x)` is effectively called, and a square matrix is returned with diagonal elements `st_predicate(x[i], x[i])`.</p>
+<p>If <code>y</code> is missing, <code>st_predicate(x, x)</code> is effectively called, and a square matrix is returned with diagonal elements <code>st_predicate(x[i], x[i])</code>.</p>
 <p>Sparse geometry binary predicate (<code><a href="sgbp.html">sgbp</a></code>) lists have the following attributes: <code>region.id</code> with the <code>row.names</code> of <code>x</code> (if any, else <code>1:n</code>), <code>ncol</code> with the number of features in <code>y</code>, and <code>predicate</code> with the name of the predicate used.</p>
 <p>for <code>model</code>, see https://github.com/r-spatial/s2/issues/32</p>
-<p>`st_contains_properly(A,B)` is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A.</p>
+<p><code>st_contains_properly(A,B)</code> is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A.</p>
 <p>See also <a href="st_relate.html">st_relate</a> and <a href="https://en.wikipedia.org/wiki/DE-9IM" class="external-link">https://en.wikipedia.org/wiki/DE-9IM</a> for a more detailed description of the underlying algorithms.</p>
 <p><code>st_equals_exact</code> returns true for two geometries of the same type and their vertices corresponding by index are equal up to a specified tolerance.</p>
     </div>

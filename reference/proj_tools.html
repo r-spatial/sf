@@ -95,11 +95,11 @@
 
 
 <dt>source_crs</dt>
-<dd><p>object of class `crs` or character</p></dd>
+<dd><p>object of class <code>crs</code> or character</p></dd>
 
 
 <dt>target_crs</dt>
-<dd><p>object of class `crs` or character</p></dd>
+<dd><p>object of class <code>crs</code> or character</p></dd>
 
 
 <dt>authority</dt>
@@ -107,7 +107,7 @@
 
 
 <dt>AOI</dt>
-<dd><p>length four numeric; desired area of interest for the resulting 
+<dd><p>length four numeric; desired area of interest for the resulting
 coordinate transformations (west, south, east, north, in degrees).
 For an area of interest crossing the anti-meridian, west will be greater than east.</p></dd>
 
@@ -118,12 +118,12 @@ of source_crs and target_crs are being used</p></dd>
 
 
 <dt>grid_availability</dt>
-<dd><p>character; one of "USED" (Grid availability is only used for sorting 
+<dd><p>character; one of "USED" (Grid availability is only used for sorting
 results. Operations where some grids are missing will be sorted last), "DISCARD"
 (Completely discard an operation if a required grid is missing)
-, "IGNORED" (Ignore grid availability at all. Results will be presented as if all grids were 
-available.), or "AVAILABLE" (Results will be presented as if grids known to PROJ (that is 
-registered in the grid_alternatives table of its database) were available. Used typically when 
+, "IGNORED" (Ignore grid availability at all. Results will be presented as if all grids were
+available.), or "AVAILABLE" (Results will be presented as if grids known to PROJ (that is
+registered in the grid_alternatives table of its database) were available. Used typically when
 networking is enabled.)</p></dd>
 
 
@@ -139,9 +139,9 @@ source/target coordinate reference systems</p></dd>
 
 
 <dt>axis_order_authority_compliant</dt>
-<dd><p>logical; if FALSE always 
-choose ‘x’ or longitude for the first 
-axis; if TRUE, follow the axis orders given by the coordinate reference systems when 
+<dd><p>logical; if FALSE always
+choose ‘x’ or longitude for the first
+axis; if TRUE, follow the axis orders given by the coordinate reference systems when
 constructing the for the first axis; if FALSE, follow the axis orders given by</p></dd>
 
 </dl></div>
@@ -149,16 +149,16 @@ constructing the for the first axis; if FALSE, follow the axis orders given by</
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>`sf_proj_search_paths()` returns the search path (possibly after setting it)</p>
+<p><code>sf_proj_search_paths()</code> returns the search path (possibly after setting it)</p>
 
 
-<p>`sf_proj_network` when called without arguments returns a logical indicating whether
+<p><code>sf_proj_network</code> when called without arguments returns a logical indicating whether
 network search of datum grids is enabled, when called with arguments it returns a character
-vector with the URL of the CDN used (or specified with `url`).</p>
+vector with the URL of the CDN used (or specified with <code>url</code>).</p>
 
 
-<p>`sf_proj_pipelines` returns a table with candidate coordinate transformation
-pipelines along with their accuracy; `NA` accuracy indicates ballpark accuracy.</p>
+<p><code>sf_proj_pipelines</code> returns a table with candidate coordinate transformation
+pipelines along with their accuracy; <code>NA</code> accuracy indicates ballpark accuracy.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
