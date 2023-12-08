@@ -748,7 +748,7 @@ register_all_s3_methods = function() {
 	register_vctrs_methods()
 }
 
-# from: https://github.com/tidyverse/hms/blob/master/R/zzz.R
+# from: https://github.com/tidyverse/hms/blob/main/R/zzz.R
 # Thu Apr 19 10:53:24 CEST 2018
 register_s3_method <- function(pkg, generic, class, fun = NULL) {
   stopifnot(is.character(pkg), length(pkg) == 1)
