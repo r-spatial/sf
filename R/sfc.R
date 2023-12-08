@@ -15,7 +15,8 @@ format.sfc = function(x, ..., width = 30) {
 
 #' Create simple feature geometry list column
 #'
-#' Create simple feature geometry list column, set class, and add coordinate reference system and precision
+#' Create simple feature geometry list column, set class, and add coordinate reference system and precision.
+#' For data.frame alternatives see [st_sf()]. To convert a foreign object to `sfc`, see [st_as_sfc()]
 #'
 #' @name sfc
 #' @aliases sfc_POINT sfc_LINESTRING sfc_POLYGON sfc_MULTIPOINT sfc_MULTILINESTRING sfc_MULTIPOLYGON sfc_GEOMETRYCOLLECTION
