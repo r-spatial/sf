@@ -237,7 +237,7 @@ Polygons2POLYGON = function(PolygonsLst) {
 
 #' @name as
 #' @rdname coerce-methods
-#' @aliases coerce Spatial sf-method
+#' @aliases Spatial sf-method
 setAs("Spatial", "sf", function(from) st_as_sf(from))
 
 #' @name as
@@ -247,7 +247,7 @@ setAs("Spatial", "sfc", function(from) st_as_sfc(from))
 
 #' @name as
 #' @rdname coerce-methods
-#' @aliases coerce sf Spatial-method
+#' @aliases coerce Spatial-method
 setAs("sf", "Spatial", function(from) {
 	if (!requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
@@ -259,7 +259,7 @@ setAs("sf", "Spatial", function(from) {
 
 #' @name as
 #' @rdname coerce-methods
-#' @aliases coerce sfc Spatial-method
+#' @aliases coerce Spatial-method
 setAs("sfc", "Spatial", function(from) as_Spatial(from))
 
 # create empy class
@@ -273,7 +273,6 @@ setAs("XY", "Spatial", function(from) as(st_sfc(from), "Spatial"))
 #' `sp` objects to `sf` and `sfc` with `as(x, "sf")`.
 #' @rdname coerce-methods
 #' @name as_Spatial
-#' @md
 #' @param from object of class `sf`, `sfc_POINT`, `sfc_MULTIPOINT`, `sfc_LINESTRING`,
 #' `sfc_MULTILINESTRING`, `sfc_POLYGON`, or `sfc_MULTIPOLYGON`.
 #' @param cast logical; if `TRUE`, [st_cast()] `from` before converting, so that e.g.

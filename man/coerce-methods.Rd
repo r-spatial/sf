@@ -2,13 +2,11 @@
 % Please edit documentation in R/sp.R
 \name{as}
 \alias{as}
-\alias{coerce}
 \alias{Spatial}
 \alias{sf-method}
+\alias{coerce}
 \alias{sfc-method}
-\alias{sf}
 \alias{Spatial-method}
-\alias{sfc}
 \alias{as_Spatial}
 \alias{crs}
 \alias{CRS-method}
