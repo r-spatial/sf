@@ -19,12 +19,12 @@ st_shift_longitude(x)
 }
 \description{
 All longitudes < 0 are added to 360, to avoid for instance parts of Alaska
-  being represented on the far left and right of a plot because they have
-  values straddling 180 degrees. In general, using a projected
-  coordinate reference system is to be preferred, but this method permits a
-  geographical coordinate reference system to be used. This is the sf
-  equivalent of \code{\link[sp:recenter-methods]{recenter}} in the sp package and
-  ST_ShiftLongitude in PostGIS.
+being represented on the far left and right of a plot because they have
+values straddling 180 degrees. In general, using a projected
+coordinate reference system is to be preferred, but this method permits a
+geographical coordinate reference system to be used. This is the sf
+equivalent of \code{\link[sp:recenter-methods]{recenter}} in the sp package and
+ST_ShiftLongitude in PostGIS.
 }
 \examples{
 ## sfc

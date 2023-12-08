@@ -12,7 +12,7 @@
 \item{...}{Further arguments of the form new_variable=expression}
 }
 \description{
-Can be used to create or modify attribute variables; for transforming geometries see 
+Can be used to create or modify attribute variables; for transforming geometries see
 \link{st_transform}, and all other functions starting with \code{st_}.
 }
 \examples{

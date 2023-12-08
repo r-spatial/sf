@@ -51,11 +51,11 @@ sf_proj_info(type = "proj", path)
 
 \item{x}{object of class sf, sfc or sfg}
 
-\item{crs}{target coordinate reference system: object of class `crs`, or input string for \link{st_crs}}
+\item{crs}{target coordinate reference system: object of class \code{crs}, or input string for \link{st_crs}}
 
 \item{...}{ignored}
 
-\item{aoi}{area of interest, in degrees: 
+\item{aoi}{area of interest, in degrees:
 WestLongitude, SouthLatitude, EastLongitude, NorthLatitude}
 
 \item{pipeline}{character; coordinate operation pipeline, for overriding the default operation}
@@ -63,11 +63,11 @@ WestLongitude, SouthLatitude, EastLongitude, NorthLatitude}
 \item{reverse}{boolean; has only an effect when \code{pipeline} is defined:
 if \code{TRUE}, the inverse operation of the pipeline is applied}
 
-\item{desired_accuracy}{numeric; Only coordinate operations that offer an accuracy of 
+\item{desired_accuracy}{numeric; Only coordinate operations that offer an accuracy of
 at least the one specified will be considered; a negative value disables this feature
 (requires GDAL >= 3.3)}
 
-\item{allow_ballpark}{logical; are ballpark (low accuracy) transformations allowed? 
+\item{allow_ballpark}{logical; are ballpark (low accuracy) transformations allowed?
 (requires GDAL >= 3.3)}
 
 \item{partial}{logical; allow for partial projection, if not all points of a geometry can be projected (corresponds to setting environment variable \code{OGR_ENABLE_PARTIAL_REPROJECTION} to \code{TRUE})}
@@ -89,7 +89,7 @@ Transform or convert coordinates of simple feature
 \code{st_can_transform} returns a boolean indicating whether
 coordinates with CRS src can be transformed into CRS dst
 
-Transforms coordinates of object to new projection. 
+Transforms coordinates of object to new projection.
 Features that cannot be transformed are returned as empty geometries.
 Transforms using the \code{pipeline=} argument may fail if there is
 ambiguity in the axis order of the specified coordinate reference system;
@@ -103,10 +103,10 @@ For a discussion of using \code{options}, see \url{https://github.com/r-spatial/
 
 \code{sf_proj_info} lists the available projections, ellipses, datums, units, or data search path of the PROJ library when \code{type} is equal to proj, ellps, datum, units or path; when \code{type} equals \code{have_datum_files} a boolean is returned indicating whether datum files are installed and accessible (checking for \code{conus}).
 
-for PROJ >= 6, \code{sf_proj_info} does not provide option \code{type = "datums"}. 
+for PROJ >= 6, \code{sf_proj_info} does not provide option \code{type = "datums"}.
 PROJ < 6 does not provide the option \code{type = "prime_meridians"}.
 
-for PROJ >= 7.1.0, the "units" query of \code{sf_proj_info} returns the \code{to_meter} 
+for PROJ >= 7.1.0, the "units" query of \code{sf_proj_info} returns the \code{to_meter}
 variable as numeric, previous versions return a character vector containing a numeric expression.
 }
 \examples{

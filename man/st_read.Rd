@@ -84,7 +84,7 @@ of LineString and MultiLineString, or of Polygon and MultiPolygon, convert
 all to the Multi variety; defaults to \code{TRUE}}
 
 \item{stringsAsFactors}{logical; logical: should character vectors be
-  converted to factors?  Default for \code{read_sf} or R version >= 4.1.0 is
+converted to factors?  Default for \code{read_sf} or R version >= 4.1.0 is
 \code{FALSE}, for \code{st_read} and R version < 4.1.0 equal to
 \code{default.stringsAsFactors()}}
 
@@ -113,10 +113,10 @@ clockwise, holes clockwise)}
 }
 \value{
 object of class \link{sf} when a layer was successfully read; in case
-  argument \code{layer} is missing and data source \code{dsn} does not
-  contain a single layer, an object of class \code{sf_layers} is returned
-  with the layer names, each with their geometry type(s). Note that the
-  number of layers may also be zero.
+argument \code{layer} is missing and data source \code{dsn} does not
+contain a single layer, an object of class \code{sf_layers} is returned
+with the layer names, each with their geometry type(s). Note that the
+number of layers may also be zero.
 }
 \description{
 Read simple features from file or database, or retrieve layer names and their
@@ -142,7 +142,7 @@ lead to spurious errors that accompanying \code{*.shp} are missing.
 
 In case of problems reading shapefiles from USB drives on OSX, please see
 \url{https://github.com/r-spatial/sf/issues/252}. Reading shapefiles (or other
-data sources) directly from zip files can be done by prepending the path 
+data sources) directly from zip files can be done by prepending the path
 with \code{/vsizip/}. This is part of the GDAL Virtual File Systems interface
 that also supports .gz, curl, and other operations, including chaining; see
 \url{https://gdal.org/user/virtual_file_systems.html} for a complete
@@ -165,13 +165,13 @@ about the data source. \code{read_sf} returns an sf-tibble rather than an sf-dat
 \code{write_sf} delete layers by default: it overwrites existing files without asking or warning.
 
 if \code{table} is not given but \code{query} is, the spatial
-  reference system (crs) of the table queried is only available in case it
-  has been stored into each geometry record (e.g., by PostGIS, when using
-  EWKB)
+reference system (crs) of the table queried is only available in case it
+has been stored into each geometry record (e.g., by PostGIS, when using
+EWKB)
 
-The function will automatically find the `geometry` type columns for
-  drivers that support it. For the other drivers, it will try to cast all the
-  character columns, which can be slow for very wide tables.
+The function will automatically find the \code{geometry} type columns for
+drivers that support it. For the other drivers, it will try to cast all the
+character columns, which can be slow for very wide tables.
 }
 \note{
 The use of \code{system.file} in examples make sure that examples run regardless where R is installed:

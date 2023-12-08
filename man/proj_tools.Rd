@@ -30,25 +30,25 @@ sf_proj_pipelines(
 
 \item{url}{character; use this to specify and override the default proj network CDN}
 
-\item{source_crs}{object of class `crs` or character}
+\item{source_crs}{object of class \code{crs} or character}
 
-\item{target_crs}{object of class `crs` or character}
+\item{target_crs}{object of class \code{crs} or character}
 
 \item{authority}{character; constrain output pipelines to those of authority}
 
-\item{AOI}{length four numeric; desired area of interest for the resulting 
+\item{AOI}{length four numeric; desired area of interest for the resulting
 coordinate transformations (west, south, east, north, in degrees).
 For an area of interest crossing the anti-meridian, west will be greater than east.}
 
 \item{Use}{one of "NONE", "BOTH", "INTERSECTION", "SMALLEST", indicating how AOI's
 of source_crs and target_crs are being used}
 
-\item{grid_availability}{character; one of "USED" (Grid availability is only used for sorting 
+\item{grid_availability}{character; one of "USED" (Grid availability is only used for sorting
 results. Operations where some grids are missing will be sorted last), "DISCARD"
 (Completely discard an operation if a required grid is missing)
-, "IGNORED" (Ignore grid availability at all. Results will be presented as if all grids were 
-available.), or "AVAILABLE" (Results will be presented as if grids known to PROJ (that is 
-registered in the grid_alternatives table of its database) were available. Used typically when 
+, "IGNORED" (Ignore grid availability at all. Results will be presented as if all grids were
+available.), or "AVAILABLE" (Results will be presented as if grids known to PROJ (that is
+registered in the grid_alternatives table of its database) were available. Used typically when
 networking is enabled.)}
 
 \item{desired_accuracy}{numeric; only return pipelines with at least this accuracy}
@@ -58,20 +58,20 @@ of interest; if TRUE strictly contain the area of interest.
 The area of interest is either as given in AOI, or as implied by the
 source/target coordinate reference systems}
 
-\item{axis_order_authority_compliant}{logical; if FALSE always 
-choose ‘x’ or longitude for the first 
-axis; if TRUE, follow the axis orders given by the coordinate reference systems when 
+\item{axis_order_authority_compliant}{logical; if FALSE always
+choose ‘x’ or longitude for the first
+axis; if TRUE, follow the axis orders given by the coordinate reference systems when
 constructing the for the first axis; if FALSE, follow the axis orders given by}
 }
 \value{
-`sf_proj_search_paths()` returns the search path (possibly after setting it)
+\code{sf_proj_search_paths()} returns the search path (possibly after setting it)
 
-`sf_proj_network` when called without arguments returns a logical indicating whether
+\code{sf_proj_network} when called without arguments returns a logical indicating whether
 network search of datum grids is enabled, when called with arguments it returns a character
-vector with the URL of the CDN used (or specified with `url`).
+vector with the URL of the CDN used (or specified with \code{url}).
 
-`sf_proj_pipelines` returns a table with candidate coordinate transformation
-pipelines along with their accuracy; `NA` accuracy indicates ballpark accuracy.
+\code{sf_proj_pipelines} returns a table with candidate coordinate transformation
+pipelines along with their accuracy; \code{NA} accuracy indicates ballpark accuracy.
 }
 \description{
 Manage PROJ search path and network settings

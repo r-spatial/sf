@@ -53,8 +53,8 @@ Description: Support for simple features, a standardized way to
     projection conversions and datum transformations. Uses by default the 's2'
     package for spherical geometry operations on ellipsoidal (long/lat) coordinates.
 License: GPL-2 | MIT + file LICENSE
-URL: https://r-spatial.github.io/sf/, https://github.com/r-spatial/sf/
-BugReports: https://github.com/r-spatial/sf/issues/
+URL: https://r-spatial.github.io/sf/, https://github.com/r-spatial/sf
+BugReports: https://github.com/r-spatial/sf/issues
 Depends:
     methods,
     R (>= 3.3.0)
@@ -114,7 +114,8 @@ VignetteBuilder:
     knitr
 Encoding: UTF-8
 RoxygenNote: 7.2.3
-Config/testhat/edition: 3
+Roxygen: list(markdown = TRUE)
+Config/testthat/edition: 2
 SystemRequirements: GDAL (>= 2.0.1), GEOS (>= 3.4.0),
     PROJ (>= 4.8.0), sqlite3
 Collate: 
