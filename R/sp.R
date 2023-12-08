@@ -21,7 +21,7 @@
 #)
 
 
-#' @name st_as_sf
+#' @rdname st_as_sf
 #' @examples
 #' if (require(sp, quietly = TRUE)) {
 #' x = rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))
@@ -80,7 +80,6 @@ st_as_sf.Spatial = function(x, ...) {
 #' @param ... further arguments
 #' @param precision precision value; see \link{st_as_binary}
 #' @param forceMulti logical; if \code{TRUE}, force coercion into \code{MULTIPOLYGON} or \code{MULTILINE} objects, else autodetect
-#' @name st_as_sfc
 #' @export
 st_as_sfc = function(x, ...) UseMethod("st_as_sfc")
 
@@ -89,7 +88,7 @@ handle_bbox = function(sfc, sp) {
 	structure(sfc, "bbox" = bb)
 }
 
-#' @name st_as_sfc
+#' @rdname st_as_sfc
 #' @export
 st_as_sfc.SpatialPoints = function(x, ..., precision = 0.0) {
 	cc = x@coords
@@ -99,14 +98,14 @@ st_as_sfc.SpatialPoints = function(x, ..., precision = 0.0) {
 		precision = precision))), x)
 }
 
-#' @name st_as_sfc
+#' @rdname st_as_sfc
 #' @export
 st_as_sfc.SpatialPixels = function(x, ..., precision = 0.0) {
 	handle_bbox(st_as_sfc(as(x, "SpatialPoints"), precision = precision), x)
 }
 
 
-#' @name st_as_sfc
+#' @rdname st_as_sfc
 #' @export
 st_as_sfc.SpatialMultiPoints = function(x, ..., precision = 0.0) {
 	lst = lapply(x@coords, st_multipoint)
@@ -114,7 +113,7 @@ st_as_sfc.SpatialMultiPoints = function(x, ..., precision = 0.0) {
 		precision = precision))), x)
 }
 
-#' @name st_as_sfc
+#' @rdname st_as_sfc
 #' @export
 st_as_sfc.SpatialLines = function(x, ..., precision = 0.0, forceMulti = FALSE) {
 	lst = if (forceMulti || any(sapply(x@lines, function(x) length(x@Lines)) != 1))
@@ -138,7 +137,7 @@ st_as_sfc.SpatialLines = function(x, ..., precision = 0.0, forceMulti = FALSE) {
 		precision = precision))), x)
 }
 
-#' @name st_as_sfc
+#' @rdname st_as_sfc
 #' @export
 
 st_as_sfc.SpatialPolygons = function(x, ..., precision = 0.0, forceMulti = FALSE) {
