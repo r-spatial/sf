@@ -710,8 +710,8 @@ get_asp = function(bb) {
 	asp
 }
 
-
-#' @export
+#' functions only exported to be used internally by stars
+#' @keywords internal
 #' @name stars
 #' @param bb ignore
 #' @param n ignore
@@ -720,6 +720,7 @@ get_asp = function(bb) {
 #' @param key.length ignore
 #' @param mfrow length-2 integer vector with number of rows, columns
 #' @param main main or sub title
+#' @export
 .get_layout = function(bb, n, total_size, key.pos, key.width, mfrow = NULL, main = NULL) {
 # return list with "m" matrix, "key.pos", "widths" and "heights" fields
 # if key.pos = -1 on input, it will be a return value, "optimally" placed
@@ -796,9 +797,7 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 	st_bbox(st_transform(pts, merc))
 }
 
-#' functions only exported to be used internally by stars
-#' @name stars
-#' @export
+#' @rdname stars
 #' @param side ignore
 #' @param at ignore
 #' @param labels ignore
@@ -806,6 +805,7 @@ bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mer
 #' @param lat ignore
 #' @param ndiscr ignore
 #' @param reset ignore
+#' @export
 .degAxis = function (side, at, labels, ..., lon, lat, ndiscr, reset) {
 	if (missing(at))
        	at = axTicks(side)
@@ -838,8 +838,7 @@ xy_from_r = function(r, l, o) {
 	c(x, y)
 }
 
-#' @name stars
-#' @export
+#' @rdname stars
 #' @param z ignore
 #' @param col ignore
 #' @param breaks ignore
@@ -850,6 +849,7 @@ xy_from_r = function(r, l, o) {
 #' @param ... ignore
 #' @param lab ignore
 #' @param cex.axis see \link{par}
+#' @export
 .image_scale = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
 		at = NULL, ..., axes = FALSE, key.length, logz = FALSE, lab = "", 
 		cex.axis = par("cex.axis")) {
@@ -929,9 +929,9 @@ xy_from_r = function(r, l, o) {
 		axis(key.pos, at = at, labels = labels, cex.axis = cex.axis)
 }
 
-#' @name stars
-#' @export
+#' @rdname stars
 #' @param key.width ignore
+#' @export
 .image_scale_factor = function(z, col, key.pos, add.axis = TRUE,
 	..., axes = FALSE, key.width, key.length, cex.axis = par("cex.axis")) {
 
