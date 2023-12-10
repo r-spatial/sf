@@ -1,5 +1,7 @@
 # version 1.0-15
 
+* documentation clean-up by @olivroy; #2266, #2285
+
 * `st_convex_hull()` uses `s2::s2_convex_hull()` for geodetic coordinates; #2250
 
 * add `directed` argument to `st_line_merge()`; #2264
