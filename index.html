@@ -100,11 +100,11 @@
 <ul>
 <li>represents simple features as records in a <code>data.frame</code> or <code>tibble</code> with a geometry list-column</li>
 <li>represents natively in R all 17 simple feature types for all dimensions (XY, XYZ, XYM, XYZM)</li>
-<li>interfaces to <a href="https://libgeos.org" class="external-link">GEOS</a> for geometrical operations on projected coordinates, and (through R package <a href="https://cran.r-project.org/package=s2" class="external-link">s2</a>) to <a href="https://s2geometry.io/" class="external-link">s2geometry</a> for geometrical operations on ellipsoidal coordinates</li>
-<li>interfaces to <a href="http://www.gdal.org/" class="external-link">GDAL</a>, supporting all driver options, <code>Date</code> and <code>POSIXct</code> and list-columns</li>
+<li>interfaces to <a href="https://libgeos.org" class="external-link">GEOS</a> for geometrical operations on projected coordinates, and (through R package <a href="https://cran.r-project.org/package=s2" class="external-link">s2</a>) to <a href="http://s2geometry.io/" class="external-link">s2geometry</a> for geometrical operations on ellipsoidal coordinates</li>
+<li>interfaces to <a href="https://gdal.org/" class="external-link">GDAL</a>, supporting all driver options, <code>Date</code> and <code>POSIXct</code> and list-columns</li>
 <li>interfaces to <a href="http://proj.org/" class="external-link">PRØJ</a> for coordinate reference system conversion and transformation</li>
 <li>uses <a href="https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary" class="external-link">well-known-binary</a> serialisations written in C++/Rcpp for fast I/O with GDAL and GEOS</li>
-<li>reads from and writes to spatial databases such as <a href="http://postgis.net/" class="external-link">PostGIS</a> using <a href="https://cran.r-project.org/web/packages/DBI/index.html" class="external-link">DBI</a>
+<li>reads from and writes to spatial databases such as <a href="http://postgis.net/" class="external-link">PostGIS</a> using <a href="https://cran.r-project.org/package=DBI" class="external-link">DBI</a>
 </li>
 <li>is extended by
 <ul>
@@ -126,11 +126,11 @@
 <li>an open access <a href="https://journal.r-project.org/archive/2018/RJ-2018-009/index.html" class="external-link">R Journal article</a> summarizes the package</li>
 <li>package vignettes: <a href="https://r-spatial.github.io/sf/articles/sf1.html">first</a>, <a href="https://r-spatial.github.io/sf/articles/sf2.html">second</a>, <a href="https://r-spatial.github.io/sf/articles/sf3.html">third</a>, <a href="https://r-spatial.github.io/sf/articles/sf4.html">fourth</a>, <a href="https://r-spatial.github.io/sf/articles/sf5.html">fifth</a>, <a href="https://r-spatial.github.io/sf/articles/sf6.html">sixth</a>, <a href="https://r-spatial.github.io/sf/articles/sf7.html">seventh</a>
 </li>
-<li>blog posts: <a href="http://r-spatial.org/r/2016/02/15/simple-features-for-r.html" class="external-link">first</a>, <a href="http://r-spatial.org/r/2016/07/18/sf2.html" class="external-link">second</a>, <a href="http://r-spatial.org/r/2016/11/02/sfcran.html" class="external-link">third</a>, <a href="http://r-spatial.org/r/2017/01/12/newssf.html" class="external-link">fourth</a>
+<li>blog posts: <a href="https://r-spatial.org/r/2016/02/15/simple-features-for-r.html" class="external-link">first</a>, <a href="https://r-spatial.org/r/2016/07/18/sf2.html" class="external-link">second</a>, <a href="https://r-spatial.org/r/2016/11/02/sfcran.html" class="external-link">third</a>, <a href="https://r-spatial.org/r/2017/01/12/newssf.html" class="external-link">fourth</a>
 </li>
 <li>the original R Consortium ISC <a href="PROPOSAL.html">proposal</a>, the R Consortium <a href="https://www.r-consortium.org/blog/2017/01/03/simple-features-now-on-cran" class="external-link">blog post</a>
 </li>
-<li>presentations: <a href="https://edzer.github.io/rstudio_conf/#1" class="external-link">rstudio::conf 2018</a> (<a href="https://www.rstudio.com/resources/videos/tidy-spatial-data-analysis/" class="external-link">video</a>), <a href="http://pebesma.staff.ifgi.de/pebesma_sfr.pdf" class="external-link">UseR! 2016</a>
+<li>presentations: <a href="https://edzer.github.io/rstudio_conf/#1" class="external-link">rstudio::conf 2018</a> (<a href="https://posit.co/resources/videos/tidy-spatial-data-analysis/" class="external-link">video</a>), <a href="http://pebesma.staff.ifgi.de/pebesma_sfr.pdf" class="external-link">UseR! 2016</a>
 </li>
 <li>wiki page describing <a href="https://github.com/r-spatial/sf/wiki/Migrating" class="external-link">sp-sf migration</a>
 </li>
@@ -139,7 +139,7 @@
 <div class="section level2">
 <h2 id="cheatsheet">Cheatsheet<a class="anchor" aria-label="anchor" href="#cheatsheet"></a>
 </h2>
-<p><a href="https://creativecommons.org/licenses/by/4.0/" class="external-link">CC 4.0</a> BY <a href="http://github.com/ryangarnett" class="external-link">Ryan Garnett</a></p>
+<p><a href="https://creativecommons.org/licenses/by/4.0/" class="external-link">CC 4.0</a> BY <a href="https://github.com/ryangarnett" class="external-link">Ryan Garnett</a></p>
 <p><a href="https://github.com/rstudio/cheatsheets/blob/main/sf.pdf" class="external-link"><img src="https://raw.githubusercontent.com/rstudio/cheatsheets/main/pngs/sf.png"></a></p>
 </div>
 <div class="section level2">
@@ -162,7 +162,7 @@
 <h3 id="macos">MacOS<a class="anchor" aria-label="anchor" href="#macos"></a>
 </h3>
 <p>MacOS users are strongly encouraged to install the <code>sf</code> binary packages from CRAN, unless they are familiar with compilers, linking, C++ source code, and homebrew.</p>
-<p>The easiest way to install <code>gdal</code> is using Homebrew. Recent versions of Homebrew include a full-featured up-to-date <a href="https://github.com/Homebrew/homebrew-core/blob/master/Formula/gdal.rb" class="external-link">gdal formula</a>, which installs <code>proj</code> and <code>gdal</code> at the same time:</p>
+<p>The easiest way to install <code>gdal</code> is using Homebrew. Recent versions of Homebrew include a full-featured up-to-date <a href="https://github.com/Homebrew/homebrew-core/blob/master/Formula/g/gdal.rb" class="external-link">gdal formula</a>, which installs <code>proj</code> and <code>gdal</code> at the same time:</p>
 <pre><code>brew install pkg-config
 brew install gdal</code></pre>
 <p>Once gdal is installed, you will be able to install <code>sf</code> package from source in R. With the current version of <code>proj</code> on homebrew, installation requires additional configuration:</p>
@@ -210,7 +210,7 @@ yay/pacaur/yaourt/whatever -S udunits</code></pre>
 <div class="section level4">
 <h4 id="other">Other<a class="anchor" aria-label="anchor" href="#other"></a>
 </h4>
-<p>To install on Debian, the <a href="https://github.com/rocker-org/geospatial" class="external-link">rocker geospatial</a> Dockerfiles may be helpful. Ubuntu Dockerfiles are found <a href="https://github.com/r-spatial/sf/tree/master/inst/docker" class="external-link">here</a>.</p>
+<p>To install on Debian, the <a href="https://github.com/rocker-org/geospatial" class="external-link">rocker geospatial</a> Dockerfiles may be helpful. Ubuntu Dockerfiles are found <a href="https://github.com/r-spatial/sf/tree/main/inst/docker" class="external-link">here</a>.</p>
 </div>
 </div>
 <div class="section level3">
@@ -239,7 +239,7 @@ yay/pacaur/yaourt/whatever -S udunits</code></pre>
 <p>Package <code>sf</code> can be cited as:</p>
 <ul>
 <li><p>Edzer Pebesma, 2018. Simple Features for R: Standardized Support for Spatial Vector Data. The R Journal <a href="https://journal.r-project.org/archive/2018/RJ-2018-009/index.html" class="external-link">10:1, 439-446.</a></p></li>
-<li><p>Pebesma, E.; Bivand, R. (2023). <a href="https://r-spatial.org/book" class="external-link">Spatial Data Science: With Applications in R</a> (1st ed.). 314 pages. <a href="https://doi.org/10.1201/9780429459016" class="external-link">Chapman and Hall/CRC</a>.</p></li>
+<li><p>Pebesma, E.; Bivand, R. (2023). <a href="https://r-spatial.org/book/" class="external-link">Spatial Data Science: With Applications in R</a> (1st ed.). 314 pages. <a href="https://doi.org/10.1201/9780429459016" class="external-link">Chapman and Hall/CRC</a>.</p></li>
 </ul>
 </div>
 <div class="section level2">
@@ -295,7 +295,7 @@ yay/pacaur/yaourt/whatever -S udunits</code></pre>
 <li><a href="http://www.gnu.org/licenses/gpl-2.0.html" class="external-link"><img src="http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat" alt="License"></a></li>
 <li><a href="https://cran.r-project.org/package=sf" class="external-link"><img src="http://www.r-pkg.org/badges/version/sf" alt="CRAN"></a></li>
 <li><a href="https://cran.r-project.org/web/checks/check_results_sf.html" class="external-link"><img src="https://badges.cranchecks.info/worst/sf.svg" alt="cran checks"></a></li>
-<li><a href="http://www.r-pkg.org/pkg/sf" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/sf?color=brightgreen" alt="Downloads"></a></li>
+<li><a href="https://www.r-pkg.org:443/pkg/sf" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/sf?color=brightgreen" alt="Downloads"></a></li>
 <li><a href="https://CRAN.R-project.org/package=sf" class="external-link"><img src="https://tinyverse.netlify.com/badge/sf" alt="status"></a></li>
 </ul>
 </div>

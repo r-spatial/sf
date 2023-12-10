@@ -67,6 +67,9 @@
     <loc>https://r-spatial.github.io/sf/reference/db_drivers.html</loc>
   </url>
   <url>
+    <loc>https://r-spatial.github.io/sf/reference/dot-stop_geos.html</loc>
+  </url>
+  <url>
     <loc>https://r-spatial.github.io/sf/reference/extension_map.html</loc>
   </url>
   <url>
@@ -98,9 +101,6 @@
   </url>
   <url>
     <loc>https://r-spatial.github.io/sf/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/internal.html</loc>
   </url>
   <url>
     <loc>https://r-spatial.github.io/sf/reference/interpolate_aw.html</loc>
@@ -142,10 +142,10 @@
     <loc>https://r-spatial.github.io/sf/reference/sf-defunct.html</loc>
   </url>
   <url>
-    <loc>https://r-spatial.github.io/sf/reference/sf-object.html</loc>
+    <loc>https://r-spatial.github.io/sf/reference/sf-package.html</loc>
   </url>
   <url>
-    <loc>https://r-spatial.github.io/sf/reference/sf-package.html</loc>
+    <loc>https://r-spatial.github.io/sf/reference/sf.html</loc>
   </url>
   <url>
     <loc>https://r-spatial.github.io/sf/reference/sf_extSoftVersion.html</loc>

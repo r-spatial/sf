@@ -113,7 +113,55 @@
 
 
 <dt>...</dt>
-<dd><p>passed on to <a href="https://r-spatial.github.io/s2/reference/s2_options.html" class="external-link">s2_options</a></p></dd>
+<dd><p>Arguments passed on to <code><a href="https://r-spatial.github.io/s2/reference/s2_options.html" class="external-link">s2::s2_options</a></code></p><dl><dt><code>snap</code></dt>
+<dd><p>Use <code>s2_snap_identity()</code>, <code>s2_snap_distance()</code>, <code>s2_snap_level()</code>,
+or <code>s2_snap_precision()</code> to specify how or if coordinate rounding should
+occur.</p></dd>
+
+    <dt><code>snap_radius</code></dt>
+<dd><p>As opposed to the snap function, which specifies
+the maximum distance a vertex should move, the snap radius (in radians) sets
+the minimum distance between vertices of the output that don't cause vertices
+to move more than the distance specified by the snap function. This can be used
+to simplify the result of a boolean operation. Use -1 to specify that any
+minimum distance is acceptable.</p></dd>
+
+    <dt><code>duplicate_edges</code></dt>
+<dd><p>Use <code>TRUE</code> to keep duplicate edges (e.g., duplicate
+points).</p></dd>
+
+    <dt><code>edge_type</code></dt>
+<dd><p>One of 'directed' (default) or 'undirected'.</p></dd>
+
+    <dt><code>validate</code></dt>
+<dd><p>Use <code>TRUE</code> to validate the result from the builder.</p></dd>
+
+    <dt><code>polyline_type</code></dt>
+<dd><p>One of 'path' (default) or 'walk'. If 'walk',
+polylines that backtrack are preserved.</p></dd>
+
+    <dt><code>polyline_sibling_pairs</code></dt>
+<dd><p>One of 'discard' (default) or 'keep'.</p></dd>
+
+    <dt><code>simplify_edge_chains</code></dt>
+<dd><p>Use <code>TRUE</code> to remove vertices that are within
+<code>snap_radius</code> of the original vertex.</p></dd>
+
+    <dt><code>split_crossing_edges</code></dt>
+<dd><p>Use <code>TRUE</code> to split crossing polyline edges
+when creating geometries.</p></dd>
+
+    <dt><code>idempotent</code></dt>
+<dd><p>Use <code>FALSE</code> to apply snap even if snapping is not necessary
+to satisfy vertex constraints.</p></dd>
+
+    <dt><code>dimensions</code></dt>
+<dd><p>A combination of 'point', 'polyline', and/or 'polygon'
+that can used to constrain the output of <code><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_rebuild()</a></code> or a
+boolean operation.</p></dd>
+
+  
+</dl></dd>
 
 
 <dt>prepared</dt>
@@ -193,7 +241,7 @@ the function <code><a href="geos_binary_ops.html">st_intersection</a></code> ins
 <span class="r-in"><span><span class="co"># remove duplicate geometries:</span></span></span>
 <span class="r-in"><span><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">p2</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="sf-object.html">st_sf</a></span><span class="op">(</span>a <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span>, geom <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p1</span>, <span class="va">p2</span>, <span class="va">p1</span>, <span class="va">p1</span>, <span class="va">p2</span>, <span class="va">p2</span>, <span class="va">p1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">=</span> <span class="fu"><a href="sf.html">st_sf</a></span><span class="op">(</span>a <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">]</span>, geom <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p1</span>, <span class="va">p2</span>, <span class="va">p1</span>, <span class="va">p1</span>, <span class="va">p2</span>, <span class="va">p2</span>, <span class="va">p1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">st_equals</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sparse geometry binary predicate list of length 8, where the predicate</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> was `equals'</span>
