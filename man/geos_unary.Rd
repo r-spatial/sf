@@ -213,6 +213,9 @@ nc = st_read(system.file("shape/nc.shp", package="sf"))
 nc_g = st_geometry(nc)
 plot(st_convex_hull(nc_g))
 plot(nc_g, border = grey(.5), add = TRUE)
+pt = st_combine(st_sfc(st_point(c(0,80)), st_point(c(120,80)), st_point(c(240,80))))
+st_convex_hull(pt) # R2
+st_convex_hull(st_set_crs(pt, 'OGC:CRS84')) # S2
 set.seed(131)
 if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.11.0") > -1) {
  pts = cbind(runif(100), runif(100))

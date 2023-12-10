@@ -1,5 +1,7 @@
 # version 1.0-15
 
+* `st_convex_hull()` uses `s2::s2_convex_hull()` for geodetic coordinates; #2250
+
 * add `directed` argument to `st_line_merge()`; #2264
 
 * `st_union.sfc()` given `x` and `y` works consistently across geodetic and projected objects; #2262

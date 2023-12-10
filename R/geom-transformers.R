@@ -182,6 +182,9 @@ st_boundary.sf = function(x) {
 #' nc_g = st_geometry(nc)
 #' plot(st_convex_hull(nc_g))
 #' plot(nc_g, border = grey(.5), add = TRUE)
+#' pt = st_combine(st_sfc(st_point(c(0,80)), st_point(c(120,80)), st_point(c(240,80))))
+#' st_convex_hull(pt) # R2
+#' st_convex_hull(st_set_crs(pt, 'OGC:CRS84')) # S2
 st_convex_hull = function(x)
 	UseMethod("st_convex_hull")
 
@@ -190,8 +193,12 @@ st_convex_hull.sfg = function(x)
 	get_first_sfg(st_convex_hull(st_sfc(x)))
 
 #' @export
-st_convex_hull.sfc = function(x)
-	st_sfc(CPL_geos_op("convex_hull", x, numeric(0), integer(0), numeric(0), logical(0)))
+st_convex_hull.sfc = function(x) {
+	if (isTRUE(st_is_longlat(x)) && sf_use_s2())
+		st_as_sfc(s2::s2_convex_hull(x), crs = st_crs(x))
+	else
+		st_sfc(CPL_geos_op("convex_hull", x, numeric(0), integer(0), numeric(0), logical(0)))
+}
 
 #' @export
 st_convex_hull.sf = function(x) {
