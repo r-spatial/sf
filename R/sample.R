@@ -141,15 +141,27 @@ st_sample.sfg = function(x, size, ...) {
 
 #' @export
 #' @name st_sample
+#' @param great_circles logical; if `TRUE`, great circle arcs are used to connect the bounding box vertices, if `FALSE` parallels (graticules)
+#' @param segments units, or numeric (degrees); segment sizes for segmenting a bounding box polygon if `great_circles` is `FALSE`
 #' @examples
 #' bbox = st_bbox(
-#'	c(xmin = 16.1, xmax = 16.6, ymax = 48.6, ymin = 47.9),
-#' 	crs = st_crs(4326)
+#'	c(xmin = 0, xmax = 40, ymax = 70, ymin = 60),
+#' 	crs = st_crs('OGC:CRS84')
 #' )
-#' 
-#' st_sample(bbox, 5)
-st_sample.bbox = function(x, size, ...) {
-	st_sample(st_as_sfc(x), size, ...)
+#' set.seed(13531)
+#' s1 = st_sample(bbox, 400)
+#' st_bbox(s1) # within bbox
+#' s2 = st_sample(bbox, 400, great_circles = TRUE)
+#' st_bbox(s2) # outside bbox
+st_sample.bbox = function(x, size, ..., great_circles = FALSE, segments = units::set_units(2, degrees)) {
+	polygon = st_as_sfc(x)
+	crs = st_crs(x)
+	if (isTRUE(st_is_longlat(x)) && !great_circles) {
+		st_crs(polygon) = NA_crs_ # to fool segmentize that we're on R2:
+		segments = units::drop_units(units::set_units(segments, degrees))
+		polygon = st_set_crs(st_segmentize(polygon, segments), crs)
+	}
+	st_sample(polygon, size, ...)
 }
 
 st_poly_sample = function(x, size, ..., type = "random",

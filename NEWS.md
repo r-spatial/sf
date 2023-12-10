@@ -1,5 +1,7 @@
 # version 1.0-15
 
+* add `st_sample()` method for `bbox`, with special provisions for ellipsoidal coordinates; #2283
+
 * documentation clean-up by @olivroy; #2266, #2285
 
 * `st_convex_hull()` uses `s2::s2_convex_hull()` for geodetic coordinates; #2250

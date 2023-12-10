@@ -5,6 +5,7 @@
 \alias{st_sample.sf}
 \alias{st_sample.sfc}
 \alias{st_sample.sfg}
+\alias{st_sample.bbox}
 \title{sample points on or in (sets of) spatial features}
 \usage{
 st_sample(x, size, ...)
@@ -23,6 +24,14 @@ st_sample(x, size, ...)
 )
 
 \method{st_sample}{sfg}(x, size, ...)
+
+\method{st_sample}{bbox}(
+  x,
+  size,
+  ...,
+  great_circles = FALSE,
+  segments = units::set_units(2, degrees)
+)
 }
 \arguments{
 \item{x}{object of class \code{sf} or \code{sfc}}
@@ -43,6 +52,10 @@ the same as specified by \code{size}? \code{TRUE} by default. Only applies to po
 when \code{type = "random"}.}
 
 \item{progress}{logical; if \code{TRUE} show progress bar (only if \code{size} is a vector).}
+
+\item{great_circles}{logical; if \code{TRUE}, great circle arcs are used to connect the bounding box vertices, if \code{FALSE} parallels (graticules)}
+
+\item{segments}{units, or numeric (degrees); segment sizes for segmenting a bounding box polygon if \code{great_circles} is \code{FALSE}}
 }
 \value{
 an \code{sfc} object containing the sampled \code{POINT} geometries
@@ -128,4 +141,13 @@ if (require(spatstat.random)) {
   # for spatstat.random::rThomas(), set type = "Thomas":
   pts <- st_sample(x, kappa = 1, mu = 10, scale = 0.1, type = "Thomas") 
 }
+bbox = st_bbox(
+c(xmin = 0, xmax = 40, ymax = 70, ymin = 60),
+	crs = st_crs('OGC:CRS84')
+)
+set.seed(13531)
+s1 = st_sample(bbox, 400)
+st_bbox(s1) # within bbox
+s2 = st_sample(bbox, 400, great_circles = TRUE)
+st_bbox(s2) # outside bbox
 }
