@@ -58,7 +58,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0-15" id="version-10-15">version 1.0-15<a class="anchor" aria-label="anchor" href="#version-10-15"></a></h2>
-<ul><li><p>add <code>directed</code> argument to <code><a href="../reference/geos_unary.html">st_line_merge()</a></code>; <a href="https://github.com/r-spatial/sf/issues/2264" class="external-link">#2264</a></p></li>
+<ul><li><p><code><a href="../reference/geos_unary.html">st_convex_hull()</a></code> uses <code><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2::s2_convex_hull()</a></code> for geodetic coordinates; <a href="https://github.com/r-spatial/sf/issues/2250" class="external-link">#2250</a></p></li>
+<li><p>add <code>directed</code> argument to <code><a href="../reference/geos_unary.html">st_line_merge()</a></code>; <a href="https://github.com/r-spatial/sf/issues/2264" class="external-link">#2264</a></p></li>
 <li><p><code>st_union.sfc()</code> given <code>x</code> and <code>y</code> works consistently across geodetic and projected objects; <a href="https://github.com/r-spatial/sf/issues/2262" class="external-link">#2262</a></p></li>
 <li><p><code>st_union.sf()</code> given <code>x</code> and <code>y</code> unions pairwise if <code>by_feature = TRUE</code>; <a href="https://github.com/r-spatial/sf/issues/2259" class="external-link">#2259</a></p></li>
 <li><p><code><a href="../reference/st_read.html">st_read()</a></code> work around issue with GPKG driver if <code>wkt_filter</code> is set; <a href="https://github.com/r-spatial/sf/issues/2248" class="external-link">#2248</a></p></li>
