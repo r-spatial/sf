@@ -372,7 +372,7 @@ system.time({
 })
 ```
 
-The result of the previous benchmarks emphasise the point that there are
+The result of the previous benchmarks emphasizes the point that there are
 trade-offs between geographic resolution and computational resources,
 something that web developers working on geographic services
 such as Google Maps understand well.

@@ -91,3 +91,4 @@
 \description{
 functions only exported to be used internally by stars
 }
+\keyword{internal}

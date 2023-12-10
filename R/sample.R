@@ -27,7 +27,7 @@ st_sample = function(x, size, ...) UseMethod("st_sample")
 #' when \code{type = "random"}.
 #' @param progress logical; if \code{TRUE} show progress bar (only if \code{size} is a vector).
 #' @return an \code{sfc} object containing the sampled \code{POINT} geometries
-#' @details if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{http://mathworld.wolfram.com/SpherePointPicking.html}. 
+#' @details if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{https://mathworld.wolfram.com/SpherePointPicking.html}. 
 #'
 #' For \code{regular} or \code{hexagonal} sampling of polygons, the resulting size is only an approximation.
 #'

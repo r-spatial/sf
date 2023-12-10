@@ -6,9 +6,12 @@
 #' though this is basically the same as \code{nc.sids} dataset in spData
 #' package, \code{nc} only contains a subset of variables. The differences are
 #' also discussed on the vignette.
-#'
+#' @format A `sf` object 
 #' @name nc
 #' @docType data
-#' @keywords data
 #' @seealso \url{https://r-spatial.github.io/spdep/articles/sids.html}
+#' @examples
+#' \donttest{
+#' nc <- st_read(system.file("shape/nc.shp", package="sf"))
+#' }
 NULL

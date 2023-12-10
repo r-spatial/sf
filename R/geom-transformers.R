@@ -1111,7 +1111,7 @@ st_line_sample = function(x, n, density, type = "regular", sample = NULL) {
 }
 
 #' Internal functions
-#' @name internal
+#' @keywords internal
 #' @param msg error message
 #' @export
 .stop_geos = function(msg) { #nocov start
