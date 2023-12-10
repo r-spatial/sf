@@ -36,7 +36,7 @@
 #' a = st_buffer(st_point(c(0,0)), 2)
 #' b = a + c(2, 0)
 #' p = function(m) { plot(c(a,b)); plot(eval(parse(text=m)), col=grey(.9), add = TRUE); title(m) }
-#' lapply(c('a | b', 'a / b', 'a & b', 'a %/% b'), p)
+#' o = lapply(c('a | b', 'a / b', 'a & b', 'a %/% b'), p)
 #' par(opar)
 #' sfc = st_sfc(st_point(0:1), st_point(2:3))
 #' sfc + c(2,3) # added to EACH geometry
@@ -47,7 +47,7 @@ Ops.sfg <- function(e1, e2) {
 		switch (.Generic,
 			"-" = return(e1 * -1.0),
 			"+" = return(e1),
-			stop(paste("unary", .Generic, "not defined for \"sfg\" objects"))
+			stop(paste("unary", .Generic, 'not defined for "sfg" objects'))
 		)
 	}
 
