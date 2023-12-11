@@ -120,7 +120,7 @@ test_that("zmrange works on more compliated examples", {
 
 test_that("transform includes zm in output", {
 
-	skip_if_not(sf_extSoftVersion()["GDAL"] > "2.1.0")
+	skip_if(sf_extSoftVersion()[["GDAL"]] <= "2.1.0")
 
 	p1 = st_point(c(7,52,52))
 	p2 = st_point(c(-30,20,20))

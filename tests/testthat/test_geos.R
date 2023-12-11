@@ -172,7 +172,7 @@ test_that("st_difference works with partially overlapping geometries", {
 	pl3 = st_polygon(list(matrix(c(0, 1.25, 2, 1.25, 1, 2.5, 0, 1.25), byrow = TRUE, ncol = 2)))
 	in1 = st_sfc(list(pl1, pl2, pl3))
 	in2 = st_sf(order = c("A", "B", "C"), geometry = st_sfc(list(pl1, pl2, pl3), crs = 4326), agr = "constant")
-	if (package_version(gsub("[a-zA-Z]", "", sf_extSoftVersion()["GEOS"])) < "3.9.0") {
+	if (package_version(gsub("[a-zA-Z]", "", sf_extSoftVersion()[["GEOS"]])) < "3.9.0") {
 		correct_geom = st_sfc(list(
 		st_polygon(list(matrix(c(0, 2, 1, 0, 0, 0, 1, 0), ncol = 2))),
 		st_polygon(list(matrix(c(0.5, 0, 1, 2, 1.5, 1, 0.5, 0.5, 0.5, 1.5, 0.5, 0.5, 1, 0.5), ncol = 2))),

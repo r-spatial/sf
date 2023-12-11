@@ -41,18 +41,18 @@ test_that("sf_proj_info works", {
 })
 
 test_that("sf_proj_info works for datum files", {
-  skip_if_not(sf_extSoftVersion()[["proj.4"]] < "6.0.0")
+  skip_if(sf_extSoftVersion()[["proj.4"]] >= "6.0.0")
   expect_silent(x <- sf_proj_info("have_datum_files"))
 })
 
 test_that("$.crs works", {
-  skip_if_not(sf_extSoftVersion()[["proj.4"]] < "6.0.0")
+  skip_if(sf_extSoftVersion()[["proj.4"]] >= "6.0.0")
   expect_false(is.null(st_crs("+init=epsg:3857")$epsg))
   expect_type(st_crs("+init=epsg:3857")$proj4string, "character")
 })
 
 test_that("$.crs works with +units", {
-  skip_if_not(sf_extSoftVersion()[["proj.4"]] < "6.0.0")
+  skip_if(sf_extSoftVersion()[["proj.4"]] >= "6.0.0")
   expect_type(st_crs("+init=epsg:3857 +units=m")$b, "double") 
   expect_type(st_crs("+init=epsg:3857 +units=m")$units, "character")
 })
