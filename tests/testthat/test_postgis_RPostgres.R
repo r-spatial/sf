@@ -357,7 +357,7 @@ test_that("can read using driver", {
             RPostgres::Postgres(),
             host = "localhost",
             dbname = "empty"),
-        silent=TRUE
+        silent = TRUE
     )
     skip_if_not(
         can_con(empty),
