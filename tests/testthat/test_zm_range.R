@@ -156,7 +156,6 @@ test_that("XYM-only objects correctly calculate M (and not Z)", {
 
 	expect_true( all( sf::st_m_range( sf_m ) == sf::st_z_range( sf_z ) ) )
 
-	expect_true( is.null( sf::st_z_range( sf_m ) ) )
-	expect_true( is.null( sf::st_m_range( sf_z ) ) )
-
+	expect_null(sf::st_z_range(sf_m))
+	expect_null(sf::st_m_range(sf_z))
 })

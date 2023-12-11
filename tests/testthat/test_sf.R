@@ -86,7 +86,7 @@ test_that("transform work", {
   data(meuse, package = "sp")
   x  = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
   x2 = transform(x, elev2 = elev^2, lead_zinc = lead/zinc)
-  expect_true(inherits(x, 'sf'))
+  expect_s3_class(x, 'sf')
   expect_identical(class(x2), class(x))
   expect_identical(st_bbox(x), st_bbox(x))
   expect_identical(st_crs(x), st_crs(x))

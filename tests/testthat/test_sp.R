@@ -45,7 +45,7 @@ test_that("we can convert SpatialPolygons objects without SF comments to sfc and
   lp <- list(p1, p2, p13, p7, p7a, p6, p5, p4, p3, p8, p11, p12, p9, p9a, p10)
   spls <- SpatialPolygons(list(Polygons(lp, ID="1")))
   expect_equal(comment(spls), "FALSE")
-  expect_true(is.null(comment(slot(spls, "polygons")[[1]])))
+  expect_null(comment(slot(spls, "polygons")[[1]]))
   spls_sfc <- sf::st_as_sfc(spls)
 # rsbivand fork coerce_comments 2022-12-21
   spls_rt <- as(spls_sfc, "Spatial")

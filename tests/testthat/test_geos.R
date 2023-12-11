@@ -17,7 +17,7 @@ test_that("CPL_geos_is_valid works", {
 
 test_that("geos ops give warnings and errors on longlat", {
     skip_if_not_installed("lwgeom")
-    skip_if_not(!sf_use_s2())
+    skip_if(sf_use_s2())
 
 	nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 	x = nc[1:2,]
@@ -92,9 +92,9 @@ test_that("geom operations work on sfg or sfc or sf", {
 	expect_s3_class(st_boundary(gpnc), "sfc_MULTILINESTRING")
 	expect_s3_class(st_boundary(gpnc[[1L]]), "MULTILINESTRING")
 
-	expect_true(inherits(st_convex_hull(pnc)$geometry, "sfc_POLYGON"))
-	expect_true(inherits(st_convex_hull(gpnc), "sfc_POLYGON"))
-	expect_true(inherits(st_convex_hull(gpnc[[1L]]), "POLYGON"))
+	expect_s3_class(st_convex_hull(pnc)$geometry, "sfc_POLYGON")
+	expect_s3_class(st_convex_hull(gpnc), "sfc_POLYGON")
+	expect_s3_class(st_convex_hull(gpnc[[1L]]), "POLYGON")
 
 	expect_silent(st_simplify(pnc, FALSE, 1e4))
 	expect_silent(st_simplify(gpnc, FALSE, 1e4))
@@ -198,7 +198,7 @@ test_that("st_difference works with partially overlapping geometries", {
 	expect_equal(attr(out1, "crs"), attr(in1, "crs"))
 	expect_equal(st_crs(out2), st_crs(in2))
 	# check that output geometries are actually correct
-	expect_equal(length(out1), 3)
+	expect_length(out1, 3)
 	expect_equal(nrow(out2), 3)
 	expect_equal(out1[[1]][[1]], correct_geom[[1]][[1]])
 	expect_equal(out1[[2]][[1]], correct_geom[[2]][[1]])
@@ -228,8 +228,8 @@ test_that("st_difference works with fully contained geometries", {
 	expect_equal(attr(out1, "crs"), attr(in1, "crs"))
 	expect_equal(st_crs(out2), st_crs(in2))
 	# check that output geometries are actually correct
-	expect_equal(length(out1), 2)
-	expect_equal(length(out2), 2)
+	expect_length(out1, 2)
+	expect_length(out2, 2)
 	expect_equal(out1[[1]][[1]], correct_geom[[1]][[1]])
 	#expect_equal(out1[[2]][[1]], correct_geom[[2]][[1]])
 	#expect_equal(out2[[1]][[1]], correct_geom[[1]][[1]])
@@ -257,5 +257,5 @@ test_that("binary operations work on sf objects with common column names", {
 
 test_that("binary operations on empty sfg objects return NA", {
   x = st_point() == st_linestring()
-  expect_true(is.na(x))
+  expect_equal(x, NA)
 })

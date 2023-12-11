@@ -3,8 +3,8 @@ nc <- st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 
 test_that("select works", {
   skip_if_not_installed("dplyr")
-  expect_true(nc %>% select_("AREA", attr(., "sf_column"))  %>% inherits("sf"))
-  expect_true(nc %>% select(AREA) %>% inherits("sf"))
+  expect_s3_class(nc %>% select("AREA", attr(., "sf_column")), "sf")
+  expect_s3_class(nc %>% select(AREA), "sf")
 })
 
 test_that("filter to sfc works", {
@@ -24,9 +24,9 @@ suppressMessages(require(tidyr, quietly = TRUE))
 test_that("separate and unite work", {
   skip_if_not_installed("dplyr")
   skip_if_not_installed("tidyr")
-  expect_true(nc %>% separate(CNTY_ID, c("a", "b"), sep = 2) %>% inherits("sf"))
-  expect_true(nc %>% separate(CNTY_ID, c("a", "b"), sep = 2) %>%
-	unite(CNTY_ID_NEW, c("a", "b"), sep = "") %>% inherits("sf"))
+  expect_s3_class(nc %>% separate(CNTY_ID, c("a", "b"), sep = 2), "sf")
+  expect_s3_class(nc %>% separate(CNTY_ID, c("a", "b"), sep = 2) %>%
+	unite(CNTY_ID_NEW, c("a", "b"), sep = ""), "sf")
 })
 
 test_that("separate_rows work", {
@@ -39,9 +39,7 @@ test_that("separate_rows work", {
                       st_point(c(2, 2)),
                       st_point(c(3, 3))),
     stringsAsFactors = FALSE))
-  expect_true(d %>%
-                separate_rows(y, convert = TRUE) %>%
-                inherits("sf"))
+  expect_s3_class(separate_rows(d, y, convert = TRUE), "sf")
   expect_identical(d %>%
       separate_rows(y, convert = TRUE) %>%
       st_geometry(),
@@ -57,7 +55,7 @@ test_that("group/ungroup works", {
  skip_if_not_installed("dplyr")
  tbl = tibble(a = c(1,1,2,2), g = st_sfc(st_point(0:1), st_point(1:2), st_point(2:3), st_point(3:4)))
  d = st_sf(tbl)
- e <- d %>% group_by(a) %>% ungroup
+ e <- d %>% group_by(a) %>% ungroup()
  expect_equal(as.data.frame(d), as.data.frame(e))
 })
 
@@ -67,10 +65,10 @@ test_that("sample_n etc work", {
   d = st_sf(tbl)
 
   expect_sampled <- function(x) {
-    expect_true(inherits(x, c("sf", "tbl_df")))
+    expect_s3_class(x, c("sf", "tbl_df"))
     expect_named(x, c("a", "g"))
     expect_equal(nrow(x), 2)
-    expect_true(inherits(x$g, "sfc_POINT"))
+    expect_s3_class(x$g, "sfc_POINT")
   }
 
   expect_sampled(sample_n(d, 2))
@@ -86,16 +84,8 @@ test_that("nest() works", {
 
 	exp_data = list(d[1:2, "g"], d[3:4, "g"])
 
-	# Work around issues of tibble comparison in dplyr 0.8.5 (faulty
-	# all.equal.tbl_df() method)
-	if (utils::packageVersion("dplyr") < "0.8.99") {
-		dfs = lapply(out$data, function(x) st_sf(as.data.frame(x)))
-		exp_data = lapply(exp_data, function(x) st_sf(as.data.frame(x)))
-		expect_identical(dfs, exp_data)
-	} else {
-		exp = tibble(a = c(1, 2), data = exp_data) %>% group_by(a)
-		expect_identical(out, exp)
-	}
+	exp = tibble(a = c(1, 2), data = exp_data) %>% group_by(a)
+	expect_identical(out, exp)
 })
 
 test_that("st_intersection of tbl returns tbl", {
@@ -286,17 +276,17 @@ test_that("`select()` and `transmute()` observe back-stickiness of geometry colu
 
 test_that("rowwise_df class is retained on row slice", {
 	skip_if_not_installed("dplyr")
-	expect_true(nc %>% rowwise() %>% slice(1) %>% inherits("rowwise_df"))
+	expect_s3_class(slice(rowwise(nc), 1), "rowwise_df")
 })
 
 test_that("grouped_df class is retained on row slice", {
 	skip_if_not_installed("dplyr")
-	expect_true(nc %>% group_by(PERIMETER > 2) %>% slice(1) %>% inherits("grouped_df"))
+	expect_s3_class(nc %>% group_by(PERIMETER > 2) %>% slice(1), "grouped_df")
 })
 
 test_that("rowwise_df class is retained on filtered rows", {
 	skip_if_not_installed("dplyr")
-	expect_true(nc %>% rowwise() %>% filter(AREA > .1) %>% inherits("rowwise_df"))
+	expect_s3_class(nc %>% rowwise() %>% filter(AREA > .1), "rowwise_df")
 })
 
 test_that("`group_split.sf()` ignores `.keep` for rowwise_df class", {
