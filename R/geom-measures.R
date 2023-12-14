@@ -115,27 +115,18 @@ message_longlat = function(caller) {
 #' st_perimeter(mpoly)
 st_perimeter = function(x, ...) {
 	x = st_geometry(x)
-	
-	# for spherical geometries we use s2 
-	if (isTRUE(st_is_longlat(x))) {
-		
-		if (!requireNamespace("s2", quietly = TRUE)) {
+	if (isTRUE(st_is_longlat(x))) { # for spherical geometries we use s2 
+		if (!requireNamespace("s2", quietly = TRUE))
 			stop("package s2 required to calculate the perimeter of spherical geometries")
-		}
-		
 		# ensure units are set to meters 
 		units::set_units(
 			s2::s2_perimeter(x, ...), 
 			"m", 
 			mode = "standard"
 		)
-		
-		# non-spherical geometries use lwgeom	
-	} else {
-		if (!requireNamespace("lwgeom", quietly = TRUE)) {
+	} else { # non-spherical geometries use lwgeom:
+		if (!requireNamespace("lwgeom", quietly = TRUE))
 			stop("package lwgeom required, please install it first")
-		}
-		
 		# note that units are handled appropriately by lwgeom
 		lwgeom::st_perimeter(x)
 	}
