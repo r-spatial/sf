@@ -263,20 +263,21 @@ st_sf = function(..., agr = NA_agr_, row.names,
 		sfc_name = all_sfc_names[1L]
 	}
 
+	if (missing(row.names))
+		row.names = seq_along(x[[sf_column]])
+
 	df = if (inherits(x, "tbl_df")) # no worries:
 			x
-		else if (length(x) == length(all_sfc_columns)) # ONLY one sfc's
-			data.frame(row.names = seq_along(x[[1]]))
+		else if (length(x) == 1) # ONLY one sfc
+			data.frame(row.names = row.names)
 		else if (!sfc_last && inherits(x, "data.frame"))
 			x
 		else if (sfc_last && inherits(x, "data.frame"))
 			x[-all_sfc_columns]
 		else
-			cbind(as.data.frame(x[-all_sfc_columns],
+			cbind(data.frame(row.names = row.names),
+				as.data.frame(x[-all_sfc_columns],
 					stringsAsFactors = stringsAsFactors, optional = TRUE))
-
-	if (!missing(row.names))
-		row.names(df) = row.names
 
 	if (check_ring_dir) { # process:
 		for (i in seq_along(all_sfc_names))
@@ -297,10 +298,10 @@ st_sf = function(..., agr = NA_agr_, row.names,
 	st_agr(df) = agr
 	if (! missing(crs))
 		st_crs(df) = crs
-	
+
 	if (Sys.getenv("ADD_SF_NAMESPACE") == "true")
 		attr(df, ".sf_namespace") <- .sf_namespace
-	
+
 	df
 }
 
