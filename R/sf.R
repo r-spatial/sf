@@ -48,7 +48,9 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 		if (na.fail && anyNA(cc))
 			stop("missing values in coordinates not allowed")
 		# classdim = getClassDim(rep(0, length(coords)), length(coords), dim, "POINT")
-		x$geometry = structure( points_rcpp(as.matrix(cc), dim),
+		if (is.null(sf_column_name))
+			sf_column_name = "geometry"
+		x[[sf_column_name]] = structure( points_rcpp(as.matrix(cc), dim),
 			n_empty = 0L, precision = 0, crs = NA_crs_,
 			bbox = structure(
 				c(xmin = min(cc[[1]], na.rm = TRUE),
@@ -57,11 +59,12 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 				ymax = max(cc[[2]], na.rm = TRUE)), class = "bbox"),
 			class =  c("sfc_POINT", "sfc" ), names = NULL)
 
-		if (is.character(coords))
-			coords = match(coords, names(x))
-
-		if (remove)
+		if (remove) {
+			if (is.character(coords))
+				coords = match(coords, names(x))
 			x = x[-coords]
+		}
+
 	}
 	st_sf(x, ..., agr = agr, sf_column_name = sf_column_name)
 }
