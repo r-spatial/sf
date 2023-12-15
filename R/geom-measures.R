@@ -212,6 +212,28 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE,
 	}
 }
 
+check_lengths = function (dots) {
+	lengths <- vapply(dots, length, integer(1))
+	non_constant_lengths <- unique(lengths[lengths != 1])
+	if (length(non_constant_lengths) == 0) {
+		1
+	}
+	else if (length(non_constant_lengths) == 1) {
+		non_constant_lengths
+	}
+	else {
+		lengths_label <- paste0(non_constant_lengths, collapse = ", ")
+		stop(sprintf("Incompatible lengths: %s", lengths_label), 
+			call. = FALSE)
+	}
+}
+
+recycle_common = function (dots) {
+	final_length <- check_lengths(dots)
+	lapply(dots, rep_len, final_length)
+}
+
+
 #' Project point on linestring, interpolate along a linestring
 #'
 #' Project point on linestring, interpolate along a linestring
@@ -220,8 +242,10 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE,
 #' @param normalized logical; if `TRUE`, use or return distance normalised to 0-1
 #' @name st_project_point
 #' @export
+#' @details
+#' arguments `line`, `point` and `dist` are recycled as needed
 #' @examples
-#' st_project_point(st_as_sfc("LINESTRING (0 0, 10 10)"), st_as_sfc("POINT (5 5)"))
+#' st_project_point(st_as_sfc("LINESTRING (0 0, 10 10)"), st_as_sfc(c("POINT (0 0)", "POINT (5 5)")))
 #' st_project_point(st_as_sfc("LINESTRING (0 0, 10 10)"), st_as_sfc("POINT (5 5)"), TRUE)
 st_project_point = function(line, point, normalized = FALSE) {
 	stopifnot(inherits(line, "sfc"), inherits(point, "sfc"),
@@ -232,5 +256,6 @@ st_project_point = function(line, point, normalized = FALSE) {
 	point = st_cast(point, "POINT")
 	if (isTRUE(st_is_longlat(line)))
 		message_longlat("st_project_point")
-	CPL_project_point(rep(line, length(point)), rep(point, length(line)), normalized)
+	recycled = recycle_common(list(line, point))
+	CPL_project_point(recycled[[1]], recycled[[2]], normalized)
 }

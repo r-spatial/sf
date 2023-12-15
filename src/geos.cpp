@@ -1403,10 +1403,10 @@ Rcpp::List CPL_interpolate_line(Rcpp::List lines, Rcpp::NumericVector dists, boo
 	std::vector<GeomPtr> l = geometries_from_sfc(hGEOSCtxt, lines, &dim);
 	std::vector<GeomPtr> p(l.size());
 	if (normalized) {
-		for (size_t i = 0; i < l.size() && i < dists.size(); i++)
+		for (int i = 0; i < (int) l.size() && i < dists.size(); i++)
 			p[i] = geos_ptr(GEOSInterpolateNormalized_r(hGEOSCtxt, l[i].get(), dists[i]), hGEOSCtxt);
 	} else {
-		for (size_t i = 0; i < l.size() && i < dists.size(); i++)
+		for (int i = 0; i < (int) l.size() && i < dists.size(); i++)
 			p[i] = geos_ptr(GEOSInterpolate_r(hGEOSCtxt, l[i].get(), dists[i]), hGEOSCtxt);
 	}
 	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, p, dim));

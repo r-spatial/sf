@@ -21,8 +21,11 @@ st_interpolate_line(line, dist, normalized = FALSE)
 \description{
 Project point on linestring, interpolate along a linestring
 }
+\details{
+arguments \code{line}, \code{point} and \code{dist} are recycled as needed
+}
 \examples{
-st_project_point(st_as_sfc("LINESTRING (0 0, 10 10)"), st_as_sfc("POINT (5 5)"))
+st_project_point(st_as_sfc("LINESTRING (0 0, 10 10)"), st_as_sfc(c("POINT (0 0)", "POINT (5 5)")))
 st_project_point(st_as_sfc("LINESTRING (0 0, 10 10)"), st_as_sfc("POINT (5 5)"), TRUE)
 st_interpolate_line(st_as_sfc("LINESTRING (0 0, 1 1)"), 1)
 st_interpolate_line(st_as_sfc("LINESTRING (0 0, 1 1)"), 1, TRUE)

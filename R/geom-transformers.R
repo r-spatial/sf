@@ -1135,6 +1135,7 @@ st_interpolate_line = function(line, dist, normalized = FALSE) {
 	if (isTRUE(st_is_longlat(line)))
 		message_longlat("st_project_point")
 	line = st_cast(line, "LINESTRING")
-	st_sfc(CPL_interpolate_line(rep(line, length(dist)), rep(dist, length(line)), normalized), 
+	recycled = recycle_common(list(line, dist))
+	st_sfc(CPL_interpolate_line(recycled[[1]], recycled[[2]], normalized), 
 		   crs = st_crs(line))
 }
