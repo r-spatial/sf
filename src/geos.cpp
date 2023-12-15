@@ -1376,3 +1376,41 @@ Rcpp::List CPL_nary_intersection(Rcpp::List sfc) {
 	// return result
 	return ret;
 }
+
+// [[Rcpp::export]]
+Rcpp::NumericVector CPL_project_point(Rcpp::List lines, Rcpp::List points, bool normalized) {
+	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
+	int dim = 2;
+	std::vector<GeomPtr> l = geometries_from_sfc(hGEOSCtxt, lines, &dim);
+	std::vector<GeomPtr> p = geometries_from_sfc(hGEOSCtxt, points, &dim);
+	Rcpp::NumericVector ret(p.size());
+	if (normalized) {
+		for (size_t i = 0; i < l.size() && i < p.size(); i++)
+			ret[i] = GEOSProjectNormalized_r(hGEOSCtxt, l[i].get(), p[i].get());
+	} else {
+		for (size_t i = 0; i < l.size() && i < p.size(); i++)
+			ret[i] = GEOSProject_r(hGEOSCtxt, l[i].get(), p[i].get());
+	}
+	CPL_geos_finish(hGEOSCtxt);
+	// return result
+	return ret;
+}
+
+// [[Rcpp::export]]
+Rcpp::List CPL_interpolate_line(Rcpp::List lines, Rcpp::NumericVector dists, bool normalized) {
+	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
+	int dim = 2;
+	std::vector<GeomPtr> l = geometries_from_sfc(hGEOSCtxt, lines, &dim);
+	std::vector<GeomPtr> p(l.size());
+	if (normalized) {
+		for (size_t i = 0; i < l.size() && i < dists.size(); i++)
+			p[i] = geos_ptr(GEOSInterpolateNormalized_r(hGEOSCtxt, l[i].get(), dists[i]), hGEOSCtxt);
+	} else {
+		for (size_t i = 0; i < l.size() && i < dists.size(); i++)
+			p[i] = geos_ptr(GEOSInterpolate_r(hGEOSCtxt, l[i].get(), dists[i]), hGEOSCtxt);
+	}
+	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, p, dim));
+	CPL_geos_finish(hGEOSCtxt);
+	// return result
+	return ret;
+}

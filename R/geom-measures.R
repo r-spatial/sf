@@ -211,3 +211,26 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE,
 		d
 	}
 }
+
+#' Project point on linestring, interpolate along a linestring
+#'
+#' Project point on linestring, interpolate along a linestring
+#' @param line object of class `sfc` with `LINESTRING` geometry
+#' @param point object of class `sfc` with `POINT` geometry
+#' @param normalized logical; if `TRUE`, use or return distance normalised to 0-1
+#' @name st_project_point
+#' @export
+#' @examples
+#' st_project_point(st_as_sfc("LINESTRING (0 0, 10 10)"), st_as_sfc("POINT (5 5)"))
+#' st_project_point(st_as_sfc("LINESTRING (0 0, 10 10)"), st_as_sfc("POINT (5 5)"), TRUE)
+st_project_point = function(line, point, normalized = FALSE) {
+	stopifnot(inherits(line, "sfc"), inherits(point, "sfc"),
+		all(st_dimension(line) == 1), all(st_dimension(point) == 0),
+		is.logical(normalized), length(normalized) == 1,
+		st_crs(line) == st_crs(point))
+	line = st_cast(line, "LINESTRING")
+	point = st_cast(point, "POINT")
+	if (isTRUE(st_is_longlat(line)))
+		message_longlat("st_project_point")
+	CPL_project_point(rep(line, length(point)), rep(point, length(line)), normalized)
+}

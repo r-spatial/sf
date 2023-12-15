@@ -1,3 +1,7 @@
+# version 1.0-16
+
+* add `st_project_point()` to find how far a point is when projected on a line, and `st_interpolate_line()` to obtain a point along a line; #2291
+
 # version 1.0-15
 
 * add `st_perimeter()` to cover both geographic and projected coordinates; #268, #2279, by @JosiahParry

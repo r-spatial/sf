@@ -880,6 +880,32 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_project_point
+Rcpp::NumericVector CPL_project_point(Rcpp::List lines, Rcpp::List points, bool normalized);
+RcppExport SEXP _sf_CPL_project_point(SEXP linesSEXP, SEXP pointsSEXP, SEXP normalizedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type lines(linesSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type points(pointsSEXP);
+    Rcpp::traits::input_parameter< bool >::type normalized(normalizedSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_project_point(lines, points, normalized));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_interpolate_line
+Rcpp::List CPL_interpolate_line(Rcpp::List lines, Rcpp::NumericVector dists, bool normalized);
+RcppExport SEXP _sf_CPL_interpolate_line(SEXP linesSEXP, SEXP distsSEXP, SEXP normalizedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type lines(linesSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type dists(distsSEXP);
+    Rcpp::traits::input_parameter< bool >::type normalized(normalizedSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_interpolate_line(lines, dists, normalized));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_hex_to_raw
 Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx);
 RcppExport SEXP _sf_CPL_hex_to_raw(SEXP cxSEXP) {
@@ -1500,6 +1526,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_transpose_sparse_incidence", (DL_FUNC) &_sf_CPL_transpose_sparse_incidence, 2},
     {"_sf_CPL_nary_difference", (DL_FUNC) &_sf_CPL_nary_difference, 1},
     {"_sf_CPL_nary_intersection", (DL_FUNC) &_sf_CPL_nary_intersection, 1},
+    {"_sf_CPL_project_point", (DL_FUNC) &_sf_CPL_project_point, 3},
+    {"_sf_CPL_interpolate_line", (DL_FUNC) &_sf_CPL_interpolate_line, 3},
     {"_sf_CPL_hex_to_raw", (DL_FUNC) &_sf_CPL_hex_to_raw, 1},
     {"_sf_CPL_raw_to_hex", (DL_FUNC) &_sf_CPL_raw_to_hex, 1},
     {"_sf_CPL_read_mdim", (DL_FUNC) &_sf_CPL_read_mdim, 8},

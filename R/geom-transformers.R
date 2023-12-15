@@ -1121,3 +1121,20 @@ st_line_sample = function(x, n, density, type = "regular", sample = NULL) {
 	if (length(pts) == 2 && is.numeric(pts))
   		assign(".geos_error", st_point(pts), envir=.sf_cache)
 } #nocov end
+
+#' @param dist numeric, vector with distance value(s)
+#' @name st_project_point
+#' @export
+#' @examples 
+#' st_interpolate_line(st_as_sfc("LINESTRING (0 0, 1 1)"), 1)
+#' st_interpolate_line(st_as_sfc("LINESTRING (0 0, 1 1)"), 1, TRUE)
+st_interpolate_line = function(line, dist, normalized = FALSE) {
+	stopifnot(inherits(line, "sfc"), all(st_dimension(line) == 1), 
+		is.logical(normalized), length(normalized) == 1,
+		is.numeric(dist))
+	if (isTRUE(st_is_longlat(line)))
+		message_longlat("st_project_point")
+	line = st_cast(line, "LINESTRING")
+	st_sfc(CPL_interpolate_line(rep(line, length(dist)), rep(dist, length(line)), normalized), 
+		   crs = st_crs(line))
+}
