@@ -203,7 +203,7 @@ meters.</p></dd>
     <p><code>st_buffer</code> computes a buffer around this geometry/each geometry. If any of <code>endCapStyle</code>,
 <code>joinStyle</code>, or <code>mitreLimit</code> are set to non-default values ('ROUND', 'ROUND', 1.0 respectively) then
 the underlying 'buffer with style' GEOS function is used.
-If a negative buffer returns empty polygons instead of shrinking, set st_use_s2() to FALSE
+If a negative buffer returns empty polygons instead of shrinking, set sf_use_s2() to FALSE
 See <a href="https://postgis.net/docs/ST_Buffer.html" class="external-link">postgis.net/docs/ST_Buffer.html</a> for details.</p>
 <p><code>nQuadSegs</code>, <code>endCapsStyle</code>, <code>joinStyle</code>, <code>mitreLimit</code> and <code>singleSide</code> only
 work when the GEOS back-end is used: for projected coordinates or when <code><a href="s2.html">sf_use_s2()</a></code> is set
