@@ -39,7 +39,7 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	wget
 
 #libv8-3.14-dev \
-RUN apt-get install -y \
+RUN apt-get update && apt-get install -y --fix-missing \
 	libjq-dev \
 	libprotobuf-dev \
 	libxml2-dev \
@@ -51,20 +51,18 @@ RUN apt-get install -y \
 	libnetcdf-dev \
 	locales \
 	libssl-dev \
-	libtiff-dev
+	libtiff-dev \
+	cmake \
+	libtiff5-dev \
+	libopenjp2-7-dev
 
 RUN locale-gen en_US.UTF-8
 
 #ENV PROJ_VERSION=7.1.0
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
-RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
-  && apt-get install -y \
-	cmake \
-	libtiff5-dev
-
 # GEOS:
-ENV GEOS_VERSION 3.11.2
+ENV GEOS_VERSION 3.12.1
 
 RUN wget -q http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
   && bzip2 -d geos-*bz2 \
@@ -80,7 +78,7 @@ RUN wget -q http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
 
 #RUN git clone --depth 1 https://github.com/OSGeo/PROJ.git
 # https://download.osgeo.org/proj/proj-9.0.0RC1.tar.gz
-ENV PROJ_VERSION 9.3.0
+ENV PROJ_VERSION 9.3.1
 RUN wget -q http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz
 RUN tar zxvf proj-${PROJ_VERSION}.tar.gz
 RUN cd proj* \
@@ -100,9 +98,7 @@ RUN cd proj* \
 #  && rm proj-data*zip \
 #  && cd -
 
-RUN apt-get install -y libopenjp2-7-dev
 # GDAL:
-
 ENV GDAL_VERSION 3.8.2
 ENV GDAL_VERSION_NAME 3.8.2rc1
 
