@@ -177,11 +177,12 @@ place and a warning is raised to stress this.</p>
 <p><code>NA_crs_</code> is the <code>crs</code> object with missing values for <code>input</code> and <code>wkt</code>.</p>
 <p>the <code>$</code> method for <code>crs</code> objects retrieves named elements
 using the GDAL interface; named elements include
-<code>"SemiMajor"</code>, <code>"SemiMinor"</code>, <code>"InvFlattening"</code>, <code>"IsGeographic"</code>,
-<code>"units_gdal"</code>, <code>"IsVertical"</code>, <code>"WktPretty"</code>, <code>"Wkt"</code>,
-<code>"Name"</code>, <code>"proj4string"</code>, <code>"epsg"</code>, <code>"yx"</code>,
-<code>"ud_unit"</code>, and <code>axes</code> (this may be subject to changes in future GDAL versions).
-<code>"ud_unit"</code> returns a valid <a href="https://r-quantities.github.io/units/reference/units.html" class="external-link">units</a> object or <code>NULL</code> if units are missing.</p>
+<code>SemiMajor</code>, <code>SemiMinor</code>, <code>InvFlattening</code>, <code>IsGeographic</code>,
+<code>units_gdal</code>, <code>IsVertical</code>, <code>WktPretty</code>, <code>Wkt</code>,
+<code>Name</code>, <code>proj4string</code>, <code>epsg</code>, <code>yx</code>,
+<code>ud_unit</code>, and <code>axes</code> (this may be subject to changes in future GDAL versions).</p>
+<p>Note that not all valid CRS have a corresponding <code>proj4string</code>.</p>
+<p><code>ud_unit</code> returns a valid <a href="https://r-quantities.github.io/units/reference/units.html" class="external-link">units</a> object or <code>NULL</code> if units are missing.</p>
 <p>format.crs returns NA if the crs is missing valued, or else
 the name of a crs if it is different from "unknown", or
 else the user input if it was set, or else its "proj4string" representation;</p>
@@ -229,10 +230,6 @@ The return value is the current state of this (<code>FALSE</code>, by default).<
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "EPSG:3857"</span>
 <span class="r-in"><span><span class="fu">st_crs</span><span class="op">(</span><span class="fl">3857</span><span class="op">)</span><span class="op">$</span><span class="va">proj4string</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "+proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs"</span>
-<span class="r-in"><span><span class="fu">st_crs</span><span class="op">(</span><span class="fl">3857</span><span class="op">)</span><span class="op">$</span><span class="va">b</span>     <span class="co"># numeric</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 6378137</span>
-<span class="r-in"><span><span class="fu">st_crs</span><span class="op">(</span><span class="fl">3857</span><span class="op">)</span><span class="op">$</span><span class="va">units</span> <span class="co"># character</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "m"</span>
 <span class="r-in"><span><span class="va">pt</span> <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">60</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># st_axis_order() only has effect in GDAL &gt;= 2.5.0:</span></span></span>
 <span class="r-in"><span><span class="fu">st_axis_order</span><span class="op">(</span><span class="op">)</span> <span class="co"># query default: FALSE means interpret pt as (longitude latitude)</span></span></span>
