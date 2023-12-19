@@ -100,10 +100,11 @@ RUN cd proj* \
 #  && rm proj-data*zip \
 #  && cd -
 
+RUN apt-get install -y libopenjp2-7-dev
 # GDAL:
 
-ENV GDAL_VERSION 3.8.0
-ENV GDAL_VERSION_NAME 3.8.0
+ENV GDAL_VERSION 3.8.2
+ENV GDAL_VERSION_NAME 3.8.2rc1
 
 RUN wget -q http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
@@ -115,7 +116,7 @@ RUN wget -q http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_N
   && make install \
   && ldconfig
 
-RUN Rscript -e 'install.packages(c("sp", "rgeos", "rgdal", "RPostgreSQL", "RSQLite", "testthat", "knitr", "tidyr", "geosphere", "maptools", "maps", "microbenchmark", "raster", "dplyr", "tibble", "units", "DBI",  "covr", "protolite", "tmap", "mapview", "odbc", "pool", "rmarkdown", "RPostgres","spatstat", "stars", "XML", "tmaptools", "tmap", "terra", "PCICt", "RNetCDF", "future.apply", "ggforce", "ggthemes", "gstat", "ncmeta", "pbapply", "plm", "spacetime", "xts", "zoo", "tidync", "ncdfgeom", "cubelyr", "clue", "classInt"))'
+RUN Rscript -e 'install.packages(c("sp", "rgeos", "rgdal", "RPostgreSQL", "RSQLite", "testthat", "knitr", "tidyr", "geosphere", "maptools", "maps", "microbenchmark", "raster", "dplyr", "tibble", "units", "DBI",  "covr", "protolite", "tmap", "mapview", "odbc", "pool", "rmarkdown", "RPostgres","spatstat", "stars", "XML", "tmaptools", "tmap", "terra", "PCICt", "RNetCDF", "future.apply", "ggforce", "ggthemes", "gstat", "ncmeta", "pbapply", "plm", "spacetime", "xts", "zoo", "tidync", "ncdfgeom", "cubelyr", "clue", "classInt", "mapdata", "ncdfgeom", "exactextractr", "randomForest", "nanoarrow", "mapview", "tmap", "spatstat", "spatstat.linnet"))'
 
 RUN git clone --depth 10 https://github.com/r-spatial/sf.git
 RUN git clone --depth 10 https://github.com/r-spatial/lwgeom.git
@@ -124,26 +125,16 @@ RUN git clone --depth 10 https://github.com/r-spatial/stars.git
 
 RUN R CMD build --no-build-vignettes --no-manual lwgeom
 RUN R CMD build --no-build-vignettes --no-manual sf
+RUN R CMD build --no-manual stars
 # RUN pkg-config proj --modversion
 RUN R CMD INSTALL sf
 RUN R CMD INSTALL lwgeom
 RUN R CMD INSTALL stars
 
-RUN Rscript -e 'install.packages(c("mapview", "tmap"))'
-RUN Rscript -e 'install.packages(c("spatstat", "spatstat.linnet"))'
 
-RUN R CMD build --no-build-vignettes --no-manual sf
-RUN rm -fr sf
-RUN git clone --depth 10 https://github.com/r-spatial/sf.git
-RUN R CMD INSTALL sf
-RUN Rscript -e 'install.packages(c("nanoarrow"))'
 RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
 RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
 
-RUN Rscript -e 'install.packages("starsdata", repos="http://gis-bigdata.uni-muenster.de/pebesma/")'
-RUN R CMD build --no-manual stars
-RUN Rscript -e 'install.packages(c("ncdfgeom", "exactextractr"))'
+RUN Rscript -e 'options(timeout=600); install.packages("starsdata", repos="http://cran.uni-muenster.de/pebesma/")'
+
 RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
-RUN Rscript -e "install.packages(c('leaflet.extras2', 'mapdeck', 'plainview', 'poorman', 'rstudioapi', 'tinytest', 'webshot', 'webshot2'))"
-RUN wget -q https://cran.r-project.org/src/contrib/mapview_2.11.2.tar.gz
-RUN R CMD check mapview*gz
