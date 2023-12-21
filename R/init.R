@@ -90,13 +90,13 @@ if_exists_restore = function(vars, where) {
 
 load_gdal <- function() {
 	if (!identical(Sys.getenv("R_SF_USE_PROJ_DATA"), "true")) {
-		if (file.exists(prj <- system.file("proj/nad.lst", package = "sf")[1])) {
+		if (file.exists(prj <- system.file("proj", package = "sf")[1])) {
 			# nocov start
 			if (! CPL_set_data_dir(prj)) { # if TRUE, uses C API to set path, leaving PROJ_LIB / PROJ_DATA alone
 				if_exists_replace("PROJ_LIB", prj, .sf_cache)
 				if_exists_replace("PROJ_DATA", prj, .sf_cache)
 			}
-			CPL_use_proj4_init_rules(1L)
+			# CPL_use_proj4_init_rules(1L)
 			# nocov end
 		}
 		if (file.exists(gdl <- system.file("gdal", package = "sf")[1]))
