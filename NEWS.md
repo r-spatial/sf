@@ -1,6 +1,12 @@
 # version 1.0-16
 
-* add `st_line_project()` to find how far a point is when projected on a line, and `st_line_interpolate()` to obtain a point at a certain distance along a line; #2291
+* if environment variable `R_SF_USE_PROJ_DATA` is `true`, `GDAL_DATA`, `PROJ_DATA` (and deprecated `PROJ_LIB`) will not be ignored.
+
+* environment variables `PROJ_LIB` and `PROJ_DATA` are (again) ignored on `sf` binary CRAN installations (win + macos); #2298
+
+* add `st_line_project()` to find how far a point is when projected on a line; #2291
+
+* add `st_line_interpolate()` to obtain a point at a certain distance along a line; #2291
 
 # version 1.0-15
 
