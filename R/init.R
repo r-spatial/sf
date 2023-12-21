@@ -72,18 +72,18 @@ sf_extSoftVersion = function() {
 		names = c("GEOS", "GDAL", "proj.4", "GDAL_with_GEOS", "USE_PROJ_H", "PROJ"))
 }
 
-if_exists_replace = function(var, new, where) {
-	if (Sys.getenv(var) != "") {
+save_and_replace = function(var, value, where) {
+	if (Sys.getenv(var) != "")
 		assign(paste0(".sf.", var), Sys.getenv(var), envir = where)
-		Sys.setenv(var = new)
-	}
+	# Sys.setenv(var = value) uses NSE and will set var, not the variable var points to:
+	do.call(Sys.setenv, setNames(list(value), var))
 }
 
 if_exists_restore = function(vars, where) {
 	fn = function(var, where) {
 		lname = paste0(".sf.", var)
 		if (!is.null(get0(lname, envir = where)))
-			Sys.setenv(var = get(lname, envir = where))
+			do.call(Sys.setenv, setNames(list(get(lname, envir = where)), var)) # see above
 	}
 	lapply(vars, fn, where = where)
 }
@@ -93,14 +93,14 @@ load_gdal <- function() {
 		if (file.exists(prj <- system.file("proj", package = "sf")[1])) {
 			# nocov start
 			if (! CPL_set_data_dir(prj)) { # if TRUE, uses C API to set path, leaving PROJ_LIB / PROJ_DATA alone
-				if_exists_replace("PROJ_LIB", prj, .sf_cache)
-				if_exists_replace("PROJ_DATA", prj, .sf_cache)
+				save_and_replace("PROJ_LIB", prj, .sf_cache)
+				save_and_replace("PROJ_DATA", prj, .sf_cache)
 			}
 			# CPL_use_proj4_init_rules(1L)
 			# nocov end
 		}
 		if (file.exists(gdl <- system.file("gdal", package = "sf")[1]))
-			if_exists_replace("GDAL_DATA", gdl, .sf_cache)
+			save_and_replace("GDAL_DATA", gdl, .sf_cache)
 	}
 	CPL_gdal_init()
 	register_all_s3_methods() # dynamically registers non-imported pkgs (tidyverse)
