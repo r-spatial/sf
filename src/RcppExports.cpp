@@ -228,28 +228,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// CPL_get_proj_search_paths
-Rcpp::CharacterVector CPL_get_proj_search_paths(Rcpp::CharacterVector paths);
-RcppExport SEXP _sf_CPL_get_proj_search_paths(SEXP pathsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type paths(pathsSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_get_proj_search_paths(paths));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_set_proj_search_paths
-Rcpp::CharacterVector CPL_set_proj_search_paths(Rcpp::CharacterVector paths);
-RcppExport SEXP _sf_CPL_set_proj_search_paths(SEXP pathsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type paths(pathsSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_set_proj_search_paths(paths));
-    return rcpp_result_gen;
-END_RCPP
-}
 // CPL_area
 Rcpp::NumericVector CPL_area(Rcpp::List sfc);
 RcppExport SEXP _sf_CPL_area(SEXP sfcSEXP) {
@@ -1067,12 +1045,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_set_data_dir
-Rcpp::LogicalVector CPL_set_data_dir(std::string data_dir);
+Rcpp::LogicalVector CPL_set_data_dir(Rcpp::CharacterVector data_dir);
 RcppExport SEXP _sf_CPL_set_data_dir(SEXP data_dirSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type data_dir(data_dirSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type data_dir(data_dirSEXP);
     rcpp_result_gen = Rcpp::wrap(CPL_set_data_dir(data_dir));
     return rcpp_result_gen;
 END_RCPP
@@ -1455,8 +1433,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_sfc_from_wkt", (DL_FUNC) &_sf_CPL_sfc_from_wkt, 1},
     {"_sf_CPL_gdal_with_geos", (DL_FUNC) &_sf_CPL_gdal_with_geos, 0},
     {"_sf_CPL_axis_order_authority_compliant", (DL_FUNC) &_sf_CPL_axis_order_authority_compliant, 1},
-    {"_sf_CPL_get_proj_search_paths", (DL_FUNC) &_sf_CPL_get_proj_search_paths, 1},
-    {"_sf_CPL_set_proj_search_paths", (DL_FUNC) &_sf_CPL_set_proj_search_paths, 1},
     {"_sf_CPL_area", (DL_FUNC) &_sf_CPL_area, 1},
     {"_sf_CPL_gdal_dimension", (DL_FUNC) &_sf_CPL_gdal_dimension, 2},
     {"_sf_CPL_length", (DL_FUNC) &_sf_CPL_length, 1},

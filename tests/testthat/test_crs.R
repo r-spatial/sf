@@ -35,7 +35,7 @@ test_that("sf_proj_info works", {
   expect_silent(x <- sf_proj_info("ellps"))
   expect_silent(x <- sf_proj_info("datum"))
   expect_silent(x <- sf_proj_info("units"))
-  expect_silent(path <- sf_proj_info("path"))
+  expect_silent(path <- sf_proj_info("path")[1])
   expect_true(is.logical(sf_proj_info(path = path)))
   expect_true(is.logical(sf_proj_info("network")))
 })

@@ -78,7 +78,7 @@ at least the one specified will be considered; a negative value disables this fe
 
 \item{quiet}{logical; print options after they have been parsed?}
 
-\item{type}{character; one of \code{have_datum_files}, \code{proj}, \code{ellps}, \code{datum}, \code{units} or \code{prime_meridians}; see Details.}
+\item{type}{character; one of \code{have_datum_files}, \code{proj}, \code{ellps}, \code{datum}, \code{units}, \code{path}, or \code{prime_meridians}; see Details.}
 
 \item{path}{character; PROJ search path to be set}
 }
