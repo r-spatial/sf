@@ -1,6 +1,6 @@
 
 #' @name st_transform
-#' @param type character; one of \code{have_datum_files}, \code{proj}, \code{ellps}, \code{datum}, \code{units} or \code{prime_meridians}; see Details.
+#' @param type character; one of `have_datum_files`, `proj`, `ellps`, `datum`, `units`, `path`, or `prime_meridians`; see Details.
 #' @param path character; PROJ search path to be set
 #' @export
 #' @details \code{sf_proj_info} lists the available projections, ellipses, datums, units, or data search path of the PROJ library when \code{type} is equal to proj, ellps, datum, units or path; when \code{type} equals \code{have_datum_files} a boolean is returned indicating whether datum files are installed and accessible (checking for \code{conus}).
@@ -21,7 +21,7 @@ sf_proj_info = function(type = "proj", path) {
 		return(CPL_get_data_dir(FALSE))
 	
 	if (!missing(path) && is.character(path))
-		return(invisible(CPL_set_data_dir(path)))
+		return(invisible(unique(CPL_set_data_dir(path))))
 
 	if (type == "network")
 		return(CPL_is_network_enabled(TRUE))
@@ -88,9 +88,9 @@ sf_project = function(from = character(0), to = character(0), pts, keep = FALSE,
 #' @export
 sf_proj_search_paths = function(paths = character(0)) {
 	if (length(paths) == 0)
-		CPL_get_proj_search_paths(paths) # get
+		CPL_get_data_dir(FALSE)
 	else
-		CPL_set_proj_search_paths(as.character(paths)) # set
+		CPL_set_data_dir(as.character(paths)) # set
 }
 
 #' @param enable logical; set this to enable (TRUE) or disable (FALSE) the proj network search facility

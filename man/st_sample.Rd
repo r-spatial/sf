@@ -30,7 +30,7 @@ st_sample(x, size, ...)
   size,
   ...,
   great_circles = FALSE,
-  segments = units::set_units(2, degrees)
+  segments = units::set_units(2, "degree", mode = "standard")
 )
 }
 \arguments{

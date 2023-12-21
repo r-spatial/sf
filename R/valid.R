@@ -95,5 +95,5 @@ st_make_valid.sfc = function(x, ..., oriented = FALSE, s2_options = s2::s2_optio
 
 #' @export
 st_make_valid.sf = function(x, ...) {
-	st_set_geometry(x, st_make_valid(st_geometry(x)))
+	st_set_geometry(x, st_make_valid(st_geometry(x), ...))
 }

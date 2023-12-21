@@ -77,14 +77,6 @@ CPL_axis_order_authority_compliant <- function(authority_compliant) {
     .Call(`_sf_CPL_axis_order_authority_compliant`, authority_compliant)
 }
 
-CPL_get_proj_search_paths <- function(paths) {
-    .Call(`_sf_CPL_get_proj_search_paths`, paths)
-}
-
-CPL_set_proj_search_paths <- function(paths) {
-    .Call(`_sf_CPL_set_proj_search_paths`, paths)
-}
-
 CPL_area <- function(sfc) {
     .Call(`_sf_CPL_area`, sfc)
 }
@@ -255,6 +247,14 @@ CPL_nary_difference <- function(sfc) {
 
 CPL_nary_intersection <- function(sfc) {
     .Call(`_sf_CPL_nary_intersection`, sfc)
+}
+
+CPL_line_project <- function(lines, points, normalized) {
+    .Call(`_sf_CPL_line_project`, lines, points, normalized)
+}
+
+CPL_line_interpolate <- function(lines, dists, normalized) {
+    .Call(`_sf_CPL_line_interpolate`, lines, dists, normalized)
 }
 
 CPL_hex_to_raw <- function(cx) {

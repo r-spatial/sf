@@ -153,12 +153,12 @@ st_sample.sfg = function(x, size, ...) {
 #' st_bbox(s1) # within bbox
 #' s2 = st_sample(bbox, 400, great_circles = TRUE)
 #' st_bbox(s2) # outside bbox
-st_sample.bbox = function(x, size, ..., great_circles = FALSE, segments = units::set_units(2, degrees)) {
+st_sample.bbox = function(x, size, ..., great_circles = FALSE, segments = units::set_units(2, "degree", mode = "standard")) {
 	polygon = st_as_sfc(x)
 	crs = st_crs(x)
 	if (isTRUE(st_is_longlat(x)) && !great_circles) {
 		st_crs(polygon) = NA_crs_ # to fool segmentize that we're on R2:
-		segments = units::drop_units(units::set_units(segments, degrees))
+		segments = units::drop_units(units::set_units(segments, "degree", mode = "standard"))
 		polygon = st_set_crs(st_segmentize(polygon, segments), crs)
 	}
 	st_sample(polygon, size, ...)
@@ -193,8 +193,8 @@ st_poly_sample = function(x, size, ..., type = "random",
 				if (!requireNamespace("lwgeom", quietly = TRUE))
 					warning("coordinate ranges not computed along great circles; install package lwgeom to get rid of this warning")
 				else 
-					bb = st_bbox(st_segmentize(st_as_sfc(bb), 
-										   units::set_units(1, "degree", mode = "standard"))) # get coordinate range on S2
+					bb = st_bbox(st_segmentize(st_as_sfc(bb),
+							units::set_units(1, "degree", mode = "standard"))) # get coordinate range on S2
 			}
 			R = s2::s2_earth_radius_meters()
 			toRad = pi / 180

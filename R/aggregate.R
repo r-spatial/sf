@@ -107,7 +107,7 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 #' sum(a2$BIR74) / sum(nc$BIR74)
 #' a1$intensive = a1$BIR74
 #' a1$extensive = a2$BIR74
-#' plot(a1[c("intensive", "extensive")], key.pos = 4)
+#' \donttest{plot(a1[c("intensive", "extensive")], key.pos = 4)}
 #' @export
 st_interpolate_aw = function(x, to, extensive, ...) UseMethod("st_interpolate_aw")
 
