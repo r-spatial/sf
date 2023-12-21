@@ -519,13 +519,13 @@ of some common data formats is illustrated below:
 `st_layers(dsn)` lists the layers present in data source `dsn`,
 and gives the number of fields, features and geometry type for each
 layer:
-```{r}
+```{r eval=FALSE}
 st_layers(system.file("osm/overpass.osm", package="sf"))
 ```
 we see that in this case, the number of features is `NA` because
 for this xml file the whole file needs to be read, which may be
 costly for large files. We can force counting by:
-```{r}
+```{r eval=FALSE}
 Sys.setenv(OSM_USE_CUSTOM_INDEXING="NO")
 st_layers(system.file("osm/overpass.osm", package="sf"), do_count = TRUE)
 ```
