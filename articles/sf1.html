@@ -856,29 +856,13 @@ read. Reading of some common data formats is illustrated below:</p>
 <code>dsn</code>, and gives the number of fields, features and geometry
 type for each layer:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/st_layers.html">st_layers</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"osm/overpass.osm"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">## Driver: OSM </span></span>
-<span><span class="co">## Available layers:</span></span>
-<span><span class="co">##         layer_name       geometry_type features fields crs_name</span></span>
-<span><span class="co">## 1           points               Point       NA     10   WGS 84</span></span>
-<span><span class="co">## 2            lines         Line String       NA      9   WGS 84</span></span>
-<span><span class="co">## 3 multilinestrings   Multi Line String       NA      4   WGS 84</span></span>
-<span><span class="co">## 4    multipolygons       Multi Polygon       NA     25   WGS 84</span></span>
-<span><span class="co">## 5  other_relations Geometry Collection       NA      4   WGS 84</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/st_layers.html">st_layers</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"osm/overpass.osm"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>we see that in this case, the number of features is <code>NA</code>
 because for this xml file the whole file needs to be read, which may be
 costly for large files. We can force counting by:</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>OSM_USE_CUSTOM_INDEXING<span class="op">=</span><span class="st">"NO"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/st_layers.html">st_layers</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"osm/overpass.osm"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>, do_count <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">## Driver: OSM </span></span>
-<span><span class="co">## Available layers:</span></span>
-<span><span class="co">##         layer_name       geometry_type features fields crs_name</span></span>
-<span><span class="co">## 1           points               Point        1     10   WGS 84</span></span>
-<span><span class="co">## 2            lines         Line String        0      9   WGS 84</span></span>
-<span><span class="co">## 3 multilinestrings   Multi Line String        0      4   WGS 84</span></span>
-<span><span class="co">## 4    multipolygons       Multi Polygon       13     25   WGS 84</span></span>
-<span><span class="co">## 5  other_relations Geometry Collection        0      4   WGS 84</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/st_layers.html">st_layers</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"osm/overpass.osm"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>, do_count <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>Another example of reading kml and kmz files is:</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Download .shp data</span></span>
