@@ -240,14 +240,15 @@ recycle_common = function (dots) {
 #' @param line object of class `sfc` with `LINESTRING` geometry
 #' @param point object of class `sfc` with `POINT` geometry
 #' @param normalized logical; if `TRUE`, use or return distance normalised to 0-1
-#' @name st_project_point
+#' @name st_line_project_point
+#' @returns `st_line_project` returns the distance(s) of point(s) along line(s), when projected on the line(s)
 #' @export
 #' @details
-#' arguments `line`, `point` and `dist` are recycled as needed
+#' arguments `line`, `point` and `dist` are recycled to common length when needed
 #' @examples
-#' st_project_point(st_as_sfc("LINESTRING (0 0, 10 10)"), st_as_sfc(c("POINT (0 0)", "POINT (5 5)")))
-#' st_project_point(st_as_sfc("LINESTRING (0 0, 10 10)"), st_as_sfc("POINT (5 5)"), TRUE)
-st_project_point = function(line, point, normalized = FALSE) {
+#' st_line_project(st_as_sfc("LINESTRING (0 0, 10 10)"), st_as_sfc(c("POINT (0 0)", "POINT (5 5)")))
+#' st_line_project(st_as_sfc("LINESTRING (0 0, 10 10)"), st_as_sfc("POINT (5 5)"), TRUE)
+st_line_project = function(line, point, normalized = FALSE) {
 	stopifnot(inherits(line, "sfc"), inherits(point, "sfc"),
 		all(st_dimension(line) == 1), all(st_dimension(point) == 0),
 		is.logical(normalized), length(normalized) == 1,
@@ -257,5 +258,5 @@ st_project_point = function(line, point, normalized = FALSE) {
 	if (isTRUE(st_is_longlat(line)))
 		message_longlat("st_project_point")
 	recycled = recycle_common(list(line, point))
-	CPL_project_point(recycled[[1]], recycled[[2]], normalized)
+	CPL_line_project(recycled[[1]], recycled[[2]], normalized)
 }

@@ -257,12 +257,12 @@ CPL_nary_intersection <- function(sfc) {
     .Call(`_sf_CPL_nary_intersection`, sfc)
 }
 
-CPL_project_point <- function(lines, points, normalized) {
-    .Call(`_sf_CPL_project_point`, lines, points, normalized)
+CPL_line_project <- function(lines, points, normalized) {
+    .Call(`_sf_CPL_line_project`, lines, points, normalized)
 }
 
-CPL_interpolate_line <- function(lines, dists, normalized) {
-    .Call(`_sf_CPL_interpolate_line`, lines, dists, normalized)
+CPL_line_interpolate <- function(lines, dists, normalized) {
+    .Call(`_sf_CPL_line_interpolate`, lines, dists, normalized)
 }
 
 CPL_hex_to_raw <- function(cx) {

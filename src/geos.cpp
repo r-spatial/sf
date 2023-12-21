@@ -1378,7 +1378,7 @@ Rcpp::List CPL_nary_intersection(Rcpp::List sfc) {
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericVector CPL_project_point(Rcpp::List lines, Rcpp::List points, bool normalized) {
+Rcpp::NumericVector CPL_line_project(Rcpp::List lines, Rcpp::List points, bool normalized) {
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 	int dim = 2;
 	std::vector<GeomPtr> l = geometries_from_sfc(hGEOSCtxt, lines, &dim);
@@ -1397,7 +1397,7 @@ Rcpp::NumericVector CPL_project_point(Rcpp::List lines, Rcpp::List points, bool 
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_interpolate_line(Rcpp::List lines, Rcpp::NumericVector dists, bool normalized) {
+Rcpp::List CPL_line_interpolate(Rcpp::List lines, Rcpp::NumericVector dists, bool normalized) {
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 	int dim = 2;
 	std::vector<GeomPtr> l = geometries_from_sfc(hGEOSCtxt, lines, &dim);

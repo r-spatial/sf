@@ -1,6 +1,6 @@
 # version 1.0-16
 
-* add `st_project_point()` to find how far a point is when projected on a line, and `st_interpolate_line()` to obtain a point along a line; #2291
+* add `st_line_project()` to find how far a point is when projected on a line, and `st_line_interpolate()` to obtain a point at a certain distance along a line; #2291
 
 # version 1.0-15
 
