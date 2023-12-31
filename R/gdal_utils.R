@@ -112,6 +112,7 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 						"-te", "-tr", "-tap", "-ts", "-ot")) # https://gdal.org/programs/gdal_rasterize.html
 				CPL_gdalrasterize(source, destination, options, oo, doo, config_options, overwrite, quiet)
 			}, # nocov end
+			gdalfootprint = CPL_gdalfootprint(source, destination, options, oo, config_options, quiet),
 			translate = CPL_gdaltranslate(source, destination, options, oo, config_options, quiet),
 			vectortranslate = CPL_gdalvectortranslate(source, destination, options, oo, doo, config_options, quiet),
 			buildvrt = CPL_gdalbuildvrt(if (missing(source)) character(0) else source, destination, options, oo, config_options, quiet),
