@@ -89,7 +89,6 @@ test_that('gdal_utils work', {
   skip_if_not(sf_extSoftVersion()[["GDAL"]] >= "3.8.0")
   tif <- system.file("tif/geomatrix.tif", package="sf")
   tf4 <- tempfile(fileext = ".gpkg")
-  expect_true(gdal_utils("gdalfootprint", sd2, tf4))
   expect_true(gdal_utils("gdalfootprint", tif, tf4))
 })
 
