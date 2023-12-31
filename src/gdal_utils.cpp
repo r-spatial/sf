@@ -265,7 +265,7 @@ Rcpp::LogicalVector CPL_gdalfootprint(Rcpp::CharacterVector src, Rcpp::Character
 	GDALFootprintOptions* opt =  GDALFootprintOptionsNew(options_char.data(), NULL);
 	
 	if (opt == NULL)
-		Rcpp::stop("translate: options error");
+		Rcpp::stop("gdalfootprint: options error");
 	
 	if (! quiet)
 		GDALFootprintOptionsSetProgress(opt, GDALRProgress, NULL);
