@@ -256,7 +256,8 @@ Rcpp::LogicalVector CPL_gdalfootprint(Rcpp::CharacterVector src, Rcpp::Character
 #if GDAL_VERSION_NUM < 3080000
 	Rcpp::CharacterVector ret;
 	Rcpp::stop("gdalfootprint util requires GDAL >= 3.8.0");
-#endif
+	// return false;
+#else
 	
 	set_config_options(co);
 	int err = 0;
@@ -282,7 +283,7 @@ Rcpp::LogicalVector CPL_gdalfootprint(Rcpp::CharacterVector src, Rcpp::Character
 		GDALClose(src_pt);
 	unset_config_options(co);
 	return result == NULL || err;
-	
+#endif
 }
 
 // [[Rcpp::export]]
