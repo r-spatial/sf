@@ -17,7 +17,7 @@ gdal_utils(
 )
 }
 \arguments{
-\item{util}{character; one of \code{info}, \code{warp}, \code{rasterize}, \code{translate}, \code{vectortranslate} (for ogr2ogr), \code{buildvrt}, \code{demprocessing}, \code{nearblack}, \code{grid}, \code{mdiminfo} and \code{mdimtranslate} (the last two requiring GDAL 3.1), \code{ogrinfo} (requiring GDAL 3.7)}
+\item{util}{character; one of \code{info}, \code{warp}, \code{rasterize}, \code{translate}, \code{vectortranslate} (for ogr2ogr), \code{buildvrt}, \code{demprocessing}, \code{nearblack}, \code{grid}, \code{mdiminfo} and \code{mdimtranslate} (the last two requiring GDAL 3.1), \code{ogrinfo} (requiring GDAL 3.7), \code{gdalfootprint} (requiring GDAL 3.8)}
 
 \item{source}{character; name of input layer(s); for \code{warp}, \code{buidvrt} or \code{mdimtranslate} this can be more than one}
 
