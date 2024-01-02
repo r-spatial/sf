@@ -8,6 +8,8 @@
 
 * add `st_line_interpolate()` to obtain a point at a certain distance along a line; #2291
 
+* add support for the GDAL footprint utility (requiring GDAL >=3.8.0) to gdal_utils; #2305
+
 # version 1.0-15
 
 * add `st_perimeter()` to cover both geographic and projected coordinates; #268, #2279, by @JosiahParry
