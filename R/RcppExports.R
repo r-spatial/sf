@@ -133,6 +133,10 @@ CPL_gdaltranslate <- function(src, dst, options, oo, co, quiet = TRUE) {
     .Call(`_sf_CPL_gdaltranslate`, src, dst, options, oo, co, quiet)
 }
 
+CPL_gdalfootprint <- function(src, dst, options, oo, co, quiet = TRUE) {
+    .Call(`_sf_CPL_gdalfootprint`, src, dst, options, oo, co, quiet)
+}
+
 CPL_gdalvectortranslate <- function(src, dst, options, oo, doo, co, quiet = TRUE) {
     .Call(`_sf_CPL_gdalvectortranslate`, src, dst, options, oo, doo, co, quiet)
 }

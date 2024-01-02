@@ -85,6 +85,11 @@ test_that('gdal_utils work', {
   expect_warning(gdal_utils("buildvrt", sd2, tf3, c("-oo", "FOO=BAR"))) # fake opening options
   expect_error(gdal_utils("buildvrt", "foo.tif", tf3, c("-oo", "FOO=BAR")), "cannot open source dataset")
   expect_true(gdal_utils("demprocessing", sd2, tf, processing = "hillshade"))
+  # check gdalfootprint
+  skip_if_not(sf_extSoftVersion()[["GDAL"]] >= "3.8.0")
+  tif <- system.file("tif/geomatrix.tif", package="sf")
+  tf4 <- tempfile(fileext = ".gpkg")
+  expect_true(gdal_utils("footprint", tif, tf4))
 })
 
 # gdalwarp -t_srs '+proj=utm +zone=11 +datum=WGS84' -overwrite NETCDF:avhrr-only-v2.19810901.nc:anom utm11.tif
