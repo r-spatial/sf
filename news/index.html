@@ -58,11 +58,11 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0-16" id="version-10-16">version 1.0-16<a class="anchor" aria-label="anchor" href="#version-10-16"></a></h2>
-<ul><li><p>if environment variable <code>R_SF_USE_PROJ_DATA</code> is <code>true</code>, <code>GDAL_DATA</code>, <code>PROJ_DATA</code> (and deprecated <code>PROJ_LIB</code>) will not be ignored.</p></li>
+<ul><li><p>add support for the GDAL <code>footprint</code> utility (requiring GDAL &gt;= 3.8.0) to <code>gdal_utils</code>; <a href="https://github.com/r-spatial/sf/issues/2305" class="external-link">#2305</a>, by <a href="https://github.com/goergen95" class="external-link">@goergen95</a></p></li>
+<li><p>if environment variable <code>R_SF_USE_PROJ_DATA</code> is <code>true</code>, <code>GDAL_DATA</code>, <code>PROJ_DATA</code> (and deprecated <code>PROJ_LIB</code>) will not be ignored.</p></li>
 <li><p>environment variables <code>PROJ_LIB</code> and <code>PROJ_DATA</code> are (again) ignored on <code>sf</code> binary CRAN installations (win + macos); <a href="https://github.com/r-spatial/sf/issues/2298" class="external-link">#2298</a></p></li>
 <li><p>add <code><a href="../reference/st_line_project_point.html">st_line_project()</a></code> to find how far a point is when projected on a line; <a href="https://github.com/r-spatial/sf/issues/2291" class="external-link">#2291</a></p></li>
 <li><p>add <code><a href="../reference/st_line_project_point.html">st_line_interpolate()</a></code> to obtain a point at a certain distance along a line; <a href="https://github.com/r-spatial/sf/issues/2291" class="external-link">#2291</a></p></li>
-<li><p>add support for the GDAL footprint utility (requiring GDAL &gt;=3.8.0) to gdal_utils; <a href="https://github.com/r-spatial/sf/issues/2305" class="external-link">#2305</a></p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0-15" id="version-10-15">version 1.0-15<a class="anchor" aria-label="anchor" href="#version-10-15"></a></h2><p class="text-muted">CRAN release: 2023-12-18</p>
