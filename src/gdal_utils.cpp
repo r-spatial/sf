@@ -254,18 +254,16 @@ Rcpp::LogicalVector CPL_gdalfootprint(Rcpp::CharacterVector src, Rcpp::Character
         bool quiet = true) {
 	
 #if GDAL_VERSION_NUM < 3080000
-	Rcpp::CharacterVector ret;
-	Rcpp::stop("gdalfootprint util requires GDAL >= 3.8.0");
-#endif
-	
-	set_config_options(co);
+	Rcpp::stop("footprint util requires GDAL >= 3.8.0");
+#else
 	int err = 0;
+	set_config_options(co);
 	std::vector <char *> options_char = create_options(options, true);
 	std::vector <char *> oo_char = create_options(oo, true);
 	GDALFootprintOptions* opt =  GDALFootprintOptionsNew(options_char.data(), NULL);
 	
 	if (opt == NULL)
-		Rcpp::stop("gdalfootprint: options error");
+		Rcpp::stop("footprint: options error");
 	
 	if (! quiet)
 		GDALFootprintOptionsSetProgress(opt, GDALRProgress, NULL);
@@ -282,7 +280,7 @@ Rcpp::LogicalVector CPL_gdalfootprint(Rcpp::CharacterVector src, Rcpp::Character
 		GDALClose(src_pt);
 	unset_config_options(co);
 	return result == NULL || err;
-	
+#endif
 }
 
 // [[Rcpp::export]]
