@@ -89,7 +89,7 @@ test_that('gdal_utils work', {
   skip_if_not(sf_extSoftVersion()[["GDAL"]] >= "3.8.0")
   tif <- system.file("tif/geomatrix.tif", package="sf")
   tf4 <- tempfile(fileext = ".gpkg")
-  expect_true(gdal_utils("gdalfootprint", tif, tf4))
+  expect_true(gdal_utils("footprint", tif, tf4))
 })
 
 # gdalwarp -t_srs '+proj=utm +zone=11 +datum=WGS84' -overwrite NETCDF:avhrr-only-v2.19810901.nc:anom utm11.tif
