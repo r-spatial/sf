@@ -147,9 +147,41 @@ List get_geometry(std::shared_ptr<GDALGroup> curGroup) {
 	return(lst);
 }
 
+List get_all_arrays(std::shared_ptr<GDALGroup> curGroup, List ret, std::string name) {
+	auto array_names(curGroup->GetMDArrayNames());
+	// for (size_t i = 0 i < array_names
+	CharacterVector a(array_names.size());
+	// ret needs to be a _named_ list, so that na is never null
+	CharacterVector na = ret.attr("names");
+	if (a.size() > 0) { // group with array(s):
+		for (int i = 0; i < a.size(); i++)
+			a[i] = array_names[i];
+		ret.push_back(a);
+		CharacterVector gn;
+		// gn.push_back("");
+		std::string group_name;
+		if (name == "/")
+			group_name = name;
+		else
+			group_name = name + "/";
+		na.push_back(group_name);
+	}
+	ret.attr("names") = na;
+	auto gn(curGroup->GetGroupNames());
+	for (const auto &gn: curGroup->GetGroupNames()) { // iterate over groups:
+		std::string slash;
+		if (name == "/")
+			slash = "";
+		else
+			slash = "/";
+		ret = get_all_arrays(curGroup->OpenGroup(gn), ret, name + slash + gn);
+	}
+	return ret;
+}
+
 // [[Rcpp::export]]
-List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterVector oo,
-				IntegerVector offset, IntegerVector count, IntegerVector step, 
+List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterVector groups,
+				CharacterVector oo, IntegerVector offset, IntegerVector count, IntegerVector step, 
 				bool proxy = false, bool debug = false) {
 
 	std::vector <char *> oo_char = create_options(oo, true); // open options
@@ -163,22 +195,41 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 	if( !poRootGroup )
 		stop("cannot open root group");
 
+	if (array_names.size() == 1 && array_names[0] == "?") {
+		List l;
+		l.attr("names") = CharacterVector::create();
+		return get_all_arrays(poRootGroup, l, poRootGroup->GetName());
+	}
+
 	auto curGroup = poRootGroup;
-	auto groupNames = poRootGroup->GetGroupNames();
-	if (groupNames.size() > 0) {
-		curGroup = curGroup->OpenGroup(groupNames[0]);
-		if (!curGroup) {
-			Rcout << "group: " << groupNames[0] << ";" << std::endl;
-			stop("Cannot find group");
+	if (groups.size() > 0) {
+		for (int i = 0; i < groups.size(); i++) {
+			curGroup = curGroup->OpenGroup(Rcpp::as<std::string>(groups[i]));
+			if (curGroup == nullptr) {
+				Rcout << "group: " << groups[i] << " ";
+				stop("cannot open group: does it exist?");
+			}
+			if (debug)
+				Rcout << groups[i] << " ";
 		}
-		if (debug && groupNames.size() > 1) {
-			Rcout << "ignored groups: ";
-			for (size_t i = 1; i < groupNames.size(); i++)
-				Rcout << groupNames[i] << " ";
-			Rcout << std::endl;
-		}
-	} else if (debug)
-		Rcout << "using root group" << std::endl;
+		Rcout << std::endl;
+	} else {
+		auto groupNames = poRootGroup->GetGroupNames();
+		if (groupNames.size() > 0) {
+			curGroup = curGroup->OpenGroup(groupNames[0]);
+			if (!curGroup) {
+				Rcout << "group: " << groupNames[0] << ";" << std::endl;
+				stop("Cannot find group");
+			}
+			if (debug && groupNames.size() > 1) {
+				Rcout << "ignored groups: ";
+				for (size_t i = 1; i < groupNames.size(); i++)
+					Rcout << groupNames[i] << " ";
+				Rcout << std::endl;
+			}
+		} else if (debug)
+			Rcout << "using root group" << std::endl;
+	}
 
 	// find possible vector geometry array, and construct
 	List geometry = get_geometry(curGroup);
@@ -199,11 +250,14 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 			if (ndim == largest_size)
 				array_names.push_back(an);
 		}
+		if (array_names.size() == 0)
+			stop("no array names found");
 	}
 	int n = array_names.size();
 
 	const char *name = array_names[0];
-	auto array(curGroup->OpenMDArray(name));
+	std::shared_ptr<GDALMDArray> array;
+	array = curGroup->OpenMDArray(name);
 	if (!array)
 		stop("Cannot find array");
 	if (offset.size() != 0 && (size_t) offset.size() != array->GetDimensionCount())

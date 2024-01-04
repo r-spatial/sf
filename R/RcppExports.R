@@ -269,8 +269,8 @@ CPL_raw_to_hex <- function(raw) {
     .Call(`_sf_CPL_raw_to_hex`, raw)
 }
 
-CPL_read_mdim <- function(file, array_names, oo, offset, count, step, proxy = FALSE, debug = FALSE) {
-    .Call(`_sf_CPL_read_mdim`, file, array_names, oo, offset, count, step, proxy, debug)
+CPL_read_mdim <- function(file, array_names, groups, oo, offset, count, step, proxy = FALSE, debug = FALSE) {
+    .Call(`_sf_CPL_read_mdim`, file, array_names, groups, oo, offset, count, step, proxy, debug)
 }
 
 CPL_write_mdim <- function(name, driver, dimensions, variables, wkt, xy, RootGroupOptions, CreationOptions, as_float = TRUE) {
