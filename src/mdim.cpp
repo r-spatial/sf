@@ -305,19 +305,18 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 		auto arr(get_array(curGroup, name));
 		dims.attr("names") = dim_names;
 		dimensions.attr("names") = dim_names;
-		NumericVector vec;
 		if (! proxy) { // read the arrays:
 			auto data_type(arr->GetDataType());
 			if (data_type.GetClass() == GEDTC_NUMERIC) {
-				NumericVector vec_(nValues);
+				NumericVector vec(nValues);
 				if (debug)
-					Rcout << "size of vec_: " << vec_.size() << "\n";
+					Rcout << "size of vec: " << vec.size() << "\n";
 				bool ok = arr->Read(offst.data(),
 							anCount.data(),
 							stp.data(), /* step: defaults to 1,1,1 */
 							nullptr, /* stride: default to row-major convention */
 							GDALExtendedDataType::Create(GDT_Float64),
-							vec_.begin());
+							vec.begin());
 				if (!ok)
 					stop("Cannot read array into a Float64 buffer");
 				bool has_offset = false;
@@ -331,35 +330,51 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 				bool has_nodata = false;
 				double nodata_value = arr->GetNoDataValueAsDouble(&has_nodata);
 				if (has_offset || has_scale || has_nodata) {
-					for (size_t i = 0; i < nValues; i++) {
-						if (ISNAN(vec_[i]) || (has_nodata && vec_[i] == nodata_value))
-							vec_[i] = NA_REAL;
+					for (size_t j = 0; j < nValues; j++) {
+						if (ISNAN(vec[j]) || (has_nodata && vec[j] == nodata_value))
+							vec[j] = NA_REAL;
 						else
-							vec_[i] = vec_[i] * scale + offst;
+							vec[j] = vec[j] * scale + offst;
 					}
 				}
-				vec_.attr("dim") = dims;
-				vec_.attr("units") = arr->GetUnit();
-				vec = vec_;
+				vec.attr("dim") = dims;
+				vec.attr("units") = arr->GetUnit();
+				vec_lst[i] = vec;
 			} else if (data_type.GetClass() == GEDTC_COMPOUND) {
-				std::vector<std::unique_ptr<GDALEDTComponent>> components;
-				components = data_type.GetComponents();
-				for (size_t i = 0; i < components.size(); i++) {
-					auto t(components[i]->GetType());
-					if (t.GetClass() == GEDTC_NUMERIC)
-						Rcout << "numeric ";
-					else if (t.GetClass() == GEDTC_STRING)
-						Rcout << "string ";
-					else 
-						Rcout << "other ";
-					Rcout << std::endl;
+				const auto &components = data_type.GetComponents();
+				size_t sz = data_type.GetSize();
+				std::vector<GByte> buf(sz * nValues);
+				bool ok = arr->Read(offst.data(),
+							anCount.data(),
+							stp.data(), /* step: defaults to 1,1,1 */
+							nullptr, /* stride: default to row-major convention */
+							data_type,
+							&buf[0]);
+				DataFrame tbl;
+				GByte *v = buf.data();
+				for (const auto &co: components) { 
+					auto t(co->GetType());
+					if (t.GetClass() == GEDTC_NUMERIC) {
+						NumericVector vec(nValues);
+						for (int j = 0; j < nValues; j++)
+							memcpy(&(vec[j]), v + j * sz + co->GetOffset(), sizeof(double));
+						tbl.push_back(vec, co->GetName());
+					} else if (t.GetClass() == GEDTC_STRING) {
+						CharacterVector vec(nValues);
+						const char *str;
+						for (int j = 0; j < nValues; j++) {
+							memcpy(&str, v + j * sz + co->GetOffset(), sizeof(const char *));
+							vec[j] = str; // deep copy
+						}
+						tbl.push_back(vec, co->GetName());
+					} else 
+						stop("unsupported type");
 				}
-				stop("reading compound data not implemented");
+				vec_lst[i] = tbl;
 			} else { // GEDTC_STRING:
 				stop("reading string data not implemented");
 			}
 		}
-		vec_lst[i] = vec;
 	}
 	vec_lst.attr("names") = a_names;
 	std::shared_ptr<OGRSpatialReference> srs = array->GetSpatialRef();
