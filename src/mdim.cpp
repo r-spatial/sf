@@ -179,9 +179,28 @@ List get_all_arrays(std::shared_ptr<GDALGroup> curGroup, List ret, std::string n
 	return ret;
 }
 
+std::shared_ptr<GDALMDArray> get_array(std::shared_ptr<GDALGroup> grp, const std::string &osName) {
+	CPLStringList aosTokens(CSLTokenizeString2(osName.c_str(), "/", 0));
+	for (int i = 0; i < aosTokens.size() - 1; i++) {
+		auto curGroupNew = grp->OpenGroup(aosTokens[i]);
+		if (!curGroupNew) {
+			Rcout << "Cannot find group " << aosTokens[i] << std::endl;
+			stop("group not found");
+		}
+		grp = curGroupNew;
+	}
+	const char *pszArrayName = aosTokens[aosTokens.size() - 1];
+	auto array(grp->OpenMDArray(pszArrayName));
+	if (!array) {
+		Rcout << "Cannot open array" << pszArrayName << std::endl;
+		stop("array not found");
+	}
+	return array;
+}
+
 // [[Rcpp::export]]
-List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterVector groups,
-				CharacterVector oo, IntegerVector offset, IntegerVector count, IntegerVector step, 
+List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterVector oo, 
+				IntegerVector offset, IntegerVector count, IntegerVector step, 
 				bool proxy = false, bool debug = false) {
 
 	std::vector <char *> oo_char = create_options(oo, true); // open options
@@ -202,35 +221,6 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 	}
 
 	auto curGroup = poRootGroup;
-	if (groups.size() > 0) {
-		for (int i = 0; i < groups.size(); i++) {
-			curGroup = curGroup->OpenGroup(Rcpp::as<std::string>(groups[i]));
-			if (curGroup == nullptr) {
-				Rcout << "group: " << groups[i] << " ";
-				stop("cannot open group: does it exist?");
-			}
-			if (debug)
-				Rcout << groups[i] << " ";
-		}
-		Rcout << std::endl;
-	} else {
-		auto groupNames = poRootGroup->GetGroupNames();
-		if (groupNames.size() > 0) {
-			curGroup = curGroup->OpenGroup(groupNames[0]);
-			if (!curGroup) {
-				Rcout << "group: " << groupNames[0] << ";" << std::endl;
-				stop("Cannot find group");
-			}
-			if (debug && groupNames.size() > 1) {
-				Rcout << "ignored groups: ";
-				for (size_t i = 1; i < groupNames.size(); i++)
-					Rcout << groupNames[i] << " ";
-				Rcout << std::endl;
-			}
-		} else if (debug)
-			Rcout << "using root group" << std::endl;
-	}
-
 	// find possible vector geometry array, and construct
 	List geometry = get_geometry(curGroup);
 
@@ -257,7 +247,7 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 
 	const char *name = array_names[0];
 	std::shared_ptr<GDALMDArray> array;
-	array = curGroup->OpenMDArray(name);
+	array = get_array(curGroup, name);
 	if (!array)
 		stop("Cannot find array");
 	if (offset.size() != 0 && (size_t) offset.size() != array->GetDimensionCount())
@@ -312,7 +302,7 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 	for (int i = 0; i < n; i++) {
 		name = array_names[i];
 		a_names[i] = array_names[i];
-		auto arr(curGroup->OpenMDArray(name));
+		auto arr(get_array(curGroup, name));
 		dims.attr("names") = dim_names;
 		dimensions.attr("names") = dim_names;
 		NumericVector vec;
@@ -326,24 +316,28 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 						nullptr, /* stride: default to row-major convention */
 						GDALExtendedDataType::Create(GDT_Float64),
 						vec_.begin());
-			if (!ok)
-				Rcout << "Read failed for array " << name << std::endl;
-			bool has_offset = false;
-			double offst = arr->GetOffset(&has_offset);
-			if (!has_offset)
-				offst = 0.0;
-			bool has_scale = false;
-			double scale = arr->GetScale(&has_scale);
-			if (!has_scale)
-				scale = 1.0;
-			bool has_nodata = false;
-			double nodata_value = arr->GetNoDataValueAsDouble(&has_nodata);
-			if (has_offset || has_scale || has_nodata) {
-				for (size_t i = 0; i < nValues; i++) {
-					if (ISNAN(vec_[i]) || (has_nodata && vec_[i] == nodata_value))
-						vec_[i] = NA_REAL;
-					else
-						vec_[i] = vec_[i] * scale + offst;
+			if (!ok) {
+				Rcout << "Cannot read array into a Float64 buffer" << name << std::endl;
+				for (size_t i = 0; i < nValues; i++)
+					vec_[i] = NA_REAL;
+			} else {
+				bool has_offset = false;
+				double offst = arr->GetOffset(&has_offset);
+				if (!has_offset)
+					offst = 0.0;
+				bool has_scale = false;
+				double scale = arr->GetScale(&has_scale);
+				if (!has_scale)
+					scale = 1.0;
+				bool has_nodata = false;
+				double nodata_value = arr->GetNoDataValueAsDouble(&has_nodata);
+				if (has_offset || has_scale || has_nodata) {
+					for (size_t i = 0; i < nValues; i++) {
+						if (ISNAN(vec_[i]) || (has_nodata && vec_[i] == nodata_value))
+							vec_[i] = NA_REAL;
+						else
+							vec_[i] = vec_[i] * scale + offst;
+					}
 				}
 			}
 			vec_.attr("dim") = dims;

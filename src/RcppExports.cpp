@@ -923,21 +923,20 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_read_mdim
-List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterVector groups, CharacterVector oo, IntegerVector offset, IntegerVector count, IntegerVector step, bool proxy, bool debug);
-RcppExport SEXP _sf_CPL_read_mdim(SEXP fileSEXP, SEXP array_namesSEXP, SEXP groupsSEXP, SEXP ooSEXP, SEXP offsetSEXP, SEXP countSEXP, SEXP stepSEXP, SEXP proxySEXP, SEXP debugSEXP) {
+List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterVector oo, IntegerVector offset, IntegerVector count, IntegerVector step, bool proxy, bool debug);
+RcppExport SEXP _sf_CPL_read_mdim(SEXP fileSEXP, SEXP array_namesSEXP, SEXP ooSEXP, SEXP offsetSEXP, SEXP countSEXP, SEXP stepSEXP, SEXP proxySEXP, SEXP debugSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< CharacterVector >::type file(fileSEXP);
     Rcpp::traits::input_parameter< CharacterVector >::type array_names(array_namesSEXP);
-    Rcpp::traits::input_parameter< CharacterVector >::type groups(groupsSEXP);
     Rcpp::traits::input_parameter< CharacterVector >::type oo(ooSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type offset(offsetSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type count(countSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type step(stepSEXP);
     Rcpp::traits::input_parameter< bool >::type proxy(proxySEXP);
     Rcpp::traits::input_parameter< bool >::type debug(debugSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_read_mdim(file, array_names, groups, oo, offset, count, step, proxy, debug));
+    rcpp_result_gen = Rcpp::wrap(CPL_read_mdim(file, array_names, oo, offset, count, step, proxy, debug));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1524,7 +1523,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_line_interpolate", (DL_FUNC) &_sf_CPL_line_interpolate, 3},
     {"_sf_CPL_hex_to_raw", (DL_FUNC) &_sf_CPL_hex_to_raw, 1},
     {"_sf_CPL_raw_to_hex", (DL_FUNC) &_sf_CPL_raw_to_hex, 1},
-    {"_sf_CPL_read_mdim", (DL_FUNC) &_sf_CPL_read_mdim, 9},
+    {"_sf_CPL_read_mdim", (DL_FUNC) &_sf_CPL_read_mdim, 8},
     {"_sf_CPL_write_mdim", (DL_FUNC) &_sf_CPL_write_mdim, 9},
     {"_sf_opp_sfc", (DL_FUNC) &_sf_opp_sfc, 4},
     {"_sf_normalize_sfc", (DL_FUNC) &_sf_normalize_sfc, 4},
