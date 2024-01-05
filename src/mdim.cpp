@@ -307,20 +307,19 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 		dimensions.attr("names") = dim_names;
 		NumericVector vec;
 		if (! proxy) { // read the arrays:
-			NumericVector vec_(nValues);
-			if (debug)
-				Rcout << "size of vec_: " << vec_.size() << "\n";
-			bool ok = arr->Read(offst.data(),
-						anCount.data(),
-						stp.data(), /* step: defaults to 1,1,1 */
-						nullptr, /* stride: default to row-major convention */
-						GDALExtendedDataType::Create(GDT_Float64),
-						vec_.begin());
-			if (!ok) {
-				Rcout << "Cannot read array into a Float64 buffer" << name << std::endl;
-				for (size_t i = 0; i < nValues; i++)
-					vec_[i] = NA_REAL;
-			} else {
+			auto data_type(arr->GetDataType());
+			if (data_type.GetClass() == GEDTC_NUMERIC) {
+				NumericVector vec_(nValues);
+				if (debug)
+					Rcout << "size of vec_: " << vec_.size() << "\n";
+				bool ok = arr->Read(offst.data(),
+							anCount.data(),
+							stp.data(), /* step: defaults to 1,1,1 */
+							nullptr, /* stride: default to row-major convention */
+							GDALExtendedDataType::Create(GDT_Float64),
+							vec_.begin());
+				if (!ok)
+					stop("Cannot read array into a Float64 buffer");
 				bool has_offset = false;
 				double offst = arr->GetOffset(&has_offset);
 				if (!has_offset)
@@ -339,10 +338,26 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 							vec_[i] = vec_[i] * scale + offst;
 					}
 				}
+				vec_.attr("dim") = dims;
+				vec_.attr("units") = arr->GetUnit();
+				vec = vec_;
+			} else if (data_type.GetClass() == GEDTC_COMPOUND) {
+				std::vector<std::unique_ptr<GDALEDTComponent>> components;
+				components = data_type.GetComponents();
+				for (size_t i = 0; i < components.size(); i++) {
+					auto t(components[i]->GetType());
+					if (t.GetClass() == GEDTC_NUMERIC)
+						Rcout << "numeric ";
+					else if (t.GetClass() == GEDTC_STRING)
+						Rcout << "string ";
+					else 
+						Rcout << "other ";
+					Rcout << std::endl;
+				}
+				stop("reading compound data not implemented");
+			} else { // GEDTC_STRING:
+				stop("reading string data not implemented");
 			}
-			vec_.attr("dim") = dims;
-			vec_.attr("units") = arr->GetUnit();
-			vec = vec_;
 		}
 		vec_lst[i] = vec;
 	}
