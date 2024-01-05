@@ -73,7 +73,6 @@ gdal_extract(f, pts, bilinear = FALSE)
 gdal_read_mdim(
   file,
   array_name = character(0),
-  groups = character(0),
   options = character(0),
   offset = integer(0),
   count = integer(0),
@@ -152,8 +151,6 @@ gdal_create(f, nxy, values, crs, xlim, ylim)
 
 \item{array_name}{array name}
 
-\item{groups}{character vector with groups (if any)}
-
 \item{offset}{offset (pixels)}
 
 \item{count}{number of pixels to read}
@@ -185,6 +182,8 @@ gdal_create(f, nxy, values, crs, xlim, ylim)
 \item{xlim}{numeric}
 
 \item{ylim}{numeric}
+
+\item{groups}{character vector with groups (if any)}
 }
 \value{
 object of class \code{crs}, see \link{st_crs}.
