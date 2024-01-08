@@ -1,10 +1,10 @@
 # version 1.0-16
 
+* `st_sample` for polygons is sensitive to setting `oriented=TRUE` to prevent wrongly correcting ring directions; #2308
+
 * add support for the GDAL `footprint` utility (requiring GDAL >= 3.8.0) to `gdal_utils`; #2305, by @goergen95
 
-* if environment variable `R_SF_USE_PROJ_DATA` is `true`, `GDAL_DATA`, `PROJ_DATA` (and deprecated `PROJ_LIB`) will not be ignored.
-
-* environment variables `PROJ_LIB` and `PROJ_DATA` are (again) ignored on `sf` binary CRAN installations (win + macos); #2298
+* existing environment variables `PROJ_LIB` and `PROJ_DATA` are (again) ignored on `sf` binary CRAN installations (win + macos), effectively by overwriting them during the R session and restoring them on exit; this does not happen if environment variable `R_SF_USE_PROJ_DATA` is set to `true`. #2298
 
 * add `st_line_project()` to find how far a point is when projected on a line; #2291
 
