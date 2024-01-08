@@ -269,11 +269,22 @@ test_that("`rename_with()` correctly changes the sf_column attribute (#2215)", {
 test_that("`rename_with()` works for unquoted `.cols` (#2220)", {
 	skip_if_not_installed("dplyr")
 	
-	sf_column = attr(nc, "sf_column")
 	fn = function(x) paste0(x, "_renamed")
 	
 	expect_identical(nc %>% rename_with(fn, c(FIPS, FIPSNO)), 
 					 nc %>% rename_with(fn, c("FIPS", "FIPSNO")))
+	
+	expect_identical(nc %>% rename_with(fn, c(FIPS, FIPSNO)), 
+					 nc %>% rename(FIPS_renamed = FIPS, FIPSNO_renamed = FIPSNO))
+})
+
+test_that("`rename_with()` accepts arguments in `...` (#2310)", {
+	skip_if_not_installed("dplyr")
+	
+	fn = function(x, y) paste0(x, y)
+	
+	expect_identical(nc %>% rename_with(fn, FIPS, y = "_renamed"), 
+					 nc %>% rename(FIPS_renamed = FIPS))
 })
 
 test_that("`select()` and `transmute()` observe back-stickiness of geometry column (#1425)", {
