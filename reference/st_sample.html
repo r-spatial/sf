@@ -143,6 +143,10 @@ when <code>type = "random"</code>.</p></dd>
 <dd><p>logical; if <code>TRUE</code> show progress bar (only if <code>size</code> is a vector).</p></dd>
 
 
+<dt>force</dt>
+<dd><p>logical; if <code>TRUE</code> continue when the sampled bounding box area is more than 1e4 times the area of interest, else (default) stop with an error. If this error is not justified, try setting <code>oriented=TRUE</code>, see details.</p></dd>
+
+
 <dt>great_circles</dt>
 <dd><p>logical; if <code>TRUE</code>, great circle arcs are used to connect the bounding box vertices, if <code>FALSE</code> parallels (graticules)</p></dd>
 
