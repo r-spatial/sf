@@ -54,6 +54,8 @@ when \code{type = "random"}.}
 
 \item{progress}{logical; if \code{TRUE} show progress bar (only if \code{size} is a vector).}
 
+\item{force}{logical; if \code{TRUE} continue when the sampled bounding box area is more than 1e4 times the area of interest, else (default) stop with an error. If this error is not justified, try setting \code{oriented=TRUE}, see details.}
+
 \item{great_circles}{logical; if \code{TRUE}, great circle arcs are used to connect the bounding box vertices, if \code{FALSE} parallels (graticules)}
 
 \item{segments}{units, or numeric (degrees); segment sizes for segmenting a bounding box polygon if \code{great_circles} is \code{FALSE}}

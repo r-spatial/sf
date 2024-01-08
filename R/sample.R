@@ -26,7 +26,7 @@ st_sample = function(x, size, ...) UseMethod("st_sample")
 #' the same as specified by \code{size}? \code{TRUE} by default. Only applies to polygons, and
 #' when \code{type = "random"}.
 #' @param progress logical; if \code{TRUE} show progress bar (only if \code{size} is a vector).
-#' @force logical; if `TRUE` continue when the sampled bounding box area is more than 1e4 times the area of interest, else (default) stop with an error. If this error is not justified, try setting `oriented=TRUE`, see details.
+#' @param force logical; if `TRUE` continue when the sampled bounding box area is more than 1e4 times the area of interest, else (default) stop with an error. If this error is not justified, try setting `oriented=TRUE`, see details.
 #' @return an \code{sfc} object containing the sampled \code{POINT} geometries
 #' @details if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{https://mathworld.wolfram.com/SpherePointPicking.html}. 
 #'
