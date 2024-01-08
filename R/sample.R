@@ -161,12 +161,12 @@ st_sample.bbox = function(x, size, ..., great_circles = FALSE, segments = units:
 		segments = units::drop_units(units::set_units(segments, "degree", mode = "standard"))
 		polygon = st_set_crs(st_segmentize(polygon, segments), crs)
 	}
-	st_sample(polygon, size, ...)
+	st_sample(polygon, size, ..., oriented = TRUE)
 }
 
 st_poly_sample = function(x, size, ..., type = "random",
                           offset = st_sample(st_as_sfc(st_bbox(x)), 1)[[1]],
-						  by_polygon = FALSE) {
+						  by_polygon = FALSE, oriented = FALSE) {
 
 	if (by_polygon && inherits(x, "sfc_MULTIPOLYGON")) { # recurse into polygons:
 		sum_a = units::drop_units(sum(st_area(x)))
@@ -201,13 +201,15 @@ st_poly_sample = function(x, size, ..., type = "random",
 			h1 = sin(bb["ymax"] * toRad)
 			h2 = sin(bb["ymin"] * toRad)
 			a0 = 2 * pi * R^2. * (h1 - h2) * (bb["xmax"] - bb["xmin"]) / 360.
-			a1 = as.numeric(sum(st_area(x)))
+			# a1 = as.numeric(sum(st_area(x)))
+			a1 = sum(s2::s2_area(st_as_s2(x, oriented = oriented)))
 			if (!is.finite(a1))
 				stop("One or more geometries have a non-finite area")
-			if (a1 < 1) { # global polygon FIXME: 
-				a1 = a0
-				global = TRUE
-			}
+			#if (a1 < 1) { # global polygon FIXME: 
+			#	a1 = a0
+			#	global = TRUE
+			#}
+			global = (a1 / a0) > .9999
 			size = round(size * a0 / a1)
 		} else {
 			a0 = as.numeric(st_area(st_as_sfc(bb)))
