@@ -86,6 +86,8 @@ For regular sampling on the sphere, see also \code{geosphere::regularCoordinates
 
 Sampling methods from package \code{spatstat} are interfaced (see examples), and need their own parameters to be set.
 For instance, to use \code{spatstat.random::rThomas()}, set \code{type = "Thomas"}.
+
+For sampling polygons one can specify \code{oriented=TRUE} to make sure that polygons larger than half the globe are not reverted, e.g. when specifying a polygon from a bounding box of a global dataset. The \code{st_sample} method for \code{bbox} does this by default.
 }
 \examples{
 nc = st_read(system.file("shape/nc.shp", package="sf"))

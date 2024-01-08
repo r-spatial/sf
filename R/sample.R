@@ -40,6 +40,8 @@ st_sample = function(x, size, ...) UseMethod("st_sample")
 #'
 #' Sampling methods from package \code{spatstat} are interfaced (see examples), and need their own parameters to be set. 
 #' For instance, to use \code{spatstat.random::rThomas()}, set \code{type = "Thomas"}.
+#' 
+#' For sampling polygons one can specify `oriented=TRUE` to make sure that polygons larger than half the globe are not reverted, e.g. when specifying a polygon from a bounding box of a global dataset. The `st_sample` method for `bbox` does this by default.
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' p1 = st_sample(nc[1:3, ], 6)
@@ -201,14 +203,9 @@ st_poly_sample = function(x, size, ..., type = "random",
 			h1 = sin(bb["ymax"] * toRad)
 			h2 = sin(bb["ymin"] * toRad)
 			a0 = 2 * pi * R^2. * (h1 - h2) * (bb["xmax"] - bb["xmin"]) / 360.
-			# a1 = as.numeric(sum(st_area(x)))
 			a1 = sum(s2::s2_area(st_as_s2(x, oriented = oriented)))
 			if (!is.finite(a1))
 				stop("One or more geometries have a non-finite area")
-			#if (a1 < 1) { # global polygon FIXME: 
-			#	a1 = a0
-			#	global = TRUE
-			#}
 			global = (a1 / a0) > .9999
 			size = round(size * a0 / a1)
 		} else {
