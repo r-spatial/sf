@@ -170,6 +170,7 @@ Mathematical Geosciences 42(1), p. 49-64</p>
 <p>For regular sampling on the sphere, see also <code>geosphere::regularCoordinates</code>.</p>
 <p>Sampling methods from package <code>spatstat</code> are interfaced (see examples), and need their own parameters to be set.
 For instance, to use <code><a href="https://rdrr.io/pkg/spatstat.random/man/rThomas.html" class="external-link">spatstat.random::rThomas()</a></code>, set <code>type = "Thomas"</code>.</p>
+<p>For sampling polygons one can specify <code>oriented=TRUE</code> to make sure that polygons larger than half the globe are not reverted, e.g. when specifying a polygon from a bounding box of a global dataset. The <code>st_sample</code> method for <code>bbox</code> does this by default.</p>
     </div>
 
     <div class="section level2">
