@@ -269,8 +269,6 @@ rename_with.sf = function(.data, .fn, .cols, ...) {
 		ret = dplyr::as_tibble(ret)
 	ret = st_as_sf(ret, sf_column_name = names(ret)[sf_column_loc])
 	
-	names(agr) = .fn(names(agr), ...)
-	st_agr(ret) = agr
 	ret
 }
 
