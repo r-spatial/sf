@@ -20,7 +20,8 @@ st_sample(x, size, ...)
   exact = TRUE,
   warn_if_not_integer = TRUE,
   by_polygon = FALSE,
-  progress = FALSE
+  progress = FALSE,
+  force = FALSE
 )
 
 \method{st_sample}{sfg}(x, size, ...)

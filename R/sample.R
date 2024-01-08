@@ -26,6 +26,7 @@ st_sample = function(x, size, ...) UseMethod("st_sample")
 #' the same as specified by \code{size}? \code{TRUE} by default. Only applies to polygons, and
 #' when \code{type = "random"}.
 #' @param progress logical; if \code{TRUE} show progress bar (only if \code{size} is a vector).
+#' @force logical; if `TRUE` continue when the sampled bounding box area is more than 1e4 times the area of interest, else (default) stop with an error. If this error is not justified, try setting `oriented=TRUE`, see details.
 #' @return an \code{sfc} object containing the sampled \code{POINT} geometries
 #' @details if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{https://mathworld.wolfram.com/SpherePointPicking.html}. 
 #'
@@ -103,7 +104,7 @@ st_sample.sf = function(x, size, ...) st_sample(st_geometry(x), size, ...)
 #' @export
 #' @name st_sample
 st_sample.sfc = function(x, size, ..., type = "random", exact = TRUE, warn_if_not_integer = TRUE,
-		by_polygon = FALSE, progress = FALSE) {
+		by_polygon = FALSE, progress = FALSE, force = FALSE) {
 
 	if (!missing(size) && warn_if_not_integer && any(size %% 1 != 0))
 		warning("size is not an integer")
@@ -120,7 +121,7 @@ st_sample.sfc = function(x, size, ..., type = "random", exact = TRUE, warn_if_no
 		res = switch(max(st_dimension(x)) + 1,
 					 st_multipoints_sample(do.call(c, x), size = size, ..., type = type),
 					 st_ll_sample(st_cast(x, "LINESTRING"), size = size, ..., type = type),
-					 st_poly_sample(x, size = size, ..., type = type, by_polygon = by_polygon))
+					 st_poly_sample(x, size = size, ..., type = type, by_polygon = by_polygon, force = force))
 		if (exact && type == "random" && all(st_geometry_type(res) == "POINT")) {
 			diff = size - length(res)
 			if (diff > 0) { # too few points
@@ -168,7 +169,7 @@ st_sample.bbox = function(x, size, ..., great_circles = FALSE, segments = units:
 
 st_poly_sample = function(x, size, ..., type = "random",
                           offset = st_sample(st_as_sfc(st_bbox(x)), 1)[[1]],
-						  by_polygon = FALSE, oriented = FALSE) {
+						  by_polygon = FALSE, oriented = FALSE, force = FALSE) {
 
 	if (by_polygon && inherits(x, "sfc_MULTIPOLYGON")) { # recurse into polygons:
 		sum_a = units::drop_units(sum(st_area(x)))
@@ -207,6 +208,8 @@ st_poly_sample = function(x, size, ..., type = "random",
 			if (!is.finite(a1))
 				stop("One or more geometries have a non-finite area")
 			global = (a1 / a0) > .9999
+			if (a0 / a1 > 1e4 && !force)
+				stop(paste0("sampling box is ", format(a0/a1), " times larger than sampling region;\nuse force=TRUE if you really want this, or try setting oriented=TRUE\n(after reading the documentation)"), call. = FALSE)
 			size = round(size * a0 / a1)
 		} else {
 			a0 = as.numeric(st_area(st_as_sfc(bb)))
