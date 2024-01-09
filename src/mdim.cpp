@@ -355,6 +355,8 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 				for (const auto &co: components) { 
 					auto t(co->GetType());
 					if (t.GetClass() == GEDTC_NUMERIC) {
+						if (t.GetSize() != sizeof(double))
+							stop("only Float64 data supported in numeric compounds");
 						NumericVector vec(nValues);
 						for (int j = 0; j < nValues; j++)
 							memcpy(&(vec[j]), v + j * sz + co->GetOffset(), sizeof(double));
