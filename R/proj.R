@@ -79,6 +79,13 @@ sf_project = function(from = character(0), to = character(0), pts, keep = FALSE,
 	CPL_proj_direct(from_to, as.matrix(pts), keep, warn, authority_compliant)
 }
 
+tidy_paths_2313 = function(res = character(0)) {
+	if (any(grepl(.Platform$path.sep, res))) {
+		res = unique(unlist(strsplit(res, .Platform$path.sep)))
+	}
+        res
+}
+
 #' Manage PROJ settings
 #' 
 #' Manage PROJ search path and network settings
@@ -88,7 +95,7 @@ sf_project = function(from = character(0), to = character(0), pts, keep = FALSE,
 #' @export
 sf_proj_search_paths = function(paths = character(0)) {
 	if (length(paths) == 0)
-		CPL_get_data_dir(FALSE)
+		tidy_paths_2313(CPL_get_data_dir(FALSE))
 	else
 		CPL_set_data_dir(as.character(paths)) # set
 }
