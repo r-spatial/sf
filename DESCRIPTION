@@ -113,7 +113,7 @@ LinkingTo:
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.0
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 2
 SystemRequirements: GDAL (>= 2.0.1), GEOS (>= 3.4.0),

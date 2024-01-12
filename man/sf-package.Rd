@@ -3,7 +3,6 @@
 \docType{package}
 \name{sf-package}
 \alias{sf-package}
-\alias{_PACKAGE}
 \title{sf: Simple Features for R}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}

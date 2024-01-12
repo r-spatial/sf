@@ -307,6 +307,7 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 		dimensions.attr("names") = dim_names;
 		if (! proxy) { // read the arrays:
 			auto data_type(arr->GetDataType());
+			size_t sz = data_type.GetSize();
 			if (data_type.GetClass() == GEDTC_NUMERIC) {
 				NumericVector vec(nValues);
 				if (debug)
@@ -342,7 +343,6 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 				vec_lst[i] = vec;
 			} else if (data_type.GetClass() == GEDTC_COMPOUND) {
 				const auto &components = data_type.GetComponents();
-				size_t sz = data_type.GetSize();
 				std::vector<GByte> buf(sz * nValues);
 				bool ok = arr->Read(offst.data(),
 							anCount.data(),
@@ -350,21 +350,23 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 							nullptr, /* stride: default to row-major convention */
 							data_type,
 							&buf[0]);
+				if (!ok)
+					stop("Cannot read array into Compound buffer");
 				DataFrame tbl;
 				GByte *v = buf.data();
 				for (const auto &co: components) { 
 					auto t(co->GetType());
 					if (t.GetClass() == GEDTC_NUMERIC) {
-						if (t.GetSize() != sizeof(double))
+						if (t.GetNumericDataType() != GDT_Float64)
 							stop("only Float64 data supported in numeric compounds");
 						NumericVector vec(nValues);
-						for (int j = 0; j < nValues; j++)
+						for (size_t j = 0; j < nValues; j++)
 							memcpy(&(vec[j]), v + j * sz + co->GetOffset(), sizeof(double));
 						tbl.push_back(vec, co->GetName());
 					} else if (t.GetClass() == GEDTC_STRING) {
 						CharacterVector vec(nValues);
 						const char *str;
-						for (int j = 0; j < nValues; j++) {
+						for (size_t j = 0; j < nValues; j++) {
 							memcpy(&str, v + j * sz + co->GetOffset(), sizeof(const char *));
 							vec[j] = str; // deep copy
 						}
@@ -374,7 +376,25 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 				}
 				vec_lst[i] = tbl;
 			} else { // GEDTC_STRING:
-				stop("reading string data not implemented");
+				std::vector<GByte> buf(sz * nValues);
+				bool ok = arr->Read(offst.data(),
+							anCount.data(),
+							stp.data(), /* step: defaults to 1,1,1 */
+							nullptr, /* stride: default to row-major convention */
+							data_type,
+							&buf[0]);
+				if (!ok)
+					stop("Cannot read array into string buffer");
+				GByte *v = buf.data();
+				CharacterVector vec(nValues);
+				const char *str;
+				for (size_t j = 0; j < nValues; j++) {
+					memcpy(&str, v + j * sz, sizeof(const char *));
+					vec[j] = str; // deep copy
+				}
+				vec.attr("dim") = dims;
+				vec.attr("units") = arr->GetUnit();
+				vec_lst[i] = vec;
 			}
 		}
 	}

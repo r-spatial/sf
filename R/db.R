@@ -559,10 +559,12 @@ setMethod("dbDataType", c("DBIObject", "sf"), function(dbObj, obj) {
 #' @param classes classes inherited
 is_geometry_column <- function(con, x, classes = "") UseMethod("is_geometry_column")
 
+#' @export
 is_geometry_column.PqConnection <- function(con, x, classes = c("pq_geometry")) {
     vapply(x, inherits, logical(1), classes)
 }
 
+#' @export
 is_geometry_column.default <- function(con, x, classes = c("character")) {
     # try all character columns (in conjunction with try_postgis_as_sfc)
     vapply(x, function(x) inherits(x, classes) && !all(is.na(x)),
