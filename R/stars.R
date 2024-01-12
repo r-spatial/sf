@@ -348,7 +348,6 @@ gdal_extract = function(f, pts, bilinear = FALSE) {
 #' @rdname gdal
 #' @param file file name
 #' @param array_name array name
-#' @param groups character vector with groups (if any)
 #' @param offset offset (pixels)
 #' @param count number of pixels to read
 #' @param step step size (pixels)

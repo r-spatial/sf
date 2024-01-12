@@ -182,8 +182,6 @@ gdal_create(f, nxy, values, crs, xlim, ylim)
 \item{xlim}{numeric}
 
 \item{ylim}{numeric}
-
-\item{groups}{character vector with groups (if any)}
 }
 \value{
 object of class \code{crs}, see \link{st_crs}.
