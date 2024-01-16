@@ -1053,13 +1053,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_get_data_dir
-Rcpp::CharacterVector CPL_get_data_dir(bool b);
-RcppExport SEXP _sf_CPL_get_data_dir(SEXP bSEXP) {
+Rcpp::CharacterVector CPL_get_data_dir(bool from_proj);
+RcppExport SEXP _sf_CPL_get_data_dir(SEXP from_projSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< bool >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_get_data_dir(b));
+    Rcpp::traits::input_parameter< bool >::type from_proj(from_projSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_get_data_dir(from_proj));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1087,13 +1087,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_set_data_dir
-Rcpp::LogicalVector CPL_set_data_dir(Rcpp::CharacterVector data_dir);
-RcppExport SEXP _sf_CPL_set_data_dir(SEXP data_dirSEXP) {
+Rcpp::LogicalVector CPL_set_data_dir(Rcpp::CharacterVector data_dir, bool with_proj);
+RcppExport SEXP _sf_CPL_set_data_dir(SEXP data_dirSEXP, SEXP with_projSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type data_dir(data_dirSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_set_data_dir(data_dir));
+    Rcpp::traits::input_parameter< bool >::type with_proj(with_projSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_set_data_dir(data_dir, with_proj));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1534,7 +1535,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_get_data_dir", (DL_FUNC) &_sf_CPL_get_data_dir, 1},
     {"_sf_CPL_is_network_enabled", (DL_FUNC) &_sf_CPL_is_network_enabled, 1},
     {"_sf_CPL_enable_network", (DL_FUNC) &_sf_CPL_enable_network, 2},
-    {"_sf_CPL_set_data_dir", (DL_FUNC) &_sf_CPL_set_data_dir, 1},
+    {"_sf_CPL_set_data_dir", (DL_FUNC) &_sf_CPL_set_data_dir, 2},
     {"_sf_CPL_use_proj4_init_rules", (DL_FUNC) &_sf_CPL_use_proj4_init_rules, 1},
     {"_sf_CPL_proj_version", (DL_FUNC) &_sf_CPL_proj_version, 1},
     {"_sf_CPL_proj_is_valid", (DL_FUNC) &_sf_CPL_proj_is_valid, 1},

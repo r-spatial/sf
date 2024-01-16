@@ -1,5 +1,5 @@
 
-R version 4.3.1 (2023-06-16) -- "Beagle Scouts"
+R version 4.3.2 (2023-10-31) -- "Eye Holes"
 Copyright (C) 2023 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
@@ -144,9 +144,9 @@ First 10 features:
 8   point      POINT (843278.5 287241.6)
 9   point      POINT (648477.7 235466.6)
 10  point        POINT (852593 267248.3)
-Error in st_poly_sample(x, size = size, ..., type = type, by_polygon = by_polygon) : 
+Error in st_poly_sample(x, size = size, ..., type = type, by_polygon = by_polygon,  : 
   rthomas is not an exported function from spatstat.random.
-Error in st_poly_sample(x, size = size, ..., type = type, by_polygon = by_polygon) : 
+Error in st_poly_sample(x, size = size, ..., type = type, by_polygon = by_polygon,  : 
   The spatstat function rThomas did not return a valid result. Consult the help file.
 Error message from spatstat:
 Error in spatstat_fun(..., win = spatstat.geom::as.owin(x)) : 
@@ -166,4 +166,4 @@ In st_as_sfc.owin(spatstat.geom::as.owin(x)) :
 > 
 > proc.time()
    user  system elapsed 
-  2.011   0.116   2.121 
+  2.039   1.402   1.935 
