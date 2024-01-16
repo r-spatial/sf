@@ -1,6 +1,6 @@
 # version 1.0-16
 
-* `st_sample` for polygons is sensitive to setting `oriented=TRUE` to prevent wrongly correcting ring directions; #2308
+* `st_sample` for polygons is sensitive to setting `oriented = TRUE` to prevent wrongly correcting ring directions; #2308
 
 * add support for the GDAL `footprint` utility (requiring GDAL >= 3.8.0) to `gdal_utils`; #2305, by @goergen95
 
@@ -12,7 +12,7 @@
 
 # version 1.0-15
 
-* add `st_perimeter()` to cover both geographic and projected coordinates; #268, #2279, by @JosiahParry
+* add `st_perimeter()` generic to cover both geographic and projected coordinates; #268, #2279, by @JosiahParry
 
 * add `st_sample()` method for `bbox`, with special provisions for ellipsoidal coordinates; #2283
 
