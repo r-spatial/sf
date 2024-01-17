@@ -65,7 +65,7 @@ use the \code{query} argument.}
 \item{options}{character; driver dependent dataset open options, multiple
 options supported. For possible values, see the "Open options" section
 of the GDAL documentation of the corresponding driver, and
-https://github.com/r-spatial/sf/issues/1157 for an example.}
+\url{https://github.com/r-spatial/sf/issues/1157} for an example.}
 
 \item{quiet}{logical; suppress info on name, driver, size and spatial
 reference, or signaling no or multiple layers}
@@ -88,11 +88,11 @@ converted to factors?  Default for \code{read_sf} or R version >= 4.1.0 is
 \code{FALSE}, for \code{st_read} and R version < 4.1.0 equal to
 \code{default.stringsAsFactors()}}
 
-\item{int64_as_string}{logical; if TRUE, Int64 attributes are returned as
-string; if FALSE, they are returned as double and a warning is given when
+\item{int64_as_string}{logical; if \code{TRUE}, Int64 attributes are returned as
+string; if \code{FALSE}, they are returned as double and a warning is given when
 precision is lost (i.e., values are larger than 2^53).}
 
-\item{check_ring_dir}{logical; if TRUE, polygon ring directions are checked
+\item{check_ring_dir}{logical; if \code{TRUE}, polygon ring directions are checked
 and if necessary corrected (when seen from above: exterior ring counter
 clockwise, holes clockwise)}
 
@@ -104,7 +104,7 @@ clockwise, holes clockwise)}
 
 \item{optional}{logical; passed to \link[base]{as.data.frame}; always \code{TRUE} when \code{as_tibble} is \code{TRUE}}
 
-\item{use_stream}{Use TRUE to use the experimental columnar interface introduced in GDAL 3.6.}
+\item{use_stream}{Use \code{TRUE} to use the experimental columnar interface introduced in GDAL 3.6.}
 
 \item{as_tibble}{logical; should the returned table be of class tibble or data.frame?}
 

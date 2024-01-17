@@ -2,7 +2,6 @@
 % Please edit documentation in R/tidyverse.R, R/join.R
 \name{tidyverse}
 \alias{tidyverse}
-\alias{group_split.sf}
 \alias{filter.sf}
 \alias{arrange.sf}
 \alias{group_by.sf}
@@ -23,6 +22,7 @@
 \alias{spread.sf}
 \alias{sample_n.sf}
 \alias{sample_frac.sf}
+\alias{group_split.sf}
 \alias{nest.sf}
 \alias{separate.sf}
 \alias{separate_rows.sf}
@@ -37,8 +37,6 @@
 \alias{anti_join.sf}
 \title{Tidyverse methods for sf objects (remove .sf suffix!)}
 \usage{
-group_split.sf(.tbl, ..., .keep = TRUE)
-
 filter.sf(.data, ..., .dots)
 
 arrange.sf(.data, ..., .dots)
@@ -131,6 +129,8 @@ sample_frac.sf(
   .env = parent.frame()
 )
 
+group_split.sf(.tbl, ..., .keep = TRUE)
+
 nest.sf(.data, ...)
 
 separate.sf(
@@ -166,21 +166,9 @@ semi_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 anti_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 }
 \arguments{
-\item{...}{other arguments}
-
-\item{.keep}{Should the join keys from both \code{x} and \code{y} be preserved in the
-output?
-\itemize{
-\item If \code{NULL}, the default, joins on equality retain only the keys from \code{x},
-while joins on inequality retain the keys from both inputs.
-\item If \code{TRUE}, all keys from both inputs are retained.
-\item If \code{FALSE}, only keys from \code{x} are retained. For right and full joins,
-the data in key columns corresponding to rows that only exist in \code{y} are
-merged into the key columns from \code{x}. Can't be used when joining on
-inequality conditions.
-}}
-
 \item{.data}{data object of class \link{sf}}
+
+\item{...}{other arguments}
 
 \item{.dots}{see corresponding function in package \code{dplyr}}
 
@@ -269,6 +257,10 @@ more details.}
 \item{weight}{see original function docs}
 
 \item{.env}{see original function docs}
+
+\item{.tbl}{see original function docs}
+
+\item{.keep}{see original function docs}
 
 \item{col}{see \link[tidyr]{separate}}
 

@@ -241,7 +241,7 @@ st_set_crs = function(x, value) {
 #'
 #' Assert whether simple feature coordinates are longlat degrees
 #' @param x object of class \link{sf} or \link{sfc}, or otherwise an object of a class that has an \link{st_crs} method returning a \code{crs} object
-#' @return TRUE if x has geographic coordinates, FALSE if it has projected coordinates, or NA if \code{is.na(st_crs(x))}.
+#' @return `TRUE` if `x` has geographic coordinates, `FALSE` if it has projected coordinates, or `NA` if \code{is.na(st_crs(x))}.
 #' @export
 st_is_longlat = function(x) {
 	crs = st_crs(x)

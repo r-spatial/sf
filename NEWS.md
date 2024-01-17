@@ -1,6 +1,6 @@
 # version 1.0-16
 
-* `st_sample` for polygons is sensitive to setting `oriented = TRUE` to prevent wrongly correcting ring directions; #2308
+* `st_sample()` for polygons is sensitive to setting `oriented = TRUE` to prevent wrongly correcting ring directions; #2308
 
 * add support for the GDAL `footprint` utility (requiring GDAL >= 3.8.0) to `gdal_utils`; #2305, by @goergen95
 
@@ -40,9 +40,9 @@
 
 * if the env. variable `ADD_SF_NAMESPACE` is set to `true`, `sf` objects get a new attribute, `.sf_namespace`, which forces loading the `sf` namespace when it has not been loaded so far, e.g. for proper printing or plotting of an `sf` object; #2212 by Mike Mahoney
 
-* `distinct.sf` is type-safe for `sf` objects with zero rows; #2204
+* `distinct.sf()` is type-safe for `sf` objects with zero rows; #2204
 
-* `summarise.sf` raises an error if `.by` is given but no `across()` on the geometry; #2207
+* `summarise.sf()` raises an error if `.by` is given but no `across()` on the geometry; #2207
 
 * `st_write()` matches fields on name first, than on position; this matters for formats that have pre-defined names, such as GPX; #2202 
 
@@ -150,7 +150,7 @@
 
 * `sf_project()` accepts 3- or 4-column matrices, containing z and t values;
 
-* optimizations for `st_sfc()` by @paleolimbot; #1938, #1925
+* optimization for `st_sfc()` by @paleolimbot; #1938, #1925
 
 * `[<-.sfc()` recomputes the bounding box; `st_sfc()` gets parameter `compute_bbox`; #1965
 
@@ -817,7 +817,7 @@
 
 * have `st_graticule` return an empty graticule object when argument `datum` is `NA`; 
 
-* export `as_Spatial`, to make it easer for packages to convert `sfc` objects without importing `sf`
+* export `as_Spatial`, to make it easier for packages to convert `sfc` objects without importing `sf`
 
 * `st_distance` gains a parameter `by_element` to obtain pairwise distances; #437
 
@@ -1027,7 +1027,7 @@
 
 * add `st_proj_info`, modelled after `rgdal::projInfo`
 
-* overwriting datasets with `st_write` is no longer allowed; update=TRUE appends to them, permitted the driver supports appending.
+* overwriting datasets with `st_write()` is no longer allowed; `update=TRUE` appends to them, permitted the driver supports appending.
 
 * `st_write` gains an argument, `update`, which when `TRUE` will try to append to existing datasets (#204)
 

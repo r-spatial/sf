@@ -23,16 +23,6 @@ dplyr_reconstruct.sf = function(data, template) {
 	)
 }
 
-#' @name tidyverse
-group_split.sf <- function(.tbl, ..., .keep = TRUE) {
-	 class(.tbl) = setdiff(class(.tbl), "sf")
-	 if (inherits(.tbl, "rowwise_df")) {
-	 	lapply(dplyr::group_split(.tbl, ...), st_as_sf)
-	 } else {
-	 	lapply(dplyr::group_split(.tbl, ..., .keep = .keep), st_as_sf)	
-	 }
-}
-
 #' Tidyverse methods for sf objects (remove .sf suffix!)
 #'
 #' Tidyverse methods for sf objects. Geometries are sticky, use \link{as.data.frame} to let \code{dplyr}'s own methods drop them. Use these methods without the .sf suffix and after loading the tidyverse package with the generic (or after loading package tidyverse).
@@ -562,7 +552,17 @@ sample_n.sf <- function(tbl, size, replace = FALSE, weight = NULL, .env = parent
 sample_frac.sf <- function(tbl, size = 1, replace = FALSE, weight = NULL, .env = parent.frame()) {
 	st_sf(NextMethod(), sf_column_name = attr(tbl, "sf_column"))
 }
-
+#' @name tidyverse
+#' @param .tbl see original function docs
+#' @param .keep see original function docs
+group_split.sf <- function(.tbl, ..., .keep = TRUE) {
+	class(.tbl) = setdiff(class(.tbl), "sf")
+	if (inherits(.tbl, "rowwise_df")) {
+		lapply(dplyr::group_split(.tbl, ...), st_as_sf)
+	} else {
+		lapply(dplyr::group_split(.tbl, ..., .keep = .keep), st_as_sf)	
+	}
+}
 #' @name tidyverse
 #' @examples
 #' if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE)) {
@@ -574,7 +574,7 @@ sample_frac.sf <- function(tbl, size = 1, replace = FALSE, weight = NULL, .env =
 #'  plot(trs.sf["year"], axes = TRUE)
 #' }
 #' @details \code{nest} assumes that a simple feature geometry list-column was among the columns that were nested.
-nest.sf = function (.data, ...) {
+nest.sf = function(.data, ...) {
 
 	if (!requireNamespace("rlang", quietly = TRUE))
 		stop("rlang required: install first?")

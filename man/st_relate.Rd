@@ -13,7 +13,7 @@ st_relate(x, y, pattern = NA_character_, sparse = !is.na(pattern))
 
 \item{pattern}{character; define the pattern to match to, see details.}
 
-\item{sparse}{logical; should a sparse matrix be returned (TRUE) or a dense matrix?}
+\item{sparse}{logical; should a sparse matrix be returned (\code{TRUE}) or a dense matrix?}
 }
 \value{
 In case \code{pattern} is not given, \code{st_relate} returns a dense \code{character} matrix; element \verb{[i,j]} has nine characters, referring to the DE9-IM relationship between \code{x[i]} and \code{y[j]}, encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of \code{x[i]} and the interior of \code{y[j]}, which is one of: 0, 1, 2, or F; digits denoting dimensionality of intersection, F denoting no intersection. When \code{pattern} is given, a dense logical matrix or sparse index list returned with matches to the given pattern; see \link{st_intersection} for a description of the returned matrix or list. See also \url{https://en.wikipedia.org/wiki/DE-9IM} for further explanation.

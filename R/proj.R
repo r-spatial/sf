@@ -83,7 +83,7 @@ sf_project = function(from = character(0), to = character(0), pts, keep = FALSE,
 #' 
 #' Query or manage PROJ search path and network settings
 #' @param paths the search path to be set; omit if paths need to be queried
-#' @param with_proj logical; if `NA` set for both GDAL and PROJ, otherwise set either for PROJ (TRUE) or GDAL (FALSE)
+#' @param with_proj logical; if `NA` set for both GDAL and PROJ, otherwise set either for PROJ (`TRUE`) or GDAL (`FALSE`)
 #' @return `sf_proj_search_paths()` returns the search path (possibly after setting it)
 #' @name proj_tools
 #' @export
@@ -103,7 +103,7 @@ sf_proj_search_paths = function(paths = character(0), with_proj = NA) {
 	}
 }
 
-#' @param enable logical; set this to enable (TRUE) or disable (FALSE) the proj network search facility
+#' @param enable logical; set this to enable (`TRUE`) or disable (`FALSE`) the proj network search facility
 #' @param url character; use this to specify and override the default proj network CDN 
 #' @return `sf_proj_network` when called without arguments returns a logical indicating whether
 #' network search of datum grids is enabled, when called with arguments it returns a character
@@ -117,8 +117,7 @@ sf_proj_network = function(enable = FALSE, url = character(0)) {
 		CPL_enable_network(url, enable)
 }
 
-#' @param source_crs object of class `crs` or character
-#' @param target_crs object of class `crs` or character
+#' @param source_crs,target_crs object of class `crs` or character
 #' @param authority character; constrain output pipelines to those of authority
 #' @param AOI length four numeric; desired area of interest for the resulting 
 #' coordinate transformations (west, south, east, north, in degrees).
@@ -133,15 +132,15 @@ sf_proj_network = function(enable = FALSE, url = character(0)) {
 #' registered in the grid_alternatives table of its database) were available. Used typically when 
 #' networking is enabled.)
 #' @param desired_accuracy numeric; only return pipelines with at least this accuracy
-#' @param strict_containment logical; default FALSE; permit partial matching of the area
-#' of interest; if TRUE strictly contain the area of interest.
+#' @param strict_containment logical; default `FALSE`; permit partial matching of the area
+#' of interest; if `TRUE` strictly contain the area of interest.
 #' The area of interest is either as given in AOI, or as implied by the
 #' source/target coordinate reference systems 
-#' @param axis_order_authority_compliant logical; if FALSE always 
+#' @param axis_order_authority_compliant logical; if `FALSE` always 
 #' choose ‘x’ or longitude for the first 
 #' axis; if TRUE, follow the axis orders given by the coordinate reference systems when 
-#' constructing the for the first axis; if FALSE, follow the axis orders given by
-#' @return `sf_proj_pipelines` returns a table with candidate coordinate transformation
+#' constructing the for the first axis; if `FALSE`, follow the axis orders given by
+#' @return `sf_proj_pipelines()` returns a table with candidate coordinate transformation
 #' pipelines along with their accuracy; `NA` accuracy indicates ballpark accuracy.
 #' @name proj_tools
 #' @export
