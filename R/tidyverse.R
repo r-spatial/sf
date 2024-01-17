@@ -224,6 +224,7 @@ rename.sf <- function(.data, ...) {
 }
 
 #' @name tidyverse
+#' @param .fn,.cols see original docs
 rename_with.sf = function(.data, .fn, .cols, ...) {
 	if (!requireNamespace("rlang", quietly = TRUE))
 		stop("rlang required: install that first") # nocov
@@ -404,7 +405,6 @@ gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, fac
 }
 
 #' @name tidyverse
-#' @param template see original function docs
 #' @param data see original function docs
 #' @param cols see original function docs
 #' @param names_to see original function docs
