@@ -6,10 +6,10 @@
 #'   values straddling 180 degrees. In general, using a projected
 #'   coordinate reference system is to be preferred, but this method permits a
 #'   geographical coordinate reference system to be used. This is the sf
-#'   equivalent of \code{\link[sp:recenter-methods]{recenter}} in the sp package and
-#'   ST_ShiftLongitude in PostGIS.
+#'   equivalent of [recenter][sp::recenter] in the sp package and
+#'   `ST_ShiftLongitude` in PostGIS.
 #'
-#' @param x object of class sf or sfc
+#' @param x object of class `sf` or `sfc`.
 #' @param ... ignored
 #'
 #' @export
@@ -46,5 +46,5 @@ st_shift_longitude.sfc = function(x, ...) {
 #' st_shift_longitude(d)
 st_shift_longitude.sf = function(x, ...) {
 	st_geometry(x) = st_shift_longitude(st_geometry(x))
-	return(x)
+	x
 }

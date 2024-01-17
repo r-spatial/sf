@@ -5,7 +5,7 @@
 
 # This is currently only used in `bind_rows()` and `bind_cols()`
 # because sf overrides all default implementations
-#' @name tidyverse
+
 dplyr_reconstruct.sf = function(data, template) {
 	sfc_name = attr(template, "sf_column")
 	if (inherits(template, "tbl_df"))
@@ -23,6 +23,7 @@ dplyr_reconstruct.sf = function(data, template) {
 	)
 }
 
+#' @name tidyverse
 group_split.sf <- function(.tbl, ..., .keep = TRUE) {
 	 class(.tbl) = setdiff(class(.tbl), "sf")
 	 if (inherits(.tbl, "rowwise_df")) {
@@ -232,6 +233,7 @@ rename.sf <- function(.data, ...) {
 	st_set_agr(st_as_sf(ret, sf_column_name = sf_column), agr)
 }
 
+#' @name tidyverse
 rename_with.sf = function(.data, .fn, .cols, ...) {
 	if (!requireNamespace("rlang", quietly = TRUE))
 		stop("rlang required: install that first") # nocov

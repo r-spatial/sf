@@ -2,7 +2,7 @@
 % Please edit documentation in R/tidyverse.R, R/join.R
 \name{tidyverse}
 \alias{tidyverse}
-\alias{dplyr_reconstruct.sf}
+\alias{group_split.sf}
 \alias{filter.sf}
 \alias{arrange.sf}
 \alias{group_by.sf}
@@ -12,6 +12,7 @@
 \alias{transmute.sf}
 \alias{select.sf}
 \alias{rename.sf}
+\alias{rename_with.sf}
 \alias{slice.sf}
 \alias{summarise.sf}
 \alias{summarise}
@@ -36,7 +37,7 @@
 \alias{anti_join.sf}
 \title{Tidyverse methods for sf objects (remove .sf suffix!)}
 \usage{
-dplyr_reconstruct.sf(data, template)
+group_split.sf(.tbl, ..., .keep = TRUE)
 
 filter.sf(.data, ..., .dots)
 
@@ -55,6 +56,8 @@ transmute.sf(.data, ..., .dots)
 select.sf(.data, ...)
 
 rename.sf(.data, ...)
+
+rename_with.sf(.data, .fn, .cols, ...)
 
 slice.sf(.data, ..., .dots)
 
@@ -163,13 +166,21 @@ semi_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 anti_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 }
 \arguments{
-\item{data}{see original function docs}
+\item{...}{other arguments}
 
-\item{template}{see original function docs}
+\item{.keep}{Should the join keys from both \code{x} and \code{y} be preserved in the
+output?
+\itemize{
+\item If \code{NULL}, the default, joins on equality retain only the keys from \code{x},
+while joins on inequality retain the keys from both inputs.
+\item If \code{TRUE}, all keys from both inputs are retained.
+\item If \code{FALSE}, only keys from \code{x} are retained. For right and full joins,
+the data in key columns corresponding to rows that only exist in \code{y} are
+merged into the key columns from \code{x}. Can't be used when joining on
+inequality conditions.
+}}
 
 \item{.data}{data object of class \link{sf}}
-
-\item{...}{other arguments}
 
 \item{.dots}{see corresponding function in package \code{dplyr}}
 
@@ -184,6 +195,8 @@ more details.}
 \item{is_coverage}{logical; if \code{do_union} is \code{TRUE}, use an optimized algorithm for features that form a polygonal coverage (have no overlaps)}
 
 \item{.keep_all}{see corresponding function in dplyr}
+
+\item{data}{see original function docs}
 
 \item{key}{see original function docs}
 
@@ -304,6 +317,8 @@ it is a potentially expensive operation so you must opt into it.}
 \item{suffix}{If there are non-joined duplicate variables in \code{x} and
 \code{y}, these suffixes will be added to the output to disambiguate them.
 Should be a character vector of length 2.}
+
+\item{template}{see original function docs}
 }
 \value{
 an object of class \link{sf}
