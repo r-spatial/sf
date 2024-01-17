@@ -77,14 +77,6 @@ CPL_axis_order_authority_compliant <- function(authority_compliant) {
     .Call(`_sf_CPL_axis_order_authority_compliant`, authority_compliant)
 }
 
-CPL_get_proj_search_paths <- function(paths) {
-    .Call(`_sf_CPL_get_proj_search_paths`, paths)
-}
-
-CPL_set_proj_search_paths <- function(paths) {
-    .Call(`_sf_CPL_set_proj_search_paths`, paths)
-}
-
 CPL_area <- function(sfc) {
     .Call(`_sf_CPL_area`, sfc)
 }
@@ -139,6 +131,10 @@ CPL_gdalrasterize <- function(src, dst, options, oo, doo, co, overwrite = FALSE,
 
 CPL_gdaltranslate <- function(src, dst, options, oo, co, quiet = TRUE) {
     .Call(`_sf_CPL_gdaltranslate`, src, dst, options, oo, co, quiet)
+}
+
+CPL_gdalfootprint <- function(src, dst, options, oo, co, quiet = TRUE) {
+    .Call(`_sf_CPL_gdalfootprint`, src, dst, options, oo, co, quiet)
 }
 
 CPL_gdalvectortranslate <- function(src, dst, options, oo, doo, co, quiet = TRUE) {
@@ -257,6 +253,14 @@ CPL_nary_intersection <- function(sfc) {
     .Call(`_sf_CPL_nary_intersection`, sfc)
 }
 
+CPL_line_project <- function(lines, points, normalized) {
+    .Call(`_sf_CPL_line_project`, lines, points, normalized)
+}
+
+CPL_line_interpolate <- function(lines, dists, normalized) {
+    .Call(`_sf_CPL_line_interpolate`, lines, dists, normalized)
+}
+
 CPL_hex_to_raw <- function(cx) {
     .Call(`_sf_CPL_hex_to_raw`, cx)
 }
@@ -297,8 +301,8 @@ CPL_get_pipelines <- function(crs, authority, AOI, Use, grid_availability, accur
     .Call(`_sf_CPL_get_pipelines`, crs, authority, AOI, Use, grid_availability, accuracy, strict_containment, axis_order_auth_compl)
 }
 
-CPL_get_data_dir <- function(b = FALSE) {
-    .Call(`_sf_CPL_get_data_dir`, b)
+CPL_get_data_dir <- function(from_proj = FALSE) {
+    .Call(`_sf_CPL_get_data_dir`, from_proj)
 }
 
 CPL_is_network_enabled <- function(b = FALSE) {
@@ -309,8 +313,8 @@ CPL_enable_network <- function(url, enable = TRUE) {
     .Call(`_sf_CPL_enable_network`, url, enable)
 }
 
-CPL_set_data_dir <- function(data_dir) {
-    .Call(`_sf_CPL_set_data_dir`, data_dir)
+CPL_set_data_dir <- function(data_dir, with_proj) {
+    .Call(`_sf_CPL_set_data_dir`, data_dir, with_proj)
 }
 
 CPL_use_proj4_init_rules <- function(v) {

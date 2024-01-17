@@ -759,29 +759,3 @@ OGRSpatialReference *handle_axis_order(OGRSpatialReference *sr) {
 #endif
 	return sr;
 }
-
-// [[Rcpp::export]]
-Rcpp::CharacterVector CPL_get_proj_search_paths(Rcpp::CharacterVector paths) {
-#if GDAL_VERSION_NUM >= 3000300
-	char **cp = OSRGetPROJSearchPaths();
-	Rcpp::CharacterVector ret = charpp2CV(cp);
-	CSLDestroy(cp);
-	return ret;
-#else
-	Rcpp::stop("GDAL >= 3.0.3 required");
-#endif
-}
-
-// [[Rcpp::export]]
-Rcpp::CharacterVector CPL_set_proj_search_paths(Rcpp::CharacterVector paths) {
-#if GDAL_VERSION_NUM >= 3000000
-	std::vector <char *> paths_char;
-	if (paths.size()) {
-		paths_char = create_options(paths, true);
-		OSRSetPROJSearchPaths(paths_char.data());
-	}
-#else
-	Rcpp::stop("GDAL >= 3.0.0 required");
-#endif
-	return paths;
-}

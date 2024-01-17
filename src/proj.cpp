@@ -1,8 +1,12 @@
 #include <iostream>
 
 #include <ogr_srs_api.h>
+#include <cpl_string.h>
 
 #include "Rcpp.h"
+
+#define NO_GDAL_CPP_HEADERS
+#include "gdal_sf_pkg.h"
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_proj_h(bool b = false) {
@@ -181,8 +185,20 @@ Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVect
 }
 
 // [[Rcpp::export]]
-Rcpp::CharacterVector CPL_get_data_dir(bool b = false) {
-	return Rcpp::CharacterVector(proj_info().searchpath);
+Rcpp::CharacterVector CPL_get_data_dir(bool from_proj = false) {
+	if (from_proj) {
+		Rcpp::CharacterVector ret(proj_info().searchpath);
+		return ret;
+	} else {
+#if GDAL_VERSION_NUM >= 3000300
+		char **ogr_sp = OSRGetPROJSearchPaths();
+		Rcpp::CharacterVector ogr_sp_sf = charpp2CV(ogr_sp);
+		CSLDestroy(ogr_sp);
+		return ogr_sp_sf;
+#else
+		Rcpp::stop("requires GDAL >= 3.0.3");
+#endif
+	}
 }
 
 // [[Rcpp::export]]
@@ -222,9 +238,21 @@ Rcpp::CharacterVector CPL_enable_network(Rcpp::CharacterVector url, bool enable 
 }
 
 // [[Rcpp::export]]
-Rcpp::LogicalVector CPL_set_data_dir(std::string data_dir) {
-	const char *cp = data_dir.c_str();
-	proj_context_set_search_paths(PJ_DEFAULT_CTX, 1, &cp);
+Rcpp::LogicalVector CPL_set_data_dir(Rcpp::CharacterVector data_dir, bool with_proj) {
+	if (with_proj) {
+		if (data_dir.size() != 1)
+			Rcpp::stop("data_dir should be size 1 character vector"); // #nocov
+		std::string dd = Rcpp::as<std::string>(data_dir);
+		const char *cp = dd.c_str();
+		proj_context_set_search_paths(PJ_DEFAULT_CTX, 1, &cp);
+	} else {
+#if GDAL_VERSION_NUM >= 3000000
+		std::vector <char *> dirs = create_options(data_dir, true);
+		OSRSetPROJSearchPaths(dirs.data());
+#else
+		Rcpp::stop("setting proj search path for GDAL requires GDAL >= 3.0.0");
+#endif
+	}
 	return true;
 }
 
@@ -427,7 +455,7 @@ Rcpp::CharacterVector CPL_enable_network(Rcpp::CharacterVector url, bool enable 
 #endif
 }
 
-Rcpp::CharacterVector CPL_get_data_dir(bool b = false) {
+Rcpp::CharacterVector CPL_get_data_dir(bool from_proj = false) {
 #if PROJ_VERSION_MAJOR >= 7
 	return Rcpp::CharacterVector(proj_info().searchpath);
 #else

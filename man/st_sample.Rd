@@ -20,7 +20,8 @@ st_sample(x, size, ...)
   exact = TRUE,
   warn_if_not_integer = TRUE,
   by_polygon = FALSE,
-  progress = FALSE
+  progress = FALSE,
+  force = FALSE
 )
 
 \method{st_sample}{sfg}(x, size, ...)
@@ -52,6 +53,8 @@ the same as specified by \code{size}? \code{TRUE} by default. Only applies to po
 when \code{type = "random"}.}
 
 \item{progress}{logical; if \code{TRUE} show progress bar (only if \code{size} is a vector).}
+
+\item{force}{logical; if \code{TRUE} continue when the sampled bounding box area is more than 1e4 times the area of interest, else (default) stop with an error. If this error is not justified, try setting \code{oriented=TRUE}, see details.}
 
 \item{great_circles}{logical; if \code{TRUE}, great circle arcs are used to connect the bounding box vertices, if \code{FALSE} parallels (graticules)}
 
@@ -86,6 +89,8 @@ For regular sampling on the sphere, see also \code{geosphere::regularCoordinates
 
 Sampling methods from package \code{spatstat} are interfaced (see examples), and need their own parameters to be set.
 For instance, to use \code{spatstat.random::rThomas()}, set \code{type = "Thomas"}.
+
+For sampling polygons one can specify \code{oriented=TRUE} to make sure that polygons larger than half the globe are not reverted, e.g. when specifying a polygon from a bounding box of a global dataset. The \code{st_sample} method for \code{bbox} does this by default.
 }
 \examples{
 nc = st_read(system.file("shape/nc.shp", package="sf"))

@@ -1121,3 +1121,22 @@ st_line_sample = function(x, n, density, type = "regular", sample = NULL) {
 	if (length(pts) == 2 && is.numeric(pts))
   		assign(".geos_error", st_point(pts), envir=.sf_cache)
 } #nocov end
+
+#' @param dist numeric, vector with distance value(s)
+#' @name st_line_project_point
+#' @returns `st_line_interpolate` returns the point(s) at dist(s), when measured along (interpolated on) the line(s)
+#' @export
+#' @examples 
+#' st_line_interpolate(st_as_sfc("LINESTRING (0 0, 1 1)"), 1)
+#' st_line_interpolate(st_as_sfc("LINESTRING (0 0, 1 1)"), 1, TRUE)
+st_line_interpolate = function(line, dist, normalized = FALSE) {
+	stopifnot(inherits(line, "sfc"), all(st_dimension(line) == 1), 
+		is.logical(normalized), length(normalized) == 1,
+		is.numeric(dist))
+	if (isTRUE(st_is_longlat(line)))
+		message_longlat("st_project_point")
+	line = st_cast(line, "LINESTRING")
+	recycled = recycle_common(list(line, dist))
+	st_sfc(CPL_line_interpolate(recycled[[1]], recycled[[2]], normalized), 
+		   crs = st_crs(line))
+}

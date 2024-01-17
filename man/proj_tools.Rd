@@ -7,7 +7,7 @@
 \alias{sf_proj_pipelines}
 \title{Manage PROJ settings}
 \usage{
-sf_proj_search_paths(paths = character(0))
+sf_proj_search_paths(paths = character(0), with_proj = NA)
 
 sf_proj_network(enable = FALSE, url = character(0))
 
@@ -24,7 +24,9 @@ sf_proj_pipelines(
 )
 }
 \arguments{
-\item{paths}{the search path to be set; omit if no paths need to be set}
+\item{paths}{the search path to be set; omit if paths need to be queried}
+
+\item{with_proj}{logical; if \code{NA} set for both GDAL and PROJ, otherwise set either for PROJ (TRUE) or GDAL (FALSE)}
 
 \item{enable}{logical; set this to enable (TRUE) or disable (FALSE) the proj network search facility}
 
@@ -74,5 +76,5 @@ vector with the URL of the CDN used (or specified with \code{url}).
 pipelines along with their accuracy; \code{NA} accuracy indicates ballpark accuracy.
 }
 \description{
-Manage PROJ search path and network settings
+Query or manage PROJ search path and network settings
 }

@@ -1,7 +1,7 @@
 #' @importFrom utils head object.size str tail packageVersion compareVersion globalVariables
 #' @importFrom stats aggregate dist na.omit rbinom runif setNames
 #' @importFrom tools file_ext file_path_sans_ext
-#' @importFrom methods as new slot slotNames "slot<-"
+#' @importFrom methods as new slot slotNames slot<-
 #' @importFrom grid convertHeight convertUnit convertWidth current.viewport linesGrob nullGrob pathGrob pointsGrob polylineGrob unit viewport
 #' @import graphics
 #' @importFrom grDevices dev.size rgb cm
@@ -57,7 +57,7 @@ pathGrob <- NULL
 		packageStartupMessage(paste(
 			"Linked against:", CPL_geos_version(TRUE, TRUE),
 			"compiled against:", CPL_geos_version(FALSE, TRUE)))
-		packageStartupMessage("It is probably a good idea to reinstall sf, and maybe rgeos and rgdal too")
+		packageStartupMessage("It is probably a good idea to reinstall sf (and maybe lwgeom too)")
 	} # nocov end
 }
 
@@ -72,19 +72,35 @@ sf_extSoftVersion = function() {
 		names = c("GEOS", "GDAL", "proj.4", "GDAL_with_GEOS", "USE_PROJ_H", "PROJ"))
 }
 
+save_and_replace = function(var, value, where) {
+	if (Sys.getenv(var) != "")
+		assign(paste0(".sf.", var), Sys.getenv(var), envir = where)
+	# Sys.setenv(var = value) uses NSE and will set var, not the variable var points to:
+	do.call(Sys.setenv, setNames(list(value), var))
+}
+
+if_exists_restore = function(vars, where) {
+	fn = function(var, where) {
+		lname = paste0(".sf.", var)
+		if (!is.null(get0(lname, envir = where)))
+			do.call(Sys.setenv, setNames(list(get(lname, envir = where)), var)) # see above
+	}
+	lapply(vars, fn, where = where)
+}
+
 load_gdal <- function() {
-	if (file.exists(system.file("proj/nad.lst", package = "sf")[1])) {
-		# nocov start
-		prj = system.file("proj", package = "sf")[1]
-		if (! CPL_set_data_dir(prj)) { # if TRUE, uses C API to set path, leaving PROJ_LIB alone
-			assign(".sf.PROJ_LIB", Sys.getenv("PROJ_LIB"), envir=.sf_cache)
-			Sys.setenv("PROJ_LIB" = prj)
+	if (!identical(Sys.getenv("R_SF_USE_PROJ_DATA"), "true")) {
+		if (file.exists(prj <- system.file("proj", package = "sf")[1])) {
+			# nocov start
+			if (! sf_proj_search_paths(prj)) { # if TRUE, uses C API to set path, leaving PROJ_LIB / PROJ_DATA alone
+				save_and_replace("PROJ_LIB", prj, .sf_cache)
+				save_and_replace("PROJ_DATA", prj, .sf_cache)
+			}
+			# CPL_use_proj4_init_rules(1L)
+			# nocov end
 		}
-		CPL_use_proj4_init_rules(1L)
-		assign(".sf.GDAL_DATA", Sys.getenv("GDAL_DATA"), envir=.sf_cache)
-		gdl = system.file("gdal", package = "sf")[1]
-		Sys.setenv("GDAL_DATA" = gdl)
-		# nocov end
+		if (file.exists(gdl <- system.file("gdal", package = "sf")[1]))
+			save_and_replace("GDAL_DATA", gdl, .sf_cache)
 	}
 	CPL_gdal_init()
 	register_all_s3_methods() # dynamically registers non-imported pkgs (tidyverse)
@@ -92,19 +108,7 @@ load_gdal <- function() {
 
 unload_gdal <- function() {
 	CPL_gdal_cleanup_all()
-	if (file.exists(system.file("proj/nad.lst", package = "sf")[1])) {
-		# nocov start
-		if (! CPL_set_data_dir(system.file("proj", package = "sf")[1])) # set back:
-			Sys.setenv("PROJ_LIB"=get(".sf.PROJ_LIB", envir=.sf_cache))
-
-		Sys.setenv("GDAL_DATA"=get(".sf.GDAL_DATA", envir=.sf_cache))
-		# nocov end
-	}
-	#units::remove_symbolic_unit("link")
-	#units::remove_symbolic_unit("us_in")
-	#units::remove_symbolic_unit("ind_yd")
-	#units::remove_symbolic_unit("ind_ft")
-	#units::remove_symbolic_unit("ind_ch")
+	if_exists_restore(c("PROJ_LIB", "PROJ_DATA", "GDAL_DATA"), .sf_cache)
 }
  
 

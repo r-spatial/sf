@@ -354,7 +354,7 @@ gdal_extract = function(f, pts, bilinear = FALSE) {
 #' @param proxy logical; return proxy object?
 #' @param debug logical; print debug messages?
 #' @export
-gdal_read_mdim = function(file, array_name = character(0), options = character(0), 
+gdal_read_mdim = function(file, array_name = character(0), options = character(0),
 						  offset = integer(0), count = integer(0), step = integer(0), 
 						  proxy = FALSE, debug = FALSE) {
 	CPL_read_mdim(file, array_name, options, offset, count, step, proxy, debug)
