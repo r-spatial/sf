@@ -9,7 +9,7 @@
 #'   equivalent of [recenter][sp::recenter] in the sp package and
 #'   `ST_ShiftLongitude` in PostGIS.
 #'
-#' @param x object of class `sf` or `sfc`.
+#' @param x object of class `sf` or `sfc`
 #' @param ... ignored
 #'
 #' @export

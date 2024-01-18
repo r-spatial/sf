@@ -5,7 +5,6 @@
 
 # This is currently only used in `bind_rows()` and `bind_cols()`
 # because sf overrides all default implementations
-
 dplyr_reconstruct.sf = function(data, template) {
 	sfc_name = attr(template, "sf_column")
 	if (inherits(template, "tbl_df"))
