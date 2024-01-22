@@ -143,8 +143,11 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 "[.sfc" = function(x, i, j, ..., op = st_intersects) {
 	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc") || inherits(i, "sfg")))
 		i = lengths(op(x, i, ...)) != 0
-	st_sfc(NextMethod(), crs = st_crs(x), precision = st_precision(x),
-		dim = if(length(x)) class(x[[1]])[1] else "XY")
+	precision = st_precision(x)
+	crs = st_crs(x)
+	dim = if (length(x)) class(x[[1]])[1] else "XY"
+	x = unclass(x)[i] # now a list
+	st_sfc(x, crs = crs, precision = precision, dim = dim)
 }
 
 
