@@ -58,7 +58,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0-16" id="version-10-16">version 1.0-16<a class="anchor" aria-label="anchor" href="#version-10-16"></a></h2>
-<ul><li><p><code>st_sample</code> for polygons is sensitive to setting <code>oriented = TRUE</code> to prevent wrongly correcting ring directions; <a href="https://github.com/r-spatial/sf/issues/2308" class="external-link">#2308</a></p></li>
+<ul><li><p><code>[.sfc</code> works when setting argument <code>op</code>; <a href="https://github.com/r-spatial/sf/issues/2320" class="external-link">#2320</a></p></li>
+<li><p><code>st_sample</code> for polygons is sensitive to setting <code>oriented = TRUE</code> to prevent wrongly correcting ring directions; <a href="https://github.com/r-spatial/sf/issues/2308" class="external-link">#2308</a></p></li>
 <li><p>add support for the GDAL <code>footprint</code> utility (requiring GDAL &gt;= 3.8.0) to <code>gdal_utils</code>; <a href="https://github.com/r-spatial/sf/issues/2305" class="external-link">#2305</a>, by <a href="https://github.com/goergen95" class="external-link">@goergen95</a></p></li>
 <li><p>existing environment variables <code>PROJ_LIB</code> and <code>PROJ_DATA</code> are (again) ignored on <code>sf</code> binary CRAN installations (win + macos), effectively by overwriting them during the R session and restoring them on exit; this does not happen if environment variable <code>R_SF_USE_PROJ_DATA</code> is set to <code>true</code>. <a href="https://github.com/r-spatial/sf/issues/2298" class="external-link">#2298</a></p></li>
 <li><p>add <code><a href="../reference/st_line_project_point.html">st_line_project()</a></code> to find how far a point is when projected on a line; <a href="https://github.com/r-spatial/sf/issues/2291" class="external-link">#2291</a></p></li>
