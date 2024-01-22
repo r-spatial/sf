@@ -4,7 +4,7 @@
 \alias{Ops}
 \alias{Ops.sfg}
 \alias{Ops.sfc}
-\title{S3 Ops Group Generic Functions for simple feature geometries}
+\title{Arithmetic operators for simple feature geometries}
 \usage{
 \method{Ops}{sfg}(e1, e2)
 
@@ -19,10 +19,10 @@
 object of class \code{sfg}
 }
 \description{
-S3 Ops Group Generic Functions for simple feature geometries
+Arithmetic operators for simple feature geometries
 }
 \details{
-in case \code{e2} is numeric, +, -, *, /, \%\% and \%/\% add, subtract, multiply, divide, modulo, or integer-divide by \code{e2}. In case \code{e2} is an n x n matrix, * matrix-multiplies and / multiplies by its inverse. If \code{e2} is an \code{sfg} object, |, /, & and \%/\% result in the geometric union, difference, intersection and symmetric difference respectively, and \code{==} and \code{!=} return geometric (in)equality, using \link{st_equals}.
+in case \code{e2} is numeric, +, -, *, /, \%\% and \%/\% add, subtract, multiply, divide, modulo, or integer-divide by \code{e2}. In case \code{e2} is an n x n matrix, * matrix-multiplies and / multiplies by its inverse. If \code{e2} is an \code{sfg} object, |, /, & and \%/\% result in the geometric union, difference, intersection and symmetric difference respectively, and \code{==} and \code{!=} return geometric (in)equality, using \link{st_equals}. If \code{e2} is an \code{sfg} or \code{sfc} object, for operations \code{+} and \code{-} it has to have \code{POINT} geometries.
 
 If \code{e1} is of class \code{sfc}, and \code{e2} is a length 2 numeric, then it is considered a two-dimensional point (and if needed repeated as such) only for operations \code{+} and \code{-}, in other cases the individual numbers are repeated; see commented examples.
 
