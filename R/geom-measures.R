@@ -258,6 +258,6 @@ st_line_project = function(line, point, normalized = FALSE) {
 	point = st_cast(point, "POINT")
 	if (isTRUE(st_is_longlat(line)))
 		message_longlat("st_project_point")
-	recycled = recycle_common(list(line, point))
+	recycled = recycle_common(list(line, point[]))
 	CPL_line_project(recycled[[1]], recycled[[2]], normalized)
 }
