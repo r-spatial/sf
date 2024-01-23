@@ -1,9 +1,9 @@
 
 #' @name st_transform
-#' @param type character; one of \code{have_datum_files}, \code{proj}, \code{ellps}, \code{datum}, \code{units} or \code{prime_meridians}; see Details.
+#' @param type character; one of `have_datum_files`, `proj`, `ellps`, `datum`, `units`, `path`, or `prime_meridians`; see Details.
 #' @param path character; PROJ search path to be set
 #' @export
-#' @details \code{sf_proj_info} lists the available projections, ellipses, datums, units, or data search path of the PROJ library when \code{type} is equal to proj, ellps, datum, units or path; when \code{type} equals \code{have_datum_files} a boolean is returned indicating whether datum files are installed and accessible (checking for \code{conus}).
+#' @details \code{sf_proj_info} lists the available projections, ellipses, datums, units, or data search path of the PROJ library when \code{type} is equal to proj, ellps, datum, units or path; when \code{type} equals \code{have_datum_files} a boolean is returned indicating whether datum files are installed and accessible (checking for \code{conus}). `path` returns the `PROJ_INFO.searchpath` field directly, as a single string with path separaters (`:`  or `;`).
 #'
 #' for PROJ >= 6, \code{sf_proj_info} does not provide option \code{type = "datums"}. 
 #' PROJ < 6 does not provide the option \code{type = "prime_meridians"}.
@@ -18,10 +18,10 @@ sf_proj_info = function(type = "proj", path) {
 		return(CPL_have_datum_files(0))
 
 	if (type == "path")
-		return(CPL_get_data_dir(FALSE))
+		return(CPL_get_data_dir(TRUE))
 	
 	if (!missing(path) && is.character(path))
-		return(invisible(CPL_set_data_dir(path)))
+		return(invisible(unique(CPL_set_data_dir(path, TRUE))))
 
 	if (type == "network")
 		return(CPL_is_network_enabled(TRUE))
@@ -81,16 +81,26 @@ sf_project = function(from = character(0), to = character(0), pts, keep = FALSE,
 
 #' Manage PROJ settings
 #' 
-#' Manage PROJ search path and network settings
-#' @param paths the search path to be set; omit if no paths need to be set
+#' Query or manage PROJ search path and network settings
+#' @param paths the search path to be set; omit if paths need to be queried
+#' @param with_proj logical; if `NA` set for both GDAL and PROJ, otherwise set either for PROJ (TRUE) or GDAL (FALSE)
 #' @return `sf_proj_search_paths()` returns the search path (possibly after setting it)
 #' @name proj_tools
 #' @export
-sf_proj_search_paths = function(paths = character(0)) {
+sf_proj_search_paths = function(paths = character(0), with_proj = NA) {
 	if (length(paths) == 0)
-		CPL_get_proj_search_paths(paths) # get
-	else
-		CPL_set_proj_search_paths(as.character(paths)) # set
+		CPL_get_data_dir(FALSE)
+	else {
+		if (is.na(with_proj) || !isTRUE(with_proj))
+			CPL_set_data_dir(as.character(paths), FALSE) # set GDAL
+		if (is.na(with_proj) || isTRUE(with_proj)) { # set for PROJ
+			if (length(paths) > 1) {
+				paths = paste0(paths, collapse = .Platform$path.sep)
+				message(paste("setting proj path(s) to", paths))
+			}
+			CPL_set_data_dir(as.character(paths), TRUE)
+		}
+	}
 }
 
 #' @param enable logical; set this to enable (TRUE) or disable (FALSE) the proj network search facility

@@ -21,7 +21,7 @@
 #)
 
 
-#' @name st_as_sf
+#' @rdname st_as_sf
 #' @examples
 #' if (require(sp, quietly = TRUE)) {
 #' x = rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))
@@ -80,7 +80,6 @@ st_as_sf.Spatial = function(x, ...) {
 #' @param ... further arguments
 #' @param precision precision value; see \link{st_as_binary}
 #' @param forceMulti logical; if \code{TRUE}, force coercion into \code{MULTIPOLYGON} or \code{MULTILINE} objects, else autodetect
-#' @name st_as_sfc
 #' @export
 st_as_sfc = function(x, ...) UseMethod("st_as_sfc")
 
@@ -89,7 +88,7 @@ handle_bbox = function(sfc, sp) {
 	structure(sfc, "bbox" = bb)
 }
 
-#' @name st_as_sfc
+#' @rdname st_as_sfc
 #' @export
 st_as_sfc.SpatialPoints = function(x, ..., precision = 0.0) {
 	cc = x@coords
@@ -100,14 +99,14 @@ st_as_sfc.SpatialPoints = function(x, ..., precision = 0.0) {
 	handle_bbox(structure(st_sfc(lst, crs = st_crs(x@proj4string), precision = precision), n_empty = 0), x)
 }
 
-#' @name st_as_sfc
+#' @rdname st_as_sfc
 #' @export
 st_as_sfc.SpatialPixels = function(x, ..., precision = 0.0) {
 	handle_bbox(st_as_sfc(as(x, "SpatialPoints"), precision = precision), x)
 }
 
 
-#' @name st_as_sfc
+#' @rdname st_as_sfc
 #' @export
 st_as_sfc.SpatialMultiPoints = function(x, ..., precision = 0.0) {
 	lst = lapply(x@coords, st_multipoint)
@@ -115,7 +114,7 @@ st_as_sfc.SpatialMultiPoints = function(x, ..., precision = 0.0) {
 		precision = precision))), x)
 }
 
-#' @name st_as_sfc
+#' @rdname st_as_sfc
 #' @export
 st_as_sfc.SpatialLines = function(x, ..., precision = 0.0, forceMulti = FALSE) {
 	lst = if (forceMulti || any(sapply(x@lines, function(x) length(x@Lines)) != 1))
@@ -139,7 +138,7 @@ st_as_sfc.SpatialLines = function(x, ..., precision = 0.0, forceMulti = FALSE) {
 		precision = precision))), x)
 }
 
-#' @name st_as_sfc
+#' @rdname st_as_sfc
 #' @export
 
 st_as_sfc.SpatialPolygons = function(x, ..., precision = 0.0, forceMulti = FALSE) {
@@ -239,17 +238,17 @@ Polygons2POLYGON = function(PolygonsLst) {
 
 #' @name as
 #' @rdname coerce-methods
-#' @aliases coerce,Spatial,sf-method
+#' @aliases Spatial sf-method
 setAs("Spatial", "sf", function(from) st_as_sf(from))
 
 #' @name as
 #' @rdname coerce-methods
-#' @aliases coerce,Spatial,sfc-method
+#' @aliases coerce Spatial sfc-method
 setAs("Spatial", "sfc", function(from) st_as_sfc(from))
 
 #' @name as
 #' @rdname coerce-methods
-#' @aliases coerce,sf,Spatial-method
+#' @aliases coerce Spatial-method
 setAs("sf", "Spatial", function(from) {
 	if (!requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
@@ -261,7 +260,7 @@ setAs("sf", "Spatial", function(from) {
 
 #' @name as
 #' @rdname coerce-methods
-#' @aliases coerce,sfc,Spatial-method
+#' @aliases coerce Spatial-method
 setAs("sfc", "Spatial", function(from) as_Spatial(from))
 
 # create empy class
@@ -275,7 +274,6 @@ setAs("XY", "Spatial", function(from) as(st_sfc(from), "Spatial"))
 #' `sp` objects to `sf` and `sfc` with `as(x, "sf")`.
 #' @rdname coerce-methods
 #' @name as_Spatial
-#' @md
 #' @param from object of class `sf`, `sfc_POINT`, `sfc_MULTIPOINT`, `sfc_LINESTRING`,
 #' `sfc_MULTILINESTRING`, `sfc_POLYGON`, or `sfc_MULTIPOLYGON`.
 #' @param cast logical; if `TRUE`, [st_cast()] `from` before converting, so that e.g.
@@ -407,7 +405,7 @@ get_comment = function(mp) { # for MULTIPOLYGON
 
 #' @name as
 #' @rdname coerce-methods
-#' @aliases coerce,crs,CRS-method
+#' @aliases coerce crs CRS-method
 setAs("crs", "CRS", function(from) CRS_from_crs(from))
 CRS_from_crs = function(from) {
 	if (! requireNamespace("sp", quietly = TRUE))

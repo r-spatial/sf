@@ -26,10 +26,21 @@ entries for this vignette (as for the others).
 
 EPSG stands for a maintained, well-understood registry of spatial
 reference systems, maintained by the International Association
-of Oil \& Gass Producers (IOGP). "EPSG" stands for the authority,
-e.g. "EPSG:4326" stands for spatial reference system with ID 4326
+of Oil \& Gass Producers (IOGP). `EPSG` stands for the authority,
+e.g. `EPSG:4326` stands for spatial reference system with ID 4326
 as it is maintained by the EPSG authority. The website for the EPSG
-registry is found at the epsg.org domain.
+registry is found at the epsg.org domain. Using `4326` instead of
+`EPSG:4326` is allowed (`EPSG` is the default authority) but the
+latter form, `EPSG:4326` is better (less ambiguous).
+
+# Why should we use `OGC:CRS84` instead of `EPSG:4326`?
+
+EPSG:4326 formally defines coordinate axes to be in the order
+latitude-longitude, but practically all data sources and software
+environments use longitude-latitude axis order. OGC:CRS84 is
+equivalent to EPSG:4326 except that it defines coordinate axis
+order longitude-latitude, removing this ambiguity so to speak.
+See also `st_axis_order()`
 
 # How does `sf` deal with secondary geometry columns?
 
@@ -62,7 +73,7 @@ to the object does not guarantee that in the resulting object these
 two polygons still have the same boundary in common, since the
 simplification is done independently, _for each feature geometry_.
 
-# Why do dplyr verbs not work for `sf` objects?
+# Why do my dplyr verbs not work for `sf` objects?
 
 They do! However, many developers like to write scripts that never
 load packages but address all functions by the `sf::` prefix, as in
@@ -77,36 +88,3 @@ One should in this case simply load `sf`, e.g. by
 ```{r,eval=FALSE}
 library(sf)
 ```
-
-# What is this error/warning/message about?
-
-## _although coordinates are longitude/latitude, xxx assumes that they are planar_
-
-Most (but not all) of the geometry calculating routines used by `sf` come from the [GEOS](https://libgeos.org) library. This library considers coordinates in a two-dimensional, flat, Euclidean space. For longitude latitude data, this is not the case. A simple example is a polygon enclosing the North pole, which should include the pole:
-```{r}
-polygon = st_sfc(st_polygon(list(rbind(c(0,80), c(120,80), c(240,80), c(0,80)))), 
-		crs = 4326)
-pole = st_sfc(st_point(c(0,90)), crs = 4326)
-st_intersects(polygon, pole)
-```
-
-which gives a wrong result (no intersection).
-
-## _st\_centroid does not give correct centroids for longitude/latitude data_
-
-Similar to the above, centroids are computed assuming flat, 2D space:
-```{r}
-st_centroid(polygon)[[1]]
-```
-
-where the centroid should have been the pole.
-
-## _dist is assumed to be in decimal degrees (arc\_degrees)._
-
-This message indicates that `sf` assumes a distance value is given in degrees. To avoid this message, pass a value with the right units:
-```{r}
-pt = st_sfc(st_point(c(0,0)), crs = 4326)
-buf = st_buffer(polygon, 1)
-buf = st_buffer(polygon, units::set_units(1, degree))
-```
-

@@ -247,6 +247,42 @@ Rcpp::LogicalVector CPL_gdaltranslate(Rcpp::CharacterVector src, Rcpp::Character
 	return result == NULL || err;
 }
 
+
+// [[Rcpp::export]]
+Rcpp::LogicalVector CPL_gdalfootprint(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
+        Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector co,
+        bool quiet = true) {
+	
+#if GDAL_VERSION_NUM < 3080000
+	Rcpp::stop("footprint util requires GDAL >= 3.8.0");
+#else
+	int err = 0;
+	set_config_options(co);
+	std::vector <char *> options_char = create_options(options, true);
+	std::vector <char *> oo_char = create_options(oo, true);
+	GDALFootprintOptions* opt =  GDALFootprintOptionsNew(options_char.data(), NULL);
+	
+	if (opt == NULL)
+		Rcpp::stop("footprint: options error");
+	
+	if (! quiet)
+		GDALFootprintOptionsSetProgress(opt, GDALRProgress, NULL);
+	GDALDatasetH src_pt = GDALOpenEx((const char *) src[0], GDAL_OF_RASTER | GA_ReadOnly,
+                                  NULL, oo_char.data(), NULL);
+	if (src_pt == NULL)
+		return 1; // #nocov
+	GDALDatasetH result = GDALFootprint((const char *) dst[0], NULL,src_pt, opt, &err);
+	GDALFootprintOptionsFree(opt);
+	// see https://github.com/r-spatial/sf/issues/1352:
+	if (result != NULL)
+		GDALClose(result);
+	if (src_pt != NULL)
+		GDALClose(src_pt);
+	unset_config_options(co);
+	return result == NULL || err;
+#endif
+}
+
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_gdalvectortranslate(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
 		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo,

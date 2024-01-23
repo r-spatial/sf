@@ -26,15 +26,16 @@
   pal = NULL,
   nbreaks = 10,
   breaks = "pretty",
-  max.plot = if (is.null(n <- getOption("sf_max.plot"))) 9 else n,
+  max.plot = getOption("sf_max.plot", default = 9),
   key.pos = get_key_pos(x, ...),
   key.length = 0.618,
-  key.width = lcm(1.8 * par("ps")/12),
+  key.width = kw_dflt(x, key.pos),
   reset = TRUE,
   logz = FALSE,
   extent = x,
   xlim = st_bbox(extent)[c(1, 3)],
-  ylim = st_bbox(extent)[c(2, 4)]
+  ylim = st_bbox(extent)[c(2, 4)],
+  compact = FALSE
 )
 
 get_key_pos(x, ...)
@@ -186,6 +187,8 @@ sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE)
 
 \item{ylim}{see \link{plot.window}}
 
+\item{compact}{logical; compact sub-plots over plotting space?}
+
 \item{pch}{plotting symbol}
 
 \item{cex}{symbol size}
@@ -234,9 +237,9 @@ or object returned by \link{st_graticule}}
 
 \item{n}{integer; number of colors}
 
-\item{cutoff.tails}{numeric, in [0,0.5] start and end values}
+\item{cutoff.tails}{numeric, in \verb{[0,0.5]} start and end values}
 
-\item{alpha}{numeric, in [0,1], transparency}
+\item{alpha}{numeric, in \verb{[0,1]}, transparency}
 
 \item{categorical}{logical; do we want colors for a categorical variable? (see details)}
 }

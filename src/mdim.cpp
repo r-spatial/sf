@@ -147,8 +147,59 @@ List get_geometry(std::shared_ptr<GDALGroup> curGroup) {
 	return(lst);
 }
 
+List get_all_arrays(std::shared_ptr<GDALGroup> curGroup, List ret, std::string name) {
+	auto array_names(curGroup->GetMDArrayNames());
+	// for (size_t i = 0 i < array_names
+	CharacterVector a(array_names.size());
+	// ret needs to be a _named_ list, so that na is never null
+	CharacterVector na = ret.attr("names");
+	if (a.size() > 0) { // group with array(s):
+		for (int i = 0; i < a.size(); i++)
+			a[i] = array_names[i];
+		ret.push_back(a);
+		CharacterVector gn;
+		// gn.push_back("");
+		std::string group_name;
+		if (name == "/")
+			group_name = name;
+		else
+			group_name = name + "/";
+		na.push_back(group_name);
+	}
+	ret.attr("names") = na;
+	auto gn(curGroup->GetGroupNames());
+	for (const auto &gn: curGroup->GetGroupNames()) { // iterate over groups:
+		std::string slash;
+		if (name == "/")
+			slash = "";
+		else
+			slash = "/";
+		ret = get_all_arrays(curGroup->OpenGroup(gn), ret, name + slash + gn);
+	}
+	return ret;
+}
+
+std::shared_ptr<GDALMDArray> get_array(std::shared_ptr<GDALGroup> grp, const std::string &osName) {
+	CPLStringList aosTokens(CSLTokenizeString2(osName.c_str(), "/", 0));
+	for (int i = 0; i < aosTokens.size() - 1; i++) {
+		auto curGroupNew = grp->OpenGroup(aosTokens[i]);
+		if (!curGroupNew) {
+			Rcout << "Cannot find group " << aosTokens[i] << std::endl;
+			stop("group not found");
+		}
+		grp = curGroupNew;
+	}
+	const char *pszArrayName = aosTokens[aosTokens.size() - 1];
+	auto array(grp->OpenMDArray(pszArrayName));
+	if (!array) {
+		Rcout << "Cannot open array" << pszArrayName << std::endl;
+		stop("array not found");
+	}
+	return array;
+}
+
 // [[Rcpp::export]]
-List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterVector oo,
+List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterVector oo, 
 				IntegerVector offset, IntegerVector count, IntegerVector step, 
 				bool proxy = false, bool debug = false) {
 
@@ -163,23 +214,13 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 	if( !poRootGroup )
 		stop("cannot open root group");
 
-	auto curGroup = poRootGroup;
-	auto groupNames = poRootGroup->GetGroupNames();
-	if (groupNames.size() > 0) {
-		curGroup = curGroup->OpenGroup(groupNames[0]);
-		if (!curGroup) {
-			Rcout << "group: " << groupNames[0] << ";" << std::endl;
-			stop("Cannot find group");
-		}
-		if (debug && groupNames.size() > 1) {
-			Rcout << "ignored groups: ";
-			for (size_t i = 1; i < groupNames.size(); i++)
-				Rcout << groupNames[i] << " ";
-			Rcout << std::endl;
-		}
-	} else if (debug)
-		Rcout << "using root group" << std::endl;
+	if (array_names.size() == 1 && array_names[0] == "?") {
+		List l;
+		l.attr("names") = CharacterVector::create();
+		return get_all_arrays(poRootGroup, l, poRootGroup->GetName());
+	}
 
+	auto curGroup = poRootGroup;
 	// find possible vector geometry array, and construct
 	List geometry = get_geometry(curGroup);
 
@@ -199,11 +240,14 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 			if (ndim == largest_size)
 				array_names.push_back(an);
 		}
+		if (array_names.size() == 0)
+			stop("no array names found");
 	}
 	int n = array_names.size();
 
 	const char *name = array_names[0];
-	auto array(curGroup->OpenMDArray(name));
+	std::shared_ptr<GDALMDArray> array;
+	array = get_array(curGroup, name);
 	if (!array)
 		stop("Cannot find array");
 	if (offset.size() != 0 && (size_t) offset.size() != array->GetDimensionCount())
@@ -258,45 +302,101 @@ List CPL_read_mdim(CharacterVector file, CharacterVector array_names, CharacterV
 	for (int i = 0; i < n; i++) {
 		name = array_names[i];
 		a_names[i] = array_names[i];
-		auto arr(curGroup->OpenMDArray(name));
+		auto arr(get_array(curGroup, name));
 		dims.attr("names") = dim_names;
 		dimensions.attr("names") = dim_names;
-		NumericVector vec;
 		if (! proxy) { // read the arrays:
-			NumericVector vec_(nValues);
-			if (debug)
-				Rcout << "size of vec_: " << vec_.size() << "\n";
-			bool ok = arr->Read(offst.data(),
-						anCount.data(),
-						stp.data(), /* step: defaults to 1,1,1 */
-						nullptr, /* stride: default to row-major convention */
-						GDALExtendedDataType::Create(GDT_Float64),
-						vec_.begin());
-			if (!ok)
-				Rcout << "Read failed for array " << name << std::endl;
-			bool has_offset = false;
-			double offst = arr->GetOffset(&has_offset);
-			if (!has_offset)
-				offst = 0.0;
-			bool has_scale = false;
-			double scale = arr->GetScale(&has_scale);
-			if (!has_scale)
-				scale = 1.0;
-			bool has_nodata = false;
-			double nodata_value = arr->GetNoDataValueAsDouble(&has_nodata);
-			if (has_offset || has_scale || has_nodata) {
-				for (size_t i = 0; i < nValues; i++) {
-					if (ISNAN(vec_[i]) || (has_nodata && vec_[i] == nodata_value))
-						vec_[i] = NA_REAL;
-					else
-						vec_[i] = vec_[i] * scale + offst;
+			auto data_type(arr->GetDataType());
+			size_t sz = data_type.GetSize();
+			if (data_type.GetClass() == GEDTC_NUMERIC) {
+				NumericVector vec(nValues);
+				if (debug)
+					Rcout << "size of vec: " << vec.size() << "\n";
+				bool ok = arr->Read(offst.data(),
+							anCount.data(),
+							stp.data(), /* step: defaults to 1,1,1 */
+							nullptr, /* stride: default to row-major convention */
+							GDALExtendedDataType::Create(GDT_Float64),
+							vec.begin());
+				if (!ok)
+					stop("Cannot read array into a Float64 buffer");
+				bool has_offset = false;
+				double offst = arr->GetOffset(&has_offset);
+				if (!has_offset)
+					offst = 0.0;
+				bool has_scale = false;
+				double scale = arr->GetScale(&has_scale);
+				if (!has_scale)
+					scale = 1.0;
+				bool has_nodata = false;
+				double nodata_value = arr->GetNoDataValueAsDouble(&has_nodata);
+				if (has_offset || has_scale || has_nodata) {
+					for (size_t j = 0; j < nValues; j++) {
+						if (ISNAN(vec[j]) || (has_nodata && vec[j] == nodata_value))
+							vec[j] = NA_REAL;
+						else
+							vec[j] = vec[j] * scale + offst;
+					}
 				}
+				vec.attr("dim") = dims;
+				vec.attr("units") = arr->GetUnit();
+				vec_lst[i] = vec;
+			} else if (data_type.GetClass() == GEDTC_COMPOUND) {
+				const auto &components = data_type.GetComponents();
+				std::vector<GByte> buf(sz * nValues);
+				bool ok = arr->Read(offst.data(),
+							anCount.data(),
+							stp.data(), /* step: defaults to 1,1,1 */
+							nullptr, /* stride: default to row-major convention */
+							data_type,
+							&buf[0]);
+				if (!ok)
+					stop("Cannot read array into Compound buffer");
+				DataFrame tbl;
+				GByte *v = buf.data();
+				for (const auto &co: components) { 
+					auto t(co->GetType());
+					if (t.GetClass() == GEDTC_NUMERIC) {
+						if (t.GetNumericDataType() != GDT_Float64)
+							stop("only Float64 data supported in numeric compounds");
+						NumericVector vec(nValues);
+						for (size_t j = 0; j < nValues; j++)
+							memcpy(&(vec[j]), v + j * sz + co->GetOffset(), sizeof(double));
+						tbl.push_back(vec, co->GetName());
+					} else if (t.GetClass() == GEDTC_STRING) {
+						CharacterVector vec(nValues);
+						const char *str;
+						for (size_t j = 0; j < nValues; j++) {
+							memcpy(&str, v + j * sz + co->GetOffset(), sizeof(const char *));
+							vec[j] = str; // deep copy
+						}
+						tbl.push_back(vec, co->GetName());
+					} else 
+						stop("unsupported type");
+				}
+				vec_lst[i] = tbl;
+			} else { // GEDTC_STRING:
+				std::vector<GByte> buf(sz * nValues);
+				bool ok = arr->Read(offst.data(),
+							anCount.data(),
+							stp.data(), /* step: defaults to 1,1,1 */
+							nullptr, /* stride: default to row-major convention */
+							data_type,
+							&buf[0]);
+				if (!ok)
+					stop("Cannot read array into string buffer");
+				GByte *v = buf.data();
+				CharacterVector vec(nValues);
+				const char *str;
+				for (size_t j = 0; j < nValues; j++) {
+					memcpy(&str, v + j * sz, sizeof(const char *));
+					vec[j] = str; // deep copy
+				}
+				vec.attr("dim") = dims;
+				vec.attr("units") = arr->GetUnit();
+				vec_lst[i] = vec;
 			}
-			vec_.attr("dim") = dims;
-			vec_.attr("units") = arr->GetUnit();
-			vec = vec_;
 		}
-		vec_lst[i] = vec;
 	}
 	vec_lst.attr("names") = a_names;
 	std::shared_ptr<OGRSpatialReference> srs = array->GetSpatialRef();

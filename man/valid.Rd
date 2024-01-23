@@ -33,7 +33,7 @@ st_make_valid(x, ...)
 )
 }
 \arguments{
-\item{x}{object of class \code{sfg}, \code{sfg} or \code{sf}}
+\item{x}{object of class \code{sfg}, \code{sfc} or \code{sf}}
 
 \item{...}{passed on to \link[s2]{s2_options}}
 

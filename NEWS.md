@@ -1,10 +1,46 @@
+# version 1.0-16
+
+* `[.sfc` works when setting argument `op`; #2320
+
+* `st_sample` for polygons is sensitive to setting `oriented = TRUE` to prevent wrongly correcting ring directions; #2308
+
+* add support for the GDAL `footprint` utility (requiring GDAL >= 3.8.0) to `gdal_utils`; #2305, by @goergen95
+
+* existing environment variables `PROJ_LIB` and `PROJ_DATA` are (again) ignored on `sf` binary CRAN installations (win + macos), effectively by overwriting them during the R session and restoring them on exit; this does not happen if environment variable `R_SF_USE_PROJ_DATA` is set to `true`. #2298
+
+* add `st_line_project()` to find how far a point is when projected on a line; #2291
+
+* add `st_line_interpolate()` to obtain a point at a certain distance along a line; #2291
+
 # version 1.0-15
 
-* `plot.sf()`: `key.width` is sensitive to pointsize graphics parameter, `key.pos` can hold a second value in [0, 1] determining the relative position of the key in the available space; keys with factor levels suggest a proper size if they won't fit.
+* add `st_perimeter()` generic to cover both geographic and projected coordinates; #268, #2279, by @JosiahParry
+
+* add `st_sample()` method for `bbox`, with special provisions for ellipsoidal coordinates; #2283
+
+* documentation clean-up by @olivroy; #2266, #2285
+
+* `st_convex_hull()` uses `s2::s2_convex_hull()` for geodetic coordinates; #2250
+
+* add `directed` argument to `st_line_merge()`; #2264
+
+* `st_union.sfc()` given `x` and `y` works consistently across geodetic and projected objects; #2262
+
+* `st_union.sf()` given `x` and `y` unions pairwise if `by_feature = TRUE`; #2259
+
+* `st_read()` work around issue with GPKG driver if `wkt_filter` is set; #2248
+
+* `st_read()` uses GDAL's stream reading when `use_stream = TRUE`; #2238 by @paleolimbot
+
+* `st_transform()` responds to in-session changes to `sf_proj_network()`; #2166
+
+* `plot.sf()`: `key.width` is sensitive to pointsize graphics parameter `par("ps")`; keys with factor levels suggest a proper size if they won't fit.
+
+* `plot.sf()`: `key.pos` can hold a second value in [0, 1] determining the relative position of the key in the available space 
 
 * `[<-.sf` fixes the `agr` attribute when it is broken; #2211
 
-* `sf` objects get a new attribute, `.sf_namespace`, which forces loading the `sf` namespace when it has not been loaded so far, e.g. for proper printing or plotting of an `sf` object; #2212 by Mike Mahoney
+* if the env. variable `ADD_SF_NAMESPACE` is set to `true`, `sf` objects get a new attribute, `.sf_namespace`, which forces loading the `sf` namespace when it has not been loaded so far, e.g. for proper printing or plotting of an `sf` object; #2212 by Mike Mahoney
 
 * `distinct.sf` is type-safe for `sf` objects with zero rows; #2204
 

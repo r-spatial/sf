@@ -8,7 +8,7 @@
 \alias{.image_scale_factor}
 \title{functions only exported to be used internally by stars}
 \usage{
-.get_layout(bb, n, total_size, key.pos, key.length, mfrow = NULL)
+.get_layout(bb, n, total_size, key.pos, key.width, mfrow = NULL, main = NULL)
 
 .degAxis(side, at, labels, ..., lon, lat, ndiscr, reset)
 
@@ -48,9 +48,11 @@
 
 \item{key.pos}{ignore}
 
-\item{key.length}{ignore}
+\item{key.width}{ignore}
 
 \item{mfrow}{length-2 integer vector with number of rows, columns}
+
+\item{main}{main or sub title}
 
 \item{side}{ignore}
 
@@ -78,14 +80,15 @@
 
 \item{axes}{ignore}
 
+\item{key.length}{ignore}
+
 \item{logz}{ignore}
 
 \item{lab}{ignore}
 
 \item{cex.axis}{see \link{par}}
-
-\item{key.width}{ignore}
 }
 \description{
 functions only exported to be used internally by stars
 }
+\keyword{internal}

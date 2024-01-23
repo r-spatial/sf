@@ -21,7 +21,7 @@ knitr::opts_chunk$set(collapse = TRUE)
 # Introduction
 
 This vignette describes what spherical geometry implies, and how
-package `sf` uses the s2geometry library (https://s2geometry.io)
+package `sf` uses the s2geometry library (http://s2geometry.io)
 for geometrical measures, predicates and transformations.  The code
 in this vignette only runs if `s2` has been installed, e.g. with
 
@@ -107,7 +107,7 @@ and transformations _on the sphere_. This means:
 * no computations on the ellipsoid (which are considered more accurate, but are also slower)
 
 The `s2` package is really a wrapper around the C++
-[s2geometry](https://s2geometry.io) library which was written by
+[s2geometry](http://s2geometry.io) library which was written by
 Google, and which is used in many of its products (e.g. Google
 Maps, Google Earth Engine, Bigquery GIS) and has been translated
 in several other programming languages.
@@ -372,7 +372,7 @@ system.time({
 })
 ```
 
-The result of the previous benchmarks emphasise the point that there are
+The result of the previous benchmarks emphasizes the point that there are
 trade-offs between geographic resolution and computational resources,
 something that web developers working on geographic services
 such as Google Maps understand well.

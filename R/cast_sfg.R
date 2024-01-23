@@ -43,7 +43,7 @@ ClosePol <- function(mtrx) {
 #' @examples 
 #' # example(st_read)
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
-#' mpl <- nc$geometry[[4]]
+#' mpl <- st_geometry(nc)[[4]]
 #' #st_cast(x) ## error 'argument "to" is missing, with no default'
 #' cast_all <- function(xg) {
 #'   lapply(c("MULTIPOLYGON", "MULTILINESTRING", "MULTIPOINT", "POLYGON", "LINESTRING", "POINT"), 
@@ -81,7 +81,7 @@ st_cast.MULTIPOLYGON <- function(x, to, ...) {
 #' @name st_cast
 #' @export
 #' @examples 
-#' mls <- st_cast(nc$geometry[[4]], "MULTILINESTRING")
+#' mls <- st_cast(st_geometry(nc)[[4]], "MULTILINESTRING")
 #' st_sfc(cast_all(mls))
 st_cast.MULTILINESTRING <- function(x, to, ...) {
 	switch(to, 
@@ -108,7 +108,7 @@ st_cast.MULTILINESTRING <- function(x, to, ...) {
 #' @name st_cast
 #' @export
 #' @examples
-#' mpt <- st_cast(nc$geometry[[4]], "MULTIPOINT")
+#' mpt <- st_cast(st_geometry(nc)[[4]], "MULTIPOINT")
 #' st_sfc(cast_all(mpt))
 st_cast.MULTIPOINT <- function(x, to, ...) {
   switch(to, 
@@ -135,7 +135,7 @@ st_cast.MULTIPOINT <- function(x, to, ...) {
 #' @name st_cast
 #' @export
 #' @examples
-#' pl <- st_cast(nc$geometry[[4]], "POLYGON")
+#' pl <- st_cast(st_geometry(nc)[[4]], "POLYGON")
 #' st_sfc(cast_all(pl))
 st_cast.POLYGON <- function(x, to, ...) {
   switch(to, 
@@ -156,7 +156,7 @@ st_cast.POLYGON <- function(x, to, ...) {
 #' @name st_cast
 #' @export
 #' @examples
-#' ls <- st_cast(nc$geometry[[4]], "LINESTRING")
+#' ls <- st_cast(st_geometry(nc)[[4]], "LINESTRING")
 #' st_sfc(cast_all(ls))
 st_cast.LINESTRING <- function(x, to, ...) {
   switch(to, 
@@ -173,7 +173,7 @@ st_cast.LINESTRING <- function(x, to, ...) {
 #' @name st_cast
 #' @export
 #' @examples
-#' pt <- st_cast(nc$geometry[[4]], "POINT")
+#' pt <- st_cast(st_geometry(nc)[[4]], "POINT")
 #' ## st_sfc(cast_all(pt))  ## Error: cannot create MULTIPOLYGON from POINT 
 #' st_sfc(lapply(c("POINT", "MULTIPOINT"), function(x) st_cast(pt, x)))
 st_cast.POINT <- function(x, to, ...) {

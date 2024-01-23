@@ -4,7 +4,7 @@
 \alias{Ops}
 \alias{Ops.sfg}
 \alias{Ops.sfc}
-\title{S3 Ops Group Generic Functions for simple feature geometries}
+\title{Arithmetic operators for simple feature geometries}
 \usage{
 \method{Ops}{sfg}(e1, e2)
 
@@ -19,10 +19,10 @@
 object of class \code{sfg}
 }
 \description{
-S3 Ops Group Generic Functions for simple feature geometries
+Arithmetic operators for simple feature geometries
 }
 \details{
-in case \code{e2} is numeric, +, -, *, /, %% and %/% add, subtract, multiply, divide, modulo, or integer-divide by \code{e2}. In case \code{e2} is an n x n matrix, * matrix-multiplies and / multiplies by its inverse. If \code{e2} is an \code{sfg} object, |, /, & and %/% result in the geometric union, difference, intersection and symmetric difference respectively, and \code{==} and \code{!=} return geometric (in)equality, using \link{st_equals}.
+in case \code{e2} is numeric, +, -, *, /, \%\% and \%/\% add, subtract, multiply, divide, modulo, or integer-divide by \code{e2}. In case \code{e2} is an n x n matrix, * matrix-multiplies and / multiplies by its inverse. If \code{e2} is an \code{sfg} object, |, /, & and \%/\% result in the geometric union, difference, intersection and symmetric difference respectively, and \code{==} and \code{!=} return geometric (in)equality, using \link{st_equals}. If \code{e2} is an \code{sfg} or \code{sfc} object, for operations \code{+} and \code{-} it has to have \code{POINT} geometries.
 
 If \code{e1} is of class \code{sfc}, and \code{e2} is a length 2 numeric, then it is considered a two-dimensional point (and if needed repeated as such) only for operations \code{+} and \code{-}, in other cases the individual numbers are repeated; see commented examples.
 
@@ -51,7 +51,7 @@ opar = par(mfrow = c(2,2), mar = c(0, 0, 1, 0))
 a = st_buffer(st_point(c(0,0)), 2)
 b = a + c(2, 0)
 p = function(m) { plot(c(a,b)); plot(eval(parse(text=m)), col=grey(.9), add = TRUE); title(m) }
-lapply(c('a | b', 'a / b', 'a & b', 'a \%/\% b'), p)
+o = lapply(c('a | b', 'a / b', 'a & b', 'a \%/\% b'), p)
 par(opar)
 sfc = st_sfc(st_point(0:1), st_point(2:3))
 sfc + c(2,3) # added to EACH geometry

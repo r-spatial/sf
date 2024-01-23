@@ -5,6 +5,7 @@
 \alias{st_sample.sf}
 \alias{st_sample.sfc}
 \alias{st_sample.sfg}
+\alias{st_sample.bbox}
 \title{sample points on or in (sets of) spatial features}
 \usage{
 st_sample(x, size, ...)
@@ -19,10 +20,19 @@ st_sample(x, size, ...)
   exact = TRUE,
   warn_if_not_integer = TRUE,
   by_polygon = FALSE,
-  progress = FALSE
+  progress = FALSE,
+  force = FALSE
 )
 
 \method{st_sample}{sfg}(x, size, ...)
+
+\method{st_sample}{bbox}(
+  x,
+  size,
+  ...,
+  great_circles = FALSE,
+  segments = units::set_units(2, "degree", mode = "standard")
+)
 }
 \arguments{
 \item{x}{object of class \code{sf} or \code{sfc}}
@@ -43,6 +53,12 @@ the same as specified by \code{size}? \code{TRUE} by default. Only applies to po
 when \code{type = "random"}.}
 
 \item{progress}{logical; if \code{TRUE} show progress bar (only if \code{size} is a vector).}
+
+\item{force}{logical; if \code{TRUE} continue when the sampled bounding box area is more than 1e4 times the area of interest, else (default) stop with an error. If this error is not justified, try setting \code{oriented=TRUE}, see details.}
+
+\item{great_circles}{logical; if \code{TRUE}, great circle arcs are used to connect the bounding box vertices, if \code{FALSE} parallels (graticules)}
+
+\item{segments}{units, or numeric (degrees); segment sizes for segmenting a bounding box polygon if \code{great_circles} is \code{FALSE}}
 }
 \value{
 an \code{sfc} object containing the sampled \code{POINT} geometries
@@ -60,19 +76,21 @@ the object if \code{size} is a single number, or the specified number of points
 in each feature if \code{size} is a vector of integers equal in length to the geometry
 of \code{x}.
 
-if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{http://mathworld.wolfram.com/SpherePointPicking.html}. 
+if \code{x} has dimension 2 (polygons) and geographical coordinates (long/lat), uniform random sampling on the sphere is applied, see e.g. \url{https://mathworld.wolfram.com/SpherePointPicking.html}.
 
 For \code{regular} or \code{hexagonal} sampling of polygons, the resulting size is only an approximation.
 
 As parameter called \code{offset} can be passed to control ("fix") regular or hexagonal sampling: for polygons a length 2 numeric vector (by default: a random point from \code{st_bbox(x)}); for lines use a number like \code{runif(1)}.
 
-Fibonacci sampling see: Alvaro Gonzalez, 2010. Measurement of Areas on a Sphere Using Fibonacci and Latitude-Longitude Lattices. 
+Fibonacci sampling see: Alvaro Gonzalez, 2010. Measurement of Areas on a Sphere Using Fibonacci and Latitude-Longitude Lattices.
 Mathematical Geosciences 42(1), p. 49-64
 
 For regular sampling on the sphere, see also \code{geosphere::regularCoordinates}.
 
-Sampling methods from package \code{spatstat} are interfaced (see examples), and need their own parameters to be set. 
+Sampling methods from package \code{spatstat} are interfaced (see examples), and need their own parameters to be set.
 For instance, to use \code{spatstat.random::rThomas()}, set \code{type = "Thomas"}.
+
+For sampling polygons one can specify \code{oriented=TRUE} to make sure that polygons larger than half the globe are not reverted, e.g. when specifying a polygon from a bounding box of a global dataset. The \code{st_sample} method for \code{bbox} does this by default.
 }
 \examples{
 nc = st_read(system.file("shape/nc.shp", package="sf"))
@@ -86,13 +104,13 @@ plot(x, axes = TRUE, graticule = TRUE)
 if (sf_extSoftVersion()["proj.4"] >= "4.9.0")
   plot(p <- st_sample(x, 1000), add = TRUE)
 if (require(lwgeom, quietly = TRUE)) { # for st_segmentize()
-x2 = st_transform(st_segmentize(x, 1e4), st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
-g = st_transform(st_graticule(), st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
-plot(x2, graticule = g)
-if (sf_extSoftVersion()["proj.4"] >= "4.9.0") {
-  p2 = st_transform(p, st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
-  plot(p2, add = TRUE)
-}
+  x2 = st_transform(st_segmentize(x, 1e4), st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
+  g = st_transform(st_graticule(), st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
+  plot(x2, graticule = g)
+  if (sf_extSoftVersion()["proj.4"] >= "4.9.0") {
+    p2 = st_transform(p, st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
+    plot(p2, add = TRUE)
+  }
 }
 x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,10),c(0,90),c(0,0))))) # NOT long/lat:
 plot(x)
@@ -124,8 +142,17 @@ st_sample(ls, 80)
 plot(st_sample(ls, 80))
 # spatstat example:
 if (require(spatstat.random)) {
- x <- sf::st_sfc(sf::st_polygon(list(rbind(c(0, 0), c(10, 0), c(10, 10), c(0, 0)))))
- # for spatstat.random::rThomas(), set type = "Thomas":
- pts <- st_sample(x, kappa = 1, mu = 10, scale = 0.1, type = "Thomas") 
+  x <- sf::st_sfc(sf::st_polygon(list(rbind(c(0, 0), c(10, 0), c(10, 10), c(0, 0)))))
+  # for spatstat.random::rThomas(), set type = "Thomas":
+  pts <- st_sample(x, kappa = 1, mu = 10, scale = 0.1, type = "Thomas") 
 }
+bbox = st_bbox(
+c(xmin = 0, xmax = 40, ymax = 70, ymin = 60),
+	crs = st_crs('OGC:CRS84')
+)
+set.seed(13531)
+s1 = st_sample(bbox, 400)
+st_bbox(s1) # within bbox
+s2 = st_sample(bbox, 400, great_circles = TRUE)
+st_bbox(s2) # outside bbox
 }

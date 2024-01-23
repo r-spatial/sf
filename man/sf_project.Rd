@@ -17,7 +17,7 @@ sf_project(
 )
 }
 \arguments{
-\item{from}{character description of source CRS, or object of class \code{crs}, 
+\item{from}{character description of source CRS, or object of class \code{crs},
 or pipeline describing a transformation}
 
 \item{to}{character description of target CRS, or object of class \code{crs}}
@@ -25,7 +25,7 @@ or pipeline describing a transformation}
 \item{pts}{two-, three- or four-column numeric matrix, or object that can be coerced into a matrix; columns 3 and 4 contain z and t values.}
 
 \item{keep}{logical value controlling the handling of unprojectable points. If
-`keep` is `TRUE`, then such points will yield `Inf` or `-Inf` in the
+\code{keep} is \code{TRUE}, then such points will yield \code{Inf} or \code{-Inf} in the
 return value; otherwise an error is reported and nothing is returned.}
 
 \item{warn}{logical; if \code{TRUE}, warn when non-finite values are generated}
@@ -39,7 +39,7 @@ two-column numeric matrix with transformed/converted coordinates, returning inva
 directly transform a set of coordinates
 }
 \details{
-\code{sf_add_proj_units} loads the PROJ units `link`, `us_in`, `ind_yd`, `ind_ft`, and `ind_ch` into the udunits database, and returns \code{TRUE} invisibly on success.
+\code{sf_add_proj_units} loads the PROJ units \code{link}, \code{us_in}, \code{ind_yd}, \code{ind_ft}, and \code{ind_ch} into the udunits database, and returns \code{TRUE} invisibly on success.
 }
 \examples{
 sf_add_proj_units()

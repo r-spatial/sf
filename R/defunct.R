@@ -1,10 +1,11 @@
-#' Deprecated functions in `sf`
-#'
-#' These functions are provided for compatibility with older version of `sf`.
-#' They may eventually be completely removed.
-#' @md
-#' @rdname sf-defunct
+#' @title Deprecated functions in `sf`
 #' @name sf-defunct
+#' @description
+#' These functions are provided for compatibility with older version of `sf`.
+#' They will eventually be completely removed.
+#' 
+#' * Use [st_read()] instead of `st_read_db()`.
+#' * Use [st_write()] instead_of `st_write_db()`
 #' @param conn open database connection
 #' @param table table name
 #' @param geom_column deprecated. Geometry column name
@@ -13,21 +14,15 @@
 #' it will try to cast all the character columns, which can be long for very wide
 #' tables.
 #' @inheritParams st_read
-#' @export  st_read_db st_write_db
-#' @aliases sf-package st_read_db, st_write_db
-#' @section Details:
-#' \tabular{rl}{
-#'   \code{st_read_db} \tab now a synonym for \code{\link{st_read}}\cr
-#'   \code{st_write_db} \tab now a synonym for \code{\link{st_write}}\cr
-#' }
-#'
 #' @export
+#' @keywords internal
 st_read_db <- function(conn = NULL, table = NULL, query = NULL,
 					   geom_column = NULL, EWKB = TRUE, ...) {
 	.Defunct("st_read")
 }
 
-#' @inheritDotParams dbWriteTable
+#' @rdname sf-defunct
+#' @inheritParams DBI::dbWriteTable
 #' @export
 st_write_db <- function(conn = NULL, obj, table = deparse(substitute(obj)), ...,
 						drop = FALSE, append = FALSE) {

@@ -144,7 +144,6 @@ test_that("transform includes zm in output", {
 
 
 test_that("XYM-only objects correctly calculate M (and not Z)", {
-
 	skip_if_not(sf_extSoftVersion()["GDAL"] > "2.1.0")
 
 	sf_m <- sf::st_read(system.file("/shape/storms_xyzm.shp", package = "sf"), quiet = TRUE)

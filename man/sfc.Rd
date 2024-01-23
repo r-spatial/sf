@@ -38,7 +38,8 @@ st_sfc(
 an object of class \code{sfc}, which is a classed list-column with simple feature geometries.
 }
 \description{
-Create simple feature geometry list column, set class, and add coordinate reference system and precision
+Create simple feature geometry list column, set class, and add coordinate reference system and precision.
+For data.frame alternatives see \code{\link[=st_sf]{st_sf()}}. To convert a foreign object to \code{sfc}, see \code{\link[=st_as_sfc]{st_as_sfc()}}
 }
 \details{
 A simple feature geometry list-column is a list of class

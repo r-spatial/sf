@@ -135,7 +135,6 @@ mutate.sf <- function(.data, ..., .dots) {
 #' @name tidyverse
 #' @examples
 #' if (require(dplyr, quietly = TRUE)) {
-#'  nc %>% transmute(AREA = AREA/10, geometry = geometry) %>% class()
 #'  nc %>% transmute(AREA = AREA/10) %>% class()
 #' }
 transmute.sf <- function(.data, ..., .dots) {
@@ -150,9 +149,7 @@ transmute.sf <- function(.data, ..., .dots) {
 #' @examples
 #' if (require(dplyr, quietly = TRUE)) {
 #'  nc %>% select(SID74, SID79) %>% names()
-#'  nc %>% select(SID74, SID79, geometry) %>% names()
 #'  nc %>% select(SID74, SID79) %>% class()
-#'  nc %>% select(SID74, SID79, geometry) %>% class()
 #' }
 #' @details \code{select} keeps the geometry regardless whether it is selected or not; to deselect it, first pipe through \code{as.data.frame} to let dplyr's own \code{select} drop it.
 select.sf <- function(.data, ...) {
@@ -245,6 +242,7 @@ rename_with.sf = function(.data, .fn, .cols, ...) {
 	if (!requireNamespace("rlang", quietly = TRUE))
 		stop("rlang required: install that first") # nocov
 	.fn = rlang::as_function(.fn)
+	is_tibble = inherits(.data, "tbl")
 	
 	sf_column = attr(.data, "sf_column")
 	sf_column_loc = match(sf_column, names(.data))
@@ -254,10 +252,31 @@ rename_with.sf = function(.data, .fn, .cols, ...) {
 	
 	agr = st_agr(.data)
 	
-	ret = NextMethod()
-	names(agr) = .fn(names(agr))
+	.data = as.data.frame(.data)
+	ret = if (missing(.cols)) {
+		if (!requireNamespace("tidyselect", quietly = TRUE)) {
+			stop("tidyselect required: install that first") # nocov
+		}
+		dplyr::rename_with(
+			.data = .data,
+			.fn = .fn,
+			.cols = tidyselect::everything(), 
+			...
+		)
+	} else {
+		dplyr::rename_with(
+			.data = .data,
+			.fn = .fn,
+			.cols = {{ .cols }}, 
+			...
+		)
+	}
+	if (is_tibble)
+		ret = dplyr::as_tibble(ret)
+	ret = st_as_sf(ret, sf_column_name = names(ret)[sf_column_loc])
+	
+	names(agr) = .fn(names(agr), ...)
 	st_agr(ret) = agr
-	st_geometry(ret) = names(ret)[sf_column_loc]
 	ret
 }
 
@@ -378,7 +397,7 @@ distinct.sf <- function(.data, ..., .keep_all = FALSE) {
 #' @param na.rm see original function docs
 #' @param factor_key see original function docs
 #' @examples
-#' if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE)) {
+#' if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE) && "geometry" %in% names(nc)) {
 #'  nc %>% select(SID74, SID79) %>% gather("VAR", "SID", -geometry) %>% summary()
 #' }
 gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, factor_key = FALSE) {
@@ -447,36 +466,65 @@ pivot_longer.sf <- function (data, cols, names_to = "name", names_prefix = NULL,
   st_as_sf(out, sf_column_name = sf_column_name)
 }
 
+globalVariables(c("name", "value"))
 # https://github.com/r-spatial/sf/issues/1915
 #' @name tidyverse
 #' @export
 #' @param id_cols see original function docs
+#' @param id_expand see original function docs
 #' @param names_from see original function docs
 #' @param names_prefix see original function docs
 #' @param names_sep see original function docs
 #' @param names_glue see original function docs
 #' @param names_sort see original function docs
+#' @param names_vary see original function docs
+#' @param names_expand see original function docs
 #' @param names_repair see original function docs
 #' @param values_from see original function docs
 #' @param values_fill see original function docs
 #' @param values_fn see original function docs
-pivot_wider.sf = function(data,
-                          id_cols = NULL,
-                          names_from, # = name,
-                          names_prefix = "",
-                          names_sep = "_",
-                          names_glue = NULL,
-                          names_sort = FALSE,
-                          names_repair = "check_unique",
-                          values_from, # = value,
-                          values_fill = NULL,
-                          values_fn = NULL,
-                          ...) {
+#' @param unused_fn see original function docs
+pivot_wider.sf = function(data, 
+						  ..., 
+						  id_cols = NULL, 
+						  id_expand = FALSE, 
+						  names_from = name, 
+						  names_prefix = "", 
+						  names_sep = "_", 
+						  names_glue = NULL, 
+						  names_sort = FALSE, 
+						  names_vary = "fastest", 
+						  names_expand = FALSE, 
+						  names_repair = "check_unique", 
+						  values_from = value, 
+						  values_fill = NULL, 
+						  values_fn = NULL, 
+						  unused_fn = NULL) {
 
 	agr = st_agr(data)
 	sf_column_name = attr(data, "sf_column")
-	class(data) = setdiff(class(data), "sf")
-	.re_sf(NextMethod(), sf_column_name = sf_column_name, agr)
+	data = as.data.frame(data)
+	if (!requireNamespace("tidyr", quietly = TRUE))
+		stop("tidyr required: install first?")
+	ret = tidyr::pivot_wider(
+		data = data, 
+		..., 
+		id_cols = {{ id_cols }}, 
+		id_expand = id_expand, 
+		names_from = {{ names_from }}, 
+		names_prefix = names_prefix, 
+		names_sep = names_sep, 
+		names_glue = names_glue, 
+		names_sort = names_sort, 
+		names_vary = names_vary, 
+		names_expand = names_expand, 
+		names_repair = names_repair, 
+		values_from = {{ values_from }}, 
+		values_fill = values_fill, 
+		values_fn = values_fn, 
+		unused_fn = unused_fn
+	)
+	st_as_sf(ret, sf_column_name = sf_column_name, agr = agr)
 }
 
 
@@ -485,7 +533,7 @@ pivot_wider.sf = function(data,
 #' @param fill see original function docs
 #' @param drop see original function docs
 #' @examples
-#' if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE)) {
+#' if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE) && "geometry" %in% names(nc)) {
 #'  nc$row = 1:100 # needed for spread to work
 #'  nc %>% select(SID74, SID79, geometry, row) %>%
 #'		gather("VAR", "SID", -geometry, -row) %>%
@@ -708,7 +756,7 @@ register_all_s3_methods = function() {
 	register_vctrs_methods()
 }
 
-# from: https://github.com/tidyverse/hms/blob/master/R/zzz.R
+# from: https://github.com/tidyverse/hms/blob/main/R/zzz.R
 # Thu Apr 19 10:53:24 CEST 2018
 register_s3_method <- function(pkg, generic, class, fun = NULL) {
   stopifnot(is.character(pkg), length(pkg) == 1)

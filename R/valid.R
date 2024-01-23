@@ -47,7 +47,7 @@ st_is_valid.sfg = function(x, ...) {
 #'
 #' Checks whether a geometry is valid, or makes an invalid geometry valid
 #' @name valid
-#' @param x object of class \code{sfg}, \code{sfg} or \code{sf}
+#' @param x object of class \code{sfg}, \code{sfc} or \code{sf}
 #' @return Object of the same class as \code{x}
 #' @details For projected geometries, \code{st_make_valid} uses the \code{lwgeom_makevalid} method also used by the PostGIS command \code{ST_makevalid} if the GEOS version linked to is smaller than 3.8.0, and otherwise the version shipped in GEOS; for geometries having ellipsoidal coordinates \code{s2::s2_rebuild} is being used.
 #' @examples
@@ -78,14 +78,16 @@ st_make_valid.sfc = function(x, ..., oriented = FALSE, s2_options = s2::s2_optio
 							 geos_method = "valid_structure", geos_keep_collapsed = TRUE) {
 	crs = st_crs(x)
 	if (sf_use_s2() && isTRUE(st_is_longlat(x))) {
-		stopifnot(missing(geos_method), missing(geos_keep_collapsed))
+		if (!missing(geos_method) || !missing(geos_keep_collapsed))
+			warning("arguments geos_method and geos_keep_collapsed are ignored for geodetic coordinates as sf_use_s2() is TRUE")
 		s2 = s2::as_s2_geography(st_as_binary(st_set_precision(x, 0.0)), oriented = oriented, check = FALSE)
 		if (st_precision(x) != 0 && missing(s2_options))
 			s2_options = s2::s2_options(snap = s2::s2_snap_precision(st_precision(x)), ...)
 		s2 = s2::s2_rebuild(s2, s2_options)
 		st_as_sfc(s2, crs = crs)
 	} else if (compareVersion(CPL_geos_version(), "3.8.0") == -1) {
-		stopifnot(missing(geos_method), missing(geos_keep_collapsed))
+		if (!missing(geos_method) || !missing(geos_keep_collapsed))
+			warning("ignoring arguments geos_method and geos_keep_collapsed, as these require GEOS >= 3.8.0")
 		if (!requireNamespace("lwgeom", quietly = TRUE))
 			stop("package lwgeom required, please install it first") # nocov
 		st_sfc(lwgeom::lwgeom_make_valid(x), crs = crs)
@@ -95,5 +97,5 @@ st_make_valid.sfc = function(x, ..., oriented = FALSE, s2_options = s2::s2_optio
 
 #' @export
 st_make_valid.sf = function(x, ...) {
-	st_set_geometry(x, st_make_valid(st_geometry(x)))
+	st_set_geometry(x, st_make_valid(st_geometry(x), ...))
 }

@@ -84,7 +84,7 @@ the \code{st_cast} method for \code{sf} objects can only split geometries, e.g. 
 \examples{
 # example(st_read)
 nc = st_read(system.file("shape/nc.shp", package="sf"))
-mpl <- nc$geometry[[4]]
+mpl <- st_geometry(nc)[[4]]
 #st_cast(x) ## error 'argument "to" is missing, with no default'
 cast_all <- function(xg) {
   lapply(c("MULTIPOLYGON", "MULTILINESTRING", "MULTIPOINT", "POLYGON", "LINESTRING", "POINT"), 
@@ -101,15 +101,15 @@ sum(duplicated(do.call(rbind, unclass(st_cast(mpl, "MULTILINESTRING"))))
 p1 <- structure(c(0, 1, 3, 2, 1, 0, 0, 0, 2, 4, 4, 0), .Dim = c(6L, 2L))
 p2 <- structure(c(1, 1, 2, 1, 1, 2, 2, 1), .Dim = c(4L, 2L))
 st_polygon(list(p1, p2))
-mls <- st_cast(nc$geometry[[4]], "MULTILINESTRING")
+mls <- st_cast(st_geometry(nc)[[4]], "MULTILINESTRING")
 st_sfc(cast_all(mls))
-mpt <- st_cast(nc$geometry[[4]], "MULTIPOINT")
+mpt <- st_cast(st_geometry(nc)[[4]], "MULTIPOINT")
 st_sfc(cast_all(mpt))
-pl <- st_cast(nc$geometry[[4]], "POLYGON")
+pl <- st_cast(st_geometry(nc)[[4]], "POLYGON")
 st_sfc(cast_all(pl))
-ls <- st_cast(nc$geometry[[4]], "LINESTRING")
+ls <- st_cast(st_geometry(nc)[[4]], "LINESTRING")
 st_sfc(cast_all(ls))
-pt <- st_cast(nc$geometry[[4]], "POINT")
+pt <- st_cast(st_geometry(nc)[[4]], "POINT")
 ## st_sfc(cast_all(pt))  ## Error: cannot create MULTIPOLYGON from POINT 
 st_sfc(lapply(c("POINT", "MULTIPOINT"), function(x) st_cast(pt, x)))
 s = st_multipoint(rbind(c(1,0)))

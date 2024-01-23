@@ -15,7 +15,8 @@ format.sfc = function(x, ..., width = 30) {
 
 #' Create simple feature geometry list column
 #'
-#' Create simple feature geometry list column, set class, and add coordinate reference system and precision
+#' Create simple feature geometry list column, set class, and add coordinate reference system and precision.
+#' For data.frame alternatives see [st_sf()]. To convert a foreign object to `sfc`, see [st_as_sfc()]
 #'
 #' @name sfc
 #' @aliases sfc_POINT sfc_LINESTRING sfc_POLYGON sfc_MULTIPOINT sfc_MULTILINESTRING sfc_MULTIPOLYGON sfc_GEOMETRYCOLLECTION
@@ -150,14 +151,19 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 
 #' @export
 "[.sfc" = function(x, i, j, ..., op = st_intersects) {
+
 	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc") || inherits(i, "sfg")))
 		i = lengths(op(x, i, ...)) != 0
 	if (inherits(x, "sfc_POINT") && !is.null(attr(x, "points")))
 		st_sfc(restore_points(x, i), crs = st_crs(x), precision = st_precision(x),
 			dim = if(length(x)) class(x[[1]])[1] else "XY")
-	else
-		st_sfc(NextMethod() , crs = st_crs(x), precision = st_precision(x),
-			dim = if(length(x)) class(x[[1]])[1] else "XY")
+	else {
+		precision = st_precision(x)
+		crs = st_crs(x)
+		dim = if (length(x)) class(x[[1]])[1] else "XY"
+		x = unclass(x)[i] # now a list
+		st_sfc(x, crs = crs, precision = precision, dim = dim)
+	}
 }
 
 

@@ -23,7 +23,7 @@ resampling_method = function(option = "near") {
 
 #' Native interface to gdal utils
 #' @name gdal_utils
-#' @param util character; one of \code{info}, \code{warp}, \code{rasterize}, \code{translate}, \code{vectortranslate} (for ogr2ogr), \code{buildvrt}, \code{demprocessing}, \code{nearblack}, \code{grid}, \code{mdiminfo} and \code{mdimtranslate} (the last two requiring GDAL 3.1), \code{ogrinfo} (requiring GDAL 3.7)
+#' @param util character; one of \code{info}, \code{warp}, \code{rasterize}, \code{translate}, \code{vectortranslate} (for ogr2ogr), \code{buildvrt}, \code{demprocessing}, \code{nearblack}, \code{grid}, \code{mdiminfo} and \code{mdimtranslate} (the last two requiring GDAL 3.1), \code{ogrinfo} (requiring GDAL 3.7), \code{footprint} (requiring GDAL 3.8)
 #' @param source character; name of input layer(s); for \code{warp}, \code{buidvrt} or \code{mdimtranslate} this can be more than one
 #' @param destination character; name of output layer
 #' @param options character; options for the utility
@@ -112,6 +112,7 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 						"-te", "-tr", "-tap", "-ts", "-ot")) # https://gdal.org/programs/gdal_rasterize.html
 				CPL_gdalrasterize(source, destination, options, oo, doo, config_options, overwrite, quiet)
 			}, # nocov end
+			footprint = CPL_gdalfootprint(source, destination, options, oo, config_options, quiet),
 			translate = CPL_gdaltranslate(source, destination, options, oo, config_options, quiet),
 			vectortranslate = CPL_gdalvectortranslate(source, destination, options, oo, doo, config_options, quiet),
 			buildvrt = CPL_gdalbuildvrt(if (missing(source)) character(0) else source, destination, options, oo, config_options, quiet),

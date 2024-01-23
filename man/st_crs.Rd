@@ -108,11 +108,14 @@ place and a warning is raised to stress this.
 
 the \code{$} method for \code{crs} objects retrieves named elements
 using the GDAL interface; named elements include
-\code{"SemiMajor"}, \code{"SemiMinor"}, \code{"InvFlattening"}, \code{"IsGeographic"},
-\code{"units_gdal"}, \code{"IsVertical"}, \code{"WktPretty"}, \code{"Wkt"},
-\code{"Name"}, \code{"proj4string"}, \code{"epsg"}, \code{"yx"}, 
-\code{"ud_unit"}, and \code{axes} (this may be subject to changes in future GDAL versions).
-\code{"ud_unit"} returns a valid \link[units]{units} object or \code{NULL} if units are missing.
+\code{SemiMajor}, \code{SemiMinor}, \code{InvFlattening}, \code{IsGeographic},
+\code{units_gdal}, \code{IsVertical}, \code{WktPretty}, \code{Wkt},
+\code{Name}, \code{proj4string}, \code{epsg}, \code{yx},
+\code{ud_unit}, and \code{axes} (this may be subject to changes in future GDAL versions).
+
+Note that not all valid CRS have a corresponding \code{proj4string}.
+
+\code{ud_unit} returns a valid \link[units]{units} object or \code{NULL} if units are missing.
 
 format.crs returns NA if the crs is missing valued, or else
 the name of a crs if it is different from "unknown", or
@@ -137,8 +140,6 @@ sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
 sfc \%>\% st_set_crs(4326) \%>\% st_transform(3857)
 st_crs("EPSG:3857")$input
 st_crs(3857)$proj4string
-st_crs(3857)$b     # numeric
-st_crs(3857)$units # character
 pt = st_sfc(st_point(c(0, 60)), crs = 4326)
 # st_axis_order() only has effect in GDAL >= 2.5.0:
 st_axis_order() # query default: FALSE means interpret pt as (longitude latitude)

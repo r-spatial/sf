@@ -798,7 +798,7 @@ NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy, bool interpol
 }
 
 // [[Rcpp::export]]
-void CPL_create(CharacterVector file, IntegerVector nxy, NumericVector value, CharacterVector wkt, 
+void CPL_create(CharacterVector file, IntegerVector nxy, NumericVector value, CharacterVector wkt,
 				NumericVector xlim, NumericVector ylim) {
 //
 // modified from gdal/apps/gdal_create.cpp:

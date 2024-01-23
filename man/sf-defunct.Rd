@@ -3,8 +3,6 @@
 \name{sf-defunct}
 \alias{sf-defunct}
 \alias{st_read_db}
-\alias{sf-package}
-\alias{st_read_db,}
 \alias{st_write_db}
 \title{Deprecated functions in \code{sf}}
 \usage{
@@ -15,6 +13,15 @@ st_read_db(
   geom_column = NULL,
   EWKB = TRUE,
   ...
+)
+
+st_write_db(
+  conn = NULL,
+  obj,
+  table = deparse(substitute(obj)),
+  ...,
+  drop = FALSE,
+  append = FALSE
 )
 }
 \arguments{
@@ -33,7 +40,11 @@ st_read_db(
 }
 \description{
 These functions are provided for compatibility with older version of \code{sf}.
-They may eventually be completely removed.
+They will eventually be completely removed.
+\itemize{
+\item Use \code{\link[=st_read]{st_read()}} instead of \code{st_read_db()}.
+\item Use \code{\link[=st_write]{st_write()}} instead_of \code{st_write_db()}
+}
 }
 \details{
 The \code{geom_column} argument is deprecated. The function will
@@ -41,11 +52,4 @@ automatically find the \code{geometry} type columns. For the \code{RPostgreSQL} 
 it will try to cast all the character columns, which can be long for very wide
 tables.
 }
-\section{Details}{
-
-\tabular{rl}{
-\code{st_read_db} \tab now a synonym for \code{\link{st_read}}\cr
-\code{st_write_db} \tab now a synonym for \code{\link{st_write}}\cr
-}
-}
-
+\keyword{internal}

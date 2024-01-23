@@ -56,7 +56,8 @@ there is more than one and \code{sf_column_name} is \code{NULL}, the first one i
 \item{n}{maximum number of features to print; can be set globally by \code{options(sf_max_print=...)}}
 }
 \description{
-Create sf, which extends data.frame-like objects with a simple feature list column
+Create sf, which extends data.frame-like objects with a simple feature list column.
+To convert a data frame object to \code{sf}, use \code{\link[=st_as_sf]{st_as_sf()}}
 }
 \details{
 \code{agr}, attribute-geometry-relationship, specifies for each non-geometry attribute column how it relates to the geometry, and can have one of following values: "constant", "aggregate", "identity". "constant" is used for attributes that are constant throughout the geometry (e.g. land use), "aggregate" where the attribute is an aggregate value over the geometry (e.g. population density or population count), "identity" when the attributes uniquely identifies the geometry of particular "thing", such as a building ID or a city name. The default value, \code{NA_agr_}, implies we don't know.

@@ -91,17 +91,21 @@ pivot_longer.sf(
 
 pivot_wider.sf(
   data,
+  ...,
   id_cols = NULL,
-  names_from,
+  id_expand = FALSE,
+  names_from = name,
   names_prefix = "",
   names_sep = "_",
   names_glue = NULL,
   names_sort = FALSE,
+  names_vary = "fastest",
+  names_expand = FALSE,
   names_repair = "check_unique",
-  values_from,
+  values_from = value,
   values_fill = NULL,
   values_fn = NULL,
-  ...
+  unused_fn = NULL
 )
 
 spread.sf(
@@ -217,17 +221,25 @@ more details.}
 
 \item{id_cols}{see original function docs}
 
+\item{id_expand}{see original function docs}
+
 \item{names_from}{see original function docs}
 
 \item{names_glue}{see original function docs}
 
 \item{names_sort}{see original function docs}
 
+\item{names_vary}{see original function docs}
+
+\item{names_expand}{see original function docs}
+
 \item{values_from}{see original function docs}
 
 \item{values_fill}{see original function docs}
 
 \item{values_fn}{see original function docs}
+
+\item{unused_fn}{see original function docs}
 
 \item{fill}{see original function docs}
 
@@ -335,14 +347,11 @@ if (require(dplyr, quietly = TRUE)) {
  nc2 <- nc \%>\% mutate(area10 = AREA/10)
 }
 if (require(dplyr, quietly = TRUE)) {
- nc \%>\% transmute(AREA = AREA/10, geometry = geometry) \%>\% class()
  nc \%>\% transmute(AREA = AREA/10) \%>\% class()
 }
 if (require(dplyr, quietly = TRUE)) {
  nc \%>\% select(SID74, SID79) \%>\% names()
- nc \%>\% select(SID74, SID79, geometry) \%>\% names()
  nc \%>\% select(SID74, SID79) \%>\% class()
- nc \%>\% select(SID74, SID79, geometry) \%>\% class()
 }
 if (require(dplyr, quietly = TRUE)) {
  nc2 <- nc \%>\% rename(area = AREA)
@@ -360,10 +369,10 @@ if (require(dplyr, quietly = TRUE)) {
 if (require(dplyr, quietly = TRUE)) {
  nc[c(1:100, 1:10), ] \%>\% distinct() \%>\% nrow()
 }
-if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE)) {
+if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE) && "geometry" \%in\% names(nc)) {
  nc \%>\% select(SID74, SID79) \%>\% gather("VAR", "SID", -geometry) \%>\% summary()
 }
-if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE)) {
+if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE) && "geometry" \%in\% names(nc)) {
  nc$row = 1:100 # needed for spread to work
  nc \%>\% select(SID74, SID79, geometry, row) \%>\%
 	gather("VAR", "SID", -geometry, -row) \%>\%

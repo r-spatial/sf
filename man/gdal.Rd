@@ -214,3 +214,4 @@ gdal_subdatasets returns the subdatasets of a gdal dataset
   gdal_metadata(f, c("", "AREA_OR_POINT"))
 }
 }
+\keyword{internal}

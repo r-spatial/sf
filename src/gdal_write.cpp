@@ -80,7 +80,7 @@ std::vector<int> GetFieldIndex(OGRLayer *poLayer, Rcpp::List obj) {
 void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List obj, size_t i, std::vector<int> fld) {
 	for (size_t j = 0; j < tp.size(); j++) {
 		if (j >= (size_t) poFeature->GetFieldCount())
-			Rcpp::stop("Impossible: field count reached\n"); // #nocov
+			Rcpp::stop("Field count reached: duplicate names present?\n"); // #nocov
 		switch (tp[j]) {
 			case OFTString: {
 				Rcpp::CharacterVector cv;

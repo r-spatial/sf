@@ -107,13 +107,38 @@ message_longlat = function(caller) {
 	message(paste0(m, collapse = "\n"))
 }
 
+
+#' @name geos_measures
+#' @export
+#' @examples
+#' st_perimeter(poly)
+#' st_perimeter(mpoly)
+st_perimeter = function(x, ...) {
+	x = st_geometry(x)
+	if (isTRUE(st_is_longlat(x))) { # for spherical geometries we use s2 
+		if (!requireNamespace("s2", quietly = TRUE))
+			stop("package s2 required to calculate the perimeter of spherical geometries")
+		# ensure units are set to meters 
+		units::set_units(
+			s2::s2_perimeter(x, ...), 
+			"m", 
+			mode = "standard"
+		)
+	} else { # non-spherical geometries use lwgeom:
+		if (!requireNamespace("lwgeom", quietly = TRUE))
+			stop("package lwgeom required, please install it first")
+		# note that units are handled appropriately by lwgeom
+		lwgeom::st_perimeter(x)
+	}
+}
+
 #' Compute geometric measurements
 #'
-#' Compute Euclidian or great circle distance between pairs of geometries; compute, the area or the length of a set of geometries.
+#' Compute Euclidean or great circle distance between pairs of geometries; compute, the area or the length of a set of geometries.
 #' @name geos_measures
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}
-#' @param ... passed on to \link[s2]{s2_distance} or \link[s2]{s2_distance_matrix}
+#' @param ... passed on to \link[s2]{s2_distance}, \link[s2]{s2_distance_matrix}, or \link[s2]{s2_perimeter}
 #' @param dist_fun deprecated
 #' @param by_element logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc; an error is raised if \code{x} and \code{y} are not the same length. If \code{FALSE}, return the dense matrix with all pairwise distances.
 #' @param which character; for Cartesian coordinates only: one of \code{Euclidean}, \code{Hausdorff} or \code{Frechet}; for geodetic coordinates, great circle distances are computed; see details
@@ -186,4 +211,53 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE,
 			units(d) = u
 		d
 	}
+}
+
+check_lengths = function (dots) {
+	lengths <- vapply(dots, length, integer(1))
+	non_constant_lengths <- unique(lengths[lengths != 1])
+	if (length(non_constant_lengths) == 0) {
+		1
+	}
+	else if (length(non_constant_lengths) == 1) {
+		non_constant_lengths
+	}
+	else {
+		lengths_label <- paste0(non_constant_lengths, collapse = ", ")
+		stop(sprintf("Incompatible lengths: %s", lengths_label), 
+			call. = FALSE)
+	}
+}
+
+recycle_common = function (dots) {
+	final_length <- check_lengths(dots)
+	lapply(dots, rep_len, final_length)
+}
+
+
+#' Project point on linestring, interpolate along a linestring
+#'
+#' Project point on linestring, interpolate along a linestring
+#' @param line object of class `sfc` with `LINESTRING` geometry
+#' @param point object of class `sfc` with `POINT` geometry
+#' @param normalized logical; if `TRUE`, use or return distance normalised to 0-1
+#' @name st_line_project_point
+#' @returns `st_line_project` returns the distance(s) of point(s) along line(s), when projected on the line(s)
+#' @export
+#' @details
+#' arguments `line`, `point` and `dist` are recycled to common length when needed
+#' @examples
+#' st_line_project(st_as_sfc("LINESTRING (0 0, 10 10)"), st_as_sfc(c("POINT (0 0)", "POINT (5 5)")))
+#' st_line_project(st_as_sfc("LINESTRING (0 0, 10 10)"), st_as_sfc("POINT (5 5)"), TRUE)
+st_line_project = function(line, point, normalized = FALSE) {
+	stopifnot(inherits(line, "sfc"), inherits(point, "sfc"),
+		all(st_dimension(line) == 1), all(st_dimension(point) == 0),
+		is.logical(normalized), length(normalized) == 1,
+		st_crs(line) == st_crs(point))
+	line = st_cast(line, "LINESTRING")
+	point = st_cast(point, "POINT")
+	if (isTRUE(st_is_longlat(line)))
+		message_longlat("st_project_point")
+	recycled = recycle_common(list(line, point))
+	CPL_line_project(recycled[[1]], recycled[[2]], normalized)
 }
