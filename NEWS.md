@@ -1,5 +1,7 @@
 # version 1.0-16
 
+* `[.sfc` works when setting argument `op`; #2320
+
 * `st_sample()` for polygons is sensitive to setting `oriented = TRUE` to prevent wrongly correcting ring directions; #2308
 
 * add support for the GDAL `footprint` utility (requiring GDAL >= 3.8.0) to `gdal_utils`; #2305, by @goergen95
