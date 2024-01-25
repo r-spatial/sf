@@ -66,14 +66,17 @@ For data.frame alternatives see <code><a href="sf.html">st_sf()</a></code>. To c
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">st_sfc</span><span class="op">(</span></span>
-<span>  <span class="va">...</span>,</span>
-<span>  crs <span class="op">=</span> <span class="va">NA_crs_</span>,</span>
-<span>  precision <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  check_ring_dir <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  <span class="va">dim</span>,</span>
-<span>  recompute_bbox <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre><code>st_sfc(
+  ...,
+  crs = NA_crs_,
+  precision = 0,
+  check_ring_dir = FALSE,
+  dim,
+  recompute_bbox = FALSE
+)
+
+# S3 method for sfc
+[(x, i, j, ..., op = st_intersects)</code></pre></div>
     </div>
 
     <div class="section level2">
@@ -100,6 +103,24 @@ For data.frame alternatives see <code><a href="sf.html">st_sf()</a></code>. To c
 
 <dt>recompute_bbox</dt>
 <dd><p>logical; use <code>TRUE</code> to force recomputation of the bounding box</p></dd>
+
+
+<dt>x</dt>
+<dd><p>object of class <code>sfc</code></p></dd>
+
+
+<dt>i</dt>
+<dd><p>record selection. Might also be an <code>sfc</code>/<code>sf</code> object to work with the <code>op</code> argument</p></dd>
+
+
+<dt>j</dt>
+<dd><p>ignored</p></dd>
+
+
+<dt>op</dt>
+<dd><p>function, geometrical binary predicate function to apply when
+<code>i</code> is a <code>sf</code>/<code>sfc</code> object. Additional arguments can be
+specified using <code>...</code>, see examples.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -128,6 +149,13 @@ superclass <code>GEOMETRY</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CRS:           NA</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (0 1)</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (1 1)</span>
+<span class="r-in"><span><span class="va">sfc</span><span class="op">[</span><span class="va">sfc</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, op <span class="op">=</span> <span class="va">st_is_within_distance</span>, dist <span class="op">=</span> <span class="fl">0.5</span><span class="op">]</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry set for 1 feature </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: POINT</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 0 ymin: 1 xmax: 0 ymax: 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> CRS:           NA</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> POINT (0 1)</span>
 <span class="r-in"><span><span class="va">d</span> <span class="op">=</span> <span class="fu"><a href="sf.html">st_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>a<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, geom<span class="op">=</span><span class="va">sfc</span><span class="op">)</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
