@@ -36,6 +36,7 @@ format.sfc = function(x, ..., width = 30) {
 #' pt1 = st_point(c(0,1))
 #' pt2 = st_point(c(1,1))
 #' (sfc = st_sfc(pt1, pt2))
+#' sfc[sfc[1], op = st_is_within_distance, dist = 0.5]
 #' d = st_sf(data.frame(a=1:2, geom=sfc))
 #' @export
 st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, dim,
@@ -139,6 +140,13 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 	lst
 }
 
+#' @name sfc
+#' @param x object of class \code{sfc}
+#' @param i record selection. Might also be an \code{sfc}/\code{sf} object to work with the \code{op} argument
+#' @param j ignored
+#' @param op function, geometrical binary predicate function to apply when
+#'   \code{i} is a \code{sf}/\code{sfc} object. Additional arguments can be
+#'   specified using \code{...}, see examples.
 #' @export
 "[.sfc" = function(x, i, j, ..., op = st_intersects) {
 	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc") || inherits(i, "sfg")))
