@@ -95,3 +95,55 @@ test_that('gdal_utils work', {
 # gdalwarp -t_srs '+proj=utm +zone=11 +datum=WGS84' -overwrite NETCDF:avhrr-only-v2.19810901.nc:anom utm11.tif
 # becomes:
 # st_gdalwarp("NETCDF:avhrr-only-v2.19810901.nc:anom", "utm11.tif", c("-t_srs", "+proj=utm +zone=11 +datum=WGS84"))
+
+test_that('gdal_addo works', {
+
+    skip_on_cran()
+
+    has_overviews = function(x){
+        info = gdal_utils(source = x, quiet = TRUE)
+        grepl("overview", info, ignore.case = TRUE)
+    }
+
+   has_compressed_overviews = function(x){
+        # Check if sidecar overview file has compression, x is tif path
+        path = paste0(x, ".ovr") # overview file
+        info = gdal_utils(source = path, quiet = TRUE)
+        if(!file.exists(path))
+            return(NA)
+        grepl("compression", info, ignore.case = TRUE)
+    }
+
+    # setup
+    dir = file.path(tempdir(), "gdal_addo")
+    dir.create(dir)
+    on.exit(unlink(dir, recursive = TRUE))  # cleanup when done
+    tif = file.path(dir, "geomatrix.tif")
+    file.copy(system.file("tif/geomatrix.tif", package = "sf"),
+                           tif, overwrite = TRUE)
+
+    expect_false(has_overviews(tif))
+
+    # Default arguments
+    expect_no_error(gdal_addo(tif)) # internal overview
+    expect_true(has_overviews(tif))
+    expect_true(is.na(has_compressed_overviews(tif))) # no overview file
+
+    # Clean overviews
+    expect_no_error(gdal_addo(tif, clean = TRUE))
+    expect_false(has_overviews(tif))
+
+    # Overviews in separate file
+    expect_no_error(gdal_addo(tif, read_only = TRUE))
+    expect_false(has_compressed_overviews(tif)) # uncompressed overview file
+
+    # Clean overviews
+    expect_no_error(gdal_addo(tif, clean = TRUE))
+    expect_false(has_overviews(tif))
+
+    # Compression via config_options works
+    expect_no_error(gdal_addo(tif, read_only = TRUE,
+                              config_options = c(COMPRESS_OVERVIEW="LZW")))
+    expect_true(has_compressed_overviews(tif))
+
+})
