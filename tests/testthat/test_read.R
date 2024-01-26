@@ -1,13 +1,13 @@
 test_that("we can read a shapefile using st_read", {
-  nc <- st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267, quiet = TRUE)
-  expect_identical(class(nc), c("sf", "data.frame"))
+  nc <- st_read(system.file("shape/nc.shp", package = "sf"), "nc", crs = 4267, quiet = TRUE)
+  expect_s3_class(nc, c("sf", "data.frame"), exact = TRUE)
   expect_equal(dim(nc), c(100, 15))
 })
 
 test_that("we can read shapefiles with a query string", {
     nc <- st_read(system.file("shape/nc.shp", package="sf"), "nc", crs = 4267, quiet = TRUE)
-    nc_all <- st_read(system.file("shape/nc.shp", package="sf"), "nc", query = "select * from nc", crs = 4267, quiet = TRUE)
-    nc_some <- st_read(system.file("shape/nc.shp", package="sf"), "nc", query = "select * from nc where SID79 > 50", crs = 4267, quiet = TRUE)
+    nc_all <- st_read(system.file("shape/nc.shp", package="sf"), query = "select * from nc", crs = 4267, quiet = TRUE)
+    nc_some <- st_read(system.file("shape/nc.shp", package="sf"), query = "select * from nc where SID79 > 50", crs = 4267, quiet = TRUE)
 })
 
 test_that("st_read.default gives error messages", {

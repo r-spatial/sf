@@ -6,25 +6,28 @@ test_that("we can convert points & lines to and from sp objects", {
   sp = as(s1, "Spatial")
   s2 = st_as_sf(sp)
   # expect_identical(s1, s2) -> name differences
-  expect_identical(class(st_geometry(s2)), c("sfc_POINT", "sfc")) #-> name differences
+  expect_s3_class(st_geometry(s2), c("sfc_POINT", "sfc"), exact = TRUE) #-> name differences
+
   l = st_linestring(matrix(1:6,3))
   l1 = st_sf(a = 1, geom = st_sfc(l))
   sp_l = as(l1, "Spatial")
-  expect_identical(class(sp_l)[[1]], "SpatialLinesDataFrame") #-> name differences
+  expect_s4_class(sp_l, "SpatialLinesDataFrame") #-> name differences
+  
   l2 = st_as_sf(sp_l)
-  expect_identical(class(st_geometry(l2)), c("sfc_LINESTRING", "sfc")) #-> name differences
+  expect_s3_class(st_geometry(l2), c("sfc_LINESTRING", "sfc"), exact = TRUE) #-> name differences
   # test multilinestring -> sp
   l = st_multilinestring(list(matrix(1:6,3), matrix(11:16,3), matrix(21:26,3)))
   l1 = st_sf(a = 1, geom = st_sfc(l))
   sp_l = as(l1, "Spatial")
-  expect_identical(class(sp_l)[[1]], "SpatialLinesDataFrame") #-> name differences
+  expect_s4_class(sp_l, "SpatialLinesDataFrame") #-> name differences
+  
   l2 = st_as_sf(sp_l)
-  expect_identical(class(st_geometry(l2)), c("sfc_MULTILINESTRING", "sfc")) #-> name differences
+  expect_s3_class(st_geometry(l2), c("sfc_MULTILINESTRING", "sfc"), exact = TRUE) #-> name differences
 })
 
 test_that("we can convert SpatialPolygons objects without SF comments to sfc and back", {
   skip_if_not_installed("sp")
-  # skip_if_not(package_version(sf_extSoftVersion()["GEOS"]) >= "3.11.0"); #2079
+  # skip_if_not(package_version(sf_extSoftVersion()[["GEOS"]]) >= "3.11.0"); #2079
   library(sp)
 # nested holes https://github.com/r-spatial/evolution/issues/9
   p1 <- Polygon(cbind(x=c(0, 0, 10, 10, 0), y=c(0, 10, 10, 0, 0)), hole=FALSE) # I
@@ -45,7 +48,7 @@ test_that("we can convert SpatialPolygons objects without SF comments to sfc and
   lp <- list(p1, p2, p13, p7, p7a, p6, p5, p4, p3, p8, p11, p12, p9, p9a, p10)
   spls <- SpatialPolygons(list(Polygons(lp, ID="1")))
   expect_equal(comment(spls), "FALSE")
-  expect_true(is.null(comment(slot(spls, "polygons")[[1]])))
+  expect_null(comment(slot(spls, "polygons")[[1]]))
   spls_sfc <- sf::st_as_sfc(spls)
 # rsbivand fork coerce_comments 2022-12-21
   spls_rt <- as(spls_sfc, "Spatial")

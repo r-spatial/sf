@@ -4,7 +4,7 @@ test_that("we can print sfc objects", {
   s1 = st_sf(a = c("x", "y"), geom = st_sfc(pt1, pt2))
   expect_output(print(s1), "Simple feature collection")
   expect_output(print(st_sfc()), "Geometry set for 0 features")
-  expect_equal(length(st_sfc()), 0)
+  expect_length(st_sfc(), 0)
 })
 
 test_that("st_is_longlat works", {
@@ -33,8 +33,8 @@ test_that("st_as_binary handles non-native big endian", {
   	as.raw(1)
   }
   r[2:5] = rev(r[2:5]) # swap bytes
-  expect_identical(gc, st_as_sfc(structure(list(r), class = "WKB"), pureR = T)[[1]])
-  expect_identical(gc, st_as_sfc(structure(list(r), class = "WKB"), pureR = T, EWKB = TRUE)[[1]])
+  expect_identical(gc, st_as_sfc(structure(list(r), class = "WKB"), pureR = TRUE)[[1]])
+  expect_identical(gc, st_as_sfc(structure(list(r), class = "WKB"), pureR = TRUE, EWKB = TRUE)[[1]])
 })
 
 test_that("st_crs<- gives warnings on changing crs", {

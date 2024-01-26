@@ -23,7 +23,7 @@ test_that("we can create points sf from data.frame", {
   meuse_sf = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
   meuse_sf[1:5,]
   summary(meuse_sf[1:5,])
-  expect_identical(class(meuse_sf), c("sf", "data.frame"))
+  expect_s3_class(meuse_sf, c("sf", "data.frame"), exact = TRUE)
 })
 
 test_that("st_zm works", {
@@ -69,14 +69,14 @@ test_that("st_as_sf bulk points work", {
   xyz_sf = st_as_sf(x, coords = c("y", "x", "dist"))
   xym_sf = st_as_sf(x, coords = c("y", "x", "dist"), dim = "XYM")
   xyzm_sf = st_as_sf(x, coords = c("x", "y", "dist", "zinc"), dim = "XYZM")
-  expect_identical(class(meuse_sf), c("sf", "data.frame"))
-  expect_identical(class(xyz_sf), c("sf", "data.frame"))
-  expect_identical(class(xym_sf), c("sf", "data.frame"))
-  expect_identical(class(xyzm_sf), c("sf", "data.frame"))
-  expect_length(unclass(st_geometry(meuse_sf)[[1]]), 2L)
-  expect_length(unclass(st_geometry(xyz_sf)[[1]]), 3L)
-  expect_length(unclass(st_geometry(xym_sf)[[1]]), 3L)
-  expect_length(unclass(st_geometry(xyzm_sf)[[1]]), 4L)
+  expect_s3_class(meuse_sf, c("sf", "data.frame"), exact = TRUE)
+  expect_s3_class(xyz_sf,   c("sf", "data.frame"), exact = TRUE)
+  expect_s3_class(xym_sf,   c("sf", "data.frame"), exact = TRUE)
+  expect_s3_class(xyzm_sf,  c("sf", "data.frame"), exact = TRUE)
+  expect_length(st_geometry(meuse_sf)[[1]], 2L)
+  expect_length(st_geometry(xyz_sf)[[1]], 3L)
+  expect_length(st_geometry(xym_sf)[[1]], 3L)
+  expect_length(st_geometry(xyzm_sf)[[1]], 4L)
 
 
 })
@@ -86,7 +86,7 @@ test_that("transform work", {
   data(meuse, package = "sp")
   x  = st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
   x2 = transform(x, elev2 = elev^2, lead_zinc = lead/zinc)
-  expect_true(inherits(x, 'sf'))
+  expect_s3_class(x, "sf")
   expect_identical(class(x2), class(x))
   expect_identical(st_bbox(x), st_bbox(x))
   expect_identical(st_crs(x), st_crs(x))
@@ -97,10 +97,10 @@ test_that("empty agr attribute is named after subset", {
 	sf = st_sf(data.frame(x = st_sfc(st_point(1:2))))
 	out = sf[, "geometry"]
 	agr = attr(out, "agr")
-	expect_identical(names(agr), character())
+	expect_named(agr, character())
 })
 test_that("duplicated work",{
 	sf = st_sf(data.frame(x = st_sfc(st_point(1:2))[rep(1,4)], a=gl(2,2), b=as.numeric(gl(2,2))))
 	expect_identical(duplicated(sf), c(FALSE,TRUE,FALSE,TRUE))
-	expect_s3_class(unique(sf),'sf')
+	expect_s3_class(unique(sf), "sf")
 })

@@ -200,7 +200,7 @@ p <- st_sample(x, 10)
 x = st_sfc(st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90)))),
  crs=st_crs(4326))
 #FIXME:
-# if (sf_extSoftVersion()["proj.4"] >= "4.9.0") # lwgeom breaks on this
+# if (sf_extSoftVersion()[["proj.4"]] >= "4.9.0") # lwgeom breaks on this
 #   (p <- st_sample(x, 10))
 pt = st_multipoint(matrix(1:20,,2))
 st_sample(p, 3)
