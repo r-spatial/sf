@@ -89,7 +89,6 @@ st_transform = function(x, crs, ...) UseMethod("st_transform")
 #' @export
 #' @examples
 #' st_transform(st_sf(a=2:1, geom=sfc), "+init=epsg:3857")
-#' try(st_transform(sfc, 3857, aoi = c(-280,-90,180,90)))
 #' if (sf_extSoftVersion()["GDAL"] >= "3.0.0") {
 #'   st_transform(sfc, pipeline =
 #' 	  "+proj=pipeline +step +proj=axisswap +order=2,1") # reverse axes
