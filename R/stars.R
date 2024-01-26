@@ -404,7 +404,7 @@ gdal_create = function(f, nxy, values, crs, xlim, ylim) {
 #' @export
 gdal_addo = function(file, overviews = c(2,4,8,16), method = "NEAREST", layers = integer(0), 
 					 options = character(0), config_options = character(0), clean = FALSE, read_only = FALSE) {
-	stopifnot(length(method) == 1, is.character(method), is.numeric(overviews))
+	stopifnot(length(method) == 1, is.character(method), is.numeric(overviews), is.character(config_options))
 	invisible(CPL_gdaladdo(file, method, as.integer(overviews), as.integer(layers), as.character(options), 
-				 as.character(config_options), as.logical(clean)[1], as.logical(read_only)[1]))
+				 config_options, as.logical(clean)[1], as.logical(read_only)[1]))
 }
