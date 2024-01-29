@@ -388,7 +388,7 @@ gdal_create = function(f, nxy, values, crs, xlim, ylim) {
 	CPL_create(as.character(f), as.integer(nxy), as.double(values), crs$wkt, as.double(xlim), as.double(ylim))
 }
 
-#' add or remove overviews to/from a raster image
+#' Add or remove overviews to/from a raster image
 #'
 #' add or remove overviews to/from a raster image
 #' @param file character; file name

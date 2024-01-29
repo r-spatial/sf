@@ -335,9 +335,10 @@ st_geometry_type = function(x, by_geometry = TRUE) {
 #' Drop Z and/or M dimensions from feature geometries, resetting classes appropriately
 #' @param x object of class \code{sfg}, \code{sfc} or \code{sf}
 #' @param ... ignored
-#' @param drop logical; drop, or (FALSE) add?
+#' @param drop logical; drop, or (`FALSE`) add?
 #' @param what character which dimensions to drop or add
-#' @details Only combinations \code{drop=TRUE}, \code{what = "ZM"}, and \code{drop=FALSE}, \code{what="Z"} are supported so far. In case \code{add=TRUE}, \code{x} should have \code{XY} geometry, and zero values are added for \code{Z}.
+#' @details Only combinations \code{drop=TRUE}, \code{what = "ZM"}, and \code{drop=FALSE}, \code{what="Z"} are supported so far.
+#' In case \code{add=TRUE}, \code{x} should have \code{XY} geometry, and zero values are added for \code{Z}.
 #' @examples
 #' st_zm(st_linestring(matrix(1:32,8)))
 #' x = st_sfc(st_linestring(matrix(1:32,8)), st_linestring(matrix(1:8,2)))
@@ -417,11 +418,14 @@ st_precision.sfc <- function(x) {
 
 #' Set precision
 #'
-#' @name st_precision
+#' @rdname st_precision
 #' @param precision numeric, or object of class \code{units} with distance units (but see details); see \link{st_as_binary} for how to do this.
 #' @details If \code{precision} is a \code{units} object, the object on which we set precision must have a coordinate reference system with compatible distance units.
 #'
-#' Setting a \code{precision} has no direct effect on coordinates of geometries, but merely set an attribute tag to an \code{sfc} object. The effect takes place in \link{st_as_binary} or, more precise, in the C++ function \code{CPL_write_wkb}, where simple feature geometries are being serialized to well-known-binary (WKB). This happens always when routines are called in GEOS library (geometrical operations or predicates), for writing geometries using \link{st_write} or \link{write_sf}, \code{st_make_valid} in package \code{lwgeom}; also \link{aggregate} and \link{summarise} by default union geometries, which calls a GEOS library function. Routines in these libraries receive rounded coordinates, and possibly return results based on them. \link{st_as_binary} contains an example of a roundtrip of \code{sfc} geometries through WKB, in order to see the rounding happening to R data.
+#' Setting a \code{precision} has no direct effect on coordinates of geometries, but merely set an attribute tag to an \code{sfc} object.
+#' The effect takes place in \link{st_as_binary} or, more precise, in the C++ function \code{CPL_write_wkb}, where simple feature geometries are being serialized to well-known-binary (WKB).
+#' This happens always when routines are called in GEOS library (geometrical operations or predicates), for writing geometries using \link{st_write} or \link{write_sf}, \code{st_make_valid} in package \code{lwgeom}; also \link{aggregate} and \link{summarise} by default union geometries, which calls a GEOS library function.
+#' Routines in these libraries receive rounded coordinates, and possibly return results based on them. \link{st_as_binary} contains an example of a roundtrip of \code{sfc} geometries through WKB, in order to see the rounding happening to R data.
 #'
 #' The reason to support precision is that geometrical operations in GEOS or liblwgeom may work better at reduced precision. For writing data from R to external resources it is harder to think of a good reason to limiting precision.
 #'

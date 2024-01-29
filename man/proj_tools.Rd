@@ -26,15 +26,13 @@ sf_proj_pipelines(
 \arguments{
 \item{paths}{the search path to be set; omit if paths need to be queried}
 
-\item{with_proj}{logical; if \code{NA} set for both GDAL and PROJ, otherwise set either for PROJ (TRUE) or GDAL (FALSE)}
+\item{with_proj}{logical; if \code{NA} set for both GDAL and PROJ, otherwise set either for PROJ (\code{TRUE}) or GDAL (\code{FALSE})}
 
-\item{enable}{logical; set this to enable (TRUE) or disable (FALSE) the proj network search facility}
+\item{enable}{logical; set this to enable (\code{TRUE}) or disable (\code{FALSE}) the proj network search facility}
 
 \item{url}{character; use this to specify and override the default proj network CDN}
 
-\item{source_crs}{object of class \code{crs} or character}
-
-\item{target_crs}{object of class \code{crs} or character}
+\item{source_crs, target_crs}{object of class \code{crs} or character}
 
 \item{authority}{character; constrain output pipelines to those of authority}
 
@@ -55,15 +53,15 @@ networking is enabled.)}
 
 \item{desired_accuracy}{numeric; only return pipelines with at least this accuracy}
 
-\item{strict_containment}{logical; default FALSE; permit partial matching of the area
-of interest; if TRUE strictly contain the area of interest.
+\item{strict_containment}{logical; default \code{FALSE}; permit partial matching of the area
+of interest; if \code{TRUE} strictly contain the area of interest.
 The area of interest is either as given in AOI, or as implied by the
 source/target coordinate reference systems}
 
-\item{axis_order_authority_compliant}{logical; if FALSE always
+\item{axis_order_authority_compliant}{logical; if \code{FALSE} always
 choose ‘x’ or longitude for the first
 axis; if TRUE, follow the axis orders given by the coordinate reference systems when
-constructing the for the first axis; if FALSE, follow the axis orders given by}
+constructing the for the first axis; if \code{FALSE}, follow the axis orders given by}
 }
 \value{
 \code{sf_proj_search_paths()} returns the search path (possibly after setting it)
@@ -72,7 +70,7 @@ constructing the for the first axis; if FALSE, follow the axis orders given by}
 network search of datum grids is enabled, when called with arguments it returns a character
 vector with the URL of the CDN used (or specified with \code{url}).
 
-\code{sf_proj_pipelines} returns a table with candidate coordinate transformation
+\code{sf_proj_pipelines()} returns a table with candidate coordinate transformation
 pipelines along with their accuracy; \code{NA} accuracy indicates ballpark accuracy.
 }
 \description{

@@ -56,7 +56,7 @@ st_is_within_distance(x, y = x, dist, sparse = TRUE, ...)
 
 \item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}; if missing, \code{x} is used}
 
-\item{sparse}{logical; should a sparse index list be returned (TRUE) or a dense logical matrix? See below.}
+\item{sparse}{logical; should a sparse index list be returned (\code{TRUE}) or a dense logical matrix? See below.}
 
 \item{...}{
   Arguments passed on to \code{\link[s2:s2_options]{s2::s2_options}}
@@ -88,14 +88,14 @@ that can used to constrain the output of \code{\link[s2:s2_rebuild]{s2_rebuild()
 boolean operation.}
   }}
 
-\item{prepared}{logical; prepare geometry for x, before looping over y? See Details.}
+\item{prepared}{logical; prepare geometry for \code{x}, before looping over \code{y}? See Details.}
 
 \item{model}{character; polygon/polyline model; one of
 "open", "semi-open" or "closed"; see Details.}
 
-\item{retain_unique}{logical; if TRUE (and y is missing) return only indexes of points larger than the current index; this can be used to select unique geometries, see examples. This argument can be used for all geometry predictates; see als \link{distinct.sf} to find records where geometries AND attributes are distinct.}
+\item{retain_unique}{logical; if \code{TRUE} (and \code{y} is missing) return only indexes of points larger than the current index; this can be used to select unique geometries, see examples. This argument can be used for all geometry predicates; see also \link{distinct.sf} to find records where geometries AND attributes are distinct.}
 
-\item{remove_self}{logical; if TRUE (and y is missing) return only indexes of geometries different from the current index; this can be used to omit self-intersections; see examples. This argument can be used for all geometry predictates}
+\item{remove_self}{logical; if \code{TRUE} (and \code{y} is missing) return only indexes of geometries different from the current index; this can be used to omit self-intersections; see examples. This argument can be used for all geometry predicates}
 
 \item{par}{numeric; parameter used for "equals_exact" (margin);}
 

@@ -39,7 +39,7 @@ plot(st_geometry(nc), col = sf.colors(12, categorical = TRUE), border = 'grey',
 plot(st_geometry(st_centroid(nc)), pch = 3, col = 'red', add = TRUE)
 ```
 
-and legends, titles and so on can be added afterwards. `border=NA` removes the polygon borders.
+and legends, titles and so on can be added afterwards. `border = NA` removes the polygon borders.
 
 As can be seen, the axes plotted are sensitive to the CRS, and in case of longitude/latitude coordinates, degree symbols and orientation are added if `axes = TRUE`.
 
@@ -92,7 +92,7 @@ Color breaks (class intervals) can be controlled by plot arguments `breaks` and 
 plot(nc["AREA"], breaks = c(0,.05,.1,.15,.2,.25))
 ```
 
-or `breaks` is used to indicate a breaks-finding method that is passed as the `style` argument to `classInt::classIntervals`. Its default value, `pretty`, results in rounded class breaks, and has as a side effect that `nbreaks` may be honoured only approximately. Other methods include `"equal"` to break the data range into `"nbreaks"` equal classes, `"quantile"` to use quantiles as class breaks, and `"jenks"`, used in other software.
+or `breaks` is used to indicate a breaks-finding method that is passed as the `style` argument to `classInt::classIntervals()`. Its default value, `pretty`, results in rounded class breaks, and has as a side effect that `nbreaks` may be honoured only approximately. Other methods include `"equal"` to break the data range into `"nbreaks"` equal classes, `"quantile"` to use quantiles as class breaks, and `"jenks"`, used in other software.
 
 ```{r}
 plot(nc["AREA"], breaks = "jenks")
@@ -116,7 +116,7 @@ plot(st_geometry(eqc), axes = TRUE)
 
 # Graticules
 
-Graticules are grid lines along equal longitude (meridians) or latitude (parallels) that, depending on the projection used, often plot as curved lines on a map, giving it reference in terms of longitude and latitude. The `sf` function `st_graticule` tries to create a graticule grid for arbitrary maps. As there are infinitely many projections, there are most likely many cases where it does not succeed in doing this well, and examples of these are welcomed as [sf issues](https://github.com/r-spatial/sf/issues).
+Graticules are grid lines along equal longitude (meridians) or latitude (parallels) that, depending on the projection used, often plot as curved lines on a map, giving it reference in terms of longitude and latitude. `sf::st_graticule()` tries to create a graticule grid for arbitrary maps. As there are infinitely many projections, there are most likely many cases where it does not succeed in doing this well, and examples of these are welcomed as [sf issues](https://github.com/r-spatial/sf/issues).
 
 The following plot shows a graticule geometry on itself,
 ```{r}
@@ -135,7 +135,7 @@ When we compute the graticule within the plotting function, we know the plotting
 plot(usa, graticule = TRUE, key.pos = NULL, axes = TRUE)
 ```
 
-We can also pass a `crs` object to `graticule` to obtain a graticule in a datum different from the default (WGS84). `st_graticule` takes parameters, and we can pass an object returned by it to the `graticule` parameter of `plot`, to get finer control:
+We can also pass a `crs` object to `graticule` to obtain a graticule in a datum different from the default (WGS84). `st_graticule()` takes parameters, and we can pass an object returned by it to the `graticule` parameter of `plot`, to get finer control:
 ```{r}
 g = st_graticule(usa, lon = seq(-130,-65,5))
 plot(usa, graticule = g, key.pos = NULL, axes = TRUE,
@@ -149,17 +149,17 @@ which still doesn't look great -- completely controlling the plotting region of 
 
 ## grid: `st_as_grob`
 
-Package `sf` provides a number of methods for `st_as_grob`:
+Package `sf` provides a number of methods for `st_as_grob()`:
 ```{r}
 methods(st_as_grob)
 ```
 
-which convert simple simple feature objects into `grob` ("graphics objects") objects; `grob`s are the graphic primitives of the `grid` plotting package. These methods can be used by plotting packages that build on `grid`, such as `ggplot2` (which uses them in `geom_sf`) and `tmap`. In addition, `st_viewport` can be used to set up a grid viewport from an `sf` object, with an aspect ratio similar to that of `base::plot.sf`.
+which convert simple simple feature objects into `grob` ("graphics objects") objects; `grob`s are the graphic primitives of the `grid` plotting package. These methods can be used by plotting packages that build on `grid`, such as `ggplot2` (which uses them in `geom_sf()`) and `tmap`. In addition, `st_viewport()` can be used to set up a grid viewport from an `sf` object, with an aspect ratio similar to that of `plot.sf()`.
 
 
 ## ggplot2
 
-contains a geom specially for simple feature objects, with support for graticule white lines in the background using `sf::st_graticule`. Support is currently good for polygons; for lines or points, your mileage may vary.
+contains a geom specially for simple feature objects, with support for graticule white lines in the background using `sf::st_graticule()`. Support is currently good for polygons; for lines or points, your mileage may vary.
 
 ```{r}
 library(ggplot2)

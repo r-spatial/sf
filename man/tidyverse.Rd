@@ -2,7 +2,6 @@
 % Please edit documentation in R/tidyverse.R, R/join.R
 \name{tidyverse}
 \alias{tidyverse}
-\alias{dplyr_reconstruct.sf}
 \alias{filter.sf}
 \alias{arrange.sf}
 \alias{group_by.sf}
@@ -12,6 +11,7 @@
 \alias{transmute.sf}
 \alias{select.sf}
 \alias{rename.sf}
+\alias{rename_with.sf}
 \alias{slice.sf}
 \alias{summarise.sf}
 \alias{summarise}
@@ -22,6 +22,7 @@
 \alias{spread.sf}
 \alias{sample_n.sf}
 \alias{sample_frac.sf}
+\alias{group_split.sf}
 \alias{nest.sf}
 \alias{separate.sf}
 \alias{separate_rows.sf}
@@ -36,8 +37,6 @@
 \alias{anti_join.sf}
 \title{Tidyverse methods for sf objects (remove .sf suffix!)}
 \usage{
-dplyr_reconstruct.sf(data, template)
-
 filter.sf(.data, ..., .dots)
 
 arrange.sf(.data, ..., .dots)
@@ -55,6 +54,8 @@ transmute.sf(.data, ..., .dots)
 select.sf(.data, ...)
 
 rename.sf(.data, ...)
+
+rename_with.sf(.data, .fn, .cols, ...)
 
 slice.sf(.data, ..., .dots)
 
@@ -128,6 +129,8 @@ sample_frac.sf(
   .env = parent.frame()
 )
 
+group_split.sf(.tbl, ..., .keep = TRUE)
+
 nest.sf(.data, ...)
 
 separate.sf(
@@ -163,10 +166,6 @@ semi_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 anti_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 }
 \arguments{
-\item{data}{see original function docs}
-
-\item{template}{see original function docs}
-
 \item{.data}{data object of class \link{sf}}
 
 \item{...}{other arguments}
@@ -179,11 +178,15 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 lazy data frames (e.g. from dbplyr or dtplyr). See \emph{Methods}, below, for
 more details.}
 
+\item{.fn, .cols}{see original docs}
+
 \item{do_union}{logical; in case \code{summary} does not create a geometry column, should geometries be created by unioning using \link{st_union}, or simply by combining using \link{st_combine}? Using \link{st_union} resolves internal boundaries, but in case of unioning points, this will likely change the order of the points; see Details.}
 
 \item{is_coverage}{logical; if \code{do_union} is \code{TRUE}, use an optimized algorithm for features that form a polygonal coverage (have no overlaps)}
 
 \item{.keep_all}{see corresponding function in dplyr}
+
+\item{data}{see original function docs}
 
 \item{key}{see original function docs}
 
@@ -256,6 +259,10 @@ more details.}
 \item{weight}{see original function docs}
 
 \item{.env}{see original function docs}
+
+\item{.tbl}{see original function docs}
+
+\item{.keep}{see original function docs}
 
 \item{col}{see \link[tidyr]{separate}}
 

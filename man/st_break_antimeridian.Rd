@@ -13,13 +13,13 @@ st_break_antimeridian(x, lon_0 = 0, tol = 1e-04, ...)
 \method{st_break_antimeridian}{sfc}(x, lon_0 = 0, tol = 1e-04, ...)
 }
 \arguments{
-\item{x}{object of class sf or sfc}
+\item{x}{object of class \code{sf} or \code{sfc}}
 
 \item{lon_0}{target central longitude (degrees)}
 
 \item{tol}{half of break width (degrees, default 0.0001)}
 
-\item{...}{ingnored here}
+\item{...}{ignored here}
 }
 \description{
 Longitudes can be broken at the antimeridian of a target central longitude
