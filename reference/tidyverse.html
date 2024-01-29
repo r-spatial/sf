@@ -63,9 +63,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dplyr_reconstruct.sf</span><span class="op">(</span><span class="va">data</span>, <span class="va">template</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">filter.sf</span><span class="op">(</span><span class="va">.data</span>, <span class="va">...</span>, <span class="va">.dots</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">filter.sf</span><span class="op">(</span><span class="va">.data</span>, <span class="va">...</span>, <span class="va">.dots</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">arrange.sf</span><span class="op">(</span><span class="va">.data</span>, <span class="va">...</span>, <span class="va">.dots</span><span class="op">)</span></span>
 <span></span>
@@ -82,6 +80,8 @@
 <span><span class="fu">select.sf</span><span class="op">(</span><span class="va">.data</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">rename.sf</span><span class="op">(</span><span class="va">.data</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">rename_with.sf</span><span class="op">(</span><span class="va">.data</span>, <span class="va">.fn</span>, <span class="va">.cols</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">slice.sf</span><span class="op">(</span><span class="va">.data</span>, <span class="va">...</span>, <span class="va">.dots</span><span class="op">)</span></span>
 <span></span>
@@ -155,6 +155,8 @@
 <span>  .env <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">group_split.sf</span><span class="op">(</span><span class="va">.tbl</span>, <span class="va">...</span>, .keep <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">nest.sf</span><span class="op">(</span><span class="va">.data</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">separate.sf</span><span class="op">(</span></span>
@@ -192,15 +194,7 @@
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>data</dt>
-<dd><p>see original function docs</p></dd>
-
-
-<dt>template</dt>
-<dd><p>see original function docs</p></dd>
-
-
-<dt>.data</dt>
+    <dl><dt>.data</dt>
 <dd><p>data object of class <a href="sf.html">sf</a></p></dd>
 
 
@@ -222,6 +216,10 @@ lazy data frames (e.g. from dbplyr or dtplyr). See <em>Methods</em>, below, for
 more details.</p></dd>
 
 
+<dt>.fn, .cols</dt>
+<dd><p>see original docs</p></dd>
+
+
 <dt>do_union</dt>
 <dd><p>logical; in case <code>summary</code> does not create a geometry column, should geometries be created by unioning using <a href="geos_combine.html">st_union</a>, or simply by combining using <a href="geos_combine.html">st_combine</a>? Using <a href="geos_combine.html">st_union</a> resolves internal boundaries, but in case of unioning points, this will likely change the order of the points; see Details.</p></dd>
 
@@ -232,6 +230,10 @@ more details.</p></dd>
 
 <dt>.keep_all</dt>
 <dd><p>see corresponding function in dplyr</p></dd>
+
+
+<dt>data</dt>
+<dd><p>see original function docs</p></dd>
 
 
 <dt>key</dt>
@@ -375,6 +377,14 @@ more details.</p></dd>
 
 
 <dt>.env</dt>
+<dd><p>see original function docs</p></dd>
+
+
+<dt>.tbl</dt>
+<dd><p>see original function docs</p></dd>
+
+
+<dt>.keep</dt>
 <dd><p>see original function docs</p></dd>
 
 

@@ -128,7 +128,7 @@ longitude-latitude, removing this ambiguity so to speak. See also
 </h2>
 <p><code>sf</code> objects can have more than one geometry list-column,
 but always only one geometry column is considered <em>active</em>, and
-returned by <code>st_geometry</code>. When there are multiple geometry
+returned by <code><a href="../reference/st_geometry.html">st_geometry()</a></code>. When there are multiple geometry
 columns, the default <code>print</code> methods reports which one is
 active:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -155,7 +155,8 @@ active:</p>
 <span><span class="co">## 1  POINT (-81.49823 36.4314)</span></span>
 <span><span class="co">## 2 POINT (-81.12513 36.49111)</span></span></code></pre></div>
 <p>We can switch the active geometry by using
-<code>st_geometry&lt;-</code> or <code>st_set_geometry</code>, as in</p>
+<code>st_geometry&lt;-</code> or <code><a href="../reference/st_geometry.html">st_set_geometry()</a></code>, as
+in</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="sf6_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
@@ -167,10 +168,10 @@ active:</p>
 <div class="section level2">
 <h2 id="does-st_simplify-preserve-topology">Does <code>st_simplify</code> preserve topology?<a class="anchor" aria-label="anchor" href="#does-st_simplify-preserve-topology"></a>
 </h2>
-<p><code>st_simplify</code> is a topology-preserving function, but does
-this on the level of individual feature geometries. That means, simply
-said, that after applying it, a polygon will still be a polygon. However
-when two features have a longer shared boundary, applying
+<p><code><a href="../reference/geos_unary.html">st_simplify()</a></code> is a topology-preserving function, but
+does this on the level of individual feature geometries. That means,
+simply said, that after applying it, a polygon will still be a polygon.
+However when two features have a longer shared boundary, applying
 <code>st_simplify</code> to the object does not guarantee that in the
 resulting object these two polygons still have the same boundary in
 common, since the simplification is done independently, <em>for each

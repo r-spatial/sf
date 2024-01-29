@@ -206,7 +206,7 @@ entire globe).</p>
 rings should be counter clockwise, interior (hole) rings should be
 clockwise, but in some sense this is obsolete as the difference between
 exterior ring and interior rings is defined by their position (exterior,
-followed by zero or more interior). <code><a href="../reference/st_read.html">sf::read_sf</a></code> has an
+followed by zero or more interior). <code><a href="../reference/st_read.html">sf::read_sf()</a></code> has an
 argument <code>check_ring_dir</code> that checks, and corrects, ring
 directions and many (legacy) datasets have wrong ring directions. With
 wrong ring directions, many things still work.</p>
@@ -407,7 +407,7 @@ instrumented to use GEOS or <code>s2</code>. First we will ask if
 <h2 id="predicates">Predicates<a class="anchor" aria-label="anchor" href="#predicates"></a>
 </h2>
 <p>All unary and binary predicates are available in <code>s2</code>,
-except for <code>st_relate</code> with a pattern. In addition, when
+except for <code><a href="../reference/st_relate.html">st_relate()</a></code> with a pattern. In addition, when
 using the <code>s2</code> predicates, depending on the
 <code>model</code>, intersections with neighbours are only reported when
 <code>model</code> is <code>closed</code> (the default):</p>
@@ -431,8 +431,8 @@ using the <code>s2</code> predicates, depending on the
 <div class="section level2">
 <h2 id="transformations">Transformations<a class="anchor" aria-label="anchor" href="#transformations"></a>
 </h2>
-<p><code>st_intersection</code>, <code>st_union</code>,
-<code>st_difference</code> and <code>st_sym_difference</code> are
+<p><code><a href="../reference/geos_binary_ops.html">st_intersection()</a></code>, <code><a href="../reference/geos_combine.html">st_union()</a></code>,
+<code><a href="../reference/geos_binary_ops.html">st_difference()</a></code>, and <code><a href="../reference/geos_binary_ops.html">st_sym_difference()</a></code> are
 available as <code>s2</code> equivalents. N-ary intersection and
 difference are not (yet) present; cascaded union is present; unioning by
 feature does not work with <code>s2</code>.</p>
@@ -467,11 +467,10 @@ left) and excessive simplification (bottom right). Note that buffers
 created with s2 <em>always</em> follow s2 cell boundaries, they are
 never smooth. Hence, choosing a large number for <code>max_cells</code>
 leads to seemingly smooth but, zoomed in, very complex buffers.</p>
-<p>To achieve a similar result you could first transform the result and
-then use the <code><a href="../reference/geos_unary.html">st_buffer()</a></code> function from <code>sf</code>. A
-simple benchmark shows the computational efficiency of the
-<code>s2</code> geometry engine in comparison with transforming and then
-creating buffers:</p>
+<p>To achieve a similar result you could first transform thes result and
+then use <code><a href="../reference/geos_unary.html">sf::st_buffer()</a></code>. A simple benchmark shows the
+computational efficiency of the <code>s2</code> geometry engine in
+comparison with transforming and then creating buffers:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># the sf way</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
@@ -479,32 +478,32 @@ creating buffers:</p>
 <span>  <span class="va">uk_buffer_sf</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">uk_projected</span>, dist <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.020   0.004   0.025</span></span>
+<span><span class="co">##   0.023   0.000   0.022</span></span>
 <span><span class="co"># sf way with few than the 30 segments in the buffer</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">uk_projected</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">uk_sfc</span>, <span class="fl">27700</span><span class="op">)</span></span>
 <span>  <span class="va">uk_buffer_sf2</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">uk_projected</span>, dist <span class="op">=</span> <span class="fl">20000</span>, nQuadSegs <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.009   0.000   0.009</span></span>
+<span><span class="co">##   0.008   0.000   0.009</span></span>
 <span><span class="co"># s2 with default cell size</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">uk_buffer</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##    0.03    0.00    0.03</span></span>
+<span><span class="co">##   0.029   0.000   0.030</span></span>
 <span><span class="co"># s2 with 10000 cells</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span>, max_cells <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.285   0.000   0.285</span></span>
+<span><span class="co">##   0.280   0.000   0.279</span></span>
 <span><span class="co"># s2 with 100 cells</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span>, max_cells <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.004   0.000   0.004</span></span></code></pre></div>
+<span><span class="co">##   0.003   0.000   0.004</span></span></code></pre></div>
 <p>The result of the previous benchmarks emphasizes the point that there
 are trade-offs between geographic resolution and computational
 resources, something that web developers working on geographic services
@@ -520,14 +519,14 @@ input geometry representing the UK.</p>
 <p>As discussed in the <a href="https://github.com/r-spatial/sf/issues/1367" class="external-link"><code>sf</code> issue
 tracker</a>, deciding on workflows and selecting appropriate levels of
 level of geographic resolution can be an iterative process.
-<code>st_buffer</code> as powered by GEOS, for <span class="math inline">\(R^2\)</span> data, are smooth and (nearly) exact.
-<code>st_buffer</code> as powered by <span class="math inline">\(S^2\)</span> is rougher, complex, non-smooth, and
-may need tuning. An common pattern where <code>st_buffer</code> is used
-is this:</p>
+<code><a href="../reference/geos_unary.html">st_buffer()</a></code> as powered by GEOS, for <span class="math inline">\(R^2\)</span> data, are smooth and (nearly) exact.
+<code><a href="../reference/geos_unary.html">st_buffer()</a></code> as powered by <span class="math inline">\(S^2\)</span> is rougher, complex, non-smooth, and
+may need tuning. An common pattern where <code><a href="../reference/geos_unary.html">st_buffer()</a></code> is
+used is this:</p>
 <ul>
 <li>compute buffers around a set of features <code>x</code> (points,
 lines, polygons)</li>
-<li>within each of these buffers, find all occurances of some other
+<li>within each of these buffers, find all occurrences of some other
 spatial variable <code>y</code> and aggregate them (e.g. count points,
 or average a raster variable like precipitation or population
 density)</li>
@@ -535,7 +534,7 @@ density)</li>
 </ul>
 <p>When this is the case, and you are working with geographic
 coordinates, it may pay off to <em>not</em> compute buffers, but instead
-directly work with <code>st_is_within_distance</code> to select, for
+directly work with <code><a href="../reference/geos_binary_pred.html">st_is_within_distance()</a></code> to select, for
 each feature of <code>x</code>, all features of <code>y</code> that are
 within a certain distance <code>d</code> from <code>x</code>. The <span class="math inline">\(S^2\)</span> version of this function uses spatial
 indexes, so is fast for large datasets.</p>

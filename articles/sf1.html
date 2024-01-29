@@ -374,7 +374,7 @@ features with attributes, the two are put together in <code>sf</code>
 <span><span class="co">## Dimension:     XY</span></span>
 <span><span class="co">## Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span></span>
 <span><span class="co">## Geodetic CRS:  NAD27</span></span></code></pre></div>
-<p>(Note that users will not use <code>system.file</code> but give a
+<p>(Note that users will not use <code><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file()</a></code> but give a
 <code>filename</code> directly, and that shapefiles consist of more than
 one file, all with identical basename, which reside in the same
 directory.) The short report printed gives the file name, the driver
@@ -475,7 +475,7 @@ e.g. by:</p>
 geometries is a list, of class <code>sfc</code>. We can retrieve the
 geometry list-column in this case by <code>nc$geom</code> or
 <code>nc[[15]]</code>, but the more general way uses
-<code>st_geometry</code>:</p>
+<code><a href="../reference/st_geometry.html">st_geometry()</a></code>:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">nc_geom</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">## Geometry set for 100 features </span></span>
@@ -574,10 +574,10 @@ exterior) for the geometry of feature 4 by:</p>
 <span><span class="co">## [67] str                          summary                     </span></span>
 <span><span class="co">## [69] vec_cast.sfc                 vec_ptype2.sfc              </span></span>
 <span><span class="co">## see '?methods' for accessing help and source code</span></span></code></pre></div>
-<p>Coordinate reference systems (<code>st_crs</code> and
-<code>st_transform</code>) are discussed in the section on <a href="#crs">coordinate reference systems</a>. <code>st_as_wkb</code> and
-<code>st_as_text</code> convert geometry list-columns into
-well-known-binary or well-known-text, explained <a href="#wkb">below</a>. <code>st_bbox</code> retrieves the coordinate
+<p>Coordinate reference systems (<code><a href="../reference/st_crs.html">st_crs()</a></code> and
+<code><a href="../reference/st_transform.html">st_transform()</a></code>) are discussed in the section on <a href="#crs">coordinate reference systems</a>. <code>st_as_wkb()</code>
+and <code><a href="../reference/st_as_text.html">st_as_text()</a></code> convert geometry list-columns into
+well-known-binary or well-known-text, explained <a href="#wkb">below</a>. <code><a href="../reference/st_bbox.html">st_bbox()</a></code> retrieves the coordinate
 bounding box.</p>
 <p>Attributes include:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
@@ -812,7 +812,7 @@ or by using the otherwise nearly identical but more quiet</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="va">filename</span><span class="op">)</span></span></code></pre></div>
 <p>Writing takes place in the same fashion, using
-<code>st_write</code>:</p>
+<code><a href="../reference/st_write.html">st_write()</a></code>:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/st_write.html">st_write</a></span><span class="op">(</span><span class="va">nc</span>, <span class="st">"nc.shp"</span><span class="op">)</span></span>
 <span><span class="co">## Writing layer `nc' to data source `nc.shp' using driver `ESRI Shapefile'</span></span>
@@ -831,9 +831,9 @@ exists, and we can overwrite by:</p>
 <h4 id="driver-specific-options">Driver-specific options<a class="anchor" aria-label="anchor" href="#driver-specific-options"></a>
 </h4>
 <p>The <code>dsn</code> and <code>layer</code> arguments to
-<code>st_read</code> and <code>st_write</code> denote a data source name
-and optionally a layer name. Their exact interpretation as well as the
-options they support vary per driver, the <a href="https://gdal.org/drivers/vector/index.html" class="external-link">GDAL driver
+<code><a href="../reference/st_read.html">st_read()</a></code> and <code><a href="../reference/st_write.html">st_write()</a></code> denote a data source
+name and optionally a layer name. Their exact interpretation as well as
+the options they support vary per driver, the <a href="https://gdal.org/drivers/vector/index.html" class="external-link">GDAL driver
 documentation</a> is best consulted for this. For instance, a PostGIS
 table in database <code>postgis</code> might be read by:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
@@ -841,11 +841,11 @@ table in database <code>postgis</code> might be read by:</p>
 <p>where the <code>PG:</code> string indicates this concerns the PostGIS
 driver, followed by database name, and possibly port and user
 credentials. When the <code>layer</code> and <code>driver</code>
-arguments are not specified, <code>st_read</code> tries to guess them
+arguments are not specified, <code><a href="../reference/st_read.html">st_read()</a></code> tries to guess them
 from the datasource, or else simply reads the first layer, giving a
 warning in case there are more.</p>
-<p><code>st_read</code> typically reads the coordinate reference system
-as <code>proj4string</code>, but not the EPSG (SRID). GDAL cannot
+<p><code><a href="../reference/st_read.html">st_read()</a></code> typically reads the coordinate reference
+system as <code>proj4string</code>, but not the EPSG (SRID). GDAL cannot
 retrieve SRID (EPSG code) from <code>proj4string</code> strings, and,
 when needed, it has to be set by the user. See also the section on <a href="#crs">coordinate reference systems</a>.</p>
 <p><code><a href="../reference/st_drivers.html">st_drivers()</a></code> returns a <code>data.frame</code> listing
@@ -885,9 +885,9 @@ costly for large files. We can force counting by:</p>
 </h4>
 <p>GDAL provides the <a href="https://en.wikipedia.org/wiki/Create,_read,_update_and_delete" class="external-link">crud</a>
 (create, read, update, delete) functions to persistent storage.
-<code>st_read</code> (or <code>read_sf</code>) are used for reading.
-<code>st_write</code> (or <code>write_sf</code>) creates, and has the
-following arguments to control update and delete:</p>
+<code><a href="../reference/st_read.html">st_read()</a></code> (or <code><a href="../reference/st_read.html">read_sf()</a></code>) are used for reading.
+<code><a href="../reference/st_write.html">st_write()</a></code> (or <code><a href="../reference/st_write.html">write_sf()</a></code>) creates, and has
+the following arguments to control update and delete:</p>
 <ul>
 <li>
 <code>update=TRUE</code> causes an existing data source to be
@@ -946,8 +946,8 @@ refers to particular, well-known CRS, whose parameters may change
 the possibility to benefit from such improvements, and limit some of the
 provenance of datasets, but may help reproducibility.</p>
 <p>Coordinate reference system transformations can be carried out using
-<code>st_transform</code>, e.g. converting longitudes/latitudes in NAD27
-to web mercator (EPSG:3857) can be done by:</p>
+<code><a href="../reference/st_transform.html">st_transform()</a></code>, e.g. converting longitudes/latitudes in
+NAD27 to web mercator (EPSG:3857) can be done by:</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nc.web_mercator</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">nc</span>, <span class="fl">3857</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc.web_mercator</span><span class="op">)</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span></span>
@@ -1022,14 +1022,14 @@ situation is identical.</p>
 </h3>
 <p>The standard for simple feature access defines a number of
 geometrical operations.</p>
-<p><code>st_is_valid</code> and <code>st_is_simple</code> return a
-boolean indicating whether a geometry is valid or simple.</p>
+<p><code><a href="../reference/valid.html">st_is_valid()</a></code> and <code><a href="../reference/geos_query.html">st_is_simple()</a></code> return a
+Boolean indicating whether a geometry is valid or simple.</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/valid.html">st_is_valid</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>,<span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">## [1] TRUE TRUE</span></span></code></pre></div>
-<p><code>st_distance</code> returns a dense numeric matrix with
-distances between geometries. <code>st_relate</code> returns a character
-matrix with the <a href="https://en.wikipedia.org/wiki/DE-9IM#Illustration" class="external-link">DE9-IM</a>
+<p><code><a href="../reference/geos_measures.html">st_distance()</a></code> returns a dense numeric matrix with
+distances between geometries. <code><a href="../reference/st_relate.html">st_relate()</a></code> returns a
+character matrix with the <a href="https://en.wikipedia.org/wiki/DE-9IM#Illustration" class="external-link">DE9-IM</a>
 values for each pair of geometries:</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">nc</span>, <span class="fl">32119</span><span class="op">)</span></span>
@@ -1048,14 +1048,14 @@ values for each pair of geometries:</p>
 <span><span class="co">## [3,] "FF2FF1212" "FF2F11212" "2FFF1FFF2" "FF2FF1212"</span></span>
 <span><span class="co">## [4,] "FF2FF1212" "FF2FF1212" "FF2FF1212" "2FFF1FFF2"</span></span>
 <span><span class="co">## [5,] "FF2FF1212" "FF2FF1212" "FF2FF1212" "FF2FF1212"</span></span></code></pre></div>
-<p>The commands <code>st_intersects</code>, <code>st_disjoint</code>,
-<code>st_touches</code>, <code>st_crosses</code>,
-<code>st_within</code>, <code>st_contains</code>,
-<code>st_overlaps</code>, <code>st_equals</code>,
-<code>st_covers</code>, <code>st_covered_by</code>,
-<code>st_equals_exact</code> and <code>st_is_within_distance</code>
-return a sparse matrix with matching (TRUE) indexes, or a full logical
-matrix:</p>
+<p><code><a href="../reference/geos_binary_pred.html">st_intersects()</a></code>, <code><a href="../reference/geos_binary_pred.html">st_disjoint()</a></code>,
+<code><a href="../reference/geos_binary_pred.html">st_touches()</a></code>, <code><a href="../reference/geos_binary_pred.html">st_crosses()</a></code>,
+<code><a href="../reference/geos_binary_pred.html">st_within()</a></code>, <code><a href="../reference/geos_binary_pred.html">st_contains()</a></code>,
+<code><a href="../reference/geos_binary_pred.html">st_overlaps()</a></code>, <code><a href="../reference/geos_binary_pred.html">st_equals()</a></code>,
+<code><a href="../reference/geos_binary_pred.html">st_covers()</a></code>, <code><a href="../reference/geos_binary_pred.html">st_covered_by()</a></code>,
+<code><a href="../reference/geos_binary_pred.html">st_equals_exact()</a></code> and <code><a href="../reference/geos_binary_pred.html">st_is_within_distance()</a></code>
+return a sparse matrix (<code>sgbp</code> object) with matching
+(<code>TRUE</code>) indexes, or a full logical matrix:</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="op">]</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">## Sparse geometry binary predicate list of length 5, where the predicate</span></span>
@@ -1072,11 +1072,11 @@ matrix:</p>
 <span><span class="co">## [3,] FALSE  TRUE  TRUE FALSE</span></span>
 <span><span class="co">## [4,] FALSE FALSE FALSE  TRUE</span></span>
 <span><span class="co">## [5,] FALSE FALSE FALSE FALSE</span></span></code></pre></div>
-<p>The commands <code>st_buffer</code>, <code>st_boundary</code>,
-<code>st_convexhull</code>, <code>st_union_cascaded</code>,
-<code>st_simplify</code>, <code>st_triangulate</code>,
-<code>st_polygonize</code>, <code>st_centroid</code>,
-<code>st_segmentize</code>, and <code>st_union</code> return new
+<p><code><a href="../reference/geos_unary.html">st_buffer()</a></code>, <code><a href="../reference/geos_unary.html">st_boundary()</a></code>,
+<code>st_convexhull()</code>, <code>st_union_cascaded</code>,
+<code>st_simplify</code>, <code><a href="../reference/geos_unary.html">st_triangulate()</a></code>,
+<code><a href="../reference/geos_unary.html">st_polygonize()</a></code>, <code><a href="../reference/geos_unary.html">st_centroid()</a></code>,
+<code><a href="../reference/geos_unary.html">st_segmentize()</a></code>, and <code><a href="../reference/geos_combine.html">st_union()</a></code> return new
 geometries, e.g.:</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sel</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">5</span>,<span class="fl">14</span><span class="op">)</span></span>
@@ -1086,9 +1086,9 @@ geometries, e.g.:</p>
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">geom</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">geom</span>, <span class="op">-</span><span class="fl">5000</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">'blue'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="sf1_files/figure-html/unnamed-chunk-39-1.png" width="700"></p>
-<p>Commands <code>st_intersection</code>, <code>st_union</code>,
-<code>st_difference</code>, <code>st_sym_difference</code> return new
-geometries that are a function of pairs of geometries:</p>
+<p><code><a href="../reference/geos_binary_ops.html">st_intersection()</a></code>, <code><a href="../reference/geos_combine.html">st_union()</a></code>,
+<code><a href="../reference/geos_binary_ops.html">st_difference()</a></code>, and <code><a href="../reference/geos_binary_ops.html">st_sym_difference()</a></code>
+return new geometries that are a function of pairs of geometries:</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">u</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/geos_combine.html">st_union</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span></span>

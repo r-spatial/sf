@@ -143,7 +143,7 @@ use the <code>query</code> argument.</p></dd>
 <dd><p>character; driver dependent dataset open options, multiple
 options supported. For possible values, see the "Open options" section
 of the GDAL documentation of the corresponding driver, and
-https://github.com/r-spatial/sf/issues/1157 for an example.</p></dd>
+<a href="https://github.com/r-spatial/sf/issues/1157" class="external-link">https://github.com/r-spatial/sf/issues/1157</a> for an example.</p></dd>
 
 
 <dt>quiet</dt>
@@ -178,13 +178,13 @@ converted to factors?  Default for <code>read_sf</code> or R version &gt;= 4.1.0
 
 
 <dt>int64_as_string</dt>
-<dd><p>logical; if TRUE, Int64 attributes are returned as
-string; if FALSE, they are returned as double and a warning is given when
+<dd><p>logical; if <code>TRUE</code>, Int64 attributes are returned as
+string; if <code>FALSE</code>, they are returned as double and a warning is given when
 precision is lost (i.e., values are larger than 2^53).</p></dd>
 
 
 <dt>check_ring_dir</dt>
-<dd><p>logical; if TRUE, polygon ring directions are checked
+<dd><p>logical; if <code>TRUE</code>, polygon ring directions are checked
 and if necessary corrected (when seen from above: exterior ring counter
 clockwise, holes clockwise)</p></dd>
 
@@ -206,7 +206,7 @@ clockwise, holes clockwise)</p></dd>
 
 
 <dt>use_stream</dt>
-<dd><p>Use TRUE to use the experimental columnar interface introduced in GDAL 3.6.</p></dd>
+<dd><p>Use <code>TRUE</code> to use the experimental columnar interface introduced in GDAL 3.6.</p></dd>
 
 
 <dt>as_tibble</dt>

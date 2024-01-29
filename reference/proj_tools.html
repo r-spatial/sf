@@ -87,22 +87,18 @@
 
 
 <dt>with_proj</dt>
-<dd><p>logical; if <code>NA</code> set for both GDAL and PROJ, otherwise set either for PROJ (TRUE) or GDAL (FALSE)</p></dd>
+<dd><p>logical; if <code>NA</code> set for both GDAL and PROJ, otherwise set either for PROJ (<code>TRUE</code>) or GDAL (<code>FALSE</code>)</p></dd>
 
 
 <dt>enable</dt>
-<dd><p>logical; set this to enable (TRUE) or disable (FALSE) the proj network search facility</p></dd>
+<dd><p>logical; set this to enable (<code>TRUE</code>) or disable (<code>FALSE</code>) the proj network search facility</p></dd>
 
 
 <dt>url</dt>
 <dd><p>character; use this to specify and override the default proj network CDN</p></dd>
 
 
-<dt>source_crs</dt>
-<dd><p>object of class <code>crs</code> or character</p></dd>
-
-
-<dt>target_crs</dt>
+<dt>source_crs, target_crs</dt>
 <dd><p>object of class <code>crs</code> or character</p></dd>
 
 
@@ -136,17 +132,17 @@ networking is enabled.)</p></dd>
 
 
 <dt>strict_containment</dt>
-<dd><p>logical; default FALSE; permit partial matching of the area
-of interest; if TRUE strictly contain the area of interest.
+<dd><p>logical; default <code>FALSE</code>; permit partial matching of the area
+of interest; if <code>TRUE</code> strictly contain the area of interest.
 The area of interest is either as given in AOI, or as implied by the
 source/target coordinate reference systems</p></dd>
 
 
 <dt>axis_order_authority_compliant</dt>
-<dd><p>logical; if FALSE always
+<dd><p>logical; if <code>FALSE</code> always
 choose ‘x’ or longitude for the first
 axis; if TRUE, follow the axis orders given by the coordinate reference systems when
-constructing the for the first axis; if FALSE, follow the axis orders given by</p></dd>
+constructing the for the first axis; if <code>FALSE</code>, follow the axis orders given by</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -161,7 +157,7 @@ network search of datum grids is enabled, when called with arguments it returns 
 vector with the URL of the CDN used (or specified with <code>url</code>).</p>
 
 
-<p><code>sf_proj_pipelines</code> returns a table with candidate coordinate transformation
+<p><code>sf_proj_pipelines()</code> returns a table with candidate coordinate transformation
 pipelines along with their accuracy; <code>NA</code> accuracy indicates ballpark accuracy.</p>
     </div>
 

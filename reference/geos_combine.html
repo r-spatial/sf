@@ -83,11 +83,11 @@
 
 
 <dt>by_feature</dt>
-<dd><p>logical; if TRUE, union each feature if <code>y</code> is missing or else each pair of features; if FALSE return a single feature that is the geometric union of the set of features in <code>x</code> if <code>y</code> is missing, or else the unions of each of the elements of the Cartesian product of both sets</p></dd>
+<dd><p>logical; if <code>TRUE</code>, union each feature if <code>y</code> is missing or else each pair of features; if <code>FALSE</code> return a single feature that is the geometric union of the set of features in <code>x</code> if <code>y</code> is missing, or else the unions of each of the elements of the Cartesian product of both sets</p></dd>
 
 
 <dt>is_coverage</dt>
-<dd><p>logical; if TRUE, use an optimized algorithm for features that form a polygonal coverage (have no overlaps)</p></dd>
+<dd><p>logical; if <code>TRUE</code>, use an optimized algorithm for features that form a polygonal coverage (have no overlaps)</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -102,8 +102,13 @@
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p><code>st_combine</code> combines geometries without resolving borders, using <a href="st.html">c.sfg</a> (analogous to <a href="https://rdrr.io/r/base/c.html" class="external-link">c</a> for ordinary vectors).</p>
-<p>If <code>st_union</code> is called with a single argument, <code>x</code>, (with <code>y</code> missing) and <code>by_feature</code> is <code>FALSE</code> all geometries are unioned together and an <code>sfg</code> or single-geometry <code>sfc</code> object is returned. If <code>by_feature</code> is <code>TRUE</code> each feature geometry is unioned individually. This can for instance be used to resolve internal boundaries after polygons were combined using <code>st_combine</code>. If <code>y</code> is provided, all elements of <code>x</code> and <code>y</code> are unioned, pairwise if <code>by_feature</code> is TRUE, or else as the Cartesian product of both sets.</p>
-<p>Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together). Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context "fully noded" means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input. "Dissolved" means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.	Unioning a set of Points has the effect of merging all identical points (producing a set with no duplicates).</p>
+<p>If <code>st_union</code> is called with a single argument, <code>x</code>, (with <code>y</code> missing) and <code>by_feature</code> is <code>FALSE</code> all geometries are unioned together and an <code>sfg</code> or single-geometry <code>sfc</code> object is returned.
+If <code>by_feature</code> is <code>TRUE</code> each feature geometry is unioned individually.
+This can for instance be used to resolve internal boundaries after polygons were combined using <code>st_combine</code>.
+If <code>y</code> is provided, all elements of <code>x</code> and <code>y</code> are unioned, pairwise if <code>by_feature</code> is TRUE, or else as the Cartesian product of both sets.</p>
+<p>Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together).
+Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context "fully noded" means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input.
+"Dissolved" means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.	Unioning a set of Points has the effect of merging all identical points (producing a set with no duplicates).</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

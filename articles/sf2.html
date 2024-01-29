@@ -101,11 +101,11 @@ files or databases, and how they can be converted to other formats
 <div class="section level2">
 <h2 id="reading-and-writing-through-gdal">Reading and writing through GDAL<a class="anchor" aria-label="anchor" href="#reading-and-writing-through-gdal"></a>
 </h2>
-<p>The Geospatial Data Abstraction Library (<a href="https://gdal.org/" class="external-link">GDAL</a>) is the swiss army knife for spatial
+<p>The Geospatial Data Abstraction Library (<a href="https://gdal.org/" class="external-link">GDAL</a>) is the Swiss Army Knife for spatial
 data: it reads and writes vector and raster data from and to practically
 every file format, or database, of significance. Package <code>sf</code>
-reads and writes using GDAL by the functions <code>st_read</code> and
-<code>st_write</code>.</p>
+reads and writes using GDAL using <code><a href="../reference/st_read.html">st_read()</a></code> and
+<code><a href="../reference/st_write.html">st_write()</a></code>.</p>
 <p>The data model GDAL uses needs</p>
 <ul>
 <li>a data source, which may be a file, directory, or database</li>
@@ -160,8 +160,8 @@ given:</p>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="at">Warning message:</span></span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="at">In eval(substitute(expr), envir, enclos) :</span></span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="at">  automatically selected the first layer in a data source containing more than one.</span></span></code></pre></div>
-<p>The message points to the <code>st_layers</code> command, which lists
-the driver and layers in a datasource, e.g.</p>
+<p>The message points to the <code><a href="../reference/st_layers.html">st_layers()</a></code> command, which
+lists the driver and layers in a datasource, e.g.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">st_layers</span>(<span class="st">"PG:dbname=postgis"</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>Driver<span class="sc">:</span> PostgreSQL </span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>Available layers<span class="sc">:</span></span>
@@ -175,17 +175,17 @@ the driver and layers in a datasource, e.g.</p>
 <p>A particular layer can now be read by e.g.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"PG:dbname=postgis"</span>, <span class="st">"sids"</span><span class="op">)</span></span></code></pre></div>
-<p><code>st_layers</code> has the option to count the number of features
-in case these are missing: some datasources (e.g. OSM xml files) do not
-report the number of features, but need to be completely read for this.
-GDAL allows for more than one geometry column for a feature layer; these
-are reported by <code>st_layers</code>.</p>
+<p><code><a href="../reference/st_layers.html">st_layers()</a></code> has the option to count the number of
+features in case these are missing: some datasources (e.g. OSM xml
+files) do not report the number of features, but need to be completely
+read for this. GDAL allows for more than one geometry column for a
+feature layer; these are reported by <code><a href="../reference/st_layers.html">st_layers()</a></code>.</p>
 <p>In case a layer contains only geometries but no attributes (fields),
-<code>st_read</code> still returns an <code>sf</code> object, with a
+<code><a href="../reference/st_read.html">st_read()</a></code> still returns an <code>sf</code> object, with a
 geometry column only.</p>
 <p>We see that GDAL automatically detects the driver (file format) of
 the datasource, by trying them all in turn.</p>
-<p><code>st_read</code> follows the conventions of base R, similar to
+<p><code><a href="../reference/st_read.html">st_read()</a></code> follows the conventions of base R, similar to
 how it reads tabular data into <code>data.frame</code>s. This means that
 character data are read, by default as <code>factor</code>s. For those
 who insist on retrieving character data as character vectors, the
@@ -215,8 +215,8 @@ arguments, the object and a filename:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/st_write.html">st_write</a></span><span class="op">(</span><span class="va">nc</span>, <span class="st">"nc1.shp"</span><span class="op">)</span></span></code></pre></div>
 <p>The file name is taken as the data source name. The default for the
 layer name is the basename (filename without path) of the the data
-source name. For this, <code>st_write</code> needs to guess the driver.
-The above command is, for instance, equivalent to:</p>
+source name. For this, <code><a href="../reference/st_write.html">st_write()</a></code> needs to guess the
+driver. The above command is, for instance, equivalent to:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/st_write.html">st_write</a></span><span class="op">(</span><span class="va">nc</span>, dsn <span class="op">=</span> <span class="st">"nc1.shp"</span>, layer <span class="op">=</span> <span class="st">"nc.shp"</span>, driver <span class="op">=</span> <span class="st">"ESRI Shapefile"</span><span class="op">)</span></span>
 <span><span class="co">## Writing layer `nc' to data source `nc1.shp' using driver `ESRI Shapefile'</span></span>
@@ -400,8 +400,8 @@ will give an error. Driver-specific options are documented in the driver
 manual of <a href="https://gdal.org/drivers/vector/index.html" class="external-link">gdal</a>.
 Multiple options can be given by multiple strings in
 <code>options</code>.</p>
-<p>For <code>st_read</code>, there is only <code>options</code>; for
-<code>st_write</code>, one needs to distinguish between
+<p>For <code><a href="../reference/st_read.html">st_read()</a></code>, there is only <code>options</code>; for
+<code><a href="../reference/st_write.html">st_write()</a></code>, one needs to distinguish between
 <code>dataset_options</code> and <code>layer_options</code>, the first
 related to opening a dataset, the second to creating layers in the
 dataset.</p>
@@ -456,7 +456,7 @@ text:</p>
 <span><span class="va">str</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_as_text.html">st_as_text</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span><span class="va">x</span></span>
 <span><span class="co">## LINESTRING (0 1, 2 3, 4 5, 6 7, 8 9)</span></span></code></pre></div>
-<p>We can convert back from WKT by using <code>st_as_sfc</code>:</p>
+<p>We can convert back from WKT by using <code><a href="../reference/st_as_sfc.html">st_as_sfc()</a></code>:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/st_as_sfc.html">st_as_sfc</a></span><span class="op">(</span><span class="va">str</span><span class="op">)</span></span>
 <span><span class="co">## Geometry set for 1 feature </span></span>
@@ -470,7 +470,7 @@ text:</p>
 <h3 id="conversion-to-and-from-well-known-binary">Conversion to and from well-known binary<a class="anchor" aria-label="anchor" href="#conversion-to-and-from-well-known-binary"></a>
 </h3>
 <p>Well-known binary is created from simple features by
-<code>st_as_binary</code>:</p>
+<code><a href="../reference/st_as_binary.html">st_as_binary()</a></code>:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="../reference/st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">9</span>,ncol<span class="op">=</span><span class="fl">2</span>,byrow<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">(</span><span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_as_binary.html">st_as_binary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
@@ -480,14 +480,14 @@ text:</p>
 <span><span class="co">## [76] 00 00 00 00 20 40 00 00 00 00 00 00 22 40</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span><span class="co">## [1] "raw"</span></span></code></pre></div>
-<p>The object returned by <code>st_as_binary</code> is of class
+<p>The object returned by <code><a href="../reference/st_as_binary.html">st_as_binary()</a></code> is of class
 <code>WKB</code> and is either a list with raw vectors, or a single raw
 vector. These can be converted into a hexadecimal character vector using
-<code>rawToHex</code>:</p>
+<code><a href="../reference/rawToHex.html">rawToHex()</a></code>:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/rawToHex.html">rawToHex</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span><span class="co">## [1] "0102000000050000000000000000000000000000000000f03f000000000000004000000000000008400000000000001040000000000000144000000000000018400000000000001c4000000000000020400000000000002240"</span></span></code></pre></div>
-<p>Converting back to <code>sf</code> uses <code>st_as_sfc</code>:</p>
+<p>Converting back to <code>sf</code> uses <code><a href="../reference/st_as_sfc.html">st_as_sfc()</a></code>:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_as_binary.html">st_as_binary</a></span><span class="op">(</span><span class="fu"><a href="../reference/sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="../reference/st.html">st_point</a></span><span class="op">(</span><span class="fl">5</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/st_as_sfc.html">st_as_sfc</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
@@ -504,7 +504,7 @@ vector. These can be converted into a hexadecimal character vector using
 </h3>
 <p>Spatial objects as maintained by package <code>sp</code> can be
 converted into simple feature objects or geometries by
-<code>st_as_sf</code> and <code>st_as_sfc</code>, respectively:</p>
+<code><a href="../reference/st_as_sf.html">st_as_sf()</a></code> and <code><a href="../reference/st_as_sfc.html">st_as_sfc()</a></code>, respectively:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/methods.html" class="external-link">methods</a></span><span class="op">(</span><span class="va">st_as_sf</span><span class="op">)</span></span>
 <span><span class="co">##  [1] st_as_sf.data.frame*   st_as_sf.lpp*          st_as_sf.map*         </span></span>

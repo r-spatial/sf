@@ -124,7 +124,7 @@ usual base plots, e.g. points are added to a polygon plot by:</p>
 <pre><code><span><span class="co">## Warning: st_centroid assumes attributes are constant over geometries</span></span></code></pre>
 <p><img src="sf5_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 <p>and legends, titles and so on can be added afterwards.
-<code>border=NA</code> removes the polygon borders.</p>
+<code>border = NA</code> removes the polygon borders.</p>
 <p>As can be seen, the axes plotted are sensitive to the CRS, and in
 case of longitude/latitude coordinates, degree symbols and orientation
 are added if <code>axes = TRUE</code>.</p>
@@ -193,7 +193,7 @@ with break values:</p>
 <p><img src="sf5_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 <p>or <code>breaks</code> is used to indicate a breaks-finding method
 that is passed as the <code>style</code> argument to
-<code><a href="https://r-spatial.github.io/classInt/reference/classIntervals.html" class="external-link">classInt::classIntervals</a></code>. Its default value,
+<code><a href="https://r-spatial.github.io/classInt/reference/classIntervals.html" class="external-link">classInt::classIntervals()</a></code>. Its default value,
 <code>pretty</code>, results in rounded class breaks, and has as a side
 effect that <code>nbreaks</code> may be honoured only approximately.
 Other methods include <code>"equal"</code> to break the data range into
@@ -234,10 +234,10 @@ to</p>
 <p>Graticules are grid lines along equal longitude (meridians) or
 latitude (parallels) that, depending on the projection used, often plot
 as curved lines on a map, giving it reference in terms of longitude and
-latitude. The <code>sf</code> function <code>st_graticule</code> tries
-to create a graticule grid for arbitrary maps. As there are infinitely
-many projections, there are most likely many cases where it does not
-succeed in doing this well, and examples of these are welcomed as <a href="https://github.com/r-spatial/sf/issues" class="external-link">sf issues</a>.</p>
+latitude. <code><a href="../reference/st_graticule.html">sf::st_graticule()</a></code> tries to create a graticule
+grid for arbitrary maps. As there are infinitely many projections, there
+are most likely many cases where it does not succeed in doing this well,
+and examples of these are welcomed as <a href="https://github.com/r-spatial/sf/issues" class="external-link">sf issues</a>.</p>
 <p>The following plot shows a graticule geometry on itself,</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">maps</span><span class="op">)</span></span>
@@ -258,7 +258,7 @@ axes in graticule units:</p>
 <p><img src="sf5_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
 <p>We can also pass a <code>crs</code> object to <code>graticule</code>
 to obtain a graticule in a datum different from the default (WGS84).
-<code>st_graticule</code> takes parameters, and we can pass an object
+<code><a href="../reference/st_graticule.html">st_graticule()</a></code> takes parameters, and we can pass an object
 returned by it to the <code>graticule</code> parameter of
 <code>plot</code>, to get finer control:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
@@ -277,7 +277,7 @@ region of base plots is not easy.</p>
 <h3 id="grid-st_as_grob">grid: <code>st_as_grob</code><a class="anchor" aria-label="anchor" href="#grid-st_as_grob"></a>
 </h3>
 <p>Package <code>sf</code> provides a number of methods for
-<code>st_as_grob</code>:</p>
+<code><a href="../reference/st_as_grob.html">st_as_grob()</a></code>:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/methods.html" class="external-link">methods</a></span><span class="op">(</span><span class="va">st_as_grob</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##  [1] st_as_grob.CIRCULARSTRING*      st_as_grob.COMPOUNDCURVE*      </span></span>
@@ -295,17 +295,17 @@ region of base plots is not easy.</p>
 (“graphics objects”) objects; <code>grob</code>s are the graphic
 primitives of the <code>grid</code> plotting package. These methods can
 be used by plotting packages that build on <code>grid</code>, such as
-<code>ggplot2</code> (which uses them in <code>geom_sf</code>) and
-<code>tmap</code>. In addition, <code>st_viewport</code> can be used to
-set up a grid viewport from an <code>sf</code> object, with an aspect
-ratio similar to that of <code>base::plot.sf</code>.</p>
+<code>ggplot2</code> (which uses them in <code><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf()</a></code>) and
+<code>tmap</code>. In addition, <code><a href="../reference/st_viewport.html">st_viewport()</a></code> can be used
+to set up a grid viewport from an <code>sf</code> object, with an aspect
+ratio similar to that of <code><a href="../reference/plot.html">plot.sf()</a></code>.</p>
 </div>
 <div class="section level3">
 <h3 id="ggplot2">ggplot2<a class="anchor" aria-label="anchor" href="#ggplot2"></a>
 </h3>
 <p>contains a geom specially for simple feature objects, with support
 for graticule white lines in the background using
-<code><a href="../reference/st_graticule.html">sf::st_graticule</a></code>. Support is currently good for polygons;
+<code><a href="../reference/st_graticule.html">sf::st_graticule()</a></code>. Support is currently good for polygons;
 for lines or points, your mileage may vary.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
