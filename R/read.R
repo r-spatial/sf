@@ -37,7 +37,7 @@ set_utf8 = function(x) {
 #' @param options character; driver dependent dataset open options, multiple
 #'   options supported. For possible values, see the "Open options" section
 #'   of the GDAL documentation of the corresponding driver, and
-#'   https://github.com/r-spatial/sf/issues/1157 for an example.
+#'   <https://github.com/r-spatial/sf/issues/1157> for an example.
 #' @param quiet logical; suppress info on name, driver, size and spatial
 #'   reference, or signaling no or multiple layers
 #' @param geometry_column integer or character; in case of multiple geometry
@@ -54,10 +54,10 @@ set_utf8 = function(x) {
 #'   converted to factors?  Default for \code{read_sf} or R version >= 4.1.0 is
 #' \code{FALSE}, for \code{st_read} and R version < 4.1.0 equal to
 #' \code{default.stringsAsFactors()}
-#' @param int64_as_string logical; if TRUE, Int64 attributes are returned as
-#'   string; if FALSE, they are returned as double and a warning is given when
+#' @param int64_as_string logical; if `TRUE`, Int64 attributes are returned as
+#'   string; if `FALSE`, they are returned as double and a warning is given when
 #'   precision is lost (i.e., values are larger than 2^53).
-#' @param check_ring_dir logical; if TRUE, polygon ring directions are checked
+#' @param check_ring_dir logical; if `TRUE`, polygon ring directions are checked
 #'   and if necessary corrected (when seen from above: exterior ring counter
 #'   clockwise, holes clockwise)
 #' @details for \code{geometry_column}, see also
@@ -269,7 +269,7 @@ process_cpl_read_ogr_stream = function(x, geom_column_info, num_features, fid_co
 #' @param drivers character; limited set of driver short names to be tried (default: try all)
 #' @param wkt_filter character; WKT representation of a spatial filter (may be used as bounding box, selecting overlapping geometries); see examples
 #' @param optional logical; passed to \link[base]{as.data.frame}; always \code{TRUE} when \code{as_tibble} is \code{TRUE}
-#' @param use_stream Use TRUE to use the experimental columnar interface introduced in GDAL 3.6.
+#' @param use_stream Use `TRUE` to use the experimental columnar interface introduced in GDAL 3.6.
 #' @note The use of \code{system.file} in examples make sure that examples run regardless where R is installed:
 #' typical users will not use \code{system.file} but give the file name directly, either with full path or relative
 #' to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename
@@ -826,8 +826,8 @@ check_append_delete <- function(append, delete) {
 
 #' @name st_write
 #' @export
-#' @details st_delete deletes layer(s) in a data source, or a data source if layers are
-#' omitted; it returns TRUE on success, FALSE on failure, invisibly.
+#' @details `st_delete()` deletes layer(s) in a data source, or a data source if layers are
+#' omitted; it returns `TRUE` on success, `FALSE` on failure, invisibly.
 st_delete = function(dsn, layer = character(0), driver = guess_driver_can_write(dsn), quiet = FALSE) {
 	invisible(CPL_delete_ogr(dsn, layer, driver, quiet) == 0)
 }

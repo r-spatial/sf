@@ -71,7 +71,7 @@ st_can_transform = function(src, dst) {
 #' ambiguity in the axis order of the specified coordinate reference system;
 #' if you need the traditional GIS order, use \code{"OGC:CRS84"}, not
 #' \code{"EPSG:4326"}. Extra care is needed with the ESRI Shapefile format,
-#' because WKT1 does not store axis order unambigiously.
+#' because WKT1 does not store axis order unambiguously.
 #'
 #' @seealso \link[lwgeom]{st_transform_proj}, part of package lwgeom.
 #' 

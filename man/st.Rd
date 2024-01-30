@@ -55,7 +55,7 @@ st_geometrycollection(x = list(), dims = "XY")
 
 \item{recursive}{logical; ignored}
 
-\item{flatten}{logical; if TRUE, try to simplify results; if FALSE, return geometrycollection containing all objects}
+\item{flatten}{logical; if \code{TRUE}, try to simplify results; if \code{FALSE}, return geometrycollection containing all objects}
 }
 \value{
 object of the same nature as \code{x}, but with appropriate class attribute set

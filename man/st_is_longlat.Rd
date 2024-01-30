@@ -10,7 +10,7 @@ st_is_longlat(x)
 \item{x}{object of class \link{sf} or \link{sfc}, or otherwise an object of a class that has an \link{st_crs} method returning a \code{crs} object}
 }
 \value{
-TRUE if x has geographic coordinates, FALSE if it has projected coordinates, or NA if \code{is.na(st_crs(x))}.
+\code{TRUE} if \code{x} has geographic coordinates, \code{FALSE} if it has projected coordinates, or \code{NA} if \code{is.na(st_crs(x))}.
 }
 \description{
 Assert whether simple feature coordinates are longlat degrees

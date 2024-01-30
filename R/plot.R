@@ -29,7 +29,7 @@ kw_dflt = function(x, key.pos) {
 #' @param pal palette function, similar to \link{rainbow}, or palette values; if omitted, \code{sf.colors} is used
 #' @param nbreaks number of colors breaks (ignored for \code{factor} or \code{character} variables)
 #' @param breaks either a numeric vector with the actual breaks, or a name of a method accepted by the \code{style} argument of \link[classInt]{classIntervals}
-#' @param max.plot integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overriden by setting the global option \code{sf_max.plot}, e.g. \code{options(sf_max.plot=2)}
+#' @param max.plot integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overridden by setting the global option \code{sf_max.plot}, e.g. \code{options(sf_max.plot=2)}
 #' @param key.pos numeric; side to plot a color key: 1 bottom, 2 left, 3 top, 4 right; set to \code{NULL} to omit key completely, 0 to only not plot the key, or -1 to select automatically. If multiple columns are plotted in a single function call by default no key is plotted and every submap is stretched individually; if a key is requested (and \code{col} is missing) all maps are colored according to a single key. Auto select depends on plot size, map aspect, and, if set, parameter \code{asp}. If it has lenght 2, the second value, ranging from 0 to 1, determines where the key is placed in the available space (default: 0.5, center).
 #' @param key.width amount of space reserved for the key (incl. labels), thickness/width of the scale bar
 #' @param key.length amount of space reserved for the key along its axis, length of the scale bar

@@ -28,11 +28,11 @@ manipulated, where manipulations include
 
 ## Type transformations
 
-This sections discusses how simple feature geometries of one type can be converted to another. For converting lines to polygons, see also `st_polygonize` below.
+This sections discusses how simple feature geometries of one type can be converted to another. For converting lines to polygons, see also `st_polygonize()` below.
 
 ### For single geometries
 
-For single geometries, `st_cast` will
+For single geometries, `st_cast()` will
 
 1. convert from XX to MULTIXX, e.g. `LINESTRING` to `MULTILINESTRING`
 2. convert from MULTIXX to XX if MULTIXX has length one (else, it will still convert but warn about loss of information)
@@ -54,7 +54,7 @@ st_geometrycollection(list(st_point(c(1,1)))) %>% st_cast("POINT")
 
 ### For collections of geometry (sfc) and simple feature collections (sf)
 
-It should be noted here that when reading geometries using `st_read`, the `type` argument can be used to control the class of the returned geometry:
+It should be noted here that when reading geometries using `st_read()`, the `type` argument can be used to control the class of the returned geometry:
 ```{r}
 shp = system.file("shape/nc.shp", package="sf")
 class(st_geometry(st_read(shp, quiet = TRUE)))
@@ -64,7 +64,7 @@ class(st_geometry(st_read(shp, quiet = TRUE, type = 1)))
 
 This option is handled by the GDAL library; in case of failure to convert to the target type, the original types are returned, which in this case is a mix of `POLYGON` and `MULTIPOLYGON` geometries, leading to a `GEOMETRY` as superclass. When we try to read multipolygons as polygons, all secondary rings of multipolygons get lost. 
 
-When functions return objects with mixed geometry type (`GEOMETRY`), downstream functions such as `st_write` may have difficulty handling them. For some of these cases, `st_cast` may help modify their type.  For sets of geometry objects (`sfc`) and simple feature sets (`sf), `st_cast` can be used by specifying the target type, or without specifying it. 
+When functions return objects with mixed geometry type (`GEOMETRY`), downstream functions such as `st_write()` may have difficulty handling them. For some of these cases, `st_cast()` may help modify their type.  For sets of geometry objects (`sfc`) and simple feature sets (`sf), `st_cast` can be used by specifying the target type, or without specifying it. 
 
 ```{r}
 ls <- st_linestring(rbind(c(0,0),c(1,1),c(2,1)))
@@ -74,7 +74,7 @@ st_cast(sfc, "MULTILINESTRING")
 sf <- st_sf(a = 5:4, geom = sfc)
 st_cast(sf, "MULTILINESTRING")
 ```
-When no target type is given, `st_cast` tries to be smart for two cases:
+When no target type is given, `st_cast()` tries to be smart for two cases:
 
 1. if the class of the object is `GEOMETRY`, and all elements are of identical type, and
 2. if all elements are length-one `GEOMETRYCOLLECTION` objects, in which case `GEOMETRYCOLLECTION` objects are replaced by their content (which may be a `GEOMETRY` mix again)
@@ -129,7 +129,7 @@ plot(cntrd, col = 'red', add = TRUE, cex = .5)
 ### Getting and setting coordinate reference systems of sf objects
 
 The coordinate reference system of objects of class `sf` or `sfc` is
-obtained by `st_crs`, and replaced by `st_crs<-`:
+obtained by `st_crs()`, and replaced by `st_crs<-`:
 ```{r}
 library(sf)
 geom = st_sfc(st_point(c(0,1)), st_point(c(11,12)))
@@ -163,7 +163,7 @@ a missing value, and then set it to the intended value.
 s3 <- s1  %>% st_set_crs(NA) %>% st_set_crs(3857)
 ```
 To carry out a coordinate conversion or transformation, we use
-`st_transform`
+`st_transform()`
 ```{r}
 s3 <- s1 %>% st_transform(3857)
 s3
@@ -197,20 +197,20 @@ plot(y, border = 'green', add = TRUE)
 
 ### Unary operations
 
-`st_is_valid` returns whether polygon geometries are topologically valid:
+`st_is_valid()` returns whether polygon geometries are topologically valid:
 ```{r}
 b0 = st_polygon(list(rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))))
 b1 = st_polygon(list(rbind(c(-1,-1), c(1,-1), c(1,1), c(0,-1), c(-1,-1))))
 st_is_valid(st_sfc(b0,b1))
 ```
-and `st_is_simple` whether line geometries are simple:
+and `st_is_simple()` whether line geometries are simple:
 ```{r}
 s = st_sfc(st_linestring(rbind(c(0,0), c(1,1))), 
 	st_linestring(rbind(c(0,0), c(1,1),c(0,1),c(1,0))))
 st_is_simple(s)
 ```
 
-`st_area` returns the area of polygon geometries, `st_length` the
+`st_area()` returns the area of polygon geometries, `st_length()` the
 length of line geometries:
 ```{r}
 st_area(x)
@@ -220,12 +220,12 @@ st_length(st_sfc(st_multilinestring(list(rbind(c(0,0),c(1,1),c(1,2))),rbind(c(0,
 ```
 
 ### Binary operations: distance and relate
-`st_distance` computes the shortest distance matrix between geometries; this is
+`st_distance()` computes the shortest distance matrix between geometries; this is
 a dense matrix:
 ```{r}
 st_distance(x,y)
 ```
-`st_relate` returns a dense character matrix with the DE9-IM relationships
+`st_relate()` returns a dense character matrix with the DE9-IM relationships
 between each pair of geometries:
 ```{r}
 st_relate(x,y)
@@ -248,10 +248,10 @@ geometry sets, dense matrices take up a lot of memory and are
 mostly filled with `FALSE` values, hence the default is to return
 a sparse matrix.
 
-`st_intersects` returns for every geometry pair whether they
+`st_intersects()` returns for every geometry pair whether they
 intersect (dense matrix), or which elements intersect (sparse).
-Note that the function `st_intersection` in this package returns
-a geometry for the intersection instead of logicals as in `st_intersects` (see the next section of this vignette).
+Note that `st_intersection()` in this package returns
+a geometry for the intersection instead of logicals as in `st_intersects()` (see the next section of this vignette).
 
 Other binary predicates include (using sparse for readability):
 
@@ -304,16 +304,16 @@ plot(x)
 plot(st_centroid(u), add = TRUE, col = 'red')
 ```
 
-The intersection of two geometries is the geometry covered by both; it is obtained by `st_intersection`:
+The intersection of two geometries is the geometry covered by both; it is obtained by `st_intersection()`:
 ```{r, fig=TRUE}
 plot(x)
 plot(y, add = TRUE)
 plot(st_intersection(st_union(x),st_union(y)), add = TRUE, col = 'red')
 ```
 
-Note that the function `st_intersects` returns a logical matrix indicating whether each geometry pair intersects (see the previous section in this vignette).
+Note that `st_intersects()` returns a logical matrix indicating whether each geometry pair intersects (see the previous section in this vignette).
 
-To get _everything but_ the intersection, use `st_difference` or `st_sym_difference`:
+To get _everything but_ the intersection, use `st_difference()` or `st_sym_difference()`:
 ```{r,fig=TRUE}
 par(mfrow=c(2,2), mar = c(0,0,1,0))
 plot(x, col = '#ff333388'); 
@@ -330,7 +330,7 @@ plot(st_sym_difference(st_union(y),st_union(x)), col = 'lightblue', add = TRUE)
 title("sym_difference(x,y)")
 ```
 
-Function `st_segmentize` adds points to straight line sections of a lines or polygon object:
+`st_segmentize()` adds points to straight line sections of a lines or polygon object:
 ```{r,fig=TRUE}
 par(mfrow=c(1,3),mar=c(1,1,0,0))
 pts = rbind(c(0,0),c(1,0),c(2,1),c(3,1))
@@ -347,7 +347,7 @@ plot(pol.seg, col = 'grey')
 points(pol.seg[[1]])
 ```
 
-Function `st_polygonize` polygonizes a multilinestring, as long as the points form a closed polygon:
+`st_polygonize()` polygonizes a multilinestring, as long as the points form a closed polygon:
 ```{r,fig=TRUE}
 par(mfrow=c(1,2),mar=c(0,0,1,0))
 mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))

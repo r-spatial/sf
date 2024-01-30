@@ -15,7 +15,7 @@
 #' @param mitreLimit numeric; limit of extension for a join if \code{joinStyle} 'MITRE' is used (default 1.0, minimum 0.0); see details
 #' @param singleSide logical; if \code{TRUE}, single-sided buffers are returned for linear geometries,
 #' in which case negative \code{dist} values give buffers on the right-hand side, positive on the left; see details
-#' @param ... passed on to \code{s2_buffer_cells}
+#' @param ... passed on to  [s2::s2_buffer_cells()]
 #' @return an object of the same class of \code{x}, with manipulated geometry.
 #' @export
 #' @details \code{st_buffer} computes a buffer around this geometry/each geometry. If any of \code{endCapStyle},
@@ -817,7 +817,7 @@ get_first_sfg = function(x) {
 #' @note To find whether pairs of simple feature geometries intersect, use
 #' the function \code{\link{st_intersects}} instead of \code{st_intersection}.
 #'
-#' When using GEOS and not using s2 polygons contain their boundary. When using s2 this is determined by the \code{model} defaults of \link[s2]{s2_options}, which can be overriden via the ... argument, e.g. \code{model = "closed"} to force DE-9IM compliant behaviour of polygons (and reproduce GEOS results).
+#' When using GEOS and not using s2 polygons contain their boundary. When using s2 this is determined by the \code{model} defaults of \link[s2]{s2_options}, which can be overridden via the ... argument, e.g. \code{model = "closed"} to force DE-9IM compliant behaviour of polygons (and reproduce GEOS results).
 #' @examples
 #' set.seed(131)
 #' library(sf)
@@ -899,7 +899,7 @@ st_difference.sfg = function(x, y, ...)
 #' numbers in the argument to \code{x}; geometries that are empty
 #' or contained fully inside geometries with higher priority are removed entirely.
 #' The \code{st_difference.sfc} method with a single argument returns an object with
-#' an \code{"idx"} attribute with the orginal index for returned geometries.
+#' an \code{"idx"} attribute with the original index for returned geometries.
 st_difference.sfc = function(x, y, ...) {
 	if (missing(y)) {
 		if (isTRUE(st_is_longlat(x)))
@@ -978,16 +978,21 @@ st_snap.sf = function(x, y, tolerance)
 
 #' @name geos_combine
 #' @export
-#' @param by_feature logical; if TRUE, union each feature if \code{y} is missing or else each pair of features; if FALSE return a single feature that is the geometric union of the set of features in \code{x} if \code{y} is missing, or else the unions of each of the elements of the Cartesian product of both sets
-#' @param is_coverage logical; if TRUE, use an optimized algorithm for features that form a polygonal coverage (have no overlaps)
+#' @param by_feature logical; if `TRUE`, union each feature if \code{y} is missing or else each pair of features; if `FALSE` return a single feature that is the geometric union of the set of features in \code{x} if \code{y} is missing, or else the unions of each of the elements of the Cartesian product of both sets
+#' @param is_coverage logical; if `TRUE`, use an optimized algorithm for features that form a polygonal coverage (have no overlaps)
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg} (optional)
 #' @param ... ignored
 #' @seealso \link{st_intersection}, \link{st_difference}, \link{st_sym_difference}
 #' @return If \code{y} is missing, \code{st_union(x)} returns a single geometry with resolved boundaries, else the geometries for all unioned pairs of `x[i]` and `y[j]`.
 #' @details
-#' If \code{st_union} is called with a single argument, \code{x}, (with \code{y} missing) and \code{by_feature} is \code{FALSE} all geometries are unioned together and an \code{sfg} or single-geometry \code{sfc} object is returned. If \code{by_feature} is \code{TRUE} each feature geometry is unioned individually. This can for instance be used to resolve internal boundaries after polygons were combined using \code{st_combine}. If \code{y} is provided, all elements of \code{x} and \code{y} are unioned, pairwise if \code{by_feature} is TRUE, or else as the Cartesian product of both sets. 
+#' If \code{st_union} is called with a single argument, \code{x}, (with \code{y} missing) and \code{by_feature} is \code{FALSE} all geometries are unioned together and an \code{sfg} or single-geometry \code{sfc} object is returned.
+#' If \code{by_feature} is \code{TRUE} each feature geometry is unioned individually.
+#' This can for instance be used to resolve internal boundaries after polygons were combined using \code{st_combine}. 
+#' If \code{y} is provided, all elements of \code{x} and \code{y} are unioned, pairwise if \code{by_feature} is TRUE, or else as the Cartesian product of both sets. 
 #'
-#' Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together). Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context "fully noded" means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input. "Dissolved" means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.	Unioning a set of Points has the effect of merging all identical points (producing a set with no duplicates).
+#' Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together).
+#' Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context "fully noded" means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input.
+#' "Dissolved" means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.	Unioning a set of Points has the effect of merging all identical points (producing a set with no duplicates).
 #' @examples
 #' plot(st_union(nc))
 st_union = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) UseMethod("st_union")
