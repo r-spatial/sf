@@ -381,7 +381,7 @@ st_sf = function(..., agr = NA_agr_, row.names,
 
 #' @export
 "[<-.sf" = function(x, i, j, value) {
-	st_set_agr(NextMethod())
+	st_as_sf(st_set_agr(NextMethod()))
 }
 
 #' @export
