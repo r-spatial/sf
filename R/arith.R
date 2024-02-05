@@ -136,12 +136,12 @@ Ops.sfc <- function(e1, e2) {
 	if (is.numeric(e2) && !is.matrix(e2) && length(e2) <= 2 && .Generic %in% c("+", "-")) {
 		if (.Generic == "-")
 			e2 <- -e2
-		return(opp_sfc(e1, as.numeric(e2), 0L, NA_crs_))
+		return(opp_sfc(e1, as.numeric(e2), 0L, st_crs(e1)))
 	} else if (.Generic %in% c("*", "/") && is.numeric(e2) && (length(e2) == 1 || is_only_diag(e2))) {
 		if (is.matrix(e2)) e2 <- diag(e2)
 		if (.Generic == "/")
 			e2 <- 1 / e2
-		return(opp_sfc(e1, as.numeric(e2), 1L, NA_crs_))
+		return(opp_sfc(e1, as.numeric(e2), 1L, st_crs(e1)))
 	}
 	if ((is.matrix(e2) && ncol(e2) == 2) || (is.numeric(e2) && length(e2) == 2))
 		e1 = st_zm(e1) # drop z and/or m
@@ -167,7 +167,8 @@ Ops.sfc <- function(e1, e2) {
 		crs = if (.Generic %in% c("&", "|", "%/%", "/") && inherits(e2, c("sfc", "sfg"))) # retain:
 			st_crs(e1)
 		else # geometry got displaced:
-			NA_crs_
+			# sfc - sfc
+			st_crs(e1)
 		st_sfc(ret, crs = crs, precision = attr(e1, "precision"))
 	} else
 		ret
