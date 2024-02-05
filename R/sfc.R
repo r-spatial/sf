@@ -600,7 +600,8 @@ st_as_sfc.blob = function(x, ...) {
 
 #' @name st_as_sfc
 #' @export
-st_as_sfc.bbox = function(x, ...) {
+st_as_sfc.bbox = function(x, crs=NA_crs_, ...) {
 	box = st_polygon(list(matrix(x[c(1, 2, 3, 2, 3, 4, 1, 4, 1, 2)], ncol = 2, byrow = TRUE)))
-	st_sfc(box, crs = st_crs(x))
+	if (is.na(crs)) crs <- st_crs(x)
+	st_sfc(box, crs = crs)
 }
