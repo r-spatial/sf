@@ -26,7 +26,7 @@ entries for this vignette (as for the others).
 
 EPSG stands for a maintained, well-understood registry of spatial
 reference systems, maintained by the International Association
-of Oil \& Gass Producers (IOGP). `EPSG` stands for the authority,
+of Oil \& Gas Producers (IOGP). `EPSG` stands for the authority,
 e.g. `EPSG:4326` stands for spatial reference system with ID 4326
 as it is maintained by the EPSG authority. The website for the EPSG
 registry is found at the epsg.org domain. Using `4326` instead of
