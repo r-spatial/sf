@@ -13,7 +13,7 @@ st_shift_longitude(x)
 \method{st_shift_longitude}{sf}(x, ...)
 }
 \arguments{
-\item{x}{object of class \code{sf} or \code{sfc}.}
+\item{x}{object of class \code{sf} or \code{sfc}}
 
 \item{...}{ignored}
 }
