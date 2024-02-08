@@ -124,30 +124,27 @@ st_geometry.sfg = function(obj, ...) st_sfc(obj)
 `st_geometry<-` = function(x, value) UseMethod("st_geometry<-")
 
 #' @export
-`st_geometry<-.data.frame` = function(x, value) {
-	stopifnot(inherits(value, "sfc") || is.character(value))
-	if (inherits(value, "sfc"))
-		stopifnot(nrow(x) == length(value))
-	if (is.character(value))
-		st_sf(x, sf_column_name = value)
-	else {
-		a = vapply(x, function(v) inherits(v, "sfc"), TRUE)
-		if (any(a)) {
-			w = which(a)
-			sf_col = attr(x, "sf_column")
-			if (! is.null(sf_col))
-				x[[ sf_col ]] = value
-			else {
-				if (length(w) > 1)
-					warning("overwriting first sfc column")
-				x[[ which(a)[1L] ]] = value
-			}
-		} else
-			x$geometry = value
-		st_sf(x)
-	}
+`st_geometry<-.data.frame` <- function (x, value) {
+    stopifnot(inherits(value, "sfc") || is.character(value))
+    if (inherits(value, "sfc")) 
+        stopifnot(nrow(x) == length(value))
+    if (is.character(value)) 
+        st_sf(x, sf_column_name = value)
+    else {
+        a = vapply(x, function(v) inherits(v, "sfc"), TRUE)
+        sf_col = attr(x, "sf_column")
+        if (!is.null(sf_col))
+          x[[sf_col]] = value
+        else if (any(a)) { 
+          w = which(a)
+          if (length(w) > 1)
+            warning("overwriting first sfc column")
+          x[[which(a)[1L]]] = value
+        }
+        else x$geometry = value
+        st_sf(x)
+    }
 }
-
 
 #' @export
 `st_geometry<-.sf` = function(x, value) {
@@ -457,6 +454,7 @@ merge.sf = function(x, y, ...) {
 	class(ret) = setdiff(class(ret), "sf")
 	g = ret[[sf_column]] # may have NULL values in it
 	ret[[sf_column]] = NULL
+	attr(ret, "sf_column") <- sf_column
 	st_set_geometry(ret, st_sfc(g)) # FIXME: set agr
 }
 
