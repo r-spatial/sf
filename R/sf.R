@@ -456,8 +456,8 @@ merge.sf = function(x, y, ...) {
 	ret = NextMethod() # if data.table, drops sf_column attribute;
 	class(ret) = setdiff(class(ret), "sf")
 	g = ret[[sf_column]] # may have NULL values in it
-	ret[[sf_column]] = NULL
-	st_set_geometry(ret, st_sfc(g)) # FIXME: set agr
+	ret[[sf_column]] = st_sfc(g) # fix NULL values
+	st_set_geometry(ret, sf_column) # FIXME: set agr
 }
 
 #' @export

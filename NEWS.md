@@ -1,5 +1,7 @@
 # version 1.0-16
 
+* `merge.sf()` no longer renames geometry column; #2334
+
 * `[.sfc` works when setting argument `op`; #2320
 
 * `st_sample()` for polygons is sensitive to setting `oriented = TRUE` to prevent wrongly correcting ring directions; #2308
