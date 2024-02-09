@@ -174,8 +174,7 @@ st_join.sf = function(x, y, join = st_intersects, ..., suffix = c(".x", ".y"),
 	if (inherits(x, "tbl_df") && requireNamespace("dplyr", quietly = TRUE))
 		st_sf(dplyr::bind_cols(x[ix,], y[unlist(i), , drop = FALSE]))
   	else
-	        st_sf(cbind(as.data.frame(x)[ix, ,drop=FALSE], y[unlist(i), , drop = FALSE]))
-	
+		st_sf(cbind(as.data.frame(x)[ix, ,drop=FALSE], y[unlist(i), , drop = FALSE]))
 }
 
 #' @export
