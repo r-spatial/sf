@@ -1,11 +1,11 @@
 kw_dflt = function(x, key.pos) {
-	if (is.null(key.pos) || key.pos == 0) # no key:
+	if (is.null(key.pos) || key.pos[1] == 0) # no key:
 		return(lcm(0))
 
 	font_scale = par("ps") / 12
-	if (key.pos == -1)
+	if (key.pos[1] == -1)
 		lcm(1.8 * font_scale)
-	else if (key.pos %in% c(2, 4) && (is.character(x[[1]]) || is.factor(x[[1]]))) {
+	else if (key.pos[1] %in% c(2, 4) && (is.character(x[[1]]) || is.factor(x[[1]]))) {
 		strings = if (is.factor(x[[1]]))
 				levels(x[[1]])
 			else
@@ -111,7 +111,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 	if (ncol(x) > 2 && !isTRUE(dots$add)) { # multiple maps to plot...
 		cols = setdiff(names(x), attr(x, "sf_column"))
 		lt = .get_layout(st_bbox(x), min(max.plot, length(cols)), par("din"), key.pos[1], key.width)
-		if (key.pos.missing || key.pos == -1)
+		if (key.pos.missing || key.pos[1] == -1)
 			key.pos = lt$key.pos
 		layout(lt$m, widths = lt$widths, heights = lt$heights, respect = compact)
 
