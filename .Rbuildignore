@@ -23,3 +23,5 @@ NOTES
 vignettes.awk
 ^\.gitattributes$
 _pkgdown.yml
+docs
+pkgdown/
