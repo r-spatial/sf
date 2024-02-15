@@ -1,4 +1,4 @@
-## dplyr methods:
+## dplyr methods: ------
 #group_map.sf <- function(.tbl, .f, ...) {
 #	 st_as_sf(NextMethod()) # nocov
 #}
@@ -375,7 +375,7 @@ distinct.sf <- function(.data, ..., .keep_all = FALSE) {
 	}
 }
 
-## tidyr methods:
+## tidyr methods: --------
 
 #' @name tidyverse
 #' @param data see original function docs
@@ -404,20 +404,11 @@ gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, fac
 		sf_column_name = attr(data, "sf_column"))
 }
 
-#' @name tidyverse
+#' @rdname tidyverse
 #' @param data see original function docs
 #' @param cols see original function docs
-#' @param names_to see original function docs
-#' @param names_prefix see original function docs
-#' @param names_sep see original function docs
-#' @param names_pattern see original function docs
-#' @param names_ptypes see original function docs
-#' @param names_transform see original function docs
-#' @param names_repair see original function docs
-#' @param values_to see original function docs
-#' @param values_drop_na see original function docs
-#' @param values_ptypes see original function docs
-#' @param values_transform see original function docs
+#' @param names_to,names_prefix,names_sep,names_pattern,names_ptype,names_transform,names_repair see [tidyr::pivot_longer()]
+#' @param values_to,values_drop_na,value_ptypes,values_transform See [tidyr::pivot_longer()]
 pivot_longer.sf <- function (data, cols, names_to = "name", names_prefix = NULL,
 		names_sep = NULL, names_pattern = NULL, names_ptypes = NULL,
 		names_transform = NULL, names_repair = "check_unique",
@@ -452,23 +443,12 @@ pivot_longer.sf <- function (data, cols, names_to = "name", names_prefix = NULL,
   st_as_sf(out, sf_column_name = sf_column_name)
 }
 
-globalVariables(c("name", "value"))
+utils::globalVariables(c("name", "value"))
 # https://github.com/r-spatial/sf/issues/1915
-#' @name tidyverse
-#' @export
-#' @param id_cols see original function docs
-#' @param id_expand see original function docs
-#' @param names_from see original function docs
-#' @param names_prefix see original function docs
-#' @param names_sep see original function docs
-#' @param names_glue see original function docs
-#' @param names_sort see original function docs
-#' @param names_vary see original function docs
-#' @param names_expand see original function docs
-#' @param names_repair see original function docs
-#' @param values_from see original function docs
-#' @param values_fill see original function docs
-#' @param values_fn see original function docs
+#' @rdname tidyverse
+#' @param id_cols,id_expand see [tidyr::pivot_wider()]
+#' @param names_from,names_prefix,names_sep,names_glue,names_sort,names_wary,names_repair see [tidyr::pivot_wider()].
+#' @param values_from,values_fill,values_fn see [tidyr::pivot_wider()]
 #' @param unused_fn see original function docs
 pivot_wider.sf = function(data, 
 						  ..., 
@@ -644,12 +624,19 @@ unnest.sf = function(data, ..., .preserve = NULL) {
 	# nocov end
 }
 
-## tibble methods:
+#' @name tidyverse
+drop_na.sf <- function(x, ...) {
+	sf_column_name = attr(x, "sf_column")
+	class(x) <- setdiff(class(x), "sf")
+	st_as_sf(NextMethod(), sf_column_name = sf_column_name)
+}
+
+## tibble methods: -------
 
 #' Summarize simple feature type for tibble
 #'
-#' Summarize simple feature type for tibble
-#' @param x object of class sfc
+#' Summarize simple feature type / item for tibble
+#' @param x object of class `sfc`
 #' @param ... ignored
 #' @name tibble
 #' @details see \link[pillar]{type_sum}
@@ -661,15 +648,12 @@ type_sum.sfc <- function(x, ...) {
 	cls
 }
 
-#' Summarize simple feature item for tibble
-#'
-#' Summarize simple feature item for tibble
-#' @name tibble
+#' @rdname tibble
 obj_sum.sfc <- function(x) {
 	vapply(x, function(sfg) format(sfg, width = 15L), "")
 }
 
-#' @name tibble
+#' @rdname tibble
 pillar_shaft.sfc <- function(x, ...) {
 	digits = options("pillar.sigfig")$pillar.sigfig
 	if (is.null(digits))
@@ -678,13 +662,6 @@ pillar_shaft.sfc <- function(x, ...) {
 	if (!inherits(x, "sfc_GEOMETRY") && !inherits(x, "sfc_GEOMETRYCOLLECTION"))
 		out <- sub("[A-Z]+ ", "", out)
 	pillar::new_pillar_shaft_simple(out, align = "right", min_width = 25)
-}
-
-#' @name tidyverse
-drop_na.sf <- function(x, ...) {
-	sf_column_name = attr(x, "sf_column")
-	class(x) <- setdiff(class(x), "sf")
-	st_as_sf(NextMethod(), sf_column_name = sf_column_name)
 }
 
 #nocov start

@@ -35,7 +35,7 @@
 \alias{full_join.sf}
 \alias{semi_join.sf}
 \alias{anti_join.sf}
-\title{Tidyverse methods for sf objects (remove .sf suffix!)}
+\title{Tidyverse methods for sf objects}
 \usage{
 filter.sf(.data, ..., .dots)
 
@@ -200,47 +200,15 @@ more details.}
 
 \item{cols}{see original function docs}
 
-\item{names_to}{see original function docs}
+\item{names_to, names_prefix, names_sep, names_pattern, names_ptype, names_transform, names_repair}{see \code{\link[tidyr:pivot_longer]{tidyr::pivot_longer()}}}
 
-\item{names_prefix}{see original function docs}
+\item{values_to, values_drop_na, value_ptypes, values_transform}{See \code{\link[tidyr:pivot_longer]{tidyr::pivot_longer()}}}
 
-\item{names_sep}{see original function docs}
+\item{id_cols, id_expand}{see \code{\link[tidyr:pivot_wider]{tidyr::pivot_wider()}}}
 
-\item{names_pattern}{see original function docs}
+\item{names_from, names_prefix, names_sep, names_glue, names_sort, names_wary, names_repair}{see \code{\link[tidyr:pivot_wider]{tidyr::pivot_wider()}}.}
 
-\item{names_ptypes}{see original function docs}
-
-\item{names_transform}{see original function docs}
-
-\item{names_repair}{see original function docs}
-
-\item{values_to}{see original function docs}
-
-\item{values_drop_na}{see original function docs}
-
-\item{values_ptypes}{see original function docs}
-
-\item{values_transform}{see original function docs}
-
-\item{id_cols}{see original function docs}
-
-\item{id_expand}{see original function docs}
-
-\item{names_from}{see original function docs}
-
-\item{names_glue}{see original function docs}
-
-\item{names_sort}{see original function docs}
-
-\item{names_vary}{see original function docs}
-
-\item{names_expand}{see original function docs}
-
-\item{values_from}{see original function docs}
-
-\item{values_fill}{see original function docs}
-
-\item{values_fn}{see original function docs}
+\item{values_from, values_fill, values_fn}{see \code{\link[tidyr:pivot_wider]{tidyr::pivot_wider()}}}
 
 \item{unused_fn}{see original function docs}
 
@@ -316,7 +284,8 @@ Should be a character vector of length 2.}
 an object of class \link{sf}
 }
 \description{
-Tidyverse methods for sf objects. Geometries are sticky, use \link{as.data.frame} to let \code{dplyr}'s own methods drop them. Use these methods without the .sf suffix and after loading the tidyverse package with the generic (or after loading package tidyverse).
+Tidyverse methods for sf objects. Geometries are sticky, use \link{as.data.frame} to let \code{dplyr}'s own methods drop them.
+Use these methods after loading the tidyverse package with the generic (or after loading package tidyverse).
 }
 \details{
 \code{select} keeps the geometry regardless whether it is selected or not; to deselect it, first pipe through \code{as.data.frame} to let dplyr's own \code{select} drop it.
