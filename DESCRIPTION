@@ -120,8 +120,8 @@ SystemRequirements: GDAL (>= 2.0.1), GEOS (>= 3.4.0),
     PROJ (>= 4.8.0), sqlite3
 Collate: 
     'RcppExports.R'
-    'import-standalone-s3-register.R'
     'init.R'
+    'import-standalone-s3-register.R'
     'crs.R'
     'bbox.R'
     'read.R'

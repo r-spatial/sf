@@ -666,12 +666,6 @@ pillar_shaft.sfc <- function(x, ...) {
 
 #nocov start
 register_all_s3_methods = function() {
-	has_dplyr_1.0 =
-		requireNamespace("dplyr", quietly = TRUE) &&
-		utils::packageVersion("dplyr") >= "0.8.99.9000"
-
-	if (!has_dplyr_1.0) stop("dplyr (>= 1.0) is required.", call. = FALSE)
-		
 	s3_register("dplyr::dplyr_reconstruct", "sf")
 	s3_register("dplyr::anti_join", "sf")
 	s3_register("dplyr::arrange", "sf")
