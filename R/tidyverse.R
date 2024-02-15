@@ -22,9 +22,10 @@ dplyr_reconstruct.sf = function(data, template) {
 	)
 }
 
-#' Tidyverse methods for sf objects (remove .sf suffix!)
+#' Tidyverse methods for sf objects
 #'
-#' Tidyverse methods for sf objects. Geometries are sticky, use \link{as.data.frame} to let \code{dplyr}'s own methods drop them. Use these methods without the .sf suffix and after loading the tidyverse package with the generic (or after loading package tidyverse).
+#' Tidyverse methods for sf objects. Geometries are sticky, use \link{as.data.frame} to let \code{dplyr}'s own methods drop them.
+#' Use these methods after loading the tidyverse package with the generic (or after loading package tidyverse).
 #' @param .data data object of class \link{sf}
 #' @param .dots see corresponding function in package \code{dplyr}
 #' @param ... other arguments
@@ -692,86 +693,61 @@ register_all_s3_methods = function() {
 		requireNamespace("dplyr", quietly = TRUE) &&
 		utils::packageVersion("dplyr") >= "0.8.99.9000"
 
-	if (has_dplyr_1.0)
-		register_s3_method("dplyr", "dplyr_reconstruct", "sf")
-	register_s3_method("dplyr", "anti_join", "sf")
-	register_s3_method("dplyr", "arrange", "sf")
-	register_s3_method("dplyr", "distinct", "sf")
-	register_s3_method("dplyr", "filter", "sf")
-	register_s3_method("dplyr", "full_join", "sf")
-	register_s3_method("dplyr", "group_by", "sf")
-#	register_s3_method("dplyr", "group_map", "sf")
-	register_s3_method("dplyr", "group_split", "sf")
-	register_s3_method("dplyr", "inner_join", "sf")
-	register_s3_method("dplyr", "left_join", "sf")
-	register_s3_method("dplyr", "mutate", "sf")
-	register_s3_method("dplyr", "rename", "sf")
-	register_s3_method("dplyr", "rename_with", "sf")
-	register_s3_method("dplyr", "right_join", "sf")
-	register_s3_method("dplyr", "rowwise", "sf")
-	register_s3_method("dplyr", "sample_frac", "sf")
-	register_s3_method("dplyr", "sample_n", "sf")
-	register_s3_method("dplyr", "select", "sf")
-	register_s3_method("dplyr", "semi_join", "sf")
-	register_s3_method("dplyr", "slice", "sf")
-	register_s3_method("dplyr", "summarise", "sf")
-	register_s3_method("dplyr", "transmute", "sf")
-	register_s3_method("dplyr", "ungroup", "sf")
-	register_s3_method("tidyr", "drop_na", "sf")
-	register_s3_method("tidyr", "gather", "sf")
-	register_s3_method("tidyr", "pivot_longer", "sf")
-	register_s3_method("tidyr", "pivot_wider", "sf")
-	register_s3_method("tidyr", "spread", "sf")
-	register_s3_method("tidyr", "nest", "sf")
-	register_s3_method("tidyr", "separate", "sf")
-	register_s3_method("tidyr", "separate_rows", "sf")
-	register_s3_method("tidyr", "unite", "sf")
-	register_s3_method("tidyr", "unnest", "sf")
-	register_s3_method("pillar", "obj_sum", "sfc")
-	register_s3_method("pillar", "type_sum", "sfc")
-	register_s3_method("pillar", "pillar_shaft", "sfc")
-	register_s3_method("spatstat.geom", "as.ppp", "sfc")
-	register_s3_method("spatstat.geom", "as.ppp", "sf")
-	register_s3_method("spatstat.geom", "as.owin", "POLYGON")
-	register_s3_method("spatstat.geom", "as.owin", "MULTIPOLYGON")
-	register_s3_method("spatstat.geom", "as.owin", "sfc_POLYGON")
-	register_s3_method("spatstat.geom", "as.owin", "sfc_MULTIPOLYGON")
-	register_s3_method("spatstat.geom", "as.owin", "sfc")
-	register_s3_method("spatstat.geom", "as.owin", "sf")
-	register_s3_method("spatstat.geom", "as.psp", "LINESTRING")
-	register_s3_method("spatstat.geom", "as.psp", "MULTILINESTRING")
-	register_s3_method("spatstat.geom", "as.psp", "sfc_MULTILINESTRING")
-	register_s3_method("spatstat.geom", "as.psp", "sfc")
-	register_s3_method("spatstat.geom", "as.psp", "sf")
-	register_s3_method("s2", "as_s2_geography", "sfg")
-	register_s3_method("s2", "as_s2_geography", "sfc")
-	register_s3_method("s2", "as_s2_geography", "sf")
+	if (!has_dplyr_1.0) stop("dplyr (>= 1.0) is required.", call. = FALSE)
+		
+	s3_register("dplyr::dplyr_reconstruct", "sf")
+	s3_register("dplyr::anti_join", "sf")
+	s3_register("dplyr::arrange", "sf")
+	s3_register("dplyr::distinct", "sf")
+	s3_register("dplyr::filter", "sf")
+	s3_register("dplyr::full_join", "sf")
+	s3_register("dplyr::group_by", "sf")
+#	s3_register("dplyr::group_map", "sf")
+	s3_register("dplyr::group_split", "sf")
+	s3_register("dplyr::inner_join", "sf")
+	s3_register("dplyr::left_join", "sf")
+	s3_register("dplyr::mutate", "sf")
+	s3_register("dplyr::rename", "sf")
+	s3_register("dplyr::rename_with", "sf")
+	s3_register("dplyr::right_join", "sf")
+	s3_register("dplyr::rowwise", "sf")
+	s3_register("dplyr::sample_frac", "sf")
+	s3_register("dplyr::sample_n", "sf")
+	s3_register("dplyr::select", "sf")
+	s3_register("dplyr::semi_join", "sf")
+	s3_register("dplyr::slice", "sf")
+	s3_register("dplyr::summarise", "sf")
+	s3_register("dplyr::transmute", "sf")
+	s3_register("dplyr::ungroup", "sf")
+	s3_register("tidyr::drop_na", "sf")
+	s3_register("tidyr::gather", "sf")
+	s3_register("tidyr::pivot_longer", "sf")
+	s3_register("tidyr::pivot_wider", "sf")
+	s3_register("tidyr::spread", "sf")
+	s3_register("tidyr::nest", "sf")
+	s3_register("tidyr::separate", "sf")
+	s3_register("tidyr::separate_rows", "sf")
+	s3_register("tidyr::unite", "sf")
+	s3_register("tidyr::unnest", "sf")
+	s3_register("pillar::obj_sum", "sfc")
+	s3_register("pillar::type_sum", "sfc")
+	s3_register("pillar::pillar_shaft", "sfc")
+	s3_register("spatstat.geom::as.ppp", "sfc")
+	s3_register("spatstat.geom::as.ppp", "sf")
+	s3_register("spatstat.geom::as.owin", "POLYGON")
+	s3_register("spatstat.geom::as.owin", "MULTIPOLYGON")
+	s3_register("spatstat.geom::as.owin", "sfc_POLYGON")
+	s3_register("spatstat.geom::as.owin", "sfc_MULTIPOLYGON")
+	s3_register("spatstat.geom::as.owin", "sfc")
+	s3_register("spatstat.geom::as.owin", "sf")
+	s3_register("spatstat.geom::as.psp", "LINESTRING")
+	s3_register("spatstat.geom::as.psp", "MULTILINESTRING")
+	s3_register("spatstat.geom::as.psp", "sfc_MULTILINESTRING")
+	s3_register("spatstat.geom::as.psp", "sfc")
+	s3_register("spatstat.geom::as.psp", "sf")
+	s3_register("s2::as_s2_geography", "sfg")
+	s3_register("s2::as_s2_geography", "sfc")
+	s3_register("s2::as_s2_geography", "sf")
 	register_vctrs_methods()
-}
-
-# from: https://github.com/tidyverse/hms/blob/main/R/zzz.R
-# Thu Apr 19 10:53:24 CEST 2018
-register_s3_method <- function(pkg, generic, class, fun = NULL) {
-  stopifnot(is.character(pkg), length(pkg) == 1)
-  stopifnot(is.character(generic), length(generic) == 1)
-  stopifnot(is.character(class), length(class) == 1)
-
-  if (is.null(fun)) {
-    fun <- get(paste0(generic, ".", class), envir = parent.frame())
-  } else {
-    stopifnot(is.function(fun))
-  }
-
-  if (pkg %in% loadedNamespaces()) {
-    registerS3method(generic, class, fun, envir = asNamespace(pkg))
-  }
-
-  # Always register hook in case package is later unloaded & reloaded
-  setHook(
-    packageEvent(pkg, "onLoad"),
-    function(...) {
-      registerS3method(generic, class, fun, envir = asNamespace(pkg))
-    }
-  )
 }
 # nocov end
