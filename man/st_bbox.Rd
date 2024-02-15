@@ -3,7 +3,6 @@
 \docType{data}
 \name{st_bbox}
 \alias{st_bbox}
-\alias{is.na.bbox}
 \alias{st_bbox.POINT}
 \alias{st_bbox.MULTIPOINT}
 \alias{st_bbox.LINESTRING}
@@ -26,14 +25,11 @@
 \alias{st_bbox.Extent}
 \alias{st_bbox.numeric}
 \alias{NA_bbox_}
-\alias{format.bbox}
 \title{Return bounding of a simple feature or simple feature set}
 \format{
 An object of class \code{bbox} of length 4.
 }
 \usage{
-\method{is.na}{bbox}(x)
-
 st_bbox(obj, ...)
 
 \method{st_bbox}{POINT}(obj, ...)
@@ -79,15 +75,9 @@ st_bbox(obj, ...)
 \method{st_bbox}{numeric}(obj, ..., crs = NA_crs_)
 
 NA_bbox_
-
-\method{format}{bbox}(x, ...)
 }
 \arguments{
-\item{x}{object of class \code{bbox}}
-
 \item{obj}{object to compute the bounding box from}
-
-\item{...}{for format.bbox, passed on to \link[base]{format} to format individual numbers}
 
 \item{crs}{object of class \code{crs}, or argument to \link{st_crs}, specifying the CRS of this bounding box.}
 }
@@ -100,7 +90,7 @@ corresponding to \code{obj} (and hence the bounding box). \link{st_as_sfc} has a
 methods for \code{bbox} objects to generate a polygon around the four bounding box points.
 }
 \description{
-Return bounding of a simple feature or simple feature set
+Return bounding of a simple feature or simple feature set.
 }
 \details{
 \code{NA_bbox_} represents the missing value for a \code{bbox} object

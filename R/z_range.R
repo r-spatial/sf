@@ -1,6 +1,4 @@
 
-#' @name st_z_range
-#' @param x object of class \code{z_range}
 #' @export
 is.na.z_range = function(x) identical(x, NA_z_range_)
 

@@ -15,7 +15,6 @@
 \alias{st_crs<-.sfc}
 \alias{st_set_crs}
 \alias{NA_crs_}
-\alias{is.na.crs}
 \alias{$.crs}
 \alias{format.crs}
 \alias{st_axis_order}
@@ -49,8 +48,6 @@ st_crs(x) <- value
 st_set_crs(x, value)
 
 NA_crs_
-
-\method{is.na}{crs}(x)
 
 \method{$}{crs}(x, name)
 
