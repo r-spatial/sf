@@ -404,11 +404,11 @@ gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, fac
 		sf_column_name = attr(data, "sf_column"))
 }
 
-#' @rdname tidyverse
+#' @name tidyverse
 #' @param data see original function docs
 #' @param cols see original function docs
-#' @param names_to,names_prefix,names_sep,names_pattern,names_ptype,names_transform,names_repair see [tidyr::pivot_longer()]
-#' @param values_to,values_drop_na,value_ptypes,values_transform See [tidyr::pivot_longer()]
+#' @param names_to,names_pattern,names_ptypes,names_transform see [tidyr::pivot_longer()]
+#' @param values_to,values_drop_na,values_ptypes,values_transform See [tidyr::pivot_longer()]
 pivot_longer.sf <- function (data, cols, names_to = "name", names_prefix = NULL,
 		names_sep = NULL, names_pattern = NULL, names_ptypes = NULL,
 		names_transform = NULL, names_repair = "check_unique",
@@ -443,13 +443,13 @@ pivot_longer.sf <- function (data, cols, names_to = "name", names_prefix = NULL,
   st_as_sf(out, sf_column_name = sf_column_name)
 }
 
-utils::globalVariables(c("name", "value"))
+globalVariables(c("name", "value"))
 # https://github.com/r-spatial/sf/issues/1915
-#' @rdname tidyverse
-#' @param id_cols,id_expand see [tidyr::pivot_wider()]
-#' @param names_from,names_prefix,names_sep,names_glue,names_sort,names_wary,names_repair see [tidyr::pivot_wider()].
-#' @param values_from,values_fill,values_fn see [tidyr::pivot_wider()]
-#' @param unused_fn see original function docs
+#' @name tidyverse
+#' @param id_cols,id_expand,names_from,names_sort,names_glue,names_vary,names_expand see [tidyr::pivot_wider()]
+# names_prefix,names_sep and names_repair are shared between pivot_longer() and pivot_wider()
+#' @param names_prefix,names_sep,names_repair see original function docs.
+#' @param values_from,values_fill,values_fn,unused_fn see [tidyr::pivot_wider()]
 pivot_wider.sf = function(data, 
 						  ..., 
 						  id_cols = NULL, 

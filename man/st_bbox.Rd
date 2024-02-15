@@ -79,6 +79,8 @@ NA_bbox_
 \arguments{
 \item{obj}{object to compute the bounding box from}
 
+\item{...}{Arguments passed on to methods.}
+
 \item{crs}{object of class \code{crs}, or argument to \link{st_crs}, specifying the CRS of this bounding box.}
 }
 \value{

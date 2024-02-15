@@ -200,17 +200,15 @@ more details.}
 
 \item{cols}{see original function docs}
 
-\item{names_to, names_prefix, names_sep, names_pattern, names_ptype, names_transform, names_repair}{see \code{\link[tidyr:pivot_longer]{tidyr::pivot_longer()}}}
+\item{names_to, names_pattern, names_ptypes, names_transform}{see \code{\link[tidyr:pivot_longer]{tidyr::pivot_longer()}}}
 
-\item{values_to, values_drop_na, value_ptypes, values_transform}{See \code{\link[tidyr:pivot_longer]{tidyr::pivot_longer()}}}
+\item{names_prefix, names_sep, names_repair}{see original function docs.}
 
-\item{id_cols, id_expand}{see \code{\link[tidyr:pivot_wider]{tidyr::pivot_wider()}}}
+\item{values_to, values_drop_na, values_ptypes, values_transform}{See \code{\link[tidyr:pivot_longer]{tidyr::pivot_longer()}}}
 
-\item{names_from, names_prefix, names_sep, names_glue, names_sort, names_wary, names_repair}{see \code{\link[tidyr:pivot_wider]{tidyr::pivot_wider()}}.}
+\item{id_cols, id_expand, names_from, names_sort, names_glue, names_vary, names_expand}{see \code{\link[tidyr:pivot_wider]{tidyr::pivot_wider()}}}
 
-\item{values_from, values_fill, values_fn}{see \code{\link[tidyr:pivot_wider]{tidyr::pivot_wider()}}}
-
-\item{unused_fn}{see original function docs}
+\item{values_from, values_fill, values_fn, unused_fn}{see \code{\link[tidyr:pivot_wider]{tidyr::pivot_wider()}}}
 
 \item{fill}{see original function docs}
 

@@ -43,6 +43,7 @@ bbox.MtrxSetSetSet = function(obj, ...) {
 #'
 #' Return bounding of a simple feature or simple feature set.
 #' @param obj object to compute the bounding box from
+#' @param ... Arguments passed on to methods.
 #' @export
 #' @return a numeric vector of length four, with \code{xmin}, \code{ymin}, \code{xmax}
 #' and \code{ymax} values; if \code{obj} is of class \code{sf}, \code{sfc}, \code{Spatial} or \code{Raster}, the object
