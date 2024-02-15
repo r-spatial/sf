@@ -262,7 +262,10 @@ st_poly_sample = function(x, size, ..., type = "random",
 		spatstat_fun = try(get(paste0("r", type), asNamespace("spatstat.random")), silent = TRUE)
 		if (inherits(spatstat_fun, "try-error"))
 			stop(paste0("r", type), " is not an exported function from spatstat.random.")
-		pts = try(spatstat_fun(..., win = spatstat.geom::as.owin(x)), silent = TRUE)
+		pts = if ("win" %in% names(as.list(args(spatstat_fun))))
+				try(spatstat_fun(..., win = spatstat.geom::as.owin(x)), silent = TRUE)
+			else
+				try(spatstat_fun(..., W = spatstat.geom::as.owin(x)), silent = TRUE)
 		if (inherits(pts, "try-error"))
 			stop("The spatstat function ", paste0("r", type),
              " did not return a valid result. Consult the help file.\n",
