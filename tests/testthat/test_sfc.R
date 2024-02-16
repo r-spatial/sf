@@ -119,3 +119,13 @@ test_that("c.sfc n_empty returns sum of st_is_empty(sfg)", {
 test_that("st_is_longlat warns on invalid bounding box", {
 	expect_warning(st_is_longlat(st_sfc(st_point(c(0,-95)), crs = 4326)))
 })
+
+test_that("value replacement works for sfc_POINT",{
+	pts1<-st_geometry(st_as_sf(data.frame(x=1:3,y=1:3), coords = c("x","y")))
+	pts2<-st_geometry(st_as_sf(data.frame(x=4:5,y=4:5), coords = c("x","y")))
+	expect_identical(replace(pts1[],2:3,pts2), replace(pts1[],2:3,pts2[]))
+	expect_identical(replace(pts1,2:3,pts2[])[], replace(pts1[],2:3,pts2[]))
+	expect_identical(replace(pts1,2:3,pts2)[], replace(pts1[],2:3,pts2[]))
+	expect_identical(st_bbox(replace(pts1,2:3,pts2)),
+					 st_bbox(replace(pts1[],2:3,pts2[])))# check if bbox is correct without realization
+})
