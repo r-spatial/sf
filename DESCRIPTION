@@ -78,7 +78,7 @@ Suggests:
     dplyr (>= 1.0.0),
     ggplot2,
     knitr,
-    lwgeom (>= 0.2-1),
+    lwgeom (>= 0.2-14),
     maps,
     mapview,
     Matrix,
