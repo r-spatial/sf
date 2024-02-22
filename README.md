@@ -1,6 +1,6 @@
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/r-spatial/sf/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-spatial/sf/actions/workflows/R-CMD-check.yaml)
-[![tic-db](https://github.com/r-spatial/sf/workflows/tic-db/badge.svg?branch=main)](https://github.com/r-spatial/sf/actions)
+[![tic-db](https://github.com/r-spatial/sf/actions/workflows/tic-db.yml/badge.svg)](https://github.com/r-spatial/sf/actions/workflows/tic-db.yml)
 [![Coverage Status](https://img.shields.io/codecov/c/github/r-spatial/sf/main.svg)](https://app.codecov.io/gh/r-spatial/sf)
 [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html)
 [![CRAN](http://www.r-pkg.org/badges/version/sf)](https://cran.r-project.org/package=sf)
