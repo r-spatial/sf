@@ -15,8 +15,6 @@ rdev
 hub
 tic.R
 NOTES
-^\.github/workflows/R-CMD-check\.yaml$
-^\.github/workflows/R-CMD-check-with-db\.yaml$
 ^\.ccache$
 ^\.github$
 ^tic\.R$

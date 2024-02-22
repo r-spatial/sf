@@ -78,7 +78,7 @@ Suggests:
     dplyr (>= 1.0.0),
     ggplot2,
     knitr,
-    lwgeom (>= 0.2-1),
+    lwgeom (>= 0.2-14),
     maps,
     mapview,
     Matrix,
@@ -116,6 +116,7 @@ Encoding: UTF-8
 RoxygenNote: 7.3.1
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 2
+Config/needs/coverage: XML
 SystemRequirements: GDAL (>= 2.0.1), GEOS (>= 3.4.0),
     PROJ (>= 4.8.0), sqlite3
 Collate: 
