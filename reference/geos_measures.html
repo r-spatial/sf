@@ -125,7 +125,7 @@
 <p>If the coordinate reference system of <code>x</code> was set, these functions return values with unit of measurement; see <a href="https://r-quantities.github.io/units/reference/units.html" class="external-link">set_units</a>.</p>
 
 
-<p>st_area returns the area of a geometry, in the coordinate reference system used; in case <code>x</code> is in degrees longitude/latitude, <a href="https://rdrr.io/pkg/lwgeom/man/geod.html" class="external-link">st_geod_area</a> is used for area calculation.</p>
+<p>st_area returns the area of a geometry, in the coordinate reference system used; in case <code>x</code> is in degrees longitude/latitude, <a href="https://r-spatial.github.io/lwgeom/reference/geod.html" class="external-link">st_geod_area</a> is used for area calculation.</p>
 
 
 <p>st_length returns the length of a <code>LINESTRING</code> or <code>MULTILINESTRING</code> geometry, using the coordinate reference system.  <code>POINT</code>, <code>MULTIPOINT</code>, <code>POLYGON</code> or <code>MULTIPOLYGON</code> geometries return zero.</p>
@@ -137,7 +137,7 @@
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>great circle distance calculations use by default spherical distances (<a href="https://r-spatial.github.io/s2/reference/s2_is_collection.html" class="external-link">s2_distance</a> or <a href="https://r-spatial.github.io/s2/reference/s2_closest_feature.html" class="external-link">s2_distance_matrix</a>); if <code><a href="s2.html">sf_use_s2()</a></code> is <code>FALSE</code>, ellipsoidal distances are computed using <a href="https://rdrr.io/pkg/lwgeom/man/geod.html" class="external-link">st_geod_distance</a> which uses function <code>geod_inverse</code> from GeographicLib (part of PROJ); see Karney, Charles FF, 2013, Algorithms for geodesics, Journal of Geodesy 87(1), 43--55</p>
+    <p>great circle distance calculations use by default spherical distances (<a href="https://r-spatial.github.io/s2/reference/s2_is_collection.html" class="external-link">s2_distance</a> or <a href="https://r-spatial.github.io/s2/reference/s2_closest_feature.html" class="external-link">s2_distance_matrix</a>); if <code><a href="s2.html">sf_use_s2()</a></code> is <code>FALSE</code>, ellipsoidal distances are computed using <a href="https://r-spatial.github.io/lwgeom/reference/geod.html" class="external-link">st_geod_distance</a> which uses function <code>geod_inverse</code> from GeographicLib (part of PROJ); see Karney, Charles FF, 2013, Algorithms for geodesics, Journal of Geodesy 87(1), 43--55</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
