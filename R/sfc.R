@@ -181,10 +181,14 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 				else
 					do.call(rbind, value)
 			attr(x, "points")[i, ] = repl
-			return(structure(x, n_empty = sum(is.na(attr(x, "points")[,1])))) # RETURNS
+			return(structure(x, 
+							 n_empty = sum(is.na(attr(x, "points")[,1])), 
+							 bbox = bbox.pointmatrix(attr(x, "points"))
+							 )) # RETURNS
 		} else
 			x = x[] # realize
 	} 
+	value = value[] # realize in case sfc_POINT while x is not 
 	x = unclass(x) # becomes a list, but keeps attributes
 	ret = st_sfc(NextMethod(), recompute_bbox = TRUE)
 	structure(ret, n_empty = sum(sfc_is_empty(ret)))
