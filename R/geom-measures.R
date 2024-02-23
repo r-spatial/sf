@@ -128,7 +128,10 @@ st_perimeter = function(x, ...) {
 		if (!requireNamespace("lwgeom", quietly = TRUE))
 			stop("package lwgeom required, please install it first")
 		# note that units are handled appropriately by lwgeom
-		lwgeom::st_perimeter(x)
+		if (packageVersion("lwgeom") <= "0.2-13")
+			lwgeom::st_perimeter(x)
+		else
+			lwgeom::st_perimeter_lwgeom(x)
 	}
 }
 

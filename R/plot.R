@@ -1,11 +1,11 @@
 kw_dflt = function(x, key.pos) {
-	if (is.null(key.pos) || key.pos == 0) # no key:
+	if (is.null(key.pos) || key.pos[1] == 0) # no key:
 		return(lcm(0))
 
 	font_scale = par("ps") / 12
-	if (key.pos == -1)
+	if (key.pos[1] == -1)
 		lcm(1.8 * font_scale)
-	else if (key.pos %in% c(2, 4) && (is.character(x[[1]]) || is.factor(x[[1]]))) {
+	else if (key.pos[1] %in% c(2, 4) && (is.character(x[[1]]) || is.factor(x[[1]]))) {
 		strings = if (is.factor(x[[1]]))
 				levels(x[[1]])
 			else
@@ -29,7 +29,7 @@ kw_dflt = function(x, key.pos) {
 #' @param pal palette function, similar to \link{rainbow}, or palette values; if omitted, \code{sf.colors} is used
 #' @param nbreaks number of colors breaks (ignored for \code{factor} or \code{character} variables)
 #' @param breaks either a numeric vector with the actual breaks, or a name of a method accepted by the \code{style} argument of \link[classInt]{classIntervals}
-#' @param max.plot integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overriden by setting the global option \code{sf_max.plot}, e.g. \code{options(sf_max.plot=2)}
+#' @param max.plot integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overridden by setting the global option \code{sf_max.plot}, e.g. \code{options(sf_max.plot=2)}
 #' @param key.pos numeric; side to plot a color key: 1 bottom, 2 left, 3 top, 4 right; set to \code{NULL} to omit key completely, 0 to only not plot the key, or -1 to select automatically. If multiple columns are plotted in a single function call by default no key is plotted and every submap is stretched individually; if a key is requested (and \code{col} is missing) all maps are colored according to a single key. Auto select depends on plot size, map aspect, and, if set, parameter \code{asp}. If it has lenght 2, the second value, ranging from 0 to 1, determines where the key is placed in the available space (default: 0.5, center).
 #' @param key.width amount of space reserved for the key (incl. labels), thickness/width of the scale bar
 #' @param key.length amount of space reserved for the key along its axis, length of the scale bar
@@ -111,7 +111,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 	if (ncol(x) > 2 && !isTRUE(dots$add)) { # multiple maps to plot...
 		cols = setdiff(names(x), attr(x, "sf_column"))
 		lt = .get_layout(st_bbox(x), min(max.plot, length(cols)), par("din"), key.pos[1], key.width)
-		if (key.pos.missing || key.pos == -1)
+		if (key.pos.missing || key.pos[1] == -1)
 			key.pos = lt$key.pos
 		layout(lt$m, widths = lt$widths, heights = lt$heights, respect = compact)
 

@@ -95,7 +95,7 @@ Transforms using the \code{pipeline=} argument may fail if there is
 ambiguity in the axis order of the specified coordinate reference system;
 if you need the traditional GIS order, use \code{"OGC:CRS84"}, not
 \code{"EPSG:4326"}. Extra care is needed with the ESRI Shapefile format,
-because WKT1 does not store axis order unambigiously.
+because WKT1 does not store axis order unambiguously.
 
 The \code{st_transform} method for \code{sfg} objects assumes that the CRS of the object is available as an attribute of that name.
 
@@ -116,7 +116,6 @@ sfc = st_sfc(p1, p2, crs = 4326)
 sfc
 st_transform(sfc, 3857)
 st_transform(st_sf(a=2:1, geom=sfc), "+init=epsg:3857")
-try(st_transform(sfc, 3857, aoi = c(-280,-90,180,90)))
 if (sf_extSoftVersion()["GDAL"] >= "3.0.0") {
   st_transform(sfc, pipeline =
 	  "+proj=pipeline +step +proj=axisswap +order=2,1") # reverse axes

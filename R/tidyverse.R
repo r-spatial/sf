@@ -5,7 +5,6 @@
 
 # This is currently only used in `bind_rows()` and `bind_cols()`
 # because sf overrides all default implementations
-#' @name tidyverse
 dplyr_reconstruct.sf = function(data, template) {
 	sfc_name = attr(template, "sf_column")
 	if (inherits(template, "tbl_df"))
@@ -21,15 +20,6 @@ dplyr_reconstruct.sf = function(data, template) {
 		crs = crs,
 		precision = prec
 	)
-}
-
-group_split.sf <- function(.tbl, ..., .keep = TRUE) {
-	 class(.tbl) = setdiff(class(.tbl), "sf")
-	 if (inherits(.tbl, "rowwise_df")) {
-	 	lapply(dplyr::group_split(.tbl, ...), st_as_sf)
-	 } else {
-	 	lapply(dplyr::group_split(.tbl, ..., .keep = .keep), st_as_sf)	
-	 }
 }
 
 #' Tidyverse methods for sf objects (remove .sf suffix!)
@@ -238,6 +228,8 @@ rename.sf <- function(.data, ...) {
 	st_set_agr(st_as_sf(ret, sf_column_name = sf_column), agr)
 }
 
+#' @name tidyverse
+#' @param .fn,.cols see original docs
 rename_with.sf = function(.data, .fn, .cols, ...) {
 	if (!requireNamespace("rlang", quietly = TRUE))
 		stop("rlang required: install that first") # nocov
@@ -418,7 +410,6 @@ gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, fac
 }
 
 #' @name tidyverse
-#' @param template see original function docs
 #' @param data see original function docs
 #' @param cols see original function docs
 #' @param names_to see original function docs
@@ -566,7 +557,17 @@ sample_n.sf <- function(tbl, size, replace = FALSE, weight = NULL, .env = parent
 sample_frac.sf <- function(tbl, size = 1, replace = FALSE, weight = NULL, .env = parent.frame()) {
 	st_sf(NextMethod(), sf_column_name = attr(tbl, "sf_column"))
 }
-
+#' @name tidyverse
+#' @param .tbl see original function docs
+#' @param .keep see original function docs
+group_split.sf <- function(.tbl, ..., .keep = TRUE) {
+	class(.tbl) = setdiff(class(.tbl), "sf")
+	if (inherits(.tbl, "rowwise_df")) {
+		lapply(dplyr::group_split(.tbl, ...), st_as_sf)
+	} else {
+		lapply(dplyr::group_split(.tbl, ..., .keep = .keep), st_as_sf)	
+	}
+}
 #' @name tidyverse
 #' @examples
 #' if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE)) {
@@ -578,7 +579,7 @@ sample_frac.sf <- function(tbl, size = 1, replace = FALSE, weight = NULL, .env =
 #'  plot(trs.sf["year"], axes = TRUE)
 #' }
 #' @details \code{nest} assumes that a simple feature geometry list-column was among the columns that were nested.
-nest.sf = function (.data, ...) {
+nest.sf = function(.data, ...) {
 
 	if (!requireNamespace("rlang", quietly = TRUE))
 		stop("rlang required: install first?")

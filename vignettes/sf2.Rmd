@@ -27,10 +27,10 @@ formats (text, [sp](https://cran.r-project.org/package=sp))
 ## Reading and writing through GDAL
 
 The Geospatial Data Abstraction Library
-([GDAL](https://gdal.org/)) is the swiss army knife for spatial
+([GDAL](https://gdal.org/)) is the Swiss Army Knife for spatial
 data: it reads and writes vector and raster data from and to practically
 every file format, or database, of significance. Package `sf` reads
-and writes using GDAL by the functions `st_read` and `st_write`.
+and writes using GDAL using `st_read()` and `st_write()`.
 
 The data model GDAL uses needs
 
@@ -84,7 +84,7 @@ In eval(substitute(expr), envir, enclos) :
   automatically selected the first layer in a data source containing more than one.
 ```
 
-The message points to the `st_layers` command, which lists the driver
+The message points to the `st_layers()` command, which lists the driver
 and layers in a datasource, e.g.
 
 ```{r eval=FALSE}
@@ -105,19 +105,19 @@ A particular layer can now be read by e.g.
 st_read("PG:dbname=postgis", "sids")
 ```
 
-`st_layers` has the option to count the number of features in case
+`st_layers()` has the option to count the number of features in case
 these are missing: some datasources (e.g. OSM xml files) do not
 report the number of features, but need to be completely read for
 this. GDAL allows for more than one geometry column for a feature
-layer; these are reported by `st_layers`.
+layer; these are reported by `st_layers()`.
 
 In case a layer contains only geometries but no attributes (fields),
-`st_read` still returns an `sf` object, with a geometry column only.
+`st_read()` still returns an `sf` object, with a geometry column only.
 
 We see that GDAL automatically detects the driver (file format)
 of the datasource, by trying them all in turn.
 
-`st_read` follows the conventions of base R, similar to how it
+`st_read()` follows the conventions of base R, similar to how it
 reads tabular data into `data.frame`s. This means that character
 data are read, by default as `factor`s.  For those who insist
 on retrieving character data as character vectors, the argument
@@ -145,7 +145,7 @@ st_write(nc, "nc1.shp")
 
 The file name is taken as the data source name. The default for
 the layer name is the basename (filename without path) of the the
-data source name. For this, `st_write` needs to guess the driver. The
+data source name. For this, `st_write()` needs to guess the driver. The
 above command is, for instance, equivalent to:
 
 ```{r}
@@ -220,7 +220,7 @@ will give an error. Driver-specific options are documented in the
 driver manual of [gdal](https://gdal.org/drivers/vector/index.html).
 Multiple options can be given by multiple strings in `options`.
 
-For `st_read`, there is only `options`; for `st_write`, one needs
+For `st_read()`, there is only `options`; for `st_write()`, one needs
 to distinguish between `dataset_options` and `layer_options`, the
 first related to opening a dataset, the second to creating layers
 in the dataset.
@@ -278,7 +278,7 @@ str = st_as_text(x)
 x
 ```
 
-We can convert back from WKT by using `st_as_sfc`:
+We can convert back from WKT by using `st_as_sfc()`:
 
 ```{r}
 st_as_sfc(str)
@@ -286,7 +286,7 @@ st_as_sfc(str)
 
 ### Conversion to and from well-known binary
 
-Well-known binary is created from simple features by `st_as_binary`:
+Well-known binary is created from simple features by `st_as_binary()`:
 
 ```{r}
 x = st_linestring(matrix(0:9,ncol=2,byrow=TRUE))
@@ -294,15 +294,15 @@ x = st_linestring(matrix(0:9,ncol=2,byrow=TRUE))
 class(x)
 ```
 
-The object returned by `st_as_binary` is of class `WKB` and is
+The object returned by `st_as_binary()` is of class `WKB` and is
 either a list with raw vectors, or a single raw vector. These
-can be converted into a hexadecimal character vector using `rawToHex`:
+can be converted into a hexadecimal character vector using `rawToHex()`:
 
 ```{r}
 rawToHex(x)
 ```
 
-Converting back to `sf` uses `st_as_sfc`:
+Converting back to `sf` uses `st_as_sfc()`:
 
 ```{r}
 x = st_as_binary(st_sfc(st_point(0:1), st_point(5:6)))
@@ -312,7 +312,7 @@ st_as_sfc(x)
 ### Conversion to and from sp
 
 Spatial objects as maintained by package `sp` can be converted into
-simple feature objects or geometries by `st_as_sf` and `st_as_sfc`,
+simple feature objects or geometries by `st_as_sf()` and `st_as_sfc()`,
 respectively:
 
 ```{r}

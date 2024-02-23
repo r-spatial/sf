@@ -235,7 +235,7 @@ format.sfg = function(x, ..., width = 30) {
 #' @name st
 #' @param ... objects to be pasted together into a single simple feature
 #' @param recursive logical; ignored
-#' @param flatten logical; if TRUE, try to simplify results; if FALSE, return geometrycollection containing all objects
+#' @param flatten logical; if `TRUE`, try to simplify results; if `FALSE`, return geometrycollection containing all objects
 #' @examples
 #' c(st_point(1:2), st_point(5:6))
 #' c(st_point(1:2), st_multipoint(matrix(5:8,2)))

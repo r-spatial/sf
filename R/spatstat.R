@@ -1,4 +1,4 @@
-# window_polygons_from_edges = function (w) {
+# window_polygons_from_edges = function(w) {
 #	mw = as.matrix(w$ends)
 #	lst1 = lapply(seq_len(NROW(mw)), function(i) st_linestring(matrix(mw[i,], 2, byrow = TRUE)))
 #	p0 = st_polygonize(do.call(c, do.call(st_sfc, lst1)))

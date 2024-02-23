@@ -26,7 +26,7 @@ entries for this vignette (as for the others).
 
 EPSG stands for a maintained, well-understood registry of spatial
 reference systems, maintained by the International Association
-of Oil \& Gass Producers (IOGP). `EPSG` stands for the authority,
+of Oil \& Gas Producers (IOGP). `EPSG` stands for the authority,
 e.g. `EPSG:4326` stands for spatial reference system with ID 4326
 as it is maintained by the EPSG authority. The website for the EPSG
 registry is found at the epsg.org domain. Using `4326` instead of
@@ -46,7 +46,7 @@ See also `st_axis_order()`
 
 `sf` objects can have more than one geometry list-column,
 but always only one geometry column is considered _active_,
-and returned by `st_geometry`.  When there are multiple
+and returned by `st_geometry()`.  When there are multiple
 geometry columns, the default `print` methods reports which
 one is active:
 ```{r}
@@ -56,7 +56,7 @@ nc$geom2 = st_centroid(st_geometry(nc))
 print(nc, n = 2)
 ```
 
-We can switch the active geometry by using `st_geometry<-` or `st_set_geometry`, as in 
+We can switch the active geometry by using `st_geometry<-` or `st_set_geometry()`, as in 
 ```{r}
 plot(st_geometry(nc))
 st_geometry(nc) <- "geom2"
@@ -65,7 +65,7 @@ plot(st_geometry(nc))
 
 # Does `st_simplify` preserve topology?
 
-`st_simplify` is a topology-preserving function, but does this on the
+`st_simplify()` is a topology-preserving function, but does this on the
 level of individual feature geometries. That means, simply said, that
 after applying it, a polygon will still be a polygon. However when
 two features have a longer shared boundary, applying `st_simplify`
