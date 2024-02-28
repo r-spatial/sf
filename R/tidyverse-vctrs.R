@@ -3,14 +3,13 @@
 # time, this declares `sfc` lists as vectors which is necessary
 # because vctrs generally treats S3 lists as scalars.
 vec_proxy.sfc = function(x, ...) {
-	x
+	x[]
 }
 # This restores `sfc` attributes after manipulation of the proxy
 # (e.g. slicing or combination)
 vec_restore.sfc = function(x, to, ...) {
 	# Ensure restoration of `n_empty` by `st_sfc()`
 	attr(x, "n_empty") = NULL
-
 	st_sfc(x, crs = st_crs(to), precision = st_precision(to))
 }
 

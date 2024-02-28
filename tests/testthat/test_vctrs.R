@@ -8,6 +8,12 @@ test_that("`sfc` vectors can be sliced", {
 	expect_identical(vctrs::vec_slice(x, 0), x[0])
 })
 
+test_that("`sfc` vectors with point matrix can be sliced", {
+	x = st_geometry(st_as_sf(data.frame(x=1:2, y=4:3), coords = 1:2))
+	expect_identical(vctrs::vec_slice(x, 1), x[1])
+	expect_equal(vctrs::vec_slice(x, 0), st_sfc(x[0], recompute_bbox=TRUE))
+})
+
 test_that("`n_empty` attribute of `sfc` vectors is restored", {
 	pt1 = st_sfc(st_point(c(NA_real_, NA_real_)))
 	pt2 = st_sfc(st_point(0:1))
