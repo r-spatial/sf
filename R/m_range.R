@@ -1,4 +1,6 @@
 
+#' @name st_m_range
+#' @param x object of class \code{m_range}
 #' @export
 is.na.m_range = function(x) identical(x, NA_m_range_)
 

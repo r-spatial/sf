@@ -3,6 +3,7 @@
 \docType{data}
 \name{st_z_range}
 \alias{st_z_range}
+\alias{is.na.z_range}
 \alias{st_z_range.POINT}
 \alias{st_z_range.MULTIPOINT}
 \alias{st_z_range.LINESTRING}
@@ -27,6 +28,8 @@
 An object of class \code{z_range} of length 2.
 }
 \usage{
+\method{is.na}{z_range}(x)
+
 st_z_range(obj, ...)
 
 \method{st_z_range}{POINT}(obj, ...)
@@ -68,6 +71,8 @@ st_z_range(obj, ...)
 NA_z_range_
 }
 \arguments{
+\item{x}{object of class \code{z_range}}
+
 \item{obj}{object to compute the z range from}
 
 \item{...}{ignored}

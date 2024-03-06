@@ -379,7 +379,9 @@ NA_crs_ = structure(
 		wkt = NA_character_),
 	class = "crs")
 
+#' @name st_crs
 #' @export
+#' @method is.na crs
 is.na.crs = function(x) {
 	identical(x, NA_crs_)
 }

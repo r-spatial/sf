@@ -3,6 +3,7 @@
 \docType{data}
 \name{st_m_range}
 \alias{st_m_range}
+\alias{is.na.m_range}
 \alias{st_m_range.POINT}
 \alias{st_m_range.MULTIPOINT}
 \alias{st_m_range.LINESTRING}
@@ -27,6 +28,8 @@
 An object of class \code{m_range} of length 2.
 }
 \usage{
+\method{is.na}{m_range}(x)
+
 st_m_range(obj, ...)
 
 \method{st_m_range}{POINT}(obj, ...)
@@ -68,6 +71,8 @@ st_m_range(obj, ...)
 NA_m_range_
 }
 \arguments{
+\item{x}{object of class \code{m_range}}
+
 \item{obj}{object to compute the m range from}
 
 \item{...}{ignored}
