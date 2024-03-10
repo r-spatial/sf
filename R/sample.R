@@ -195,7 +195,7 @@ st_poly_sample = function(x, size, ..., type = "random",
 			if (sf_use_s2()) { # if FALSE, the user wants the coord ranges to be the bbox
 				if (!requireNamespace("lwgeom", quietly = TRUE))
 					warning("coordinate ranges not computed along great circles; install package lwgeom to get rid of this warning")
-				else 
+				else
 					bb = st_bbox(st_segmentize(st_as_sfc(bb),
 							units::set_units(1, "degree", mode = "standard"))) # get coordinate range on S2
 			}
