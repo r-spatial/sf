@@ -91,9 +91,9 @@ vec_cast.sfc.default = function(x, to, ...) {
 
 #nocov start
 register_vctrs_methods = function() {
-	register_s3_method("vctrs", "vec_proxy", "sfc")
-	register_s3_method("vctrs", "vec_restore", "sfc")
-	register_s3_method("vctrs", "vec_ptype2", "sfc")
-	register_s3_method("vctrs", "vec_cast", "sfc")
+	s3_register("vctrs::vec_proxy", "sfc")
+	s3_register("vctrs::vec_restore", "sfc")
+	s3_register("vctrs::vec_ptype2", "sfc")
+	s3_register("vctrs::vec_cast", "sfc")
 }
 #nocov end
