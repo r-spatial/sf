@@ -146,32 +146,32 @@ single layer. In case the number of layers is zero (e.g. a database with
 no tables), an error message is given. In case there are more layers
 than one, the first layer is returned, but a message and a warning are
 given:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">st_read</span>(<span class="st">"PG:dbname=postgis"</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>Multiple layers are present <span class="cf">in</span> data source PG<span class="sc">:</span>dbname<span class="ot">=</span>postgis, reading layer <span class="st">`</span><span class="at">meuse'.</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">Use </span><span class="st">`</span>st_layers<span class="st">' to list all layer names and their type in a data source.</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="st">Set the `layer'</span> argument <span class="cf">in</span> <span class="st">`</span><span class="at">st_read' to read a particular layer.</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">Reading layer </span><span class="st">`</span>meuse<span class="st">' from data source `PG:dbname=postgis'</span> using driver <span class="st">`</span><span class="at">PostgreSQL'</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">Simple feature collection with 155 features and 12 fields</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="at">geometry type:  POINT</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="at">dimension:      XY</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="at">bbox:           xmin: 178605 ymin: 329714 xmax: 181390 ymax: 333611</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="at">epsg (SRID):    28992</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="at">proj4string:    +proj=sterea +lat_0=52.15616055555555 ...</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="at">Warning message:</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="at">In eval(substitute(expr), envir, enclos) :</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="at">  automatically selected the first layer in a data source containing more than one.</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">st_read</span>(<span class="st">"PG:dbname=postgis"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>Multiple layers are present <span class="cf">in</span> data source PG<span class="sc">:</span>dbname<span class="ot">=</span>postgis, reading layer <span class="st">`</span><span class="at">meuse'.</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="at">Use </span><span class="st">`</span>st_layers<span class="st">' to list all layer names and their type in a data source.</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="st">Set the `layer'</span> argument <span class="cf">in</span> <span class="st">`</span><span class="at">st_read' to read a particular layer.</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="at">Reading layer </span><span class="st">`</span>meuse<span class="st">' from data source `PG:dbname=postgis'</span> using driver <span class="st">`</span><span class="at">PostgreSQL'</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="at">Simple feature collection with 155 features and 12 fields</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="at">geometry type:  POINT</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="at">dimension:      XY</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="at">bbox:           xmin: 178605 ymin: 329714 xmax: 181390 ymax: 333611</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="at">epsg (SRID):    28992</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="at">proj4string:    +proj=sterea +lat_0=52.15616055555555 ...</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="at">Warning message:</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="at">In eval(substitute(expr), envir, enclos) :</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="at">  automatically selected the first layer in a data source containing more than one.</span></span></code></pre></div>
 <p>The message points to the <code><a href="../reference/st_layers.html">st_layers()</a></code> command, which
 lists the driver and layers in a datasource, e.g.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">st_layers</span>(<span class="st">"PG:dbname=postgis"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>Driver<span class="sc">:</span> PostgreSQL </span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>Available layers<span class="sc">:</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  layer_name geometry_type features fields</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span>      meuse         Point      <span class="dv">155</span>     <span class="dv">12</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span>   meuse_sf         Point      <span class="dv">155</span>     <span class="dv">12</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span>       sids Multi Polygon      <span class="dv">100</span>     <span class="dv">14</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="dv">4</span>  meuse_tbl         Point      <span class="dv">155</span>     <span class="dv">13</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span> meuse_tbl2         Point      <span class="dv">155</span>     <span class="dv">13</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> </span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">st_layers</span>(<span class="st">"PG:dbname=postgis"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>Driver<span class="sc">:</span> PostgreSQL </span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>Available layers<span class="sc">:</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  layer_name geometry_type features fields</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="dv">1</span>      meuse         Point      <span class="dv">155</span>     <span class="dv">12</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="dv">2</span>   meuse_sf         Point      <span class="dv">155</span>     <span class="dv">12</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="dv">3</span>       sids Multi Polygon      <span class="dv">100</span>     <span class="dv">14</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="dv">4</span>  meuse_tbl         Point      <span class="dv">155</span>     <span class="dv">13</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="dv">5</span> meuse_tbl2         Point      <span class="dv">155</span>     <span class="dv">13</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="sc">&gt;</span> </span></code></pre></div>
 <p>A particular layer can now be read by e.g.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="st">"PG:dbname=postgis"</span>, <span class="st">"sids"</span><span class="op">)</span></span></code></pre></div>

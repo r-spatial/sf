@@ -186,11 +186,11 @@ brew install gdal</code></pre>
 <h4 id="ubuntu">Ubuntu<a class="anchor" aria-label="anchor" href="#ubuntu"></a>
 </h4>
 <p>Dependencies for recent versions of Ubuntu (18.04 and later) are available in the official repositories; you can install them with:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">apt-get</span> <span class="at">-y</span> update <span class="kw">&amp;&amp;</span> <span class="ex">apt-get</span> install <span class="at">-y</span>  libudunits2-dev libgdal-dev libgeos-dev libproj-dev</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="ex">apt-get</span> <span class="at">-y</span> update <span class="kw">&amp;&amp;</span> <span class="ex">apt-get</span> install <span class="at">-y</span>  libudunits2-dev libgdal-dev libgeos-dev libproj-dev</span></code></pre></div>
 <p>However, to get more up-to-date versions of dependencies such as GDAL, we recommend adding the <a href="http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/" class="external-link">ubuntugis-unstable</a> PPA to the package repositories and installing them as follows:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> add-apt-repository ppa:ubuntugis/ubuntugis-unstable</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get update</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev libsqlite0-dev</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">sudo</span> add-apt-repository ppa:ubuntugis/ubuntugis-unstable</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">sudo</span> apt-get update</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="fu">sudo</span> apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev libsqlite0-dev</span></code></pre></div>
 <p>Adding this PPA is required for installing <code>sf</code> on older versions of Ubuntu (e.g. Xenial).</p>
 <p>Another option, for advanced users, is to install dependencies from source; see e.g. an older <a href="https://github.com/r-spatial/sf/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml" class="external-link">Travis</a> config file for hints.</p>
 </div>
@@ -198,7 +198,7 @@ brew install gdal</code></pre>
 <h4 id="fedora">Fedora<a class="anchor" aria-label="anchor" href="#fedora"></a>
 </h4>
 <p>The following command installs all required dependencies:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> dnf install gdal-devel proj-devel geos-devel sqlite-devel udunits2-devel</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">sudo</span> dnf install gdal-devel proj-devel geos-devel sqlite-devel udunits2-devel</span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="arch">Arch<a class="anchor" aria-label="anchor" href="#arch"></a>
