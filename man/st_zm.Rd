@@ -11,7 +11,7 @@ st_zm(x, ..., drop = TRUE, what = "ZM")
 
 \item{...}{ignored}
 
-\item{drop}{logical; drop, or (FALSE) add?}
+\item{drop}{logical; drop, or (\code{FALSE}) add?}
 
 \item{what}{character which dimensions to drop or add}
 }
@@ -19,7 +19,8 @@ st_zm(x, ..., drop = TRUE, what = "ZM")
 Drop Z and/or M dimensions from feature geometries, resetting classes appropriately
 }
 \details{
-Only combinations \code{drop=TRUE}, \code{what = "ZM"}, and \code{drop=FALSE}, \code{what="Z"} are supported so far. In case \code{add=TRUE}, \code{x} should have \code{XY} geometry, and zero values are added for \code{Z}.
+Only combinations \code{drop=TRUE}, \code{what = "ZM"}, and \code{drop=FALSE}, \code{what="Z"} are supported so far.
+In case \code{add=TRUE}, \code{x} should have \code{XY} geometry, and zero values are added for \code{Z}.
 }
 \examples{
 st_zm(st_linestring(matrix(1:32,8)))

@@ -63,11 +63,12 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 			bbox = bbox.pointmatrix(cc),
 			class = c("sfc_POINT", "sfc"), names = NULL)
 
-		if (is.character(coords))
-			coords = match(coords, names(x))
-
-		if (remove)
+		if (remove) {
+			if (is.character(coords))
+				coords = match(coords, names(x))
 			x = x[-coords]
+		}
+
 	}
 	st_sf(x, ..., agr = agr, sf_column_name = sf_column_name)
 }
@@ -198,8 +199,10 @@ list_column_to_sfc = function(x) {
 
 #' Create sf object
 #'
-#' Create sf, which extends data.frame-like objects with a simple feature list column
+#' Create sf, which extends data.frame-like objects with a simple feature list column.
+#' To convert a data frame object to `sf`, use [st_as_sf()]
 #' @name sf
+#' @aliases st_sf
 #' @param ... column elements to be binded into an \code{sf} object or a single \code{list} or \code{data.frame} with such columns; at least one of these columns shall be a geometry list-column of class \code{sfc} or be a list-column that can be converted into an \code{sfc} by \link{st_as_sfc}.
 #' @param crs coordinate reference system, something suitable as input to \link{st_crs}
 #' @param agr character vector; see details below.
@@ -299,9 +302,10 @@ st_sf = function(..., agr = NA_agr_, row.names,
 	st_agr(df) = agr
 	if (! missing(crs))
 		st_crs(df) = crs
-	
-	attr(df, ".sf_namespace") <- .sf_namespace
-	
+
+	if (Sys.getenv("ADD_SF_NAMESPACE") != "false")
+		attr(df, ".sf_namespace") <- .sf_namespace
+
 	df
 }
 
@@ -381,7 +385,7 @@ st_sf = function(..., agr = NA_agr_, row.names,
 
 #' @export
 "[<-.sf" = function(x, i, j, value) {
-	st_set_agr(NextMethod())
+	st_as_sf(st_set_agr(NextMethod()))
 }
 
 #' @export
@@ -408,7 +412,7 @@ st_sf = function(..., agr = NA_agr_, row.names,
 	x
 }
 
-#' @name sf
+#' @rdname sf
 #' @param n maximum number of features to print; can be set globally by \code{options(sf_max_print=...)}
 #' @export
 print.sf = function(x, ..., n = getOption("sf_max_print", default = 10)) {
@@ -507,7 +511,7 @@ st_drop_geometry.default = function(x, ...) {
 #' \link{st_transform}, and all other functions starting with \code{st_}.
 #' 
 #' @param _data object of class \code{sf}
-#' @param ... Further arguments of the form new_variable=expression
+#' @param ... Further arguments of the form `new_variable = expression`
 #'
 #' @export
 #' @examples

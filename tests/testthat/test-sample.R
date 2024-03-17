@@ -5,5 +5,5 @@ test_that("st_sample works", {
 	sample_default = st_sample(x = nc, size = n)
 	expect_s3_class(sample_default, "sfc")
 	sample_exact = st_sample(x = nc, size = n, exact = TRUE)
-	expect_equal(length(sample_exact), n)
+	expect_length(sample_exact, n)
 })

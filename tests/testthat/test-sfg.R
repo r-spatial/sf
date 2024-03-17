@@ -62,11 +62,11 @@ test_that("Ops work for sfc", {
 	hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
 	hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5),ncol=2, byrow=TRUE)
 	pts = list(outer, hole1, hole2)
-	expect_true(inherits(st_multipolygon(list(pts)) * 2 + 3, "MULTIPOLYGON"))
+	expect_s3_class(st_multipolygon(list(pts)) * 2 + 3, "MULTIPOLYGON")
 	gc = st_geometrycollection(list(st_multipolygon(list(pts)), st_point(c(2,2))))
 	m = matrix(0, 2, 2)
 	diag(m) = c(1, 3)
-	expect_true(inherits(gc * m - 3, "GEOMETRYCOLLECTION"))
+	expect_s3_class(gc * m - 3, "GEOMETRYCOLLECTION")
 })
 
 test_that("Ops work for sfg", {

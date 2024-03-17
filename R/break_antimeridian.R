@@ -6,14 +6,14 @@
 #' on the chosen central longitude. The method may only be used with 
 #' non-projected, geographical coordinates and linestring or polygon objects.
 #' s2 is turned off internally to permit the use of a rectangular bounding 
-#' box. If the input geometries go outside [-180, 180] degrees longitude,
+#' box. If the input geometries go outside `[-180, 180]` degrees longitude,
 #' the protruding geometries will also be split using the same \code{tol=} 
 #' values; in this case empty geometries will be dropped first.
 #'
-#' @param x object of class sf or sfc
+#' @param x object of class `sf` or `sfc`
 #' @param lon_0 target central longitude (degrees)
 #' @param tol half of break width (degrees, default 0.0001)
-#' @param ... ingnored here
+#' @param ... ignored here
 #' @export
 #' @name st_break_antimeridian
 #' @examples

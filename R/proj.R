@@ -1,9 +1,9 @@
 
 #' @name st_transform
-#' @param type character; one of \code{have_datum_files}, \code{proj}, \code{ellps}, \code{datum}, \code{units} or \code{prime_meridians}; see Details.
+#' @param type character; one of `have_datum_files`, `proj`, `ellps`, `datum`, `units`, `path`, or `prime_meridians`; see Details.
 #' @param path character; PROJ search path to be set
 #' @export
-#' @details \code{sf_proj_info} lists the available projections, ellipses, datums, units, or data search path of the PROJ library when \code{type} is equal to proj, ellps, datum, units or path; when \code{type} equals \code{have_datum_files} a boolean is returned indicating whether datum files are installed and accessible (checking for \code{conus}).
+#' @details \code{sf_proj_info} lists the available projections, ellipses, datums, units, or data search path of the PROJ library when \code{type} is equal to proj, ellps, datum, units or path; when \code{type} equals \code{have_datum_files} a boolean is returned indicating whether datum files are installed and accessible (checking for \code{conus}). `path` returns the `PROJ_INFO.searchpath` field directly, as a single string with path separaters (`:`  or `;`).
 #'
 #' for PROJ >= 6, \code{sf_proj_info} does not provide option \code{type = "datums"}. 
 #' PROJ < 6 does not provide the option \code{type = "prime_meridians"}.
@@ -18,10 +18,10 @@ sf_proj_info = function(type = "proj", path) {
 		return(CPL_have_datum_files(0))
 
 	if (type == "path")
-		return(CPL_get_data_dir(FALSE))
+		return(CPL_get_data_dir(TRUE))
 	
 	if (!missing(path) && is.character(path))
-		return(invisible(CPL_set_data_dir(path)))
+		return(invisible(unique(CPL_set_data_dir(path, TRUE))))
 
 	if (type == "network")
 		return(CPL_is_network_enabled(TRUE))
@@ -81,19 +81,29 @@ sf_project = function(from = character(0), to = character(0), pts, keep = FALSE,
 
 #' Manage PROJ settings
 #' 
-#' Manage PROJ search path and network settings
-#' @param paths the search path to be set; omit if no paths need to be set
+#' Query or manage PROJ search path and network settings
+#' @param paths the search path to be set; omit if paths need to be queried
+#' @param with_proj logical; if `NA` set for both GDAL and PROJ, otherwise set either for PROJ (`TRUE`) or GDAL (`FALSE`)
 #' @return `sf_proj_search_paths()` returns the search path (possibly after setting it)
 #' @name proj_tools
 #' @export
-sf_proj_search_paths = function(paths = character(0)) {
+sf_proj_search_paths = function(paths = character(0), with_proj = NA) {
 	if (length(paths) == 0)
-		CPL_get_proj_search_paths(paths) # get
-	else
-		CPL_set_proj_search_paths(as.character(paths)) # set
+		CPL_get_data_dir(FALSE)
+	else {
+		if (is.na(with_proj) || !isTRUE(with_proj))
+			CPL_set_data_dir(as.character(paths), FALSE) # set GDAL
+		if (is.na(with_proj) || isTRUE(with_proj)) { # set for PROJ
+			if (length(paths) > 1) {
+				paths = paste0(paths, collapse = .Platform$path.sep)
+				message(paste("setting proj path(s) to", paths))
+			}
+			CPL_set_data_dir(as.character(paths), TRUE)
+		}
+	}
 }
 
-#' @param enable logical; set this to enable (TRUE) or disable (FALSE) the proj network search facility
+#' @param enable logical; set this to enable (`TRUE`) or disable (`FALSE`) the proj network search facility
 #' @param url character; use this to specify and override the default proj network CDN 
 #' @return `sf_proj_network` when called without arguments returns a logical indicating whether
 #' network search of datum grids is enabled, when called with arguments it returns a character
@@ -107,8 +117,7 @@ sf_proj_network = function(enable = FALSE, url = character(0)) {
 		CPL_enable_network(url, enable)
 }
 
-#' @param source_crs object of class `crs` or character
-#' @param target_crs object of class `crs` or character
+#' @param source_crs,target_crs object of class `crs` or character
 #' @param authority character; constrain output pipelines to those of authority
 #' @param AOI length four numeric; desired area of interest for the resulting 
 #' coordinate transformations (west, south, east, north, in degrees).
@@ -123,15 +132,15 @@ sf_proj_network = function(enable = FALSE, url = character(0)) {
 #' registered in the grid_alternatives table of its database) were available. Used typically when 
 #' networking is enabled.)
 #' @param desired_accuracy numeric; only return pipelines with at least this accuracy
-#' @param strict_containment logical; default FALSE; permit partial matching of the area
-#' of interest; if TRUE strictly contain the area of interest.
+#' @param strict_containment logical; default `FALSE`; permit partial matching of the area
+#' of interest; if `TRUE` strictly contain the area of interest.
 #' The area of interest is either as given in AOI, or as implied by the
 #' source/target coordinate reference systems 
-#' @param axis_order_authority_compliant logical; if FALSE always 
+#' @param axis_order_authority_compliant logical; if `FALSE` always 
 #' choose ‘x’ or longitude for the first 
 #' axis; if TRUE, follow the axis orders given by the coordinate reference systems when 
-#' constructing the for the first axis; if FALSE, follow the axis orders given by
-#' @return `sf_proj_pipelines` returns a table with candidate coordinate transformation
+#' constructing the for the first axis; if `FALSE`, follow the axis orders given by
+#' @return `sf_proj_pipelines()` returns a table with candidate coordinate transformation
 #' pipelines along with their accuracy; `NA` accuracy indicates ballpark accuracy.
 #' @name proj_tools
 #' @export

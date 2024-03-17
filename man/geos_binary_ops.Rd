@@ -53,7 +53,7 @@ overlapping areas are erased from geometries that are indexed at greater
 numbers in the argument to \code{x}; geometries that are empty
 or contained fully inside geometries with higher priority are removed entirely.
 The \code{st_difference.sfc} method with a single argument returns an object with
-an \code{"idx"} attribute with the orginal index for returned geometries.
+an \code{"idx"} attribute with the original index for returned geometries.
 
 \code{st_snap} snaps the vertices and segments of a geometry to another geometry's vertices. If \code{y} contains more than one geometry, its geometries are merged into a collection before snapping to that collection.
 
@@ -63,7 +63,7 @@ an \code{"idx"} attribute with the orginal index for returned geometries.
 To find whether pairs of simple feature geometries intersect, use
 the function \code{\link{st_intersects}} instead of \code{st_intersection}.
 
-When using GEOS and not using s2 polygons contain their boundary. When using s2 this is determined by the \code{model} defaults of \link[s2]{s2_options}, which can be overriden via the ... argument, e.g. \code{model = "closed"} to force DE-9IM compliant behaviour of polygons (and reproduce GEOS results).
+When using GEOS and not using s2 polygons contain their boundary. When using s2 this is determined by the \code{model} defaults of \link[s2]{s2_options}, which can be overridden via the ... argument, e.g. \code{model = "closed"} to force DE-9IM compliant behaviour of polygons (and reproduce GEOS results).
 }
 \examples{
 set.seed(131)

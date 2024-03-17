@@ -107,11 +107,11 @@ test_that("st_cast can crack GEOMETRYCOLLECTION", {
   sfc <- st_sfc(gc1, gc2, gc3)
   expect_s3_class(st_cast(sfc), "sfc_GEOMETRY")  # first, it cracks the collection
   expect_s3_class(st_cast(st_cast(sfc)), "sfc_MULTILINESTRING")  # then cast to multi*
-#  expect_warning(expect_is(st_cast(sfc, "POINT"), "sfc_POINT"), "first coordinate")
+#  expect_warning(expect_s3_class(st_cast(sfc, "POINT"), "sfc_POINT"), "first coordinate")
 #  expect_equal(st_cast(sfc, "POINT") %>% length, sfc %>% length)
 # @etienne: I think this is more useful; attr(x, "ids") contains the original lengths
   expect_s3_class(st_cast(sfc, "MULTIPOINT"), "sfc_MULTIPOINT")
-  #expect_is(st_cast(sfc, "LINESTRING"), "sfc_LINESTRING")
+  # expect_s3_class(st_cast(sfc, "LINESTRING"), "sfc_LINESTRING")
   expect_error(st_cast(sfc, "LINESTRING"))
   expect_error(st_cast(sfc, "MULTILINESTRING"))
   expect_s3_class(st_cast(sfc) %>% st_cast("MULTILINESTRING"), "sfc_MULTILINESTRING")
@@ -122,7 +122,7 @@ test_that("st_cast can crack GEOMETRYCOLLECTION", {
       "GEOMETRYCOLLECTION (POLYGON EMPTY)"
     )
   )
-  expect_is(st_cast(gc5), "sfc_POLYGON")
+  expect_s3_class(st_cast(gc5), "sfc_POLYGON")
   expect_equal(st_is_empty(st_cast(gc5)), c(FALSE, TRUE))
 
   sfc2 <- st_sfc(gc1, gc2, gc4)

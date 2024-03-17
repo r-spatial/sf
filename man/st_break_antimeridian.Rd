@@ -13,22 +13,22 @@ st_break_antimeridian(x, lon_0 = 0, tol = 1e-04, ...)
 \method{st_break_antimeridian}{sfc}(x, lon_0 = 0, tol = 1e-04, ...)
 }
 \arguments{
-\item{x}{object of class sf or sfc}
+\item{x}{object of class \code{sf} or \code{sfc}}
 
 \item{lon_0}{target central longitude (degrees)}
 
 \item{tol}{half of break width (degrees, default 0.0001)}
 
-\item{...}{ingnored here}
+\item{...}{ignored here}
 }
 \description{
-Longitudes can be broken at the antimeridian of a target central longitude 
-to permit plotting of (usually world) line or polygon objects centred 
-on the chosen central longitude. The method may only be used with 
+Longitudes can be broken at the antimeridian of a target central longitude
+to permit plotting of (usually world) line or polygon objects centred
+on the chosen central longitude. The method may only be used with
 non-projected, geographical coordinates and linestring or polygon objects.
-s2 is turned off internally to permit the use of a rectangular bounding 
-box. If the input geometries go outside [-180, 180] degrees longitude,
-the protruding geometries will also be split using the same \code{tol=} 
+s2 is turned off internally to permit the use of a rectangular bounding
+box. If the input geometries go outside \verb{[-180, 180]} degrees longitude,
+the protruding geometries will also be split using the same \code{tol=}
 values; in this case empty geometries will be dropped first.
 }
 \examples{

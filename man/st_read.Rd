@@ -25,7 +25,8 @@ st_read(dsn, layer, ...)
   fid_column_name = character(0),
   drivers = character(0),
   wkt_filter = character(0),
-  optional = FALSE
+  optional = FALSE,
+  use_stream = default_st_read_use_stream()
 )
 
 read_sf(..., quiet = TRUE, stringsAsFactors = FALSE, as_tibble = TRUE)
@@ -64,7 +65,7 @@ use the \code{query} argument.}
 \item{options}{character; driver dependent dataset open options, multiple
 options supported. For possible values, see the "Open options" section
 of the GDAL documentation of the corresponding driver, and
-https://github.com/r-spatial/sf/issues/1157 for an example.}
+\url{https://github.com/r-spatial/sf/issues/1157} for an example.}
 
 \item{quiet}{logical; suppress info on name, driver, size and spatial
 reference, or signaling no or multiple layers}
@@ -83,15 +84,15 @@ of LineString and MultiLineString, or of Polygon and MultiPolygon, convert
 all to the Multi variety; defaults to \code{TRUE}}
 
 \item{stringsAsFactors}{logical; logical: should character vectors be
-  converted to factors?  Default for \code{read_sf} or R version >= 4.1.0 is 
+converted to factors?  Default for \code{read_sf} or R version >= 4.1.0 is
 \code{FALSE}, for \code{st_read} and R version < 4.1.0 equal to
 \code{default.stringsAsFactors()}}
 
-\item{int64_as_string}{logical; if TRUE, Int64 attributes are returned as
-string; if FALSE, they are returned as double and a warning is given when
+\item{int64_as_string}{logical; if \code{TRUE}, Int64 attributes are returned as
+string; if \code{FALSE}, they are returned as double and a warning is given when
 precision is lost (i.e., values are larger than 2^53).}
 
-\item{check_ring_dir}{logical; if TRUE, polygon ring directions are checked
+\item{check_ring_dir}{logical; if \code{TRUE}, polygon ring directions are checked
 and if necessary corrected (when seen from above: exterior ring counter
 clockwise, holes clockwise)}
 
@@ -103,6 +104,8 @@ clockwise, holes clockwise)}
 
 \item{optional}{logical; passed to \link[base]{as.data.frame}; always \code{TRUE} when \code{as_tibble} is \code{TRUE}}
 
+\item{use_stream}{Use \code{TRUE} to use the experimental columnar interface introduced in GDAL 3.6.}
+
 \item{as_tibble}{logical; should the returned table be of class tibble or data.frame?}
 
 \item{EWKB}{logical; is the WKB of type EWKB? if missing, defaults to
@@ -110,10 +113,10 @@ clockwise, holes clockwise)}
 }
 \value{
 object of class \link{sf} when a layer was successfully read; in case
-  argument \code{layer} is missing and data source \code{dsn} does not
-  contain a single layer, an object of class \code{sf_layers} is returned
-  with the layer names, each with their geometry type(s). Note that the
-  number of layers may also be zero.
+argument \code{layer} is missing and data source \code{dsn} does not
+contain a single layer, an object of class \code{sf_layers} is returned
+with the layer names, each with their geometry type(s). Note that the
+number of layers may also be zero.
 }
 \description{
 Read simple features from file or database, or retrieve layer names and their
@@ -139,7 +142,7 @@ lead to spurious errors that accompanying \code{*.shp} are missing.
 
 In case of problems reading shapefiles from USB drives on OSX, please see
 \url{https://github.com/r-spatial/sf/issues/252}. Reading shapefiles (or other
-data sources) directly from zip files can be done by prepending the path 
+data sources) directly from zip files can be done by prepending the path
 with \code{/vsizip/}. This is part of the GDAL Virtual File Systems interface
 that also supports .gz, curl, and other operations, including chaining; see
 \url{https://gdal.org/user/virtual_file_systems.html} for a complete
@@ -162,13 +165,13 @@ about the data source. \code{read_sf} returns an sf-tibble rather than an sf-dat
 \code{write_sf} delete layers by default: it overwrites existing files without asking or warning.
 
 if \code{table} is not given but \code{query} is, the spatial
-  reference system (crs) of the table queried is only available in case it
-  has been stored into each geometry record (e.g., by PostGIS, when using
-  EWKB)
+reference system (crs) of the table queried is only available in case it
+has been stored into each geometry record (e.g., by PostGIS, when using
+EWKB)
 
-The function will automatically find the `geometry` type columns for
-  drivers that support it. For the other drivers, it will try to cast all the
-  character columns, which can be slow for very wide tables.
+The function will automatically find the \code{geometry} type columns for
+drivers that support it. For the other drivers, it will try to cast all the
+character columns, which can be slow for very wide tables.
 }
 \note{
 The use of \code{system.file} in examples make sure that examples run regardless where R is installed:

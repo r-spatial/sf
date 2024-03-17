@@ -17,7 +17,7 @@ test_that("st_crs works", {
   expect_silent(st_crs(nc1) <- st_crs(nc1))
 
   if (sf_extSoftVersion()[["GDAL"]] > "2.2.3") {
-    expect_error(st_crs("+proj=ll"), "invalid crs")
+    suppressWarnings(expect_error(st_crs("+proj=ll"), "invalid crs"))
   	# expect_error(st_crs("+proj=longlat +datum=NAD26"))
   }
   expect_silent(st_crs("+proj=longlat"))
@@ -35,32 +35,32 @@ test_that("sf_proj_info works", {
   expect_silent(x <- sf_proj_info("ellps"))
   expect_silent(x <- sf_proj_info("datum"))
   expect_silent(x <- sf_proj_info("units"))
-  expect_silent(path <- sf_proj_info("path"))
-  expect_true(is.logical(sf_proj_info(path = path)))
-  expect_true(is.logical(sf_proj_info("network")))
+  expect_silent(path <- sf_proj_info("path")[1])
+  expect_type(sf_proj_info(path = path), "logical")
+  expect_type(sf_proj_info("network"), "logical")
 })
 
 test_that("sf_proj_info works for datum files", {
-  skip_if_not(sf_extSoftVersion()[["proj.4"]] < "6.0.0")
+  skip_if(sf_extSoftVersion()[["proj.4"]] >= "6.0.0")
   expect_silent(x <- sf_proj_info("have_datum_files"))
 })
 
 test_that("$.crs works", {
-  skip_if_not(sf_extSoftVersion()[["proj.4"]] < "6.0.0")
-  expect_true(!is.null(st_crs("+init=epsg:3857")$epsg))
-  expect_true(is.character(st_crs("+init=epsg:3857")$proj4string))
+  skip_if(sf_extSoftVersion()[["proj.4"]] >= "6.0.0")
+  expect_false(is.null(st_crs("+init=epsg:3857")$epsg))
+  expect_type(st_crs("+init=epsg:3857")$proj4string, "character")
 })
 
 test_that("$.crs works with +units", {
-  skip_if_not(sf_extSoftVersion()[["proj.4"]] < "6.0.0")
-  expect_true(is.numeric(st_crs("+init=epsg:3857 +units=m")$b)) 
-  expect_true(is.character(st_crs("+init=epsg:3857 +units=m")$units))
+  skip_if(sf_extSoftVersion()[["proj.4"]] >= "6.0.0")
+  expect_type(st_crs("+init=epsg:3857 +units=m")$b, "double") 
+  expect_type(st_crs("+init=epsg:3857 +units=m")$units, "character")
 })
 
 test_that("$.crs works 2", {
   skip_if_not(sf_extSoftVersion()[["GDAL"]] < "2.5.0" && sf_extSoftVersion()[["proj.4"]] < "6.0.0")
-  expect_true(is.numeric(st_crs("+init=epsg:3857 +units=km")$b)) 
-  expect_true(is.character(st_crs("+init=epsg:3857 +units=km")$units))
+  expect_type(st_crs("+init=epsg:3857 +units=km")$b, "double")
+  expect_type(st_crs("+init=epsg:3857 +units=km")$units, "character")
 })
 
 test_that("CRS comparison uses ellipsoid and datum (#180)", {
@@ -108,5 +108,5 @@ test_that("crs.Raster works", {
   library(raster)
   r = raster()
   x = st_crs(r)
-  expect_equal(class(x), "crs")
+  expect_s3_class(x, "crs", exact = TRUE)
 })

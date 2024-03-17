@@ -241,7 +241,7 @@ st_set_crs = function(x, value) {
 #'
 #' Assert whether simple feature coordinates are longlat degrees
 #' @param x object of class \link{sf} or \link{sfc}, or otherwise an object of a class that has an \link{st_crs} method returning a \code{crs} object
-#' @return TRUE if x has geographic coordinates, FALSE if it has projected coordinates, or NA if \code{is.na(st_crs(x))}.
+#' @return `TRUE` if `x` has geographic coordinates, `FALSE` if it has projected coordinates, or `NA` if \code{is.na(st_crs(x))}.
 #' @export
 st_is_longlat = function(x) {
 	crs = st_crs(x)
@@ -392,15 +392,16 @@ is.na.crs = function(x) {
 #' @examples
 #' st_crs("EPSG:3857")$input
 #' st_crs(3857)$proj4string
-#' st_crs(3857)$b     # numeric
-#' st_crs(3857)$units # character
-#' @details the \code{$} method for \code{crs} objects retrieves named elements
+#' @details the `$` method for `crs` objects retrieves named elements
 #' using the GDAL interface; named elements include
-#' \code{"SemiMajor"}, \code{"SemiMinor"}, \code{"InvFlattening"}, \code{"IsGeographic"},
-#' \code{"units_gdal"}, \code{"IsVertical"}, \code{"WktPretty"}, \code{"Wkt"},
-#' \code{"Name"}, \code{"proj4string"}, \code{"epsg"}, \code{"yx"}, 
-#' \code{"ud_unit"}, and \code{axes} (this may be subject to changes in future GDAL versions).
-#' \code{"ud_unit"} returns a valid \link[units]{units} object or \code{NULL} if units are missing.
+#' `SemiMajor`, `SemiMinor`, `InvFlattening`, `IsGeographic`,
+#' `units_gdal`, `IsVertical`, `WktPretty`, `Wkt`,
+#' `Name`, `proj4string`, `epsg`, `yx`, 
+#' `ud_unit`, and `axes` (this may be subject to changes in future GDAL versions).
+#'
+#' Note that not all valid CRS have a corresponding `proj4string`. 
+#'
+#' `ud_unit` returns a valid \link[units]{units} object or `NULL` if units are missing.
 #' @export
 `$.crs` = function(x, name) {
 

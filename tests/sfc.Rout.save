@@ -1,6 +1,6 @@
 
-R version 4.3.1 (2023-06-16) -- "Beagle Scouts"
-Copyright (C) 2023 The R Foundation for Statistical Computing
+R version 4.3.3 (2024-02-29) -- "Angel Food Cake"
+Copyright (C) 2024 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -347,7 +347,7 @@ use `st_zm(...)` to coerce to XY dimensions
 > 
 > sf_extSoftVersion()[1:3]
     GEOS     GDAL   proj.4 
-"3.11.1"  "3.6.4"  "9.1.1" 
+"3.12.1"  "3.8.4"  "9.3.1" 
 > 
 > # Ops.sfc:
 > ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))))
@@ -699,7 +699,7 @@ POINT (76.1712 32.1029)
 > x = st_sfc(st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90)))),
 +  crs=st_crs(4326))
 > #FIXME:
-> # if (sf_extSoftVersion()["proj.4"] >= "4.9.0") # lwgeom breaks on this
+> # if (sf_extSoftVersion()[["proj.4"]] >= "4.9.0") # lwgeom breaks on this
 > #   (p <- st_sample(x, 10))
 > pt = st_multipoint(matrix(1:20,,2))
 > st_sample(p, 3)
@@ -1089,4 +1089,4 @@ CRS:           NA
 > 
 > proc.time()
    user  system elapsed 
-  4.676   0.117   4.784 
+  5.159   1.424   5.082 

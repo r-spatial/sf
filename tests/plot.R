@@ -71,9 +71,11 @@ plot(nc)
 plot(nc, axes = TRUE)
 plot(nc, col="lightgrey") 
 plot(st_centroid(nc), add = TRUE, col = 1)
-nc %>% 
+if ("geometry" %in% names(nc)) {
+ nc %>% 
   select(geometry) %>% 
   plot()
+}
 
 nc$f = cut(nc[[1]], 5)
 plot(nc["f"], key.pos = 1)

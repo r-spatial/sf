@@ -37,7 +37,7 @@ set_utf8 = function(x) {
 #' @param options character; driver dependent dataset open options, multiple
 #'   options supported. For possible values, see the "Open options" section
 #'   of the GDAL documentation of the corresponding driver, and
-#'   https://github.com/r-spatial/sf/issues/1157 for an example.
+#'   <https://github.com/r-spatial/sf/issues/1157> for an example.
 #' @param quiet logical; suppress info on name, driver, size and spatial
 #'   reference, or signaling no or multiple layers
 #' @param geometry_column integer or character; in case of multiple geometry
@@ -51,13 +51,13 @@ set_utf8 = function(x) {
 #'   of LineString and MultiLineString, or of Polygon and MultiPolygon, convert
 #'   all to the Multi variety; defaults to \code{TRUE}
 #' @param stringsAsFactors logical; logical: should character vectors be
-#'   converted to factors?  Default for \code{read_sf} or R version >= 4.1.0 is 
+#'   converted to factors?  Default for \code{read_sf} or R version >= 4.1.0 is
 #' \code{FALSE}, for \code{st_read} and R version < 4.1.0 equal to
 #' \code{default.stringsAsFactors()}
-#' @param int64_as_string logical; if TRUE, Int64 attributes are returned as
-#'   string; if FALSE, they are returned as double and a warning is given when
+#' @param int64_as_string logical; if `TRUE`, Int64 attributes are returned as
+#'   string; if `FALSE`, they are returned as double and a warning is given when
 #'   precision is lost (i.e., values are larger than 2^53).
-#' @param check_ring_dir logical; if TRUE, polygon ring directions are checked
+#' @param check_ring_dir logical; if `TRUE`, polygon ring directions are checked
 #'   and if necessary corrected (when seen from above: exterior ring counter
 #'   clockwise, holes clockwise)
 #' @details for \code{geometry_column}, see also
@@ -146,7 +146,7 @@ st_read.default = function(dsn, layer, ...) {
 }
 
 process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
-		stringsAsFactors = ifelse(as_tibble, FALSE, sf_stringsAsFactors()), 
+		stringsAsFactors = ifelse(as_tibble, FALSE, sf_stringsAsFactors()),
 		geometry_column = 1, as_tibble = FALSE, optional = FALSE) {
 
 	which.geom = which(vapply(x, function(f) inherits(f, "sfc"), TRUE))
@@ -156,7 +156,7 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 
 	# in case no geometry is present:
 	if (length(which.geom) == 0) {
-		if (! quiet) 
+		if (! quiet)
 			warning("no simple feature geometries present: returning a data.frame or tbl_df", call. = FALSE)
 		x = if (!as_tibble) {
 				if (any(sapply(x, is.list)))
@@ -192,8 +192,13 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 	for (i in seq_along(lc.other))
 		x[[ nm.lc[i] ]] = list.cols[[i]]
 
-	for (i in seq_along(geom))
-		x[[ nm[i] ]] = st_sfc(geom[[i]], crs = attr(geom[[i]], "crs")) # computes bbox
+	for (i in seq_along(geom)) {
+		if (is.null(attr(geom[[i]], "bbox"))) {
+			x[[ nm[i] ]] = st_sfc(geom[[i]], crs = attr(geom[[i]], "crs")) # computes bbox
+		} else {
+			x[[ nm[i] ]] = geom[[i]]
+		}
+	}
 
 	x = st_as_sf(x, ...,
 		sf_column_name = if (is.character(geometry_column)) geometry_column else nm[geometry_column],
@@ -204,20 +209,77 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 		x
 }
 
+# Allow setting the default to TRUE to make it easier to run existing tests
+# of st_read() through the stream interface
+default_st_read_use_stream = function() {
+	getOption(
+		"sf.st_read_use_stream",
+		identical(Sys.getenv("R_SF_ST_READ_USE_STREAM"), "true")
+	)
+}
+
+process_cpl_read_ogr_stream = function(x, geom_column_info, num_features, fid_column_name,
+                                       crs = NULL, promote_to_multi = TRUE, ...) {
+	is_geometry_column = vapply(
+		x$get_schema()$children,
+		function(s) identical(s$metadata[["ARROW:extension:name"]], "ogc.wkb"),
+		logical(1)
+	)
+    
+    geom_column_info$index = which(is_geometry_column)
+    
+    if (num_features == -1) {
+		num_features = NULL
+	}
+    
+    # Suppress warnings about extension type conversion (since we want the
+    # default behaviour of converting the storage type)
+	df = suppressWarnings(nanoarrow::convert_array_stream(x, size = num_features))
+	
+	for (i in seq_len(nrow(geom_column_info))) {
+		crs = if (is.null(crs)) st_crs(geom_column_info$crs[[i]]) else st_crs(crs)
+		name = geom_column_info$name[[i]]
+		index = geom_column_info$index[[i]]
+		
+		column_wkb = df[[index]]
+		attributes(column_wkb) = NULL
+		column_sfc = wk::wk_handle(
+			wk::new_wk_wkb(column_wkb),
+			wk::sfc_writer(promote_multi = promote_to_multi)
+		)
+		
+		df[[index]] = st_set_crs(column_sfc, crs)
+		names(df)[index] = name
+	}
+	
+	# Rename OGC_FID to fid_column_name and move to end
+	if (length(fid_column_name) == 1 && "OGC_FID" %in% names(df)) {
+		df = df[c(setdiff(names(df), "OGC_FID"), "OGC_FID")]
+		names(df)[names(df) == "OGC_FID"] = fid_column_name
+	}
+	
+	# All geometry columns to the end
+	df = df[c(setdiff(seq_along(df), geom_column_info$index), geom_column_info$index)]
+	
+	process_cpl_read_ogr(df, ...)
+}
+
 #' @name st_read
 #' @param fid_column_name character; name of column to write feature IDs to; defaults to not doing this
 #' @param drivers character; limited set of driver short names to be tried (default: try all)
 #' @param wkt_filter character; WKT representation of a spatial filter (may be used as bounding box, selecting overlapping geometries); see examples
 #' @param optional logical; passed to \link[base]{as.data.frame}; always \code{TRUE} when \code{as_tibble} is \code{TRUE}
+#' @param use_stream Use `TRUE` to use the experimental columnar interface introduced in GDAL 3.6.
 #' @note The use of \code{system.file} in examples make sure that examples run regardless where R is installed:
 #' typical users will not use \code{system.file} but give the file name directly, either with full path or relative
 #' to the current working directory (see \link{getwd}). "Shapefiles" consist of several files with the same basename
 #' that reside in the same directory, only one of them having extension \code{.shp}.
 #' @export
-st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet = FALSE, geometry_column = 1L, 
+st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet = FALSE, geometry_column = 1L,
 		type = 0, promote_to_multi = TRUE, stringsAsFactors = sf_stringsAsFactors(),
 		int64_as_string = FALSE, check_ring_dir = FALSE, fid_column_name = character(0),
-		drivers = character(0), wkt_filter = character(0), optional = FALSE) {
+		drivers = character(0), wkt_filter = character(0), optional = FALSE,
+		use_stream = default_st_read_use_stream()) {
 
 	layer = if (missing(layer))
 		character(0)
@@ -233,11 +295,24 @@ st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet 
 	if (length(promote_to_multi) > 1)
 		stop("`promote_to_multi' should have length one, and applies to all geometry columns")
 
-	x = CPL_read_ogr(dsn, layer, query, as.character(options), quiet, type, fid_column_name,
-		drivers, wkt_filter, promote_to_multi, int64_as_string, dsn_exists, dsn_isdb, getOption("width"))
-	process_cpl_read_ogr(x, quiet, check_ring_dir = check_ring_dir,
-		stringsAsFactors = stringsAsFactors, geometry_column = geometry_column, 
-		optional = optional, ...)
+
+
+	if (use_stream) {
+		stream = nanoarrow::nanoarrow_allocate_array_stream()
+		info = CPL_read_gdal_stream(stream, dsn, layer, query, as.character(options), quiet,
+		    drivers, wkt_filter, dsn_exists, dsn_isdb, fid_column_name, getOption("width"))
+		geom_column_info = data.frame(name = info[[1]], crs = info[[2]], stringsAsFactors = FALSE)
+		process_cpl_read_ogr_stream(stream, geom_column_info, num_features = info[[3]],
+			fid_column_name = fid_column_name, stringsAsFactors = stringsAsFactors, quiet = quiet,
+			promote_to_multi = promote_to_multi, ...)
+	} else {
+		x = CPL_read_ogr(dsn, layer, query, as.character(options), quiet, type, fid_column_name,
+		    drivers, wkt_filter, promote_to_multi, int64_as_string, dsn_exists, dsn_isdb, getOption("width"))
+
+        process_cpl_read_ogr(x, quiet, check_ring_dir = check_ring_dir,
+			stringsAsFactors = stringsAsFactors, geometry_column = geometry_column,
+			optional = optional, ...)
+	}
 }
 
 #' @name st_read
@@ -606,7 +681,7 @@ print.sf_layers = function(x, ...) {
 #' @param options character; driver dependent dataset open options, multiple options supported.
 #' @param do_count logical; if TRUE, count the features by reading them, even if their count is not reported by the driver
 #' @name st_layers
-#' @return list object of class \code{sf_layers} with elements 
+#' @return list object of class \code{sf_layers} with elements
 #' \describe{
 #'   \item{name}{name of the layer}
 #'   \item{geomtype}{list with for each layer the geometry types}
@@ -751,8 +826,8 @@ check_append_delete <- function(append, delete) {
 
 #' @name st_write
 #' @export
-#' @details st_delete deletes layer(s) in a data source, or a data source if layers are 
-#' omitted; it returns TRUE on success, FALSE on failure, invisibly.
+#' @details `st_delete()` deletes layer(s) in a data source, or a data source if layers are
+#' omitted; it returns `TRUE` on success, `FALSE` on failure, invisibly.
 st_delete = function(dsn, layer = character(0), driver = guess_driver_can_write(dsn), quiet = FALSE) {
 	invisible(CPL_delete_ogr(dsn, layer, driver, quiet) == 0)
 }

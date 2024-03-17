@@ -9,6 +9,7 @@
 #' @param RasterIO_parameters list with named parameters to GDAL's RasterIO; see the stars::read_stars documentation.
 #' @details These functions are exported for the single purpose of being used by package stars, they are not meant to be used directly and may change or disappear without prior notice or deprecation warnings.
 #' @name gdal
+#' @keywords internal
 #' @export
 gdal_read = function(x, ..., options = character(0), driver = character(0), read_data = TRUE, NA_value = NA_real_,
 		RasterIO_parameters = list()) {
@@ -21,7 +22,7 @@ gdal_read = function(x, ..., options = character(0), driver = character(0), read
 		as.logical(read_data), as.double(NA_value), RasterIO_parameters, max_cells)
 }
 
-#' @name gdal
+#' @rdname gdal
 #' @export
 #' @param type gdal write type
 #' @param geotransform length 6 numeric vector with GDAL geotransform parameters.
@@ -95,7 +96,7 @@ gdal_write = function(x, ..., file, driver = "GTiff", options = character(0), ty
 }
 
 #' @param gt double vector of length 6
-#' @name gdal
+#' @rdname gdal
 #' @details gdal_inv_geotransform returns the inverse geotransform
 #' @export
 gdal_inv_geotransform = function(gt)
@@ -207,14 +208,14 @@ st_as_sfc.dimensions = function(x, ..., as_points = NA, use_cpp = TRUE, which = 
 #' @details gdal_crs reads coordinate reference system from GDAL data set
 #' @param file character; file name
 #' @return object of class \code{crs}, see \link{st_crs}.
-#' @name gdal
+#' @rdname gdal
 #' @export
 gdal_crs = function(file, options = character(0)) {
 	st_crs(CPL_get_crs(file, options)$crs)
 }
 
 #' @details get_metadata gets metadata of a raster layer
-#' @name gdal
+#' @rdname gdal
 #' @export
 #' @param domain_item character vector of length 0, 1 (with domain), or 2 (with domain and item); use \code{""} for the default domain, use \code{NA_character_} to query the domain names.
 #' @param parse logical; should metadata be parsed into a named list (\code{TRUE}) or returned as character data?
@@ -252,7 +253,7 @@ split_strings = function(md, split = "=") {
 #' @param name logical; retrieve name of subdataset? If \code{FALSE}, retrieve description
 #' @export
 #' @return \code{gdal_subdatasets} returns a zero-length list if \code{file} does not have subdatasets, and else a named list with subdatasets.
-#' @name gdal
+#' @rdname gdal
 #' @details gdal_subdatasets returns the subdatasets of a gdal dataset
 gdal_subdatasets = function(file, options = character(0), name = TRUE) {
 	if (!("SUBDATASETS" %in% CPL_get_metadata(file, NA_character_, options)))
@@ -272,7 +273,7 @@ gdal_subdatasets = function(file, options = character(0), name = TRUE) {
 #' @param use_contours logical;
 #' @param contour_lines logical;
 #' @param connect8 logical; if \code{TRUE} use 8 connection algorithm, rather than 4
-#' @name gdal
+#' @rdname gdal
 #' @export
 gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", use_integer = TRUE,
 		geotransform, breaks = classInt::classIntervals(na.omit(as.vector(x[[1]])))$brks, 
@@ -336,7 +337,7 @@ gdal_rasterize = function(sf, x, gt, file, driver = "GTiff", options = character
 }
 
 #' @export
-#' @name gdal
+#' @rdname gdal
 #' @param f gdal raster data source filename
 #' @param pts points matrix
 #' @param bilinear logical; use bilinear interpolation, rather than nearest neighbor?
@@ -344,7 +345,7 @@ gdal_extract = function(f, pts, bilinear = FALSE) {
 	CPL_extract(f, pts, as.logical(bilinear))
 }
 
-#' @name gdal
+#' @rdname gdal
 #' @param file file name
 #' @param array_name array name
 #' @param offset offset (pixels)
@@ -353,13 +354,13 @@ gdal_extract = function(f, pts, bilinear = FALSE) {
 #' @param proxy logical; return proxy object?
 #' @param debug logical; print debug messages?
 #' @export
-gdal_read_mdim = function(file, array_name = character(0), options = character(0), 
+gdal_read_mdim = function(file, array_name = character(0), options = character(0),
 						  offset = integer(0), count = integer(0), step = integer(0), 
 						  proxy = FALSE, debug = FALSE) {
 	CPL_read_mdim(file, array_name, options, offset, count, step, proxy, debug)
 }
 
-#' @name gdal
+#' @rdname gdal
 #' @param dimx integer named vector with dimensions of object
 #' @param cdl list with variables, each having a named dim attribute
 #' @param wkt character; WKT of crs
@@ -387,7 +388,7 @@ gdal_create = function(f, nxy, values, crs, xlim, ylim) {
 	CPL_create(as.character(f), as.integer(nxy), as.double(values), crs$wkt, as.double(xlim), as.double(ylim))
 }
 
-#' add or remove overviews to/from a raster image
+#' Add or remove overviews to/from a raster image
 #'
 #' add or remove overviews to/from a raster image
 #' @param file character; file name
@@ -403,7 +404,7 @@ gdal_create = function(f, nxy, values, crs, xlim, ylim) {
 #' @export
 gdal_addo = function(file, overviews = c(2,4,8,16), method = "NEAREST", layers = integer(0), 
 					 options = character(0), config_options = character(0), clean = FALSE, read_only = FALSE) {
-	stopifnot(length(method) == 1, is.character(method), is.numeric(overviews))
+	stopifnot(length(method) == 1, is.character(method), is.numeric(overviews), is.character(config_options))
 	invisible(CPL_gdaladdo(file, method, as.integer(overviews), as.integer(layers), as.character(options), 
-				 as.character(config_options), as.logical(clean)[1], as.logical(read_only)[1]))
+				 config_options, as.logical(clean)[1], as.logical(read_only)[1]))
 }

@@ -2,7 +2,6 @@
 % Please edit documentation in R/tidyverse.R, R/join.R
 \name{tidyverse}
 \alias{tidyverse}
-\alias{dplyr_reconstruct.sf}
 \alias{filter.sf}
 \alias{arrange.sf}
 \alias{group_by.sf}
@@ -12,6 +11,7 @@
 \alias{transmute.sf}
 \alias{select.sf}
 \alias{rename.sf}
+\alias{rename_with.sf}
 \alias{slice.sf}
 \alias{summarise.sf}
 \alias{summarise}
@@ -22,6 +22,7 @@
 \alias{spread.sf}
 \alias{sample_n.sf}
 \alias{sample_frac.sf}
+\alias{group_split.sf}
 \alias{nest.sf}
 \alias{separate.sf}
 \alias{separate_rows.sf}
@@ -34,10 +35,8 @@
 \alias{full_join.sf}
 \alias{semi_join.sf}
 \alias{anti_join.sf}
-\title{Tidyverse methods for sf objects (remove .sf suffix!)}
+\title{Tidyverse methods for sf objects}
 \usage{
-dplyr_reconstruct.sf(data, template)
-
 filter.sf(.data, ..., .dots)
 
 arrange.sf(.data, ..., .dots)
@@ -55,6 +54,8 @@ transmute.sf(.data, ..., .dots)
 select.sf(.data, ...)
 
 rename.sf(.data, ...)
+
+rename_with.sf(.data, .fn, .cols, ...)
 
 slice.sf(.data, ..., .dots)
 
@@ -91,17 +92,21 @@ pivot_longer.sf(
 
 pivot_wider.sf(
   data,
+  ...,
   id_cols = NULL,
-  names_from,
+  id_expand = FALSE,
+  names_from = name,
   names_prefix = "",
   names_sep = "_",
   names_glue = NULL,
   names_sort = FALSE,
+  names_vary = "fastest",
+  names_expand = FALSE,
   names_repair = "check_unique",
-  values_from,
+  values_from = value,
   values_fill = NULL,
   values_fn = NULL,
-  ...
+  unused_fn = NULL
 )
 
 spread.sf(
@@ -123,6 +128,8 @@ sample_frac.sf(
   weight = NULL,
   .env = parent.frame()
 )
+
+group_split.sf(.tbl, ..., .keep = TRUE)
 
 nest.sf(.data, ...)
 
@@ -159,10 +166,6 @@ semi_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 anti_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 }
 \arguments{
-\item{data}{see original function docs}
-
-\item{template}{see original function docs}
-
 \item{.data}{data object of class \link{sf}}
 
 \item{...}{other arguments}
@@ -175,11 +178,15 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 lazy data frames (e.g. from dbplyr or dtplyr). See \emph{Methods}, below, for
 more details.}
 
+\item{.fn, .cols}{see original docs}
+
 \item{do_union}{logical; in case \code{summary} does not create a geometry column, should geometries be created by unioning using \link{st_union}, or simply by combining using \link{st_combine}? Using \link{st_union} resolves internal boundaries, but in case of unioning points, this will likely change the order of the points; see Details.}
 
 \item{is_coverage}{logical; if \code{do_union} is \code{TRUE}, use an optimized algorithm for features that form a polygonal coverage (have no overlaps)}
 
 \item{.keep_all}{see corresponding function in dplyr}
+
+\item{data}{see original function docs}
 
 \item{key}{see original function docs}
 
@@ -193,41 +200,15 @@ more details.}
 
 \item{cols}{see original function docs}
 
-\item{names_to}{see original function docs}
+\item{names_to, names_pattern, names_ptypes, names_transform}{see \code{\link[tidyr:pivot_longer]{tidyr::pivot_longer()}}}
 
-\item{names_prefix}{see original function docs}
+\item{names_prefix, names_sep, names_repair}{see original function docs.}
 
-\item{names_sep}{see original function docs}
+\item{values_to, values_drop_na, values_ptypes, values_transform}{See \code{\link[tidyr:pivot_longer]{tidyr::pivot_longer()}}}
 
-\item{names_pattern}{see original function docs}
+\item{id_cols, id_expand, names_from, names_sort, names_glue, names_vary, names_expand}{see \code{\link[tidyr:pivot_wider]{tidyr::pivot_wider()}}}
 
-\item{names_ptypes}{see original function docs}
-
-\item{names_transform}{see original function docs}
-
-\item{names_repair}{see original function docs}
-
-\item{values_to}{see original function docs}
-
-\item{values_drop_na}{see original function docs}
-
-\item{values_ptypes}{see original function docs}
-
-\item{values_transform}{see original function docs}
-
-\item{id_cols}{see original function docs}
-
-\item{names_from}{see original function docs}
-
-\item{names_glue}{see original function docs}
-
-\item{names_sort}{see original function docs}
-
-\item{values_from}{see original function docs}
-
-\item{values_fill}{see original function docs}
-
-\item{values_fn}{see original function docs}
+\item{values_from, values_fill, values_fn, unused_fn}{see \code{\link[tidyr:pivot_wider]{tidyr::pivot_wider()}}}
 
 \item{fill}{see original function docs}
 
@@ -244,6 +225,10 @@ more details.}
 \item{weight}{see original function docs}
 
 \item{.env}{see original function docs}
+
+\item{.tbl}{see original function docs}
+
+\item{.keep}{see original function docs}
 
 \item{col}{see \link[tidyr]{separate}}
 
@@ -297,7 +282,8 @@ Should be a character vector of length 2.}
 an object of class \link{sf}
 }
 \description{
-Tidyverse methods for sf objects. Geometries are sticky, use \link{as.data.frame} to let \code{dplyr}'s own methods drop them. Use these methods without the .sf suffix and after loading the tidyverse package with the generic (or after loading package tidyverse).
+Tidyverse methods for sf objects. Geometries are sticky, use \link{as.data.frame} to let \code{dplyr}'s own methods drop them.
+Use these methods after loading the tidyverse package with the generic (or after loading package tidyverse).
 }
 \details{
 \code{select} keeps the geometry regardless whether it is selected or not; to deselect it, first pipe through \code{as.data.frame} to let dplyr's own \code{select} drop it.
@@ -335,14 +321,11 @@ if (require(dplyr, quietly = TRUE)) {
  nc2 <- nc \%>\% mutate(area10 = AREA/10)
 }
 if (require(dplyr, quietly = TRUE)) {
- nc \%>\% transmute(AREA = AREA/10, geometry = geometry) \%>\% class()
  nc \%>\% transmute(AREA = AREA/10) \%>\% class()
 }
 if (require(dplyr, quietly = TRUE)) {
  nc \%>\% select(SID74, SID79) \%>\% names()
- nc \%>\% select(SID74, SID79, geometry) \%>\% names()
  nc \%>\% select(SID74, SID79) \%>\% class()
- nc \%>\% select(SID74, SID79, geometry) \%>\% class()
 }
 if (require(dplyr, quietly = TRUE)) {
  nc2 <- nc \%>\% rename(area = AREA)
@@ -360,10 +343,10 @@ if (require(dplyr, quietly = TRUE)) {
 if (require(dplyr, quietly = TRUE)) {
  nc[c(1:100, 1:10), ] \%>\% distinct() \%>\% nrow()
 }
-if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE)) {
+if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE) && "geometry" \%in\% names(nc)) {
  nc \%>\% select(SID74, SID79) \%>\% gather("VAR", "SID", -geometry) \%>\% summary()
 }
-if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE)) {
+if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE) && "geometry" \%in\% names(nc)) {
  nc$row = 1:100 # needed for spread to work
  nc \%>\% select(SID74, SID79, geometry, row) \%>\%
 	gather("VAR", "SID", -geometry, -row) \%>\%

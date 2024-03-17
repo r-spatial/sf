@@ -228,28 +228,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// CPL_get_proj_search_paths
-Rcpp::CharacterVector CPL_get_proj_search_paths(Rcpp::CharacterVector paths);
-RcppExport SEXP _sf_CPL_get_proj_search_paths(SEXP pathsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type paths(pathsSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_get_proj_search_paths(paths));
-    return rcpp_result_gen;
-END_RCPP
-}
-// CPL_set_proj_search_paths
-Rcpp::CharacterVector CPL_set_proj_search_paths(Rcpp::CharacterVector paths);
-RcppExport SEXP _sf_CPL_set_proj_search_paths(SEXP pathsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type paths(pathsSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_set_proj_search_paths(paths));
-    return rcpp_result_gen;
-END_RCPP
-}
 // CPL_area
 Rcpp::NumericVector CPL_area(Rcpp::List sfc);
 RcppExport SEXP _sf_CPL_area(SEXP sfcSEXP) {
@@ -342,6 +320,28 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type dsn_isdb(dsn_isdbSEXP);
     Rcpp::traits::input_parameter< int >::type width(widthSEXP);
     rcpp_result_gen = Rcpp::wrap(CPL_read_ogr(datasource, layer, query, options, quiet, toTypeUser, fid_column_name, drivers, wkt_filter, promote_to_multi, int64_as_string, dsn_exists, dsn_isdb, width));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_read_gdal_stream
+Rcpp::List CPL_read_gdal_stream(Rcpp::RObject stream_xptr, Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer, Rcpp::CharacterVector query, Rcpp::CharacterVector options, bool quiet, Rcpp::CharacterVector drivers, Rcpp::CharacterVector wkt_filter, bool dsn_exists, bool dsn_isdb, Rcpp::CharacterVector fid_column, int width);
+RcppExport SEXP _sf_CPL_read_gdal_stream(SEXP stream_xptrSEXP, SEXP datasourceSEXP, SEXP layerSEXP, SEXP querySEXP, SEXP optionsSEXP, SEXP quietSEXP, SEXP driversSEXP, SEXP wkt_filterSEXP, SEXP dsn_existsSEXP, SEXP dsn_isdbSEXP, SEXP fid_columnSEXP, SEXP widthSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::RObject >::type stream_xptr(stream_xptrSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type datasource(datasourceSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type layer(layerSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type query(querySEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type options(optionsSEXP);
+    Rcpp::traits::input_parameter< bool >::type quiet(quietSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type drivers(driversSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type wkt_filter(wkt_filterSEXP);
+    Rcpp::traits::input_parameter< bool >::type dsn_exists(dsn_existsSEXP);
+    Rcpp::traits::input_parameter< bool >::type dsn_isdb(dsn_isdbSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type fid_column(fid_columnSEXP);
+    Rcpp::traits::input_parameter< int >::type width(widthSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_read_gdal_stream(stream_xptr, datasource, layer, query, options, quiet, drivers, wkt_filter, dsn_exists, dsn_isdb, fid_column, width));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -440,6 +440,22 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type co(coSEXP);
     Rcpp::traits::input_parameter< bool >::type quiet(quietSEXP);
     rcpp_result_gen = Rcpp::wrap(CPL_gdaltranslate(src, dst, options, oo, co, quiet));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_gdalfootprint
+Rcpp::LogicalVector CPL_gdalfootprint(Rcpp::CharacterVector src, Rcpp::CharacterVector dst, Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector co, bool quiet);
+RcppExport SEXP _sf_CPL_gdalfootprint(SEXP srcSEXP, SEXP dstSEXP, SEXP optionsSEXP, SEXP ooSEXP, SEXP coSEXP, SEXP quietSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type src(srcSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type dst(dstSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type options(optionsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type oo(ooSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type co(coSEXP);
+    Rcpp::traits::input_parameter< bool >::type quiet(quietSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_gdalfootprint(src, dst, options, oo, co, quiet));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -858,6 +874,32 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_line_project
+Rcpp::NumericVector CPL_line_project(Rcpp::List lines, Rcpp::List points, bool normalized);
+RcppExport SEXP _sf_CPL_line_project(SEXP linesSEXP, SEXP pointsSEXP, SEXP normalizedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type lines(linesSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type points(pointsSEXP);
+    Rcpp::traits::input_parameter< bool >::type normalized(normalizedSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_line_project(lines, points, normalized));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_line_interpolate
+Rcpp::List CPL_line_interpolate(Rcpp::List lines, Rcpp::NumericVector dists, bool normalized);
+RcppExport SEXP _sf_CPL_line_interpolate(SEXP linesSEXP, SEXP distsSEXP, SEXP normalizedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type lines(linesSEXP);
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type dists(distsSEXP);
+    Rcpp::traits::input_parameter< bool >::type normalized(normalizedSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_line_interpolate(lines, dists, normalized));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_hex_to_raw
 Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx);
 RcppExport SEXP _sf_CPL_hex_to_raw(SEXP cxSEXP) {
@@ -1011,13 +1053,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_get_data_dir
-Rcpp::CharacterVector CPL_get_data_dir(bool b);
-RcppExport SEXP _sf_CPL_get_data_dir(SEXP bSEXP) {
+Rcpp::CharacterVector CPL_get_data_dir(bool from_proj);
+RcppExport SEXP _sf_CPL_get_data_dir(SEXP from_projSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< bool >::type b(bSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_get_data_dir(b));
+    Rcpp::traits::input_parameter< bool >::type from_proj(from_projSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_get_data_dir(from_proj));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1045,13 +1087,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_set_data_dir
-Rcpp::LogicalVector CPL_set_data_dir(std::string data_dir);
-RcppExport SEXP _sf_CPL_set_data_dir(SEXP data_dirSEXP) {
+Rcpp::LogicalVector CPL_set_data_dir(Rcpp::CharacterVector data_dir, bool with_proj);
+RcppExport SEXP _sf_CPL_set_data_dir(SEXP data_dirSEXP, SEXP with_projSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type data_dir(data_dirSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_set_data_dir(data_dir));
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type data_dir(data_dirSEXP);
+    Rcpp::traits::input_parameter< bool >::type with_proj(with_projSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_set_data_dir(data_dir, with_proj));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1330,7 +1373,7 @@ RcppExport SEXP _sf_CPL_read_wkb(SEXP wkb_listSEXP, SEXP EWKBSEXP, SEXP spatiali
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
@@ -1365,7 +1408,7 @@ RcppExport SEXP _sf_CPL_write_wkb(SEXP sfcSEXP, SEXP EWKBSEXP) {
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
@@ -1433,8 +1476,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_sfc_from_wkt", (DL_FUNC) &_sf_CPL_sfc_from_wkt, 1},
     {"_sf_CPL_gdal_with_geos", (DL_FUNC) &_sf_CPL_gdal_with_geos, 0},
     {"_sf_CPL_axis_order_authority_compliant", (DL_FUNC) &_sf_CPL_axis_order_authority_compliant, 1},
-    {"_sf_CPL_get_proj_search_paths", (DL_FUNC) &_sf_CPL_get_proj_search_paths, 1},
-    {"_sf_CPL_set_proj_search_paths", (DL_FUNC) &_sf_CPL_set_proj_search_paths, 1},
     {"_sf_CPL_area", (DL_FUNC) &_sf_CPL_area, 1},
     {"_sf_CPL_gdal_dimension", (DL_FUNC) &_sf_CPL_gdal_dimension, 2},
     {"_sf_CPL_length", (DL_FUNC) &_sf_CPL_length, 1},
@@ -1442,12 +1483,14 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_gdal_linestring_sample", (DL_FUNC) &_sf_CPL_gdal_linestring_sample, 2},
     {"_sf_CPL_get_layers", (DL_FUNC) &_sf_CPL_get_layers, 3},
     {"_sf_CPL_read_ogr", (DL_FUNC) &_sf_CPL_read_ogr, 14},
+    {"_sf_CPL_read_gdal_stream", (DL_FUNC) &_sf_CPL_read_gdal_stream, 12},
     {"_sf_CPL_gdalinfo", (DL_FUNC) &_sf_CPL_gdalinfo, 4},
     {"_sf_CPL_ogrinfo", (DL_FUNC) &_sf_CPL_ogrinfo, 4},
     {"_sf_CPL_gdaladdo", (DL_FUNC) &_sf_CPL_gdaladdo, 8},
     {"_sf_CPL_gdalwarp", (DL_FUNC) &_sf_CPL_gdalwarp, 8},
     {"_sf_CPL_gdalrasterize", (DL_FUNC) &_sf_CPL_gdalrasterize, 8},
     {"_sf_CPL_gdaltranslate", (DL_FUNC) &_sf_CPL_gdaltranslate, 6},
+    {"_sf_CPL_gdalfootprint", (DL_FUNC) &_sf_CPL_gdalfootprint, 6},
     {"_sf_CPL_gdalvectortranslate", (DL_FUNC) &_sf_CPL_gdalvectortranslate, 7},
     {"_sf_CPL_gdalbuildvrt", (DL_FUNC) &_sf_CPL_gdalbuildvrt, 6},
     {"_sf_CPL_gdaldemprocessing", (DL_FUNC) &_sf_CPL_gdaldemprocessing, 8},
@@ -1477,6 +1520,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_transpose_sparse_incidence", (DL_FUNC) &_sf_CPL_transpose_sparse_incidence, 2},
     {"_sf_CPL_nary_difference", (DL_FUNC) &_sf_CPL_nary_difference, 1},
     {"_sf_CPL_nary_intersection", (DL_FUNC) &_sf_CPL_nary_intersection, 1},
+    {"_sf_CPL_line_project", (DL_FUNC) &_sf_CPL_line_project, 3},
+    {"_sf_CPL_line_interpolate", (DL_FUNC) &_sf_CPL_line_interpolate, 3},
     {"_sf_CPL_hex_to_raw", (DL_FUNC) &_sf_CPL_hex_to_raw, 1},
     {"_sf_CPL_raw_to_hex", (DL_FUNC) &_sf_CPL_raw_to_hex, 1},
     {"_sf_CPL_read_mdim", (DL_FUNC) &_sf_CPL_read_mdim, 8},
@@ -1490,7 +1535,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_get_data_dir", (DL_FUNC) &_sf_CPL_get_data_dir, 1},
     {"_sf_CPL_is_network_enabled", (DL_FUNC) &_sf_CPL_is_network_enabled, 1},
     {"_sf_CPL_enable_network", (DL_FUNC) &_sf_CPL_enable_network, 2},
-    {"_sf_CPL_set_data_dir", (DL_FUNC) &_sf_CPL_set_data_dir, 1},
+    {"_sf_CPL_set_data_dir", (DL_FUNC) &_sf_CPL_set_data_dir, 2},
     {"_sf_CPL_use_proj4_init_rules", (DL_FUNC) &_sf_CPL_use_proj4_init_rules, 1},
     {"_sf_CPL_proj_version", (DL_FUNC) &_sf_CPL_proj_version, 1},
     {"_sf_CPL_proj_is_valid", (DL_FUNC) &_sf_CPL_proj_is_valid, 1},

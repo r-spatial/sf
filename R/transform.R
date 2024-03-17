@@ -25,6 +25,7 @@ chk_mpol = function(x) {
 sanity_check = function(x) {
 	d = st_dimension(x) # flags empty geoms as NA
 	if (any(d == 2, na.rm = TRUE)) { # the polygon stuff
+		x = st_cast(x[d == 2]) # convert GEOMETRY to POLYGON or MULTIPOLYGON, if possible
 		if (inherits(x, "sfc_POLYGON"))
 			st_sfc(lapply(x, chk_pol), crs = st_crs(x))
 		else if (inherits(x, "sfc_MULTIPOLYGON"))
@@ -70,7 +71,7 @@ st_can_transform = function(src, dst) {
 #' ambiguity in the axis order of the specified coordinate reference system;
 #' if you need the traditional GIS order, use \code{"OGC:CRS84"}, not
 #' \code{"EPSG:4326"}. Extra care is needed with the ESRI Shapefile format,
-#' because WKT1 does not store axis order unambigiously.
+#' because WKT1 does not store axis order unambiguously.
 #'
 #' @seealso \link[lwgeom]{st_transform_proj}, part of package lwgeom.
 #' 
@@ -88,7 +89,6 @@ st_transform = function(x, crs, ...) UseMethod("st_transform")
 #' @export
 #' @examples
 #' st_transform(st_sf(a=2:1, geom=sfc), "+init=epsg:3857")
-#' try(st_transform(sfc, 3857, aoi = c(-280,-90,180,90)))
 #' if (sf_extSoftVersion()["GDAL"] >= "3.0.0") {
 #'   st_transform(sfc, pipeline =
 #' 	  "+proj=pipeline +step +proj=axisswap +order=2,1") # reverse axes

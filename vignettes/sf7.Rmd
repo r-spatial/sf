@@ -21,7 +21,7 @@ knitr::opts_chunk$set(collapse = TRUE)
 # Introduction
 
 This vignette describes what spherical geometry implies, and how
-package `sf` uses the s2geometry library (https://s2geometry.io)
+package `sf` uses the s2geometry library (http://s2geometry.io)
 for geometrical measures, predicates and transformations.  The code
 in this vignette only runs if `s2` has been installed, e.g. with
 
@@ -107,7 +107,7 @@ and transformations _on the sphere_. This means:
 * no computations on the ellipsoid (which are considered more accurate, but are also slower)
 
 The `s2` package is really a wrapper around the C++
-[s2geometry](https://s2geometry.io) library which was written by
+[s2geometry](http://s2geometry.io) library which was written by
 Google, and which is used in many of its products (e.g. Google
 Maps, Google Earth Engine, Bigquery GIS) and has been translated
 in several other programming languages.
@@ -132,7 +132,7 @@ Simple feature geometries should obey a ring direction too: exterior
 rings should be counter clockwise, interior (hole) rings should
 be clockwise, but in some sense this is obsolete as the difference
 between exterior ring and interior rings is defined by their position
-(exterior, followed by zero or more interior). `sf::read_sf` has an
+(exterior, followed by zero or more interior). `sf::read_sf()` has an
 argument `check_ring_dir` that checks, and corrects, ring directions
 and many (legacy) datasets have wrong ring directions. With wrong
 ring directions, many things still work.
@@ -296,7 +296,7 @@ summary(as.vector(d1)-as.vector(d2))
 # Predicates
 
 All unary and binary predicates are available in `s2`, except for
-`st_relate` with a pattern. In addition, when using the `s2` predicates,
+`st_relate()` with a pattern. In addition, when using the `s2` predicates,
 depending on the `model`, intersections with neighbours are only reported
 when `model` is `closed` (the default):
 ```{r}
@@ -309,8 +309,8 @@ st_intersects(nc[1:3,], nc[1:3,], model = "semi-open") # only self-intersections
 
 # Transformations
 
-`st_intersection`, `st_union`, `st_difference` and
-`st_sym_difference` are available as `s2` equivalents. N-ary
+`st_intersection()`, `st_union()`, `st_difference()`, and
+`st_sym_difference()` are available as `s2` equivalents. N-ary
 intersection and difference are not (yet) present; cascaded union
 is present; unioning by feature does not work with `s2`.
 
@@ -342,8 +342,7 @@ excessive simplification (bottom right). Note that buffers created with s2 _alwa
 follow s2 cell boundaries, they are never smooth. Hence, choosing a large number
 for `max_cells` leads to seemingly smooth but, zoomed in, very complex buffers.
 
-To achieve a similar result you could first transform the result and then use
-the `st_buffer()` function from `sf`. A simple benchmark shows the
+To achieve a similar result you could first transform thes result and then use `sf::st_buffer()`. A simple benchmark shows the
 computational efficiency of the `s2` geometry engine in comparison
 with transforming and then creating buffers:
 
@@ -372,7 +371,7 @@ system.time({
 })
 ```
 
-The result of the previous benchmarks emphasise the point that there are
+The result of the previous benchmarks emphasizes the point that there are
 trade-offs between geographic resolution and computational resources,
 something that web developers working on geographic services
 such as Google Maps understand well.
@@ -385,19 +384,19 @@ low resolution of the input geometry representing the UK.
 As discussed in the [`sf` issue tracker](https://github.com/r-spatial/sf/issues/1367),
 deciding on workflows and selecting appropriate levels of level of geographic resolution can
 be an iterative process.
-`st_buffer` as powered by GEOS, for $R^2$ data, are smooth and (nearly) exact.
-`st_buffer` as powered by $S^2$ is rougher, complex, non-smooth, and may need tuning.
-An common pattern where `st_buffer` is used is this:
+`st_buffer()` as powered by GEOS, for $R^2$ data, are smooth and (nearly) exact.
+`st_buffer()` as powered by $S^2$ is rougher, complex, non-smooth, and may need tuning.
+An common pattern where `st_buffer()` is used is this:
 
 * compute buffers around a set of features `x` (points, lines, polygons)
-* within each of these buffers, find all occurances of some other spatial 
+* within each of these buffers, find all occurrences of some other spatial 
 variable `y` and aggregate them (e.g. count points, or average a raster 
 variable like precipitation or population density)
 * work with these aggregated values (discard the buffer)
 
 When this is the case, and you are working with geographic
 coordinates, it may pay off to _not_ compute buffers, but instead
-directly work with `st_is_within_distance` to select, for each
+directly work with `st_is_within_distance()` to select, for each
 feature of `x`, all features of `y` that are within a certain
 distance `d` from `x`. The $S^2$ version of this function uses spatial
 indexes, so is fast for large datasets.

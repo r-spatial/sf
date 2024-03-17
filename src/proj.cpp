@@ -1,6 +1,12 @@
 #include <iostream>
 
+#include <ogr_srs_api.h>
+#include <cpl_string.h>
+
 #include "Rcpp.h"
+
+#define NO_GDAL_CPP_HEADERS
+#include "gdal_sf_pkg.h"
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_proj_h(bool b = false) {
@@ -73,16 +79,19 @@ Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVect
 	if (grid_availability.size() == 1) {
 		if (grid_availability[0] == "USED")
 			proj_operation_factory_context_set_grid_availability_use(PJ_DEFAULT_CTX, factory_ctx, 
-				PROJ_GRID_AVAILABILITY_USED_FOR_SORTING); // Grid availability is only used for sorting results. Operations where some grids are missing will be sorted last.
+				PROJ_GRID_AVAILABILITY_USED_FOR_SORTING); // Grid availability is only used for sorting results. 
+														  // Operations where some grids are missing will be sorted last.
 		else if (grid_availability[0] == "DISCARD")
-			proj_operation_factory_context_set_grid_availability_use(PJ_DEFAULT_CTX, factory_ctx,
-PROJ_GRID_AVAILABILITY_DISCARD_OPERATION_IF_MISSING_GRID); // Completely discard an operation if a required grid is missing.
+			proj_operation_factory_context_set_grid_availability_use(PJ_DEFAULT_CTX, factory_ctx, 
+							PROJ_GRID_AVAILABILITY_DISCARD_OPERATION_IF_MISSING_GRID); // Completely discard an operation if a required grid is missing.
 		else if (grid_availability[0] == "IGNORED")
-			proj_operation_factory_context_set_grid_availability_use(PJ_DEFAULT_CTX, factory_ctx,
-PROJ_GRID_AVAILABILITY_IGNORED); // Ignore grid availability at all. Results will be presented as if all grids were available.
+			proj_operation_factory_context_set_grid_availability_use(PJ_DEFAULT_CTX, factory_ctx, 
+							PROJ_GRID_AVAILABILITY_IGNORED); // Ignore grid availability at all. Results will be presented as if all grids were available.
 		else if (grid_availability[0] == "AVAILABLE")
-			proj_operation_factory_context_set_grid_availability_use(PJ_DEFAULT_CTX, factory_ctx,
-PROJ_GRID_AVAILABILITY_KNOWN_AVAILABLE); // Results will be presented as if grids known to PROJ (that is registered in the grid_alternatives table of its database) were available. Used typically when networking is enabled.
+			proj_operation_factory_context_set_grid_availability_use(PJ_DEFAULT_CTX, factory_ctx, 
+							PROJ_GRID_AVAILABILITY_KNOWN_AVAILABLE); // Results will be presented as if grids known to PROJ 
+																	 // (that is registered in the grid_alternatives table of its database) 
+																	 // were available. Used typically when networking is enabled.
 		else
 			Rcpp::stop("Unknown value for grid_availability");
 	}
@@ -176,13 +185,29 @@ PROJ_GRID_AVAILABILITY_KNOWN_AVAILABLE); // Results will be presented as if grid
 }
 
 // [[Rcpp::export]]
-Rcpp::CharacterVector CPL_get_data_dir(bool b = false) {
-	return Rcpp::CharacterVector(proj_info().searchpath);
+Rcpp::CharacterVector CPL_get_data_dir(bool from_proj = false) {
+	if (from_proj) {
+		Rcpp::CharacterVector ret(proj_info().searchpath);
+		return ret;
+	} else {
+#if GDAL_VERSION_NUM >= 3000300
+		char **ogr_sp = OSRGetPROJSearchPaths();
+		Rcpp::CharacterVector ogr_sp_sf = charpp2CV(ogr_sp);
+		CSLDestroy(ogr_sp);
+		return ogr_sp_sf;
+#else
+		Rcpp::stop("requires GDAL >= 3.0.3");
+#endif
+	}
 }
 
 // [[Rcpp::export]]
 Rcpp::LogicalVector CPL_is_network_enabled(bool b = false) {
 #if PROJ_VERSION_MAJOR >= 7
+#if GDAL_VERSION_NUM >= 3040000
+	if (OSRGetPROJEnableNetwork() != proj_context_is_network_enabled(PJ_DEFAULT_CTX))
+		Rcpp::warning("GDAL and PROJ have different settings for network enablement; use sf_use_network() to sync them");
+#endif
 	return Rcpp::LogicalVector::create(proj_context_is_network_enabled(PJ_DEFAULT_CTX));
 #else
 	return Rcpp::LogicalVector::create(false);
@@ -194,11 +219,17 @@ Rcpp::CharacterVector CPL_enable_network(Rcpp::CharacterVector url, bool enable 
 #ifdef HAVE_71
 	if (enable) {
 		proj_context_set_enable_network(PJ_DEFAULT_CTX, 1);
+#if GDAL_VERSION_NUM >= 3040000
+		OSRSetPROJEnableNetwork(1);
+#endif
 		if (url.size())
 			proj_context_set_url_endpoint(PJ_DEFAULT_CTX, url[0]);
 		return Rcpp::CharacterVector::create(proj_context_get_url_endpoint(PJ_DEFAULT_CTX));
 	} else { // disable:
 		proj_context_set_enable_network(PJ_DEFAULT_CTX, 0);
+#if GDAL_VERSION_NUM >= 3040000
+		OSRSetPROJEnableNetwork(0);
+#endif
 		return Rcpp::CharacterVector::create();
 	}
 #else
@@ -207,9 +238,21 @@ Rcpp::CharacterVector CPL_enable_network(Rcpp::CharacterVector url, bool enable 
 }
 
 // [[Rcpp::export]]
-Rcpp::LogicalVector CPL_set_data_dir(std::string data_dir) {
-	const char *cp = data_dir.c_str();
-	proj_context_set_search_paths(PJ_DEFAULT_CTX, 1, &cp);
+Rcpp::LogicalVector CPL_set_data_dir(Rcpp::CharacterVector data_dir, bool with_proj) {
+	if (with_proj) {
+		if (data_dir.size() != 1)
+			Rcpp::stop("data_dir should be size 1 character vector"); // #nocov
+		std::string dd = Rcpp::as<std::string>(data_dir);
+		const char *cp = dd.c_str();
+		proj_context_set_search_paths(PJ_DEFAULT_CTX, 1, &cp);
+	} else {
+#if GDAL_VERSION_NUM >= 3000000
+		std::vector <char *> dirs = create_options(data_dir, true);
+		OSRSetPROJSearchPaths(dirs.data());
+#else
+		Rcpp::stop("setting proj search path for GDAL requires GDAL >= 3.0.0");
+#endif
+	}
 	return true;
 }
 
@@ -412,7 +455,7 @@ Rcpp::CharacterVector CPL_enable_network(Rcpp::CharacterVector url, bool enable 
 #endif
 }
 
-Rcpp::CharacterVector CPL_get_data_dir(bool b = false) {
+Rcpp::CharacterVector CPL_get_data_dir(bool from_proj = false) {
 #if PROJ_VERSION_MAJOR >= 7
 	return Rcpp::CharacterVector(proj_info().searchpath);
 #else

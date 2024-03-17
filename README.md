@@ -1,11 +1,11 @@
 <!-- badges: start -->
-[![rcmdcheck](https://github.com/r-spatial/sf/actions/workflows/rcmdcheck.yml/badge.svg?branch=main)](https://github.com/r-spatial/sf/actions/workflows/rcmdcheck.yml)
-[![tic-db](https://github.com/r-spatial/sf/workflows/tic-db/badge.svg?branch=main)](https://github.com/r-spatial/sf/actions)
+[![R-CMD-check](https://github.com/r-spatial/sf/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-spatial/sf/actions/workflows/R-CMD-check.yaml)
+[![tic-db](https://github.com/r-spatial/sf/actions/workflows/tic-db.yml/badge.svg)](https://github.com/r-spatial/sf/actions/workflows/tic-db.yml)
 [![Coverage Status](https://img.shields.io/codecov/c/github/r-spatial/sf/main.svg)](https://app.codecov.io/gh/r-spatial/sf)
 [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html)
 [![CRAN](http://www.r-pkg.org/badges/version/sf)](https://cran.r-project.org/package=sf)
 [![cran checks](https://badges.cranchecks.info/worst/sf.svg)](https://cran.r-project.org/web/checks/check_results_sf.html)
-[![Downloads](http://cranlogs.r-pkg.org/badges/sf?color=brightgreen)](http://www.r-pkg.org/pkg/sf)
+[![Downloads](http://cranlogs.r-pkg.org/badges/sf?color=brightgreen)](https://www.r-pkg.org:443/pkg/sf)
 [![status](https://tinyverse.netlify.com/badge/sf)](https://CRAN.R-project.org/package=sf)
 <!-- badges: end -->
 
@@ -22,11 +22,11 @@ Package sf:
 
 * represents simple features as records in a `data.frame` or `tibble` with a geometry list-column
 * represents natively in R all 17 simple feature types for all dimensions (XY, XYZ, XYM, XYZM)
-* interfaces to [GEOS](https://libgeos.org) for geometrical operations on projected coordinates, and to [s2geometry](https://s2geometry.io/) for geometrical operations on ellipsoidal coordinates
-* interfaces to [GDAL](http://www.gdal.org/), supporting all driver options, `Date` and `POSIXct` and list-columns
+* interfaces to [GEOS](https://libgeos.org) for geometrical operations on projected coordinates, and (through R package [s2](https://cran.r-project.org/package=s2)) to [s2geometry](http://s2geometry.io/) for geometrical operations on ellipsoidal coordinates
+* interfaces to [GDAL](https://gdal.org/), supporting all driver options, `Date` and `POSIXct` and list-columns
 * interfaces to [PRØJ](http://proj.org/) for coordinate reference system conversion and transformation
 * uses [well-known-binary](https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary) serialisations written in C++/Rcpp for fast I/O with GDAL and GEOS 
-* reads from and writes to spatial databases such as [PostGIS](http://postgis.net/) using [DBI](https://cran.r-project.org/web/packages/DBI/index.html)
+* reads from and writes to spatial databases such as [PostGIS](http://postgis.net/) using [DBI](https://cran.r-project.org/package=DBI)
 * is extended by 
     * [lwgeom](https://github.com/r-spatial/lwgeom/) for selected liblwgeom/PostGIS functions
     * [stars](https://github.com/r-spatial/stars/) for raster data, and raster or vector data cubes (spatial time series)
@@ -40,13 +40,13 @@ Package sf:
 
 * an open access [R Journal article](https://journal.r-project.org/archive/2018/RJ-2018-009/index.html) summarizes the package
 * package vignettes: [first](https://r-spatial.github.io/sf/articles/sf1.html), [second](https://r-spatial.github.io/sf/articles/sf2.html), [third](https://r-spatial.github.io/sf/articles/sf3.html), [fourth](https://r-spatial.github.io/sf/articles/sf4.html), [fifth](https://r-spatial.github.io/sf/articles/sf5.html), [sixth](https://r-spatial.github.io/sf/articles/sf6.html), [seventh](https://r-spatial.github.io/sf/articles/sf7.html)
-* blog posts: [first](http://r-spatial.org/r/2016/02/15/simple-features-for-r.html), [second](http://r-spatial.org/r/2016/07/18/sf2.html), [third](http://r-spatial.org/r/2016/11/02/sfcran.html), [fourth](http://r-spatial.org/r/2017/01/12/newssf.html)
+* blog posts: [first](https://r-spatial.org/r/2016/02/15/simple-features-for-r.html), [second](https://r-spatial.org/r/2016/07/18/sf2.html), [third](https://r-spatial.org/r/2016/11/02/sfcran.html), [fourth](https://r-spatial.org/r/2017/01/12/newssf.html)
 * the original R Consortium ISC [proposal](PROPOSAL.md), the R Consortium [blog post](https://www.r-consortium.org/blog/2017/01/03/simple-features-now-on-cran)
-* presentations: [rstudio::conf 2018](https://edzer.github.io/rstudio_conf/#1) ([video](https://www.rstudio.com/resources/videos/tidy-spatial-data-analysis/)), [UseR! 2016](http://pebesma.staff.ifgi.de/pebesma_sfr.pdf)
+* presentations: [rstudio::conf 2018](https://edzer.github.io/rstudio_conf/#1) ([video](https://posit.co/resources/videos/tidy-spatial-data-analysis/)), [UseR! 2016](http://pebesma.staff.ifgi.de/pebesma_sfr.pdf)
 * wiki page describing [sp-sf migration](https://github.com/r-spatial/sf/wiki/Migrating)
 
 ## Cheatsheet
-[CC 4.0](https://creativecommons.org/licenses/by/4.0/) BY [Ryan Garnett](http://github.com/ryangarnett)  
+[CC 4.0](https://creativecommons.org/licenses/by/4.0/) BY [Ryan Garnett](https://github.com/ryangarnett)  
 
 <a href="https://github.com/rstudio/cheatsheets/blob/main/sf.pdf"><img src="https://raw.githubusercontent.com/rstudio/cheatsheets/main/pngs/sf.png" /></a>
 
@@ -72,7 +72,7 @@ Installing sf from source works under Windows when [Rtools](https://cran.r-proje
 
 MacOS users are strongly encouraged to install the `sf` binary packages from CRAN, unless they are familiar with compilers, linking, C++ source code, and homebrew.
 
-The easiest way to install `gdal` is using Homebrew. Recent versions of Homebrew include a full-featured up-to-date [gdal formula](https://github.com/Homebrew/homebrew-core/blob/master/Formula/gdal.rb), which installs `proj` and `gdal` at the same time:
+The easiest way to install `gdal` is using Homebrew. Recent versions of Homebrew include a full-featured up-to-date [gdal formula](https://github.com/Homebrew/homebrew-core/blob/master/Formula/g/gdal.rb), which installs `proj` and `gdal` at the same time:
 
 ```
 brew install pkg-config
@@ -142,7 +142,7 @@ yay/pacaur/yaourt/whatever -S udunits
 ```
 
 #### Other
-To install on Debian, the [rocker geospatial](https://github.com/rocker-org/geospatial) Dockerfiles may be helpful. Ubuntu Dockerfiles are found [here](https://github.com/r-spatial/sf/tree/master/inst/docker).
+To install on Debian, the [rocker geospatial](https://github.com/rocker-org/geospatial) Dockerfiles may be helpful. Ubuntu Dockerfiles are found [here](https://github.com/r-spatial/sf/tree/main/inst/docker).
 
 ### Multiple GDAL, GEOS and/or PROJ versions on your system
 
@@ -150,7 +150,7 @@ If you use dynamic linking (installation from source) and have multiple versions
 
 ### lwgeom
 
-Functions and methods that require `liblwgeom`, including `st_make_valid` and all spherical or ellipsoidal metrics (area, distances), have since sf 0.5-5 been moved to their own package, [lwgeom](https://github.com/r-spatial/lwgeom), which is also on [CRAN](https://cran.r-project.org/package=lwgeom).
+Functions and methods that require `liblwgeom`, including ellipsoidal (not spherical or Eucledian) metrics (area, distances), are provide by and used from [lwgeom](https://github.com/r-spatial/lwgeom), which is also on [CRAN](https://cran.r-project.org/package=lwgeom).
 
 ## Contributing
 
@@ -165,7 +165,7 @@ Package `sf` can be cited as:
 * Edzer Pebesma, 2018.  Simple Features for R: Standardized Support
 for Spatial Vector Data. The R Journal [10:1, 439-446.](https://journal.r-project.org/archive/2018/RJ-2018-009/index.html)
 
-* Pebesma, E.; Bivand, R. (2023). [Spatial Data Science: With Applications in R](https://r-spatial.org/book) 
+* Pebesma, E.; Bivand, R. (2023). [Spatial Data Science: With Applications in R](https://r-spatial.org/book/) 
 (1st ed.). 314 pages. [Chapman and Hall/CRC](https://doi.org/10.1201/9780429459016).
 
 ## Acknowledgment

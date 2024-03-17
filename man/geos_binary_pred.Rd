@@ -56,18 +56,46 @@ st_is_within_distance(x, y = x, dist, sparse = TRUE, ...)
 
 \item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}; if missing, \code{x} is used}
 
-\item{sparse}{logical; should a sparse index list be returned (TRUE) or a dense logical matrix? See below.}
+\item{sparse}{logical; should a sparse index list be returned (\code{TRUE}) or a dense logical matrix? See below.}
 
-\item{...}{passed on to \link[s2]{s2_options}}
+\item{...}{
+  Arguments passed on to \code{\link[s2:s2_options]{s2::s2_options}}
+  \describe{
+    \item{\code{snap}}{Use \code{s2_snap_identity()}, \code{s2_snap_distance()}, \code{s2_snap_level()},
+or \code{s2_snap_precision()} to specify how or if coordinate rounding should
+occur.}
+    \item{\code{snap_radius}}{As opposed to the snap function, which specifies
+the maximum distance a vertex should move, the snap radius (in radians) sets
+the minimum distance between vertices of the output that don't cause vertices
+to move more than the distance specified by the snap function. This can be used
+to simplify the result of a boolean operation. Use -1 to specify that any
+minimum distance is acceptable.}
+    \item{\code{duplicate_edges}}{Use \code{TRUE} to keep duplicate edges (e.g., duplicate
+points).}
+    \item{\code{edge_type}}{One of 'directed' (default) or 'undirected'.}
+    \item{\code{validate}}{Use \code{TRUE} to validate the result from the builder.}
+    \item{\code{polyline_type}}{One of 'path' (default) or 'walk'. If 'walk',
+polylines that backtrack are preserved.}
+    \item{\code{polyline_sibling_pairs}}{One of 'discard' (default) or 'keep'.}
+    \item{\code{simplify_edge_chains}}{Use \code{TRUE} to remove vertices that are within
+\code{snap_radius} of the original vertex.}
+    \item{\code{split_crossing_edges}}{Use \code{TRUE} to split crossing polyline edges
+when creating geometries.}
+    \item{\code{idempotent}}{Use \code{FALSE} to apply snap even if snapping is not necessary
+to satisfy vertex constraints.}
+    \item{\code{dimensions}}{A combination of 'point', 'polyline', and/or 'polygon'
+that can used to constrain the output of \code{\link[s2:s2_rebuild]{s2_rebuild()}} or a
+boolean operation.}
+  }}
 
-\item{prepared}{logical; prepare geometry for x, before looping over y? See Details.}
+\item{prepared}{logical; prepare geometry for \code{x}, before looping over \code{y}? See Details.}
 
 \item{model}{character; polygon/polyline model; one of
 "open", "semi-open" or "closed"; see Details.}
 
-\item{retain_unique}{logical; if TRUE (and y is missing) return only indexes of points larger than the current index; this can be used to select unique geometries, see examples. This argument can be used for all geometry predictates; see als \link{distinct.sf} to find records where geometries AND attributes are distinct.}
+\item{retain_unique}{logical; if \code{TRUE} (and \code{y} is missing) return only indexes of points larger than the current index; this can be used to select unique geometries, see examples. This argument can be used for all geometry predicates; see also \link{distinct.sf} to find records where geometries AND attributes are distinct.}
 
-\item{remove_self}{logical; if TRUE (and y is missing) return only indexes of geometries different from the current index; this can be used to omit self-intersections; see examples. This argument can be used for all geometry predictates}
+\item{remove_self}{logical; if \code{TRUE} (and \code{y} is missing) return only indexes of geometries different from the current index; this can be used to omit self-intersections; see examples. This argument can be used for all geometry predicates}
 
 \item{par}{numeric; parameter used for "equals_exact" (margin);}
 
@@ -85,13 +113,13 @@ If \code{prepared} is \code{TRUE}, and \code{x} contains POINT geometries and \c
 For most predicates, a spatial index is built on argument \code{x}; see \url{https://r-spatial.org/r/2017/06/22/spatial-index.html}.
 Specifically, \code{st_intersects}, \code{st_disjoint}, \code{st_touches} \code{st_crosses}, \code{st_within}, \code{st_contains}, \code{st_contains_properly}, \code{st_overlaps}, \code{st_equals}, \code{st_covers} and \code{st_covered_by} all build spatial indexes for more efficient geometry calculations. \code{st_relate}, \code{st_equals_exact}, and do not; \code{st_is_within_distance} uses a spatial index for geographic coordinates when \code{sf_use_s2()} is true.
 
-If \code{y} is missing, `st_predicate(x, x)` is effectively called, and a square matrix is returned with diagonal elements `st_predicate(x[i], x[i])`.
+If \code{y} is missing, \code{st_predicate(x, x)} is effectively called, and a square matrix is returned with diagonal elements \code{st_predicate(x[i], x[i])}.
 
 Sparse geometry binary predicate (\code{\link{sgbp}}) lists have the following attributes: \code{region.id} with the \code{row.names} of \code{x} (if any, else \code{1:n}), \code{ncol} with the number of features in \code{y}, and \code{predicate} with the name of the predicate used.
 
 for \code{model}, see https://github.com/r-spatial/s2/issues/32
 
-`st_contains_properly(A,B)` is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A.
+\code{st_contains_properly(A,B)} is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A.
 
 See also \link{st_relate} and \url{https://en.wikipedia.org/wiki/DE-9IM} for a more detailed description of the underlying algorithms.
 

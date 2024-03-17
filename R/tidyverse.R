@@ -1,11 +1,10 @@
-## dplyr methods:
+## dplyr methods: ------
 #group_map.sf <- function(.tbl, .f, ...) {
 #	 st_as_sf(NextMethod()) # nocov
 #}
 
 # This is currently only used in `bind_rows()` and `bind_cols()`
 # because sf overrides all default implementations
-#' @name tidyverse
 dplyr_reconstruct.sf = function(data, template) {
 	sfc_name = attr(template, "sf_column")
 	if (inherits(template, "tbl_df"))
@@ -23,18 +22,10 @@ dplyr_reconstruct.sf = function(data, template) {
 	)
 }
 
-group_split.sf <- function(.tbl, ..., .keep = TRUE) {
-	 class(.tbl) = setdiff(class(.tbl), "sf")
-	 if (inherits(.tbl, "rowwise_df")) {
-	 	lapply(dplyr::group_split(.tbl, ...), st_as_sf)
-	 } else {
-	 	lapply(dplyr::group_split(.tbl, ..., .keep = .keep), st_as_sf)	
-	 }
-}
-
-#' Tidyverse methods for sf objects (remove .sf suffix!)
+#' Tidyverse methods for sf objects
 #'
-#' Tidyverse methods for sf objects. Geometries are sticky, use \link{as.data.frame} to let \code{dplyr}'s own methods drop them. Use these methods without the .sf suffix and after loading the tidyverse package with the generic (or after loading package tidyverse).
+#' Tidyverse methods for sf objects. Geometries are sticky, use \link{as.data.frame} to let \code{dplyr}'s own methods drop them.
+#' Use these methods after loading the tidyverse package with the generic (or after loading package tidyverse).
 #' @param .data data object of class \link{sf}
 #' @param .dots see corresponding function in package \code{dplyr}
 #' @param ... other arguments
@@ -135,7 +126,6 @@ mutate.sf <- function(.data, ..., .dots) {
 #' @name tidyverse
 #' @examples
 #' if (require(dplyr, quietly = TRUE)) {
-#'  nc %>% transmute(AREA = AREA/10, geometry = geometry) %>% class()
 #'  nc %>% transmute(AREA = AREA/10) %>% class()
 #' }
 transmute.sf <- function(.data, ..., .dots) {
@@ -150,9 +140,7 @@ transmute.sf <- function(.data, ..., .dots) {
 #' @examples
 #' if (require(dplyr, quietly = TRUE)) {
 #'  nc %>% select(SID74, SID79) %>% names()
-#'  nc %>% select(SID74, SID79, geometry) %>% names()
 #'  nc %>% select(SID74, SID79) %>% class()
-#'  nc %>% select(SID74, SID79, geometry) %>% class()
 #' }
 #' @details \code{select} keeps the geometry regardless whether it is selected or not; to deselect it, first pipe through \code{as.data.frame} to let dplyr's own \code{select} drop it.
 select.sf <- function(.data, ...) {
@@ -241,10 +229,13 @@ rename.sf <- function(.data, ...) {
 	st_set_agr(st_as_sf(ret, sf_column_name = sf_column), agr)
 }
 
+#' @name tidyverse
+#' @param .fn,.cols see original docs
 rename_with.sf = function(.data, .fn, .cols, ...) {
 	if (!requireNamespace("rlang", quietly = TRUE))
 		stop("rlang required: install that first") # nocov
 	.fn = rlang::as_function(.fn)
+	is_tibble = inherits(.data, "tbl")
 	
 	sf_column = attr(.data, "sf_column")
 	sf_column_loc = match(sf_column, names(.data))
@@ -254,10 +245,31 @@ rename_with.sf = function(.data, .fn, .cols, ...) {
 	
 	agr = st_agr(.data)
 	
-	ret = NextMethod()
-	names(agr) = .fn(names(agr))
+	.data = as.data.frame(.data)
+	ret = if (missing(.cols)) {
+		if (!requireNamespace("tidyselect", quietly = TRUE)) {
+			stop("tidyselect required: install that first") # nocov
+		}
+		dplyr::rename_with(
+			.data = .data,
+			.fn = .fn,
+			.cols = tidyselect::everything(), 
+			...
+		)
+	} else {
+		dplyr::rename_with(
+			.data = .data,
+			.fn = .fn,
+			.cols = {{ .cols }}, 
+			...
+		)
+	}
+	if (is_tibble)
+		ret = dplyr::as_tibble(ret)
+	ret = st_as_sf(ret, sf_column_name = names(ret)[sf_column_loc])
+	
+	names(agr) = .fn(names(agr), ...)
 	st_agr(ret) = agr
-	st_geometry(ret) = names(ret)[sf_column_loc]
 	ret
 }
 
@@ -369,7 +381,7 @@ distinct.sf <- function(.data, ..., .keep_all = FALSE) {
 	}
 }
 
-## tidyr methods:
+## tidyr methods: --------
 
 #' @name tidyverse
 #' @param data see original function docs
@@ -378,7 +390,7 @@ distinct.sf <- function(.data, ..., .keep_all = FALSE) {
 #' @param na.rm see original function docs
 #' @param factor_key see original function docs
 #' @examples
-#' if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE)) {
+#' if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE) && "geometry" %in% names(nc)) {
 #'  nc %>% select(SID74, SID79) %>% gather("VAR", "SID", -geometry) %>% summary()
 #' }
 gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, factor_key = FALSE) {
@@ -399,20 +411,10 @@ gather.sf <- function(data, key, value, ..., na.rm = FALSE, convert = FALSE, fac
 }
 
 #' @name tidyverse
-#' @param template see original function docs
 #' @param data see original function docs
 #' @param cols see original function docs
-#' @param names_to see original function docs
-#' @param names_prefix see original function docs
-#' @param names_sep see original function docs
-#' @param names_pattern see original function docs
-#' @param names_ptypes see original function docs
-#' @param names_transform see original function docs
-#' @param names_repair see original function docs
-#' @param values_to see original function docs
-#' @param values_drop_na see original function docs
-#' @param values_ptypes see original function docs
-#' @param values_transform see original function docs
+#' @param names_to,names_pattern,names_ptypes,names_transform see [tidyr::pivot_longer()]
+#' @param values_to,values_drop_na,values_ptypes,values_transform See [tidyr::pivot_longer()]
 pivot_longer.sf <- function (data, cols, names_to = "name", names_prefix = NULL,
 		names_sep = NULL, names_pattern = NULL, names_ptypes = NULL,
 		names_transform = NULL, names_repair = "check_unique",
@@ -447,36 +449,54 @@ pivot_longer.sf <- function (data, cols, names_to = "name", names_prefix = NULL,
   st_as_sf(out, sf_column_name = sf_column_name)
 }
 
+globalVariables(c("name", "value"))
 # https://github.com/r-spatial/sf/issues/1915
 #' @name tidyverse
-#' @export
-#' @param id_cols see original function docs
-#' @param names_from see original function docs
-#' @param names_prefix see original function docs
-#' @param names_sep see original function docs
-#' @param names_glue see original function docs
-#' @param names_sort see original function docs
-#' @param names_repair see original function docs
-#' @param values_from see original function docs
-#' @param values_fill see original function docs
-#' @param values_fn see original function docs
-pivot_wider.sf = function(data,
-                          id_cols = NULL,
-                          names_from, # = name,
-                          names_prefix = "",
-                          names_sep = "_",
-                          names_glue = NULL,
-                          names_sort = FALSE,
-                          names_repair = "check_unique",
-                          values_from, # = value,
-                          values_fill = NULL,
-                          values_fn = NULL,
-                          ...) {
+#' @param id_cols,id_expand,names_from,names_sort,names_glue,names_vary,names_expand see [tidyr::pivot_wider()]
+# names_prefix,names_sep and names_repair are shared between pivot_longer() and pivot_wider()
+#' @param names_prefix,names_sep,names_repair see original function docs.
+#' @param values_from,values_fill,values_fn,unused_fn see [tidyr::pivot_wider()]
+pivot_wider.sf = function(data, 
+						  ..., 
+						  id_cols = NULL, 
+						  id_expand = FALSE, 
+						  names_from = name, 
+						  names_prefix = "", 
+						  names_sep = "_", 
+						  names_glue = NULL, 
+						  names_sort = FALSE, 
+						  names_vary = "fastest", 
+						  names_expand = FALSE, 
+						  names_repair = "check_unique", 
+						  values_from = value, 
+						  values_fill = NULL, 
+						  values_fn = NULL, 
+						  unused_fn = NULL) {
 
 	agr = st_agr(data)
 	sf_column_name = attr(data, "sf_column")
-	class(data) = setdiff(class(data), "sf")
-	.re_sf(NextMethod(), sf_column_name = sf_column_name, agr)
+	data = as.data.frame(data)
+	if (!requireNamespace("tidyr", quietly = TRUE))
+		stop("tidyr required: install first?")
+	ret = tidyr::pivot_wider(
+		data = data, 
+		..., 
+		id_cols = {{ id_cols }}, 
+		id_expand = id_expand, 
+		names_from = {{ names_from }}, 
+		names_prefix = names_prefix, 
+		names_sep = names_sep, 
+		names_glue = names_glue, 
+		names_sort = names_sort, 
+		names_vary = names_vary, 
+		names_expand = names_expand, 
+		names_repair = names_repair, 
+		values_from = {{ values_from }}, 
+		values_fill = values_fill, 
+		values_fn = values_fn, 
+		unused_fn = unused_fn
+	)
+	st_as_sf(ret, sf_column_name = sf_column_name, agr = agr)
 }
 
 
@@ -485,7 +505,7 @@ pivot_wider.sf = function(data,
 #' @param fill see original function docs
 #' @param drop see original function docs
 #' @examples
-#' if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE)) {
+#' if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE) && "geometry" %in% names(nc)) {
 #'  nc$row = 1:100 # needed for spread to work
 #'  nc %>% select(SID74, SID79, geometry, row) %>%
 #'		gather("VAR", "SID", -geometry, -row) %>%
@@ -518,7 +538,17 @@ sample_n.sf <- function(tbl, size, replace = FALSE, weight = NULL, .env = parent
 sample_frac.sf <- function(tbl, size = 1, replace = FALSE, weight = NULL, .env = parent.frame()) {
 	st_sf(NextMethod(), sf_column_name = attr(tbl, "sf_column"))
 }
-
+#' @name tidyverse
+#' @param .tbl see original function docs
+#' @param .keep see original function docs
+group_split.sf <- function(.tbl, ..., .keep = TRUE) {
+	class(.tbl) = setdiff(class(.tbl), "sf")
+	if (inherits(.tbl, "rowwise_df")) {
+		lapply(dplyr::group_split(.tbl, ...), st_as_sf)
+	} else {
+		lapply(dplyr::group_split(.tbl, ..., .keep = .keep), st_as_sf)	
+	}
+}
 #' @name tidyverse
 #' @examples
 #' if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE)) {
@@ -530,7 +560,7 @@ sample_frac.sf <- function(tbl, size = 1, replace = FALSE, weight = NULL, .env =
 #'  plot(trs.sf["year"], axes = TRUE)
 #' }
 #' @details \code{nest} assumes that a simple feature geometry list-column was among the columns that were nested.
-nest.sf = function (.data, ...) {
+nest.sf = function(.data, ...) {
 
 	if (!requireNamespace("rlang", quietly = TRUE))
 		stop("rlang required: install first?")
@@ -602,12 +632,19 @@ unnest.sf = function(data, ..., .preserve = NULL) {
 	# nocov end
 }
 
-## tibble methods:
+#' @name tidyverse
+drop_na.sf <- function(x, ...) {
+	sf_column_name = attr(x, "sf_column")
+	class(x) <- setdiff(class(x), "sf")
+	st_as_sf(NextMethod(), sf_column_name = sf_column_name)
+}
+
+## tibble methods: -------
 
 #' Summarize simple feature type for tibble
 #'
-#' Summarize simple feature type for tibble
-#' @param x object of class sfc
+#' Summarize simple feature type / item for tibble
+#' @param x object of class `sfc`
 #' @param ... ignored
 #' @name tibble
 #' @details see \link[pillar]{type_sum}
@@ -619,15 +656,12 @@ type_sum.sfc <- function(x, ...) {
 	cls
 }
 
-#' Summarize simple feature item for tibble
-#'
-#' Summarize simple feature item for tibble
-#' @name tibble
+#' @rdname tibble
 obj_sum.sfc <- function(x) {
 	vapply(x[], function(sfg) format(sfg, width = 15L), "")
 }
 
-#' @name tibble
+#' @rdname tibble
 pillar_shaft.sfc <- function(x, ...) {
 	digits = options("pillar.sigfig")$pillar.sigfig
 	if (is.null(digits))
@@ -638,99 +672,61 @@ pillar_shaft.sfc <- function(x, ...) {
 	pillar::new_pillar_shaft_simple(out, align = "right", min_width = 25)
 }
 
-#' @name tidyverse
-drop_na.sf <- function(x, ...) {
-	sf_column_name = attr(x, "sf_column")
-	class(x) <- setdiff(class(x), "sf")
-	st_as_sf(NextMethod(), sf_column_name = sf_column_name)
-}
-
 #nocov start
 register_all_s3_methods = function() {
-	has_dplyr_1.0 =
-		requireNamespace("dplyr", quietly = TRUE) &&
-		utils::packageVersion("dplyr") >= "0.8.99.9000"
-
-	if (has_dplyr_1.0)
-		register_s3_method("dplyr", "dplyr_reconstruct", "sf")
-	register_s3_method("dplyr", "anti_join", "sf")
-	register_s3_method("dplyr", "arrange", "sf")
-	register_s3_method("dplyr", "distinct", "sf")
-	register_s3_method("dplyr", "filter", "sf")
-	register_s3_method("dplyr", "full_join", "sf")
-	register_s3_method("dplyr", "group_by", "sf")
-#	register_s3_method("dplyr", "group_map", "sf")
-	register_s3_method("dplyr", "group_split", "sf")
-	register_s3_method("dplyr", "inner_join", "sf")
-	register_s3_method("dplyr", "left_join", "sf")
-	register_s3_method("dplyr", "mutate", "sf")
-	register_s3_method("dplyr", "rename", "sf")
-	register_s3_method("dplyr", "rename_with", "sf")
-	register_s3_method("dplyr", "right_join", "sf")
-	register_s3_method("dplyr", "rowwise", "sf")
-	register_s3_method("dplyr", "sample_frac", "sf")
-	register_s3_method("dplyr", "sample_n", "sf")
-	register_s3_method("dplyr", "select", "sf")
-	register_s3_method("dplyr", "semi_join", "sf")
-	register_s3_method("dplyr", "slice", "sf")
-	register_s3_method("dplyr", "summarise", "sf")
-	register_s3_method("dplyr", "transmute", "sf")
-	register_s3_method("dplyr", "ungroup", "sf")
-	register_s3_method("tidyr", "drop_na", "sf")
-	register_s3_method("tidyr", "gather", "sf")
-	register_s3_method("tidyr", "pivot_longer", "sf")
-	register_s3_method("tidyr", "pivot_wider", "sf")
-	register_s3_method("tidyr", "spread", "sf")
-	register_s3_method("tidyr", "nest", "sf")
-	register_s3_method("tidyr", "separate", "sf")
-	register_s3_method("tidyr", "separate_rows", "sf")
-	register_s3_method("tidyr", "unite", "sf")
-	register_s3_method("tidyr", "unnest", "sf")
-	register_s3_method("pillar", "obj_sum", "sfc")
-	register_s3_method("pillar", "type_sum", "sfc")
-	register_s3_method("pillar", "pillar_shaft", "sfc")
-	register_s3_method("spatstat.geom", "as.ppp", "sfc")
-	register_s3_method("spatstat.geom", "as.ppp", "sf")
-	register_s3_method("spatstat.geom", "as.owin", "POLYGON")
-	register_s3_method("spatstat.geom", "as.owin", "MULTIPOLYGON")
-	register_s3_method("spatstat.geom", "as.owin", "sfc_POLYGON")
-	register_s3_method("spatstat.geom", "as.owin", "sfc_MULTIPOLYGON")
-	register_s3_method("spatstat.geom", "as.owin", "sfc")
-	register_s3_method("spatstat.geom", "as.owin", "sf")
-	register_s3_method("spatstat.geom", "as.psp", "LINESTRING")
-	register_s3_method("spatstat.geom", "as.psp", "MULTILINESTRING")
-	register_s3_method("spatstat.geom", "as.psp", "sfc_MULTILINESTRING")
-	register_s3_method("spatstat.geom", "as.psp", "sfc")
-	register_s3_method("spatstat.geom", "as.psp", "sf")
-	register_s3_method("s2", "as_s2_geography", "sfg")
-	register_s3_method("s2", "as_s2_geography", "sfc")
-	register_s3_method("s2", "as_s2_geography", "sf")
+	s3_register("dplyr::dplyr_reconstruct", "sf")
+	s3_register("dplyr::anti_join", "sf")
+	s3_register("dplyr::arrange", "sf")
+	s3_register("dplyr::distinct", "sf")
+	s3_register("dplyr::filter", "sf")
+	s3_register("dplyr::full_join", "sf")
+	s3_register("dplyr::group_by", "sf")
+#	s3_register("dplyr::group_map", "sf")
+	s3_register("dplyr::group_split", "sf")
+	s3_register("dplyr::inner_join", "sf")
+	s3_register("dplyr::left_join", "sf")
+	s3_register("dplyr::mutate", "sf")
+	s3_register("dplyr::rename", "sf")
+	s3_register("dplyr::rename_with", "sf")
+	s3_register("dplyr::right_join", "sf")
+	s3_register("dplyr::rowwise", "sf")
+	s3_register("dplyr::sample_frac", "sf")
+	s3_register("dplyr::sample_n", "sf")
+	s3_register("dplyr::select", "sf")
+	s3_register("dplyr::semi_join", "sf")
+	s3_register("dplyr::slice", "sf")
+	s3_register("dplyr::summarise", "sf")
+	s3_register("dplyr::transmute", "sf")
+	s3_register("dplyr::ungroup", "sf")
+	s3_register("tidyr::drop_na", "sf")
+	s3_register("tidyr::gather", "sf")
+	s3_register("tidyr::pivot_longer", "sf")
+	s3_register("tidyr::pivot_wider", "sf")
+	s3_register("tidyr::spread", "sf")
+	s3_register("tidyr::nest", "sf")
+	s3_register("tidyr::separate", "sf")
+	s3_register("tidyr::separate_rows", "sf")
+	s3_register("tidyr::unite", "sf")
+	s3_register("tidyr::unnest", "sf")
+	s3_register("pillar::obj_sum", "sfc")
+	s3_register("pillar::type_sum", "sfc")
+	s3_register("pillar::pillar_shaft", "sfc")
+	s3_register("spatstat.geom::as.ppp", "sfc")
+	s3_register("spatstat.geom::as.ppp", "sf")
+	s3_register("spatstat.geom::as.owin", "POLYGON")
+	s3_register("spatstat.geom::as.owin", "MULTIPOLYGON")
+	s3_register("spatstat.geom::as.owin", "sfc_POLYGON")
+	s3_register("spatstat.geom::as.owin", "sfc_MULTIPOLYGON")
+	s3_register("spatstat.geom::as.owin", "sfc")
+	s3_register("spatstat.geom::as.owin", "sf")
+	s3_register("spatstat.geom::as.psp", "LINESTRING")
+	s3_register("spatstat.geom::as.psp", "MULTILINESTRING")
+	s3_register("spatstat.geom::as.psp", "sfc_MULTILINESTRING")
+	s3_register("spatstat.geom::as.psp", "sfc")
+	s3_register("spatstat.geom::as.psp", "sf")
+	s3_register("s2::as_s2_geography", "sfg")
+	s3_register("s2::as_s2_geography", "sfc")
+	s3_register("s2::as_s2_geography", "sf")
 	register_vctrs_methods()
-}
-
-# from: https://github.com/tidyverse/hms/blob/master/R/zzz.R
-# Thu Apr 19 10:53:24 CEST 2018
-register_s3_method <- function(pkg, generic, class, fun = NULL) {
-  stopifnot(is.character(pkg), length(pkg) == 1)
-  stopifnot(is.character(generic), length(generic) == 1)
-  stopifnot(is.character(class), length(class) == 1)
-
-  if (is.null(fun)) {
-    fun <- get(paste0(generic, ".", class), envir = parent.frame())
-  } else {
-    stopifnot(is.function(fun))
-  }
-
-  if (pkg %in% loadedNamespaces()) {
-    registerS3method(generic, class, fun, envir = asNamespace(pkg))
-  }
-
-  # Always register hook in case package is later unloaded & reloaded
-  setHook(
-    packageEvent(pkg, "onLoad"),
-    function(...) {
-      registerS3method(generic, class, fun, envir = asNamespace(pkg))
-    }
-  )
 }
 # nocov end

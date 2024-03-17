@@ -71,7 +71,7 @@ points_rcpp <- function(pts, gdim = "XY", ...) {
 #' Create simple feature from a numeric vector, matrix or list
 #'
 #' Create simple feature from a numeric vector, matrix or list
-#' @param x for \code{st_point}, numeric vector (or one-row-matrix) of length 2, 3 or 4; for \code{st_linestring} and \code{st_multipoint}, numeric matrix with points in rows; for \code{st_polygon} and \code{st_multilinestring}, list with numeric matrices with points in rows; for \code{st_multipolygon}, list of lists with numeric matrices; for \code{st_geometrycollection} list with (non-geometrycollection) simple feature objects
+#' @param x for \code{st_point}, numeric vector (or one-row-matrix) of length 2, 3 or 4; for \code{st_linestring} and \code{st_multipoint}, numeric matrix with points in rows; for \code{st_polygon} and \code{st_multilinestring}, list with numeric matrices with points in rows; for \code{st_multipolygon}, list of lists with numeric matrices; for \code{st_geometrycollection} list with (non-geometrycollection) simple feature geometry (sfg) objects; see examples below
 #' @param dim character, indicating dimensions: "XY", "XYZ", "XYM", or "XYZM"; only really needed for three-dimensional points (which can be either XYZ or XYM) or empty geometries; see details
 #' @name st
 #' @details "XYZ" refers to coordinates where the third dimension represents altitude, "XYM" refers to three-dimensional coordinates where the third dimension refers to something else ("M" for measure); checking of the sanity of \code{x} may be only partial.
@@ -235,7 +235,7 @@ format.sfg = function(x, ..., width = 30) {
 #' @name st
 #' @param ... objects to be pasted together into a single simple feature
 #' @param recursive logical; ignored
-#' @param flatten logical; if TRUE, try to simplify results; if FALSE, return geometrycollection containing all objects
+#' @param flatten logical; if `TRUE`, try to simplify results; if `FALSE`, return geometrycollection containing all objects
 #' @examples
 #' c(st_point(1:2), st_point(5:6))
 #' c(st_point(1:2), st_multipoint(matrix(5:8,2)))

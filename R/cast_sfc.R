@@ -147,12 +147,13 @@ empty_sfg <- function(to) {
 	   )
 }
 
-has_curves = function(x) {
-	if (inherits(x, c("sfc_MULTICURVE", "sfc_COMPOUNDCURVE", "sfc_CURVEPOLYGON"))) # for which GEOS has no st_is_empty()
+is_exotic = function(x) {
+	stopifnot(length(x) > 0)
+	if (inherits(x, c("sfc_MULTICURVE", "sfc_COMPOUNDCURVE", "sfc_CURVEPOLYGON", "sfc_MULTISURFACE"))) # for which GEOS has no st_is_empty()
 		TRUE
-	else if(inherits(x, "sfc_GEOMETRY")) {
+	else if (inherits(x, "sfc_GEOMETRY")) {
 		cls = sapply(x, class)
-		any(cls[2,] %in% c("MULTICURVE", "COMPOUNDCURVE", "CURVEPOLYGON"))
+		any(cls[2,] %in% c("MULTICURVE", "COMPOUNDCURVE", "CURVEPOLYGON", "MULTISURFACE"))
 	} else
 		FALSE
 }
@@ -174,11 +175,11 @@ has_curves = function(x) {
 #' st_cast(d, "POINT") # will not convert the entire MULTIPOINT, and warns
 #' st_cast(d, "MULTIPOINT") %>% st_cast("POINT")
 st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
-	if (missing(to))
+	if (missing(to) || length(x) == 0)
 		return(st_cast_sfc_default(x))
 
 	e = rep(FALSE, length(x))
-	if (!has_curves(x)) { # for which GEOS has no st_is_empty()
+	if (!is_exotic(x)) { # for which GEOS has no st_is_empty()
 		e = st_is_empty(x)
 		if (all(e)) {
 			x[e] = empty_sfg(to)

@@ -122,7 +122,7 @@ test_that("FID feature ID gets written and read", {
   tf <- paste0(tempfile(), ".geojson")
   write_sf(nc, tf, fid_column_name = "f_id")
   nc2 = read_sf(tf, fid_column_name = "f_id")
-  if (sf_extSoftVersion()["GDAL"] >= "2.3.2")
+  if (sf_extSoftVersion()[["GDAL"]] >= "2.3.2")
   	expect_equal(nc$f_id, nc2$f_id)
 })
 

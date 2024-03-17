@@ -173,7 +173,7 @@ library(sf)
 nc <- st_read(system.file("shape/nc.shp", package="sf"))
 ```
 
-(Note that users will not use `system.file` but give a `filename` directly, and that shapefiles consist of more than one file, all with identical basename, which reside in the same directory.)
+(Note that users will not use `system.file()` but give a `filename` directly, and that shapefiles consist of more than one file, all with identical basename, which reside in the same directory.)
 The short report printed gives the file name, the driver (ESRI Shapefile), mentions that there are 100 features (records, represented as rows) and 14
 fields (attributes, represented as columns). This object is of class
 
@@ -226,7 +226,7 @@ However, such objects:
 
 The column in the `sf` data.frame that contains the geometries is a list, of class `sfc`.
 We can retrieve the geometry list-column in this case by `nc$geom` or `nc[[15]]`, but the
-more general way uses `st_geometry`:
+more general way uses `st_geometry()`:
 
 ```{r}
 (nc_geom <- st_geometry(nc))
@@ -275,9 +275,9 @@ Methods for geometry list-columns include:
 methods(class = 'sfc')
 ```
 
-Coordinate reference systems (`st_crs` and `st_transform`) are discussed in the section on [coordinate reference systems](#crs).
-`st_as_wkb` and `st_as_text` convert geometry list-columns into well-known-binary or well-known-text, explained [below](#wkb).
-`st_bbox` retrieves the coordinate bounding box.
+Coordinate reference systems (`st_crs()` and `st_transform()`) are discussed in the section on [coordinate reference systems](#crs).
+`st_as_wkb()` and `st_as_text()` convert geometry list-columns into well-known-binary or well-known-text, explained [below](#wkb).
+`st_bbox()` retrieves the coordinate bounding box.
 
 Attributes include:
 ```{r}
@@ -468,7 +468,7 @@ by using the otherwise nearly identical but more quiet
 nc <- read_sf(filename)
 ```
 
-Writing takes place in the same fashion, using `st_write`:
+Writing takes place in the same fashion, using `st_write()`:
 
 ```{r}
 st_write(nc, "nc.shp")
@@ -489,7 +489,7 @@ write_sf(nc, "nc.shp") # silently overwrites
 
 ### Driver-specific options
 
-The `dsn` and `layer` arguments to `st_read` and `st_write`
+The `dsn` and `layer` arguments to `st_read()` and `st_write()`
 denote a data source name and optionally a layer name.  Their exact
 interpretation as well as the options they support vary per driver,
 the [GDAL driver documentation](https://gdal.org/drivers/vector/index.html)
@@ -502,11 +502,11 @@ meuse <- st_read("PG:dbname=postgis", "meuse")
 
 where the `PG:` string indicates this concerns the PostGIS driver,
 followed by database name, and possibly port and user credentials.
-When the `layer` and `driver` arguments are not specified, `st_read`
+When the `layer` and `driver` arguments are not specified, `st_read()`
 tries to guess them from the datasource, or else simply reads the
 first layer, giving a warning in case there are more.
 
-`st_read` typically reads the coordinate reference system as
+`st_read()` typically reads the coordinate reference system as
 `proj4string`, but not the EPSG (SRID).  GDAL cannot retrieve SRID
 (EPSG code) from `proj4string` strings, and, when needed, it has
 to be set by the user. See also the section on [coordinate reference systems](#crs).
@@ -519,13 +519,13 @@ of some common data formats is illustrated below:
 `st_layers(dsn)` lists the layers present in data source `dsn`,
 and gives the number of fields, features and geometry type for each
 layer:
-```{r}
+```{r eval=FALSE}
 st_layers(system.file("osm/overpass.osm", package="sf"))
 ```
 we see that in this case, the number of features is `NA` because
 for this xml file the whole file needs to be read, which may be
 costly for large files. We can force counting by:
-```{r}
+```{r eval=FALSE}
 Sys.setenv(OSM_USE_CUSTOM_INDEXING="NO")
 st_layers(system.file("osm/overpass.osm", package="sf"), do_count = TRUE)
 ```
@@ -553,7 +553,7 @@ bikraces <- st_read("bikeraces.kml")
 GDAL provides the
 [crud](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete)
 (create, read, update, delete) functions to persistent storage.
-`st_read` (or `read_sf`) are used for reading. `st_write` (or `write_sf`)
+`st_read()` (or `read_sf()`) are used for reading. `st_write()` (or `write_sf()`)
 creates, and has the following arguments to control update and delete:
 
 * `update=TRUE` causes an existing data source to be updated, if it
@@ -605,7 +605,7 @@ from such improvements, and limit some of the provenance of datasets,
 but may help reproducibility.
 
 Coordinate reference system transformations can be carried out using
-`st_transform`, e.g. converting longitudes/latitudes in NAD27 to
+`st_transform()`, e.g. converting longitudes/latitudes in NAD27 to
 web mercator (EPSG:3857) can be done by:
 
 ```{r}
@@ -645,15 +645,15 @@ will override this, and create `MULTIPOLYGON`s in all cases. For `LINES` the sit
 
 The standard for simple feature access defines a number of geometrical operations.
 
-`st_is_valid` and `st_is_simple` return a boolean indicating whether
+`st_is_valid()` and `st_is_simple()` return a Boolean indicating whether
 a geometry is valid or simple.
 
 ```{r}
 st_is_valid(nc[1:2,])
 ```
 
-`st_distance` returns a dense numeric matrix with distances
-between geometries. `st_relate` returns a character matrix with the
+`st_distance()` returns a dense numeric matrix with distances
+between geometries. `st_relate()` returns a character matrix with the
 [DE9-IM](https://en.wikipedia.org/wiki/DE-9IM#Illustration) values
 for each pair of geometries:
 
@@ -663,10 +663,10 @@ st_distance(x[c(1,4,22),], x[c(1, 33,55,56),])
 st_relate(nc[1:5,], nc[1:4,])
 ```
 
-The commands `st_intersects`, `st_disjoint`, `st_touches`,
-`st_crosses`, `st_within`, `st_contains`, `st_overlaps`,
-`st_equals`, `st_covers`, `st_covered_by`, `st_equals_exact` and
-`st_is_within_distance` return a sparse matrix with matching (TRUE)
+`st_intersects()`, `st_disjoint()`, `st_touches()`,
+`st_crosses()`, `st_within()`, `st_contains()`, `st_overlaps()`,
+`st_equals()`, `st_covers()`, `st_covered_by()`, `st_equals_exact()` and
+`st_is_within_distance()` return a sparse matrix (`sgbp` object) with matching (`TRUE`)
 indexes, or a full logical matrix:
 
 ```{r}
@@ -674,9 +674,9 @@ st_intersects(nc[1:5,], nc[1:4,])
 st_intersects(nc[1:5,], nc[1:4,], sparse = FALSE)
 ```
 
-The commands `st_buffer`, `st_boundary`, `st_convexhull`,
-`st_union_cascaded`, `st_simplify`, `st_triangulate`,
-`st_polygonize`, `st_centroid`, `st_segmentize`, and `st_union`
+`st_buffer()`, `st_boundary()`, `st_convexhull()`,
+`st_union_cascaded`, `st_simplify`, `st_triangulate()`,
+`st_polygonize()`, `st_centroid()`, `st_segmentize()`, and `st_union()`
 return new geometries, e.g.:
 
 ```{r fig.height=3}
@@ -688,8 +688,8 @@ plot(geom, add = TRUE)
 plot(st_buffer(geom, -5000), add = TRUE, border = 'blue')
 ```
 
-Commands `st_intersection`, `st_union`, `st_difference`,
-`st_sym_difference` return new geometries that are a function of
+`st_intersection()`, `st_union()`, `st_difference()`, and
+`st_sym_difference()` return new geometries that are a function of
 pairs of geometries:
 
 ```{r fig.height=3}

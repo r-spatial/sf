@@ -38,7 +38,7 @@
 #'    c( bb[3],bb[4]),c( bb[1],bb[4]),c( bb[1],bb[2])))
 #'
 #' g = st_graticule(usa)
-#' plot(usa, xlim = 1.2 * c(-2450853.4, 2186391.9))
+#' plot(usa, xlim = 1.2 * c(-2450853.4, 2186391.9), reset = FALSE)
 #' plot(g[1], add = TRUE, col = 'grey')
 #' plot(bbox, add = TRUE)
 #' points(g$x_start, g$y_start, col = 'red')

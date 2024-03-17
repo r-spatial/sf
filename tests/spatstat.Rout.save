@@ -1,6 +1,6 @@
 
-R version 4.3.0 (2023-04-21) -- "Already Tomorrow"
-Copyright (C) 2023 The R Foundation for Statistical Computing
+R version 4.3.3 (2024-02-29) -- "Angel Food Cake"
+Copyright (C) 2024 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -125,8 +125,8 @@ Type 'q()' to quit R.
 + (y = st_as_sfc(as.psp(sf)))
 + all.equal(st_geometry(x), y)
 + }
-spatstat.geom 3.2-1
-spatstat.random 3.1-5
+spatstat.geom 3.2-9
+spatstat.random 3.2-3
 Simple feature collection with 51 features and 1 field
 Geometry type: GEOMETRY
 Dimension:     XY
@@ -144,9 +144,9 @@ First 10 features:
 8   point      POINT (843278.5 287241.6)
 9   point      POINT (648477.7 235466.6)
 10  point        POINT (852593 267248.3)
-Error in st_poly_sample(x, size = size, ..., type = type, by_polygon = by_polygon) : 
+Error in st_poly_sample(x, size = size, ..., type = type, by_polygon = by_polygon,  : 
   rthomas is not an exported function from spatstat.random.
-Error in st_poly_sample(x, size = size, ..., type = type, by_polygon = by_polygon) : 
+Error in st_poly_sample(x, size = size, ..., type = type, by_polygon = by_polygon,  : 
   The spatstat function rThomas did not return a valid result. Consult the help file.
 Error message from spatstat:
 Error in spatstat_fun(..., win = spatstat.geom::as.owin(x)) : 
@@ -166,4 +166,4 @@ In st_as_sfc.owin(spatstat.geom::as.owin(x)) :
 > 
 > proc.time()
    user  system elapsed 
-  2.366   0.868   2.343 
+  2.012   1.340   1.846 

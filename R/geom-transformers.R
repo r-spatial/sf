@@ -15,13 +15,13 @@
 #' @param mitreLimit numeric; limit of extension for a join if \code{joinStyle} 'MITRE' is used (default 1.0, minimum 0.0); see details
 #' @param singleSide logical; if \code{TRUE}, single-sided buffers are returned for linear geometries,
 #' in which case negative \code{dist} values give buffers on the right-hand side, positive on the left; see details
-#' @param ... passed on to \code{s2_buffer_cells}
+#' @param ... passed on to  [s2::s2_buffer_cells()]
 #' @return an object of the same class of \code{x}, with manipulated geometry.
 #' @export
 #' @details \code{st_buffer} computes a buffer around this geometry/each geometry. If any of \code{endCapStyle},
 #' \code{joinStyle}, or \code{mitreLimit} are set to non-default values ('ROUND', 'ROUND', 1.0 respectively) then
 #' the underlying 'buffer with style' GEOS function is used.
-#' If a negative buffer returns empty polygons instead of shrinking, set st_use_s2() to FALSE
+#' If a negative buffer returns empty polygons instead of shrinking, set sf_use_s2() to FALSE
 #' See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.html} for details.
 #' 
 #' \code{nQuadSegs}, \code{endCapsStyle}, \code{joinStyle}, \code{mitreLimit} and \code{singleSide} only
@@ -182,6 +182,9 @@ st_boundary.sf = function(x) {
 #' nc_g = st_geometry(nc)
 #' plot(st_convex_hull(nc_g))
 #' plot(nc_g, border = grey(.5), add = TRUE)
+#' pt = st_combine(st_sfc(st_point(c(0,80)), st_point(c(120,80)), st_point(c(240,80))))
+#' st_convex_hull(pt) # R2
+#' st_convex_hull(st_set_crs(pt, 'OGC:CRS84')) # S2
 st_convex_hull = function(x)
 	UseMethod("st_convex_hull")
 
@@ -190,8 +193,12 @@ st_convex_hull.sfg = function(x)
 	get_first_sfg(st_convex_hull(st_sfc(x)))
 
 #' @export
-st_convex_hull.sfc = function(x)
-	st_sfc(CPL_geos_op("convex_hull", x, numeric(0), integer(0), numeric(0), logical(0)))
+st_convex_hull.sfc = function(x) {
+	if (isTRUE(st_is_longlat(x)) && sf_use_s2())
+		st_as_sfc(s2::s2_convex_hull(x), crs = st_crs(x))
+	else
+		st_sfc(CPL_geos_op("convex_hull", x, numeric(0), integer(0), numeric(0), logical(0)))
+}
 
 #' @export
 st_convex_hull.sf = function(x) {
@@ -514,26 +521,30 @@ st_polygonize.sf = function(x) {
 
 #' @name geos_unary
 #' @export
+#' @param directed logical; if \code{TRUE}, lines with opposite directions will not be merged
 #' @details \code{st_line_merge} merges lines. In case of \code{st_line_merge}, \code{x} must be an object of class \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
 #' @examples
 #' mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
 #' st_line_merge(st_sfc(mls))
-st_line_merge = function(x)
+st_line_merge = function(x, ..., directed = FALSE)
 	UseMethod("st_line_merge")
 
 #' @export
-st_line_merge.sfg = function(x)
-	get_first_sfg(st_line_merge(st_sfc(x)))
+st_line_merge.sfg = function(x, ..., directed = FALSE)
+	get_first_sfg(st_line_merge(st_sfc(x), directed = directed, ...))
 
 #' @export
-st_line_merge.sfc = function(x) {
+st_line_merge.sfc = function(x, ..., directed = FALSE) {
 	stopifnot(inherits(x, "sfc_MULTILINESTRING"))
-	st_sfc(CPL_geos_op("linemerge", x, numeric(0), integer(0), numeric(0), logical(0)))
+	if (directed)
+		st_sfc(CPL_geos_op("linemergedirected", x, numeric(0), integer(0), numeric(0), logical(0)))
+	else
+		st_sfc(CPL_geos_op("linemerge", x, numeric(0), integer(0), numeric(0), logical(0)))
 }
 
 #' @export
-st_line_merge.sf = function(x) {
-	st_set_geometry(x, st_line_merge(st_geometry(x)))
+st_line_merge.sf = function(x, ..., directed = FALSE) {
+	st_set_geometry(x, st_line_merge(st_geometry(x), directed = directed, ...))
 }
 
 #' @name geos_unary
@@ -812,7 +823,7 @@ get_first_sfg = function(x) {
 #' @note To find whether pairs of simple feature geometries intersect, use
 #' the function \code{\link{st_intersects}} instead of \code{st_intersection}.
 #'
-#' When using GEOS and not using s2 polygons contain their boundary. When using s2 this is determined by the \code{model} defaults of \link[s2]{s2_options}, which can be overriden via the ... argument, e.g. \code{model = "closed"} to force DE-9IM compliant behaviour of polygons (and reproduce GEOS results).
+#' When using GEOS and not using s2 polygons contain their boundary. When using s2 this is determined by the \code{model} defaults of \link[s2]{s2_options}, which can be overridden via the ... argument, e.g. \code{model = "closed"} to force DE-9IM compliant behaviour of polygons (and reproduce GEOS results).
 #' @examples
 #' set.seed(131)
 #' library(sf)
@@ -894,7 +905,7 @@ st_difference.sfg = function(x, y, ...)
 #' numbers in the argument to \code{x}; geometries that are empty
 #' or contained fully inside geometries with higher priority are removed entirely.
 #' The \code{st_difference.sfc} method with a single argument returns an object with
-#' an \code{"idx"} attribute with the orginal index for returned geometries.
+#' an \code{"idx"} attribute with the original index for returned geometries.
 st_difference.sfc = function(x, y, ...) {
 	if (missing(y)) {
 		if (isTRUE(st_is_longlat(x)))
@@ -973,16 +984,21 @@ st_snap.sf = function(x, y, tolerance)
 
 #' @name geos_combine
 #' @export
-#' @param by_feature logical; if TRUE, union each feature, if FALSE return a single feature that is the geometric union of the set of features
-#' @param is_coverage logical; if TRUE, use an optimized algorithm for features that form a polygonal coverage (have no overlaps)
+#' @param by_feature logical; if `TRUE`, union each feature if \code{y} is missing or else each pair of features; if `FALSE` return a single feature that is the geometric union of the set of features in \code{x} if \code{y} is missing, or else the unions of each of the elements of the Cartesian product of both sets
+#' @param is_coverage logical; if `TRUE`, use an optimized algorithm for features that form a polygonal coverage (have no overlaps)
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg} (optional)
 #' @param ... ignored
 #' @seealso \link{st_intersection}, \link{st_difference}, \link{st_sym_difference}
-#' @return If \code{y} is missing, \code{st_union(x)} returns a single geometry with resolved boundaries, else the geometries for all unioned pairs of x[i] and y[j].
+#' @return If \code{y} is missing, \code{st_union(x)} returns a single geometry with resolved boundaries, else the geometries for all unioned pairs of `x[i]` and `y[j]`.
 #' @details
-#' If \code{st_union} is called with a single argument, \code{x}, (with \code{y} missing) and \code{by_feature} is \code{FALSE} all geometries are unioned together and an \code{sfg} or single-geometry \code{sfc} object is returned. If \code{by_feature} is \code{TRUE} each feature geometry is unioned. This can for instance be used to resolve internal boundaries after polygons were combined using \code{st_combine}. If \code{y} is provided, all elements of \code{x} and \code{y} are unioned, pairwise (and \code{by_feature} is ignored). The former corresponds to \code{rgeos::gUnaryUnion}, the latter to \code{rgeos::gUnion}.
+#' If \code{st_union} is called with a single argument, \code{x}, (with \code{y} missing) and \code{by_feature} is \code{FALSE} all geometries are unioned together and an \code{sfg} or single-geometry \code{sfc} object is returned.
+#' If \code{by_feature} is \code{TRUE} each feature geometry is unioned individually.
+#' This can for instance be used to resolve internal boundaries after polygons were combined using \code{st_combine}. 
+#' If \code{y} is provided, all elements of \code{x} and \code{y} are unioned, pairwise if \code{by_feature} is TRUE, or else as the Cartesian product of both sets. 
 #'
-#' Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together). Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context "fully noded" means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input. "Dissolved" means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.	Unioning a set of Points has the effect of merging all identical points (producing a set with no duplicates).
+#' Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together).
+#' Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context "fully noded" means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input.
+#' "Dissolved" means that any duplicate (e.g. coincident) line segments or portions of line segments will be reduced to a single line segment in the output.	Unioning a set of Points has the effect of merging all identical points (producing a set with no duplicates).
 #' @examples
 #' plot(st_union(nc))
 st_union = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) UseMethod("st_union")
@@ -1011,16 +1027,32 @@ st_union.sfc = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 		} else {
 			if (ll)
 				message_longlat("st_union")
-			st_sfc(CPL_geos_union(st_geometry(x), by_feature, is_coverage))
+			st_sfc(CPL_geos_union(x, by_feature, is_coverage))
 		}
 	} else {
+		y = st_geometry(y)
 		stopifnot(st_crs(x) == st_crs(y))
-		if (ll && sf_use_s2())
-			st_as_sfc(s2::s2_union(x, y, ...), crs = st_crs(x)) 
-		else {
-			if (ll)
-				message_longlat("st_union")
-			geos_op2_geom("union", x, y, ...)
+		if (by_feature) {
+			stopifnot(length(x) == length(y))
+			if (ll && sf_use_s2())
+				st_as_sfc(s2::s2_union(x, y, ...), crs = st_crs(x)) 
+			else {
+				if (ll)
+					message_longlat("st_union")
+				st_as_sfc(mapply(st_union, x, y, MoreArgs = list(is_coverage = is_coverage), SIMPLIFY = FALSE),
+						  crs = st_crs(x), precision = st_precision(x))
+			}
+		} else {
+			if (ll && sf_use_s2()) {
+				i = rep(seq_along(x), each = length(y))
+				j = rep(seq_along(y), length(x))
+				st_as_sfc(s2::s2_union(x[i], y[j], ...), crs = st_crs(x),
+					precision = st_precision(x)) 
+			} else {
+				if (ll)
+					message_longlat("st_union")
+				geos_op2_geom("union", x, y, ...)
+			}
 		}
 	}
 }
@@ -1033,8 +1065,13 @@ st_union.sf = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 			st_set_geometry(x, geom)
 		else
 			geom
-	} else
-		geos_op2_df(x, y, geos_op2_geom("union", x, y, ...))
+	} else {
+		if (by_feature) {
+			df = cbind(st_drop_geometry(x), st_drop_geometry(y))
+			st_set_geometry(df, st_union(st_geometry(x), st_geometry(y), is_coverage = is_coverage))
+		} else
+			geos_op2_df(x, y, geos_op2_geom("union", x, y, ...))
+	}
 }
 
 #' Sample points on a linear geometry
@@ -1085,7 +1122,7 @@ st_line_sample = function(x, n, density, type = "regular", sample = NULL) {
 }
 
 #' Internal functions
-#' @name internal
+#' @keywords internal
 #' @param msg error message
 #' @export
 .stop_geos = function(msg) { #nocov start
@@ -1095,3 +1132,22 @@ st_line_sample = function(x, n, density, type = "regular", sample = NULL) {
 	if (length(pts) == 2 && is.numeric(pts))
   		assign(".geos_error", st_point(pts), envir=.sf_cache)
 } #nocov end
+
+#' @param dist numeric, vector with distance value(s)
+#' @name st_line_project_point
+#' @returns `st_line_interpolate` returns the point(s) at dist(s), when measured along (interpolated on) the line(s)
+#' @export
+#' @examples 
+#' st_line_interpolate(st_as_sfc("LINESTRING (0 0, 1 1)"), 1)
+#' st_line_interpolate(st_as_sfc("LINESTRING (0 0, 1 1)"), 1, TRUE)
+st_line_interpolate = function(line, dist, normalized = FALSE) {
+	stopifnot(inherits(line, "sfc"), all(st_dimension(line) == 1), 
+		is.logical(normalized), length(normalized) == 1,
+		is.numeric(dist))
+	if (isTRUE(st_is_longlat(line)))
+		message_longlat("st_project_point")
+	line = st_cast(line, "LINESTRING")
+	recycled = recycle_common(list(line, dist))
+	st_sfc(CPL_line_interpolate(recycled[[1]], recycled[[2]], normalized), 
+		   crs = st_crs(line))
+}

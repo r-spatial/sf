@@ -69,6 +69,15 @@ test_that("can write to db", {
     expect_silent(write_sf(pts, pg, "sf_meuse__", delete_layer = TRUE))
 })
 
+test_that("can create a missing table even if append is TRUE (#2206)", {
+	skip_if_not(can_con(pg), "could not connect to postgis database")
+	x <- st_sf(geometry = st_sfc(st_point(1:2)))
+	dbWriteTable(pg, "x", x, append = TRUE, temporary = TRUE)
+	col_type <- dbGetQuery(pg, "SELECT pg_typeof(geometry) as col_type FROM x")
+	expect_equal(unclass(col_type[["col_type"]]), "geometry")
+	dbExecute(pg, "drop table if exists x")
+})
+
 test_that("can handle multiple geom columns", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
     multi <- cbind(pts[["geometry"]], st_transform(pts, 4326))
@@ -112,9 +121,9 @@ test_that("sf can read non-sf tables with geometries", {
 
 test_that("returns an `sf` object (#1039)", {
     skip_if_not(can_con(pg), "could not connect to postgis database")
-    expect_is(st_read(pg, query = "SELECT 'POINT(1 1)'::geometry"), "sf")
-    expect_is(st_read(pg, query = "SELECT 'POINT(1 1)'::geometry", as_tibble = TRUE), "sf")
-    expect_is(read_sf(pg, query = "SELECT 'POINT(1 1)'::geometry"), "sf")
+    expect_s3_class(st_read(pg, query = "SELECT 'POINT(1 1)'::geometry"), "sf")
+    expect_s3_class(st_read(pg, query = "SELECT 'POINT(1 1)'::geometry", as_tibble = TRUE), "sf")
+    expect_s3_class(read_sf(pg, query = "SELECT 'POINT(1 1)'::geometry"), "sf")
 })
 
 test_that("validates arguments", {
@@ -131,7 +140,7 @@ test_that("sf can write non-sf tables with geometries", {
     df <- as.data.frame(pts)
     expect_silent(st_write(df, pg, "df"))
     expect_silent(dfx <- st_read(pg, "df"))
-    expect_equal(df$geometry, dfx$geometry)
+    expect_equal(df[["geometry"]], dfx[["geometry"]])
     expect_silent(DBI::dbRemoveTable(pg, "df"))
 })
 
@@ -348,7 +357,7 @@ test_that("can read using driver", {
             RPostgres::Postgres(),
             host = "localhost",
             dbname = "empty"),
-        silent=TRUE
+        silent = TRUE
     )
     skip_if_not(
         can_con(empty),

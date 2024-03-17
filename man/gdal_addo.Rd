@@ -2,7 +2,7 @@
 % Please edit documentation in R/stars.R
 \name{gdal_addo}
 \alias{gdal_addo}
-\title{add or remove overviews to/from a raster image}
+\title{Add or remove overviews to/from a raster image}
 \usage{
 gdal_addo(
   file,

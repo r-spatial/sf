@@ -289,6 +289,9 @@ if test "${gdal_has_proj}" = no; then
 fi
 
 AC_MSG_CHECKING(GDAL: checking whether PROJ is available for running:)
+if test "x$cross_compiling" = "xyes"; then
+AC_MSG_RESULT(cross compiling, assuming yes)
+else
 ./gdal_proj
 if test `echo $?` -ne 0 ; then
 gdal_has_proj=no
@@ -299,6 +302,7 @@ AC_MSG_RESULT(yes)
 fi
 if test "${gdal_has_proj}" = no; then
    AC_MSG_ERROR([OGRCoordinateTransformation() does not return a coord.trans: PROJ not available?])
+fi
 fi
 rm -fr errors.txt gdal_proj.cpp gdal_proj
 AC_MSG_NOTICE([GDAL: ${GDAL_VERSION}])
