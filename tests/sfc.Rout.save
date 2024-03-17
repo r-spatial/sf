@@ -347,7 +347,7 @@ use `st_zm(...)` to coerce to XY dimensions
 > 
 > sf_extSoftVersion()[1:3]
     GEOS     GDAL   proj.4 
-"3.12.1"  "3.8.3"  "9.3.1" 
+"3.12.1"  "3.8.4"  "9.3.1" 
 > 
 > # Ops.sfc:
 > ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))))
@@ -437,6 +437,7 @@ Classes 'sf' and 'data.frame':	100 obs. of  15 variables:
  - attr(*, "sf_column")= chr "geometry"
  - attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA NA NA NA NA ...
   ..- attr(*, "names")= chr [1:14] "AREA" "PERIMETER" "CNTY_" "CNTY_ID" ...
+ - attr(*, ".sf_namespace")=function ()  
 > bb = st_as_sfc(st_bbox(nc))
 > format(st_bbox(nc))
 [1] "((-84.32385,33.88199),(-75.45698,36.58965))"
@@ -1088,4 +1089,4 @@ CRS:           NA
 > 
 > proc.time()
    user  system elapsed 
-  5.127   1.392   5.019 
+  5.159   1.424   5.082 
