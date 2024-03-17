@@ -305,7 +305,7 @@ st_sf = function(..., agr = NA_agr_, row.names,
 	if (! missing(crs))
 		st_crs(df) = crs
 
-	if (Sys.getenv("ADD_SF_NAMESPACE") == "true")
+	if (Sys.getenv("ADD_SF_NAMESPACE") != "false")
 		attr(df, ".sf_namespace") <- .sf_namespace
 
 	df
@@ -513,7 +513,7 @@ st_drop_geometry.default = function(x, ...) {
 #' \link{st_transform}, and all other functions starting with \code{st_}.
 #' 
 #' @param _data object of class \code{sf}
-#' @param ... Further arguments of the form new_variable=expression
+#' @param ... Further arguments of the form `new_variable = expression`
 #'
 #' @export
 #' @examples
