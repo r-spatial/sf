@@ -1,5 +1,9 @@
 # version 1.0-16
 
+* fix `st_sample()` when polygon crosses the antemeridian; #2331
+
+* clean up and modernization of S3 registration of methods and tests; #2285, #2288, #2316, #2341, #2342, by @olivroy
+
 * `[.sfc` works when setting argument `op`; #2320
 
 * `st_sample()` for polygons is sensitive to setting `oriented = TRUE` to prevent wrongly correcting ring directions; #2308
