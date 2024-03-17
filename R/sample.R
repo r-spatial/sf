@@ -168,8 +168,8 @@ st_sample.bbox = function(x, size, ..., great_circles = FALSE, segments = units:
 }
 
 st_poly_sample = function(x, size, ..., type = "random",
-                          offset = st_sample(st_as_sfc(st_bbox(x)), 1)[[1]],
-						  by_polygon = FALSE, oriented = FALSE, force = FALSE) {
+						offset = st_sample(st_as_sfc(st_bbox(x)), 1)[[1]],
+						by_polygon = FALSE, oriented = FALSE, force = FALSE) {
 
 	if (by_polygon && inherits(x, "sfc_MULTIPOLYGON")) { # recurse into polygons:
 		sum_a = units::drop_units(sum(st_area(x)))
@@ -195,9 +195,16 @@ st_poly_sample = function(x, size, ..., type = "random",
 			if (sf_use_s2()) { # if FALSE, the user wants the coord ranges to be the bbox
 				if (!requireNamespace("lwgeom", quietly = TRUE))
 					warning("coordinate ranges not computed along great circles; install package lwgeom to get rid of this warning")
-				else
-					bb = st_bbox(st_segmentize(st_as_sfc(bb),
-							units::set_units(1, "degree", mode = "standard"))) # get coordinate range on S2
+				else {
+					# see https://github.com/r-spatial/sf/issues/2331
+					# bb = st_bbox(st_segmentize(st_as_sfc(bb),
+					#		units::set_units(1, "degree", mode = "standard"))) # get coordinate range on S2
+					dfMaxLength = units::set_units(100000, "m", mode = "standard")
+					if (! is.na(st_crs(x)))
+						units(dfMaxLength) = units(st_crs(x)$SemiMajor) # might convert
+					seg = st_sfc(CPL_gdal_segmentize(x, dfMaxLength), crs = st_crs(x)) # avoid lwgeom path
+					bb = st_bbox(seg)
+				}
 			}
 			R = s2::s2_earth_radius_meters()
 			toRad = pi / 180
@@ -268,8 +275,8 @@ st_poly_sample = function(x, size, ..., type = "random",
 				try(spatstat_fun(..., W = spatstat.geom::as.owin(x)), silent = TRUE)
 		if (inherits(pts, "try-error"))
 			stop("The spatstat function ", paste0("r", type),
-             " did not return a valid result. Consult the help file.\n",
-             "Error message from spatstat:\n", pts)
+				" did not return a valid result. Consult the help file.\n",
+				"Error message from spatstat:\n", pts)
 		st_as_sf(pts)[-1,]
 	}
 }
