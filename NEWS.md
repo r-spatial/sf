@@ -1,7 +1,5 @@
 # version 1.0-16
 
-* unless the env. variable `ADD_SF_NAMESPACE` is set to `false`, `sf` objects contain a new attribute, a dummy function called `.sf_namespace`, which is only there to force loading the `sf` namespace when it has not been loaded so far, e.g. for proper printing or plotting of an `sf` object when `library(sf)` has not been called; #2212, #2277 by Mike Mahoney
-
 * `st_sample()` works when unprojected polygon geometry crosses the antemeridian; #2331
 
 * clean up and modernization of S3 registration of methods and tests; #2285, #2288, #2316, #2341, #2342, by @olivroy
