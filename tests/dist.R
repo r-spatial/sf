@@ -38,7 +38,7 @@ st_crs(y) = 4326
 d = st_distance(y, y)
 round(d, 7)
 st_length(z)
-st_length(z) - sum(d[1,2], d[2,3], d[3,4], d[4,5])
+round(st_length(z) - sum(d[1,2], d[2,3], d[3,4], d[4,5]), 7)
 
 # st_line_sample:
 ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),

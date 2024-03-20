@@ -29,9 +29,9 @@ if ("GPKG" %in% st_drivers()$name) { # read Int64
 # see https://github.com/edzer/sfr/issues/45 :
 if ("OSM" %in% st_drivers()$name && Sys.info()['sysname'] != "Darwin") {
 	osm = system.file("osm/overpass.osm", package="sf")
-	print(st_layers(osm))
-	suppressWarnings(print(st_layers(osm, do_count = TRUE)))
-	suppressWarnings(print(st_read(osm, "multipolygons", quiet = TRUE)))
+	osm_l = st_layers(osm)
+	osm_lc = suppressWarnings(st_layers(osm, do_count = TRUE))
+	osm_r = suppressWarnings(st_read(osm, "multipolygons", quiet = TRUE))
 }
 
 # layer opening option:
@@ -130,12 +130,12 @@ if ("GML" %in% st_drivers()$name) {
 
 # logical:
 if ("GPKG" %in% st_drivers()$name) {
-	tst = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE) # default layer name
+	tst = read_sf(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE) # default layer name
 	tst$bool = tst$NWBIR79 > 800 # logical
 	tst$bool[1:3] = NA
-	st_write(tst, "tst__.gpkg")
-	tst2 = st_read("tst__.gpkg")
-	print(identical(tst$bool, tst2$bool))
+	write_sf(tst, "tst__.gpkg")
+	tst2 = read_sf("tst__.gpkg")
+	stopifnot(identical(tst$bool, tst2$bool))
 }
 
 # spatial filter:
