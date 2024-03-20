@@ -104,13 +104,13 @@ if ("SQLite" %in% st_drivers()$name && require(RSQLite)) {
 	  dbcon <- dbConnect(dbDriver("SQLite"), db)
 	  m = dbReadTable(dbcon, "HighWays")
 	  m$Geometry = st_as_sfc(m$Geometry, spatialite = TRUE) # spatialite wkb
-	  print(st_sf(m), n = 3)
+	  print(st_sf(m), n = 1)
 	  m = dbReadTable(dbcon, "Towns")
 	  m$Geometry = st_as_sfc(m$Geometry, spatialite = TRUE) # spatialite wkb
-	  print(st_sf(m), n = 3)
+	  print(st_sf(m), n = 1)
 	  m = dbReadTable(dbcon, "Regions")
 	  m$Geometry = st_as_sfc(m$Geometry, spatialite = TRUE) # spatialite wkb
-	  print(st_sf(m), n = 3)
+	  print(st_sf(m), n = 1)
 	}
 }
 

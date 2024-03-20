@@ -190,13 +190,13 @@ Projected CRS: Undefined Cartesian SRS with unknown unit
 + 	  dbcon <- dbConnect(dbDriver("SQLite"), db)
 + 	  m = dbReadTable(dbcon, "HighWays")
 + 	  m$Geometry = st_as_sfc(m$Geometry, spatialite = TRUE) # spatialite wkb
-+ 	  print(st_sf(m), n = 3)
++ 	  print(st_sf(m), n = 1)
 + 	  m = dbReadTable(dbcon, "Towns")
 + 	  m$Geometry = st_as_sfc(m$Geometry, spatialite = TRUE) # spatialite wkb
-+ 	  print(st_sf(m), n = 3)
++ 	  print(st_sf(m), n = 1)
 + 	  m = dbReadTable(dbcon, "Regions")
 + 	  m$Geometry = st_as_sfc(m$Geometry, spatialite = TRUE) # spatialite wkb
-+ 	  print(st_sf(m), n = 3)
++ 	  print(st_sf(m), n = 1)
 + 	}
 + }
 Loading required package: RSQLite
@@ -249,35 +249,25 @@ Geometry type: LINESTRING
 Dimension:     XY
 Bounding box:  xmin: 645003 ymin: 4822568 xmax: 748805.6 ymax: 4992001
 Projected CRS: WGS 84 / UTM zone 32N
-First 3 features:
+First 1 features:
   PK_UID    Name                       Geometry
 1      1 Unknown LINESTRING (668540.7 485826...
-2      2 Unknown LINESTRING (671365.9 485417...
-3      3 Unknown LINESTRING (671417.6 485417...
 Simple feature collection with 8101 features and 6 fields
 Geometry type: POINT
 Dimension:     XY
 Bounding box:  xmin: 319224 ymin: 3934674 xmax: 1308585 ymax: 5214373
 Projected CRS: WGS 84 / UTM zone 32N
-First 3 features:
-  PK_UID               Name Peoples LocalCounc County Region
-1      1            Brozolo     435          1      0      0
-2      2 Campiglione-Fenile    1284          1      0      0
-3      3          Canischio     274          1      0      0
-                  Geometry
-1 POINT (427002.8 4996361)
-2 POINT (367470.5 4962414)
-3 POINT (390084.1 5025552)
+First 1 features:
+  PK_UID    Name Peoples LocalCounc County Region                 Geometry
+1      1 Brozolo     435          1      0      0 POINT (427002.8 4996361)
 Simple feature collection with 10 features and 2 fields
 Geometry type: MULTIPOLYGON
 Dimension:     XY
 Bounding box:  xmin: 378359.8 ymin: 4198234 xmax: 1211486 ymax: 5036803
 Projected CRS: WGS 84 / UTM zone 32N
-First 3 features:
+First 1 features:
   PK_UID   Name                       Geometry
 1      1 VENETO MULTIPOLYGON (((752912.3 50...
-2      2 VENETO MULTIPOLYGON (((751705.5 50...
-3      3 VENETO MULTIPOLYGON (((766247.8 50...
 > 
 > csv = system.file("csv/pt.csv", package = "sf")
 > identical(st_read(quiet = TRUE, csv, options = "AUTODETECT_TYPE=Yes")$Int64[3], NA_real_)
@@ -329,4 +319,4 @@ Error : wkt parse error.
 > 
 > proc.time()
    user  system elapsed 
-  1.252   1.361   1.109 
+  1.272   1.360   1.182 
