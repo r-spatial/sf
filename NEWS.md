@@ -1,5 +1,7 @@
 # version 1.0-16
 
+* `st_join()` no longer renames the geometry column; #2327
+
 * `st_sample()` works when unprojected polygon geometry crosses the antemeridian; #2331
 
 * clean up and modernization of S3 registration of methods and tests; #2285, #2288, #2316, #2341, #2342, by @olivroy
