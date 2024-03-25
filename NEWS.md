@@ -1,3 +1,5 @@
+# version 1.0-17
+
 # version 1.0-16
 
 * `st_join()` no longer renames the geometry column; #2327
