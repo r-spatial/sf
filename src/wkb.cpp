@@ -400,11 +400,16 @@ int native_endian(void) {
 	return (int) *cp;
 }
 
+
+
 // [[Rcpp::export]]
 Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, bool spatialite = false) {
 	Rcpp::List output(wkb_list.size());
 
-	int type = 0, last_type = 0, n_types = 0, n_empty = 0;
+	int type = 0, n_empty = 0;
+	// An integer such that (all_types & (1 << sf_type)) != 0 if sf_type was
+	// encountered while reading the wkb items.
+	int64_t all_types = 0;
 	int endian = native_endian();
 
 	uint32_t srid = 0;
@@ -421,11 +426,16 @@ Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, bool spatialite 
 			n_empty++;
 		}
 		// Rcpp::Rcout << "type is " << type << "\n";
-		if (n_types <= 1 && type != last_type) {
-			last_type = type;
-			n_types++; // check if there's more than 1 type:
+		all_types |= static_cast<int64_t>(1) << type;
+	}
+
+	int n_types = 0;
+	for (int i = 0; i < SF_Type_Max; i++) {
+		if (all_types & (static_cast<int64_t>(1) << i)) {
+			n_types++;
 		}
 	}
+
 	output.attr("single_type") = n_types <= 1; // if 0, we have only empty geometrycollections
 	output.attr("n_empty") = (int) n_empty;
 	if ((EWKB || spatialite) && srid != 0)
@@ -679,8 +689,8 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false) {
 	}
 
 	int srid = 0;
-	if (EWKB) { 
-		// get SRID from crs[["input"]], either of the form "4326" 
+	if (EWKB) {
+		// get SRID from crs[["input"]], either of the form "4326"
 		// or "XXXX:4326" with arbitrary XXXX string,
 		// or else from the wkt field of the crs using srid_from_crs()
 		Rcpp::List crs = sfc.attr("crs");
