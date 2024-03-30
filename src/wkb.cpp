@@ -400,7 +400,27 @@ int native_endian(void) {
 	return (int) *cp;
 }
 
+static int64_t sf_type_bitmask(int sf_type) {
+	return static_cast<int64_t>(1) << sf_type;
+}
 
+static void read_wkb_promote_multi_if_possible(Rcpp::List output, int64_t* all_types) {
+	int64_t can_promote_multipoint = sf_type_bitmask(SF_Point) |
+		sf_type_bitmask(SF_MultiPoint);
+	int64_t can_promote_multilinestring = sf_type_bitmask(SF_LineString) |
+		sf_type_bitmask(SF_MultiLineString);
+	int64_t can_promote_multipolygon = sf_type_bitmask(SF_Polygon) |
+		sf_type_bitmask(SF_MultiPolygon);
+
+	if (*all_types != can_promote_multipoint &&
+	    *all_types != can_promote_multilinestring &&
+		*all_types != can_promote_multipolygon) {
+		// No type promotion possible
+		return;
+	}
+
+	Rcpp::stop("Not implemented");
+}
 
 // [[Rcpp::export]]
 Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, bool spatialite = false) {
@@ -426,12 +446,18 @@ Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, bool spatialite 
 			n_empty++;
 		}
 		// Rcpp::Rcout << "type is " << type << "\n";
-		all_types |= static_cast<int64_t>(1) << type;
+		all_types |= sf_type_bitmask(type);
+	}
+
+	bool promote_multi = false;
+
+	if (promote_multi) {
+		read_wkb_promote_multi_if_possible(output, &all_types);
 	}
 
 	int n_types = 0;
 	for (int i = 0; i < SF_Type_Max; i++) {
-		if (all_types & (static_cast<int64_t>(1) << i)) {
+		if (all_types & sf_type_bitmask(i)) {
 			n_types++;
 		}
 	}
