@@ -404,6 +404,49 @@ static int64_t sf_type_bitmask(int sf_type) {
 	return static_cast<int64_t>(1) << sf_type;
 }
 
+static Rcpp::NumericMatrix read_wkb_promote_sfg_multipoint(Rcpp::NumericVector item) {
+	SEXP cls_old = Rf_getAttrib(item, R_ClassSymbol);
+	Rcpp::CharacterVector cls_new = Rf_duplicate(cls_old);
+	cls_new[0] = "MULTIPOINT";
+
+	bool is_empty = true;
+	for (const auto ordinate : item) {
+		if (!ISNAN(ordinate)) {
+			is_empty = false;
+			break;
+		}
+	}
+
+	Rcpp::NumericMatrix multi;
+	if (is_empty) {
+		multi = Rcpp::NumericMatrix(0, item.size());
+	} else {
+		multi = Rcpp::NumericMatrix(1, item.size());
+		memcpy(REAL(multi), REAL(item), item.size() * sizeof(double));
+	}
+
+	multi.attr("class") = cls_new;
+	return multi;
+}
+
+static Rcpp::List read_wkb_promote_sfg_multipolygon_or_linestring(SEXP item, const char* cls_multi) {
+	// Technically we could mutate this class because we allocated it above; however,
+	// safer to not make this assumption.
+	SEXP cls_old = Rf_getAttrib(item, R_ClassSymbol);
+	Rcpp::CharacterVector cls_new = Rf_duplicate(cls_old);
+	cls_new[0] = cls_multi;
+
+	Rcpp::List multi;
+	if (Rf_length(item) == 0) {
+		multi = Rcpp::List::create();
+	} else {
+		multi = Rcpp::List::create(item);
+	}
+
+	multi.attr("class") = cls_new;
+	return multi;
+}
+
 static void read_wkb_promote_multi_if_possible(Rcpp::List output, int64_t* all_types) {
 	int64_t can_promote_multipoint = sf_type_bitmask(SF_Point) |
 		sf_type_bitmask(SF_MultiPoint);
@@ -412,14 +455,44 @@ static void read_wkb_promote_multi_if_possible(Rcpp::List output, int64_t* all_t
 	int64_t can_promote_multipolygon = sf_type_bitmask(SF_Polygon) |
 		sf_type_bitmask(SF_MultiPolygon);
 
-	if (*all_types != can_promote_multipoint &&
-	    *all_types != can_promote_multilinestring &&
-		*all_types != can_promote_multipolygon) {
-		// No type promotion possible
+	const char* cls_simple;
+	int sf_type_multi;
+	if (*all_types == can_promote_multipoint) {
+		cls_simple = "POINT";
+		sf_type_multi = SF_MultiPoint;
+	} else if (*all_types == can_promote_multilinestring) {
+		cls_simple = "LINESTRING";
+		sf_type_multi = SF_MultiLineString;
+	} else if (*all_types == can_promote_multipolygon) {
+		cls_simple = "POLYGON";
+		sf_type_multi = SF_MultiPolygon;
+	} else {
+		// Promotion is not possible or is not necessary
 		return;
 	}
 
-	Rcpp::stop("Not implemented");
+	for (int i = 0; i < output.size(); i++) {
+		SEXP item = output[i];
+		if (!Rf_inherits(item, cls_simple)) {
+			continue;
+		}
+
+		switch (sf_type_multi) {
+			case SF_MultiPoint:
+				output[i] = read_wkb_promote_sfg_multipoint(item);
+				break;
+			case SF_MultiLineString:
+				output[i] = read_wkb_promote_sfg_multipolygon_or_linestring(item, "MULTILINESTRING");
+				break;
+			case SF_MultiPolygon:
+				output[i] = read_wkb_promote_sfg_multipolygon_or_linestring(item, "MULTIPOLYGON");
+				break;
+			default:
+				Rcpp::stop("promote to multi not implemented");
+		}
+	}
+
+	*all_types = sf_type_multi;
 }
 
 // [[Rcpp::export]]
