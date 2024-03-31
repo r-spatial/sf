@@ -76,7 +76,7 @@ set_utf8 = function(x) {
 #'
 #' In case of problems reading shapefiles from USB drives on OSX, please see
 #' \url{https://github.com/r-spatial/sf/issues/252}. Reading shapefiles (or other
-#' data sources) directly from zip files can be done by prepending the path 
+#' data sources) directly from zip files can be done by prepending the path
 #' with \code{/vsizip/}. This is part of the GDAL Virtual File Systems interface
 #' that also supports .gz, curl, and other operations, including chaining; see
 #' \url{https://gdal.org/user/virtual_file_systems.html} for a complete
@@ -225,42 +225,38 @@ process_cpl_read_ogr_stream = function(x, geom_column_info, num_features, fid_co
 		function(s) identical(s$metadata[["ARROW:extension:name"]], "ogc.wkb"),
 		logical(1)
 	)
-    
+
     geom_column_info$index = which(is_geometry_column)
-    
+
     if (num_features == -1) {
 		num_features = NULL
 	}
-    
+
     # Suppress warnings about extension type conversion (since we want the
     # default behaviour of converting the storage type)
 	df = suppressWarnings(nanoarrow::convert_array_stream(x, size = num_features))
-	
+
 	for (i in seq_len(nrow(geom_column_info))) {
 		crs = if (is.null(crs)) st_crs(geom_column_info$crs[[i]]) else st_crs(crs)
 		name = geom_column_info$name[[i]]
 		index = geom_column_info$index[[i]]
-		
+
 		column_wkb = df[[index]]
-		attributes(column_wkb) = NULL
-		column_sfc = wk::wk_handle(
-			wk::new_wk_wkb(column_wkb),
-			wk::sfc_writer(promote_multi = promote_to_multi)
-		)
-		
-		df[[index]] = st_set_crs(column_sfc, crs)
+		class(column_wkb) <- "WKB"
+		column_sfc = sf::st_as_sfc(column_wkb, crs = crs, promote_multi = promote_to_multi)
+		df[[index]] = column_sfc
 		names(df)[index] = name
 	}
-	
+
 	# Rename OGC_FID to fid_column_name and move to end
 	if (length(fid_column_name) == 1 && "OGC_FID" %in% names(df)) {
 		df = df[c(setdiff(names(df), "OGC_FID"), "OGC_FID")]
 		names(df)[names(df) == "OGC_FID"] = fid_column_name
 	}
-	
+
 	# All geometry columns to the end
 	df = df[c(setdiff(seq_along(df), geom_column_info$index), geom_column_info$index)]
-	
+
 	process_cpl_read_ogr(df, ...)
 }
 

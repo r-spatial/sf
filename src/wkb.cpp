@@ -492,7 +492,7 @@ static void read_wkb_promote_multi_if_possible(Rcpp::List output, int64_t* all_t
 		}
 	}
 
-	*all_types = sf_type_multi;
+	*all_types = sf_type_bitmask(sf_type_multi);
 }
 
 // [[Rcpp::export]]
