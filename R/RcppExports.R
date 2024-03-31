@@ -393,8 +393,8 @@ CPL_create <- function(file, nxy, value, wkt, xlim, ylim) {
     invisible(.Call(`_sf_CPL_create`, file, nxy, value, wkt, xlim, ylim))
 }
 
-CPL_read_wkb <- function(wkb_list, EWKB = FALSE, spatialite = FALSE) {
-    .Call(`_sf_CPL_read_wkb`, wkb_list, EWKB, spatialite)
+CPL_read_wkb <- function(wkb_list, EWKB = FALSE, spatialite = FALSE, promote_multi = FALSE) {
+    .Call(`_sf_CPL_read_wkb`, wkb_list, EWKB, spatialite, promote_multi)
 }
 
 CPL_write_wkb <- function(sfc, EWKB = FALSE) {

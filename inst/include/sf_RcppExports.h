@@ -24,17 +24,17 @@ namespace sf {
         }
     }
 
-    inline Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, bool spatialite = false) {
-        typedef SEXP(*Ptr_CPL_read_wkb)(SEXP,SEXP,SEXP);
+    inline Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, bool spatialite = false, bool promote_multi = false) {
+        typedef SEXP(*Ptr_CPL_read_wkb)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_CPL_read_wkb p_CPL_read_wkb = NULL;
         if (p_CPL_read_wkb == NULL) {
-            validateSignature("Rcpp::List(*CPL_read_wkb)(Rcpp::List,bool,bool)");
+            validateSignature("Rcpp::List(*CPL_read_wkb)(Rcpp::List,bool,bool,bool)");
             p_CPL_read_wkb = (Ptr_CPL_read_wkb)R_GetCCallable("sf", "_sf_CPL_read_wkb");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_CPL_read_wkb(Shield<SEXP>(Rcpp::wrap(wkb_list)), Shield<SEXP>(Rcpp::wrap(EWKB)), Shield<SEXP>(Rcpp::wrap(spatialite)));
+            rcpp_result_gen = p_CPL_read_wkb(Shield<SEXP>(Rcpp::wrap(wkb_list)), Shield<SEXP>(Rcpp::wrap(EWKB)), Shield<SEXP>(Rcpp::wrap(spatialite)), Shield<SEXP>(Rcpp::wrap(promote_multi)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

@@ -19,7 +19,7 @@
 #define SF_Triangle           17
 #define SF_Type_Max           17
 
-Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB, bool spatialite);
+Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB, bool spatialite, bool promote_multi);
 Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB);
 unsigned int make_type(const char *cls, const char *dim, bool EWKB, int *tp, int srid);
 Rcpp::List get_dim_sfc(Rcpp::List sfc);

@@ -496,7 +496,7 @@ static void read_wkb_promote_multi_if_possible(Rcpp::List output, int64_t* all_t
 }
 
 // [[Rcpp::export]]
-Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, bool spatialite = false) {
+Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, bool spatialite = false, bool promote_multi = false) {
 	Rcpp::List output(wkb_list.size());
 
 	int type = 0, n_empty = 0;
@@ -521,8 +521,6 @@ Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, bool spatialite 
 		// Rcpp::Rcout << "type is " << type << "\n";
 		all_types |= sf_type_bitmask(type);
 	}
-
-	bool promote_multi = false;
 
 	if (promote_multi) {
 		read_wkb_promote_multi_if_possible(output, &all_types);
