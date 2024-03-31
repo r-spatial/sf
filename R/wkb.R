@@ -32,7 +32,8 @@ skip0x = function(x) {
 #' wkb = structure(list("0x01010000204071000000000000801A064100000000AC5C1441"), class = "WKB")
 #' st_as_sfc(wkb, EWKB = TRUE)
 #' @export
-st_as_sfc.WKB = function(x, ..., EWKB = FALSE, spatialite = FALSE, pureR = FALSE, crs = NA_crs_) {
+st_as_sfc.WKB = function(x, ..., EWKB = FALSE, spatialite = FALSE, pureR = FALSE, crs = NA_crs_,
+					     promote_multi = FALSE) {
 	if (EWKB && spatialite)
 		stop("arguments EWKB and spatialite cannot both be TRUE")
 	if (spatialite && pureR)
@@ -49,7 +50,7 @@ st_as_sfc.WKB = function(x, ..., EWKB = FALSE, spatialite = FALSE, pureR = FALSE
 	ret = if (pureR)
 			R_read_wkb(x, readWKB, EWKB = EWKB)
 		else
-			CPL_read_wkb(x, EWKB, spatialite)
+			CPL_read_wkb(x, EWKB, spatialite, promote_multi)
 	if (is.na(crs) && (EWKB || spatialite) && !is.null(attr(ret, "srid")) && attr(ret, "srid") != 0)
 		crs = attr(ret, "srid")
 	if (! is.na(st_crs(crs))) {

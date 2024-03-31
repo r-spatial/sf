@@ -407,7 +407,7 @@ static int64_t sf_type_bitmask(int sf_type) {
 static Rcpp::NumericMatrix read_wkb_promote_sfg_multipoint(Rcpp::NumericVector item) {
 	SEXP cls_old = Rf_getAttrib(item, R_ClassSymbol);
 	Rcpp::CharacterVector cls_new = Rf_duplicate(cls_old);
-	cls_new[0] = "MULTIPOINT";
+	cls_new[1] = "MULTIPOINT";
 
 	bool is_empty = true;
 	for (const auto ordinate : item) {
@@ -434,7 +434,7 @@ static Rcpp::List read_wkb_promote_sfg_multipolygon_or_linestring(SEXP item, con
 	// safer to not make this assumption.
 	SEXP cls_old = Rf_getAttrib(item, R_ClassSymbol);
 	Rcpp::CharacterVector cls_new = Rf_duplicate(cls_old);
-	cls_new[0] = cls_multi;
+	cls_new[1] = cls_multi;
 
 	Rcpp::List multi;
 	if (Rf_length(item) == 0) {
