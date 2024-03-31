@@ -97,10 +97,9 @@ test_that("st_as_sfc() for WKB can promote_to_multi for multilinestring + linest
 
   # st_as_sfc() assigns different attribute order than st_cast, but we ony care
   # about whether the geometries are correct
-  expect_equal(
+  expect_equivalent(
     st_as_sfc(wkb_mixed, promote_to_multi = TRUE),
-    st_cast(sfc_mixed, "MULTILINESTRING"),
-    ignore_attr = TRUE
+    st_cast(sfc_mixed, "MULTILINESTRING")
   )
 })
 
@@ -120,9 +119,8 @@ test_that("st_as_sfc() for WKB can promote_to_multi for multipolygon + polygon",
 
   # st_as_sfc() assigns different attribute order than st_cast, but we ony care
   # about whether the geometries are correct
-  expect_equal(
+  expect_equivalent(
     st_as_sfc(wkb_mixed, promote_to_multi = TRUE),
-    st_cast(sfc_mixed, "MULTILINESTRING"),
-    ignore_attr = TRUE
+    st_cast(sfc_mixed, "MULTILINESTRING")
   )
 })
