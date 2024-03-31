@@ -51,7 +51,7 @@ st_as_sfc.WKB = function(x, ..., EWKB = FALSE, spatialite = FALSE, pureR = FALSE
 			R_read_wkb(x, readWKB, EWKB = EWKB)
 		else
 			CPL_read_wkb2(x,
-						  list(EKWB = EWKB,
+						  list(EWKB = EWKB,
 						  	   spatialite = spatialite,
 						  	   promote_to_multi = promote_to_multi))
 	if (is.na(crs) && (EWKB || spatialite) && !is.null(attr(ret, "srid")) && attr(ret, "srid") != 0)
