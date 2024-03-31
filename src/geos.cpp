@@ -252,7 +252,7 @@ Rcpp::List sfc_from_geometry(GEOSContextHandle_t hGEOSCtxt, std::vector<GeomPtr>
 		}
 	}
 	GEOSWKBWriter_destroy_r(hGEOSCtxt, wkb_writer);
-	return CPL_read_wkb(out, true, false, false);
+	return CPL_read_wkb(out, true, false);
 }
 
 Rcpp::NumericVector get_dim(double dim0, double dim1) {

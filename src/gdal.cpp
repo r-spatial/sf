@@ -497,7 +497,7 @@ Rcpp::List sfc_from_ogr(std::vector<OGRGeometry *> g, bool destroy = false) {
 		if (destroy)
 			OGRGeometryFactory::destroyGeometry(g[i]);
 	}
-	Rcpp::List ret = CPL_read_wkb(lst, false, false, false);
+	Rcpp::List ret = CPL_read_wkb(lst, false, false);
 	ret.attr("crs") = crs;
 	ret.attr("class") = "sfc";
 	return ret;

@@ -243,7 +243,7 @@ process_cpl_read_ogr_stream = function(x, geom_column_info, num_features, fid_co
 
 		column_wkb = df[[index]]
 		class(column_wkb) <- "WKB"
-		column_sfc = sf::st_as_sfc(column_wkb, crs = crs, promote_multi = promote_to_multi)
+		column_sfc = sf::st_as_sfc(column_wkb, crs = crs, promote_to_multi = promote_to_multi)
 		df[[index]] = column_sfc
 		names(df)[index] = name
 	}

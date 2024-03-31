@@ -495,8 +495,7 @@ static void read_wkb_promote_multi_if_possible(Rcpp::List output, int64_t* all_t
 	*all_types = sf_type_bitmask(sf_type_multi);
 }
 
-// [[Rcpp::export]]
-Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, bool spatialite = false, bool promote_multi = false) {
+static Rcpp::List CPL_read_wkb_internal(Rcpp::List wkb_list, bool EWKB = false, bool spatialite = false, bool promote_multi = false) {
 	Rcpp::List output(wkb_list.size());
 
 	int type = 0, n_empty = 0;
@@ -538,6 +537,37 @@ Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, bool spatialite 
 	if ((EWKB || spatialite) && srid != 0)
 		output.attr("srid") = (int) srid;
 	return output;
+}
+
+
+// This function is used by other packages that link to sf, so its signature cannot be changed
+// [[Rcpp::export]]
+Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, bool spatialite = false) {
+	return CPL_read_wkb_internal(wkb_list, EWKB, spatialite);
+}
+
+
+// This version of the function is designed to allow evolution of options without
+// breaking compatability with existing usage
+// [[Rcpp::export]]
+Rcpp::List CPL_read_wkb2(Rcpp::List wkb_list, Rcpp::List options) {
+	bool EWKB = false;
+	bool spatialite = false;
+	bool promote_to_multi = false;
+
+	if (options.containsElementNamed("EWKB")) {
+		EWKB = options("EWKB");
+	}
+
+	if (options.containsElementNamed("spatialite")) {
+		spatialite = options("spatialite");
+	}
+
+	if (options.containsElementNamed("promote_to_multi")) {
+		promote_to_multi = options("promote_to_multi");
+	}
+
+	return CPL_read_wkb_internal(wkb_list, EWKB, spatialite, promote_to_multi);
 }
 
 //

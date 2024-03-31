@@ -1343,23 +1343,57 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_read_wkb
-Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB, bool spatialite, bool promote_multi);
-static SEXP _sf_CPL_read_wkb_try(SEXP wkb_listSEXP, SEXP EWKBSEXP, SEXP spatialiteSEXP, SEXP promote_multiSEXP) {
+Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB, bool spatialite);
+static SEXP _sf_CPL_read_wkb_try(SEXP wkb_listSEXP, SEXP EWKBSEXP, SEXP spatialiteSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Rcpp::List >::type wkb_list(wkb_listSEXP);
     Rcpp::traits::input_parameter< bool >::type EWKB(EWKBSEXP);
     Rcpp::traits::input_parameter< bool >::type spatialite(spatialiteSEXP);
-    Rcpp::traits::input_parameter< bool >::type promote_multi(promote_multiSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_read_wkb(wkb_list, EWKB, spatialite, promote_multi));
+    rcpp_result_gen = Rcpp::wrap(CPL_read_wkb(wkb_list, EWKB, spatialite));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _sf_CPL_read_wkb(SEXP wkb_listSEXP, SEXP EWKBSEXP, SEXP spatialiteSEXP, SEXP promote_multiSEXP) {
+RcppExport SEXP _sf_CPL_read_wkb(SEXP wkb_listSEXP, SEXP EWKBSEXP, SEXP spatialiteSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_sf_CPL_read_wkb_try(wkb_listSEXP, EWKBSEXP, spatialiteSEXP, promote_multiSEXP));
+        rcpp_result_gen = PROTECT(_sf_CPL_read_wkb_try(wkb_listSEXP, EWKBSEXP, spatialiteSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
+// CPL_read_wkb2
+Rcpp::List CPL_read_wkb2(Rcpp::List wkb_list, Rcpp::List options);
+static SEXP _sf_CPL_read_wkb2_try(SEXP wkb_listSEXP, SEXP optionsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type wkb_list(wkb_listSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type options(optionsSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_read_wkb2(wkb_list, options));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _sf_CPL_read_wkb2(SEXP wkb_listSEXP, SEXP optionsSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_sf_CPL_read_wkb2_try(wkb_listSEXP, optionsSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -1443,7 +1477,8 @@ END_RCPP
 static int _sf_RcppExport_validate(const char* sig) { 
     static std::set<std::string> signatures;
     if (signatures.empty()) {
-        signatures.insert("Rcpp::List(*CPL_read_wkb)(Rcpp::List,bool,bool,bool)");
+        signatures.insert("Rcpp::List(*CPL_read_wkb)(Rcpp::List,bool,bool)");
+        signatures.insert("Rcpp::List(*CPL_read_wkb2)(Rcpp::List,Rcpp::List)");
         signatures.insert("Rcpp::List(*CPL_write_wkb)(Rcpp::List,bool)");
     }
     return signatures.find(sig) != signatures.end();
@@ -1452,6 +1487,7 @@ static int _sf_RcppExport_validate(const char* sig) {
 // registerCCallable (register entry points for exported C++ functions)
 RcppExport SEXP _sf_RcppExport_registerCCallable() { 
     R_RegisterCCallable("sf", "_sf_CPL_read_wkb", (DL_FUNC)_sf_CPL_read_wkb_try);
+    R_RegisterCCallable("sf", "_sf_CPL_read_wkb2", (DL_FUNC)_sf_CPL_read_wkb2_try);
     R_RegisterCCallable("sf", "_sf_CPL_write_wkb", (DL_FUNC)_sf_CPL_write_wkb_try);
     R_RegisterCCallable("sf", "_sf_RcppExport_validate", (DL_FUNC)_sf_RcppExport_validate);
     return R_NilValue;
@@ -1556,7 +1592,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_write_gdal", (DL_FUNC) &_sf_CPL_write_gdal, 13},
     {"_sf_CPL_extract", (DL_FUNC) &_sf_CPL_extract, 3},
     {"_sf_CPL_create", (DL_FUNC) &_sf_CPL_create, 6},
-    {"_sf_CPL_read_wkb", (DL_FUNC) &_sf_CPL_read_wkb, 4},
+    {"_sf_CPL_read_wkb", (DL_FUNC) &_sf_CPL_read_wkb, 3},
+    {"_sf_CPL_read_wkb2", (DL_FUNC) &_sf_CPL_read_wkb2, 2},
     {"_sf_CPL_write_wkb", (DL_FUNC) &_sf_CPL_write_wkb, 2},
     {"_sf_CPL_get_z_range", (DL_FUNC) &_sf_CPL_get_z_range, 2},
     {"_sf_CPL_get_m_range", (DL_FUNC) &_sf_CPL_get_m_range, 2},
