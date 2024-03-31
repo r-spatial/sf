@@ -121,6 +121,6 @@ test_that("st_as_sfc() for WKB can promote_to_multi for multipolygon + polygon",
   # about whether the geometries are correct
   expect_equivalent(
     st_as_sfc(wkb_mixed, promote_to_multi = TRUE),
-    st_cast(sfc_mixed, "MULTILINESTRING")
+    st_cast(sfc_mixed, "MULTIPOLYGON")
   )
 })
