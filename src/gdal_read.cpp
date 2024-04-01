@@ -199,6 +199,8 @@ Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
 		Rcpp::NumericVector toTypeUser, Rcpp::CharacterVector fid_column, 
 		bool promote_to_multi = true, int nfeatures = -1) {
 
+	OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
+
 	size_t n = 0;
 	if (nfeatures == -1) {
 		double n_d = (double) poLayer->GetFeatureCount();
@@ -212,8 +214,6 @@ Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
 
 	std::vector<OGRFeature *> poFeatureV(n); // full archive
 	Rcpp::CharacterVector fids(n);
-
-	OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
 
 	std::vector<OGRGeometry *> poGeometryV(n * poFDefn->GetGeomFieldCount());
 	// cycles column wise: 2nd el is 1st geometry, 2nd feature
