@@ -17,7 +17,7 @@ st_interpolate_aw(x, to, extensive, ...)
 
 \item{extensive}{logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population) and the sum is preserved, otherwise, spatially intensive (like population density) and the mean is preserved.}
 
-\item{...}{ignored}
+\item{...}{passed on to \link{sum} in the final aggregation step; e.g. \code{na.rm = TRUE} could be used here}
 
 \item{keep_NA}{logical; if \code{TRUE}, return all features in \code{to}, if \code{FALSE} return only those with non-NA values (but with \code{row.names} the index corresponding to the feature in \code{to})}
 }

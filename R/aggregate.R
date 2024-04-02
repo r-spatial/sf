@@ -95,7 +95,7 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 #' @param x object of class \code{sf}, for which we want to aggregate attributes
 #' @param to object of class \code{sf} or \code{sfc}, with the target geometries
 #' @param extensive logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population) and the sum is preserved, otherwise, spatially intensive (like population density) and the mean is preserved.
-#' @param ... ignored
+#' @param ... passed on to \link{sum} in the final aggregation step; e.g. `na.rm = TRUE` could be used here
 #' @param keep_NA logical; if \code{TRUE}, return all features in \code{to}, if \code{FALSE} return only those with non-NA values (but with \code{row.names} the index corresponding to the feature in \code{to})
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
@@ -150,7 +150,7 @@ st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE) {
 			x_st$...area_t = merge(data.frame(idx = idx[,2]), df)$area
 			lapply(x_st, function(v) v * x_st$...area_st / x_st$...area_t)
 		}
-	x_st = aggregate(x_st, list(idx[,2]), sum)
+	x_st = aggregate(x_st, list(idx[,2]), sum, ...)
 	df = if (keep_NA) {
 			ix = rep(NA_integer_, length(to))
 			ix[x_st$Group.1] = seq_along(x_st$Group.1)
