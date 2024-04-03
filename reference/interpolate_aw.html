@@ -66,7 +66,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">st_interpolate_aw</span><span class="op">(</span><span class="va">x</span>, <span class="va">to</span>, <span class="va">extensive</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for sf</span></span>
-<span><span class="fu">st_interpolate_aw</span><span class="op">(</span><span class="va">x</span>, <span class="va">to</span>, <span class="va">extensive</span>, <span class="va">...</span>, keep_NA <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">st_interpolate_aw</span><span class="op">(</span><span class="va">x</span>, <span class="va">to</span>, <span class="va">extensive</span>, <span class="va">...</span>, keep_NA <span class="op">=</span> <span class="cn">FALSE</span>, na.rm <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -84,13 +84,21 @@
 
 
 <dt>...</dt>
-<dd><p>passed on to <a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a> in the final aggregation step; e.g. <code>na.rm = TRUE</code> could be used here</p></dd>
+<dd><p>ignored</p></dd>
 
 
 <dt>keep_NA</dt>
 <dd><p>logical; if <code>TRUE</code>, return all features in <code>to</code>, if <code>FALSE</code> return only those with non-NA values (but with <code>row.names</code> the index corresponding to the feature in <code>to</code>)</p></dd>
 
+
+<dt>na.rm</dt>
+<dd><p>logical; if <code>TRUE</code> remove features with <code>NA</code> attributes from <code>x</code> before interpolating</p></dd>
+
 </dl></div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>if <code>extensive</code> is <code>TRUE</code> and <code>na.rm</code> is set to <code>TRUE</code>, geometries with <code>NA</code> are effectively treated as having zero attribute values.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
