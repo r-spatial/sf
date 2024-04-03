@@ -1,5 +1,7 @@
 # version 1.0-17
 
+* `st_interpolate_aw()` gains an `na.rm` argument, for removing features with `NA` attributes before interpolating; #830
+
 # version 1.0-16
 
 * `st_join()` no longer renames the geometry column; #2327

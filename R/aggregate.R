@@ -95,8 +95,10 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 #' @param x object of class \code{sf}, for which we want to aggregate attributes
 #' @param to object of class \code{sf} or \code{sfc}, with the target geometries
 #' @param extensive logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population) and the sum is preserved, otherwise, spatially intensive (like population density) and the mean is preserved.
-#' @param ... passed on to \link{sum} in the final aggregation step; e.g. `na.rm = TRUE` could be used here
+#' @param na.rm logical; if `TRUE` remove features with `NA` attributes from `x` before interpolating
+#' @param ... ignored
 #' @param keep_NA logical; if \code{TRUE}, return all features in \code{to}, if \code{FALSE} return only those with non-NA values (but with \code{row.names} the index corresponding to the feature in \code{to})
+#' @details if `extensive` is `TRUE` and `na.rm` is set to `TRUE`, geometries with `NA` are effectively treated as having zero attribute values.
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' g = st_make_grid(nc, n = c(10, 5))
@@ -113,12 +115,14 @@ st_interpolate_aw = function(x, to, extensive, ...) UseMethod("st_interpolate_aw
 
 #' @export
 #' @name interpolate_aw
-st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE) {
+st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE, na.rm = FALSE) {
 	if (!inherits(to, "sf") && !inherits(to, "sfc")) {
 		to <- try(st_as_sf(to))
 		if (inherits(to, "try-error"))
 			stop("st_interpolate_aw requires geometries in argument to")
 	}
+	if (isTRUE(na.rm))
+		x = x[! apply(is.na(x), 1, any),]
 
 	if (! all_constant(x))
 		warning("st_interpolate_aw assumes attributes are constant or uniform over areas of x")
@@ -150,7 +154,7 @@ st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE) {
 			x_st$...area_t = merge(data.frame(idx = idx[,2]), df)$area
 			lapply(x_st, function(v) v * x_st$...area_st / x_st$...area_t)
 		}
-	x_st = aggregate(x_st, list(idx[,2]), sum, ...)
+	x_st = aggregate(x_st, list(idx[,2]), sum)
 	df = if (keep_NA) {
 			ix = rep(NA_integer_, length(to))
 			ix[x_st$Group.1] = seq_along(x_st$Group.1)
