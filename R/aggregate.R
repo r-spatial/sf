@@ -50,6 +50,10 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 		a = aggregate(x[unlist(i), , drop = FALSE],
 			list(rep(seq_len(nrow(by)), lengths(i))), FUN, ...)
 		nrow_diff = nrow(by) - nrow(a)
+
+		if (is.matrix(a[[2]])) # https://github.com/r-spatial/sf/issues/2375
+			a = data.frame(a[1], as.data.frame(a[[2]]))
+
 		if(nrow_diff > 0) {
 			a_na = a[rep(NA, nrow(by)),] # 'top-up' missing rows
 			a_na[a$Group.1,] = a
@@ -82,9 +86,7 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 		else
 			paste0("Group.", seq_along(by))
 		agr[n] = "identity"
-		st_agr(x) = agr
-
-		x
+		st_set_agr(x, agr)
 	}
 }
 
