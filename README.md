@@ -141,7 +141,15 @@ pacman -S gdal proj geos arrow podofo-0.9
 yay/pacaur/yaourt/whatever -S udunits
 ```
 
+#### `renv` or `conda`
+
+There are several reports that `sf` fails to install as a source package when R is used with `renv`, or when R is installed in a `conda` environment. If you experience this, please do not raise an issue here, but 
+
+* try to sort this out with the `renv` developers or the `conda` maintainers, or
+* try to use binary installs of the `sf` package, e.g. from [r2u](https://github.com/eddelbuettel/r2u), or the Posit package manager
+
 #### Other
+
 To install on Debian, the [rocker geospatial](https://github.com/rocker-org/geospatial) Dockerfiles may be helpful. Ubuntu Dockerfiles are found [here](https://github.com/r-spatial/sf/tree/main/inst/docker).
 
 ### Multiple GDAL, GEOS and/or PROJ versions on your system
