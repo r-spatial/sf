@@ -227,8 +227,10 @@ Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
 	bool warn_int64 = false, has_null_geometries = false;
 	OGRFeature *poFeature;
 	while ((poFeature = poLayer->GetNextFeature()) != NULL) {
-		if (i > (n - 1))
-			Rcpp::stop("more features than GetFeatureCount() reported: please report as issue on GitHub");
+		if (i > (n - 1)) {
+			Rcpp::warning("more features available than GetFeatureCount() reported: some records may be failing");
+			break;
+		}
 		// getFID:
 		fids[i] = std::to_string(poFeature->GetFID());
 
