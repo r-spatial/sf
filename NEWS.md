@@ -1,5 +1,7 @@
 # version 1.0-17
 
+* when `dim` is not `XYZM`, `sf_as_sf.data.frame()` interprets a length 4 `coords` argument to specify the corners of a rectangular polygon; #2357
+
 * `st_interpolate_aw()` gains an `na.rm` argument, for removing features with `NA` attributes before interpolating; #830
 
 # version 1.0-16
