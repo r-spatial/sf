@@ -126,7 +126,7 @@
 
 
 <dt>dim</dt>
-<dd><p>passed on to <a href="st.html">st_point</a> (only when argument coords is given)</p></dd>
+<dd><p>specify what 3- or 4-dimensional points reflect: passed on to <a href="st.html">st_point</a> (only when argument coords is given)</p></dd>
 
 
 <dt>remove</dt>
@@ -157,6 +157,7 @@ there is more than one and <code>sf_column_name</code> is <code>NULL</code>, the
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>setting argument <code>wkt</code> annihilates the use of argument <code>coords</code>. If <code>x</code> contains a column called "geometry", <code>coords</code> will result in overwriting of this column by the <a href="sfc.html">sfc</a> geometry list-column.  Setting <code>wkt</code> will replace this column with the geometry list-column, unless <code>remove</code> is <code>FALSE</code>.</p>
+<p>If <code>coords</code> has length 4, and <code>dim</code> is not <code>XYZM</code>, the four columns are taken as the xmin, ymin, xmax, ymax corner coordinates of a rectangle, and polygons are returned.</p>
     </div>
 
     <div class="section level2">
