@@ -73,7 +73,13 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for sgbp</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sgbp</span></span>
+<span><span class="fu"><a href="Ops.html">Ops</a></span><span class="op">(</span><span class="va">e1</span>, <span class="va">e2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sgbp</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -93,10 +99,19 @@
 <dt>max_nb</dt>
 <dd><p>integer; maximum number of neighbours to print for each item</p></dd>
 
+
+<dt>e1</dt>
+<dd><p>object of class <code>sgbp</code></p></dd>
+
+
+<dt>e2</dt>
+<dd><p>object of class <code>sgbp</code></p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p><code>sgbp</code> are sparse matrices, stored as a list with integer vectors holding the ordered <code>TRUE</code> indices of each row. This means that for a dense, \(m \times n\) matrix <code>Q</code> and a list <code>L</code>, if <code>Q[i,j]</code> is <code>TRUE</code> then \(j\) is an element of <code>L[[i]]</code>. Reversed: when \(k\) is the value of <code>L[[i]][j]</code>, then <code>Q[i,k]</code> is <code>TRUE</code>.</p>
+<p><code>==</code> compares only the dimension and index values, not the attributes of two <code>sgbp</code> object; use <code>identical</code> to check for equality of everything.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
