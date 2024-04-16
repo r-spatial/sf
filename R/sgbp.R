@@ -80,17 +80,27 @@ dim.sgbp = function(x) {
 	c(length(x), attr(x, "ncol"))
 }
 
+#' @name sgbp
+#' @param e1 object of class `sgbp`
+#' @param e2 object of class `sgbp`
 #' @export
+#' @details `==` compares only the dimension and index values, not the attributes of two `sgbp` object; use `identical` to check for equality of everything.
 Ops.sgbp = function(e1, e2) {
-	if (.Generic != "!")
-		stop("only ! operator is supported for sgbp objects")
-	nc = 1:attr(e1, "ncol")
-	sgbp(lapply(e1, function(x) setdiff(nc, x)),
-		predicate = paste0("!", attr(e1, "predicate")),
-		region.id = attr(e1, "region.id"),
-		ncol = attr(e1, "ncol"))
+	switch(.Generic, 
+	   "!" = {
+			nc = 1:attr(e1, "ncol")
+			sgbp(lapply(e1, function(x) setdiff(nc, x)),
+				predicate = paste0("!", attr(e1, "predicate")),
+				region.id = attr(e1, "region.id"),
+				ncol = attr(e1, "ncol"))
+	   },
+	   "==" = (length(e1) == length(e2)) && all(mapply(function(x,y) identical(x, y), e1, e2)), 
+	   "!=" = return(!(e1 == e2)),
+		stop("only operators !, == and != are supported for sgbp objects")
+	)
 }
 
+#' @name sgbp
 #' @export
 as.data.frame.sgbp = function(x, ...) {
 	data.frame(row.id = rep(seq_along(x), lengths(x)), col.id = unlist(x))
