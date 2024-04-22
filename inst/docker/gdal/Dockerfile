@@ -78,7 +78,7 @@ RUN wget -q http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
 
 #RUN git clone --depth 1 https://github.com/OSGeo/PROJ.git
 # https://download.osgeo.org/proj/proj-9.0.0RC1.tar.gz
-ENV PROJ_VERSION 9.3.1
+ENV PROJ_VERSION 9.4.0
 RUN wget -q http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz
 RUN tar zxvf proj-${PROJ_VERSION}.tar.gz
 RUN cd proj* \
@@ -99,8 +99,9 @@ RUN cd proj* \
 #  && cd -
 
 # GDAL:
-ENV GDAL_VERSION 3.8.2
-ENV GDAL_VERSION_NAME 3.8.2
+ENV GDAL_VERSION 3.9.0
+ENV GDAL_VERSION_NAME 3.9.0beta1
+#https://download.osgeo.org/gdal/3.9.0/gdal-3.9.0beta1.tar.gz
 
 RUN wget -q http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
@@ -121,6 +122,7 @@ RUN git clone --depth 10 https://github.com/r-spatial/stars.git
 
 RUN R CMD build --no-build-vignettes --no-manual lwgeom
 RUN R CMD build --no-build-vignettes --no-manual sf
+RUN Rscript -e 'install.packages("viridis")'
 RUN R CMD build --no-manual stars
 # RUN pkg-config proj --modversion
 RUN R CMD INSTALL sf
