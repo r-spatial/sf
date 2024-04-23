@@ -273,7 +273,7 @@ st_sf = function(..., agr = NA_agr_, row.names,
 	if (missing(row.names))
 		row.names = seq_along(x[[sf_column]])
 
-	df = if (inherits(x, "tbl_df")) # no worries:
+	df = if (inherits(x, c("tbl_df", "tbl"))) # no worries:
 			x
 		else if (length(x) == 1) # ONLY one sfc
 			data.frame(row.names = row.names)
@@ -281,6 +281,8 @@ st_sf = function(..., agr = NA_agr_, row.names,
 			x
 		else if (sfc_last && inherits(x, "data.frame"))
 			x[-all_sfc_columns]
+		else if (inherits(x[[1]], c("tbl_df", "tbl")))
+			x[[1]]
 		else
 			cbind(data.frame(row.names = row.names),
 				as.data.frame(x[-all_sfc_columns],
@@ -429,7 +431,7 @@ print.sf = function(x, ..., n = getOption("sf_max_print", default = 10)) {
 		app = paste0(app, "\n", "Active geometry column: ", attr(x, "sf_column"))
 	print(st_geometry(x), n = 0, what = "Simple feature collection with", append = app)
 	if (n > 0) {
-		if (inherits(x, "tbl_df"))
+		if (inherits(x, c("tbl_df", "tbl")))
 			NextMethod()
 		else {
 			y <- x

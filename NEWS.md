@@ -1,5 +1,7 @@
 # version 1.0-17
 
+* `st_sf()` no longer strips `tbl` or `tbl_df` class labels; #2378
+
 * `st_layers()` returns an object of class `c("sf_layers", "data.frame")`, with a dedicated `print` method.
 
 * when `dim` is not `XYZM`, `sf_as_sf.data.frame()` interprets a length 4 `coords` argument to specify the corners of a rectangular polygon; #2357
