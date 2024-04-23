@@ -182,17 +182,15 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
 			feature_count(iLayer) = count_features(poLayer);
 	}
 
-	Rcpp::List out(6);
-	out(0) = names;
-	out(1) = geomtype;
-	out(2) = poDS->GetDriverName();
-	out(3) = feature_count;
-	out(4) = field_count;
-	out(5) = layer_crs;
+	Rcpp::List ret = Rcpp::List::create(
+		Rcpp::_["name"] = names,
+		Rcpp::_["geomtype"] = geomtype,
+		Rcpp::_["driver"] = poDS->GetDriverName(),
+		Rcpp::_["features"] = feature_count,
+		Rcpp::_["fields"] = field_count,
+		Rcpp::_["crs"] = layer_crs);
 	GDALClose(poDS); // close & destroys data source
-	out.attr("names") = Rcpp::CharacterVector::create("name", "geomtype", "driver", "features", "fields", "crs");
-	out.attr("class") = Rcpp::CharacterVector::create("sf_layers");
-	return out;
+	return ret;
 }
 
 Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
