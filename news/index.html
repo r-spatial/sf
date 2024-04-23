@@ -58,7 +58,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0-17" id="version-10-17">version 1.0-17<a class="anchor" aria-label="anchor" href="#version-10-17"></a></h2>
-<ul><li><p>when <code>dim</code> is not <code>XYZM</code>, <code>sf_as_sf.data.frame()</code> interprets a length 4 <code>coords</code> argument to specify the corners of a rectangular polygon; <a href="https://github.com/r-spatial/sf/issues/2357" class="external-link">#2357</a></p></li>
+<ul><li><p><code><a href="../reference/st_layers.html">st_layers()</a></code> returns an object of class <code>c("sf_layers", "data.frame")</code>, with a dedicated <code>print</code> method.</p></li>
+<li><p>when <code>dim</code> is not <code>XYZM</code>, <code>sf_as_sf.data.frame()</code> interprets a length 4 <code>coords</code> argument to specify the corners of a rectangular polygon; <a href="https://github.com/r-spatial/sf/issues/2357" class="external-link">#2357</a></p></li>
 <li><p><code><a href="../reference/interpolate_aw.html">st_interpolate_aw()</a></code> gains an <code>na.rm</code> argument, for removing features with <code>NA</code> attributes before interpolating; <a href="https://github.com/r-spatial/sf/issues/830" class="external-link">#830</a></p></li>
 </ul></div>
     <div class="section level2">
