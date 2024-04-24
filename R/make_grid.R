@@ -5,7 +5,7 @@
 #' @param cellsize numeric of length 1 or 2 with target cellsize: for square or rectangular cells the width and height, for hexagonal cells the distance between opposite edges (edge length is cellsize/sqrt(3)). A length units object can be passed, or an area unit object with area size of the square or hexagonal cell.
 #' @param offset numeric of length 2; lower left corner coordinates (x, y) of the grid
 #' @param n integer of length 1 or 2, number of grid cells in x and y direction (columns, rows)
-#' @param crs object of class \code{crs}; coordinate reference system of the target of the target grid in case argument \code{x} is missing, if \code{x} is not missing, its crs is inherited.
+#' @param crs object of class \code{crs}; coordinate reference system of the target grid in case argument \code{x} is missing, if \code{x} is not missing, its crs is inherited.
 #' @param what character; one of: \code{"polygons"}, \code{"corners"}, or \code{"centers"}
 #' @param square logical; if \code{FALSE}, create hexagonal grid
 #' @param flat_topped logical; if \code{TRUE} generate flat topped hexagons, else generate pointy topped
