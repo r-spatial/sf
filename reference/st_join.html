@@ -125,20 +125,21 @@ see also <a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>alternative values for argument <code>join</code> are:</p><ul><li><p><a href="geos_binary_pred.html">st_contains_properly</a></p></li>
-<li><p><a href="geos_binary_pred.html">st_contains</a></p></li>
-<li><p><a href="geos_binary_pred.html">st_covered_by</a></p></li>
-<li><p><a href="geos_binary_pred.html">st_covers</a></p></li>
-<li><p><a href="geos_binary_pred.html">st_crosses</a></p></li>
-<li><p><a href="geos_binary_pred.html">st_disjoint</a></p></li>
-<li><p><a href="geos_binary_pred.html">st_equals_exact</a></p></li>
-<li><p><a href="geos_binary_pred.html">st_equals</a></p></li>
-<li><p><a href="geos_binary_pred.html">st_is_within_distance</a></p></li>
-<li><p><a href="st_nearest_feature.html">st_nearest_feature</a></p></li>
-<li><p><a href="geos_binary_pred.html">st_overlaps</a></p></li>
-<li><p><a href="geos_binary_pred.html">st_touches</a></p></li>
-<li><p><a href="geos_binary_pred.html">st_within</a></p></li>
-<li><p>any user-defined function of the same profile as the above</p></li>
+    <p>alternative values for argument <code>join</code> are:</p><ul><li><p><a href="geos_binary_pred.html">st_contains_properly</a>,</p></li>
+<li><p><a href="geos_binary_pred.html">st_contains</a>,</p></li>
+<li><p><a href="geos_binary_pred.html">st_covered_by</a>,</p></li>
+<li><p><a href="geos_binary_pred.html">st_covers</a>,</p></li>
+<li><p><a href="geos_binary_pred.html">st_crosses</a>,</p></li>
+<li><p><a href="geos_binary_pred.html">st_disjoint</a>,</p></li>
+<li><p><a href="geos_binary_pred.html">st_equals_exact</a>,</p></li>
+<li><p><a href="geos_binary_pred.html">st_equals</a>,</p></li>
+<li><p><a href="geos_binary_pred.html">st_is_within_distance</a>,</p></li>
+<li><p><a href="st_nearest_feature.html">st_nearest_feature</a>,</p></li>
+<li><p><a href="geos_binary_pred.html">st_overlaps</a>,</p></li>
+<li><p><a href="geos_binary_pred.html">st_touches</a>,</p></li>
+<li><p><a href="geos_binary_pred.html">st_within</a>,</p></li>
+<li><p><a href="st_relate.html">st_relate</a> (which will require <code>pattern</code> to be set),</p></li>
+<li><p>or any user-defined function of the same profile as the above</p></li>
 </ul><p>A left join returns all records of the <code>x</code> object with <code>y</code> fields for non-matched records filled with <code>NA</code> values; an inner join returns only records that spatially match.</p>
 <p>To replicate the results of <code>st_within(x, y)</code> you will need to use <code>st_join(x, y, join = "st_within", left = FALSE)</code>.</p>
     </div>
