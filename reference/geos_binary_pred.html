@@ -193,9 +193,7 @@ boolean operation.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>If <code>sparse=FALSE</code>, <code>st_predicate</code> (with <code>predicate</code> e.g. "intersects") returns a dense logical matrix with element <code>i,j</code></p>
-<p></p>
-<p><code>TRUE</code> when <code>predicate(x[i], y[j])</code> (e.g., when geometry of feature i and j intersect); if <code>sparse=TRUE</code>, an object of class <code><a href="sgbp.html">sgbp</a></code> with a sparse list representation of the same matrix, with list element <code>i</code> an integer vector with all indices j for which <code>predicate(x[i],y[j])</code> is <code>TRUE</code> (and hence a zero-length integer vector if none of them is <code>TRUE</code>). From the dense matrix, one can find out if one or more elements intersect by <code>apply(mat, 1, any)</code>, and from the sparse list by <code>lengths(lst) &gt; 0</code>, see examples below.</p>
+<p>If <code>sparse=FALSE</code>, <code>st_predicate</code> (with <code>predicate</code> e.g. "intersects") returns a dense logical matrix with element <code>i,j</code> equal to <code>TRUE</code> when <code>predicate(x[i], y[j])</code> (e.g., when geometry of feature i and j intersect); if <code>sparse=TRUE</code>, an object of class <code><a href="sgbp.html">sgbp</a></code> is returned, which is a sparse list representation of the same matrix, with list element <code>i</code> an integer vector with all indices <code>j</code> for which <code>predicate(x[i],y[j])</code> is <code>TRUE</code> (and hence a zero-length integer vector if none of them is <code>TRUE</code>). From the dense matrix, one can find out if one or more elements intersect by <code>apply(mat, 1, any)</code>, and from the sparse list by <code>lengths(lst) &gt; 0</code>, see examples below.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
