@@ -19,6 +19,7 @@ RUN apt-get upgrade -y
 
 RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
   && apt-get install -y \
+	devscripts \
 	gdb \
 	git \
 	libcairo2-dev \
@@ -100,7 +101,7 @@ RUN cd proj* \
 
 # GDAL:
 ENV GDAL_VERSION 3.9.0
-ENV GDAL_VERSION_NAME 3.9.0beta1
+ENV GDAL_VERSION_NAME 3.9.0rc1
 #https://download.osgeo.org/gdal/3.9.0/gdal-3.9.0beta1.tar.gz
 
 RUN wget -q http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
@@ -122,7 +123,6 @@ RUN git clone --depth 10 https://github.com/r-spatial/stars.git
 
 RUN R CMD build --no-build-vignettes --no-manual lwgeom
 RUN R CMD build --no-build-vignettes --no-manual sf
-RUN Rscript -e 'install.packages("viridis")'
 RUN R CMD build --no-manual stars
 # RUN pkg-config proj --modversion
 RUN R CMD INSTALL sf
