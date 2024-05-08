@@ -692,7 +692,7 @@ Rcpp::NumericVector CPL_transform_bounds(Rcpp::NumericVector bb, Rcpp::List crs_
 	double xmin, ymin, xmax, ymax;
 	int success = ct->TransformBounds(bb[0], bb[1], bb[2], bb[3], &xmin, &ymin, &xmax, &ymax, densify_pts);
 	if (!success)
-		Rcpp::stop("transform_bounds(): failures encountered"); // #nocov end
+		Rcpp::stop("transform_bounds(): failures encountered"); // #nocov
 	Rcpp::NumericVector ret(4);
 	ret[0] = xmin;
 	ret[1] = ymin;
