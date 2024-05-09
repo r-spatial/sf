@@ -11,14 +11,17 @@ st_as_sf.SpatVector = function(x, ..., hex = TRUE) {
 }
 
 #' @export
-st_crs.SpatRaster = function(x, ...) {
+st_crs.SpatRaster = function(x) {
 	if (!requireNamespace("terra", quietly = TRUE))
 		stop("package terra required, please install it first") # nocov
-	string = terra::crs(x)
-	if (string == "") 
+	ctr <- terra::crs(x)
+	if (ctr == "") {
 		NA_crs_
-	else
-		st_crs(string)
+	} else {
+		crs <- sf:::CPL_crs_from_input(ctr)
+		crs$input <- crs$Name
+		crs
+	}
 }
 
 #' @export
