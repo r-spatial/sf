@@ -18,7 +18,7 @@ st_crs.SpatRaster = function(x) {
 	if (ctr == "") {
 		NA_crs_
 	} else {
-		crs <- sf:::CPL_crs_from_input(ctr)
+		crs <- CPL_crs_from_input(ctr)
 		crs$input <- crs$Name
 		crs
 	}
