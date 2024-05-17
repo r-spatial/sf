@@ -36,9 +36,10 @@ Package sf:
 
 (Illustration (c) 2018 by <a href="https://twitter.com/allison_horst/status/1071456081308614656">Allison Horst</a>)
 
-## Blogs, presentations, vignettes, sp-sf wiki
+## Books, journal articles, blogs, presentations, vignettes, sp-sf wiki
 
 * an open access [R Journal article](https://journal.r-project.org/archive/2018/RJ-2018-009/index.html) summarizes the package
+* two books: [Spatial Data Science: with applications in R](https://r-spatial.org/book/), [Geocomputation with R](https://r.geocompx.org/)
 * package vignettes: [first](https://r-spatial.github.io/sf/articles/sf1.html), [second](https://r-spatial.github.io/sf/articles/sf2.html), [third](https://r-spatial.github.io/sf/articles/sf3.html), [fourth](https://r-spatial.github.io/sf/articles/sf4.html), [fifth](https://r-spatial.github.io/sf/articles/sf5.html), [sixth](https://r-spatial.github.io/sf/articles/sf6.html), [seventh](https://r-spatial.github.io/sf/articles/sf7.html)
 * blog posts: [first](https://r-spatial.org/r/2016/02/15/simple-features-for-r.html), [second](https://r-spatial.org/r/2016/07/18/sf2.html), [third](https://r-spatial.org/r/2016/11/02/sfcran.html), [fourth](https://r-spatial.org/r/2017/01/12/newssf.html)
 * the original R Consortium ISC [proposal](PROPOSAL.md), the R Consortium [blog post](https://www.r-consortium.org/blog/2017/01/03/simple-features-now-on-cran)
