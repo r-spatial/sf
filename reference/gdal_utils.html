@@ -118,15 +118,15 @@
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><a href="gdal_addo.html">gdal_addo</a> for adding overlays to a raste file; <a href="st_layers.html">st_layers</a> to query geometry type(s) and crs from layers in a (vector) data source</p></div>
+    <div class="dont-index"><p><a href="gdal_addo.html">gdal_addo</a> for adding overlays to a raster file; <a href="st_layers.html">st_layers</a> to query geometry type(s) and crs from layers in a (vector) data source</p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="sf_extSoftVersion.html">sf_extSoftVersion</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="st">"GDAL"</span><span class="op">]</span> <span class="op">&gt;</span> <span class="st">"2.1.0"</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="co"># info utils can be used to list information about about a raster</span></span></span>
-<span class="r-in"><span><span class="co"># dataset. More info: https://gdal.org/programs/ngdalinfo.html</span></span></span>
+<span class="r-in"><span><span class="co"># info utils can be used to list information about a raster</span></span></span>
+<span class="r-in"><span><span class="co"># dataset. More info: https://gdal.org/programs/gdalinfo.html</span></span></span>
 <span class="r-in"><span><span class="va">in_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"tif/geomatrix.tif"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">gdal_utils</span><span class="op">(</span><span class="st">"info"</span>, <span class="va">in_file</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"-mm"</span>, <span class="st">"-proj4"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -142,7 +142,7 @@
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># The parameters can be specified as c("name") or c("name", "value"). The</span></span></span>
 <span class="r-in"><span><span class="co"># vectortranslate utils can perform also various operations during the</span></span></span>
-<span class="r-in"><span><span class="co"># conversion process. For example we can reproject the features during the</span></span></span>
+<span class="r-in"><span><span class="co"># conversion process. For example, we can reproject the features during the</span></span></span>
 <span class="r-in"><span><span class="co"># translation.</span></span></span>
 <span class="r-in"><span><span class="fu">gdal_utils</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  util <span class="op">=</span> <span class="st">"vectortranslate"</span>,</span></span>
@@ -228,8 +228,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Center      ( 1840966.750, 1143938.250) (104d50'48.65"W, 10d 7'11.53"N)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Band 1 Block=20x20 Type=Byte, ColorInterp=Gray</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Computed Min/Max=74.000,255.000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `storms_xyz' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmprLyhVw/file1e82145b8559.gpkg' using driver `GPKG'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `storms_xyz' from data source `/tmp/RtmpZ7MN0a/file1d506dcff1b.gpkg' using driver `GPKG'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 71 features and 0 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: LINESTRING</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XYZ</span>
