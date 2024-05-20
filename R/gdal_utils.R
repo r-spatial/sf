@@ -33,12 +33,12 @@ resampling_method = function(option = "near") {
 #' @param colorfilename character; name of color file for \code{demprocessing} (mandatory if \code{processing="color-relief"})
 #' @return \code{info} returns a character vector with the raster metadata; all other utils return (invisibly) a logical indicating success (i.e., \code{TRUE}); in case of failure, an error is raised.
 #' @export
-#' @seealso \link{gdal_addo} for adding overlays to a raste file; \link{st_layers} to query geometry type(s) and crs from layers in a (vector) data source
+#' @seealso \link{gdal_addo} for adding overlays to a raster file; \link{st_layers} to query geometry type(s) and crs from layers in a (vector) data source
 #' @examples
 #'
 #' if (sf_extSoftVersion()["GDAL"] > "2.1.0") {
-#' # info utils can be used to list information about about a raster
-#' # dataset. More info: https://gdal.org/programs/ngdalinfo.html
+#' # info utils can be used to list information about a raster
+#' # dataset. More info: https://gdal.org/programs/gdalinfo.html
 #' in_file <- system.file("tif/geomatrix.tif", package = "sf")
 #' gdal_utils("info", in_file, options = c("-mm", "-proj4"))
 #'
@@ -54,7 +54,7 @@ resampling_method = function(option = "near") {
 #' )
 #' # The parameters can be specified as c("name") or c("name", "value"). The
 #' # vectortranslate utils can perform also various operations during the
-#' # conversion process. For example we can reproject the features during the
+#' # conversion process. For example, we can reproject the features during the
 #' # translation.
 #' gdal_utils(
 #'   util = "vectortranslate",

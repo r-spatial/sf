@@ -172,6 +172,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_transform_bounds
+Rcpp::NumericVector CPL_transform_bounds(Rcpp::NumericVector bb, Rcpp::List crs_dst, int densify_pts);
+RcppExport SEXP _sf_CPL_transform_bounds(SEXP bbSEXP, SEXP crs_dstSEXP, SEXP densify_ptsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type bb(bbSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type crs_dst(crs_dstSEXP);
+    Rcpp::traits::input_parameter< int >::type densify_pts(densify_ptsSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_transform_bounds(bb, crs_dst, densify_pts));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_wrap_dateline
 Rcpp::List CPL_wrap_dateline(Rcpp::List sfc, Rcpp::CharacterVector opt, bool quiet);
 RcppExport SEXP _sf_CPL_wrap_dateline(SEXP sfcSEXP, SEXP optSEXP, SEXP quietSEXP) {
@@ -1471,6 +1484,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_curve_to_linestring", (DL_FUNC) &_sf_CPL_curve_to_linestring, 1},
     {"_sf_CPL_can_transform", (DL_FUNC) &_sf_CPL_can_transform, 2},
     {"_sf_CPL_transform", (DL_FUNC) &_sf_CPL_transform, 7},
+    {"_sf_CPL_transform_bounds", (DL_FUNC) &_sf_CPL_transform_bounds, 3},
     {"_sf_CPL_wrap_dateline", (DL_FUNC) &_sf_CPL_wrap_dateline, 3},
     {"_sf_CPL_get_gdal_drivers", (DL_FUNC) &_sf_CPL_get_gdal_drivers, 1},
     {"_sf_CPL_sfc_from_wkt", (DL_FUNC) &_sf_CPL_sfc_from_wkt, 1},

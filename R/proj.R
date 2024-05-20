@@ -203,7 +203,7 @@ print.proj_pipelines = function(x, ...) {
 	# nos:
 	if (length(nos) > 0L) {
 		grds <- attr(x, "grids")
-		for (i in seq(along=nos)) {
+		for (i in seq(along.with = nos)) {
 			grd <- grds[[nos[i]]]
 			ii <- length(grd)
 			if (ii > 0L) {

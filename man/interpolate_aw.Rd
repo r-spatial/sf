@@ -8,7 +8,7 @@
 \usage{
 st_interpolate_aw(x, to, extensive, ...)
 
-\method{st_interpolate_aw}{sf}(x, to, extensive, ..., keep_NA = FALSE)
+\method{st_interpolate_aw}{sf}(x, to, extensive, ..., keep_NA = FALSE, na.rm = FALSE)
 }
 \arguments{
 \item{x}{object of class \code{sf}, for which we want to aggregate attributes}
@@ -20,9 +20,14 @@ st_interpolate_aw(x, to, extensive, ...)
 \item{...}{ignored}
 
 \item{keep_NA}{logical; if \code{TRUE}, return all features in \code{to}, if \code{FALSE} return only those with non-NA values (but with \code{row.names} the index corresponding to the feature in \code{to})}
+
+\item{na.rm}{logical; if \code{TRUE} remove features with \code{NA} attributes from \code{x} before interpolating}
 }
 \description{
 Areal-weighted interpolation of polygon data
+}
+\details{
+if \code{extensive} is \code{TRUE} and \code{na.rm} is set to \code{TRUE}, geometries with \code{NA} are effectively treated as having zero attribute values.
 }
 \examples{
 nc = st_read(system.file("shape/nc.shp", package="sf"))

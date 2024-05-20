@@ -50,6 +50,10 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 		a = aggregate(x[unlist(i), , drop = FALSE],
 			list(rep(seq_len(nrow(by)), lengths(i))), FUN, ...)
 		nrow_diff = nrow(by) - nrow(a)
+
+		if (is.matrix(a[[2]])) # https://github.com/r-spatial/sf/issues/2375
+			a = data.frame(a[1], as.data.frame(a[[2]]))
+
 		if(nrow_diff > 0) {
 			a_na = a[rep(NA, nrow(by)),] # 'top-up' missing rows
 			a_na[a$Group.1,] = a
@@ -82,9 +86,7 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 		else
 			paste0("Group.", seq_along(by))
 		agr[n] = "identity"
-		st_agr(x) = agr
-
-		x
+		st_set_agr(x, agr)
 	}
 }
 
@@ -95,8 +97,10 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 #' @param x object of class \code{sf}, for which we want to aggregate attributes
 #' @param to object of class \code{sf} or \code{sfc}, with the target geometries
 #' @param extensive logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population) and the sum is preserved, otherwise, spatially intensive (like population density) and the mean is preserved.
+#' @param na.rm logical; if `TRUE` remove features with `NA` attributes from `x` before interpolating
 #' @param ... ignored
 #' @param keep_NA logical; if \code{TRUE}, return all features in \code{to}, if \code{FALSE} return only those with non-NA values (but with \code{row.names} the index corresponding to the feature in \code{to})
+#' @details if `extensive` is `TRUE` and `na.rm` is set to `TRUE`, geometries with `NA` are effectively treated as having zero attribute values.
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' g = st_make_grid(nc, n = c(10, 5))
@@ -113,12 +117,14 @@ st_interpolate_aw = function(x, to, extensive, ...) UseMethod("st_interpolate_aw
 
 #' @export
 #' @name interpolate_aw
-st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE) {
+st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE, na.rm = FALSE) {
 	if (!inherits(to, "sf") && !inherits(to, "sfc")) {
 		to <- try(st_as_sf(to))
 		if (inherits(to, "try-error"))
 			stop("st_interpolate_aw requires geometries in argument to")
 	}
+	if (isTRUE(na.rm))
+		x = x[! apply(is.na(x), 1, any),]
 
 	if (! all_constant(x))
 		warning("st_interpolate_aw assumes attributes are constant or uniform over areas of x")

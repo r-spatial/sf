@@ -182,22 +182,22 @@ Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVecto
 			feature_count(iLayer) = count_features(poLayer);
 	}
 
-	Rcpp::List out(6);
-	out(0) = names;
-	out(1) = geomtype;
-	out(2) = poDS->GetDriverName();
-	out(3) = feature_count;
-	out(4) = field_count;
-	out(5) = layer_crs;
+	Rcpp::List ret = Rcpp::List::create(
+		Rcpp::_["name"] = names,
+		Rcpp::_["geomtype"] = geomtype,
+		Rcpp::_["driver"] = poDS->GetDriverName(),
+		Rcpp::_["features"] = feature_count,
+		Rcpp::_["fields"] = field_count,
+		Rcpp::_["crs"] = layer_crs);
 	GDALClose(poDS); // close & destroys data source
-	out.attr("names") = Rcpp::CharacterVector::create("name", "geomtype", "driver", "features", "fields", "crs");
-	out.attr("class") = Rcpp::CharacterVector::create("sf_layers");
-	return out;
+	return ret;
 }
 
 Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
 		Rcpp::NumericVector toTypeUser, Rcpp::CharacterVector fid_column, 
 		bool promote_to_multi = true, int nfeatures = -1) {
+
+	OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
 
 	size_t n = 0;
 	if (nfeatures == -1) {
@@ -213,8 +213,6 @@ Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
 	std::vector<OGRFeature *> poFeatureV(n); // full archive
 	Rcpp::CharacterVector fids(n);
 
-	OGRFeatureDefn *poFDefn = poLayer->GetLayerDefn();
-
 	std::vector<OGRGeometry *> poGeometryV(n * poFDefn->GetGeomFieldCount());
 	// cycles column wise: 2nd el is 1st geometry, 2nd feature
 
@@ -227,8 +225,10 @@ Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
 	bool warn_int64 = false, has_null_geometries = false;
 	OGRFeature *poFeature;
 	while ((poFeature = poLayer->GetNextFeature()) != NULL) {
-		if (i > (n - 1))
-			Rcpp::stop("more features than GetFeatureCount() reported: please report as issue on GitHub");
+		if (i > (n - 1)) {
+			Rcpp::warning("more features available than GetFeatureCount() reported: some records may be failing");
+			break;
+		}
 		// getFID:
 		fids[i] = std::to_string(poFeature->GetFID());
 

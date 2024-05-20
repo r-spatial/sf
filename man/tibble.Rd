@@ -14,14 +14,12 @@ obj_sum.sfc(x)
 pillar_shaft.sfc(x, ...)
 }
 \arguments{
-\item{x}{object of class sfc}
+\item{x}{object of class \code{sfc}}
 
 \item{...}{ignored}
 }
 \description{
-Summarize simple feature type for tibble
-
-Summarize simple feature item for tibble
+Summarize simple feature type / item for tibble
 }
 \details{
 see \link[pillar]{type_sum}

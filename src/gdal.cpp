@@ -670,6 +670,44 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 }
 
 // [[Rcpp::export]]
+Rcpp::NumericVector CPL_transform_bounds(Rcpp::NumericVector bb, Rcpp::List crs_dst,
+		int densify_pts = 21) {
+
+#if GDAL_VERSION_NUM >= 3040000
+	if (bb.size() != 4)
+		Rcpp::stop("bb should have length 4");
+	Rcpp::List crs_src = bb.attr("crs");
+	OGRSpatialReference *src = OGRSrs_from_crs(crs_src);
+	OGRSpatialReference *dst = OGRSrs_from_crs(crs_dst);
+	if (src == NULL)
+		Rcpp::stop("crs_src not found: is it missing?"); // #nocov
+	if (dst == NULL)
+		Rcpp::stop("crs_dst not found: is it missing?"); // #nocov
+	OGRCoordinateTransformation *ct = OGRCreateCoordinateTransformation(src, dst);
+	if (ct == NULL) {
+		dst->Release(); // #nocov start
+		src->Release();
+		Rcpp::stop("transform_bounds(): transformation not available"); // #nocov end
+	}
+	double xmin, ymin, xmax, ymax;
+	int success = ct->TransformBounds(bb[0], bb[1], bb[2], bb[3], &xmin, &ymin, &xmax, &ymax, densify_pts);
+	if (!success)
+		Rcpp::stop("transform_bounds(): failures encountered"); // #nocov
+	Rcpp::NumericVector ret(4);
+	ret[0] = xmin;
+	ret[1] = ymin;
+	ret[2] = xmax;
+	ret[3] = ymax;
+	ct->DestroyCT(ct);
+	dst->Release();
+	src->Release();
+#else
+	Rcpp::stop("transform_bounds() requires GDAL >= 3.4");
+#endif
+	return ret;
+}
+
+// [[Rcpp::export]]
 Rcpp::List CPL_wrap_dateline(Rcpp::List sfc, Rcpp::CharacterVector opt, bool quiet = true) {
 
 	std::vector <char *> options = create_options(opt, quiet);

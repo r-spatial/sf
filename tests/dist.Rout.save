@@ -1,6 +1,6 @@
 
-R version 4.3.1 (2023-06-16) -- "Beagle Scouts"
-Copyright (C) 2023 The R Foundation for Statistical Computing
+R version 4.3.3 (2024-02-29) -- "Angel Food Cake"
+Copyright (C) 2024 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -80,7 +80,7 @@ Units: [m]
 [5,] 1196767  333585.3  222390.2  111195.1       0.0
 > st_length(z)
 1451026 [m]
-> st_length(z) - sum(d[1,2], d[2,3], d[3,4], d[4,5])
+> round(st_length(z) - sum(d[1,2], d[2,3], d[3,4], d[4,5]), 7)
 0 [m]
 > 
 > # st_line_sample:
@@ -109,4 +109,4 @@ Error in st_line_sample(ls, density = 1/1000) :
 > 
 > proc.time()
    user  system elapsed 
-  1.257   0.770   1.138 
+  0.782   1.289   0.574 

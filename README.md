@@ -1,6 +1,6 @@
 <!-- badges: start -->
-[![rcmdcheck](https://github.com/r-spatial/sf/actions/workflows/rcmdcheck.yml/badge.svg?branch=main)](https://github.com/r-spatial/sf/actions/workflows/rcmdcheck.yml)
-[![tic-db](https://github.com/r-spatial/sf/workflows/tic-db/badge.svg?branch=main)](https://github.com/r-spatial/sf/actions)
+[![R-CMD-check](https://github.com/r-spatial/sf/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-spatial/sf/actions/workflows/R-CMD-check.yaml)
+[![tic-db](https://github.com/r-spatial/sf/actions/workflows/tic-db.yml/badge.svg)](https://github.com/r-spatial/sf/actions/workflows/tic-db.yml)
 [![Coverage Status](https://img.shields.io/codecov/c/github/r-spatial/sf/main.svg)](https://app.codecov.io/gh/r-spatial/sf)
 [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html)
 [![CRAN](http://www.r-pkg.org/badges/version/sf)](https://cran.r-project.org/package=sf)
@@ -36,9 +36,10 @@ Package sf:
 
 (Illustration (c) 2018 by <a href="https://twitter.com/allison_horst/status/1071456081308614656">Allison Horst</a>)
 
-## Blogs, presentations, vignettes, sp-sf wiki
+## Books, journal articles, blogs, presentations, vignettes, sp-sf wiki
 
 * an open access [R Journal article](https://journal.r-project.org/archive/2018/RJ-2018-009/index.html) summarizes the package
+* two books: [Spatial Data Science: with applications in R](https://r-spatial.org/book/), [Geocomputation with R](https://r.geocompx.org/)
 * package vignettes: [first](https://r-spatial.github.io/sf/articles/sf1.html), [second](https://r-spatial.github.io/sf/articles/sf2.html), [third](https://r-spatial.github.io/sf/articles/sf3.html), [fourth](https://r-spatial.github.io/sf/articles/sf4.html), [fifth](https://r-spatial.github.io/sf/articles/sf5.html), [sixth](https://r-spatial.github.io/sf/articles/sf6.html), [seventh](https://r-spatial.github.io/sf/articles/sf7.html)
 * blog posts: [first](https://r-spatial.org/r/2016/02/15/simple-features-for-r.html), [second](https://r-spatial.org/r/2016/07/18/sf2.html), [third](https://r-spatial.org/r/2016/11/02/sfcran.html), [fourth](https://r-spatial.org/r/2017/01/12/newssf.html)
 * the original R Consortium ISC [proposal](PROPOSAL.md), the R Consortium [blog post](https://www.r-consortium.org/blog/2017/01/03/simple-features-now-on-cran)
@@ -141,7 +142,15 @@ pacman -S gdal proj geos arrow podofo-0.9
 yay/pacaur/yaourt/whatever -S udunits
 ```
 
+#### `renv` or `conda`
+
+There are several reports that `sf` fails to install as a source package when R is used with `renv`, or when R is installed in a `conda` environment. If you experience this, please do not raise an issue here, but 
+
+* try to sort this out with the `renv` developers or the `conda` maintainers, or
+* try to use binary installs of the `sf` package, e.g. from [r2u](https://github.com/eddelbuettel/r2u), or the Posit package manager
+
 #### Other
+
 To install on Debian, the [rocker geospatial](https://github.com/rocker-org/geospatial) Dockerfiles may be helpful. Ubuntu Dockerfiles are found [here](https://github.com/r-spatial/sf/tree/main/inst/docker).
 
 ### Multiple GDAL, GEOS and/or PROJ versions on your system

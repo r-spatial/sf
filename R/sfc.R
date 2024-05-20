@@ -338,7 +338,7 @@ st_geometry_type = function(x, by_geometry = TRUE) {
 #' @param drop logical; drop, or (`FALSE`) add?
 #' @param what character which dimensions to drop or add
 #' @details Only combinations \code{drop=TRUE}, \code{what = "ZM"}, and \code{drop=FALSE}, \code{what="Z"} are supported so far.
-#' In case \code{add=TRUE}, \code{x} should have \code{XY} geometry, and zero values are added for \code{Z}.
+#' In the latter case, \code{x} should have \code{XY} geometry, and zero values are added for the \code{Z} dimension.
 #' @examples
 #' st_zm(st_linestring(matrix(1:32,8)))
 #' x = st_sfc(st_linestring(matrix(1:32,8)), st_linestring(matrix(1:8,2)))

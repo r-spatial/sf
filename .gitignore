@@ -19,3 +19,4 @@ nc.prj
 nc.dbf
 nc.shx
 docs/
+tests/testthat/Rplots.pdf

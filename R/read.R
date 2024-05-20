@@ -700,7 +700,7 @@ st_layers = function(dsn, options = character(0), do_count = FALSE) {
 		Encoding(ret[[1]]) <- "UTF-8"
 		ret[[1]] <- enc2native(ret[[1]])
 	}
-	ret
+	structure(ret, row.names = seq_along(ret[[1]]), class = c("sf_layers", "data.frame"))
 }
 
 guess_driver = function(dsn) {

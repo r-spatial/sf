@@ -42,8 +42,8 @@ Native interface to gdal utils
 \examples{
 
 if (sf_extSoftVersion()["GDAL"] > "2.1.0") {
-# info utils can be used to list information about about a raster
-# dataset. More info: https://gdal.org/programs/ngdalinfo.html
+# info utils can be used to list information about a raster
+# dataset. More info: https://gdal.org/programs/gdalinfo.html
 in_file <- system.file("tif/geomatrix.tif", package = "sf")
 gdal_utils("info", in_file, options = c("-mm", "-proj4"))
 
@@ -59,7 +59,7 @@ gdal_utils(
 )
 # The parameters can be specified as c("name") or c("name", "value"). The
 # vectortranslate utils can perform also various operations during the
-# conversion process. For example we can reproject the features during the
+# conversion process. For example, we can reproject the features during the
 # translation.
 gdal_utils(
   util = "vectortranslate",
@@ -79,5 +79,5 @@ st_read(in_file)
 }
 }
 \seealso{
-\link{gdal_addo} for adding overlays to a raste file; \link{st_layers} to query geometry type(s) and crs from layers in a (vector) data source
+\link{gdal_addo} for adding overlays to a raster file; \link{st_layers} to query geometry type(s) and crs from layers in a (vector) data source
 }

@@ -54,7 +54,7 @@ st_as_sf(x, ...)
 
 \item{wkt}{name or number of the character column that holds WKT encoded geometries}
 
-\item{dim}{passed on to \link{st_point} (only when argument coords is given)}
+\item{dim}{specify what 3- or 4-dimensional points reflect: passed on to \link{st_point} (only when argument coords is given)}
 
 \item{remove}{logical; when coords or wkt is given, remove these columns from data.frame?}
 
@@ -74,6 +74,8 @@ Convert foreign object to an sf object
 }
 \details{
 setting argument \code{wkt} annihilates the use of argument \code{coords}. If \code{x} contains a column called "geometry", \code{coords} will result in overwriting of this column by the \link{sfc} geometry list-column.  Setting \code{wkt} will replace this column with the geometry list-column, unless \code{remove} is \code{FALSE}.
+
+If \code{coords} has length 4, and \code{dim} is not \code{XYZM}, the four columns are taken as the xmin, ymin, xmax, ymax corner coordinates of a rectangle, and polygons are returned.
 }
 \examples{
 pt1 = st_point(c(0,1))
