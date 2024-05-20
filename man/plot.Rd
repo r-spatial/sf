@@ -16,6 +16,7 @@
 \alias{plot.sfg}
 \alias{plot_sf}
 \alias{sf.colors}
+\alias{text.sf}
 \title{plot sf object}
 \usage{
 \method{plot}{sf}(
@@ -153,6 +154,8 @@ plot_sf(
 )
 
 sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE)
+
+\method{text}{sf}(x, labels = as.character(seq_len(nrow(x))), ...)
 }
 \arguments{
 \item{x}{object of class sf}
@@ -242,6 +245,8 @@ or object returned by \link{st_graticule}}
 \item{alpha}{numeric, in \verb{[0,1]}, transparency}
 
 \item{categorical}{logical; do we want colors for a categorical variable? (see details)}
+
+\item{labels}{character, text to draw (one per row of input)}
 }
 \description{
 plot one or more attributes of an sf object on a map
@@ -275,6 +280,9 @@ implies an \href{https://en.wikipedia.org/wiki/Equirectangular_projection}{Equir
 
 non-categorical colors from \code{sf.colors} were taken from \link[sp]{bpy.colors}, with modified \code{cutoff.tails} defaults
 If categorical is \code{TRUE}, default colors are from \url{https://colorbrewer2.org/} (if n < 9, Set2, else Set3).
+
+Adds text to an existing graphic. Text is placed at the centroid of
+each feature in \code{x}.  Provide POINT features for full control of placement.
 }
 \examples{
 nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)
@@ -302,4 +310,5 @@ x = st_sf(a=1:4, st_sfc(p, p * 2, p * 3, p * 4)) # plot(x, col=2:5) only shows t
 plot(x[order(st_area(x), decreasing = TRUE),], col = 2:5) # plot largest polygons first
 
 sf.colors(10)
+text(nc, labels = substring(nc$NAME,1,1))
 }
