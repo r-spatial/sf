@@ -155,7 +155,7 @@ plot_sf(
 
 sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE)
 
-\method{text}{sf}(x, labels = as.character(seq_len(nrow(x))), ...)
+\method{text}{sf}(x, labels = row.names, ..., of_largest_polygon = FALSE)
 }
 \arguments{
 \item{x}{object of class sf}
@@ -247,6 +247,8 @@ or object returned by \link{st_graticule}}
 \item{categorical}{logical; do we want colors for a categorical variable? (see details)}
 
 \item{labels}{character, text to draw (one per row of input)}
+
+\item{of_largest_polygon}{logical, passed on to \code{st_centroid}}
 }
 \description{
 plot one or more attributes of an sf object on a map

@@ -703,16 +703,17 @@ sf.colors = function (n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorica
 # Add text to an existing graphic
 #
 #' @param labels character, text to draw (one per row of input)
+#' @param of_largest_polygon logical, passed on to \code{st_centroid}
 #' @name plot
 #' @export
 #' @details Adds text to an existing graphic. Text is placed at the centroid of 
 #'   each feature in \code{x}.  Provide POINT features for full control of placement.
 #' @examples
 #' text(nc, labels = substring(nc$NAME,1,1))
-text.sf = function(x, labels = as.character(seq_len(nrow(x))), ...){
-  xy = st_geometry(x) |>
-    st_centroid() |>
-    st_coordinates()
+text.sf = function(x, labels = row.names, ..., of_largest_polygon = FALSE){
+  x = st_geometry(x) 
+  x = st_centroid(x, of_largest_polygon = FALSE)
+  xy = st_coordinates(x)
   text(xy[,1], xy[,2], labels = labels, ...)
 }
 
