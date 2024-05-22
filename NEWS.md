@@ -1,5 +1,7 @@
 # version 1.0-17
 
+* `text.sf()` adds labels to base plots at geometry centroids; #2399
+
 * `st_sf()` no longer strips `tbl` or `tbl_df` class labels; #2378
 
 * `st_layers()` returns an object of class `c("sf_layers", "data.frame")`, with a dedicated `print` method.

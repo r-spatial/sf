@@ -703,15 +703,20 @@ sf.colors = function (n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorica
 # Add text to an existing (base) plot
 #
 #' @param labels character, text to draw (one per row of input)
-#' @param of_largest_polygon logical, passed on to \link{st_centroid}
 #' @name plot
 #' @export
 #' @details `text.sf` adds text to an existing base graphic. Text is placed at the centroid of 
 #'   each feature in \code{x}. Provide POINT features for further control of placement.
 #' @examples
 #' text(nc, labels = substring(nc$NAME,1,1))
-text.sf = function(x, labels = row.names(x), ..., of_largest_polygon = FALSE){
-	x = st_geometry(x) 
+text.sf = function(x, labels = row.names(x), ...) {
+	text(st_geometry(x), labels = labels, ...)
+}
+
+#' @export
+#' @name plot
+#' @param of_largest_polygon logical, passed on to \link{st_centroid}
+text.sfc = function(x, labels = seq_along(x), ..., of_largest_polygon = FALSE){
 	x = st_centroid(x, of_largest_polygon = of_largest_polygon)
 	xy = st_coordinates(x)
 	text(xy[,1], xy[,2], labels = labels, ...)
