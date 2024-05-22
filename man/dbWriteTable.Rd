@@ -32,19 +32,17 @@
 \arguments{
 \item{conn}{DBIObject}
 
-\item{name}{The table name, passed on to \code{\link[DBI:dbQuoteIdentifier]{dbQuoteIdentifier()}}. Options are:
-\itemize{
-\item a character string with the unquoted DBMS table name,
-e.g. \code{"table_name"},
-\item a call to \code{\link[DBI:Id]{Id()}} with components to the fully qualified table name,
-e.g. \code{Id(schema = "my_schema", table = "table_name")}
-\item a call to \code{\link[DBI:SQL]{SQL()}} with the quoted and fully qualified table name
-given verbatim, e.g. \code{SQL('"my_schema"."table_name"')}
-}}
+\item{name}{
+   character vector of names (table names, fields, keywords).
+}
 
-\item{value}{A \link{data.frame} (or coercible to data.frame).}
+\item{value}{
+   a data.frame.
+}
 
-\item{...}{Other parameters passed on to methods.}
+\item{...}{
+   placeholder for future use.
+}
 
 \item{row.names}{Add a \code{row.name} column, or a vector of length \code{nrow(obj)}
 containing row.names; default \code{FALSE}.}

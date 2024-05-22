@@ -74,16 +74,16 @@ points(g$x_end, g$y_end, col = 'blue')
 
 invisible(lapply(seq_len(nrow(g)), function(i) {
 if (g$type[i] == "N" && g$x_start[i] - min(g$x_start) < 1000)
-	text(g[i,"x_start"], g[i,"y_start"], labels = parse(text = g[i,"degree_label"]),
+	text(g$x_start[i], g$y_start[i], labels = parse(text = g$degree_label[i]), 
 		srt = g$angle_start[i], pos = 2, cex = .7)
 if (g$type[i] == "E" && g$y_start[i] - min(g$y_start) < 1000)
-	text(g[i,"x_start"], g[i,"y_start"], labels = parse(text = g[i,"degree_label"]),
+	text(g$x_start[i], g$y_start[i], labels = parse(text = g$degree_label[i]), 
 		srt = g$angle_start[i] - 90, pos = 1, cex = .7)
 if (g$type[i] == "N" && g$x_end[i] - max(g$x_end) > -1000)
-	text(g[i,"x_end"], g[i,"y_end"], labels = parse(text = g[i,"degree_label"]),
+	text(g$x_end[i], g$y_end[i], labels = parse(text = g$degree_label[i]), 
 		srt = g$angle_end[i], pos = 4, cex = .7)
 if (g$type[i] == "E" && g$y_end[i] - max(g$y_end) > -1000)
-	text(g[i,"x_end"], g[i,"y_end"], labels = parse(text = g[i,"degree_label"]),
+	text(g$x_end[i], g$y_end[i], labels = parse(text = g$degree_label[i]), 
 		srt = g$angle_end[i] - 90, pos = 3, cex = .7)
 }))
 plot(usa, graticule = st_crs(4326), axes = TRUE, lon = seq(-60,-130,by=-10))
