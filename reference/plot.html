@@ -432,7 +432,9 @@ implies an <a href="https://en.wikipedia.org/wiki/Equirectangular_projection" cl
 <p>non-categorical colors from <code>sf.colors</code> were taken from <a href="https://edzer.github.io/sp/reference/bpy.colors.html" class="external-link">bpy.colors</a>, with modified <code>cutoff.tails</code> defaults
 If categorical is <code>TRUE</code>, default colors are from <a href="https://colorbrewer2.org/" class="external-link">https://colorbrewer2.org/</a> (if n &lt; 9, Set2, else Set3).</p>
 <p><code>text.sf</code> adds text to an existing base graphic. Text is placed at the centroid of
-each feature in <code>x</code>. Provide POINT features for further control of placement.</p>
+each feature in <code>x</code>. Provide POINT features for further control of placement.
+<code>points.sf</code> adds point symbols to an existing base graphic. If points of text are not shown
+correctly, try setting argument <code>reset</code> to <code>FALSE</code> in the <code>plot()</code> call.</p>
     </div>
 
     <div class="section level2">
