@@ -706,7 +706,9 @@ sf.colors = function (n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorica
 #' @name plot
 #' @export
 #' @details `text.sf` adds text to an existing base graphic. Text is placed at the centroid of 
-#'   each feature in \code{x}. Provide POINT features for further control of placement.
+#' each feature in \code{x}. Provide POINT features for further control of placement.
+#' `points.sf` adds point symbols to an existing base graphic. If points of text are not shown
+#' correctly, try setting argument `reset` to `FALSE` in the `plot()` call.
 #' @examples
 #' text(nc, labels = substring(nc$NAME,1,1))
 text.sf = function(x, labels = row.names(x), ...) {

@@ -294,6 +294,8 @@ If categorical is \code{TRUE}, default colors are from \url{https://colorbrewer2
 
 \code{text.sf} adds text to an existing base graphic. Text is placed at the centroid of
 each feature in \code{x}. Provide POINT features for further control of placement.
+\code{points.sf} adds point symbols to an existing base graphic. If points of text are not shown
+correctly, try setting argument \code{reset} to \code{FALSE} in the \code{plot()} call.
 }
 \examples{
 nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)
