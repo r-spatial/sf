@@ -1,6 +1,6 @@
 # version 1.0-17
 
-* `text.sf()` adds labels to base plots at geometry centroids; #2399
+* `text.sf()` and `text.sfc()` add labels to base plots at geometry centroids; #2399
 
 * `st_sf()` no longer strips `tbl` or `tbl_df` class labels; #2378
 

@@ -17,6 +17,7 @@
 \alias{plot_sf}
 \alias{sf.colors}
 \alias{text.sf}
+\alias{text.sfc}
 \title{plot sf object}
 \usage{
 \method{plot}{sf}(
@@ -155,7 +156,9 @@ plot_sf(
 
 sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE)
 
-\method{text}{sf}(x, labels = row.names(x), ..., of_largest_polygon = FALSE)
+\method{text}{sf}(x, labels = row.names(x), ...)
+
+\method{text}{sfc}(x, labels = seq_along(x), ..., of_largest_polygon = FALSE)
 }
 \arguments{
 \item{x}{object of class sf}
