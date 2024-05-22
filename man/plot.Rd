@@ -155,7 +155,7 @@ plot_sf(
 
 sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE)
 
-\method{text}{sf}(x, labels = row.names, ..., of_largest_polygon = FALSE)
+\method{text}{sf}(x, labels = row.names(x), ..., of_largest_polygon = FALSE)
 }
 \arguments{
 \item{x}{object of class sf}
@@ -248,7 +248,7 @@ or object returned by \link{st_graticule}}
 
 \item{labels}{character, text to draw (one per row of input)}
 
-\item{of_largest_polygon}{logical, passed on to \code{st_centroid}}
+\item{of_largest_polygon}{logical, passed on to \link{st_centroid}}
 }
 \description{
 plot one or more attributes of an sf object on a map
@@ -283,8 +283,8 @@ implies an \href{https://en.wikipedia.org/wiki/Equirectangular_projection}{Equir
 non-categorical colors from \code{sf.colors} were taken from \link[sp]{bpy.colors}, with modified \code{cutoff.tails} defaults
 If categorical is \code{TRUE}, default colors are from \url{https://colorbrewer2.org/} (if n < 9, Set2, else Set3).
 
-Adds text to an existing graphic. Text is placed at the centroid of
-each feature in \code{x}.  Provide POINT features for full control of placement.
+\code{text.sf} adds text to an existing base graphic. Text is placed at the centroid of
+each feature in \code{x}. Provide POINT features for further control of placement.
 }
 \examples{
 nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)
