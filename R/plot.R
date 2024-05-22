@@ -722,6 +722,20 @@ text.sfc = function(x, labels = seq_along(x), ..., of_largest_polygon = FALSE){
 	text(xy[,1], xy[,2], labels = labels, ...)
 }
 
+#' @name plot
+#' @export
+points.sf = function(x, ...) {
+	points(st_geometry(x), ...)
+}
+
+#' @name plot
+#' @export
+points.sfc = function(x, ..., of_largest_polygon = FALSE) {
+	x = st_centroid(x, of_largest_polygon = of_largest_polygon)
+	xy = st_coordinates(x)
+	points(xy[,1], xy[,2], ...)
+}
+
 # get the aspect ratio of a bounding box, for geodetic coords true scale at mid latitude:
 get_asp = function(bb) {
 	asp = diff(bb[c(2,4)])/diff(bb[c(1,3)])
