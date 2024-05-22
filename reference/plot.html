@@ -214,7 +214,10 @@ Plot sf object</p>
 <span><span class="fu">sf.colors</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span>, cutoff.tails <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.35</span>, <span class="fl">0.2</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">1</span>, categorical <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for sf</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">x</span>, labels <span class="op">=</span> <span class="va">row.names</span>, <span class="va">...</span>, of_largest_polygon <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">x</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sfc</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">x</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="va">...</span>, of_largest_polygon <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -398,7 +401,7 @@ or object returned by <a href="st_graticule.html">st_graticule</a></p></dd>
 
 
 <dt>of_largest_polygon</dt>
-<dd><p>logical, passed on to <code>st_centroid</code></p></dd>
+<dd><p>logical, passed on to <a href="geos_unary.html">st_centroid</a></p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -422,8 +425,8 @@ projected (coordinates are long/lat), the aspect is by default set to
 implies an <a href="https://en.wikipedia.org/wiki/Equirectangular_projection" class="external-link">Equirectangular projection</a>.</p>
 <p>non-categorical colors from <code>sf.colors</code> were taken from <a href="https://edzer.github.io/sp/reference/bpy.colors.html" class="external-link">bpy.colors</a>, with modified <code>cutoff.tails</code> defaults
 If categorical is <code>TRUE</code>, default colors are from <a href="https://colorbrewer2.org/" class="external-link">https://colorbrewer2.org/</a> (if n &lt; 9, Set2, else Set3).</p>
-<p>Adds text to an existing graphic. Text is placed at the centroid of
-each feature in <code>x</code>.  Provide POINT features for full control of placement.</p>
+<p><code>text.sf</code> adds text to an existing base graphic. Text is placed at the centroid of
+each feature in <code>x</code>. Provide POINT features for further control of placement.</p>
     </div>
 
     <div class="section level2">
