@@ -6,9 +6,13 @@
 #' Geometric unary operations on simple feature geometries. These are all generics, with methods for \code{sfg}, \code{sfc} and \code{sf} objects, returning an object of the same class. All operations work on a per-feature basis, ignoring all other features.
 #' @name geos_unary
 #' @param x object of class \code{sfg}, \code{sfc} or \code{sf}
-#' @param dist numeric; buffer distance for all, or for each of the elements in \code{x}; in case
-#' \code{dist} is a \code{units} object, it should be convertible to \code{arc_degree} if
-#' \code{x} has geographic coordinates, and to \code{st_crs(x)$units} otherwise
+#' @param dist numeric or object of class `units`; buffer distance for all, or for each of the elements in \code{x}. 
+#' In case \code{x} has geodetic coordinates (lon/lat) and `sf_use_s2()` is `TRUE`, a numeric 
+#' `dist` is taken as distance in meters and a `units` object in `dist` is converted to meters.
+#' In case \code{x} has geodetic coordinates (lon/lat) and `sf_use_s2()` is `FALSE`, a numeric 
+#' `dist` is taken as degrees, and a `units` object in `dist` is converted to `arc_degree` (and warnings are issued).
+#' In case \code{x} does not have geodetic coordinates (projected) then
+#' numeric `dist` is assumed to have the units of the coordinates, and a `units` `dist` is converted to those if `st_crs(x)` is not `NA`.
 #' @param nQuadSegs integer; number of segments per quadrant (fourth of a circle), for all or per-feature; see details
 #' @param endCapStyle character; style of line ends, one of 'ROUND', 'FLAT', 'SQUARE'; see details
 #' @param joinStyle character; style of line joins, one of 'ROUND', 'MITRE', 'BEVEL'; see details
