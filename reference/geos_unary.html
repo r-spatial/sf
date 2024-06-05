@@ -114,9 +114,13 @@
 
 
 <dt>dist</dt>
-<dd><p>numeric; buffer distance for all, or for each of the elements in <code>x</code>; in case
-<code>dist</code> is a <code>units</code> object, it should be convertible to <code>arc_degree</code> if
-<code>x</code> has geographic coordinates, and to <code>st_crs(x)$units</code> otherwise</p></dd>
+<dd><p>numeric or object of class <code>units</code>; buffer distance for all, or for each of the elements in <code>x</code>.
+In case <code>x</code> has geodetic coordinates (lon/lat) and <code><a href="s2.html">sf_use_s2()</a></code> is <code>TRUE</code>, a numeric
+<code>dist</code> is taken as distance in meters and a <code>units</code> object in <code>dist</code> is converted to meters.
+In case <code>x</code> has geodetic coordinates (lon/lat) and <code><a href="s2.html">sf_use_s2()</a></code> is <code>FALSE</code>, a numeric
+<code>dist</code> is taken as degrees, and a <code>units</code> object in <code>dist</code> is converted to <code>arc_degree</code> (and warnings are issued).
+In case <code>x</code> does not have geodetic coordinates (projected) then
+numeric <code>dist</code> is assumed to have the units of the coordinates, and a <code>units</code> <code>dist</code> is converted to those if <code>st_crs(x)</code> is not <code>NA</code>.</p></dd>
 
 
 <dt>nQuadSegs</dt>
