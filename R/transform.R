@@ -156,7 +156,7 @@ st_transform.sf = function(x, crs = st_crs(x), ...) {
 #' @export
 #' @details The \code{st_transform} method for \code{sfg} objects assumes that the CRS of the object is available as an attribute of that name.
 #' @examples
-#' st_transform(structure(p1, proj4string = "+init=epsg:4326"), "EPSG:3857")
+#' st_transform(structure(p1, proj4string = "EPSG:4326"), "EPSG:3857")
 st_transform.sfg = function(x, crs = st_crs(x), ...) {
 	x = st_sfc(x, crs = attr(x, "proj4string"))
 	if (missing(crs))

@@ -42,7 +42,7 @@ if (sf_extSoftVersion()["USE_PROJ_H"] == "true" || sf_proj_info("have_datum_file
 }
 
 if (suppressPackageStartupMessages(require(sp, quietly = TRUE))) {
- x0 = sp::CRS("+init=epsg:4326")
+ x0 = sp::CRS("EPSG:4326")
  cat(sp::wkt(x0), "\n")
  x = st_crs(x0)
  print(x)
