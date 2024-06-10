@@ -115,7 +115,7 @@ p2 = st_point(c(-30,20))
 sfc = st_sfc(p1, p2, crs = 4326)
 sfc
 st_transform(sfc, 3857)
-st_transform(st_sf(a=2:1, geom=sfc), "+init=epsg:3857")
+st_transform(st_sf(a=2:1, geom=sfc), "EPSG:3857")
 if (sf_extSoftVersion()["GDAL"] >= "3.0.0") {
   st_transform(sfc, pipeline =
 	  "+proj=pipeline +step +proj=axisswap +order=2,1") # reverse axes
@@ -128,7 +128,7 @@ st_area(st_transform(nc[1,], 32119)) # NC state plane, m
 st_area(st_transform(nc[1,], 2264)) # NC state plane, US foot
 library(units)
 set_units(st_area(st_transform(nc[1,], 2264)), m^2)
-st_transform(structure(p1, proj4string = "+init=epsg:4326"), "+init=epsg:3857")
+st_transform(structure(p1, proj4string = "EPSG:4326"), "EPSG:3857")
 st_wrap_dateline(st_sfc(st_linestring(rbind(c(-179,0),c(179,0))), crs = 4326))
 sf_proj_info("datum")
 }
