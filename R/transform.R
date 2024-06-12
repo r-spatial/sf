@@ -88,7 +88,7 @@ st_transform = function(x, crs, ...) UseMethod("st_transform")
 #' @name st_transform
 #' @export
 #' @examples
-#' st_transform(st_sf(a=2:1, geom=sfc), "+init=epsg:3857")
+#' st_transform(st_sf(a=2:1, geom=sfc), "EPSG:3857")
 #' if (sf_extSoftVersion()["GDAL"] >= "3.0.0") {
 #'   st_transform(sfc, pipeline =
 #' 	  "+proj=pipeline +step +proj=axisswap +order=2,1") # reverse axes
@@ -156,7 +156,7 @@ st_transform.sf = function(x, crs = st_crs(x), ...) {
 #' @export
 #' @details The \code{st_transform} method for \code{sfg} objects assumes that the CRS of the object is available as an attribute of that name.
 #' @examples
-#' st_transform(structure(p1, proj4string = "+init=epsg:4326"), "+init=epsg:3857")
+#' st_transform(structure(p1, proj4string = "EPSG:4326"), "EPSG:3857")
 st_transform.sfg = function(x, crs = st_crs(x), ...) {
 	x = st_sfc(x, crs = attr(x, "proj4string"))
 	if (missing(crs))
