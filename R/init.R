@@ -5,7 +5,6 @@
 #' @importFrom grid convertHeight convertUnit convertWidth current.viewport linesGrob nullGrob pathGrob pointsGrob polylineGrob unit viewport
 #' @import graphics
 #' @importFrom grDevices dev.size rgb cm
-#' @importFrom Rcpp evalCpp
 #' @importFrom DBI dbConnect dbDisconnect dbExecute dbGetQuery dbReadTable dbSendQuery dbWriteTable
 #' @importFrom units as_units drop_units make_unit_label set_units
 #' @importFrom classInt classIntervals
