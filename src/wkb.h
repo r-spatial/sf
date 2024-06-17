@@ -17,6 +17,7 @@
 #define SF_PolyhedralSurface  15
 #define SF_TIN                16
 #define SF_Triangle           17
+#define SF_Type_Max           17
 
 Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB, bool spatialite);
 Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB);
