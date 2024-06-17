@@ -1,7 +1,7 @@
 
-R version 4.3.3 (2024-02-29) -- "Angel Food Cake"
+R version 4.4.0 (2024-04-24) -- "Puppy Cup"
 Copyright (C) 2024 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu (64-bit)
+Platform: x86_64-pc-linux-gnu
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -1086,6 +1086,52 @@ CRS:           NA
             x
 1 POINT (0 1)
 > 
+> # st_exterior_ring():
+> outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
+> hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
+> hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5),ncol=2, byrow=TRUE)
+> pts = list(outer, hole1, hole2)
+> pl1 = st_polygon(pts)
+> mpl1 = st_multipolygon(list(pl1,pl1+20))
+> 
+> spl1 = st_as_sfc(list(pl1),crs=4326)
+> smpl1 = st_as_sfc(list(mpl1),crs=4326)
+> 
+> st_exterior_ring(spl1[[1]])
+POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))
+> st_exterior_ring(spl1)
+Geometry set for 1 feature 
+Geometry type: POLYGON
+Dimension:     XY
+Bounding box:  xmin: 0 ymin: 0 xmax: 10 ymax: 10
+Geodetic CRS:  WGS 84
+POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))
+> st_exterior_ring(st_sf(a = 1, geom = spl1))
+Simple feature collection with 1 feature and 1 field
+Geometry type: POLYGON
+Dimension:     XY
+Bounding box:  xmin: 0 ymin: 0 xmax: 10 ymax: 10
+Geodetic CRS:  WGS 84
+  a                           geom
+1 1 POLYGON ((0 0, 10 0, 10 10,...
+> st_exterior_ring(smpl1[[1]])
+MULTIPOLYGON (((0 0, 10 0, 10 10, 0 10, 0 0)), ((20 20, 30 20, 30 30, 20 30, 20 20)))
+> st_exterior_ring(st_sfc(smpl1))
+Geometry set for 1 feature 
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 0 ymin: 0 xmax: 30 ymax: 30
+Geodetic CRS:  WGS 84
+MULTIPOLYGON (((0 0, 10 0, 10 10, 0 10, 0 0)), ...
+> st_exterior_ring(st_sf(a = 1, geom = st_sfc(smpl1)))
+Simple feature collection with 1 feature and 1 field
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 0 ymin: 0 xmax: 30 ymax: 30
+Geodetic CRS:  WGS 84
+  a                           geom
+1 1 MULTIPOLYGON (((0 0, 10 0, ...
+> 
 > proc.time()
    user  system elapsed 
-  5.156   1.454   5.144 
+  5.477   1.381   5.407 

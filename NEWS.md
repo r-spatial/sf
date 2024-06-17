@@ -1,5 +1,7 @@
 # version 1.0-17
 
+* add `st_exterior_ring()` to extract exterior rings (remove holes); #2406
+
 * add `text.sf()`, `text.sfc()`, `points.sf()`, `points.sfc()` to annotate base plots at geometry centroids; #2399
 
 * `st_sf()` no longer strips `tbl` or `tbl_df` class labels; #2378

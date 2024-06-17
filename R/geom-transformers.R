@@ -1149,3 +1149,29 @@ st_line_interpolate = function(line, dist, normalized = FALSE) {
 	st_sfc(CPL_line_interpolate(recycled[[1]], recycled[[2]], normalized), 
 		   crs = st_crs(line))
 }
+
+#' @export
+#' @name geos_unary
+st_exterior_ring = function(x, ...) UseMethod("st_exterior_ring")
+
+#' @export
+st_exterior_ring.sf = function(x, ...)
+	st_set_geometry(x, st_exterior_ring(st_geometry(x)))
+
+#' @export
+st_exterior_ring.sfg = function(x, ...)
+	st_exterior_ring(st_sfc(x))[[1]]
+
+#' @export
+st_exterior_ring.sfc = function(x, ...) {
+	stopifnot(all(st_dimension(x, NA_if_empty = FALSE) == 2))
+	exterior_sfg = function(x) {
+		if (inherits(x, "MULTIPOLYGON"))
+			st_multipolygon(lapply(st_cast(st_sfc(x), "POLYGON"), exterior_sfg))
+		else if (inherits(x, "POLYGON"))
+			st_polygon(x[1])
+		else
+			stop(paste("no exterior_ring method for objects of class", class(x)[1]))
+	}
+    st_as_sfc(lapply(x, exterior_sfg), crs = st_crs(x))
+}

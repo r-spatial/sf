@@ -19,6 +19,7 @@
 \alias{st_reverse}
 \alias{st_node}
 \alias{st_segmentize}
+\alias{st_exterior_ring}
 \title{Geometric unary operations on simple feature geometry sets}
 \usage{
 st_buffer(
@@ -63,6 +64,8 @@ st_reverse(x)
 st_node(x)
 
 st_segmentize(x, dfMaxLength, ...)
+
+st_exterior_ring(x, ...)
 }
 \arguments{
 \item{x}{object of class \code{sfg}, \code{sfc} or \code{sf}}
