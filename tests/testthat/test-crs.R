@@ -110,3 +110,17 @@ test_that("crs.Raster works", {
   x = st_crs(r)
   expect_s3_class(x, "crs", exact = TRUE)
 })
+
+
+test_that("SpatVector crs reads correctly", {
+	skip_if_not_installed("terra")
+	library(terra)
+	lux <- terra::vect(system.file("ex/lux.shp", package="terra"))
+	expect_s3_class(st_crs(lux), "crs", exact = TRUE)
+	expect_equal(st_crs(crs(lux)), st_crs(lux))
+	
+	crs(lux) <- NA
+	expect_s3_class(st_crs(lux), "crs", exact = TRUE)
+	expect_equal(st_crs(lux), NA_crs_)
+	
+})
