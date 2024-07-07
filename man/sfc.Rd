@@ -41,7 +41,7 @@ st_sfc(
 
 \item{i}{record selection. Might also be an \code{sfc}/\code{sf} object to work with the \code{op} argument}
 
-\item{j}{ignored}
+\item{j}{ignored if \code{op} is specified}
 
 \item{op}{function, geometrical binary predicate function to apply when
 \code{i} is a \code{sf}/\code{sfc} object. Additional arguments can be
@@ -59,6 +59,8 @@ A simple feature geometry list-column is a list of class
 \code{c("stc_TYPE", "sfc")} which most often contains objects of identical type;
 in case of a mix of types or an empty set, \code{TYPE} is set to the
 superclass \code{GEOMETRY}.
+
+if \code{x} has a \code{dim} attribute (i.e. is an \code{array} or \code{matrix}) then \code{op} cannot be used.
 }
 \examples{
 pt1 = st_point(c(0,1))

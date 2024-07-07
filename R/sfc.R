@@ -143,29 +143,27 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 #' @name sfc
 #' @param x object of class \code{sfc}
 #' @param i record selection. Might also be an \code{sfc}/\code{sf} object to work with the \code{op} argument
-#' @param j ignored
+#' @param j ignored if `op` is specified
 #' @param op function, geometrical binary predicate function to apply when
 #'   \code{i} is a \code{sf}/\code{sfc} object. Additional arguments can be
 #'   specified using \code{...}, see examples.
+#' @details if `x` has a `dim` attribute (i.e. is an `array` or `matrix`) then `op` cannot be used.
 #' @export
 "[.sfc" = function(x, i, j, ..., op = st_intersects) {
-	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc") || inherits(i, "sfg")))
-		i = lengths(op(x, i, ...)) != 0
 	precision = st_precision(x)
 	crs = st_crs(x)
 	dim = if (length(x)) class(x[[1]])[1] else "XY"
-	x = unclass(x)[i] # now a list
-	st_sfc(x, crs = crs, precision = precision, dim = dim)
+	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc") || inherits(i, "sfg"))) {
+		i = lengths(op(x, i, ...)) != 0
+		st_sfc(unclass(x)[i], crs = crs, precision = precision, dim = dim)
+	} else
+		st_sfc(NextMethod(), crs = crs, precision = precision, dim = dim)
 }
 
-
 #' @export
-#"[<-.sfc" = function (x, i, j, value) {
-"[<-.sfc" = function (x, i, value) {
+"[<-.sfc" = function (x, i, j, ..., value) {
 	if (is.null(value) || inherits(value, "sfg"))
 		value = list(value)
-	x = unclass(x) # becomes a list, but keeps attributes
-
 	ret = st_sfc(NextMethod(), recompute_bbox = TRUE)
 	structure(ret, n_empty = sum(sfc_is_empty(ret)))
 }
@@ -204,6 +202,8 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 		if (ne > 0)
 			cat(paste0(" (with ", ne, ifelse(ne > 1, " geometries ", " geometry "), "empty)"))
 	}
+	if (!is.null(dim(x)))
+		cat(paste0(" [dim: ", paste(dim(x), collapse = " x "), "]"))
 	cat("\n")
 	if (length(x)) {
 		cat(paste0("Geometry type: ", cls, "\n"))
