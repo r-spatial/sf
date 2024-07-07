@@ -135,10 +135,10 @@ sudo dnf install gdal-devel proj-devel geos-devel sqlite-devel udunits2-devel
 
 #### Arch
 
-Get gdal, proj and geos from the main repos, and udunits from the AUR:
+Get gdal, proj, geos and podofo from the main repos, and udunits from the AUR:
 
 ```
-pacman -S gdal proj geos arrow podofo-0.9
+pacman -S gdal proj geos arrow podofo
 yay/pacaur/yaourt/whatever -S udunits
 ```
 
