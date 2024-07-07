@@ -58,7 +58,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0-17" id="version-10-17">version 1.0-17<a class="anchor" aria-label="anchor" href="#version-10-17"></a></h2>
-<ul><li><p>add <code><a href="../reference/geos_unary.html">st_exterior_ring()</a></code> to extract exterior rings (remove holes); <a href="https://github.com/r-spatial/sf/issues/2406" class="external-link">#2406</a></p></li>
+<ul><li><p><code>[.sfc</code> and <code>[&lt;-.sfc</code> use matrix/array type subsetting for <code>sfc</code> objects that have a <code>dim</code> attribute</p></li>
+<li><p>add <code><a href="../reference/geos_unary.html">st_exterior_ring()</a></code> to extract exterior rings (remove holes); <a href="https://github.com/r-spatial/sf/issues/2406" class="external-link">#2406</a></p></li>
 <li><p>add <code><a href="../reference/plot.html">text.sf()</a></code>, <code><a href="../reference/plot.html">text.sfc()</a></code>, <code><a href="../reference/plot.html">points.sf()</a></code>, <code><a href="../reference/plot.html">points.sfc()</a></code> to annotate base plots at geometry centroids; <a href="https://github.com/r-spatial/sf/issues/2399" class="external-link">#2399</a></p></li>
 <li><p><code><a href="../reference/sf.html">st_sf()</a></code> no longer strips <code>tbl</code> or <code>tbl_df</code> class labels; <a href="https://github.com/r-spatial/sf/issues/2378" class="external-link">#2378</a></p></li>
 <li><p><code><a href="../reference/st_layers.html">st_layers()</a></code> returns an object of class <code>c("sf_layers", "data.frame")</code>, with a dedicated <code>print</code> method.</p></li>

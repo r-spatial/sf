@@ -114,7 +114,7 @@ For data.frame alternatives see <code><a href="sf.html">st_sf()</a></code>. To c
 
 
 <dt>j</dt>
-<dd><p>ignored</p></dd>
+<dd><p>ignored if <code>op</code> is specified</p></dd>
 
 
 <dt>op</dt>
@@ -135,6 +135,7 @@ specified using <code>...</code>, see examples.</p></dd>
 <code>c("stc_TYPE", "sfc")</code> which most often contains objects of identical type;
 in case of a mix of types or an empty set, <code>TYPE</code> is set to the
 superclass <code>GEOMETRY</code>.</p>
+<p>if <code>x</code> has a <code>dim</code> attribute (i.e. is an <code>array</code> or <code>matrix</code>) then <code>op</code> cannot be used.</p>
     </div>
 
     <div class="section level2">
