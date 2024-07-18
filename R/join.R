@@ -189,5 +189,5 @@ st_filter.sf = function(x, y, ..., .predicate = st_intersects) {
 	if (!requireNamespace("dplyr", quietly = TRUE))
 		stop("dplyr is not installed: install first?")
 
-    dplyr::filter(x, lengths(.predicate(x, y, ...)) > 0) # will call filter.sf
+    dplyr::filter(x, lengths(.predicate(!!x, !!y, ...)) > 0) # will call filter.sf
 }

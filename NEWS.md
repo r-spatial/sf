@@ -1,5 +1,7 @@
 # version 1.0-17
 
+* `st_filter.sf()` correctly scopes `x` and `y` arguments using !! operator
+
 * `[.sfc` and `[<-.sfc` use matrix/array type subsetting for `sfc` objects that have a `dim` attribute
 
 * add `st_exterior_ring()` to extract exterior rings (remove holes); #2406
