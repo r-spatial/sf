@@ -1,306 +1,104 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://r-spatial.github.io/sf/404.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/PROPOSAL.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/articles/sf1.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/articles/sf2.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/articles/sf3.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/articles/sf4.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/articles/sf5.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/articles/sf6.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/articles/sf7.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/index.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/Ops.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/aggregate.sf.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/bind.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/coerce-methods.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/dbDataType.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/dbWriteTable.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/db_drivers.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/dot-stop_geos.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/extension_map.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/gdal.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/gdal_addo.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/gdal_utils.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/geos_binary_ops.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/geos_binary_pred.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/geos_combine.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/geos_measures.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/geos_query.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/geos_unary.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/interpolate_aw.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/is_driver_available.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/is_driver_can.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/is_geometry_column.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/merge.sf.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/nc.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/plot.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/prefix_map.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/proj_tools.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/rawToHex.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/reexports.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/s2.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/sf-defunct.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/sf-package.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/sf.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/sf_extSoftVersion.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/sf_project.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/sfc.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/sgbp.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_agr.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_as_binary.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_as_grob.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_as_sf.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_as_sfc.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_as_text.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_bbox.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_break_antimeridian.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_cast.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_cast_sfc_default.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_collection_extract.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_coordinates.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_crop.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_crs.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_drivers.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_geometry.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_geometry_type.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_graticule.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_is.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_is_longlat.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_jitter.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_join.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_layers.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_line_project_point.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_line_sample.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_m_range.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_make_grid.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_nearest_feature.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_nearest_points.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_normalize.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_precision.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_read.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_relate.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_sample.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_shift_longitude.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_transform.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_viewport.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_write.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_z_range.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/st_zm.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/stars.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/summary.sfc.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/tibble.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/tidyverse.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/transform.sf.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/valid.html</loc>
-  </url>
-  <url>
-    <loc>https://r-spatial.github.io/sf/reference/vctrs.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://r-spatial.github.io/sf/404.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/CONDUCT.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/LICENSE-text.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/PROPOSAL.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/articles/index.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/articles/sf1.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/articles/sf2.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/articles/sf3.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/articles/sf4.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/articles/sf5.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/articles/sf6.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/articles/sf7.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/authors.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/index.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/news/index.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/Ops.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/aggregate.sf.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/bind.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/coerce-methods.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/dbDataType.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/dbWriteTable.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/db_drivers.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/dot-stop_geos.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/extension_map.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/gdal.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/gdal_addo.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/gdal_utils.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/geos_binary_ops.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/geos_binary_pred.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/geos_combine.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/geos_measures.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/geos_query.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/geos_unary.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/index.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/interpolate_aw.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/is_driver_available.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/is_driver_can.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/is_geometry_column.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/merge.sf.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/nc.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/plot.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/prefix_map.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/proj_tools.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/rawToHex.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/reexports.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/s2.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/sf-defunct.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/sf-package.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/sf.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/sf_extSoftVersion.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/sf_project.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/sfc.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/sgbp.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_agr.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_as_binary.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_as_grob.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_as_sf.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_as_sfc.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_as_text.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_bbox.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_break_antimeridian.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_cast.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_cast_sfc_default.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_collection_extract.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_coordinates.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_crop.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_crs.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_drivers.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_geometry.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_geometry_type.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_graticule.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_is.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_is_longlat.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_jitter.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_join.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_layers.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_line_project_point.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_line_sample.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_m_range.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_make_grid.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_nearest_feature.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_nearest_points.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_normalize.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_precision.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_read.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_relate.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_sample.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_shift_longitude.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_transform.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_viewport.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_write.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_z_range.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_zm.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/stars.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/summary.sfc.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/tibble.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/tidyverse.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/transform.sf.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/valid.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/vctrs.html</loc></url>
 </urlset>
+

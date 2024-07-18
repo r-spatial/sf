@@ -5,7 +5,6 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="sf">
 <title>7. Spherical geometry in sf using s2geometry • sf</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
@@ -15,67 +14,51 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="7. Spherical geometry in sf using s2geometry">
-<meta property="og:description" content="sf">
-<meta property="og:image" content="https://r-spatial.github.io/sf/logo.png">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="7. Spherical geometry in sf using s2geometry">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
-    
+
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">sf</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0-17</small>
 
-    
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/sf1.html">1. Simple Features for R</a>
-    <a class="dropdown-item" href="../articles/sf2.html">2. Reading, Writing and Converting Simple Features</a>
-    <a class="dropdown-item" href="../articles/sf3.html">3. Manipulating Simple Feature Geometries</a>
-    <a class="dropdown-item" href="../articles/sf4.html">4. Manipulating Simple Features</a>
-    <a class="dropdown-item" href="../articles/sf5.html">5. Plotting Simple Features</a>
-    <a class="dropdown-item" href="../articles/sf6.html">6. Miscellaneous</a>
-    <a class="dropdown-item" href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="../articles/sf1.html">1. Simple Features for R</a></li>
+    <li><a class="dropdown-item" href="../articles/sf2.html">2. Reading, Writing and Converting Simple Features</a></li>
+    <li><a class="dropdown-item" href="../articles/sf3.html">3. Manipulating Simple Feature Geometries</a></li>
+    <li><a class="dropdown-item" href="../articles/sf4.html">4. Manipulating Simple Features</a></li>
+    <li><a class="dropdown-item" href="../articles/sf5.html">5. Plotting Simple Features</a></li>
+    <li><a class="dropdown-item" href="../articles/sf6.html">6. Miscellaneous</a></li>
+    <li><a class="dropdown-item" href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a></li>
+  </ul>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../news/index.html">Changelog</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
-<form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
-</form>
-
-      <ul class="navbar-nav">
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/r-spatial/sf/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
+</form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/r-spatial/sf/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
-    
+
   </div>
 </nav><div class="container template-article">
 
@@ -89,7 +72,7 @@
 and Dewey Dunnington</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/r-spatial/sf/blob/HEAD/vignettes/sf7.Rmd" class="external-link"><code>vignettes/sf7.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/r-spatial/sf/blob/main/vignettes/sf7.Rmd" class="external-link"><code>vignettes/sf7.Rmd</code></a></small>
       <div class="d-none name"><code>sf7.Rmd</code></div>
     </div>
 
@@ -113,12 +96,11 @@ check if <code>s2</code> is being used:</p>
 <span><span class="co">## Attaching package: 'sf'</span></span>
 <span><span class="co">## The following object is masked from 'package:lwgeom':</span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">##     st_perimeter</span></span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">##     st_perimeter</span></span>
+<span><span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">## [1] TRUE</span></span></code></pre></div>
 <p>Attach the <code>s2</code> package as follows:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/s2/" class="external-link">s2</a></span><span class="op">)</span></span></code></pre></div>
 <p>Most of the package’s functions start with <code>s2_</code> in the
 same way that most <code>sf</code> function names start with
@@ -138,21 +120,28 @@ In st_voronoi.sfc(st_geometry(x), st_sfc(envelope), dTolerance,  :
 coordinates, meaning that they are associated to points on a flat space,
 or to unprojected or <em>geographic</em> coordinates, when they refer to
 angles (latitude, longitude) pointing to locations on a sphere (or
-ellipsoid). The flat space is also referred to as <span class="math inline">\(R^2\)</span>, the sphere as <span class="math inline">\(S^2\)</span></p>
+ellipsoid). The flat space is also referred to as
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>,
+the sphere as
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>S</mi><mn>2</mn></msup><annotation encoding="application/x-tex">S^2</annotation></semantics></math></p>
 <p>Package <code>sf</code> implements <em>simple features</em>, a
 standard for point, line, and polygon geometries where geometries are
 built from points (nodes) connected by straight lines (edges). The
 simple feature standard does not say much about its suitability for
 dealing with geographic coordinates, but the topological relational
-system it builds upon (<a href="https://en.wikipedia.org/wiki/DE-9IM" class="external-link">DE9-IM</a>) refer to <span class="math inline">\(R^2\)</span>, the two-dimensional flat space.</p>
+system it builds upon (<a href="https://en.wikipedia.org/wiki/DE-9IM" class="external-link">DE9-IM</a>) refer to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>,
+the two-dimensional flat space.</p>
 <p>Yet, more and more data are routinely served or exchanged using
-geographic coordinates. Using software that assumes an <span class="math inline">\(R^2\)</span>, flat space may work for some
-problems, and although <code>sf</code> up to version 0.9-x had some
-functions in place for spherical/ellipsoidal computations (from package
-<code>lwgeom</code>, for computing area, length, distance, and for
-segmentizing), it has also happily warned the user that it is doing
-<span class="math inline">\(R^2\)</span>, flat computations with such
-coordinates with messages like</p>
+geographic coordinates. Using software that assumes an
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>,
+flat space may work for some problems, and although <code>sf</code> up
+to version 0.9-x had some functions in place for spherical/ellipsoidal
+computations (from package <code>lwgeom</code>, for computing area,
+length, distance, and for segmentizing), it has also happily warned the
+user that it is doing
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>,
+flat computations with such coordinates with messages like</p>
 <pre><code>although coordinates are longitude/latitude, st_intersects assumes that they are planar</code></pre>
 <p>hinting to the responsibility of the user to take care of potential
 problems. Doing this however leaves ambiguities, e.g. whether
@@ -174,8 +163,9 @@ for spherical geometry, which has functions for computing pretty much
 all measures, predicates and transformations <em>on the sphere</em>.
 This means:</p>
 <ul>
-<li>no more hodge-podge of some functions working on <span class="math inline">\(R^2\)</span>, with annoying messages, some on the
-ellipsoid</li>
+<li>no more hodge-podge of some functions working on
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>,
+with annoying messages, some on the ellipsoid</li>
 <li>a considerable speed increase for some functions</li>
 <li>no computations on the ellipsoid (which are considered more
 accurate, but are also slower)</li>
@@ -184,25 +174,30 @@ accurate, but are also slower)</li>
 Google, and which is used in many of its products (e.g. Google Maps,
 Google Earth Engine, Bigquery GIS) and has been translated in several
 other programming languages.</p>
-<p>With projected coordinates <code>sf</code> continues to work in <span class="math inline">\(R^2\)</span> as before.</p>
+<p>With projected coordinates <code>sf</code> continues to work in
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
+as before.</p>
 </div>
 <div class="section level2">
 <h2 id="fundamental-differences">Fundamental differences<a class="anchor" aria-label="anchor" href="#fundamental-differences"></a>
 </h2>
-<p>Compared to geometry on <span class="math inline">\(R^2\)</span>, and
-DE9-IM, the <code>s2</code> package brings a few fundamentally new
+<p>Compared to geometry on
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>,
+and DE9-IM, the <code>s2</code> package brings a few fundamentally new
 concepts, which are discussed first.</p>
 <div class="section level3">
-<h3 id="polygons-on-s2-divide-the-sphere-in-two-parts">Polygons on <span class="math inline">\(S^2\)</span> divide the
-sphere in two parts<a class="anchor" aria-label="anchor" href="#polygons-on-s2-divide-the-sphere-in-two-parts"></a>
+<h3 id="polygons-on-s2-divide-the-sphere-in-two-parts">Polygons on
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>S</mi><mn>2</mn></msup><annotation encoding="application/x-tex">S^2</annotation></semantics></math>
+divide the sphere in two parts<a class="anchor" aria-label="anchor" href="#polygons-on-s2-divide-the-sphere-in-two-parts"></a>
 </h3>
-<p>On the sphere (<span class="math inline">\(S^2\)</span>), any polygon
-defines two areas; when following the exterior ring, we need to define
-what is inside, and the definition is <em>the left side of the enclosing
-edges</em>. This also means that we can flip a polygon (by inverting the
-edge order) to obtain the other part of the globe, and that in addition
-to an empty polygon (the empty set) we can have the full polygon (the
-entire globe).</p>
+<p>On the sphere
+(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>S</mi><mn>2</mn></msup><annotation encoding="application/x-tex">S^2</annotation></semantics></math>),
+any polygon defines two areas; when following the exterior ring, we need
+to define what is inside, and the definition is <em>the left side of the
+enclosing edges</em>. This also means that we can flip a polygon (by
+inverting the edge order) to obtain the other part of the globe, and
+that in addition to an empty polygon (the empty set) we can have the
+full polygon (the entire globe).</p>
 <p>Simple feature geometries should obey a ring direction too: exterior
 rings should be counter clockwise, interior (hole) rings should be
 clockwise, but in some sense this is obsolete as the difference between
@@ -211,31 +206,30 @@ followed by zero or more interior). <code><a href="../reference/st_read.html">sf
 argument <code>check_ring_dir</code> that checks, and corrects, ring
 directions and many (legacy) datasets have wrong ring directions. With
 wrong ring directions, many things still work.</p>
-<p>For <span class="math inline">\(S^2\)</span>, ring direction is
-essential. For that reason, <code>st_as_s2</code> has an argument
-<code>oriented = FALSE</code>, which will check and correct ring
-directions, assuming that all exterior rings occupy an area smaller than
-half the globe:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<p>For
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>S</mi><mn>2</mn></msup><annotation encoding="application/x-tex">S^2</annotation></semantics></math>,
+ring direction is essential. For that reason, <code>st_as_s2</code> has
+an argument <code>oriented = FALSE</code>, which will check and correct
+ring directions, assuming that all exterior rings occupy an area smaller
+than half the globe:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"gpkg/nc.gpkg"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span> <span class="co"># wrong ring directions</span></span>
 <span><span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_is_collection.html" class="external-link">s2_area</a></span><span class="op">(</span><span class="fu"><a href="../reference/s2.html">st_as_s2</a></span><span class="op">(</span><span class="va">nc</span>, oriented <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span> <span class="co"># corrects ring direction, correct area:</span></span>
-<span><span class="co">## [1] 1137107793  610916077 1423145355</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_is_collection.html" class="external-link">s2_area</a></span><span class="op">(</span><span class="fu"><a href="../reference/s2.html">st_as_s2</a></span><span class="op">(</span><span class="va">nc</span>, oriented <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span> <span class="co"># wrong direction: Earth's surface minus area</span></span>
-<span><span class="co">## [1] 5.100649e+14 5.100655e+14 5.100646e+14</span></span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"gpkg/nc.gpkg"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>, check_ring_dir <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">## [1] 1137107793  610916077 1423145355</span></span>
+<span><span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_is_collection.html" class="external-link">s2_area</a></span><span class="op">(</span><span class="fu"><a href="../reference/s2.html">st_as_s2</a></span><span class="op">(</span><span class="va">nc</span>, oriented <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span> <span class="co"># wrong direction: Earth's surface minus area</span></span>
+<span><span class="co">## [1] 5.100649e+14 5.100655e+14 5.100646e+14</span></span>
+<span><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"gpkg/nc.gpkg"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span>, check_ring_dir <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_is_collection.html" class="external-link">s2_area</a></span><span class="op">(</span><span class="fu"><a href="../reference/s2.html">st_as_s2</a></span><span class="op">(</span><span class="va">nc</span>, oriented <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span> <span class="co"># no second correction needed here:</span></span>
 <span><span class="co">## [1] 1137107793  610916077 1423145355</span></span></code></pre></div>
 <p>Here is an example where the oceans are computed as the difference
 from the full polygon representing the entire globe,</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">g</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/as_s2_geography.html" class="external-link">as_s2_geography</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">g</span></span>
 <span><span class="co">## &lt;geodesic s2_geography[1] with CRS=OGC:CRS84&gt;</span></span>
 <span><span class="co">## [1] POLYGON ((0 -90, 0 -90))</span></span></code></pre></div>
 <p>and the countries, and shown in an orthographic projection:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">co</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_data_tbl_countries.html" class="external-link">s2_data_countries</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">oc</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_difference</a></span><span class="op">(</span><span class="va">g</span>, <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_union_agg</a></span><span class="op">(</span><span class="va">co</span><span class="op">)</span><span class="op">)</span> <span class="co"># oceans</span></span>
 <span><span class="va">b</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_buffer_cells</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/s2/reference/as_s2_geography.html" class="external-link">as_s2_geography</a></span><span class="op">(</span><span class="st">"POINT(-30 52)"</span><span class="op">)</span>, <span class="fl">9800000</span><span class="op">)</span> <span class="co"># visible half</span></span>
@@ -248,7 +242,7 @@ feature standard; it seems to reflect the internal representation of the
 full polygon, and would require a WKT extension).</p>
 <p>We can now calculate the proportion of the Earth’s surface covered by
 oceans:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_is_collection.html" class="external-link">s2_area</a></span><span class="op">(</span><span class="va">oc</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_is_collection.html" class="external-link">s2_area</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span></span>
 <span><span class="co">## [1] 0.711301</span></span></code></pre></div>
 </div>
@@ -278,19 +272,16 @@ that every point is assigned to <em>maximally</em> one polygon in an
 intersection. This corresponds to e.g. how this would be handled in a
 grid (raster) coverage, where every grid cell (typically) only contains
 its upper-left corner and its upper and left sides.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">a</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/as_s2_geography.html" class="external-link">as_s2_geography</a></span><span class="op">(</span><span class="st">"POINT(0 0)"</span><span class="op">)</span></span>
 <span><span class="va">b</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/as_s2_geography.html" class="external-link">as_s2_geography</a></span><span class="op">(</span><span class="st">"POLYGON((0 0,1 0,1 1,0 1,0 0))"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_contains.html" class="external-link">s2_intersects</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span>, <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_options.html" class="external-link">s2_options</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"open"</span><span class="op">)</span><span class="op">)</span> </span>
-<span><span class="co">## [1] FALSE</span></span></code></pre></div>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_contains.html" class="external-link">s2_intersects</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span>, <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_options.html" class="external-link">s2_options</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"closed"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">## [1] TRUE</span></span></code></pre></div>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_contains.html" class="external-link">s2_intersects</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span>, <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_options.html" class="external-link">s2_options</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"semi-open"</span><span class="op">)</span><span class="op">)</span> <span class="co"># a toss</span></span>
-<span><span class="co">## [1] FALSE</span></span></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_contains.html" class="external-link">s2_intersects</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span><span class="op">)</span> <span class="co"># default: semi-open</span></span>
+<span><span class="co">## [1] FALSE</span></span>
+<span><span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_contains.html" class="external-link">s2_intersects</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span>, <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_options.html" class="external-link">s2_options</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"closed"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## [1] TRUE</span></span>
+<span><span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_contains.html" class="external-link">s2_intersects</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span>, <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_options.html" class="external-link">s2_options</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"semi-open"</span><span class="op">)</span><span class="op">)</span> <span class="co"># a toss</span></span>
+<span><span class="co">## [1] FALSE</span></span>
+<span><span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_contains.html" class="external-link">s2_intersects</a></span><span class="op">(</span><span class="va">a</span>, <span class="va">b</span><span class="op">)</span> <span class="co"># default: semi-open</span></span>
 <span><span class="co">## [1] FALSE</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -310,14 +301,13 @@ extending to +/- 90</li>
 </ul>
 <p>S2 has two alternatives: the bounding cap and the bounding
 rectangle:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fiji</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_data_tbl_countries.html" class="external-link">s2_data_countries</a></span><span class="op">(</span><span class="st">"Fiji"</span><span class="op">)</span></span>
 <span><span class="va">aa</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_data_tbl_countries.html" class="external-link">s2_data_countries</a></span><span class="op">(</span><span class="st">"Antarctica"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_bounds_cap.html" class="external-link">s2_bounds_cap</a></span><span class="op">(</span><span class="va">fiji</span><span class="op">)</span></span>
 <span><span class="co">##        lng       lat    angle</span></span>
-<span><span class="co">## 1 178.7459 -17.15444 1.801369</span></span></code></pre></div>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_bounds_cap.html" class="external-link">s2_bounds_rect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">fiji</span>,<span class="va">aa</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## 1 178.7459 -17.15444 1.801369</span></span>
+<span><span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_bounds_cap.html" class="external-link">s2_bounds_rect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">fiji</span>,<span class="va">aa</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">##     lng_lo    lat_lo    lng_hi    lat_hi</span></span>
 <span><span class="co">## 1  177.285 -18.28799 -179.7933 -16.02088</span></span>
 <span><span class="co">## 2 -180.000 -90.00000  180.0000 -63.27066</span></span></code></pre></div>
@@ -332,19 +322,20 @@ being higher than <code>lng_hi</code> indicates that the region covers
 <div class="section level2">
 <h2 id="switching-between-s2-and-geos">Switching between S2 and GEOS<a class="anchor" aria-label="anchor" href="#switching-between-s2-and-geos"></a>
 </h2>
-<p>The two-dimensional <span class="math inline">\(R^2\)</span> library
-that was formerly used by <code>sf</code> is <a href="https://libgeos.org" class="external-link">GEOS</a>, and <code>sf</code> can be
+<p>The two-dimensional
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
+library that was formerly used by <code>sf</code> is <a href="https://libgeos.org" class="external-link">GEOS</a>, and <code>sf</code> can be
 instrumented to use GEOS or <code>s2</code>. First we will ask if
 <code>s2</code> is being used by default:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">## [1] TRUE</span></span></code></pre></div>
 <p>then we can switch it off (and use GEOS) by</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">## Spherical geometry (s2) switched off</span></span></code></pre></div>
 <p>and switch it on (and use s2) by</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">## Spherical geometry (s2) switched on</span></span></code></pre></div>
 </div>
@@ -354,22 +345,20 @@ instrumented to use GEOS or <code>s2</code>. First we will ask if
 <div class="section level3">
 <h3 id="area">Area<a class="anchor" aria-label="anchor" href="#area"></a>
 </h3>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-quantities.github.io/units/" class="external-link">units</a></span><span class="op">)</span></span>
-<span><span class="co">## udunits database from /usr/share/xml/udunits/udunits2.xml</span></span></code></pre></div>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"gpkg/nc.gpkg"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## udunits database from /usr/share/xml/udunits/udunits2.xml</span></span>
+<span><span class="va">nc</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"gpkg/nc.gpkg"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">a1</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_measures.html">st_area</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">## Spherical geometry (s2) switched off</span></span></code></pre></div>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">a2</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_measures.html">st_area</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span></span>
+<span><span class="co">## Spherical geometry (s2) switched off</span></span>
+<span><span class="va">a2</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_measures.html">st_area</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">a1</span>, <span class="va">a2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="sf7_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">(</span><span class="va">a1</span> <span class="op">-</span> <span class="va">a2</span><span class="op">)</span><span class="op">/</span><span class="va">a1</span><span class="op">)</span></span>
 <span><span class="co">##       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
 <span><span class="co">## -2.638e-04 -1.650e-04 -7.133e-05 -6.448e-05  1.598e-05  2.817e-04</span></span></code></pre></div>
@@ -377,20 +366,18 @@ instrumented to use GEOS or <code>s2</code>. First we will ask if
 <div class="section level3">
 <h3 id="length">Length<a class="anchor" aria-label="anchor" href="#length"></a>
 </h3>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nc_ls</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_cast.html">st_cast</a></span><span class="op">(</span><span class="va">nc</span>, <span class="st">"MULTILINESTRING"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">## Spherical geometry (s2) switched on</span></span></code></pre></div>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">l1</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_measures.html">st_length</a></span><span class="op">(</span><span class="va">nc_ls</span><span class="op">)</span></span>
+<span><span class="co">## Spherical geometry (s2) switched on</span></span>
+<span><span class="va">l1</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_measures.html">st_length</a></span><span class="op">(</span><span class="va">nc_ls</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">## Spherical geometry (s2) switched off</span></span></code></pre></div>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">l2</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_measures.html">st_length</a></span><span class="op">(</span><span class="va">nc_ls</span><span class="op">)</span></span>
+<span><span class="co">## Spherical geometry (s2) switched off</span></span>
+<span><span class="va">l2</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_measures.html">st_length</a></span><span class="op">(</span><span class="va">nc_ls</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">l1</span> , <span class="va">l2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="sf7_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">(</span><span class="va">l1</span><span class="op">-</span><span class="va">l2</span><span class="op">)</span><span class="op">/</span><span class="va">l1</span><span class="op">)</span></span>
 <span><span class="co">##       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
 <span><span class="co">## -0.0012301 -0.0004396 -0.0001258 -0.0001123  0.0001742  0.0009660</span></span></code></pre></div>
@@ -398,19 +385,17 @@ instrumented to use GEOS or <code>s2</code>. First we will ask if
 <div class="section level3">
 <h3 id="distances">Distances<a class="anchor" aria-label="anchor" href="#distances"></a>
 </h3>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">## Spherical geometry (s2) switched on</span></span></code></pre></div>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">d1</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_measures.html">st_distance</a></span><span class="op">(</span><span class="va">nc</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">## Spherical geometry (s2) switched on</span></span>
+<span><span class="va">d1</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_measures.html">st_distance</a></span><span class="op">(</span><span class="va">nc</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">## Spherical geometry (s2) switched off</span></span></code></pre></div>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">d2</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_measures.html">st_distance</a></span><span class="op">(</span><span class="va">nc</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">## Spherical geometry (s2) switched off</span></span>
+<span><span class="va">d2</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_measures.html">st_distance</a></span><span class="op">(</span><span class="va">nc</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">d1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">d2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="sf7_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">d1</span><span class="op">)</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">d2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
 <span><span class="co">## -1424.5  -613.2  -236.5  -319.5     0.0   460.1</span></span></code></pre></div>
@@ -424,18 +409,16 @@ except for <code><a href="../reference/st_relate.html">st_relate()</a></code> wi
 using the <code>s2</code> predicates, depending on the
 <code>model</code>, intersections with neighbours are only reported when
 <code>model</code> is <code>closed</code> (the default):</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">## Spherical geometry (s2) switched on</span></span></code></pre></div>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span><span class="op">)</span> <span class="co"># self-intersections + neighbours</span></span>
+<span><span class="co">## Spherical geometry (s2) switched on</span></span>
+<span><span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span><span class="op">)</span> <span class="co"># self-intersections + neighbours</span></span>
 <span><span class="co">## Sparse geometry binary predicate list of length 3, where the predicate</span></span>
 <span><span class="co">## was `intersects'</span></span>
 <span><span class="co">##  1: 1, 2</span></span>
 <span><span class="co">##  2: 1, 2, 3</span></span>
-<span><span class="co">##  3: 2, 3</span></span></code></pre></div>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">##  3: 2, 3</span></span>
+<span><span class="fu"><a href="../reference/s2.html">sf_use_s2</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/geos_binary_pred.html">st_intersects</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span>, model <span class="op">=</span> <span class="st">"semi-open"</span><span class="op">)</span> <span class="co"># only self-intersections</span></span>
 <span><span class="co">## Sparse geometry binary predicate list of length 3, where the predicate</span></span>
 <span><span class="co">## was `intersects'</span></span>
@@ -457,19 +440,17 @@ feature does not work with <code>s2</code>.</p>
 <p>Buffers can be calculated for features with geographic coordinates as
 follows, using an unprojected object representing the UK as an
 example:</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">uk</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_data_tbl_countries.html" class="external-link">s2_data_countries</a></span><span class="op">(</span><span class="st">"United Kingdom"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">uk</span><span class="op">)</span></span>
-<span><span class="co">## [1] "s2_geography" "wk_vctr"</span></span></code></pre></div>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">uk_sfc</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_as_sfc.html">st_as_sfc</a></span><span class="op">(</span><span class="va">uk</span><span class="op">)</span> </span>
+<span><span class="co">## [1] "s2_geography" "wk_vctr"</span></span>
+<span><span class="va">uk_sfc</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_as_sfc.html">st_as_sfc</a></span><span class="op">(</span><span class="va">uk</span><span class="op">)</span> </span>
 <span><span class="va">uk_buffer</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span></span>
 <span><span class="va">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span>, max_cells <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span>
 <span><span class="va">uk_buffer3</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span>, max_cells <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">uk_buffer</span><span class="op">)</span></span>
-<span><span class="co">## [1] "s2_geography" "wk_vctr"</span></span></code></pre></div>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">uk_sfc</span><span class="op">)</span></span>
+<span><span class="co">## [1] "s2_geography" "wk_vctr"</span></span>
+<span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">uk_sfc</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_as_sfc.html">st_as_sfc</a></span><span class="op">(</span><span class="va">uk_buffer</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_as_sfc.html">st_as_sfc</a></span><span class="op">(</span><span class="va">uk_buffer2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_as_sfc.html">st_as_sfc</a></span><span class="op">(</span><span class="va">uk_buffer3</span><span class="op">)</span><span class="op">)</span></span>
@@ -488,43 +469,39 @@ leads to seemingly smooth but, zoomed in, very complex buffers.</p>
 then use <code><a href="../reference/geos_unary.html">sf::st_buffer()</a></code>. A simple benchmark shows the
 computational efficiency of the <code>s2</code> geometry engine in
 comparison with transforming and then creating buffers:</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># the sf way</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">uk_projected</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">uk_sfc</span>, <span class="fl">27700</span><span class="op">)</span></span>
 <span>  <span class="va">uk_buffer_sf</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">uk_projected</span>, dist <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.023   0.000   0.023</span></span></code></pre></div>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># sf way with few than the 30 segments in the buffer</span></span>
+<span><span class="co">##   0.023   0.000   0.022</span></span>
+<span><span class="co"># sf way with few than the 30 segments in the buffer</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">uk_projected</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">uk_sfc</span>, <span class="fl">27700</span><span class="op">)</span></span>
 <span>  <span class="va">uk_buffer_sf2</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">uk_projected</span>, dist <span class="op">=</span> <span class="fl">20000</span>, nQuadSegs <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.009   0.000   0.008</span></span></code></pre></div>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># s2 with default cell size</span></span>
+<span><span class="co">##   0.008   0.000   0.009</span></span>
+<span><span class="co"># s2 with default cell size</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">uk_buffer</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.030   0.000   0.031</span></span></code></pre></div>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># s2 with 10000 cells</span></span>
+<span><span class="co">##   0.031   0.000   0.031</span></span>
+<span><span class="co"># s2 with 10000 cells</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span>, max_cells <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.290   0.000   0.289</span></span></code></pre></div>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># s2 with 100 cells</span></span>
+<span><span class="co">##   0.292   0.000   0.292</span></span>
+<span><span class="co"># s2 with 100 cells</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span>, max_cells <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.004   0.000   0.003</span></span></code></pre></div>
+<span><span class="co">##   0.004   0.000   0.004</span></span></code></pre></div>
 <p>The result of the previous benchmarks emphasizes the point that there
 are trade-offs between geographic resolution and computational
 resources, something that web developers working on geographic services
@@ -540,10 +517,13 @@ input geometry representing the UK.</p>
 <p>As discussed in the <a href="https://github.com/r-spatial/sf/issues/1367" class="external-link"><code>sf</code> issue
 tracker</a>, deciding on workflows and selecting appropriate levels of
 level of geographic resolution can be an iterative process.
-<code><a href="../reference/geos_unary.html">st_buffer()</a></code> as powered by GEOS, for <span class="math inline">\(R^2\)</span> data, are smooth and (nearly) exact.
-<code><a href="../reference/geos_unary.html">st_buffer()</a></code> as powered by <span class="math inline">\(S^2\)</span> is rougher, complex, non-smooth, and
-may need tuning. An common pattern where <code><a href="../reference/geos_unary.html">st_buffer()</a></code> is
-used is this:</p>
+<code><a href="../reference/geos_unary.html">st_buffer()</a></code> as powered by GEOS, for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
+data, are smooth and (nearly) exact. <code><a href="../reference/geos_unary.html">st_buffer()</a></code> as powered
+by
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>S</mi><mn>2</mn></msup><annotation encoding="application/x-tex">S^2</annotation></semantics></math>
+is rougher, complex, non-smooth, and may need tuning. An common pattern
+where <code><a href="../reference/geos_unary.html">st_buffer()</a></code> is used is this:</p>
 <ul>
 <li>compute buffers around a set of features <code>x</code> (points,
 lines, polygons)</li>
@@ -557,21 +537,24 @@ density)</li>
 coordinates, it may pay off to <em>not</em> compute buffers, but instead
 directly work with <code><a href="../reference/geos_binary_pred.html">st_is_within_distance()</a></code> to select, for
 each feature of <code>x</code>, all features of <code>y</code> that are
-within a certain distance <code>d</code> from <code>x</code>. The <span class="math inline">\(S^2\)</span> version of this function uses spatial
-indexes, so is fast for large datasets.</p>
+within a certain distance <code>d</code> from <code>x</code>. The
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>S</mi><mn>2</mn></msup><annotation encoding="application/x-tex">S^2</annotation></semantics></math>
+version of this function uses spatial indexes, so is fast for large
+datasets.</p>
 </div>
 <div class="section level3">
 <h3 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h3>
 <ul>
 <li>Dewey Dunnington, Edzer Pebesma and Ege Rubak, 2020. s2: Spherical
-Geometry Operators Using the <span class="math inline">\(S^2\)</span>
+Geometry Operators Using the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>S</mi><mn>2</mn></msup><annotation encoding="application/x-tex">S^2</annotation></semantics></math>
 Geometry Library. <a href="https://r-spatial.github.io/s2/" class="external-link uri">https://r-spatial.github.io/s2/</a>, <a href="https://github.com/r-spatial/s2" class="external-link uri">https://github.com/r-spatial/s2</a>
 </li>
 </ul>
 </div>
 </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
 
@@ -582,15 +565,15 @@ Geometry Library. <a href="https://r-spatial.github.io/s2/" class="external-link
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
     </footer>
 </div>
 
-  
 
-  
+
+
 
   </body>
 </html>
