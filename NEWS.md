@@ -1,6 +1,6 @@
 # version 1.0-17
 
-* `st_filter.sf()` correctly scopes `x` and `y` arguments using !! operator
+* `st_filter.sf()` correctly scopes `x` and `y` arguments using !! operator; #2416
 
 * `[.sfc` and `[<-.sfc` use matrix/array type subsetting for `sfc` objects that have a `dim` attribute
 
