@@ -53,7 +53,7 @@ a filename, a folder, a database name, or a Database Connection
 extension; for database connection, it is the name of the table. If layer
 is missing, the \code{basename} of \code{dsn} is taken.}
 
-\item{...}{other arguments passed to \link{dbWriteTable} when \code{dsn} is a
+\item{...}{other arguments passed to \link[DBI]{dbWriteTable} when \code{dsn} is a
 Database Connection}
 
 \item{driver}{character; name of driver to be used; if missing and \code{dsn} is not a Database Connection, a driver name is guessed from \code{dsn};
