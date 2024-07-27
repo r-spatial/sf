@@ -377,7 +377,7 @@ st_sf = function(..., agr = NA_agr_, row.names,
 		} else
 			structure(x, class = setdiff(class(x), "sf"))
 	} else
-		NextMethod()
+		structure(NextMethod(), class = setdiff(class(x), "sf"))
 }
 
 #' @export
