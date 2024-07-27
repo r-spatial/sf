@@ -153,11 +153,12 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 	precision = st_precision(x)
 	crs = st_crs(x)
 	dim = if (length(x)) class(x[[1]])[1] else "XY"
-	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc") || inherits(i, "sfg"))) {
+	if (!missing(i) && (inherits(i, c("sf", "sfc", "sfg"))))
 		i = lengths(op(x, i, ...)) != 0
-		st_sfc(unclass(x)[i], crs = crs, precision = precision, dim = dim)
-	} else
+	if (!is.null(dim(x))) # x is an array with geometries
 		st_sfc(NextMethod(), crs = crs, precision = precision, dim = dim)
+	else # x is a list but avoid NextMethod() to allow j, ... to be specified & ignored:
+		st_sfc(unclass(x)[i], crs = crs, precision = precision, dim = dim)
 }
 
 #' @export
