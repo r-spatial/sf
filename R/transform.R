@@ -167,6 +167,14 @@ st_transform.sfg = function(x, crs = st_crs(x), ...) {
 
 #' @name st_transform
 #' @export
+#' @param densify integer, number of points for discretizing lines between bounding box corner points; see Details
+#' @details the method for `bbox` objects densifies lines for geographic coordinates along Cartesian lines, not great circle arcs
+st_transform.bbox = function(x, crs, ..., densify = 21) {
+	st_bbox(CPL_transform_bounds(x, st_crs(crs), densify), crs = crs)
+}
+
+#' @name st_transform
+#' @export
 st_wrap_dateline = function(x, options, quiet) UseMethod("st_wrap_dateline")
 
 #' @name st_transform
