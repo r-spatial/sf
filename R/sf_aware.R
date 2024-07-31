@@ -5,7 +5,6 @@
 # the feature was introduced (Jul 23, 2024). 
 # New packages wanting to opt-in should use `make_sf_aware()` in their .onLoad().
 known_sf_aware <- c(".globalenv", "sf", "base", "utils", "stats", 
-					"rsample", # called by spatialsample
 					"od", # only imports sfheaders; used by abstr
 					"igr", # published Jul 27, 2024
 					"weatherOz", # published Jul 26, 2024
@@ -31,11 +30,25 @@ known_sf_aware <- c(".globalenv", "sf", "base", "utils", "stats",
 #' for packages: use the sticky geometry [ behaviour of sf in package code
 #'
 #' for packages: use the sticky geometry [ behaviour of sf in package code
+#' @name sf_make_aware
 #' @param env environment
 #' @param value logical; default `TRUE`
 #' @export
-make_sf_aware <- function(env = parent.frame(), value = TRUE) {
+sf_make_aware <- function(env = parent.frame(), value = TRUE) {
 	env$.__sf_aware__. <- value
+}
+
+#' @export
+#' @name sf_make_aware
+#' @param pkg package name
+sf_make_aware_pkg <- function(pkg) {
+	stopifnot(is.character(pkg), length(pkg) == 1)
+	old = known_sf_aware
+	if (pkg %in% old)
+		message(paste("package", pkg, "is already sf-aware"))
+	else
+		utils::assignInMyNamespace("known_sf_aware", c(pkg, known_sf_aware))
+	invisible(old)
 }
 
 is_sf_aware <- function(env = parent.frame(2)) {
