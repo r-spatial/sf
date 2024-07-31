@@ -72,6 +72,9 @@
 <span><span class="co"># S3 method for class 'sfg'</span></span>
 <span><span class="fu">st_transform</span><span class="op">(</span><span class="va">x</span>, crs <span class="op">=</span> <span class="fu"><a href="st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># S3 method for class 'bbox'</span></span>
+<span><span class="fu">st_transform</span><span class="op">(</span><span class="va">x</span>, <span class="va">crs</span>, <span class="va">...</span>, densify <span class="op">=</span> <span class="fl">21</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">st_wrap_dateline</span><span class="op">(</span><span class="va">x</span>, <span class="va">options</span>, <span class="va">quiet</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'sfc'</span></span>
@@ -143,6 +146,10 @@ at least the one specified will be considered; a negative value disables this fe
 <dd><p>logical; if <code>TRUE</code>, perform a sanity check on resulting polygons</p></dd>
 
 
+<dt id="arg-densify">densify<a class="anchor" aria-label="anchor" href="#arg-densify"></a></dt>
+<dd><p>integer, number of points for discretizing lines between bounding box corner points; see Details</p></dd>
+
+
 <dt id="arg-options">options<a class="anchor" aria-label="anchor" href="#arg-options"></a></dt>
 <dd><p>character; should have "WRAPDATELINE=YES" to function; another parameter that is used is "DATELINEOFFSET=10" (where 10 is the default value)</p></dd>
 
@@ -171,6 +178,7 @@ if you need the traditional GIS order, use <code>"OGC:CRS84"</code>, not
 <code>"EPSG:4326"</code>. Extra care is needed with the ESRI Shapefile format,
 because WKT1 does not store axis order unambiguously.</p>
 <p>The <code>st_transform</code> method for <code>sfg</code> objects assumes that the CRS of the object is available as an attribute of that name.</p>
+<p>the method for <code>bbox</code> objects densifies lines for geographic coordinates along Cartesian lines, not great circle arcs</p>
 <p>For a discussion of using <code>options</code>, see <a href="https://github.com/r-spatial/sf/issues/280" class="external-link">https://github.com/r-spatial/sf/issues/280</a> and <a href="https://github.com/r-spatial/sf/issues/1983" class="external-link">https://github.com/r-spatial/sf/issues/1983</a></p>
 <p><code>sf_proj_info</code> lists the available projections, ellipses, datums, units, or data search path of the PROJ library when <code>type</code> is equal to proj, ellps, datum, units or path; when <code>type</code> equals <code>have_datum_files</code> a boolean is returned indicating whether datum files are installed and accessible (checking for <code>conus</code>). <code>path</code> returns the <code>PROJ_INFO.searchpath</code> field directly, as a single string with path separaters (<code>:</code>  or <code>;</code>).</p>
 <p>for PROJ &gt;= 6, <code>sf_proj_info</code> does not provide option <code>type = "datums"</code>.
