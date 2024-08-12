@@ -406,7 +406,7 @@ abbreviate_shapefile_names = function(x) {
 #' @param driver character; name of driver to be used; if missing and \code{dsn} is not a Database Connection, a driver name is guessed from \code{dsn};
 #' \code{st_drivers()} returns the drivers that are available with their properties; links to full driver documentation
 #' are found at \url{https://gdal.org/drivers/vector/index.html}
-#' @param ... other arguments passed to \link{dbWriteTable} when \code{dsn} is a
+#' @param ... other arguments passed to \link[DBI]{dbWriteTable} when \code{dsn} is a
 #' Database Connection
 #' @param dataset_options character; driver dependent dataset creation options;
 #' multiple options supported.

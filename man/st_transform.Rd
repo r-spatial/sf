@@ -6,6 +6,7 @@
 \alias{st_transform.sfc}
 \alias{st_transform.sf}
 \alias{st_transform.sfg}
+\alias{st_transform.bbox}
 \alias{st_wrap_dateline}
 \alias{st_wrap_dateline.sfc}
 \alias{st_wrap_dateline.sf}
@@ -33,6 +34,8 @@ st_transform(x, crs, ...)
 \method{st_transform}{sf}(x, crs = st_crs(x), ...)
 
 \method{st_transform}{sfg}(x, crs = st_crs(x), ...)
+
+\method{st_transform}{bbox}(x, crs, ..., densify = 21)
 
 st_wrap_dateline(x, options, quiet)
 
@@ -74,6 +77,8 @@ at least the one specified will be considered; a negative value disables this fe
 
 \item{check}{logical; if \code{TRUE}, perform a sanity check on resulting polygons}
 
+\item{densify}{integer, number of points for discretizing lines between bounding box corner points; see Details}
+
 \item{options}{character; should have "WRAPDATELINE=YES" to function; another parameter that is used is "DATELINEOFFSET=10" (where 10 is the default value)}
 
 \item{quiet}{logical; print options after they have been parsed?}
@@ -98,6 +103,8 @@ if you need the traditional GIS order, use \code{"OGC:CRS84"}, not
 because WKT1 does not store axis order unambiguously.
 
 The \code{st_transform} method for \code{sfg} objects assumes that the CRS of the object is available as an attribute of that name.
+
+the method for \code{bbox} objects densifies lines for geographic coordinates along Cartesian lines, not great circle arcs
 
 For a discussion of using \code{options}, see \url{https://github.com/r-spatial/sf/issues/280} and \url{https://github.com/r-spatial/sf/issues/1983}
 

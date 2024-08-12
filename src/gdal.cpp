@@ -698,6 +698,12 @@ Rcpp::NumericVector CPL_transform_bounds(Rcpp::NumericVector bb, Rcpp::List crs_
 	ret[1] = ymin;
 	ret[2] = xmax;
 	ret[3] = ymax;
+	Rcpp::CharacterVector names(4);
+	names(0) = "xmin";
+	names(1) = "ymin";
+	names(2) = "xmax";
+	names(3) = "ymax";
+	ret.attr("names") = names;
 	ct->DestroyCT(ct);
 	dst->Release();
 	src->Release();
