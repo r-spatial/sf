@@ -49,7 +49,13 @@ st_inscribed_circle(x, dTolerance, ...)
 
 st_minimum_rotated_rectangle(x, ...)
 
-st_voronoi(x, envelope, dTolerance = 0, bOnlyEdges = FALSE)
+st_voronoi(
+  x,
+  envelope,
+  dTolerance = 0,
+  bOnlyEdges = FALSE,
+  point_order = FALSE
+)
 
 st_polygonize(x)
 
@@ -114,6 +120,8 @@ meters.}
 \item{bOnlyEdges}{logical; if TRUE, return lines, else return polygons}
 
 \item{envelope}{object of class \code{sfc} or \code{sfg} containing a \code{POLYGON} with the envelope for a voronoi diagram; this only takes effect when it is larger than the default envelope, chosen when \code{envelope} is an empty polygon}
+
+\item{point_order}{logical; preserve point order if TRUE and GEOS version >= 3.12; overrides bOnlyEdges}
 
 \item{directed}{logical; if \code{TRUE}, lines with opposite directions will not be merged}
 
@@ -278,7 +286,15 @@ if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.5.0") > -1) {
  # compute Voronoi polygons:
  pols = st_collection_extract(st_voronoi(do.call(c, st_geometry(pts))))
  # match them to points:
- pts$pols = pols[unlist(st_intersects(pts, pols))]
+ pts_pol = st_intersects(pts, pols)
+ pts$pols = pols[unlist(pts_pol)] # re-order
+ if (isTRUE(try(compareVersion(sf_extSoftVersion()["GEOS"], "3.12.0") > -1,
+   silent = TRUE))) {
+   pols_po = st_collection_extract(st_voronoi(do.call(c, st_geometry(pts)),
+     point_order = TRUE)) # GEOS >= 3.12 can preserve order of inputs
+   pts_pol_po = st_intersects(pts, pols_po)
+   print(all(unlist(pts_pol_po) == 1:(n/2)))
+ }
  plot(pts["id"], pch = 16) # ID is color
  plot(st_set_geometry(pts, "pols")["id"], xlim = c(0,1), ylim = c(0,1), reset = FALSE)
  plot(st_geometry(pts), add = TRUE)

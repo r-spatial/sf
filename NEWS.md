@@ -1,5 +1,7 @@
 # version 1.0-17
 
+* add flag for preservation of point order in `st_voronoi` #1371 for GEOS >= 3.12
+
 * add `st_transform()` method for `bbox` objects; this uses OGRCoordinateTransformation::TransformBounds(), densifying first and antemeridian proof; #2415
 
 * `st_filter.sf()` correctly scopes `x` and `y` arguments using !! operator; #2416
