@@ -49,7 +49,7 @@ st_covered_by(x, y = x, sparse = TRUE, prepared = TRUE, ..., model = "closed")
 
 st_equals_exact(x, y, par, sparse = TRUE, prepared = FALSE, ...)
 
-st_is_within_distance(x, y = x, dist, sparse = TRUE, ...)
+st_is_within_distance(x, y = x, dist, sparse = TRUE, ..., remove_self = FALSE)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
