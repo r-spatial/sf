@@ -77,7 +77,7 @@ Rcpp::CharacterVector CPL_ogrinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVect
 	GDALDatasetH ds = NULL;
 #if GDAL_VERSION_NUM >= 3070000
 	if (obj.size())
-		ds = GDALOpenEx((const char *) obj[0], GA_ReadOnly, NULL, oo_char.data(), NULL);
+		ds = GDALOpenEx((const char *) obj[0], GA_Update, NULL, oo_char.data(), NULL);
 	GDALVectorInfoOptions* opt = GDALVectorInfoOptionsNew(options_char.data(), NULL);
 	char *ret_val = GDALVectorInfo(ds, opt);
 	if (ret_val == NULL)
