@@ -1,5 +1,5 @@
 
-R version 4.4.0 (2024-04-24) -- "Puppy Cup"
+R version 4.4.1 (2024-06-14) -- "Race for Your Life"
 Copyright (C) 2024 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
@@ -1083,7 +1083,7 @@ Geometry type: POINT
 Dimension:     XY
 Bounding box:  xmin: 0 ymin: 1 xmax: 0 ymax: 1
 CRS:           NA
-            x
+     geometry
 1 POINT (0 1)
 > 
 > # st_exterior_ring():
@@ -1134,4 +1134,4 @@ Geodetic CRS:  WGS 84
 > 
 > proc.time()
    user  system elapsed 
-  5.477   1.381   5.407 
+  5.158   1.450   5.100 
