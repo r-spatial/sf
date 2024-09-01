@@ -242,7 +242,6 @@ st_overlaps		= function(x, y, sparse = TRUE, prepared = TRUE, ...)
 #' st_equals(p, remove_self = TRUE)
 #' (u = st_equals(p, retain_unique = TRUE))
 #' p[-unlist(u),]
-#' st_equals_exact(p1, p2)
 st_equals		= function(x, y, sparse = TRUE, prepared = FALSE, ..., 
 							retain_unique = FALSE, remove_self = FALSE) {
 	if (prepared)

@@ -53,7 +53,6 @@ st_equals(p)
 st_equals(p, remove_self = TRUE)
 (u = st_equals(p, retain_unique = TRUE))
 p[-unlist(u),]
-st_equals_exact(p1, p2)
 }
 \seealso{
 Other geometric binary predicates for two spatial objects: 
