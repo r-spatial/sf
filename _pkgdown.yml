@@ -2,3 +2,46 @@ url: https://r-spatial.github.io/sf/
 
 template:
   bootstrap: 5
+
+reference:
+  - title: Simple features objects
+    contents:
+    - sf
+    - sfc
+    - sgbp
+  - title: Operations
+    contents:
+    - starts_with("st_")
+  - title: Database operators
+    contents:
+    - starts_with("db")
+  - title: Visualize spatial data
+    desc: >
+      See more in `vignette("sf5")`
+    contents:
+    - plot
+  - title: sf methods
+    contents:
+    - tidyverse
+    - tibble
+    - vctrs
+    - transform.sf
+    - aggregate.sf
+    - merge.sf
+    - summary.sfc
+    - as
+  - title: Data objects
+    contents:
+    - nc
+  - title: Other helpers
+    contents:
+    - extension_map
+    - gdal_addo
+    - gdal_utils
+    - Ops
+    - prefix_map
+    - proj_tools
+    - rawToHex
+    - sf_extSoftVersion
+    - sf_project
+    
