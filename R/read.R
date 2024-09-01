@@ -628,7 +628,6 @@ write_sf <- function(..., quiet = TRUE, append = FALSE, delete_layer = !append) 
 #'   support](https://gdal.org/drivers/vector/index.html).
 #' @return A `data.frame` with driver metadata.
 #' @export
-#' @md
 #' @examples
 #' # The following driver lists depend on the GDAL setup and platform used:
 #' st_drivers()
@@ -743,7 +742,8 @@ guess_driver_can_write = function(dns, drv = guess_driver(dns)) {
 #' Search through the driver table if driver is listed
 #' @param drv character. Name of driver
 #' @param drivers data.frame. Table containing driver names and support. Default
-#' is from \code{\link{st_drivers}}
+#' is from `st_drivers()`
+#' @noRd
 is_driver_available = function(drv, drivers = st_drivers()) {
   i = match(drv, drivers$name)
   if (is.na(i))
@@ -760,6 +760,7 @@ is_driver_available = function(drv, drivers = st_drivers()) {
 #' @param drivers data.frame. Table containing driver names and support. Default
 #' is from \code{\link{st_drivers}}
 #' @param operation character. What action to check
+#' @noRd
 is_driver_can = function(drv, drivers = st_drivers(), operation = "write") {
   stopifnot(operation %in% names(drivers))
   i = match(drv, drivers$name)
