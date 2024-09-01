@@ -824,7 +824,7 @@ get_asp = function(bb) {
 
 bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mercator" CRS
 	wgs84 = st_crs(4326)
-	merc =  st_crs(3857) # http://wiki.openstreetmap.org/wiki/EPSG:3857
+	merc =  st_crs(3857) # https://wiki.openstreetmap.org/wiki/Web_Mercator
 	pts = if (cls == "ggmap") {
 		b = vapply(attr(x, "bb"), c, 0.0)
 		st_sfc(st_point(c(b[2:1])), st_point(c(b[4:3])), crs = wgs84)

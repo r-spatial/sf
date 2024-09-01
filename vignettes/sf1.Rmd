@@ -138,7 +138,7 @@ unit](https://CRAN.R-project.org/package=units).
 # How simple features in R are organized
 
 Package `sf` represents simple features as native R objects.
-Similar to [PostGIS](http://postgis.net/), all functions and methods
+Similar to [PostGIS](https://postgis.net/), all functions and methods
 in `sf` that operate on spatial data are prefixed by `st_`, which
 refers to _spatial type_; this makes them easily findable
 by command-line completion.  Simple features are implemented as
