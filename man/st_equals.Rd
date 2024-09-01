@@ -26,12 +26,15 @@ st_equals_exact(x, y, par, sparse = TRUE, prepared = FALSE, ...)
 
 \item{prepared}{logical; prepare geometry for \code{x}, before looping over \code{y}? See Details.}
 
+\item{...}{passed on to \code{\link[s2:s2_contains]{s2::s2_equals()}}}
+
 \item{retain_unique}{logical; if \code{TRUE} (and \code{y} is missing) return only
 indexes of points larger than the current index; this can be used to select
 unique geometries, see examples. This argument can be used for all geometry predicates;
 see also \link{distinct.sf} to find records where geometries AND attributes are distinct.}
 
-\item{remove_self}{logical; if \code{TRUE} (and \code{y} is missing) return only indexes of geometries different from the current index; this can be used to omit self-intersections; see examples. This argument can be used for all geometry predicates}
+\item{remove_self}{logical; if \code{TRUE} (and \code{y} is missing) return only indexes of geometries different from the current index; this can be used to omit self-intersections; see examples.
+This argument can be used for all geometry predicates}
 
 \item{par}{numeric; parameter used for "equals_exact" (margin);}
 }
@@ -40,6 +43,17 @@ see also \link{distinct.sf} to find records where geometries AND attributes are 
 \item \code{st_equals()} validate if x and y are equal.
 \item \code{st_equals_exact()} returns true for two geometries of the same type and their vertices corresponding by index are equal up to a specified tolerance.
 }
+}
+\examples{
+# remove duplicate geometries:
+p1 = st_point(0:1)
+p2 = st_point(2:1)
+p = st_sf(a = letters[1:8], geom = st_sfc(p1, p1, p2, p1, p1, p2, p2, p1))
+st_equals(p)
+st_equals(p, remove_self = TRUE)
+(u = st_equals(p, retain_unique = TRUE))
+p[-unlist(u),]
+st_equals_exact(p1, p2)
 }
 \seealso{
 Other geometric binary predicates for two spatial objects: 

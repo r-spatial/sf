@@ -18,6 +18,8 @@ st_contains_properly(x, y, sparse = TRUE, prepared = TRUE, ...)
 
 \item{prepared}{logical; prepare geometry for \code{x}, before looping over \code{y}? See Details.}
 
+\item{...}{passed on to \code{\link[s2:s2_contains]{s2::s2_contains()}}}
+
 \item{model}{character; polygon/polyline model; one of
 "open", "semi-open" or "closed"; see Details.}
 }

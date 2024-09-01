@@ -29,6 +29,47 @@ st_covered_by(x, y = x, sparse = TRUE, prepared = TRUE, ..., model = "closed")
 st_is_within_distance(x, y = x, dist, sparse = TRUE, ...)
 }
 \arguments{
+\item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
+
+\item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}; if missing, \code{x} is used}
+
+\item{sparse}{logical; should a sparse index list be returned (\code{TRUE}) or a dense logical matrix? See below.}
+
+\item{prepared}{logical; prepare geometry for \code{x}, before looping over \code{y}? See Details.}
+
+\item{...}{
+  Arguments passed on to \code{\link[s2:s2_options]{s2::s2_options}}
+  \describe{
+    \item{\code{snap}}{Use \code{s2_snap_identity()}, \code{s2_snap_distance()}, \code{s2_snap_level()},
+or \code{s2_snap_precision()} to specify how or if coordinate rounding should
+occur.}
+    \item{\code{snap_radius}}{As opposed to the snap function, which specifies
+the maximum distance a vertex should move, the snap radius (in radians) sets
+the minimum distance between vertices of the output that don't cause vertices
+to move more than the distance specified by the snap function. This can be used
+to simplify the result of a boolean operation. Use -1 to specify that any
+minimum distance is acceptable.}
+    \item{\code{duplicate_edges}}{Use \code{TRUE} to keep duplicate edges (e.g., duplicate
+points).}
+    \item{\code{edge_type}}{One of 'directed' (default) or 'undirected'.}
+    \item{\code{validate}}{Use \code{TRUE} to validate the result from the builder.}
+    \item{\code{polyline_type}}{One of 'path' (default) or 'walk'. If 'walk',
+polylines that backtrack are preserved.}
+    \item{\code{polyline_sibling_pairs}}{One of 'discard' (default) or 'keep'.}
+    \item{\code{simplify_edge_chains}}{Use \code{TRUE} to remove vertices that are within
+\code{snap_radius} of the original vertex.}
+    \item{\code{split_crossing_edges}}{Use \code{TRUE} to split crossing polyline edges
+when creating geometries.}
+    \item{\code{idempotent}}{Use \code{FALSE} to apply snap even if snapping is not necessary
+to satisfy vertex constraints.}
+    \item{\code{dimensions}}{A combination of 'point', 'polyline', and/or 'polygon'
+that can used to constrain the output of \code{\link[s2:s2_rebuild]{s2_rebuild()}} or a
+boolean operation.}
+  }}
+
+\item{model}{character; polygon/polyline model; one of
+\code{"open"}, \code{"semi-open"} or \code{"closed"}; see Details.}
+
 \item{dist}{distance threshold; geometry indexes with distances smaller or equal to this value are returned; numeric value or units value having distance units.}
 }
 \description{
@@ -37,6 +78,11 @@ see \url{https://r-spatial.org/r/2017/06/22/spatial-index.html}.
 
 If \code{prepared = TRUE}, \code{x} contains POINT geometries, and \code{y} contains polygons,
 then the polygon geometries are prepared, rather than the points.
+}
+\details{
+If \code{prepared} is \code{TRUE}, and \code{x} contains POINT geometries and \code{y} contains polygons, then the polygon geometries are prepared, rather than the points.
+
+for \code{model}, see https://github.com/r-spatial/s2/issues/32
 }
 \examples{
 pts = st_sfc(st_point(c(.5,.5)), st_point(c(1.5, 1.5)), st_point(c(2.5, 2.5)))

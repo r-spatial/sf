@@ -44,8 +44,6 @@ to satisfy vertex constraints.}
 that can used to constrain the output of \code{\link[s2:s2_rebuild]{s2_rebuild()}} or a
 boolean operation.}
   }}
-
-\item{prepared}{logical; prepare geometry for \code{x}, before looping over \code{y}? See Details.}
 }
 \value{
 If \code{sparse=FALSE}, \code{st_predicate} (with \code{predicate} e.g. "intersects") returns a dense logical matrix with element \code{i,j} equal to \code{TRUE} when \code{predicate(x[i], y[j])} (e.g., when geometry of feature i and j intersect); if \code{sparse=TRUE}, an object of class \code{\link{sgbp}} is returned, which is a sparse list representation of the same matrix, with list element \code{i} an integer vector with all indices \code{j} for which \code{predicate(x[i],y[j])} is \code{TRUE} (and hence a zero-length integer vector if none of them is \code{TRUE}). From the dense matrix, one can find out if one or more elements intersect by \code{apply(mat, 1, any)}, and from the sparse list by \code{lengths(lst) > 0}, see examples below.
@@ -54,8 +52,6 @@ If \code{sparse=FALSE}, \code{st_predicate} (with \code{predicate} e.g. "interse
 Identify if \code{x} and \code{y} share any space
 }
 \details{
-If \code{prepared} is \code{TRUE}, and \code{x} contains POINT geometries and \code{y} contains polygons, then the polygon geometries are prepared, rather than the points.
-
 For most predicates, a spatial index is built on argument \code{x}; see \url{https://r-spatial.org/r/2017/06/22/spatial-index.html}.
 Specifically, \code{st_intersects}, \code{st_disjoint}, \code{st_touches} \code{st_crosses}, \code{st_within}, \code{st_contains}, \code{st_contains_properly}, \code{st_overlaps}, \code{st_equals}, \code{st_covers} and \code{st_covered_by} all build spatial indexes for more efficient geometry calculations. \code{st_relate}, \code{st_equals_exact}, and do not; \code{st_is_within_distance} uses a spatial index for geographic coordinates when \code{sf_use_s2()} is true.
 
@@ -77,15 +73,7 @@ apply(mat, 1, any)
 lengths(lst) > 0
 # which points fall inside the first polygon?
 st_intersects(pol, pts)[[1]]
-# remove duplicate geometries:
-p1 = st_point(0:1)
-p2 = st_point(2:1)
-p = st_sf(a = letters[1:8], geom = st_sfc(p1, p1, p2, p1, p1, p2, p2, p1))
-st_equals(p)
-st_equals(p, remove_self = TRUE)
-(u = st_equals(p, retain_unique = TRUE))
 # retain the records with unique geometries:
-p[-unlist(u),]
 }
 \seealso{
 Other geometric binary predicates for two spatial objects: 
