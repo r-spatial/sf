@@ -17,10 +17,9 @@ kw_dflt = function(x, key.pos) {
 }
 
 
-#' plot sf object
-#'
-#' plot one or more attributes of an sf object on a map
 #' Plot sf object
+#'
+#' Plot one or more attributes of an sf object on a map
 #'
 #' @param x object of class sf
 #' @param y ignored
@@ -63,7 +62,8 @@ kw_dflt = function(x, key.pos) {
 #' parameter \code{at} can be set to specify where labels are placed along the key; see examples.
 #' 
 #' The features are plotted in the order as they apppear in the sf object. See examples for when a different plotting order is wanted.
-#'
+#' 
+#' @seealso `vignette("sf5")`
 #' @examples
 #' nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)
 #' # plot single attribute, auto-legend:
