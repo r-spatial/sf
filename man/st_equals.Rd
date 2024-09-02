@@ -26,7 +26,7 @@ st_equals_exact(x, y, par, sparse = TRUE, prepared = FALSE, ...)
 
 \item{prepared}{logical; prepare geometry for \code{x}, before looping over \code{y}? See Details.}
 
-\item{...}{passed on to \code{\link[s2:s2_contains]{s2::s2_equals()}}}
+\item{...}{passed on to \code{\link[s2:s2_options]{s2::s2_options()}}}
 
 \item{retain_unique}{logical; if \code{TRUE} (and \code{y} is missing) return only
 indexes of points larger than the current index; this can be used to select
@@ -52,6 +52,7 @@ p = st_sf(a = letters[1:8], geom = st_sfc(p1, p1, p2, p1, p1, p2, p2, p1))
 st_equals(p)
 st_equals(p, remove_self = TRUE)
 (u = st_equals(p, retain_unique = TRUE))
+# retain the records with unique geometries:
 p[-unlist(u),]
 }
 \seealso{

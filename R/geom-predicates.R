@@ -230,7 +230,7 @@ st_overlaps		= function(x, y, sparse = TRUE, prepared = TRUE, ...)
 #'   see also \link{distinct.sf} to find records where geometries AND attributes are distinct.
 #' @param remove_self logical; if `TRUE` (and `y` is missing) return only indexes of geometries different from the current index; this can be used to omit self-intersections; see examples.
 #' This argument can be used for all geometry predicates
-#' @param ... passed on to [s2::s2_equals()]
+#' @param ... passed on to [s2::s2_options()]
 #' @export
 #' @family geometric binary predicates for two spatial objects
 #' @examples
@@ -241,6 +241,7 @@ st_overlaps		= function(x, y, sparse = TRUE, prepared = TRUE, ...)
 #' st_equals(p)
 #' st_equals(p, remove_self = TRUE)
 #' (u = st_equals(p, retain_unique = TRUE))
+#' # retain the records with unique geometries:
 #' p[-unlist(u),]
 st_equals		= function(x, y, sparse = TRUE, prepared = FALSE, ..., 
 							retain_unique = FALSE, remove_self = FALSE) {
