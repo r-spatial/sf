@@ -1,12 +1,13 @@
-#' get nearest points between pairs of geometries
+#' Get nearest points between pairs of geometries
 #' 
 #' get nearest points between pairs of geometries
-#' @param x object of class \code{sfg}, \code{sfc} or \code{sf}
-#' @param y object of class \code{sfg}, \code{sfc} or \code{sf}
-#' @param pairwise logical; if \code{FALSE} (default) return nearest points between all pairs, if \code{TRUE}, return nearest points between subsequent pairs.
-#' @param ... ignored
+#' @param x,y object of class \code{sfg}, \code{sfc} or \code{sf}
+#' @param pairwise logical; if \code{FALSE} (default) return nearest points between all pairs,
+#'   if \code{TRUE}, return nearest points between subsequent pairs.
+#' @param ... passed on to methods. Currently, only `pairwise` is implemented.
 #' @seealso \link{st_nearest_feature} for finding the nearest feature
-#' @return an \link{sfc} object with all two-point \code{LINESTRING} geometries of point pairs from the first to the second geometry, of length x * y, with y cycling fastest. See examples for ideas how to convert these to \code{POINT} geometries.
+#' @return an \link{sfc} object with all two-point \code{LINESTRING} geometries of point pairs from the first to the second geometry, of length x * y, with y cycling fastest.
+#'   See examples for ideas how to convert these to \code{POINT} geometries.
 #' @details in case \code{x} lies inside \code{y}, when using S2, the end points 
 #' are on polygon boundaries, when using GEOS the end point are identical to \code{x}.
 #' @examples
@@ -34,6 +35,7 @@
 #' plot(pts[seq(2, 200, 2)], add = TRUE, col = 'green')
 #' 
 #' @export
+#'  
 st_nearest_points = function(x, y, ...) UseMethod("st_nearest_points")
 
 #' @export
@@ -55,13 +57,13 @@ st_nearest_points.sfc = function(x, y, ..., pairwise = FALSE) {
 }
  
 #' @export
-#' @name st_nearest_points
+#' @rdname st_nearest_points
 st_nearest_points.sfg = function(x, y, ...) {
 	st_nearest_points(st_geometry(x), st_geometry(y), ...)
 }
 
 #' @export
-#' @name st_nearest_points
+#' @rdname st_nearest_points
 st_nearest_points.sf = function(x, y, ...) {
 	st_nearest_points(st_geometry(x), st_geometry(y), ...)
 }
