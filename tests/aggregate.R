@@ -1,4 +1,6 @@
+## IGNORE_RDIFF_BEGIN
 library(sf)
+## IGNORE_RDIFF_END
 # aggregate
 pl1 = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,0))))
 pl2 = st_polygon(list(rbind(c(0,0),c(1,1),c(0,1),c(0,0))))

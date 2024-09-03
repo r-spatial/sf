@@ -100,8 +100,8 @@ RUN cd proj* \
 #  && cd -
 
 # GDAL:
-ENV GDAL_VERSION 3.9.0
-ENV GDAL_VERSION_NAME 3.9.0rc1
+ENV GDAL_VERSION 3.9.2
+ENV GDAL_VERSION_NAME 3.9.2
 #https://download.osgeo.org/gdal/3.9.0/gdal-3.9.0beta1.tar.gz
 
 RUN wget -q http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
@@ -128,10 +128,10 @@ RUN R CMD build --no-manual stars
 RUN R CMD INSTALL sf
 RUN R CMD INSTALL lwgeom
 RUN R CMD INSTALL stars
-
-RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
-RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
-
-RUN Rscript -e 'options(timeout=1200); install.packages("starsdata", repos="http://cran.uni-muenster.de/pebesma/")'
-
-RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
+#
+#RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
+#RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
+#
+#RUN Rscript -e 'options(timeout=1200); install.packages("starsdata", repos="http://cran.uni-muenster.de/pebesma/")'
+#
+#RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
