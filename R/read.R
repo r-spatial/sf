@@ -443,7 +443,7 @@ abbreviate_shapefile_names = function(x) {
 #' When deleting layers or data sources is not successful, no error is emitted.
 #' \code{delete_dsn} and \code{delete_layer} should be
 #' handled with care; the former may erase complete directories or databases.
-#' @seealso \link{st_drivers}, \link{dbWriteTable}
+#' @seealso \link{st_drivers}, \link[DBI]{dbWriteTable}
 #' @return \code{obj}, invisibly
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))

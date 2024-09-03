@@ -1,5 +1,7 @@
 suppressPackageStartupMessages(library(sf))
+## IGNORE_RDIFF_BEGIN
 if (require(spatstat.random, quietly = TRUE)) {
+## IGNORE_RDIFF_END
 
 data(chicago)
 st_as_sf(chicago)

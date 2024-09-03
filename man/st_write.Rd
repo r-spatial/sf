@@ -136,5 +136,5 @@ if (require(sp, quietly = TRUE)) {
 }
 }
 \seealso{
-\link{st_drivers}, \link{dbWriteTable}
+\link{st_drivers}, \link[DBI]{dbWriteTable}
 }
