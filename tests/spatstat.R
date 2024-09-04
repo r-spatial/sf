@@ -1,7 +1,6 @@
 suppressPackageStartupMessages(library(sf))
 ## IGNORE_RDIFF_BEGIN
 if (require(spatstat.random, quietly = TRUE)) {
-## IGNORE_RDIFF_END
 
 data(chicago)
 st_as_sf(chicago)
@@ -110,3 +109,4 @@ as.psp(sf, marks = 5:1)
 (y = st_as_sfc(as.psp(sf)))
 all.equal(st_geometry(x), y)
 }
+## IGNORE_RDIFF_END

@@ -23,3 +23,4 @@ vignettes.awk
 _pkgdown.yml
 docs
 pkgdown
+^changes*txt
