@@ -231,12 +231,12 @@ lead to spurious errors that accompanying <code>*.shp</code> are missing.</p>
 data sources) directly from zip files can be done by prepending the path
 with <code>/vsizip/</code>. This is part of the GDAL Virtual File Systems interface
 that also supports .gz, curl, and other operations, including chaining; see
-<a href="https://gdal.org/user/virtual_file_systems.html" class="external-link">https://gdal.org/user/virtual_file_systems.html</a> for a complete
+<a href="https://gdal.org/en/latest/user/virtual_file_systems.html" class="external-link">https://gdal.org/en/latest/user/virtual_file_systems.html</a> for a complete
 description and examples.</p>
 <p>For <code>query</code> with a character <code>dsn</code> the query text is handed to
 'ExecuteSQL' on the GDAL/OGR data set and will result in the creation of a
 new layer (and <code>layer</code> is ignored). See 'OGRSQL'
-<a href="https://gdal.org/user/ogr_sql_dialect.html" class="external-link">https://gdal.org/user/ogr_sql_dialect.html</a> for details. Please note that the
+<a href="https://gdal.org/en/latest/user/ogr_sql_dialect.html" class="external-link">https://gdal.org/en/latest/user/ogr_sql_dialect.html</a> for details. Please note that the
 'FID' special field is driver-dependent, and may be either 0-based (e.g. ESRI
 Shapefile), 1-based (e.g. MapInfo) or arbitrary (e.g. OSM). Other features of
 OGRSQL are also likely to be driver dependent. The available layer names may
