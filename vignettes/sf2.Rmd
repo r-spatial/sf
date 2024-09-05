@@ -217,7 +217,7 @@ st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse",
 
 In case the table exists and the option is not specified, the driver
 will give an error. Driver-specific options are documented in the
-driver manual of [gdal](https://gdal.org/drivers/vector/index.html).
+driver manual of [gdal](https://gdal.org/en/latest/drivers/vector/index.html).
 Multiple options can be given by multiple strings in `options`.
 
 For `st_read()`, there is only `options`; for `st_write()`, one needs

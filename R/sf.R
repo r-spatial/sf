@@ -82,7 +82,7 @@ st_as_sf.sf = function(x, ...) x
 
 #' @name st_as_sf
 #' @export
-st_as_sf.sfc = function(x, ...) st_sf(x, ...)
+st_as_sf.sfc = function(x, ...) st_as_sf(data.frame(x), ...)
 
 
 #' Get, set, replace or rename geometry from an sf object

@@ -145,13 +145,13 @@ In case of problems reading shapefiles from USB drives on OSX, please see
 data sources) directly from zip files can be done by prepending the path
 with \code{/vsizip/}. This is part of the GDAL Virtual File Systems interface
 that also supports .gz, curl, and other operations, including chaining; see
-\url{https://gdal.org/user/virtual_file_systems.html} for a complete
+\url{https://gdal.org/en/latest/user/virtual_file_systems.html} for a complete
 description and examples.
 
 For \code{query} with a character \code{dsn} the query text is handed to
 'ExecuteSQL' on the GDAL/OGR data set and will result in the creation of a
 new layer (and \code{layer} is ignored). See 'OGRSQL'
-\url{https://gdal.org/user/ogr_sql_dialect.html} for details. Please note that the
+\url{https://gdal.org/en/latest/user/ogr_sql_dialect.html} for details. Please note that the
 'FID' special field is driver-dependent, and may be either 0-based (e.g. ESRI
 Shapefile), 1-based (e.g. MapInfo) or arbitrary (e.g. OSM). Other features of
 OGRSQL are also likely to be driver dependent. The available layer names may

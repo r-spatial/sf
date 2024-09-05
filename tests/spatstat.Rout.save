@@ -16,6 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > suppressPackageStartupMessages(library(sf))
+> ## IGNORE_RDIFF_BEGIN
 > if (require(spatstat.random, quietly = TRUE)) {
 + 
 + data(chicago)
@@ -163,7 +164,8 @@ Error : Only projected coordinates may be converted to spatstat class objects
 Warning message:
 In st_as_sfc.owin(spatstat.geom::as.owin(x)) :
   The spatstat object has an measurement unit multiplier != 1. Consider rescaling before converting.
+> ## IGNORE_RDIFF_END
 > 
 > proc.time()
    user  system elapsed 
-  1.892   1.411   1.794 
+  1.768   1.389   1.788 
