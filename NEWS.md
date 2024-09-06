@@ -1,7 +1,5 @@
 # version 1.0-17
 
-* `st_as_sf.sfc()` returns an object with geometry column named `geometry`; #2429
-
 * add `st_transform()` method for `bbox` objects; this uses OGRCoordinateTransformation::TransformBounds(), densifying first and antemeridian proof; #2415
 
 * `st_filter.sf()` correctly scopes `x` and `y` arguments using !! operator; #2416
