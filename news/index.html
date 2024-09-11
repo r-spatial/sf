@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">sf</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0-17</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0-18</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,11 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.0-17" id="version-10-17">version 1.0-17<a class="anchor" aria-label="anchor" href="#version-10-17"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.0-18" id="version-10-18">version 1.0-18<a class="anchor" aria-label="anchor" href="#version-10-18"></a></h2>
+<ul><li>fix build failure with GDAL &lt; 3.4.0 <a href="https://github.com/r-spatial/sf/issues/2436" class="external-link">#2436</a></li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0-17" id="version-10-17">version 1.0-17<a class="anchor" aria-label="anchor" href="#version-10-17"></a></h2><p class="text-muted">CRAN release: 2024-09-06</p>
 <ul><li><p>add <code><a href="../reference/st_transform.html">st_transform()</a></code> method for <code>bbox</code> objects; this uses OGRCoordinateTransformation::TransformBounds(), densifying first and antemeridian proof; <a href="https://github.com/r-spatial/sf/issues/2415" class="external-link">#2415</a></p></li>
 <li><p><code><a href="../reference/st_join.html">st_filter.sf()</a></code> correctly scopes <code>x</code> and <code>y</code> arguments using !! operator; <a href="https://github.com/r-spatial/sf/issues/2416" class="external-link">#2416</a></p></li>
 <li><p><code>[.sfc</code> and <code>[&lt;-.sfc</code> use matrix/array type subsetting for <code>sfc</code> objects that have a <code>dim</code> attribute</p></li>
