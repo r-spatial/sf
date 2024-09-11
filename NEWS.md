@@ -1,3 +1,7 @@
+# version 1.0-18
+
+* fix build failure with GDAL < 3.4.0 #2436
+
 # version 1.0-17
 
 * add `st_transform()` method for `bbox` objects; this uses OGRCoordinateTransformation::TransformBounds(), densifying first and antemeridian proof; #2415
