@@ -1,5 +1,7 @@
 # version 1.0-18
 
+* add flag for preservation of point order in `st_voronoi` #1371 for GEOS >= 3.12
+
 * fix build failure with GDAL < 3.4.0 #2436
 
 # version 1.0-17
