@@ -255,9 +255,9 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 		cat(paste0("First ", n, " geometries:\n"))
 	for (i in seq_len(min(n, length(x))))
 		if (inherits(x[[i]], "sfg"))
-			print(x[[i]], width = 50)
+			print(x[[i]], width = 50, crs = crs)
 		else
-			print(x[[i]])
+			print(x[[i]], crs = crs)
 	invisible(x)
 }
 
