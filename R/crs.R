@@ -249,7 +249,7 @@ st_is_longlat = function(x) {
 		NA
 	else {
 		ret = crs_parameters(crs)$IsGeographic
-		if (ret && inherits(x, c("sf", "sfc", "stars"))) {
+		if (ret && inherits(x, c("sf", "sfc", "stars")) && !is.null(attr(x, "bbox"))) {
 			bb = st_bbox(x)
 			# check for potentially meaningless value range:
 			eps = sqrt(.Machine$double.eps)

@@ -602,6 +602,54 @@ st_as_sfc.blob = function(x, ...) {
 #' @name st_as_sfc
 #' @export
 st_as_sfc.bbox = function(x, ...) {
-	box = st_polygon(list(matrix(x[c(1, 2, 3, 2, 3, 4, 1, 4, 1, 2)], ncol = 2, byrow = TRUE)))
-	st_sfc(box, crs = st_crs(x))
+	if (st_is_full(x))
+		st_as_sfc("POLYGON FULL", crs = st_crs(x))
+	else {
+		box = st_polygon(list(matrix(x[c(1, 2, 3, 2, 3, 4, 1, 4, 1, 2)], ncol = 2, byrow = TRUE)))
+		st_sfc(box, crs = st_crs(x))
+	}
+}
+
+POLYGON_FULL = matrix(c(0,-90,0,-90), 2, byrow = TRUE)
+
+#' predicate whether a geometry is equal to a POLYGON FULL
+#'
+#' predicate whether a geometry is equal to a POLYGON FULL
+#' @param x object of class `sfg`, `sfc` or `sf`
+#' @param ... ignored, except when it contains a `crs` argument to inform unspecified `is_longlat`
+#' @returns logical, indicating whether geometries are POLYGON FULL (a spherical
+#' polygon covering the entire sphere)
+#' @export
+st_is_full = function(x, ...) UseMethod("st_is_full")
+
+#' @export
+#' @param is_longlat logical; output of \link{st_is_longlat} of the parent `sfc` object
+st_is_full.sfg = function(x, ..., is_longlat = NULL) {
+	if (identical(is_longlat, FALSE)) # we know these are Cartesian coordinates:
+		FALSE
+	else
+		sf_use_s2() && inherits(x, "POLYGON") &&
+		length(x) == 1 && nrow(x[[1]]) == 2 && identical(x[[1]], POLYGON_FULL)
+}
+
+#' @export
+st_is_full.sfc = function(x, ...) {
+	if (sf_use_s2() && inherits(x, c("sfc_POLYGON", "sfc_GEOMETRY"))) {
+		is_longlat = if (!is.null(attr(x, "crs")))
+				st_is_longlat(x)
+			else
+				NA
+		sapply(x, st_is_full.sfg, ..., is_longlat = is_longlat)
+	} else
+		rep_len(FALSE, length(x))
+}
+
+#' @export
+st_is_full.sf = function(x, ...) {
+	st_is_full(st_geometry(x), ...)
+}
+
+#' @export
+st_is_full.bbox = function(x, ...) {
+	sf_use_s2() && st_is_longlat(x) && all(x == c(-180,-90,180,90))
 }

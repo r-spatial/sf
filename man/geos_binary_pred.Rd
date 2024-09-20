@@ -19,7 +19,7 @@
 \usage{
 st_intersects(x, y, sparse = TRUE, ...)
 
-st_disjoint(x, y = x, sparse = TRUE, prepared = TRUE)
+st_disjoint(x, y = x, sparse = TRUE, prepared = TRUE, ...)
 
 st_touches(x, y, sparse = TRUE, prepared = TRUE, ...)
 
