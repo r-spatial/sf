@@ -1,5 +1,7 @@
 # version 1.0-17
 
+* support  `POLYGON FULL` simple feature geometry, representing the the entire Earth surface; #2441
+
 * add `st_transform()` method for `bbox` objects; this uses OGRCoordinateTransformation::TransformBounds(), densifying first and antemeridian proof; #2415
 
 * `st_filter.sf()` correctly scopes `x` and `y` arguments using !! operator; #2416
