@@ -25,3 +25,9 @@ st_bbox(f[3])
 st_is_valid(f)
 st_make_valid(f)
 st_make_valid(f[2:3])
+
+# roundtrip:
+sf = st_as_sf(data.frame(attr = 1:3, geom = f[1:3]))
+write_sf(sf, fn <- tempfile(fileext=".gpkg"))
+g = read_sf(fn)
+g

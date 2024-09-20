@@ -295,8 +295,6 @@ st_read.character = function(dsn, layer, ..., query = NA, options = NULL, quiet 
 	if (length(promote_to_multi) > 1)
 		stop("`promote_to_multi' should have length one, and applies to all geometry columns")
 
-
-
 	if (use_stream) {
 		stream = nanoarrow::nanoarrow_allocate_array_stream()
 		info = CPL_read_gdal_stream(stream, dsn, layer, query, as.character(options), quiet,
