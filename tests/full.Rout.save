@@ -122,6 +122,15 @@ Geodetic CRS:  WGS 84 (CRS84)
 2     2 POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))
 3     3                         POINT (0 1)
 > 
+> st_is_empty(g)
+[1] FALSE FALSE FALSE
+> st_is_full(g)
+[1]  TRUE FALSE FALSE
+> st_is_valid(g)
+[1] TRUE TRUE TRUE
+> st_is_simple(g)
+[1] TRUE TRUE TRUE
+> 
 > proc.time()
    user  system elapsed 
-  0.767   1.331   0.742 
+  0.777   1.387   0.661 

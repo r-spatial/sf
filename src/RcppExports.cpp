@@ -1229,6 +1229,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// sfc_is_full
+LogicalVector sfc_is_full(List sfc);
+RcppExport SEXP _sf_sfc_is_full(SEXP sfcSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type sfc(sfcSEXP);
+    rcpp_result_gen = Rcpp::wrap(sfc_is_full(sfc));
+    return rcpp_result_gen;
+END_RCPP
+}
 // points_cpp
 List points_cpp(NumericMatrix pts, CharacterVector gdim);
 RcppExport SEXP _sf_points_cpp(SEXP ptsSEXP, SEXP gdimSEXP) {
@@ -1560,6 +1571,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_sfc_is_null", (DL_FUNC) &_sf_sfc_is_null, 1},
     {"_sf_sfc_unique_sfg_dims_and_types", (DL_FUNC) &_sf_sfc_unique_sfg_dims_and_types, 1},
     {"_sf_sfc_is_empty", (DL_FUNC) &_sf_sfc_is_empty, 1},
+    {"_sf_sfc_is_full", (DL_FUNC) &_sf_sfc_is_full, 1},
     {"_sf_points_cpp", (DL_FUNC) &_sf_points_cpp, 2},
     {"_sf_CPL_signed_area", (DL_FUNC) &_sf_CPL_signed_area, 1},
     {"_sf_CPL_get_metadata", (DL_FUNC) &_sf_CPL_get_metadata, 3},

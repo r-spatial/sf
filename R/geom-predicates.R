@@ -4,7 +4,13 @@
 #' @examples
 #' ls = st_linestring(rbind(c(0,0), c(1,1), c(1,0), c(0,1)))
 #' st_is_simple(st_sfc(ls, st_point(c(0,0))))
-st_is_simple = function(x) CPL_geos_is_simple(st_geometry(x))
+st_is_simple = function(x) {
+	x = st_geometry(x)
+	not_full = !sfc_is_full(x)
+	ret = rep(TRUE, length(x))
+	ret[not_full] = CPL_geos_is_simple(x[not_full])
+	ret
+}
 
 #' @name geos_query
 #' @export
@@ -12,7 +18,10 @@ st_is_simple = function(x) CPL_geos_is_simple(st_geometry(x))
 #' @examples
 #' ls = st_linestring(rbind(c(0,0), c(1,1), c(1,0), c(0,1)))
 #' st_is_empty(st_sfc(ls, st_point(), st_linestring()))
-st_is_empty = function(x) CPL_geos_is_empty(st_geometry(x))
+st_is_empty = function(x) sfc_is_empty(st_geometry(x)) 
+  # used to call
+  # CPL_geos_is_empty(st_geometry(x))
+  # but this avoids a R -> WKB -> GEOS conversion
 
 is_symmetric = function(operation, pattern) {
 	if (!is.na(pattern)) {

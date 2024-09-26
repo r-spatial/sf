@@ -31,3 +31,8 @@ sf = st_as_sf(data.frame(attr = 1:3, geom = f[1:3]))
 write_sf(sf, fn <- tempfile(fileext=".gpkg"))
 g = read_sf(fn)
 g
+
+st_is_empty(g)
+st_is_full(g)
+st_is_valid(g)
+st_is_simple(g)

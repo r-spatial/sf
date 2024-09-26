@@ -623,6 +623,7 @@ POLYGON_FULL = matrix(c(0,-90,0,-90), 2, byrow = TRUE)
 st_is_full = function(x, ...) UseMethod("st_is_full")
 
 #' @export
+#' @name st_is_full
 #' @param is_longlat logical; output of \link{st_is_longlat} of the parent `sfc` object
 st_is_full.sfg = function(x, ..., is_longlat = NULL) {
 	if (identical(is_longlat, FALSE)) # we know these are Cartesian coordinates:
@@ -633,23 +634,27 @@ st_is_full.sfg = function(x, ..., is_longlat = NULL) {
 }
 
 #' @export
+#' @name st_is_full
 st_is_full.sfc = function(x, ...) {
 	if (sf_use_s2() && inherits(x, c("sfc_POLYGON", "sfc_GEOMETRY"))) {
 		is_longlat = if (!is.null(attr(x, "crs")))
 				st_is_longlat(x)
 			else
 				NA
-		sapply(x, st_is_full.sfg, ..., is_longlat = is_longlat)
+		#sapply(x, st_is_full.sfg, ..., is_longlat = is_longlat)
+		sfc_is_full(x)
 	} else
 		rep_len(FALSE, length(x))
 }
 
 #' @export
+#' @name st_is_full
 st_is_full.sf = function(x, ...) {
 	st_is_full(st_geometry(x), ...)
 }
 
 #' @export
+#' @name st_is_full
 st_is_full.bbox = function(x, ...) {
 	sf_use_s2() && st_is_longlat(x) && all(x == c(-180,-90,180,90))
 }
