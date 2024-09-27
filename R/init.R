@@ -26,6 +26,7 @@ setOldClass(c("sfc_GEOMETRY", "sfc"))
 setOldClass(c("sfc_GEOMETRYCOLLECTION", "sfc"))
 setOldClass("sfg")
 setOldClass("crs")
+setOldClass("bbox")
 
 .sf_cache <- new.env(FALSE, parent=globalenv())
 
