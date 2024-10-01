@@ -286,7 +286,12 @@ st_simplify.sfc = function(x, preserveTopology, dTolerance = 0.0) {
 	if (ll && sf_use_s2()) {
 		if (!missing(preserveTopology) && isFALSE(preserveTopology))
 			warning("argument preserveTopology cannot be set to FALSE when working with ellipsoidal coordinates since the algorithm behind st_simplify always preserves topological relationships")
-		st_as_sfc(s2::s2_simplify(x, dTolerance), crs = st_crs(x))
+	    if (length(dTolerance) == 1) {
+			st_as_sfc(s2::s2_simplify(x, dTolerance), crs = st_crs(x))
+		} else {
+			simplify <- function(x, dTolerance) st_as_sfc(s2::s2_simplify(x, dTolerance))
+			st_as_sfc(mapply(simplify, x, dTolerance), crs = st_crs(x))
+		}
 	} else {
 		if (missing(preserveTopology)) {
 			preserveTopology = FALSE

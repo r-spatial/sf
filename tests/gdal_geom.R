@@ -20,6 +20,8 @@ x = st_convex_hull(nc)
 
 x = st_simplify(nc_tr, dTolerance = 1e4)
 
+x = st_simplify(nc_tr, dTolerance = rep(1e4, nrow(nc_tr)))
+
 x = st_simplify(nc_tr, preserveTopology = TRUE)
 
 if (sf:::CPL_geos_version() >= "3.4.0")
