@@ -1,4 +1,4 @@
-#' @importFrom utils head tail object.size str packageVersion compareVersion globalVariables assignInMyNamespace
+#' @importFrom utils head object.size str tail packageVersion compareVersion globalVariables
 #' @importFrom stats aggregate dist na.omit rbinom runif setNames
 #' @importFrom tools file_ext file_path_sans_ext
 #' @importFrom methods as new slot slotNames slot<-

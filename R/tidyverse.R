@@ -177,8 +177,6 @@ select.sf <- function(.data, ...) {
 }
 
 #' @name tidyverse
-#' @param .before see original docs
-#' @param .after see original docs
 relocate.sf = function(.data, ..., .before = NULL, .after = NULL) {
 	st_as_sf(NextMethod())
 }

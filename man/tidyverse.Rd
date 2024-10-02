@@ -10,7 +10,6 @@
 \alias{mutate.sf}
 \alias{transmute.sf}
 \alias{select.sf}
-\alias{relocate.sf}
 \alias{rename.sf}
 \alias{rename_with.sf}
 \alias{slice.sf}
@@ -53,8 +52,6 @@ mutate.sf(.data, ..., .dots)
 transmute.sf(.data, ..., .dots)
 
 select.sf(.data, ...)
-
-relocate.sf(.data, ..., .before = NULL, .after = NULL)
 
 rename.sf(.data, ...)
 
@@ -180,10 +177,6 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 \item{x, y}{A pair of data frames, data frame extensions (e.g. a tibble), or
 lazy data frames (e.g. from dbplyr or dtplyr). See \emph{Methods}, below, for
 more details.}
-
-\item{.before}{see original docs}
-
-\item{.after}{see original docs}
 
 \item{.fn, .cols}{see original docs}
 
