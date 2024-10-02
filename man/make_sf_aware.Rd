@@ -6,11 +6,8 @@
 \usage{
 make_sf_aware(env = parent.frame(), value = TRUE)
 }
-\arguments{
-\item{env}{environment}
-
-\item{value}{logical; default \code{TRUE}}
-}
 \description{
 for packages: use the sticky geometry [ behaviour of sf in package code
+param env environment
+value logical; default \code{TRUE}
 }
