@@ -176,11 +176,6 @@ select.sf <- function(.data, ...) {
 	st_set_agr(st_as_sf(ret, sf_column_name = sf_column), new_agr)
 }
 
-#' @name tidyverse
-relocate.sf = function(.data, ..., .before = NULL, .after = NULL) {
-	st_as_sf(NextMethod())
-}
-
 
 #' @name tidyverse
 #' @examples
@@ -683,7 +678,6 @@ register_all_s3_methods = function() {
 	s3_register("dplyr::inner_join", "sf")
 	s3_register("dplyr::left_join", "sf")
 	s3_register("dplyr::mutate", "sf")
-	s3_register("dplyr::relocate", "sf")
 	s3_register("dplyr::rename", "sf")
 	s3_register("dplyr::rename_with", "sf")
 	s3_register("dplyr::right_join", "sf")
