@@ -338,45 +338,41 @@ st_sf = function(..., agr = NA_agr_, row.names,
 #' h[g,]
 #' @export
 "[.sf" = function(x, i, j, ..., drop = FALSE, op = st_intersects) {
+	nargs = nargs()
+	agr = st_agr(x)
+	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc") || inherits(i, "sfg")))
+		i = lengths(op(x, i, ...)) != 0
+	sf_column = attr(x, "sf_column")
+	geom = st_geometry(x)
+	if (!missing(i) && nargs > 2) { # e.g. a[3:4,] not a[3:4]
+		if (is.character(i))
+			i = match(i, row.names(x))
+		geom = geom[i]
+	}
 
-	if (is_sf_aware()) {
-		nargs = nargs()
-		agr = st_agr(x)
-		if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc") || inherits(i, "sfg")))
-			i = lengths(op(x, i, ...)) != 0
-		sf_column = attr(x, "sf_column")
-		geom = st_geometry(x)
-		if (!missing(i) && nargs > 2) { # e.g. a[3:4,] not a[3:4]
-			if (is.character(i))
-				i = match(i, row.names(x))
-			geom = geom[i]
-		}
-
-		# x = as.data.frame(x)
-		class(x) = setdiff(class(x), "sf") # one step down
-		x = if (missing(j)) {
-			if (nargs == 2) # `[`(x,i)
-				x[i] # do sth else for tbl?
-			else
-				x[i, , drop = drop]
-		} else
-			x[i, j, drop = drop]
-
-		if (!missing(j))
-			agr = agr[j]
-		else if (!missing(i) && nargs <= 2)
-			agr = agr[i] # e.g., obj["name"]
-
-		if (inherits(x, "sfc")) # drop was TRUE, and we selected geom column only
-			x
-		else if (! drop) {
-			x[[ sf_column ]] = geom
-			x = st_sf(x, sf_column_name = sf_column, sfc_last = FALSE)
-			st_set_agr(x, agr[match(setdiff(names(x), sf_column), names(agr))])
-		} else
-			structure(x, class = setdiff(class(x), "sf"))
+	# x = as.data.frame(x)
+	class(x) = setdiff(class(x), "sf") # one step down
+	x = if (missing(j)) {
+		if (nargs == 2) # `[`(x,i)
+			x[i] # do sth else for tbl?
+		else
+			x[i, , drop = drop]
 	} else
-		NextMethod()
+		x[i, j, drop = drop]
+
+	if (!missing(j))
+		agr = agr[j]
+	else if (!missing(i) && nargs <= 2)
+		agr = agr[i] # e.g., obj["name"]
+
+	if (inherits(x, "sfc")) # drop was TRUE, and we selected geom column only
+		x
+	else if (! drop) {
+		x[[ sf_column ]] = geom
+		x = st_sf(x, sf_column_name = sf_column, sfc_last = FALSE)
+		st_set_agr(x, agr[match(setdiff(names(x), sf_column), names(agr))])
+	} else
+		structure(x, class = setdiff(class(x), "sf"))
 }
 
 #' @export

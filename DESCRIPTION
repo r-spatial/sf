@@ -162,7 +162,6 @@ Collate:
     'gdal_utils.R'
     'nearest.R'
     'normalize.R'
-    'sf_aware.R'
     'sf-package.R'
     'defunct.R'
     'z_range.R'
