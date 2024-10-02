@@ -35,6 +35,9 @@
 # if GEOS_VERSION_MINOR >= 11
 #  define HAVE311
 # endif
+# if GEOS_VERSION_MINOR >= 12
+#  define HAVE312
+# endif
 #else
 # if GEOS_VERSION_MAJOR > 3
 #  define HAVE340

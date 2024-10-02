@@ -73,7 +73,8 @@ st_line_merge(mls)
 if (isTRUE(try(compareVersion(sf_extSoftVersion()["GEOS"], "3.5.0") > -1, silent = TRUE))) {
  # voronoi:
  set.seed(1)
- x = st_multipoint(matrix(runif(10),,2))
+ m = matrix(runif(10),,2)
+ x = st_multipoint(m)
  box = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))))
  v = st_sfc(st_voronoi(x, st_sfc(box)))
  plot(v, col = 0, border = 1, axes = TRUE)
@@ -81,6 +82,17 @@ if (isTRUE(try(compareVersion(sf_extSoftVersion()["GEOS"], "3.5.0") > -1, silent
  plot(x, add = TRUE, col = 'red', cex=2, pch=16)
  plot(st_intersection(st_cast(v), box)) # clip to smaller box
  plot(x, add = TRUE, col = 'red', cex=2, pch=16)
+ v0 = st_sfc(st_voronoi(st_sfc(x), st_sfc(box)))
+ pal <- c("black", "red", "green", "blue", "orange")
+ opar = par(mfrow=c(1,2))
+ plot(st_collection_extract(v0, "POLYGON"), col=pal)
+ text(m[,1], m[,2], label=1:5, col="white")
+ if (isTRUE(try(compareVersion(sf_extSoftVersion()["GEOS"], "3.12.0") > -1, silent = TRUE))) {
+  v2 = st_sfc(st_voronoi(st_sfc(x), st_sfc(box), point_order=TRUE))
+  plot(st_collection_extract(v2, "POLYGON"), col=pal)
+  text(m[,1], m[,2], label=1:5, col="white")
+ }
+ par(opar)
 
  v = st_voronoi(x)
  print(class(v))
