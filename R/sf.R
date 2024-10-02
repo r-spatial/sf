@@ -375,13 +375,8 @@ st_sf = function(..., agr = NA_agr_, row.names,
 			st_set_agr(x, agr[match(setdiff(names(x), sf_column), names(agr))])
 		} else
 			structure(x, class = setdiff(class(x), "sf"))
-	} else {
-		ret = NextMethod()
-		if (inherits(ret, "sf"))
-			structure(NextMethod(), class = setdiff(class(ret), "sf"))
-		else
-			ret
-	}
+	} else
+		structure(NextMethod(), class = setdiff(class(x), "sf"))
 }
 
 #' @export
