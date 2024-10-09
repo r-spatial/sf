@@ -9,6 +9,8 @@
 #' then the polygon geometries are prepared, rather than the points.
 #' @name geos_binary_pred
 #' @family geometric binary predicates for two spatial objects
+#' @param remove_self logical; if `TRUE` (and `y` is missing) return only indexes of geometries different from the current index; this can be used to omit self-intersections; see examples.
+#'   This argument can be used for all geometry predicates
 #' @examples
 #' pts = st_sfc(st_point(c(.5,.5)), st_point(c(1.5, 1.5)), st_point(c(2.5, 2.5)))
 #' pol = st_polygon(list(rbind(c(0,0), c(2,0), c(2,2), c(0,2), c(0,0))))

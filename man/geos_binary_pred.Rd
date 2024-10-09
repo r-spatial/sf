@@ -71,6 +71,9 @@ boolean operation.}
 \code{"open"}, \code{"semi-open"} or \code{"closed"}; see Details.}
 
 \item{dist}{distance threshold; geometry indexes with distances smaller or equal to this value are returned; numeric value or units value having distance units.}
+
+\item{remove_self}{logical; if \code{TRUE} (and \code{y} is missing) return only indexes of geometries different from the current index; this can be used to omit self-intersections; see examples.
+This argument can be used for all geometry predicates}
 }
 \description{
 For most predicates, a spatial index is built on argument \code{x};
