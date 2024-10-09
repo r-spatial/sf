@@ -22,22 +22,14 @@ knitr::opts_chunk$set(collapse = TRUE)
 
 This vignette describes what spherical geometry implies, and how
 package `sf` uses the s2geometry library (http://s2geometry.io)
-for geometrical measures, predicates and transformations.  The code
-in this vignette only runs if `s2` has been installed, e.g. with
-
-```{r, eval=FALSE}
-install.packages("s2")
-```
-
-and is available. After `sf` has been loaded, you can check if `s2`
-is being used:
+for geometrical measures, predicates and transformations.  
+After `sf` has been loaded, it will report whether `s2` is being
+used; it can be switched off (resorting to flat space geometry)
+by `sf_use_s2(FALSE)`.
 
 ```{r}
 library(sf)
-sf_use_s2()
 ```
-
-Attach the `s2` package as follows:
 
 ```{r}
 library(s2)
@@ -148,33 +140,38 @@ s2_area(st_as_s2(nc, oriented = TRUE)[1:3]) # wrong direction: Earth's surface m
 nc = read_sf(system.file("gpkg/nc.gpkg", package="sf"), check_ring_dir = TRUE)
 s2_area(st_as_s2(nc, oriented = TRUE)[1:3]) # no second correction needed here:
 ```
+The default conversion from `sf` to `s2` uses `oriented = FALSE`, so that we
+get
+```{r}
+all(units::drop_units(st_area(nc)) == s2_area(st_as_s2(nc, oriented = FALSE)))
+```
+
 
 Here is an example where the oceans are computed as the difference
 from the full polygon representing the entire globe,
 ```{r}
-g = as_s2_geography(TRUE)
+g = st_as_sfc("POLYGON FULL", crs = 'EPSG:4326')
 g
 ```
 
 and the countries, and shown in an orthographic projection:
 ```{r}
-co = s2_data_countries()
-oc = s2_difference(g, s2_union_agg(co)) # oceans
-b = s2_buffer_cells(as_s2_geography("POINT(-30 52)"), 9800000) # visible half
-i = s2_intersection(b, oc) # visible ocean
-plot(st_transform(st_as_sfc(i), "+proj=ortho +lat_0=52 +lon_0=-30"), col = 'blue')
+options(s2_oriented = TRUE) # don't change orientation from here on
+co = st_as_sf(s2_data_countries())
+oc = st_difference(g, st_union(co)) # oceans
+b = st_buffer(st_as_sfc("POINT(-30 52)", crs = 'EPSG:4326'), 9800000) # visible half
+i = st_intersection(b, oc) # visible ocean
+plot(st_transform(i, "+proj=ortho +lat_0=52 +lon_0=-30"), col = 'blue')
 ```
 
-(Note that the WKT printing of the full polygon `g` is not valid WKT,
-and can not be used as input as it doesn't follow the simple feature
-standard; it seems to reflect the internal representation of the
-full polygon, and would require a WKT extension).
+(Note that the printing of `POLYGON FULL` is not valid WKT according
+to the simple feature standard, which does not include this.)
 
 We can now calculate the proportion of the Earth's surface covered
 by oceans:
 
 ```{r}
-s2_area(oc) / s2_area(g)
+st_area(oc) / st_area(g)
 ```
 
 
@@ -202,12 +199,12 @@ where every grid cell (typically) only contains its upper-left
 corner and its upper and left sides.
 
 ```{r}
-a = as_s2_geography("POINT(0 0)")
-b = as_s2_geography("POLYGON((0 0,1 0,1 1,0 1,0 0))")
-s2_intersects(a, b, s2_options(model = "open")) 
-s2_intersects(a, b, s2_options(model = "closed"))
-s2_intersects(a, b, s2_options(model = "semi-open")) # a toss
-s2_intersects(a, b) # default: semi-open
+a = st_as_sfc("POINT(0 0)", crs = 'EPSG:4326')
+b = st_as_sfc("POLYGON((0 0,1 0,1 1,0 1,0 0))", crs = 'EPSG:4326')
+st_intersects(a, b, model = "open")
+st_intersects(a, b, model = "closed")
+st_intersects(a, b, model = "semi-open") # a toss
+st_intersects(a, b) # default: closed
 ```
 
 ## Bounding cap, bounding rectangle
@@ -257,6 +254,7 @@ sf_use_s2(TRUE)
 
 ## Area
 ```{r eval=require("lwgeom", quietly = TRUE)}
+options(s2_oriented = FALSE) # correct orientation from here on
 library(sf)
 library(units)
 nc = read_sf(system.file("gpkg/nc.gpkg", package="sf"))
@@ -323,14 +321,14 @@ using an unprojected object representing the UK as an example:
 uk = s2_data_countries("United Kingdom")
 class(uk)
 uk_sfc = st_as_sfc(uk) 
-uk_buffer = s2_buffer_cells(uk, distance = 20000)
-uk_buffer2 = s2_buffer_cells(uk, distance = 20000, max_cells = 10000)
-uk_buffer3 = s2_buffer_cells(uk, distance = 20000, max_cells = 100)
+uk_buffer = st_buffer(uk_sfc, dist = 20000)
+uk_buffer2 = st_buffer(uk_sfc, dist = 20000, max_cells = 10000)
+uk_buffer3 = st_buffer(uk_sfc, dist = 20000, max_cells = 100)
 class(uk_buffer)
 plot(uk_sfc)
-plot(st_as_sfc(uk_buffer))
-plot(st_as_sfc(uk_buffer2))
-plot(st_as_sfc(uk_buffer3))
+plot(uk_buffer)
+plot(uk_buffer2)
+plot(uk_buffer3)
 uk_sf = st_as_sf(uk) 
 ```
 

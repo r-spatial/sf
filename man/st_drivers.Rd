@@ -23,7 +23,7 @@ Get a list of the available GDAL drivers
 The drivers available will depend on the installation of GDAL/OGR,
 and can vary; the \code{st_drivers()} function shows all the drivers that are
 readable, and which may be written. The field \code{vsi} refers to the driver's
-capability to read/create datasets through the VSI*L API. \href{https://gdal.org/drivers/vector/index.html}{See GDAL website for additional details on driver support}.
+capability to read/create datasets through the VSI*L API. \href{https://gdal.org/en/latest/drivers/vector/index.html}{See GDAL website for additional details on driver support}
 }
 \examples{
 # The following driver lists depend on the GDAL setup and platform used:

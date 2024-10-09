@@ -4,7 +4,13 @@
 #' @examples
 #' ls = st_linestring(rbind(c(0,0), c(1,1), c(1,0), c(0,1)))
 #' st_is_simple(st_sfc(ls, st_point(c(0,0))))
-st_is_simple = function(x) CPL_geos_is_simple(st_geometry(x))
+st_is_simple = function(x) {
+	x = st_geometry(x)
+	not_full = !sfc_is_full(x)
+	ret = rep(TRUE, length(x))
+	ret[not_full] = CPL_geos_is_simple(x[not_full])
+	ret
+}
 
 #' @name geos_query
 #' @export
@@ -12,7 +18,10 @@ st_is_simple = function(x) CPL_geos_is_simple(st_geometry(x))
 #' @examples
 #' ls = st_linestring(rbind(c(0,0), c(1,1), c(1,0), c(0,1)))
 #' st_is_empty(st_sfc(ls, st_point(), st_linestring()))
-st_is_empty = function(x) CPL_geos_is_empty(st_geometry(x))
+st_is_empty = function(x) sfc_is_empty(st_geometry(x)) 
+  # used to call
+  # CPL_geos_is_empty(st_geometry(x))
+  # but this avoids a R -> WKB -> GEOS conversion
 
 is_symmetric = function(operation, pattern) {
 	if (!is.na(pattern)) {
@@ -155,9 +164,9 @@ st_intersects.sfg = function(x, y, sparse = TRUE, prepared = TRUE, ...)
 
 #' @name geos_binary_pred
 #' @export
-st_disjoint		= function(x, y = x, sparse = TRUE, prepared = TRUE) {
+st_disjoint		= function(x, y = x, sparse = TRUE, prepared = TRUE, ...) {
 	# st_geos_binop("disjoint", x, y, sparse = sparse, prepared = prepared) -> didn't use STRtree
-	int = st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared)
+	int = st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared, ...)
 	# disjoint = !intersects :
 	if (sparse)
 		sgbp(lapply(int, function(g) setdiff(seq_along(st_geometry(y)), g)),
@@ -278,7 +287,7 @@ st_equals_exact = function(x, y, par, sparse = TRUE, prepared = FALSE, ...) {
 #' @name geos_binary_pred
 #' @export
 #' @param dist distance threshold; geometry indexes with distances smaller or equal to this value are returned; numeric value or units value having distance units.
-st_is_within_distance = function(x, y = x, dist, sparse = TRUE, ...) {
+st_is_within_distance = function(x, y = x, dist, sparse = TRUE, ..., remove_self = FALSE) {
 
 	ret = if (isTRUE(st_is_longlat(x))) {
 			units(dist) = as_units("m") # might convert
@@ -293,11 +302,11 @@ st_is_within_distance = function(x, y = x, dist, sparse = TRUE, ...) {
 					lwgeom::st_geod_distance(x, y, tolerance = dist, sparse = TRUE)
 				}
 			sgbp(r, predicate = "is_within_distance", region.id = seq_along(x), 
-				ncol = length(st_geometry(y)))
+				remove_self = remove_self, ncol = length(st_geometry(y)))
 		} else {
 			if (!is.null(st_crs(x)$ud_unit))
 				units(dist) = st_crs(x)$ud_unit # might convert
-			st_geos_binop("is_within_distance", x, y, par = dist, sparse = sparse, ...)
+			st_geos_binop("is_within_distance", x, y, par = dist, sparse = sparse, remove_self = remove_self, ...)
 		}
 	if (!sparse)
 		as.matrix(ret)

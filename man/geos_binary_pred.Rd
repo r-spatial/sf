@@ -12,7 +12,7 @@
 \alias{st_is_within_distance}
 \title{Geometric binary predicates on pairs of simple feature geometry sets}
 \usage{
-st_disjoint(x, y = x, sparse = TRUE, prepared = TRUE)
+st_disjoint(x, y = x, sparse = TRUE, prepared = TRUE, ...)
 
 st_touches(x, y, sparse = TRUE, prepared = TRUE, ...)
 
@@ -26,7 +26,7 @@ st_covers(x, y, sparse = TRUE, prepared = TRUE, ..., model = "closed")
 
 st_covered_by(x, y = x, sparse = TRUE, prepared = TRUE, ..., model = "closed")
 
-st_is_within_distance(x, y = x, dist, sparse = TRUE, ...)
+st_is_within_distance(x, y = x, dist, sparse = TRUE, ..., remove_self = FALSE)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}

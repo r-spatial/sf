@@ -131,6 +131,26 @@ LogicalVector sfc_is_empty(List sfc) {
 }
 
 // [[Rcpp::export]]
+LogicalVector sfc_is_full(List sfc) {
+	LogicalVector out(sfc.size());
+	
+	SEXP item;
+	
+	for (R_xlen_t i = 0; i < sfc.size(); i++) {
+		item = sfc[i];
+		int item_len = Rf_length(item);
+		bool is_full = false;
+		if (item_len == 1 && Rf_inherits(item, "POLYGON")) {
+			SEXP m = VECTOR_ELT(item, 0);
+			if (Rf_isMatrix(m) && Rf_nrows(m) == 2) /* we can go on and check the values, but... */
+				is_full = true;
+		}
+		out[i] = is_full;
+	}
+	return out;
+}
+
+// [[Rcpp::export]]
 List points_cpp(NumericMatrix pts, CharacterVector gdim = "XY") {
 	int n = pts.nrow();
 	List out(n);

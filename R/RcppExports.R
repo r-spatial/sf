@@ -361,6 +361,10 @@ sfc_is_empty <- function(sfc) {
     .Call(`_sf_sfc_is_empty`, sfc)
 }
 
+sfc_is_full <- function(sfc) {
+    .Call(`_sf_sfc_is_full`, sfc)
+}
+
 points_cpp <- function(pts, gdim = "XY") {
     .Call(`_sf_points_cpp`, pts, gdim)
 }

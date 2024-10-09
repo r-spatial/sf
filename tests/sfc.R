@@ -100,7 +100,9 @@ x = st_sfc(st_point(c(-90,35)), st_point(c(-80,36)),
 	crs = "+proj=longlat +datum=NAD27")
 y = st_transform(x, 3857)
 
+## IGNORE_RDIFF_BEGIN
 sf_extSoftVersion()[1:3]
+## IGNORE_RDIFF_END
 
 # Ops.sfc:
 ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))))

@@ -1,7 +1,7 @@
 
-R version 4.4.1 (2024-06-14) -- "Race for Your Life"
+R version 4.3.3 (2024-02-29) -- "Angel Food Cake"
 Copyright (C) 2024 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -16,6 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > suppressPackageStartupMessages(library(sf))
+> ## IGNORE_RDIFF_BEGIN
 > if (require(spatstat.random, quietly = TRUE)) {
 + 
 + data(chicago)
@@ -125,9 +126,8 @@ Type 'q()' to quit R.
 + (y = st_as_sfc(as.psp(sf)))
 + all.equal(st_geometry(x), y)
 + }
-spatstat.univar 3.0-0
-spatstat.geom 3.3-2
-spatstat.random 3.3-1
+spatstat.geom 3.2-9
+spatstat.random 3.2-3
 Simple feature collection with 51 features and 1 field
 Geometry type: GEOMETRY
 Dimension:     XY
@@ -163,7 +163,8 @@ Error : Only projected coordinates may be converted to spatstat class objects
 Warning message:
 In st_as_sfc.owin(spatstat.geom::as.owin(x)) :
   The spatstat object has an measurement unit multiplier != 1. Consider rescaling before converting.
+> ## IGNORE_RDIFF_END
 > 
 > proc.time()
    user  system elapsed 
-  1.815   1.456   1.762 
+  2.074   1.308   1.918 

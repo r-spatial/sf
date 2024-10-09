@@ -58,7 +58,7 @@ Database Connection}
 
 \item{driver}{character; name of driver to be used; if missing and \code{dsn} is not a Database Connection, a driver name is guessed from \code{dsn};
 \code{st_drivers()} returns the drivers that are available with their properties; links to full driver documentation
-are found at \url{https://gdal.org/drivers/vector/index.html}}
+are found at \url{https://gdal.org/en/latest/drivers/vector/index.html}}
 
 \item{dataset_options}{character; driver dependent dataset creation options;
 multiple options supported.}
@@ -136,5 +136,5 @@ if (require(sp, quietly = TRUE)) {
 }
 }
 \seealso{
-\link{st_drivers}, \link{dbWriteTable}
+\link{st_drivers}, \link[DBI]{dbWriteTable}
 }

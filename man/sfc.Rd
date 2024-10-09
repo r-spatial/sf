@@ -19,7 +19,8 @@ st_sfc(
   precision = 0,
   check_ring_dir = FALSE,
   dim,
-  recompute_bbox = FALSE
+  recompute_bbox = FALSE,
+  oriented = NA
 )
 
 \method{[}{sfc}(x, i, j, ..., op = st_intersects)
@@ -36,6 +37,9 @@ st_sfc(
 \item{dim}{character; if this function is called without valid geometries, this argument may carry the right dimension to set empty geometries}
 
 \item{recompute_bbox}{logical; use \code{TRUE} to force recomputation of the bounding box}
+
+\item{oriented}{logical; if \code{TRUE}, the ring is oriented such that left of the edges is inside the polygon; this is
+needed for convering polygons larger than half the globe to s2}
 
 \item{x}{object of class \code{sfc}}
 
