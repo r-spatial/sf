@@ -6,6 +6,8 @@
 
 * fix build failure with GDAL < 3.4.0 #2436
 
+* `st_simplify()` now accepts feature-wise tolerance values when `s2` is switched on #2442
+
 # version 1.0-17
 
 * add `st_transform()` method for `bbox` objects; this uses OGRCoordinateTransformation::TransformBounds(), densifying first and antemeridian proof; #2415
