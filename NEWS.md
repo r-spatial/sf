@@ -1,6 +1,8 @@
 # version 1.0-18
 
-* support  `POLYGON FULL` simple feature geometry, representing the the entire Earth surface; #2441
+* support  `POLYGON FULL` simple feature geometry, representing the the entire Earth surface, as used by `s2geometry`; #2441
+
+* `st_sfc()` has an argument `oriented` which, when set to `TRUE`, adds an attribute `oriented=TRUE` to an `sfc` object, indicating that this object should not be reoriented in conversion to `s2_geography` (avoiding using the global option `s2_oriented`); `st_as_sfc.bbox()` sets this to `TRUE`; #2441
 
 * fix build failure with GDAL < 3.4.0 #2436
 
