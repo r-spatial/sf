@@ -72,6 +72,7 @@
 <url><loc>https://r-spatial.github.io/sf/reference/st_geometry_type.html</loc></url>
 <url><loc>https://r-spatial.github.io/sf/reference/st_graticule.html</loc></url>
 <url><loc>https://r-spatial.github.io/sf/reference/st_is.html</loc></url>
+<url><loc>https://r-spatial.github.io/sf/reference/st_is_full.html</loc></url>
 <url><loc>https://r-spatial.github.io/sf/reference/st_is_longlat.html</loc></url>
 <url><loc>https://r-spatial.github.io/sf/reference/st_jitter.html</loc></url>
 <url><loc>https://r-spatial.github.io/sf/reference/st_join.html</loc></url>
