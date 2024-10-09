@@ -43,7 +43,9 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0-18" id="version-10-18">version 1.0-18<a class="anchor" aria-label="anchor" href="#version-10-18"></a></h2>
-<ul><li><p>fix build failure with GDAL &lt; 3.4.0 <a href="https://github.com/r-spatial/sf/issues/2436" class="external-link">#2436</a></p></li>
+<ul><li><p>support <code>POLYGON FULL</code> simple feature geometry, representing the the entire Earth surface, as used by <code>s2geometry</code>; <a href="https://github.com/r-spatial/sf/issues/2441" class="external-link">#2441</a></p></li>
+<li><p><code><a href="../reference/sfc.html">st_sfc()</a></code> has an argument <code>oriented</code> which, when set to <code>TRUE</code>, adds an attribute <code>oriented=TRUE</code> to an <code>sfc</code> object, indicating that this object should not be reoriented in conversion to <code>s2_geography</code> (avoiding using the global option <code>s2_oriented</code>); <code><a href="../reference/st_as_sfc.html">st_as_sfc.bbox()</a></code> sets this to <code>TRUE</code>; <a href="https://github.com/r-spatial/sf/issues/2441" class="external-link">#2441</a></p></li>
+<li><p>fix build failure with GDAL &lt; 3.4.0 <a href="https://github.com/r-spatial/sf/issues/2436" class="external-link">#2436</a></p></li>
 <li><p><code><a href="../reference/geos_unary.html">st_simplify()</a></code> now accepts feature-wise tolerance values when <code>s2</code> is switched on <a href="https://github.com/r-spatial/sf/issues/2442" class="external-link">#2442</a></p></li>
 </ul></div>
     <div class="section level2">

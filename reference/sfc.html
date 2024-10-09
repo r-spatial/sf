@@ -57,7 +57,8 @@ For data.frame alternatives see <code><a href="sf.html">st_sf()</a></code>. To c
 <span>  precision <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  check_ring_dir <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">dim</span>,</span>
-<span>  recompute_bbox <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  recompute_bbox <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  oriented <span class="op">=</span> <span class="cn">NA</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'sfc'</span></span>
@@ -90,6 +91,11 @@ For data.frame alternatives see <code><a href="sf.html">st_sf()</a></code>. To c
 
 <dt id="arg-recompute-bbox">recompute_bbox<a class="anchor" aria-label="anchor" href="#arg-recompute-bbox"></a></dt>
 <dd><p>logical; use <code>TRUE</code> to force recomputation of the bounding box</p></dd>
+
+
+<dt id="arg-oriented">oriented<a class="anchor" aria-label="anchor" href="#arg-oriented"></a></dt>
+<dd><p>logical; if <code>TRUE</code>, the ring is oriented such that left of the edges is inside the polygon; this is
+needed for convering polygons larger than half the globe to s2</p></dd>
 
 
 <dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
