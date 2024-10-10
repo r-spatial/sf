@@ -4,7 +4,13 @@
 #' @examples
 #' ls = st_linestring(rbind(c(0,0), c(1,1), c(1,0), c(0,1)))
 #' st_is_simple(st_sfc(ls, st_point(c(0,0))))
-st_is_simple = function(x) CPL_geos_is_simple(st_geometry(x))
+st_is_simple = function(x) {
+	x = st_geometry(x)
+	not_full = !sfc_is_full(x)
+	ret = rep(TRUE, length(x))
+	ret[not_full] = CPL_geos_is_simple(x[not_full])
+	ret
+}
 
 #' @name geos_query
 #' @export
@@ -12,7 +18,10 @@ st_is_simple = function(x) CPL_geos_is_simple(st_geometry(x))
 #' @examples
 #' ls = st_linestring(rbind(c(0,0), c(1,1), c(1,0), c(0,1)))
 #' st_is_empty(st_sfc(ls, st_point(), st_linestring()))
-st_is_empty = function(x) CPL_geos_is_empty(st_geometry(x))
+st_is_empty = function(x) sfc_is_empty(st_geometry(x)) 
+  # used to call
+  # CPL_geos_is_empty(st_geometry(x))
+  # but this avoids a R -> WKB -> GEOS conversion
 
 is_symmetric = function(operation, pattern) {
 	if (!is.na(pattern)) {
@@ -81,7 +90,7 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param pattern character; define the pattern to match to, see details.
 #' @param sparse logical; should a sparse matrix be returned (`TRUE`) or a dense matrix?
-#' @return In case \code{pattern} is not given, \code{st_relate} returns a dense \code{character} matrix; element `[i,j]` has nine characters, referring to the DE9-IM relationship between `x[i]` and `y[j]`, encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of `x[i]` and the interior of `y[j]`, which is one of: 0, 1, 2, or F; digits denoting dimensionality of intersection, F denoting no intersection. When \code{pattern} is given, a dense logical matrix or sparse index list returned with matches to the given pattern; see \link{st_intersection} for a description of the returned matrix or list. See also \url{https://en.wikipedia.org/wiki/DE-9IM} for further explanation.
+#' @return In case \code{pattern} is not given, \code{st_relate} returns a dense \code{character} matrix; element `[i,j]` has nine characters, referring to the DE9-IM relationship between `x[i]` and `y[j]`, encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of `x[i]` and the interior of `y[j]`, which is one of: 0, 1, 2, or F; digits denoting dimensionality of intersection, F denoting no intersection. When \code{pattern} is given, a dense logical matrix or sparse index list returned with matches to the given pattern; see \link{st_intersects} for a description of the returned matrix or list. See also \url{https://en.wikipedia.org/wiki/DE-9IM} for further explanation.
 #' @export
 #' @examples
 #' p1 = st_point(c(0,0))
@@ -117,7 +126,7 @@ st_relate	= function(x, y, pattern = NA_character_, sparse = !is.na(pattern)) {
 #' @inheritDotParams s2::s2_options
 #' @param prepared logical; prepare geometry for `x`, before looping over `y`? See Details.
 #' @details If \code{prepared} is \code{TRUE}, and \code{x} contains POINT geometries and \code{y} contains polygons, then the polygon geometries are prepared, rather than the points.
-#' @return If \code{sparse=FALSE}, \code{st_predicate} (with \code{predicate} e.g. "intersects") returns a dense logical matrix with element \code{i,j} \code{TRUE} when \code{predicate(x[i], y[j])} (e.g., when geometry of feature i and j intersect); if \code{sparse=TRUE}, an object of class \code{\link{sgbp}} with a sparse list representation of the same matrix, with list element \code{i} an integer vector with all indices j for which \code{predicate(x[i],y[j])} is \code{TRUE} (and hence a zero-length integer vector if none of them is \code{TRUE}). From the dense matrix, one can find out if one or more elements intersect by \code{apply(mat, 1, any)}, and from the sparse list by \code{lengths(lst) > 0}, see examples below.
+#' @return If \code{sparse=FALSE}, \code{st_predicate} (with \code{predicate} e.g. "intersects") returns a dense logical matrix with element \code{i,j} equal to \code{TRUE} when \code{predicate(x[i], y[j])} (e.g., when geometry of feature i and j intersect); if \code{sparse=TRUE}, an object of class \code{\link{sgbp}} is returned, which is a sparse list representation of the same matrix, with list element \code{i} an integer vector with all indices \code{j} for which \code{predicate(x[i],y[j])} is \code{TRUE} (and hence a zero-length integer vector if none of them is \code{TRUE}). From the dense matrix, one can find out if one or more elements intersect by \code{apply(mat, 1, any)}, and from the sparse list by \code{lengths(lst) > 0}, see examples below.
 #' @details For most predicates, a spatial index is built on argument \code{x}; see \url{https://r-spatial.org/r/2017/06/22/spatial-index.html}.
 #' Specifically, \code{st_intersects}, \code{st_disjoint}, \code{st_touches} \code{st_crosses}, \code{st_within}, \code{st_contains}, \code{st_contains_properly}, \code{st_overlaps}, \code{st_equals}, \code{st_covers} and \code{st_covered_by} all build spatial indexes for more efficient geometry calculations. \code{st_relate}, \code{st_equals_exact}, and do not; \code{st_is_within_distance} uses a spatial index for geographic coordinates when \code{sf_use_s2()} is true.
 #'
@@ -165,9 +174,9 @@ st_intersects.sfg = function(x, y, sparse = TRUE, prepared = TRUE, ...)
 
 #' @name geos_binary_pred
 #' @export
-st_disjoint		= function(x, y = x, sparse = TRUE, prepared = TRUE) {
+st_disjoint		= function(x, y = x, sparse = TRUE, prepared = TRUE, ...) {
 	# st_geos_binop("disjoint", x, y, sparse = sparse, prepared = prepared) -> didn't use STRtree
-	int = st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared)
+	int = st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared, ...)
 	# disjoint = !intersects :
 	if (sparse)
 		sgbp(lapply(int, function(g) setdiff(seq_along(st_geometry(y)), g)),
@@ -254,7 +263,7 @@ st_equals_exact = function(x, y, par, sparse = TRUE, prepared = FALSE, ...) {
 #' @name geos_binary_pred
 #' @export
 #' @param dist distance threshold; geometry indexes with distances smaller or equal to this value are returned; numeric value or units value having distance units.
-st_is_within_distance = function(x, y = x, dist, sparse = TRUE, ...) {
+st_is_within_distance = function(x, y = x, dist, sparse = TRUE, ..., remove_self = FALSE) {
 
 	ret = if (isTRUE(st_is_longlat(x))) {
 			units(dist) = as_units("m") # might convert
@@ -269,11 +278,11 @@ st_is_within_distance = function(x, y = x, dist, sparse = TRUE, ...) {
 					lwgeom::st_geod_distance(x, y, tolerance = dist, sparse = TRUE)
 				}
 			sgbp(r, predicate = "is_within_distance", region.id = seq_along(x), 
-				ncol = length(st_geometry(y)))
+				remove_self = remove_self, ncol = length(st_geometry(y)))
 		} else {
 			if (!is.null(st_crs(x)$ud_unit))
 				units(dist) = st_crs(x)$ud_unit # might convert
-			st_geos_binop("is_within_distance", x, y, par = dist, sparse = sparse, ...)
+			st_geos_binop("is_within_distance", x, y, par = dist, sparse = sparse, remove_self = remove_self, ...)
 		}
 	if (!sparse)
 		as.matrix(ret)

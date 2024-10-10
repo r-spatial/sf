@@ -6,9 +6,13 @@
 #' Geometric unary operations on simple feature geometries. These are all generics, with methods for \code{sfg}, \code{sfc} and \code{sf} objects, returning an object of the same class. All operations work on a per-feature basis, ignoring all other features.
 #' @name geos_unary
 #' @param x object of class \code{sfg}, \code{sfc} or \code{sf}
-#' @param dist numeric; buffer distance for all, or for each of the elements in \code{x}; in case
-#' \code{dist} is a \code{units} object, it should be convertible to \code{arc_degree} if
-#' \code{x} has geographic coordinates, and to \code{st_crs(x)$units} otherwise
+#' @param dist numeric or object of class `units`; buffer distance for all, or for each of the elements in \code{x}. 
+#' In case \code{x} has geodetic coordinates (lon/lat) and `sf_use_s2()` is `TRUE`, a numeric 
+#' `dist` is taken as distance in meters and a `units` object in `dist` is converted to meters.
+#' In case \code{x} has geodetic coordinates (lon/lat) and `sf_use_s2()` is `FALSE`, a numeric 
+#' `dist` is taken as degrees, and a `units` object in `dist` is converted to `arc_degree` (and warnings are issued).
+#' In case \code{x} does not have geodetic coordinates (projected) then
+#' numeric `dist` is assumed to have the units of the coordinates, and a `units` `dist` is converted to those if `st_crs(x)` is not `NA`.
 #' @param nQuadSegs integer; number of segments per quadrant (fourth of a circle), for all or per-feature; see details
 #' @param endCapStyle character; style of line ends, one of 'ROUND', 'FLAT', 'SQUARE'; see details
 #' @param joinStyle character; style of line joins, one of 'ROUND', 'MITRE', 'BEVEL'; see details
@@ -282,7 +286,12 @@ st_simplify.sfc = function(x, preserveTopology, dTolerance = 0.0) {
 	if (ll && sf_use_s2()) {
 		if (!missing(preserveTopology) && isFALSE(preserveTopology))
 			warning("argument preserveTopology cannot be set to FALSE when working with ellipsoidal coordinates since the algorithm behind st_simplify always preserves topological relationships")
-		st_as_sfc(s2::s2_simplify(x, dTolerance), crs = st_crs(x))
+		if (length(dTolerance) == 1) {
+			st_as_sfc(s2::s2_simplify(x, dTolerance), crs = st_crs(x))
+		} else {
+			simplify <- function(x, dTolerance) st_as_sfc(s2::s2_simplify(x, dTolerance))
+			st_as_sfc(mapply(simplify, x, dTolerance), crs = st_crs(x))
+		}
 	} else {
 		if (missing(preserveTopology)) {
 			preserveTopology = FALSE
@@ -1150,4 +1159,30 @@ st_line_interpolate = function(line, dist, normalized = FALSE) {
 	recycled = recycle_common(list(line, dist))
 	st_sfc(CPL_line_interpolate(recycled[[1]], recycled[[2]], normalized), 
 		   crs = st_crs(line))
+}
+
+#' @export
+#' @name geos_unary
+st_exterior_ring = function(x, ...) UseMethod("st_exterior_ring")
+
+#' @export
+st_exterior_ring.sf = function(x, ...)
+	st_set_geometry(x, st_exterior_ring(st_geometry(x)))
+
+#' @export
+st_exterior_ring.sfg = function(x, ...)
+	st_exterior_ring(st_sfc(x))[[1]]
+
+#' @export
+st_exterior_ring.sfc = function(x, ...) {
+	stopifnot(all(st_dimension(x, NA_if_empty = FALSE) == 2))
+	exterior_sfg = function(x) {
+		if (inherits(x, "MULTIPOLYGON"))
+			st_multipolygon(lapply(st_cast(st_sfc(x), "POLYGON"), exterior_sfg))
+		else if (inherits(x, "POLYGON"))
+			st_polygon(x[1])
+		else
+			stop(paste("no exterior_ring method for objects of class", class(x)[1]))
+	}
+	st_as_sfc(lapply(x, exterior_sfg), crs = st_crs(x))
 }

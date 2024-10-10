@@ -463,7 +463,7 @@ Rcpp::CharacterVector CPL_get_data_dir(bool from_proj = false) {
 #endif
 }
 
-Rcpp::LogicalVector CPL_set_data_dir(std::string data_dir) { // #nocov start
+Rcpp::LogicalVector CPL_set_data_dir(Rcpp::CharacterVector data_dir, bool with_proj) { // #nocov start
 	return false;
 }
 

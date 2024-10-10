@@ -1,6 +1,6 @@
 
-R version 4.3.2 (2023-10-31) -- "Eye Holes"
-Copyright (C) 2023 The R Foundation for Statistical Computing
+R version 4.3.3 (2024-02-29) -- "Angel Food Cake"
+Copyright (C) 2024 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -56,47 +56,10 @@ Type 'q()' to quit R.
 > # see https://github.com/edzer/sfr/issues/45 :
 > if ("OSM" %in% st_drivers()$name && Sys.info()['sysname'] != "Darwin") {
 + 	osm = system.file("osm/overpass.osm", package="sf")
-+ 	print(st_layers(osm))
-+ 	suppressWarnings(print(st_layers(osm, do_count = TRUE)))
-+ 	suppressWarnings(print(st_read(osm, "multipolygons", quiet = TRUE)))
++ 	osm_l = st_layers(osm)
++ 	osm_lc = suppressWarnings(st_layers(osm, do_count = TRUE))
++ 	osm_r = suppressWarnings(st_read(osm, "multipolygons", quiet = TRUE))
 + }
-Driver: OSM 
-Available layers:
-        layer_name       geometry_type features fields crs_name
-1           points               Point       NA     10   WGS 84
-2            lines         Line String       NA     10   WGS 84
-3 multilinestrings   Multi Line String       NA      4   WGS 84
-4    multipolygons       Multi Polygon       NA     25   WGS 84
-5  other_relations Geometry Collection       NA      4   WGS 84
-Driver: OSM 
-Available layers:
-        layer_name       geometry_type features fields crs_name
-1           points               Point        0     10   WGS 84
-2            lines         Line String        0     10   WGS 84
-3 multilinestrings   Multi Line String        0      4   WGS 84
-4    multipolygons       Multi Polygon        3     25   WGS 84
-5  other_relations Geometry Collection        0      4   WGS 84
-Simple feature collection with 3 features and 25 fields
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: -1.556254 ymin: 53.79519 xmax: -1.550716 ymax: 53.80341
-Geodetic CRS:  WGS 84
-  osm_id osm_way_id name type aeroway amenity admin_level barrier boundary
-1   <NA>  263958111 <NA> <NA>    <NA>    <NA>        <NA>    <NA>     <NA>
-2   <NA>  301461256 <NA> <NA>    <NA>    <NA>        <NA>    <NA>     <NA>
-3   <NA>  462227487 <NA> <NA>    <NA>    <NA>        <NA>    <NA>     <NA>
-  building craft geological historic land_area landuse leisure man_made
-1     <NA>  <NA>       <NA>     <NA>      <NA>    <NA>    park     <NA>
-2     <NA>  <NA>       <NA>     <NA>      <NA>    <NA>    park     <NA>
-3     <NA>  <NA>       <NA>     <NA>      <NA>    <NA>    park     <NA>
-  military natural office place shop sport tourism other_tags
-1     <NA>    <NA>   <NA>  <NA> <NA>  <NA>    <NA>       <NA>
-2     <NA>    <NA>   <NA>  <NA> <NA>  <NA>    <NA>       <NA>
-3     <NA>    <NA>   <NA>  <NA> <NA>  <NA>    <NA>       <NA>
-                        geometry
-1 MULTIPOLYGON (((-1.550719 5...
-2 MULTIPOLYGON (((-1.555763 5...
-3 MULTIPOLYGON (((-1.551502 5...
 > 
 > # layer opening option:
 > st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE,
@@ -227,13 +190,13 @@ Projected CRS: Undefined Cartesian SRS with unknown unit
 + 	  dbcon <- dbConnect(dbDriver("SQLite"), db)
 + 	  m = dbReadTable(dbcon, "HighWays")
 + 	  m$Geometry = st_as_sfc(m$Geometry, spatialite = TRUE) # spatialite wkb
-+ 	  print(st_sf(m), n = 3)
++ 	  print(st_sf(m), n = 1)
 + 	  m = dbReadTable(dbcon, "Towns")
 + 	  m$Geometry = st_as_sfc(m$Geometry, spatialite = TRUE) # spatialite wkb
-+ 	  print(st_sf(m), n = 3)
++ 	  print(st_sf(m), n = 1)
 + 	  m = dbReadTable(dbcon, "Regions")
 + 	  m$Geometry = st_as_sfc(m$Geometry, spatialite = TRUE) # spatialite wkb
-+ 	  print(st_sf(m), n = 3)
++ 	  print(st_sf(m), n = 1)
 + 	}
 + }
 Loading required package: RSQLite
@@ -286,35 +249,25 @@ Geometry type: LINESTRING
 Dimension:     XY
 Bounding box:  xmin: 645003 ymin: 4822568 xmax: 748805.6 ymax: 4992001
 Projected CRS: WGS 84 / UTM zone 32N
-First 3 features:
+First 1 features:
   PK_UID    Name                       Geometry
 1      1 Unknown LINESTRING (668540.7 485826...
-2      2 Unknown LINESTRING (671365.9 485417...
-3      3 Unknown LINESTRING (671417.6 485417...
 Simple feature collection with 8101 features and 6 fields
 Geometry type: POINT
 Dimension:     XY
 Bounding box:  xmin: 319224 ymin: 3934674 xmax: 1308585 ymax: 5214373
 Projected CRS: WGS 84 / UTM zone 32N
-First 3 features:
-  PK_UID               Name Peoples LocalCounc County Region
-1      1            Brozolo     435          1      0      0
-2      2 Campiglione-Fenile    1284          1      0      0
-3      3          Canischio     274          1      0      0
-                  Geometry
-1 POINT (427002.8 4996361)
-2 POINT (367470.5 4962414)
-3 POINT (390084.1 5025552)
+First 1 features:
+  PK_UID    Name Peoples LocalCounc County Region                 Geometry
+1      1 Brozolo     435          1      0      0 POINT (427002.8 4996361)
 Simple feature collection with 10 features and 2 fields
 Geometry type: MULTIPOLYGON
 Dimension:     XY
 Bounding box:  xmin: 378359.8 ymin: 4198234 xmax: 1211486 ymax: 5036803
 Projected CRS: WGS 84 / UTM zone 32N
-First 3 features:
+First 1 features:
   PK_UID   Name                       Geometry
 1      1 VENETO MULTIPOLYGON (((752912.3 50...
-2      2 VENETO MULTIPOLYGON (((751705.5 50...
-3      3 VENETO MULTIPOLYGON (((766247.8 50...
 > 
 > csv = system.file("csv/pt.csv", package = "sf")
 > identical(st_read(quiet = TRUE, csv, options = "AUTODETECT_TYPE=Yes")$Int64[3], NA_real_)
@@ -343,23 +296,13 @@ Warning messages:
 > 
 > # logical:
 > if ("GPKG" %in% st_drivers()$name) {
-+ 	tst = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE) # default layer name
++ 	tst = read_sf(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE) # default layer name
 + 	tst$bool = tst$NWBIR79 > 800 # logical
 + 	tst$bool[1:3] = NA
-+ 	st_write(tst, "tst__.gpkg")
-+ 	tst2 = st_read("tst__.gpkg")
-+ 	print(identical(tst$bool, tst2$bool))
++ 	write_sf(tst, "tst__.gpkg")
++ 	tst2 = read_sf("tst__.gpkg")
++ 	stopifnot(identical(tst$bool, tst2$bool))
 + }
-Writing layer `tst__' to data source `tst__.gpkg' using driver `GPKG'
-Writing 100 features with 15 fields and geometry type Multi Polygon.
-Reading layer `tst__' from data source 
-  `/home/edzer/git/sf.Rcheck/tests/tst__.gpkg' using driver `GPKG'
-Simple feature collection with 100 features and 15 fields
-Geometry type: MULTIPOLYGON
-Dimension:     XY
-Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-Geodetic CRS:  NAD27
-[1] TRUE
 > 
 > # spatial filter:
 > nc = read_sf(system.file("gpkg/nc.gpkg", package="sf"))
@@ -376,4 +319,4 @@ Error : wkt parse error.
 > 
 > proc.time()
    user  system elapsed 
-  1.255   1.397   1.179 
+  1.272   1.360   1.182 

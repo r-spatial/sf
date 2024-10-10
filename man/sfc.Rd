@@ -19,7 +19,8 @@ st_sfc(
   precision = 0,
   check_ring_dir = FALSE,
   dim,
-  recompute_bbox = FALSE
+  recompute_bbox = FALSE,
+  oriented = NA
 )
 
 \method{[}{sfc}(x, i, j, ..., op = st_intersects)
@@ -37,11 +38,14 @@ st_sfc(
 
 \item{recompute_bbox}{logical; use \code{TRUE} to force recomputation of the bounding box}
 
+\item{oriented}{logical; if \code{TRUE}, the ring is oriented such that left of the edges is inside the polygon; this is
+needed for convering polygons larger than half the globe to s2}
+
 \item{x}{object of class \code{sfc}}
 
 \item{i}{record selection. Might also be an \code{sfc}/\code{sf} object to work with the \code{op} argument}
 
-\item{j}{ignored}
+\item{j}{ignored if \code{op} is specified}
 
 \item{op}{function, geometrical binary predicate function to apply when
 \code{i} is a \code{sf}/\code{sfc} object. Additional arguments can be
@@ -59,6 +63,8 @@ A simple feature geometry list-column is a list of class
 \code{c("stc_TYPE", "sfc")} which most often contains objects of identical type;
 in case of a mix of types or an empty set, \code{TYPE} is set to the
 superclass \code{GEOMETRY}.
+
+if \code{x} has a \code{dim} attribute (i.e. is an \code{array} or \code{matrix}) then \code{op} cannot be used.
 }
 \examples{
 pt1 = st_point(c(0,1))

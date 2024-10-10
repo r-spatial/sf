@@ -1,7 +1,7 @@
 
-R version 4.2.0 (2022-04-22) -- "Vigorous Calisthenics"
-Copyright (C) 2022 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu (64-bit)
+R version 4.4.0 (2024-04-24) -- "Puppy Cup"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -36,16 +36,16 @@ Type 'q()' to quit R.
 + 
 + invisible(lapply(seq_len(nrow(g)), function(i) {
 + 	if (g$type[i] == "N" && g$x_start[i] - min(g$x_start) < 1000)
-+ 		text(g[i,"x_start"], g[i,"y_start"], labels = parse(text = g[i,"degree_label"]), 
++ 		text(g$x_start[i], g$y_start[i], labels = parse(text = g$degree_label[i]), 
 + 			srt = g$angle_start[i], pos = 2, cex = .7)
 + 	if (g$type[i] == "E" && g$y_start[i] - min(g$y_start) < 1000)
-+ 		text(g[i,"x_start"], g[i,"y_start"], labels = parse(text = g[i,"degree_label"]), 
++ 		text(g$x_start[i], g$y_start[i], labels = parse(text = g$degree_label[i]), 
 + 			srt = g$angle_start[i] - 90, pos = 1, cex = .7)
 + 	if (g$type[i] == "N" && g$x_end[i] - max(g$x_end) > -1000)
-+ 		text(g[i,"x_end"], g[i,"y_end"], labels = parse(text = g[i,"degree_label"]), 
++ 		text(g$x_end[i], g$y_end[i], labels = parse(text = g$degree_label[i]), 
 + 			srt = g$angle_end[i], pos = 4, cex = .7)
 + 	if (g$type[i] == "E" && g$y_end[i] - max(g$y_end) > -1000)
-+ 		text(g[i,"x_end"], g[i,"y_end"], labels = parse(text = g[i,"degree_label"]), 
++ 		text(g$x_end[i], g$y_end[i], labels = parse(text = g$degree_label[i]), 
 + 			srt = g$angle_end[i] - 90, pos = 3, cex = .7)
 + }))
 + 
@@ -72,4 +72,4 @@ Type 'q()' to quit R.
 > 
 > proc.time()
    user  system elapsed 
-  1.960   0.175   2.135 
+  1.361   1.348   1.218 

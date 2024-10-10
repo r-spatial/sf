@@ -100,7 +100,9 @@ x = st_sfc(st_point(c(-90,35)), st_point(c(-80,36)),
 	crs = "+proj=longlat +datum=NAD27")
 y = st_transform(x, 3857)
 
+## IGNORE_RDIFF_BEGIN
 sf_extSoftVersion()[1:3]
+## IGNORE_RDIFF_END
 
 # Ops.sfc:
 ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))))
@@ -340,3 +342,21 @@ out = merge(x, y, all.x=TRUE)
 class(out)
 
 st_as_sf(st_sfc(st_point(0:1)))
+
+# st_exterior_ring():
+outer = matrix(c(0,0,10,0,10,10,0,10,0,0),ncol=2, byrow=TRUE)
+hole1 = matrix(c(1,1,1,2,2,2,2,1,1,1),ncol=2, byrow=TRUE)
+hole2 = matrix(c(5,5,5,6,6,6,6,5,5,5),ncol=2, byrow=TRUE)
+pts = list(outer, hole1, hole2)
+pl1 = st_polygon(pts)
+mpl1 = st_multipolygon(list(pl1,pl1+20))
+
+spl1 = st_as_sfc(list(pl1),crs=4326)
+smpl1 = st_as_sfc(list(mpl1),crs=4326)
+
+st_exterior_ring(spl1[[1]])
+st_exterior_ring(spl1)
+st_exterior_ring(st_sf(a = 1, geom = spl1))
+st_exterior_ring(smpl1[[1]])
+st_exterior_ring(st_sfc(smpl1))
+st_exterior_ring(st_sf(a = 1, geom = st_sfc(smpl1)))

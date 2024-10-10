@@ -20,7 +20,7 @@ Drop Z and/or M dimensions from feature geometries, resetting classes appropriat
 }
 \details{
 Only combinations \code{drop=TRUE}, \code{what = "ZM"}, and \code{drop=FALSE}, \code{what="Z"} are supported so far.
-In case \code{add=TRUE}, \code{x} should have \code{XY} geometry, and zero values are added for \code{Z}.
+In the latter case, \code{x} should have \code{XY} geometry, and zero values are added for the \code{Z} dimension.
 }
 \examples{
 st_zm(st_linestring(matrix(1:32,8)))

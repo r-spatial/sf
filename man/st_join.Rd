@@ -50,20 +50,21 @@ spatial join, spatial filter
 \details{
 alternative values for argument \code{join} are:
 \itemize{
-\item \link{st_contains_properly}
-\item \link{st_contains}
-\item \link{st_covered_by}
-\item \link{st_covers}
-\item \link{st_crosses}
-\item \link{st_disjoint}
-\item \link{st_equals_exact}
-\item \link{st_equals}
-\item \link{st_is_within_distance}
-\item \link{st_nearest_feature}
-\item \link{st_overlaps}
-\item \link{st_touches}
-\item \link{st_within}
-\item any user-defined function of the same profile as the above
+\item \link{st_contains_properly},
+\item \link{st_contains},
+\item \link{st_covered_by},
+\item \link{st_covers},
+\item \link{st_crosses},
+\item \link{st_disjoint},
+\item \link{st_equals_exact},
+\item \link{st_equals},
+\item \link{st_is_within_distance},
+\item \link{st_nearest_feature},
+\item \link{st_overlaps},
+\item \link{st_touches},
+\item \link{st_within},
+\item \link{st_relate} (which will require \code{pattern} to be set),
+\item or any user-defined function of the same profile as the above
 }
 A left join returns all records of the \code{x} object with \code{y} fields for non-matched records filled with \code{NA} values; an inner join returns only records that spatially match.
 

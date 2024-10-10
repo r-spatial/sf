@@ -1,6 +1,38 @@
+# version 1.0-18
+
+* support  `POLYGON FULL` simple feature geometry, representing the the entire Earth surface, as used by `s2geometry`; #2441
+
+* `st_sfc()` has an argument `oriented` which, when set to `TRUE`, adds an attribute `oriented=TRUE` to an `sfc` object, indicating that this object should not be reoriented in conversion to `s2_geography` (avoiding using the global option `s2_oriented`); `st_as_sfc.bbox()` sets this to `TRUE`; #2441
+
+* fix build failure with GDAL < 3.4.0 #2436
+
+* `st_simplify()` now accepts feature-wise tolerance values when `s2` is switched on #2442
+
+# version 1.0-17
+
+* add `st_transform()` method for `bbox` objects; this uses OGRCoordinateTransformation::TransformBounds(), densifying first and antemeridian proof; #2415
+
+* `st_filter.sf()` correctly scopes `x` and `y` arguments using !! operator; #2416
+
+* `[.sfc` and `[<-.sfc` use matrix/array type subsetting for `sfc` objects that have a `dim` attribute
+
+* add `st_exterior_ring()` to extract exterior rings (remove holes); #2406
+
+* add `text.sf()`, `text.sfc()`, `points.sf()`, `points.sfc()` to annotate base plots at geometry centroids; #2399
+
+* `st_sf()` no longer strips `tbl` or `tbl_df` class labels; #2378
+
+* `st_layers()` returns an object of class `c("sf_layers", "data.frame")`, with a dedicated `print` method.
+
+* when `dim` is not `XYZM`, `sf_as_sf.data.frame()` interprets a length 4 `coords` argument to specify the corners of a rectangular polygon; #2357
+
+* `st_interpolate_aw()` gains an `na.rm` argument, for removing features with `NA` attributes before interpolating; #830
+
+* `merge.sf()` no longer renames geometry column; #2334
+
 # version 1.0-16
 
-* unless the env. variable `ADD_SF_NAMESPACE` is set to `false`, `sf` objects contain a new attribute, a dummy function called `.sf_namespace`, which is only there to force loading the `sf` namespace when it has not been loaded so far, e.g. for proper printing or plotting of an `sf` object when `library(sf)` has not been called; #2212, #2277 by Mike Mahoney
+* `st_join()` no longer renames the geometry column; #2327
 
 * `st_sample()` works when unprojected polygon geometry crosses the antemeridian; #2331
 

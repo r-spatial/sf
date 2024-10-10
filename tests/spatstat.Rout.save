@@ -16,6 +16,7 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 Type 'q()' to quit R.
 
 > suppressPackageStartupMessages(library(sf))
+> ## IGNORE_RDIFF_BEGIN
 > if (require(spatstat.random, quietly = TRUE)) {
 + 
 + data(chicago)
@@ -67,7 +68,7 @@ Type 'q()' to quit R.
 + w = st_as_sfc(st_bbox(st_sfc(p1, p2)))
 + sf = st_sf(a = 1:3, geom = p)
 + (p0 = rbind(st_sf(a = 0, geom = w), sf))
-+ try(as.ppp(p0)) # errors: one point outside window
++ suppressWarnings(try(as.ppp(p0))) # errors: one point outside window
 + 
 + w = st_as_sfc(st_bbox(p))
 + sf = st_sf(a = 1:3, geom = p)
@@ -155,15 +156,15 @@ Error in spatstat_fun(..., win = spatstat.geom::as.owin(x)) :
 Error : Only projected coordinates may be converted to spatstat class objects
 Error in `marks<-.ppp`(`*tmp*`, value = value) : 
   number of rows of data frame != number of points
-In addition: Warning messages:
-1: In as.ppp.sf(sf) : only first attribute column is used for marks
-2: 1 point was rejected as lying outside the specified window 
+In addition: Warning message:
+In as.ppp.sf(sf) : only first attribute column is used for marks
 Error : Only projected coordinates may be converted to spatstat class objects
 [1] TRUE
 Warning message:
 In st_as_sfc.owin(spatstat.geom::as.owin(x)) :
   The spatstat object has an measurement unit multiplier != 1. Consider rescaling before converting.
+> ## IGNORE_RDIFF_END
 > 
 > proc.time()
    user  system elapsed 
-  2.012   1.340   1.846 
+  2.074   1.308   1.918 

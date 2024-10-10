@@ -19,6 +19,7 @@
 \alias{st_reverse}
 \alias{st_node}
 \alias{st_segmentize}
+\alias{st_exterior_ring}
 \title{Geometric unary operations on simple feature geometry sets}
 \usage{
 st_buffer(
@@ -63,13 +64,19 @@ st_reverse(x)
 st_node(x)
 
 st_segmentize(x, dfMaxLength, ...)
+
+st_exterior_ring(x, ...)
 }
 \arguments{
 \item{x}{object of class \code{sfg}, \code{sfc} or \code{sf}}
 
-\item{dist}{numeric; buffer distance for all, or for each of the elements in \code{x}; in case
-\code{dist} is a \code{units} object, it should be convertible to \code{arc_degree} if
-\code{x} has geographic coordinates, and to \code{st_crs(x)$units} otherwise}
+\item{dist}{numeric or object of class \code{units}; buffer distance for all, or for each of the elements in \code{x}.
+In case \code{x} has geodetic coordinates (lon/lat) and \code{sf_use_s2()} is \code{TRUE}, a numeric
+\code{dist} is taken as distance in meters and a \code{units} object in \code{dist} is converted to meters.
+In case \code{x} has geodetic coordinates (lon/lat) and \code{sf_use_s2()} is \code{FALSE}, a numeric
+\code{dist} is taken as degrees, and a \code{units} object in \code{dist} is converted to \code{arc_degree} (and warnings are issued).
+In case \code{x} does not have geodetic coordinates (projected) then
+numeric \code{dist} is assumed to have the units of the coordinates, and a \code{units} \code{dist} is converted to those if \code{st_crs(x)} is not \code{NA}.}
 
 \item{nQuadSegs}{integer; number of segments per quadrant (fourth of a circle), for all or per-feature; see details}
 

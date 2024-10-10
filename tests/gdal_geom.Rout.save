@@ -1,7 +1,7 @@
 
-R version 4.2.2 Patched (2022-11-10 r83330) -- "Innocent and Trusting"
-Copyright (C) 2022 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu (64-bit)
+R version 4.4.1 (2024-06-14) -- "Race for Your Life"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -50,6 +50,8 @@ Type 'q()' to quit R.
 > x = st_convex_hull(nc)
 > 
 > x = st_simplify(nc_tr, dTolerance = 1e4)
+> 
+> x = st_simplify(nc_tr, dTolerance = rep(1e4, nrow(nc_tr)))
 > 
 > x = st_simplify(nc_tr, preserveTopology = TRUE)
 > 
@@ -285,14 +287,7 @@ MULTILINESTRING ((0 0, 1 1), (0 1, 1 0))
 Error in st_buffer.sfc(sfc, units::set_units(1000, km)) : 
   x does not have a crs set: can't convert units
 > sfc = st_sfc(p1, p2, crs = 4326)
-> try(st_buffer(sfc, units::set_units(1000, km))) # error: wrong units
-Geometry set for 2 features 
-Geometry type: POLYGON
-Dimension:     XY
-Bounding box:  xmin: -39.65182 ymin: 10.93649 xmax: 21.97439 ymax: 61.16965
-Geodetic CRS:  WGS 84
-POLYGON ((-1.035063 59.83701, -1.558398 59.8318...
-POLYGON ((-22.57219 14.45171, -22.42915 14.4660...
+> try(zzz <- st_buffer(sfc, units::set_units(1000, km))) # error: wrong units
 > if (version$os == "linux-gnu") { # FIXME: why does this break on windows - degree symbol?
 +   x = st_buffer(sfc, units::set_units(0.1, rad))      # OK: will convert to arc_degrees
 + }
@@ -331,4 +326,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-  1.531   0.765   1.415 
+  0.843   1.401   0.740 

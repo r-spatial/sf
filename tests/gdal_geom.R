@@ -20,6 +20,8 @@ x = st_convex_hull(nc)
 
 x = st_simplify(nc_tr, dTolerance = 1e4)
 
+x = st_simplify(nc_tr, dTolerance = rep(1e4, nrow(nc_tr)))
+
 x = st_simplify(nc_tr, preserveTopology = TRUE)
 
 if (sf:::CPL_geos_version() >= "3.4.0")
@@ -115,7 +117,7 @@ p2 = st_point(c(-30,20))
 sfc = st_sfc(p1, p2)
 try(st_buffer(sfc, units::set_units(1000, km))) # error: no crs
 sfc = st_sfc(p1, p2, crs = 4326)
-try(st_buffer(sfc, units::set_units(1000, km))) # error: wrong units
+try(zzz <- st_buffer(sfc, units::set_units(1000, km))) # error: wrong units
 if (version$os == "linux-gnu") { # FIXME: why does this break on windows - degree symbol?
   x = st_buffer(sfc, units::set_units(0.1, rad))      # OK: will convert to arc_degrees
 }

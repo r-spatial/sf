@@ -78,7 +78,7 @@ st_bbox.MULTIPOINT = bbox.Mtrx
 st_bbox.LINESTRING = bbox.Mtrx
 #' @export
 #' @name st_bbox
-st_bbox.POLYGON = bbox.MtrxSet
+st_bbox.POLYGON = function(obj, ...) if (sf_use_s2() && length(obj) == 1 && nrow(obj[[1]]) == 2) FULL_bbox_ else bbox.MtrxSet(obj)
 #' @export
 #' @name st_bbox
 st_bbox.MULTILINESTRING = bbox.MtrxSet
@@ -147,7 +147,7 @@ compute_bbox = function(obj) {
 		sfc_POINT = bb_wrap(bbox.Set(obj)),
 		sfc_MULTIPOINT = bb_wrap(bbox.MtrxSet(obj)),
 		sfc_LINESTRING = bb_wrap(bbox.MtrxSet(obj)),
-		sfc_POLYGON = bb_wrap(bbox.MtrxSetSet(obj)),
+		sfc_POLYGON = if (any(st_is_full(obj))) FULL_bbox_ else bb_wrap(bbox.MtrxSetSet(obj)),
 		sfc_MULTILINESTRING = bb_wrap(bbox.MtrxSetSet(obj)),
 		sfc_MULTIPOLYGON = bb_wrap(bbox.MtrxSetSetSet(obj)),
 		bbox_list(obj)
@@ -224,6 +224,14 @@ st_bbox.bbox = function(obj, ...) obj
 #' @details \code{NA_bbox_} represents the missing value for a \code{bbox} object
 #' @export
 NA_bbox_ = structure(rep(NA_real_, 4),
+	names = c("xmin", "ymin", "xmax", "ymax"),
+	crs = NA_crs_,
+	class = "bbox")
+
+#' @name st_bbox
+#' @details \code{NA_bbox_} represents the missing value for a \code{bbox} object
+#' @export
+FULL_bbox_ = structure(c(-180.,-90.,180.,90.),
 	names = c("xmin", "ymin", "xmax", "ymax"),
 	crs = NA_crs_,
 	class = "bbox")

@@ -142,7 +142,7 @@ Ops.sfc <- function(e1, e2) {
 		if (.Generic == "-")
 			e2 <- -e2
 		return(opp_sfc(e1, as.numeric(e2), 0L, NA_crs_))
-	} else if (.Generic %in% c("*", "/") && is.numeric(e2) && (length(e2) == 1 || is_only_diag(e2))) {
+	} else if (.Generic %in% c("*", "/") && is.numeric(e2) && (length(e2) == 1 || (is_only_pos_diag(e2)))) {
 		if (is.matrix(e2)) e2 <- diag(e2)
 		if (.Generic == "/")
 			e2 <- 1 / e2
@@ -173,10 +173,11 @@ Ops.sfc <- function(e1, e2) {
 			st_crs(e1)
 		else # geometry got displaced:
 			NA_crs_
-		st_sfc(ret, crs = crs, precision = attr(e1, "precision"))
+		st_sfc(ret, crs = crs, precision = attr(e1, "precision"), recompute_bbox = TRUE) # also check_ring_dir, if polygons? #2377
 	} else
 		ret
 }
-is_only_diag <- function(x) {
-	is.matrix(x) && all(`diag<-`(x, 0) == 0) # nocov
+
+is_only_pos_diag <- function(x) {
+	is.matrix(x) && all(`diag<-`(x, 0) == 0) && all(diag(x) >= 0) # nocov
 }

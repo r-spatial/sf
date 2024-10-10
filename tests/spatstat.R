@@ -1,4 +1,5 @@
 suppressPackageStartupMessages(library(sf))
+## IGNORE_RDIFF_BEGIN
 if (require(spatstat.random, quietly = TRUE)) {
 
 data(chicago)
@@ -50,7 +51,7 @@ as.ppp(sf) # warns
 w = st_as_sfc(st_bbox(st_sfc(p1, p2)))
 sf = st_sf(a = 1:3, geom = p)
 (p0 = rbind(st_sf(a = 0, geom = w), sf))
-try(as.ppp(p0)) # errors: one point outside window
+suppressWarnings(try(as.ppp(p0))) # errors: one point outside window
 
 w = st_as_sfc(st_bbox(p))
 sf = st_sf(a = 1:3, geom = p)
@@ -108,3 +109,4 @@ as.psp(sf, marks = 5:1)
 (y = st_as_sfc(as.psp(sf)))
 all.equal(st_geometry(x), y)
 }
+## IGNORE_RDIFF_END

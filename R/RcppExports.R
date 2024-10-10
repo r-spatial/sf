@@ -57,6 +57,10 @@ CPL_transform <- function(sfc, crs, AOI, pipeline, reverse = FALSE, desired_accu
     .Call(`_sf_CPL_transform`, sfc, crs, AOI, pipeline, reverse, desired_accuracy, allow_ballpark)
 }
 
+CPL_transform_bounds <- function(bb, crs_dst, densify_pts = 21L) {
+    .Call(`_sf_CPL_transform_bounds`, bb, crs_dst, densify_pts)
+}
+
 CPL_wrap_dateline <- function(sfc, opt, quiet = TRUE) {
     .Call(`_sf_CPL_wrap_dateline`, sfc, opt, quiet)
 }
@@ -355,6 +359,10 @@ sfc_unique_sfg_dims_and_types <- function(sfc) {
 
 sfc_is_empty <- function(sfc) {
     .Call(`_sf_sfc_is_empty`, sfc)
+}
+
+sfc_is_full <- function(sfc) {
+    .Call(`_sf_sfc_is_full`, sfc)
 }
 
 points_cpp <- function(pts, gdim = "XY") {

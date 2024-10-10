@@ -129,3 +129,8 @@ test_that("value replacement works for sfc_POINT",{
 	expect_identical(st_bbox(replace(pts1,2:3,pts2)),
 					 st_bbox(replace(pts1[],2:3,pts2[])))# check if bbox is correct without realization
 })
+test_that("bounding box is flipped when geometry is flipped", {
+	foo <- st_bbox(c(xmin = 0, xmax = 100, ymin = 0, ymax = 200)) |> st_as_sfc()
+	bar <- foo * matrix(c(1,0,0,-1), nrow = 2)
+	expect_equal(st_bbox(bar), st_bbox(c(xmin=0, ymin=-200, xmax=100, ymax=0)))
+})

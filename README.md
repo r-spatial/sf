@@ -3,10 +3,10 @@
 [![tic-db](https://github.com/r-spatial/sf/actions/workflows/tic-db.yml/badge.svg)](https://github.com/r-spatial/sf/actions/workflows/tic-db.yml)
 [![Coverage Status](https://img.shields.io/codecov/c/github/r-spatial/sf/main.svg)](https://app.codecov.io/gh/r-spatial/sf)
 [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html)
-[![CRAN](http://www.r-pkg.org/badges/version/sf)](https://cran.r-project.org/package=sf)
+[![CRAN](https://www.r-pkg.org/badges/version/sf)](https://cran.r-project.org/package=sf)
 [![cran checks](https://badges.cranchecks.info/worst/sf.svg)](https://cran.r-project.org/web/checks/check_results_sf.html)
-[![Downloads](http://cranlogs.r-pkg.org/badges/sf?color=brightgreen)](https://www.r-pkg.org:443/pkg/sf)
-[![status](https://tinyverse.netlify.com/badge/sf)](https://CRAN.R-project.org/package=sf)
+[![Downloads](https://cranlogs.r-pkg.org/badges/sf?color=brightgreen)](https://www.r-pkg.org/pkg/sf)
+[![status](https://tinyverse.netlify.app/badge/sf)](https://CRAN.R-project.org/package=sf)
 <!-- badges: end -->
 
 # Simple Features for R
@@ -36,9 +36,10 @@ Package sf:
 
 (Illustration (c) 2018 by <a href="https://twitter.com/allison_horst/status/1071456081308614656">Allison Horst</a>)
 
-## Blogs, presentations, vignettes, sp-sf wiki
+## Books, journal articles, blogs, presentations, vignettes, sp-sf wiki
 
 * an open access [R Journal article](https://journal.r-project.org/archive/2018/RJ-2018-009/index.html) summarizes the package
+* two books: [Spatial Data Science: with applications in R](https://r-spatial.org/book/), [Geocomputation with R](https://r.geocompx.org/)
 * package vignettes: [first](https://r-spatial.github.io/sf/articles/sf1.html), [second](https://r-spatial.github.io/sf/articles/sf2.html), [third](https://r-spatial.github.io/sf/articles/sf3.html), [fourth](https://r-spatial.github.io/sf/articles/sf4.html), [fifth](https://r-spatial.github.io/sf/articles/sf5.html), [sixth](https://r-spatial.github.io/sf/articles/sf6.html), [seventh](https://r-spatial.github.io/sf/articles/sf7.html)
 * blog posts: [first](https://r-spatial.org/r/2016/02/15/simple-features-for-r.html), [second](https://r-spatial.org/r/2016/07/18/sf2.html), [third](https://r-spatial.org/r/2016/11/02/sfcran.html), [fourth](https://r-spatial.org/r/2017/01/12/newssf.html)
 * the original R Consortium ISC [proposal](PROPOSAL.md), the R Consortium [blog post](https://www.r-consortium.org/blog/2017/01/03/simple-features-now-on-cran)
@@ -134,14 +135,22 @@ sudo dnf install gdal-devel proj-devel geos-devel sqlite-devel udunits2-devel
 
 #### Arch
 
-Get gdal, proj and geos from the main repos, and udunits from the AUR:
+Get gdal, proj, geos and podofo from the main repos, and udunits from the AUR:
 
 ```
-pacman -S gdal proj geos arrow podofo-0.9
+pacman -S gdal proj geos arrow podofo
 yay/pacaur/yaourt/whatever -S udunits
 ```
 
+#### `renv` or `conda`
+
+There are several reports that `sf` fails to install as a source package when R is used with `renv`, or when R is installed in a `conda` environment. If you experience this, please do not raise an issue here, but 
+
+* try to sort this out with the `renv` developers or the `conda` maintainers, or
+* try to use binary installs of the `sf` package, e.g. from [r2u](https://github.com/eddelbuettel/r2u), or the Posit package manager
+
 #### Other
+
 To install on Debian, the [rocker geospatial](https://github.com/rocker-org/geospatial) Dockerfiles may be helpful. Ubuntu Dockerfiles are found [here](https://github.com/r-spatial/sf/tree/main/inst/docker).
 
 ### Multiple GDAL, GEOS and/or PROJ versions on your system
@@ -150,13 +159,13 @@ If you use dynamic linking (installation from source) and have multiple versions
 
 ### lwgeom
 
-Functions and methods that require `liblwgeom`, including ellipsoidal (not spherical or Eucledian) metrics (area, distances), are provide by and used from [lwgeom](https://github.com/r-spatial/lwgeom), which is also on [CRAN](https://cran.r-project.org/package=lwgeom).
+Functions and methods that require `liblwgeom`, including ellipsoidal (not spherical or Euclidean) metrics (area, distances), are provide by and used from [lwgeom](https://github.com/r-spatial/lwgeom), which is also on [CRAN](https://cran.r-project.org/package=lwgeom).
 
 ## Contributing
 
 * Contributions of all sorts are most welcome, issues and pull requests are the preferred ways of sharing them.
-* When contributing pull requests, please adhere to the package style (in package code use `=` rather than `<-`; don't change indentation; tab stops of 4 spaces are preferred)
-* This project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
+* When contributing pull requests, please adhere to the package style (in package code use `=` rather than `<-`; don't change indentation; tab stops of 4 spaces are preferred).
+* This project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project, you agree to abide by its terms.
 
 ## How to cite
 
@@ -172,8 +181,8 @@ for Spatial Vector Data. The R Journal [10:1, 439-446.](https://journal.r-projec
 
 This project gratefully acknowledges financial [support](https://www.r-consortium.org/projects) from the
 
-<a href="https://www.r-consortium.org/all-projects/awarded-projects/2016-group-1">
-<img src="https://www.r-consortium.org/wp-content/uploads/sites/13/2016/09/RConsortium_Horizontal_Pantone.png" width="300">
+<a href="https://r-consortium.org/all-projects/2016-group-1.html#simple-features-for-r">
+<img src="https://r-consortium.org/images/RConsortium_Horizontal_Pantone.webp" width="300">
 </a>
 <!--
 <img src="http://pebesma.staff.ifgi.de/RConsortium_Horizontal_Pantone.png" width="300">

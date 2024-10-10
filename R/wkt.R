@@ -57,7 +57,14 @@ prnt.MULTIPOINT = function(x, ..., EWKT = TRUE, nested_parens = FALSE) {
 		  prnt.Matrix(x, nested_parens = nested_parens, ...))
 }
 prnt.LINESTRING = function(x, ..., EWKT = TRUE) paste(WKT_name(x, EWKT = EWKT), prnt.Matrix(x, ...))
-prnt.POLYGON = function(x, ..., EWKT = TRUE) paste(WKT_name(x, EWKT = EWKT), prnt.MatrixList(x, ...))
+
+prnt.POLYGON = function(x, ..., EWKT = TRUE) {
+	if (st_is_full(x, ...))
+		"POLYGON FULL"
+	else
+		paste(WKT_name(x, EWKT = EWKT), prnt.MatrixList(x, ...))
+}
+
 prnt.MULTILINESTRING = function(x, ..., EWKT = TRUE) paste(WKT_name(x, EWKT = EWKT), prnt.MatrixList(x, ...))
 prnt.MULTIPOLYGON = function(x, ..., EWKT = TRUE) paste(WKT_name(x, EWKT = EWKT), prnt.MatrixListList(x, ...))
 prnt.GEOMETRYCOLLECTION = function(x, ..., EWKT = TRUE) {
@@ -164,6 +171,8 @@ st_as_sfc.character = function(x, crs = NA_integer_, ..., GeoJSON = FALSE) {
 			}
 			x = ewkt_to_wkt(x)
 		}
+		if (sf_use_s2() && !identical(st_is_longlat(crs), FALSE) && any(full <- (x == "POLYGON FULL")))
+			x[full] = "POLYGON((0 -90,0 -90))" # s2 struct for POLYGON FULL
 		ret = st_sfc(CPL_sfc_from_wkt(x))
 		st_crs(ret) = crs
 		ret

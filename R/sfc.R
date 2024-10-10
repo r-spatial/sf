@@ -26,6 +26,8 @@ format.sfc = function(x, ..., width = 30) {
 #' @param check_ring_dir see \link{st_read}
 #' @param dim character; if this function is called without valid geometries, this argument may carry the right dimension to set empty geometries
 #' @param recompute_bbox logical; use \code{TRUE} to force recomputation of the bounding box
+#' @param oriented logical; if \code{TRUE}, the ring is oriented such that left of the edges is inside the polygon; this is
+#' needed for convering polygons larger than half the globe to s2
 #' @return an object of class \code{sfc}, which is a classed list-column with simple feature geometries.
 #'
 #' @details A simple feature geometry list-column is a list of class
@@ -40,7 +42,7 @@ format.sfc = function(x, ..., width = 30) {
 #' d = st_sf(data.frame(a=1:2, geom=sfc))
 #' @export
 st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, dim,
-				  recompute_bbox = FALSE) {
+				  recompute_bbox = FALSE, oriented = NA) {
 	lst = list(...)
 	# if we have only one arg, which is already a list with sfg's, but NOT a geometrycollection:
 	# (this is the old form of calling st_sfc; it is way faster to call st_sfc(lst) if lst
@@ -147,16 +149,20 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 #		if (length(u <- unique(sfg_classes[1L,])) > 1)
 #			stop(paste("found multiple dimensions:", paste(u, collapse = " ")))
 	}
+	if (isTRUE(oriented))
+		attr(lst, "oriented") = TRUE
+
 	lst
 }
 
 #' @name sfc
 #' @param x object of class \code{sfc}
 #' @param i record selection. Might also be an \code{sfc}/\code{sf} object to work with the \code{op} argument
-#' @param j ignored
+#' @param j ignored if `op` is specified
 #' @param op function, geometrical binary predicate function to apply when
 #'   \code{i} is a \code{sf}/\code{sfc} object. Additional arguments can be
 #'   specified using \code{...}, see examples.
+#' @details if `x` has a `dim` attribute (i.e. is an `array` or `matrix`) then `op` cannot be used.
 #' @export
 "[.sfc" = function(x, i, j, ..., op = st_intersects) {
 
@@ -169,11 +175,12 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 		precision = st_precision(x)
 		crs = st_crs(x)
 		dim = if (length(x)) class(x[[1]])[1] else "XY"
-		x = unclass(x)[i] # now a list
-		st_sfc(x, crs = crs, precision = precision, dim = dim)
+		if (!is.null(dim(x))) # x is an array with geometries
+			st_sfc(NextMethod(), crs = crs, precision = precision, dim = dim)
+		else # x is a list but avoid NextMethod() to allow j, ... to be specified & ignored:
+			st_sfc(unclass(x)[i], crs = crs, precision = precision, dim = dim)
 	}
 }
-
 
 #' @export
 "[<-.sfc" = function (x, i, value) {
@@ -245,6 +252,8 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 		if (ne > 0)
 			cat(paste0(" (with ", ne, ifelse(ne > 1, " geometries ", " geometry "), "empty)"))
 	}
+	if (!is.null(dim(x)))
+		cat(paste0(" [dim: ", paste(dim(x), collapse = " x "), "]"))
 	cat("\n")
 	if (length(x)) {
 		cat(paste0("Geometry type: ", cls, "\n"))
@@ -295,9 +304,9 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 		cat(paste0("First ", n, " geometries:\n"))
 	for (i in seq_len(min(n, length(x))))
 		if (inherits(x[[i]], "sfg"))
-			print(x[[i]], width = 50)
+			print(x[[i]], width = 50, crs = crs)
 		else
-			print(x[[i]])
+			print(x[[i]], crs = crs)
 	invisible(x)
 }
 
@@ -379,7 +388,7 @@ st_geometry_type = function(x, by_geometry = TRUE) {
 #' @param drop logical; drop, or (`FALSE`) add?
 #' @param what character which dimensions to drop or add
 #' @details Only combinations \code{drop=TRUE}, \code{what = "ZM"}, and \code{drop=FALSE}, \code{what="Z"} are supported so far.
-#' In case \code{add=TRUE}, \code{x} should have \code{XY} geometry, and zero values are added for \code{Z}.
+#' In the latter case, \code{x} should have \code{XY} geometry, and zero values are added for the \code{Z} dimension.
 #' @examples
 #' st_zm(st_linestring(matrix(1:32,8)))
 #' x = st_sfc(st_linestring(matrix(1:32,8)), st_linestring(matrix(1:8,2)))
@@ -648,8 +657,61 @@ st_as_sfc.blob = function(x, ...) {
 #' @name st_as_sfc
 #' @export
 st_as_sfc.bbox = function(x, ...) {
-	box = st_polygon(list(matrix(x[c(1, 2, 3, 2, 3, 4, 1, 4, 1, 2)], ncol = 2, byrow = TRUE)))
-	st_sfc(box, crs = st_crs(x))
+	if (st_is_full(x))
+		st_as_sfc("POLYGON FULL", crs = st_crs(x))
+	else {
+		box = st_polygon(list(matrix(x[c(1, 2, 3, 2, 3, 4, 1, 4, 1, 2)], ncol = 2, byrow = TRUE)))
+		st_sfc(box, crs = st_crs(x), oriented = TRUE)
+	}
+}
+
+POLYGON_FULL = matrix(c(0,-90,0,-90), 2, byrow = TRUE)
+
+#' predicate whether a geometry is equal to a POLYGON FULL
+#'
+#' predicate whether a geometry is equal to a POLYGON FULL
+#' @param x object of class `sfg`, `sfc` or `sf`
+#' @param ... ignored, except when it contains a `crs` argument to inform unspecified `is_longlat`
+#' @returns logical, indicating whether geometries are POLYGON FULL (a spherical
+#' polygon covering the entire sphere)
+#' @export
+st_is_full = function(x, ...) UseMethod("st_is_full")
+
+#' @export
+#' @name st_is_full
+#' @param is_longlat logical; output of \link{st_is_longlat} of the parent `sfc` object
+st_is_full.sfg = function(x, ..., is_longlat = NULL) {
+	if (identical(is_longlat, FALSE)) # we know these are Cartesian coordinates:
+		FALSE
+	else
+		sf_use_s2() && inherits(x, "POLYGON") &&
+		length(x) == 1 && nrow(x[[1]]) == 2 && identical(x[[1]], POLYGON_FULL)
+}
+
+#' @export
+#' @name st_is_full
+st_is_full.sfc = function(x, ...) {
+	if (sf_use_s2() && inherits(x, c("sfc_POLYGON", "sfc_GEOMETRY"))) {
+		is_longlat = if (!is.null(attr(x, "crs")))
+				st_is_longlat(x)
+			else
+				NA
+		#sapply(x, st_is_full.sfg, ..., is_longlat = is_longlat)
+		sfc_is_full(x)
+	} else
+		rep_len(FALSE, length(x))
+}
+
+#' @export
+#' @name st_is_full
+st_is_full.sf = function(x, ...) {
+	st_is_full(st_geometry(x), ...)
+}
+
+#' @export
+#' @name st_is_full
+st_is_full.bbox = function(x, ...) {
+	sf_use_s2() && st_is_longlat(x) && all(x == c(-180,-90,180,90))
 }
 
 #' @export

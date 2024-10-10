@@ -10,13 +10,15 @@ st_as_sf = function(x, ...) UseMethod("st_as_sf")
 #' @param agr character vector; see details section of \link{st_sf}
 #' @param coords in case of point data: names or numbers of the numeric columns holding coordinates
 #' @param wkt name or number of the character column that holds WKT encoded geometries
-#' @param dim passed on to \link{st_point} (only when argument coords is given)
+#' @param dim specify what 3- or 4-dimensional points reflect: passed on to \link{st_point} (only when argument coords is given)
 #' @param remove logical; when coords or wkt is given, remove these columns from data.frame?
 #' @param na.fail logical; if \code{TRUE}, raise an error if coordinates contain missing values
 #' @param sf_column_name character; name of the active list-column with simple feature geometries; in case
 #' there is more than one and \code{sf_column_name} is \code{NULL}, the first one is taken.
 #' @param ... passed on to \link{st_sf}, might included named arguments \code{crs} or \code{precision}
 #' @details setting argument \code{wkt} annihilates the use of argument \code{coords}. If \code{x} contains a column called "geometry", \code{coords} will result in overwriting of this column by the \link{sfc} geometry list-column.  Setting \code{wkt} will replace this column with the geometry list-column, unless \code{remove} is \code{FALSE}.
+#'
+#' If `coords` has length 4, and `dim` is not `XYZM`, the four columns are taken as the xmin, ymin, xmax, ymax corner coordinates of a rectangle, and polygons are returned.
 #'
 #' @examples
 #' pt1 = st_point(c(0,1))
@@ -58,12 +60,18 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 		dimnames(cc) = NULL
 		if (is.null(sf_column_name))
 			sf_column_name = "geometry"
-		x[[sf_column_name]] = structure(vector("list", length = nrow(cc)),
-			points = cc,
-			points_dim = dim,
-			n_empty = 0L, precision = 0, crs = NA_crs_,
-			bbox = bbox.pointmatrix(cc),
-			class = c("sfc_POINT", "sfc"), names = NULL)
+
+		x[[sf_column_name]] = if (nchar(dim) < 4 && ncol(cc) == 4) { # create POLYGONs:
+				fn = function(x) st_as_sfc(st_bbox(c(xmin = x[[1]], ymin = x[[2]], xmax = x[[3]], ymax = x[[4]])))
+				do.call(c, apply(as.matrix(cc), 1, fn))
+			} else { # points:
+				structure(vector("list", length = nrow(cc)),
+				points = cc,
+				points_dim = dim,
+				n_empty = 0L, precision = 0, crs = NA_crs_,
+				bbox = bbox.pointmatrix(cc),
+				class = c("sfc_POINT", "sfc"), names = NULL)
+			}
 
 		if (remove) {
 			if (is.character(coords))
@@ -82,7 +90,6 @@ st_as_sf.sf = function(x, ...) x
 #' @name st_as_sf
 #' @export
 st_as_sf.sfc = function(x, ...) st_sf(x, ...)
-
 
 #' Get, set, replace or rename geometry from an sf object
 #'
@@ -272,7 +279,7 @@ st_sf = function(..., agr = NA_agr_, row.names,
 	if (missing(row.names))
 		row.names = seq_along(x[[sf_column]])
 
-	df = if (inherits(x, "tbl_df")) # no worries:
+	df = if (inherits(x, c("tbl_df", "tbl"))) # no worries:
 			x
 		else if (length(x) == 1) # ONLY one sfc
 			data.frame(row.names = row.names)
@@ -280,6 +287,8 @@ st_sf = function(..., agr = NA_agr_, row.names,
 			x
 		else if (sfc_last && inherits(x, "data.frame"))
 			x[-all_sfc_columns]
+		else if (inherits(x[[1]], c("tbl_df", "tbl")))
+			x[[1]]
 		else
 			cbind(data.frame(row.names = row.names),
 				as.data.frame(x[-all_sfc_columns],
@@ -305,7 +314,7 @@ st_sf = function(..., agr = NA_agr_, row.names,
 	if (! missing(crs))
 		st_crs(df) = crs
 
-	if (Sys.getenv("ADD_SF_NAMESPACE") != "false")
+	if (Sys.getenv("ADD_SF_NAMESPACE") == "true")
 		attr(df, ".sf_namespace") <- .sf_namespace
 
 	df
@@ -428,7 +437,7 @@ print.sf = function(x, ..., n = getOption("sf_max_print", default = 10)) {
 		app = paste0(app, "\n", "Active geometry column: ", attr(x, "sf_column"))
 	print(st_geometry(x), n = 0, what = "Simple feature collection with", append = app)
 	if (n > 0) {
-		if (inherits(x, "tbl_df")) {
+		if (inherits(x, c("tbl_df", "tbl"))) {
 			st_geometry(x) = x[[attr(x, "sf_column")]][] # note the extra []: this reloads points
 			NextMethod()
 		} else {
@@ -463,8 +472,8 @@ merge.sf = function(x, y, ...) {
 	ret = NextMethod() # if data.table, drops sf_column attribute;
 	class(ret) = setdiff(class(ret), "sf")
 	g = ret[[sf_column]] # may have NULL values in it
-	ret[[sf_column]] = NULL
-	st_set_geometry(ret, st_sfc(g)) # FIXME: set agr
+	ret[[sf_column]] = st_sfc(g) # fix NULL values
+	st_set_geometry(ret, sf_column) # FIXME: set agr
 }
 
 #' @export

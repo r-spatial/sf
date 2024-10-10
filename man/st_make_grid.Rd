@@ -24,7 +24,7 @@ st_make_grid(
 
 \item{n}{integer of length 1 or 2, number of grid cells in x and y direction (columns, rows)}
 
-\item{crs}{object of class \code{crs}; coordinate reference system of the target of the target grid in case argument \code{x} is missing, if \code{x} is not missing, its crs is inherited.}
+\item{crs}{object of class \code{crs}; coordinate reference system of the target grid in case argument \code{x} is missing, if \code{x} is not missing, its crs is inherited.}
 
 \item{what}{character; one of: \code{"polygons"}, \code{"corners"}, or \code{"centers"}}
 
