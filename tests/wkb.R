@@ -6,7 +6,7 @@ round_trip = function(x, EWKB = FALSE, pureR = FALSE) {
 	class(wkb) = "WKB"
 	# print(wkb)
 	y = st_as_sfc(wkb, EWKB = EWKB, pureR = pureR)
-	a = all.equal(x, y)
+	a = all.equal(x[], y[]) # realize both
 	if (length(a) == 1 && is.logical(a) && a)
 		TRUE
 	else {
