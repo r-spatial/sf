@@ -1,3 +1,5 @@
+# version 1.0-19
+
 # version 1.0-18
 
 * support  `POLYGON FULL` simple feature geometry, representing the the entire Earth surface, as used by `s2geometry`; #2441
