@@ -30,6 +30,11 @@ suppressWarnings(
   sf_project("+proj=longlat", "+proj=lcc +lat_1=30 +lat_2=60", cbind(c(0,0),c(-80,-90)), keep = TRUE)
 )
 st_transform(st_sfc(st_point(c(0,0)), st_point(c(1,1)), crs = 4326), 3857)
+if (Sys.getenv("USER") %in% c("edzer", "travis")) { # causes memory leaks:
+  stopifnot(inherits(try(sf_project("+proj=longlat", "+proj=bar", matrix(1:4,2)), silent = TRUE), "try-error"))
+  stopifnot(inherits(try(sf_project("+proj=foo", "+proj=longlat", matrix(1:4,2)), silent = TRUE), "try-error"))
+}
+
 if (sf_extSoftVersion()["USE_PROJ_H"] == "true" || sf_proj_info("have_datum_files")) {
   "datum files installed"
 } else {

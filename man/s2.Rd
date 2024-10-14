@@ -14,12 +14,7 @@ st_as_s2(x, ...)
 
 \method{st_as_s2}{sf}(x, ...)
 
-\method{st_as_s2}{sfc}(
-  x,
-  ...,
-  oriented = getOption("s2_oriented", FALSE) || isTRUE(attr(x, "oriented")),
-  rebuild = FALSE
-)
+\method{st_as_s2}{sfc}(x, ..., oriented = getOption("s2_oriented", FALSE), rebuild = FALSE)
 }
 \arguments{
 \item{use_s2}{logical; if \code{TRUE}, use the s2 spherical geometry package

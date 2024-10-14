@@ -1,4 +1,4 @@
-#' @importFrom utils head object.size str tail packageVersion compareVersion globalVariables
+#' @importFrom utils head tail object.size str packageVersion compareVersion globalVariables assignInMyNamespace
 #' @importFrom stats aggregate dist na.omit rbinom runif setNames
 #' @importFrom tools file_ext file_path_sans_ext
 #' @importFrom methods as new slot slotNames slot<-
@@ -26,7 +26,6 @@ setOldClass(c("sfc_GEOMETRY", "sfc"))
 setOldClass(c("sfc_GEOMETRYCOLLECTION", "sfc"))
 setOldClass("sfg")
 setOldClass("crs")
-setOldClass("bbox")
 
 .sf_cache <- new.env(FALSE, parent=globalenv())
 

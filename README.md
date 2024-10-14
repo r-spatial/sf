@@ -3,10 +3,10 @@
 [![tic-db](https://github.com/r-spatial/sf/actions/workflows/tic-db.yml/badge.svg)](https://github.com/r-spatial/sf/actions/workflows/tic-db.yml)
 [![Coverage Status](https://img.shields.io/codecov/c/github/r-spatial/sf/main.svg)](https://app.codecov.io/gh/r-spatial/sf)
 [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html)
-[![CRAN](https://www.r-pkg.org/badges/version/sf)](https://cran.r-project.org/package=sf)
+[![CRAN](http://www.r-pkg.org/badges/version/sf)](https://cran.r-project.org/package=sf)
 [![cran checks](https://badges.cranchecks.info/worst/sf.svg)](https://cran.r-project.org/web/checks/check_results_sf.html)
-[![Downloads](https://cranlogs.r-pkg.org/badges/sf?color=brightgreen)](https://www.r-pkg.org/pkg/sf)
-[![status](https://tinyverse.netlify.app/badge/sf)](https://CRAN.R-project.org/package=sf)
+[![Downloads](http://cranlogs.r-pkg.org/badges/sf?color=brightgreen)](https://www.r-pkg.org:443/pkg/sf)
+[![status](https://tinyverse.netlify.com/badge/sf)](https://CRAN.R-project.org/package=sf)
 <!-- badges: end -->
 
 # Simple Features for R
@@ -159,13 +159,13 @@ If you use dynamic linking (installation from source) and have multiple versions
 
 ### lwgeom
 
-Functions and methods that require `liblwgeom`, including ellipsoidal (not spherical or Euclidean) metrics (area, distances), are provide by and used from [lwgeom](https://github.com/r-spatial/lwgeom), which is also on [CRAN](https://cran.r-project.org/package=lwgeom).
+Functions and methods that require `liblwgeom`, including ellipsoidal (not spherical or Eucledian) metrics (area, distances), are provide by and used from [lwgeom](https://github.com/r-spatial/lwgeom), which is also on [CRAN](https://cran.r-project.org/package=lwgeom).
 
 ## Contributing
 
 * Contributions of all sorts are most welcome, issues and pull requests are the preferred ways of sharing them.
-* When contributing pull requests, please adhere to the package style (in package code use `=` rather than `<-`; don't change indentation; tab stops of 4 spaces are preferred).
-* This project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project, you agree to abide by its terms.
+* When contributing pull requests, please adhere to the package style (in package code use `=` rather than `<-`; don't change indentation; tab stops of 4 spaces are preferred)
+* This project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
 
 ## How to cite
 
@@ -181,8 +181,8 @@ for Spatial Vector Data. The R Journal [10:1, 439-446.](https://journal.r-projec
 
 This project gratefully acknowledges financial [support](https://www.r-consortium.org/projects) from the
 
-<a href="https://r-consortium.org/all-projects/2016-group-1.html#simple-features-for-r">
-<img src="https://r-consortium.org/images/RConsortium_Horizontal_Pantone.webp" width="300">
+<a href="https://www.r-consortium.org/all-projects/awarded-projects/2016-group-1">
+<img src="https://www.r-consortium.org/wp-content/uploads/sites/13/2016/09/RConsortium_Horizontal_Pantone.png" width="300">
 </a>
 <!--
 <img src="http://pebesma.staff.ifgi.de/RConsortium_Horizontal_Pantone.png" width="300">

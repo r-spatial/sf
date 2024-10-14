@@ -170,10 +170,7 @@ st_transform.sfg = function(x, crs = st_crs(x), ...) {
 #' @param densify integer, number of points for discretizing lines between bounding box corner points; see Details
 #' @details the method for `bbox` objects densifies lines for geographic coordinates along Cartesian lines, not great circle arcs
 st_transform.bbox = function(x, crs, ..., densify = 21) {
-        if (sf_extSoftVersion()["GDAL"] >= "3.4.0")
-		st_bbox(CPL_transform_bounds(x, st_crs(crs), densify), crs = crs)
-	else
-		stop("method not available for GDAL: ", sf_extSoftVersion()["GDAL"])
+	st_bbox(CPL_transform_bounds(x, st_crs(crs), densify), crs = crs)
 }
 
 #' @name st_transform

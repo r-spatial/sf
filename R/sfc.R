@@ -26,8 +26,6 @@ format.sfc = function(x, ..., width = 30) {
 #' @param check_ring_dir see \link{st_read}
 #' @param dim character; if this function is called without valid geometries, this argument may carry the right dimension to set empty geometries
 #' @param recompute_bbox logical; use \code{TRUE} to force recomputation of the bounding box
-#' @param oriented logical; if \code{TRUE}, the ring is oriented such that left of the edges is inside the polygon; this is
-#' needed for convering polygons larger than half the globe to s2
 #' @return an object of class \code{sfc}, which is a classed list-column with simple feature geometries.
 #'
 #' @details A simple feature geometry list-column is a list of class
@@ -42,7 +40,7 @@ format.sfc = function(x, ..., width = 30) {
 #' d = st_sf(data.frame(a=1:2, geom=sfc))
 #' @export
 st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, dim,
-				  recompute_bbox = FALSE, oriented = NA) {
+				  recompute_bbox = FALSE) {
 	lst = list(...)
 	# if we have only one arg, which is already a list with sfg's, but NOT a geometrycollection:
 	# (this is the old form of calling st_sfc; it is way faster to call st_sfc(lst) if lst
@@ -139,9 +137,6 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 #		if (length(u <- unique(sfg_classes[1L,])) > 1)
 #			stop(paste("found multiple dimensions:", paste(u, collapse = " ")))
 	}
-	if (isTRUE(oriented))
-		attr(lst, "oriented") = TRUE
-
 	lst
 }
 
@@ -611,7 +606,7 @@ st_as_sfc.bbox = function(x, ...) {
 		st_as_sfc("POLYGON FULL", crs = st_crs(x))
 	else {
 		box = st_polygon(list(matrix(x[c(1, 2, 3, 2, 3, 4, 1, 4, 1, 2)], ncol = 2, byrow = TRUE)))
-		st_sfc(box, crs = st_crs(x), oriented = TRUE)
+		st_sfc(box, crs = st_crs(x))
 	}
 }
 

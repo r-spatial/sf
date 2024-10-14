@@ -1,7 +1,7 @@
 
-R version 4.4.1 (2024-06-14) -- "Race for Your Life"
+R version 4.3.3 (2024-02-29) -- "Angel Food Cake"
 Copyright (C) 2024 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -50,8 +50,6 @@ Type 'q()' to quit R.
 > x = st_convex_hull(nc)
 > 
 > x = st_simplify(nc_tr, dTolerance = 1e4)
-> 
-> x = st_simplify(nc_tr, dTolerance = rep(1e4, nrow(nc_tr)))
 > 
 > x = st_simplify(nc_tr, preserveTopology = TRUE)
 > 
@@ -326,4 +324,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-  0.843   1.401   0.740 
+  0.960   1.292   0.749 
