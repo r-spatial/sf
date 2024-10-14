@@ -663,6 +663,10 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 	Rcpp::List ret = sfc_from_ogr(g, true); // destroys g;
 	// how to return the target CRS when only a transformation pipeline is provided? Not by:
 	// ret.attr("crs") = create_crs(ct->GetTargetCS(), true);
+	// 
+	// According to the discussion at https://github.com/r-spatial/sf/issues/2439, this is 
+	// not a solvable issue in general. See the same link for a possible workaround and 
+	// a more general solution that uses PROJ. 
 	ct->DestroyCT(ct);
 	if (dest)
 		dest->Release();
@@ -673,6 +677,17 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 Rcpp::NumericVector CPL_transform_bounds(Rcpp::NumericVector bb, Rcpp::List crs_dst,
 		int densify_pts = 21) {
 
+	Rcpp::NumericVector ret(4);
+	ret[0] = 0.0;
+	ret[1] = 0.0;
+	ret[2] = 0.0;
+	ret[3] = 0.0;
+	Rcpp::CharacterVector names(4);
+	names(0) = "xmin";
+	names(1) = "ymin";
+	names(2) = "xmax";
+	names(3) = "ymax";
+	ret.attr("names") = names;
 #if GDAL_VERSION_NUM >= 3040000
 	if (bb.size() != 4)
 		Rcpp::stop("bb should have length 4");
@@ -693,17 +708,10 @@ Rcpp::NumericVector CPL_transform_bounds(Rcpp::NumericVector bb, Rcpp::List crs_
 	int success = ct->TransformBounds(bb[0], bb[1], bb[2], bb[3], &xmin, &ymin, &xmax, &ymax, densify_pts);
 	if (!success)
 		Rcpp::stop("transform_bounds(): failures encountered"); // #nocov
-	Rcpp::NumericVector ret(4);
 	ret[0] = xmin;
 	ret[1] = ymin;
 	ret[2] = xmax;
 	ret[3] = ymax;
-	Rcpp::CharacterVector names(4);
-	names(0) = "xmin";
-	names(1) = "ymin";
-	names(2) = "xmax";
-	names(3) = "ymax";
-	ret.attr("names") = names;
 	ct->DestroyCT(ct);
 	dst->Release();
 	src->Release();
