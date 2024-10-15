@@ -340,7 +340,7 @@ excessive simplification (bottom right). Note that buffers created with s2 _alwa
 follow s2 cell boundaries, they are never smooth. Hence, choosing a large number
 for `max_cells` leads to seemingly smooth but, zoomed in, very complex buffers.
 
-To achieve a similar result you could first transform thes result and then use `sf::st_buffer()`. A simple benchmark shows the
+To achieve a similar result you could first transform the result and then use `sf::st_buffer()`. A simple benchmark shows the
 computational efficiency of the `s2` geometry engine in comparison
 with transforming and then creating buffers:
 
