@@ -89,7 +89,7 @@ numeric \code{dist} is assumed to have the units of the coordinates, and a \code
 \item{singleSide}{logical; if \code{TRUE}, single-sided buffers are returned for linear geometries,
 in which case negative \code{dist} values give buffers on the right-hand side, positive on the left; see details}
 
-\item{...}{ignored}
+\item{...}{in \code{st_buffer} passed on to  \code{\link[s2:s2_boundary]{s2::s2_buffer_cells()}}, otherwise ignored}
 
 \item{ratio}{numeric; fraction convex: 1 returns the convex hulls, 0 maximally concave hulls}
 

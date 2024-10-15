@@ -19,7 +19,7 @@
 #' @param mitreLimit numeric; limit of extension for a join if \code{joinStyle} 'MITRE' is used (default 1.0, minimum 0.0); see details
 #' @param singleSide logical; if \code{TRUE}, single-sided buffers are returned for linear geometries,
 #' in which case negative \code{dist} values give buffers on the right-hand side, positive on the left; see details
-#' @param ... passed on to  [s2::s2_buffer_cells()]
+#' @param ... in `st_buffer` passed on to  [s2::s2_buffer_cells()], otherwise ignored
 #' @return an object of the same class of \code{x}, with manipulated geometry.
 #' @export
 #' @details \code{st_buffer} computes a buffer around this geometry/each geometry. If any of \code{endCapStyle},
@@ -698,7 +698,6 @@ st_node.sf = function(x) {
 #' @details \code{st_segmentize} adds points to straight lines
 #' @export
 #' @param dfMaxLength maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is either a numeric expressed in meter, or an object of class \code{units} with length units \code{rad} or \code{degree}; segmentation in the long/lat case takes place along the great circle, using \link[lwgeom:geod]{st_geod_segmentize}.
-#' @param ... ignored
 #' @examples
 #' sf = st_sf(a=1, geom=st_sfc(st_linestring(rbind(c(0,0),c(1,1)))), crs = 4326)
 #' if (require(lwgeom, quietly = TRUE)) {
