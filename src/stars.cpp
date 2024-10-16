@@ -778,6 +778,11 @@ NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy, bool interpol
 			if (iPixel < 0 || iLine < 0 || iPixel >= xsize || iLine >= ysize) // outside bbox:
 				pixel = NA_REAL;
 			else { // read pixel:
+#if GDAL_VERSION_NUM >= 3100000
+				if (poBand->InterpolateAtPoint(Pixel, Line, interpolate ? GRIORA_NearestNeighbour : GRIORA_Bilinear, &pixel, nullptr) != CE_None)
+						// tbd: handle GRIORA_Cubic, GRIORA_CubicSpline
+					stop("Error in InterpolateAtPoint()");
+#else
 				if (interpolate)
 					// stop("interpolate not implemented");
 					pixel = get_bilinear(poBand, Pixel, Line, iPixel, iLine,
@@ -785,6 +790,7 @@ NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy, bool interpol
 				else if (GDALRasterIO(poBand, GF_Read, iPixel, iLine, 1, 1,
 						&pixel, 1, 1, GDT_CFloat64, 0, 0) != CE_None)
 					stop("Error reading!");
+#endif
 				if (nodata_set && pixel == nodata)
 					pixel = NA_REAL;
 				else if (dfOffset != 0.0 || dfScale != 1.0)
