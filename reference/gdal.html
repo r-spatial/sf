@@ -100,7 +100,11 @@
 <span></span>
 <span><span class="fu">gdal_rasterize</span><span class="op">(</span><span class="va">sf</span>, <span class="va">x</span>, <span class="va">gt</span>, <span class="va">file</span>, driver <span class="op">=</span> <span class="st">"GTiff"</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">gdal_extract</span><span class="op">(</span><span class="va">f</span>, <span class="va">pts</span>, bilinear <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">gdal_extract</span><span class="op">(</span></span>
+<span>  <span class="va">f</span>,</span>
+<span>  <span class="va">pts</span>,</span>
+<span>  resampling <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nearest"</span>, <span class="st">"bilinear"</span>, <span class="st">"cubic"</span>, <span class="st">"cubicspline"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">gdal_read_mdim</span><span class="op">(</span></span>
 <span>  <span class="va">file</span>,</span>
@@ -233,8 +237,9 @@
 <dd><p>points matrix</p></dd>
 
 
-<dt id="arg-bilinear">bilinear<a class="anchor" aria-label="anchor" href="#arg-bilinear"></a></dt>
-<dd><p>logical; use bilinear interpolation, rather than nearest neighbor?</p></dd>
+<dt id="arg-resampling">resampling<a class="anchor" aria-label="anchor" href="#arg-resampling"></a></dt>
+<dd><p>character; resampling method; for method cubic or cubicspline,
+<code>stars_proxy</code> objects should be used and GDAL should have version &gt;= 3.10.0</p></dd>
 
 
 <dt id="arg-array-name">array_name<a class="anchor" aria-label="anchor" href="#arg-array-name"></a></dt>
