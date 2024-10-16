@@ -100,9 +100,10 @@ RUN cd proj* \
 #  && cd -
 
 # GDAL:
-ENV GDAL_VERSION 3.9.2
-ENV GDAL_VERSION_NAME 3.9.2
+ENV GDAL_VERSION 3.10.0
+ENV GDAL_VERSION_NAME 3.10.0beta1
 #https://download.osgeo.org/gdal/3.9.0/gdal-3.9.0beta1.tar.gz
+#https://download.osgeo.org/gdal/3.10.0/gdal-3.10.0beta1.tar.gz
 
 RUN wget -q http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
