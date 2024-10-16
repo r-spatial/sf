@@ -721,8 +721,8 @@ double get_bilinear(GDALRasterBand *poBand, double Pixel, double Line,
 		dY -= 0.5;
 
 	// read:
-	if (GDALRasterIO(poBand, GF_Read, iPixel, iLine, 2, 2,
-			(void *) pixels, 2, 2, GDT_CFloat64, sizeof(double), 0) != CE_None)
+	if (poBand->RasterIO(GF_Read, iPixel, iLine, 2, 2,
+			(void *) pixels, 2, 2, GDT_CFloat64, sizeof(double), 0, NULL) != CE_None)
 		stop("Error reading!");
 	// f(0,0): pixels[0], f(1,0): pixels[1], f(0,1): pixels[2], f(1,1): pixels[3]
 	if (na_set && (pixels[0] == na_value || pixels[1] == na_value ||
@@ -736,7 +736,7 @@ double get_bilinear(GDALRasterBand *poBand, double Pixel, double Line,
 }
 
 // [[Rcpp::export]]
-NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy, bool interpolate = false) {
+NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy, CharacterVector interpolate) {
 	// mostly taken from gdal/apps/gdallocationinfo.cpp
 
 	GDALDataset *poDataset = (GDALDataset *) GDALOpenEx(input[0], GA_ReadOnly,
@@ -749,6 +749,17 @@ NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy, bool interpol
 	NumericMatrix ret(xy.nrow(), poDataset->GetRasterCount());
 	int xsize = poDataset->GetRasterXSize();
 	int ysize = poDataset->GetRasterYSize();
+	GDALRIOResampleAlg RA;
+	if (interpolate[0] == "nearest")
+		RA = GRIORA_NearestNeighbour;
+	else if (interpolate[0] == "bilinear")
+		RA = GRIORA_Bilinear;
+	else if (interpolate[0] == "cubic")
+		RA = GRIORA_Cubic;
+	else if (interpolate[0] == "cubicspline")
+		RA = GRIORA_CubicSpline;
+	else
+		stop("interpolation method not supported"); // #nocov
 
 	double gt[6];
 	poDataset->GetGeoTransform(gt);
@@ -779,16 +790,17 @@ NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy, bool interpol
 				pixel = NA_REAL;
 			else { // read pixel:
 #if GDAL_VERSION_NUM >= 3100000
-				if (poBand->InterpolateAtPoint(Pixel, Line, interpolate ? GRIORA_NearestNeighbour : GRIORA_Bilinear, &pixel, nullptr) != CE_None)
+				if (poBand->InterpolateAtPoint(Pixel, Line, RA, &pixel, nullptr) != CE_None)
 						// tbd: handle GRIORA_Cubic, GRIORA_CubicSpline
 					stop("Error in InterpolateAtPoint()");
 #else
-				if (interpolate)
-					// stop("interpolate not implemented");
+				if (RA == GRIORA_Cubic || RA == GRIORA_CubicSpline)
+					stop("cubic or cubicspline requires GDAL >= 3.10.0");
+				if (RA == GRIORA_Bilinear)
 					pixel = get_bilinear(poBand, Pixel, Line, iPixel, iLine,
 						xsize, ysize, nodata_set, nodata);
-				else if (GDALRasterIO(poBand, GF_Read, iPixel, iLine, 1, 1,
-						&pixel, 1, 1, GDT_CFloat64, 0, 0) != CE_None)
+				else if (poBand->RasterIO(GF_Read, iPixel, iLine, 1, 1,
+						&pixel, 1, 1, GDT_CFloat64, 0, 0, NULL) != CE_None)
 					stop("Error reading!");
 #endif
 				if (nodata_set && pixel == nodata)

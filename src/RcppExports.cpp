@@ -1339,14 +1339,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_extract
-NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy, bool interpolate);
+NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy, CharacterVector interpolate);
 RcppExport SEXP _sf_CPL_extract(SEXP inputSEXP, SEXP xySEXP, SEXP interpolateSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< CharacterVector >::type input(inputSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type xy(xySEXP);
-    Rcpp::traits::input_parameter< bool >::type interpolate(interpolateSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type interpolate(interpolateSEXP);
     rcpp_result_gen = Rcpp::wrap(CPL_extract(input, xy, interpolate));
     return rcpp_result_gen;
 END_RCPP

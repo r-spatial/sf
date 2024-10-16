@@ -393,7 +393,7 @@ CPL_write_gdal <- function(x, fname, driver, options, Type, dims, from, gt, p4s,
     invisible(.Call(`_sf_CPL_write_gdal`, x, fname, driver, options, Type, dims, from, gt, p4s, na_val, scale_offset, create, only_create))
 }
 
-CPL_extract <- function(input, xy, interpolate = FALSE) {
+CPL_extract <- function(input, xy, interpolate) {
     .Call(`_sf_CPL_extract`, input, xy, interpolate)
 }
 

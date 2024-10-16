@@ -340,9 +340,10 @@ gdal_rasterize = function(sf, x, gt, file, driver = "GTiff", options = character
 #' @rdname gdal
 #' @param f gdal raster data source filename
 #' @param pts points matrix
-#' @param bilinear logical; use bilinear interpolation, rather than nearest neighbor?
-gdal_extract = function(f, pts, bilinear = FALSE) {
-	CPL_extract(f, pts, as.logical(bilinear))
+#' @param resampling character; resampling method; for method cubic or cubicspline, 
+#' `stars_proxy` objects should be used and GDAL should have version >= 3.10.0
+gdal_extract = function(f, pts, resampling = c("nearest", "bilinear", "cubic", "cubicspline")) {
+	CPL_extract(f, pts, match.arg(resampling))
 }
 
 #' @rdname gdal
