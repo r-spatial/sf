@@ -93,9 +93,10 @@ handle_bbox = function(sfc, sp) {
 st_as_sfc.SpatialPoints = function(x, ..., precision = 0.0) {
 	cc = x@coords
 	dimnames(cc) = NULL
-	lst = lapply(seq_len(nrow(cc)), function(x) st_point(cc[x,]))
-	handle_bbox(do.call(st_sfc, append(lst, list(crs = st_crs(x@proj4string), 
-		precision = precision))), x)
+	lst = vector("list", length = nrow(cc))
+	attr(lst, "points") = cc
+	attr(lst, "points_dim") = "XY"
+	handle_bbox(structure(st_sfc(lst, crs = st_crs(x@proj4string), precision = precision), n_empty = 0), x)
 }
 
 #' @rdname st_as_sfc
@@ -341,7 +342,11 @@ as_Spatial = function(from, cast = TRUE, IDs = paste0("ID", seq_along(from))) {
 sfc2SpatialPoints = function(from, IDs) {
 	if (!requireNamespace("sp", quietly = TRUE))
 		stop("package sp required, please install it first")
-	sp::SpatialPoints(do.call(rbind, from), proj4string = as(st_crs(from), "CRS"))
+	m = if (!is.null(pts <- attr(from, "points")))
+			pts
+		else 
+			do.call(rbind, from)
+	sp::SpatialPoints(m, proj4string = as(st_crs(from), "CRS"))
 }
 
 sfc2SpatialMultiPoints = function(from) {
