@@ -22,15 +22,15 @@
 #' @param ... in `st_buffer` passed on to  [s2::s2_buffer_cells()], otherwise ignored
 #' @return an object of the same class of \code{x}, with manipulated geometry.
 #' @export
-#' @details \code{st_buffer} computes a buffer around this geometry/each geometry. If any of \code{endCapStyle},
-#' \code{joinStyle}, or \code{mitreLimit} are set to non-default values ('ROUND', 'ROUND', 1.0 respectively) then
-#' the underlying 'buffer with style' GEOS function is used.
-#' If a negative buffer returns empty polygons instead of shrinking, set \code{sf_use_s2()} to \code{FALSE}.
-#' See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.html} for details.
+#' @details \code{st_buffer} computes a buffer around this geometry/each geometry. Depending on the spatial
+#' coordinate system, a different engine (GEOS or S2) can be used, which have different function
+#' arguments. The \code{nQuadSegs}, \code{endCapsStyle}, \code{joinStyle}, \code{mitreLimit} and
+#' \code{singleSide} parameters only work if the GEOS engine is used (i.e. projected coordinates or
+#' when \code{sf_use_s2()} is set to \code{FALSE}). See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.html}
+#' for details. The \code{max_cells} and \code{min_level} parameters ([s2::s2_buffer_cells()] ) work with the S2
+#' engine (i.e. geographic coordinates) and can be used to change the buffer shape (e.g. smoothing). If
+#' a negative buffer returns empty polygons instead of shrinking, set \code{sf_use_s2()} to \code{FALSE}.
 #' 
-#' \code{nQuadSegs}, \code{endCapsStyle}, \code{joinStyle}, \code{mitreLimit} and \code{singleSide} only
-#' work when the GEOS back-end is used: for projected coordinates or when \code{sf_use_s2()} is set
-#' to \code{FALSE}.
 #' @examples
 #'
 #' ## st_buffer, style options (taken from rgeos gBuffer)
