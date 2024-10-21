@@ -695,27 +695,32 @@ double get_bilinear(GDALRasterBand *poBand, double Pixel, double Line,
 	double pixels[4];
 	double dY  = Line - iLine; // [0, 1) over a raster cell
 	double dX  = Pixel - iPixel; // [0, 1) over a raster cell
-	if ((dY < 0.5 && iLine > 0) || (iLine == RasterYSize - 1)) // where to start reading
+	double eps = 1.0e-13;
+	if ((dY < 0.5 && iLine > 0) || (iLine == RasterYSize - 1)) { // where to start reading
 		iLine -= 1;
-	if ((dX < 0.5 && iPixel > 0) || (iPixel == RasterXSize - 1))
+		dY += 1.0;
+	}
+	if ((dX < 0.5 && iPixel > 0) || (iPixel == RasterXSize - 1)) {
 		iPixel -= 1;
+		dX += 1.0;
+	}
 
 	// x:
-	if (Pixel < 0.5) // border:
+	if (Pixel < (0.5 - eps)) // border:
 		dX = 0.0;
-	else if (Pixel > RasterXSize - 0.5)
+	else if (Pixel > (RasterXSize - 0.5 + eps))
 		dX = 1.0;
-	else if (dX < 0.5) // shift to pixel center:
+	else if (dX < (0.5 - eps)) // shift to pixel center:
 		dX += 0.5;
 	else
 		dX -= 0.5;
 
 	// y:
-	if (Line < 0.5)
+	if (Line < (0.5 - eps))
 		dY = 0.0;
-	else if (Line > RasterYSize - 0.5)
+	else if (Line > (RasterYSize - 0.5 + eps))
 		dY = 1.0;
-	else if (dY < 0.5)
+	else if (dY < (0.5 - eps))
 		dY += 0.5;
 	else
 		dY -= 0.5;
@@ -724,6 +729,8 @@ double get_bilinear(GDALRasterBand *poBand, double Pixel, double Line,
 	if (poBand->RasterIO(GF_Read, iPixel, iLine, 2, 2,
 			(void *) pixels, 2, 2, GDT_CFloat64, sizeof(double), 0, NULL) != CE_None)
 		stop("Error reading!");
+	// Rprintf("px[%g (%g) %g (%g) %g (%g) %g (%g)] dY: %g dX: %g iLine: %d iPixel: %d Line: %g Pixel :%g\n", pixels[0], (1-dX)*(1-dY), pixels[1], dX * (1-dY), pixels[2], (1-dX) * dY, pixels[3], dX * dY, dY, dX, iLine, iPixel, Line, Pixel);
+	//
 	// f(0,0): pixels[0], f(1,0): pixels[1], f(0,1): pixels[2], f(1,1): pixels[3]
 	if (na_set && (pixels[0] == na_value || pixels[1] == na_value ||
 			pixels[2] == na_value || pixels[3] == na_value))
