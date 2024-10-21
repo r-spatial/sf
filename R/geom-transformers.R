@@ -27,7 +27,7 @@
 #' arguments. The \code{nQuadSegs}, \code{endCapsStyle}, \code{joinStyle}, \code{mitreLimit} and
 #' \code{singleSide} parameters only work if the GEOS engine is used (i.e. projected coordinates or
 #' when \code{sf_use_s2()} is set to \code{FALSE}). See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.html}
-#' for details. The \code{max_cells} and \code{min_level} parameters ([s2::s2_buffer_cells()] ) work with the S2
+#' for details. The \code{max_cells} and \code{min_level} parameters ([s2::s2_buffer_cells()]) work with the S2
 #' engine (i.e. geographic coordinates) and can be used to change the buffer shape (e.g. smoothing). If
 #' a negative buffer returns empty polygons instead of shrinking, set \code{sf_use_s2()} to \code{FALSE}.
 #' 
