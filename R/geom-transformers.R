@@ -25,7 +25,7 @@
 #' @details \code{st_buffer} computes a buffer around this geometry/each geometry. If any of \code{endCapStyle},
 #' \code{joinStyle}, or \code{mitreLimit} are set to non-default values ('ROUND', 'ROUND', 1.0 respectively) then
 #' the underlying 'buffer with style' GEOS function is used.
-#' If a negative buffer returns empty polygons instead of shrinking, set sf_use_s2() to FALSE
+#' If a negative buffer returns empty polygons instead of shrinking, set \code{sf_use_s2()} to \code{FALSE}.
 #' See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.html} for details.
 #' 
 #' \code{nQuadSegs}, \code{endCapsStyle}, \code{joinStyle}, \code{mitreLimit} and \code{singleSide} only
@@ -313,7 +313,7 @@ st_simplify.sf = function(x, preserveTopology, dTolerance = 0.0) {
 
 #' @name geos_unary
 #' @export
-#' @param bOnlyEdges logical; if TRUE, return lines, else return polygons
+#' @param bOnlyEdges logical; if \code{TRUE}, return lines, else return polygons
 #' @details \code{st_triangulate} triangulates set of points (not constrained). \code{st_triangulate} requires GEOS version 3.4 or above
 st_triangulate = function(x, dTolerance = 0.0, bOnlyEdges = FALSE)
 	UseMethod("st_triangulate")
@@ -455,7 +455,7 @@ st_minimum_rotated_rectangle.sf = function(x, dTolerance, ...) {
 #' @name geos_unary
 #' @export
 #' @param envelope object of class \code{sfc} or \code{sfg} containing a \code{POLYGON} with the envelope for a voronoi diagram; this only takes effect when it is larger than the default envelope, chosen when \code{envelope} is an empty polygon
-#' @details \code{st_voronoi} creates voronoi tesselation. \code{st_voronoi} requires GEOS version 3.5 or above
+#' @details \code{st_voronoi} creates voronoi tessellation. \code{st_voronoi} requires GEOS version 3.5 or above
 #' @examples
 #' set.seed(1)
 #' x = st_multipoint(matrix(runif(10),,2))
@@ -505,7 +505,7 @@ st_voronoi.sf = function(x, envelope = st_polygon(), dTolerance = 0.0, bOnlyEdge
 }
 
 #' @name geos_unary
-#' @details \code{st_polygonize} creates polygon from lines that form a closed ring. In case of \code{st_polygonize}, \code{x} must be an object of class \code{LINESTRING} or \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
+#' @details \code{st_polygonize} creates a polygon from lines that form a closed ring. In case of \code{st_polygonize}, \code{x} must be an object of class \code{LINESTRING} or \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
 #' @export
 #' @examples
 #' mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
