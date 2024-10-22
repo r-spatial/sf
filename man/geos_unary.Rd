@@ -111,7 +111,7 @@ specified with long-lat coordinates and \code{sf_use_s2()} returns
 \code{TRUE}, then the value of \code{dTolerance} must be specified in
 meters.}
 
-\item{bOnlyEdges}{logical; if TRUE, return lines, else return polygons}
+\item{bOnlyEdges}{logical; if \code{TRUE}, return lines, else return polygons}
 
 \item{envelope}{object of class \code{sfc} or \code{sfg} containing a \code{POLYGON} with the envelope for a voronoi diagram; this only takes effect when it is larger than the default envelope, chosen when \code{envelope} is an empty polygon}
 
@@ -128,15 +128,14 @@ an object of the same class of \code{x}, with manipulated geometry.
 Geometric unary operations on simple feature geometries. These are all generics, with methods for \code{sfg}, \code{sfc} and \code{sf} objects, returning an object of the same class. All operations work on a per-feature basis, ignoring all other features.
 }
 \details{
-\code{st_buffer} computes a buffer around this geometry/each geometry. If any of \code{endCapStyle},
-\code{joinStyle}, or \code{mitreLimit} are set to non-default values ('ROUND', 'ROUND', 1.0 respectively) then
-the underlying 'buffer with style' GEOS function is used.
-If a negative buffer returns empty polygons instead of shrinking, set sf_use_s2() to FALSE
-See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.html} for details.
-
-\code{nQuadSegs}, \code{endCapsStyle}, \code{joinStyle}, \code{mitreLimit} and \code{singleSide} only
-work when the GEOS back-end is used: for projected coordinates or when \code{sf_use_s2()} is set
-to \code{FALSE}.
+\code{st_buffer} computes a buffer around this geometry/each geometry. Depending on the spatial
+coordinate system, a different engine (GEOS or S2) can be used, which have different function
+arguments. The \code{nQuadSegs}, \code{endCapsStyle}, \code{joinStyle}, \code{mitreLimit} and
+\code{singleSide} parameters only work if the GEOS engine is used (i.e. projected coordinates or
+when \code{sf_use_s2()} is set to \code{FALSE}). See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.html}
+for details. The \code{max_cells} and \code{min_level} parameters (\code{\link[s2:s2_boundary]{s2::s2_buffer_cells()}} ) work with the S2
+engine (i.e. geographic coordinates) and can be used to change the buffer shape (e.g. smoothing). If
+a negative buffer returns empty polygons instead of shrinking, set \code{sf_use_s2()} to \code{FALSE}.
 
 \code{st_boundary} returns the boundary of a geometry
 
@@ -162,9 +161,9 @@ rectangle has width equal to the minimum diameter, and a longer
 length. If the convex hill of the input is degenerate (a line or
 point) a linestring or point is returned.
 
-\code{st_voronoi} creates voronoi tesselation. \code{st_voronoi} requires GEOS version 3.5 or above
+\code{st_voronoi} creates voronoi tessellation. \code{st_voronoi} requires GEOS version 3.5 or above
 
-\code{st_polygonize} creates polygon from lines that form a closed ring. In case of \code{st_polygonize}, \code{x} must be an object of class \code{LINESTRING} or \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
+\code{st_polygonize} creates a polygon from lines that form a closed ring. In case of \code{st_polygonize}, \code{x} must be an object of class \code{LINESTRING} or \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
 
 \code{st_line_merge} merges lines. In case of \code{st_line_merge}, \code{x} must be an object of class \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
 
