@@ -196,7 +196,7 @@ coordinate system, a different engine (GEOS or S2) can be used, which have diffe
 arguments. The <code>nQuadSegs</code>, <code>endCapsStyle</code>, <code>joinStyle</code>, <code>mitreLimit</code> and
 <code>singleSide</code> parameters only work if the GEOS engine is used (i.e. projected coordinates or
 when <code><a href="s2.html">sf_use_s2()</a></code> is set to <code>FALSE</code>). See <a href="https://postgis.net/docs/ST_Buffer.html" class="external-link">postgis.net/docs/ST_Buffer.html</a>
-for details. The <code>max_cells</code> and <code>min_level</code> parameters (<code><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2::s2_buffer_cells()</a></code> ) work with the S2
+for details. The <code>max_cells</code> and <code>min_level</code> parameters (<code><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2::s2_buffer_cells()</a></code>) work with the S2
 engine (i.e. geographic coordinates) and can be used to change the buffer shape (e.g. smoothing). If
 a negative buffer returns empty polygons instead of shrinking, set <code><a href="s2.html">sf_use_s2()</a></code> to <code>FALSE</code>.</p>
 <p><code>st_boundary</code> returns the boundary of a geometry</p>
