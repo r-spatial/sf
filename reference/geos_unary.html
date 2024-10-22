@@ -166,7 +166,7 @@ meters.</p></dd>
 
 
 <dt id="arg-bonlyedges">bOnlyEdges<a class="anchor" aria-label="anchor" href="#arg-bonlyedges"></a></dt>
-<dd><p>logical; if TRUE, return lines, else return polygons</p></dd>
+<dd><p>logical; if <code>TRUE</code>, return lines, else return polygons</p></dd>
 
 
 <dt id="arg-envelope">envelope<a class="anchor" aria-label="anchor" href="#arg-envelope"></a></dt>
@@ -191,14 +191,14 @@ meters.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p><code>st_buffer</code> computes a buffer around this geometry/each geometry. If any of <code>endCapStyle</code>,
-<code>joinStyle</code>, or <code>mitreLimit</code> are set to non-default values ('ROUND', 'ROUND', 1.0 respectively) then
-the underlying 'buffer with style' GEOS function is used.
-If a negative buffer returns empty polygons instead of shrinking, set sf_use_s2() to FALSE
-See <a href="https://postgis.net/docs/ST_Buffer.html" class="external-link">postgis.net/docs/ST_Buffer.html</a> for details.</p>
-<p><code>nQuadSegs</code>, <code>endCapsStyle</code>, <code>joinStyle</code>, <code>mitreLimit</code> and <code>singleSide</code> only
-work when the GEOS back-end is used: for projected coordinates or when <code><a href="s2.html">sf_use_s2()</a></code> is set
-to <code>FALSE</code>.</p>
+    <p><code>st_buffer</code> computes a buffer around this geometry/each geometry. Depending on the spatial
+coordinate system, a different engine (GEOS or S2) can be used, which have different function
+arguments. The <code>nQuadSegs</code>, <code>endCapsStyle</code>, <code>joinStyle</code>, <code>mitreLimit</code> and
+<code>singleSide</code> parameters only work if the GEOS engine is used (i.e. projected coordinates or
+when <code><a href="s2.html">sf_use_s2()</a></code> is set to <code>FALSE</code>). See <a href="https://postgis.net/docs/ST_Buffer.html" class="external-link">postgis.net/docs/ST_Buffer.html</a>
+for details. The <code>max_cells</code> and <code>min_level</code> parameters (<code><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2::s2_buffer_cells()</a></code> ) work with the S2
+engine (i.e. geographic coordinates) and can be used to change the buffer shape (e.g. smoothing). If
+a negative buffer returns empty polygons instead of shrinking, set <code><a href="s2.html">sf_use_s2()</a></code> to <code>FALSE</code>.</p>
 <p><code>st_boundary</code> returns the boundary of a geometry</p>
 <p><code>st_convex_hull</code> creates the convex hull of a set of points</p>
 <p><code>st_concave_hull</code> creates the concave hull of a geometry</p>
@@ -215,8 +215,8 @@ rotated rectangular POLYGON which encloses the input geometry. The
 rectangle has width equal to the minimum diameter, and a longer
 length. If the convex hill of the input is degenerate (a line or
 point) a linestring or point is returned.</p>
-<p><code>st_voronoi</code> creates voronoi tesselation. <code>st_voronoi</code> requires GEOS version 3.5 or above</p>
-<p><code>st_polygonize</code> creates polygon from lines that form a closed ring. In case of <code>st_polygonize</code>, <code>x</code> must be an object of class <code>LINESTRING</code> or <code>MULTILINESTRING</code>, or an <code>sfc</code> geometry list-column object containing these</p>
+<p><code>st_voronoi</code> creates voronoi tessellation. <code>st_voronoi</code> requires GEOS version 3.5 or above</p>
+<p><code>st_polygonize</code> creates a polygon from lines that form a closed ring. In case of <code>st_polygonize</code>, <code>x</code> must be an object of class <code>LINESTRING</code> or <code>MULTILINESTRING</code>, or an <code>sfc</code> geometry list-column object containing these</p>
 <p><code>st_line_merge</code> merges lines. In case of <code>st_line_merge</code>, <code>x</code> must be an object of class <code>MULTILINESTRING</code>, or an <code>sfc</code> geometry list-column object containing these</p>
 <p><code>st_centroid</code> gives the centroid of a geometry</p>
 <p><code>st_point_on_surface</code> returns a point guaranteed to be on the (multi)surface.</p>
