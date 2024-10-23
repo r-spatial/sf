@@ -57,7 +57,8 @@
 <span>    <span class="op">(</span><span class="st">"-multi"</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">options</span><span class="op">)</span>,</span>
 <span>  processing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
 <span>  colorfilename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
-<span>  config_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
+<span>  config_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  read_only <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -95,6 +96,10 @@
 
 <dt id="arg-config-options">config_options<a class="anchor" aria-label="anchor" href="#arg-config-options"></a></dt>
 <dd><p>named character vector with GDAL config options, like <code>c(option1=value1, option2=value2)</code></p></dd>
+
+
+<dt id="arg-read-only">read_only<a class="anchor" aria-label="anchor" href="#arg-read-only"></a></dt>
+<dd><p>logical; only for <code>ogrinfo</code>: if <code>TRUE</code>, source is opened in read-only mode</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -214,7 +219,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Band 1 Block=20x20 Type=Byte, ColorInterp=Gray</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Computed Min/Max=74.000,255.000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `storms_xyz' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/Rtmpu0DxVu/file1d044ca31e93.gpkg' using driver `GPKG'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpQaqXSa/file1d484dfa9aef.gpkg' using driver `GPKG'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 71 features and 0 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: LINESTRING</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XYZ</span>
