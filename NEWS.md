@@ -1,8 +1,10 @@
 # version 1.0-19
 
+* `gdal_utils()` `ogrinfo` has an argument `read_only` which, when `TRUE` (or `options` includes `"-ro"`), opens a datasource in read-only mode (#2460; `sf` did this before 1.0-17); by default a datasource is opened in update (read-write) mode (since sf 1.0-17; #2420)
+
 # version 1.0-18
 
-* support  `POLYGON FULL` simple feature geometry, representing the the entire Earth surface, as used by `s2geometry`; #2441
+* support  `POLYGON FULL` simple feature geometry, representing the entire Earth surface, as used by `s2geometry`; #2441
 
 * `st_sfc()` has an argument `oriented` which, when set to `TRUE`, adds an attribute `oriented=TRUE` to an `sfc` object, indicating that this object should not be reoriented in conversion to `s2_geography` (avoiding using the global option `s2_oriented`); `st_as_sfc.bbox()` sets this to `TRUE`; #2441
 
