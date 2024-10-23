@@ -373,8 +373,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_ogrinfo
-Rcpp::CharacterVector CPL_ogrinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector co);
-RcppExport SEXP _sf_CPL_ogrinfo(SEXP objSEXP, SEXP optionsSEXP, SEXP ooSEXP, SEXP coSEXP) {
+Rcpp::CharacterVector CPL_ogrinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector co, bool read_only);
+RcppExport SEXP _sf_CPL_ogrinfo(SEXP objSEXP, SEXP optionsSEXP, SEXP ooSEXP, SEXP coSEXP, SEXP read_onlySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -382,7 +382,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type options(optionsSEXP);
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type oo(ooSEXP);
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type co(coSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_ogrinfo(obj, options, oo, co));
+    Rcpp::traits::input_parameter< bool >::type read_only(read_onlySEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_ogrinfo(obj, options, oo, co, read_only));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1510,7 +1511,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_read_ogr", (DL_FUNC) &_sf_CPL_read_ogr, 14},
     {"_sf_CPL_read_gdal_stream", (DL_FUNC) &_sf_CPL_read_gdal_stream, 12},
     {"_sf_CPL_gdalinfo", (DL_FUNC) &_sf_CPL_gdalinfo, 4},
-    {"_sf_CPL_ogrinfo", (DL_FUNC) &_sf_CPL_ogrinfo, 4},
+    {"_sf_CPL_ogrinfo", (DL_FUNC) &_sf_CPL_ogrinfo, 5},
     {"_sf_CPL_gdaladdo", (DL_FUNC) &_sf_CPL_gdaladdo, 8},
     {"_sf_CPL_gdalwarp", (DL_FUNC) &_sf_CPL_gdalwarp, 8},
     {"_sf_CPL_gdalrasterize", (DL_FUNC) &_sf_CPL_gdalrasterize, 8},
