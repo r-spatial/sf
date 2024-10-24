@@ -4,7 +4,7 @@
 
 # version 1.0-18
 
-* support  `POLYGON FULL` simple feature geometry, representing the entire Earth surface, as used by `s2geometry`; #2441
+* support  `POLYGON FULL` simple feature geometry, representing the entire Earth surface, as used by `s2geometry`; see also https://r-spatial.org/r/2024/10/11/polygonfull.html for a longer introduction; #2441
 
 * `st_sfc()` has an argument `oriented` which, when set to `TRUE`, adds an attribute `oriented=TRUE` to an `sfc` object, indicating that this object should not be reoriented in conversion to `s2_geography` (avoiding using the global option `s2_oriented`); `st_as_sfc.bbox()` sets this to `TRUE`; #2441
 
