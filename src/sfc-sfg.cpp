@@ -99,10 +99,9 @@ LogicalVector sfc_is_empty(List sfc) {
 	for (R_xlen_t i = 0; i < sfc.size(); i++) {
 		item = sfc[i];
 		int item_len = Rf_length(item);
+		bool is_empty = true;
 		
 		if (Rf_inherits(item, "POINT")) {
-			bool is_empty = true;
-			
 			if (TYPEOF(item) == REALSXP) {
 				for (int j = 0; j < item_len; j++) {
 					double val = REAL(item)[j];
@@ -120,11 +119,9 @@ LogicalVector sfc_is_empty(List sfc) {
 					}
 				}
 			}
-			
-			out[i] = is_empty;
-		} else {
-			out[i] = item_len == 0;
-		}
+		} else
+			is_empty = (item_len == 0) || (TYPEOF(item) == VECSXP && Rf_length(VECTOR_ELT(item, 0)) == 0); // #2463
+		out[i] = is_empty;
 	}
 	
 	return out;
