@@ -119,8 +119,16 @@ LogicalVector sfc_is_empty(List sfc) {
 					}
 				}
 			}
-		} else
-			is_empty = (item_len == 0) || (TYPEOF(item) == VECSXP && Rf_length(VECTOR_ELT(item, 0)) == 0); // #2463
+		} else {
+			if (item_len == 0) 
+				is_empty = true;
+			else if (TYPEOF(item) == VECSXP) { // #2463
+				item = VECTOR_ELT(item, 0); 
+				is_empty = Rf_length(item) == 0 || // e.g. POLYGON with 1 ring without coordinates
+						(TYPEOF(item) == VECSXP && Rf_length(VECTOR_ELT(item, 0)) == 0); // same for one level deeper, e.g. MULTIPOLYGON:
+			} else
+				is_empty = false;
+		}
 		out[i] = is_empty;
 	}
 	
