@@ -85,6 +85,11 @@ prnt.GEOMETRYCOLLECTION = function(x, ..., EWKT = TRUE) {
 #' \href{https://www.ogc.org/standard/sfa/}{simple features access} specification and extensions
 #' (known as EWKT, supported by PostGIS and other simple features implementations for addition of 
 #' a SRID to a WKT string).
+#' @note To improve conversion performance, the lwgeom package can be used (it must be installed
+#' beforehand) and set the \code{Sys.setenv("LWGEOM_WKT" = "true")} environment variable. This
+#' will also result in faster printing of complex geometries. Note that the representation as WKT is
+#' different from the sf package and may cause reproducibility problems. An alternative solution is
+#' to use the [lwgeom::st_astext()] or [wk::as_wkt()] functions.
 #'
 #' @export
 st_as_text = function(x, ...) UseMethod("st_as_text")
