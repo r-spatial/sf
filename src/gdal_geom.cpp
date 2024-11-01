@@ -63,8 +63,12 @@ Rcpp::NumericVector CPL_length(Rcpp::List sfc) {
 				}
 				break;
 			default: {
-					OGRGeometryCollection *a = (OGRGeometryCollection *) g[i];
-					out[i] = a->get_Length();
+					if (OGR_GT_IsSubClassOf(gt, wkbGeometryCollection)) {
+						OGRGeometryCollection *a = (OGRGeometryCollection *) g[i];
+						out[i] = a->get_Length();
+					} else {
+						out[i] = 0.0;
+					}
 				}
 		}
 		OGRGeometryFactory f;
