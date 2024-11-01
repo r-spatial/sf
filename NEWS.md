@@ -1,5 +1,7 @@
 # version 1.0-19
 
+* fix ambiguities in `CPL_area` and `CPL_length` revealed in testing with GDAL 3.10.0 release candidates ; #2466, #2468, #2429
+
 * improve test on empty geometries, which changed in 1.0-18; #2463
 
 * `gdal_utils()` `ogrinfo` has an argument `read_only` which, when `TRUE` (or `options` includes `"-ro"`), opens a datasource in read-only mode (#2460; `sf` did this before 1.0-17); by default a datasource is opened in update (read-write) mode (since sf 1.0-17; #2420)

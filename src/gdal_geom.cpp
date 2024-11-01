@@ -12,14 +12,19 @@ Rcpp::NumericVector CPL_area(Rcpp::List sfc) {
 	for (size_t i = 0; i < g.size(); i++) {
 		if (g[i]->getDimension() == 2) {
 			OGRwkbGeometryType gt = OGR_GT_Flatten(g[i]->getGeometryType());
-			if (gt == wkbMultiSurface || gt == wkbMultiPolygon) {
+// PR 2468
+//			if (gt == wkbMultiSurface || gt == wkbMultiPolygon) {
+			if (OGR_GT_IsSubClassOf(gt, wkbGeometryCollection)) {
+				// will match OGRMultiPolygon, OGRMultiSurface and OGRGeometryCollection
 				OGRGeometryCollection *gc = (OGRGeometryCollection *) g[i];
 				out[i] = gc->get_Area();
-			} else {
+			} else if (OGR_GT_IsSurface(gt)) {
 				OGRSurface *surf = (OGRSurface *) g[i];
 				out[i] = surf->get_Area();
-			} 
-		} else
+			} else {
+				out[i] = 0.0; // not supposed to happen, but who knows...
+			}
+		} else 
 			out[i] = 0.0;
 		OGRGeometryFactory::destroyGeometry(g[i]);
 	}
@@ -63,8 +68,15 @@ Rcpp::NumericVector CPL_length(Rcpp::List sfc) {
 				}
 				break;
 			default: {
-					OGRGeometryCollection *a = (OGRGeometryCollection *) g[i];
-					out[i] = a->get_Length();
+// PR 2469
+/*					OGRGeometryCollection *a = (OGRGeometryCollection *) g[i];
+					out[i] = a->get_Length();*/
+				if (OGR_GT_IsSubClassOf(gt, wkbGeometryCollection)) {
+						OGRGeometryCollection *a = (OGRGeometryCollection *) g[i];
+						out[i] = a->get_Length();
+					} else {
+						out[i] = 0.0;
+					}
 				}
 		}
 		OGRGeometryFactory f;
