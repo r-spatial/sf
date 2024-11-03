@@ -1134,6 +1134,14 @@ Geodetic CRS:  WGS 84
   a                           geom
 1 1 MULTIPOLYGON (((0 0, 10 0, ...
 > 
+> '{"type":"Polygon","coordinates":[[]]}' |> read_sf() |> st_is_empty()
+[1] TRUE
+> # '{"type":"Polygon","coordinates":[]}' |> read_sf() |> st_is_empty() # breaks on GDAL < 3.9 or so
+> '{"type":"MultiPolygon","coordinates":[[[]]]}' |> read_sf() |> st_is_empty()
+[1] TRUE
+> '{"type":"MultiPolygon","coordinates":[[]]}' |> read_sf() |> st_is_empty()
+[1] TRUE
+> 
 > proc.time()
    user  system elapsed 
-  5.266   1.417   5.341 
+  4.932   1.534   5.006 
