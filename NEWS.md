@@ -4,6 +4,8 @@
 
 * `gdal_utils()` `ogrinfo` has an argument `read_only` which, when `TRUE` (or `options` includes `"-ro"`), opens a datasource in read-only mode (#2460; `sf` did this before 1.0-17); by default a datasource is opened in update (read-write) mode (since sf 1.0-17; #2420)
 
+* the `sf` -> `ppp` conversion accepts a data.frame of marks instead of just 1 column #2450, by @agila5
+
 # version 1.0-18
 
 * support  `POLYGON FULL` simple feature geometry, representing the entire Earth surface, as used by `s2geometry`; #2441

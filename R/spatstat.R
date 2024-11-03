@@ -144,13 +144,12 @@ as.ppp.sf = function(X, ...) {
 	if (st_dimension(X[1,]) == 2)
 		X = X[-1,]
 	st_geometry(X) = NULL # remove geometry column
-	if (ncol(X) > 1)
-		warning("only first attribute column is used for marks")
 
-	if (ncol(X) == 0)
+	if (ncol(X) == 0) {
 		pp
-	else 
-		spatstat.geom::setmarks(pp, X[1])
+	} else {
+		spatstat.geom::setmarks(pp, X)
+	}
 }
 
 as.owin.POLYGON = function(W, ..., fatal, check_polygons = TRUE) {
