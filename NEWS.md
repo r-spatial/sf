@@ -1,12 +1,12 @@
 # version 1.0-19
 
-* fix type checks in C++ GDAL area and length computation functions, anticipating GDAL 3.10.0; #2466, #2468mm, #2469 by @rsbivand and @rouault
+* fix type checks in C++ GDAL area and length computation functions, anticipating GDAL 3.10.0; #2466, #2468, #2469 by @rsbivand and @rouault
 
 * improve test on empty geometries, which changed in 1.0-18; #2463
 
 * `gdal_utils()` `ogrinfo` has an argument `read_only` which, when `TRUE` (or `options` includes `"-ro"`), opens a datasource in read-only mode (#2460; `sf` did this before 1.0-17); by default a datasource is opened in update (read-write) mode (since sf 1.0-17; #2420)
 
-* the `sf` -> `ppp` conversion accepts a data.frame of marks instead of just 1 column #2450, by @agila5
+* the `sf` -> `ppp` conversion `as.ppp.sf()` accepts a data.frame of marks instead of just 1 column #2450, by @agila5
 
 # version 1.0-18
 
