@@ -127,7 +127,7 @@ Well-Know Binary geometries to sfc
 }
 \details{
 for \code{geometry_column}, see also
-\url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}
+\url{https://gdal.org/en/latest/development/rfc/rfc41_multiple_geometry_fields.html}
 
 for values for \code{type} see
 \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but

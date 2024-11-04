@@ -663,6 +663,10 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 	Rcpp::List ret = sfc_from_ogr(g, true); // destroys g;
 	// how to return the target CRS when only a transformation pipeline is provided? Not by:
 	// ret.attr("crs") = create_crs(ct->GetTargetCS(), true);
+	// 
+	// According to the discussion at https://github.com/r-spatial/sf/issues/2439, this is 
+	// not a solvable issue in general. See the same link for a possible workaround and 
+	// a more general solution that uses PROJ. 
 	ct->DestroyCT(ct);
 	if (dest)
 		dest->Release();

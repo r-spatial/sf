@@ -360,3 +360,8 @@ st_exterior_ring(st_sf(a = 1, geom = spl1))
 st_exterior_ring(smpl1[[1]])
 st_exterior_ring(st_sfc(smpl1))
 st_exterior_ring(st_sf(a = 1, geom = st_sfc(smpl1)))
+
+'{"type":"Polygon","coordinates":[[]]}' |> read_sf() |> st_is_empty()
+# '{"type":"Polygon","coordinates":[]}' |> read_sf() |> st_is_empty() # breaks on GDAL < 3.9 or so
+'{"type":"MultiPolygon","coordinates":[[[]]]}' |> read_sf() |> st_is_empty()
+'{"type":"MultiPolygon","coordinates":[[]]}' |> read_sf() |> st_is_empty()

@@ -26,9 +26,12 @@
 \alias{st_bbox.Extent}
 \alias{st_bbox.numeric}
 \alias{NA_bbox_}
+\alias{FULL_bbox_}
 \alias{format.bbox}
 \title{Return bounding of a simple feature or simple feature set}
 \format{
+An object of class \code{bbox} of length 4.
+
 An object of class \code{bbox} of length 4.
 }
 \usage{
@@ -80,6 +83,8 @@ st_bbox(obj, ...)
 
 NA_bbox_
 
+FULL_bbox_
+
 \method{format}{bbox}(x, ...)
 }
 \arguments{
@@ -103,6 +108,8 @@ methods for \code{bbox} objects to generate a polygon around the four bounding b
 Return bounding of a simple feature or simple feature set
 }
 \details{
+\code{NA_bbox_} represents the missing value for a \code{bbox} object
+
 \code{NA_bbox_} represents the missing value for a \code{bbox} object
 }
 \examples{

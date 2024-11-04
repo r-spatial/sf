@@ -70,11 +70,6 @@ Bounding box:  xmin: 0 ymin: 0 xmax: 111319.5 ymax: 111325.1
 Projected CRS: WGS 84 / Pseudo-Mercator
 POINT (0 0)
 POINT (111319.5 111325.1)
-> if (Sys.getenv("USER") %in% c("edzer", "travis")) { # causes memory leaks:
-+   stopifnot(inherits(try(sf_project("+proj=longlat", "+proj=bar", matrix(1:4,2)), silent = TRUE), "try-error"))
-+   stopifnot(inherits(try(sf_project("+proj=foo", "+proj=longlat", matrix(1:4,2)), silent = TRUE), "try-error"))
-+ }
-> 
 > if (sf_extSoftVersion()["USE_PROJ_H"] == "true" || sf_proj_info("have_datum_files")) {
 +   "datum files installed"
 + } else {
@@ -98,4 +93,4 @@ POINT (111319.5 111325.1)
 > 
 > proc.time()
    user  system elapsed 
-  0.632   1.210   0.580 
+  0.750   1.093   0.700 

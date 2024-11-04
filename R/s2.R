@@ -44,13 +44,13 @@ as_s2_geography.sfg <- function(x, ..., oriented = getOption("s2_oriented", FALS
 }
 
 # dynamically exported in tidyverse.R
-as_s2_geography.sfc <- function(x, ..., oriented = getOption("s2_oriented", FALSE)) {
+as_s2_geography.sfc <- function(x, ..., oriented = getOption("s2_oriented", FALSE) || isTRUE(attr(x, "oriented"))) {
 	st_as_s2.sfc(x, ..., oriented = oriented)
 }
 
 # dynamically exported in tidyverse.R
-as_s2_geography.sf <- function(x, ..., oriented = getOption("s2_oriented", FALSE)) {
-	st_as_s2.sf(x, ..., oriented = oriented)
+as_s2_geography.sf <- function(x, ...) {
+	st_as_s2.sf(x, ...)
 }
 
 #' functions for spherical geometry, using s2 package
@@ -86,7 +86,8 @@ st_as_s2.sf = function(x, ...) st_as_s2(st_geometry(x), ...)
 #' left of the polygon's path.
 #' @param rebuild logical; call \link[s2]{s2_rebuild} on the geometry (think of this as a \code{st_make_valid} on the sphere)
 #' @export
-st_as_s2.sfc = function(x, ..., oriented = getOption("s2_oriented", FALSE), rebuild = FALSE) {
+st_as_s2.sfc = function(x, ..., oriented = getOption("s2_oriented", FALSE) || isTRUE(attr(x, "oriented")), 
+						rebuild = FALSE) {
 	if (!is.na(st_crs(x)) && !st_is_longlat(x))
 		x = st_transform(x, ifelse(st_axis_order(), "OGC:CRS84", "EPSG:4326"))
 	if (length(x) && nchar(class(x[[1]])[1]) > 2) { # Z, M, ZM:

@@ -99,10 +99,9 @@ LogicalVector sfc_is_empty(List sfc) {
 	for (R_xlen_t i = 0; i < sfc.size(); i++) {
 		item = sfc[i];
 		int item_len = Rf_length(item);
+		bool is_empty = true;
 		
 		if (Rf_inherits(item, "POINT")) {
-			bool is_empty = true;
-			
 			if (TYPEOF(item) == REALSXP) {
 				for (int j = 0; j < item_len; j++) {
 					double val = REAL(item)[j];
@@ -120,13 +119,39 @@ LogicalVector sfc_is_empty(List sfc) {
 					}
 				}
 			}
-			
-			out[i] = is_empty;
 		} else {
-			out[i] = item_len == 0;
+			if (item_len == 0) 
+				is_empty = true;
+			else if (TYPEOF(item) == VECSXP) { // #2463
+				item = VECTOR_ELT(item, 0); 
+				is_empty = Rf_length(item) == 0 || // e.g. POLYGON with 1 ring without coordinates
+						(TYPEOF(item) == VECSXP && Rf_length(VECTOR_ELT(item, 0)) == 0); // same for one level deeper, e.g. MULTIPOLYGON:
+			} else
+				is_empty = false;
 		}
+		out[i] = is_empty;
 	}
 	
+	return out;
+}
+
+// [[Rcpp::export]]
+LogicalVector sfc_is_full(List sfc) {
+	LogicalVector out(sfc.size());
+	
+	SEXP item;
+	
+	for (R_xlen_t i = 0; i < sfc.size(); i++) {
+		item = sfc[i];
+		int item_len = Rf_length(item);
+		bool is_full = false;
+		if (item_len == 1 && Rf_inherits(item, "POLYGON")) {
+			SEXP m = VECTOR_ELT(item, 0);
+			if (Rf_isMatrix(m) && Rf_nrows(m) == 2) /* we can go on and check the values, but... */
+				is_full = true;
+		}
+		out[i] = is_full;
+	}
 	return out;
 }
 

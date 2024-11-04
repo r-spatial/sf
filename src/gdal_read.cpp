@@ -115,7 +115,7 @@ OGRwkbGeometryType to_multi_what(std::vector<OGRGeometry *> gv) {
 			return wkbMultiPoint;
 		if (lines && multilines)
 			return wkbMultiLineString;
-		if (!lines && !multilines)
+		if (polygons && multipolygons)
 			return wkbMultiPolygon;
 	}
 	// another mix or single type:

@@ -108,5 +108,28 @@ as.psp(sf, marks = 5:1)
 (x = st_as_sf(as.psp(sf)))
 (y = st_as_sfc(as.psp(sf)))
 all.equal(st_geometry(x), y)
+
+# Test sf -> ppp conversion when the conversion involves more than 1 column of mark(s)
+# (https://github.com/r-spatial/sf/issues/2450)
+reference_ppp <- ppp(
+	x = c(0.25, 0.75),
+	y = c(0.25, 0.75), 
+	# We consider a data.frame of marks which includes several types of columns
+	# (and also a list column)
+	marks = data.frame(
+		a = TRUE, b = 1L, c = pi, d = I(list(list(1, 2), list("A", "B", "C"))), 
+		#NB: row.names should always defined as a vector with character character
+		#since they are converted as characters when applying st_as_sf (see line
+		#below) which mixes NA and not-NA row.names
+		row.names = c("point1", "point2")
+	)
+)
+# The st_as_sf conversion returns an sf object where the first row is the Window
+# and the other rows are the points
+tmp <- st_as_sf(reference_ppp)
+pts <- tmp[tmp$label == "point", 1:4]
+target_ppp <- as.ppp(pts)
+Window(target_ppp) <- owin()
+all.equal(reference_ppp, target_ppp)
 }
 ## IGNORE_RDIFF_END

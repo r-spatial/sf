@@ -57,7 +57,14 @@ prnt.MULTIPOINT = function(x, ..., EWKT = TRUE, nested_parens = FALSE) {
 		  prnt.Matrix(x, nested_parens = nested_parens, ...))
 }
 prnt.LINESTRING = function(x, ..., EWKT = TRUE) paste(WKT_name(x, EWKT = EWKT), prnt.Matrix(x, ...))
-prnt.POLYGON = function(x, ..., EWKT = TRUE) paste(WKT_name(x, EWKT = EWKT), prnt.MatrixList(x, ...))
+
+prnt.POLYGON = function(x, ..., EWKT = TRUE) {
+	if (st_is_full(x, ...))
+		"POLYGON FULL"
+	else
+		paste(WKT_name(x, EWKT = EWKT), prnt.MatrixList(x, ...))
+}
+
 prnt.MULTILINESTRING = function(x, ..., EWKT = TRUE) paste(WKT_name(x, EWKT = EWKT), prnt.MatrixList(x, ...))
 prnt.MULTIPOLYGON = function(x, ..., EWKT = TRUE) paste(WKT_name(x, EWKT = EWKT), prnt.MatrixListList(x, ...))
 prnt.GEOMETRYCOLLECTION = function(x, ..., EWKT = TRUE) {
@@ -78,6 +85,11 @@ prnt.GEOMETRYCOLLECTION = function(x, ..., EWKT = TRUE) {
 #' \href{https://www.ogc.org/standard/sfa/}{simple features access} specification and extensions
 #' (known as EWKT, supported by PostGIS and other simple features implementations for addition of 
 #' a SRID to a WKT string).
+#' @note To improve conversion performance, the lwgeom package can be used (it must be installed
+#' beforehand) and set the \code{Sys.setenv("LWGEOM_WKT" = "true")} environment variable. This
+#' will also result in faster printing of complex geometries. Note that the representation as WKT is
+#' different from the sf package and may cause reproducibility problems. An alternative solution is
+#' to use the [lwgeom::st_astext()] or [wk::as_wkt()] functions.
 #'
 #' @export
 st_as_text = function(x, ...) UseMethod("st_as_text")
@@ -164,6 +176,8 @@ st_as_sfc.character = function(x, crs = NA_integer_, ..., GeoJSON = FALSE) {
 			}
 			x = ewkt_to_wkt(x)
 		}
+		if (sf_use_s2() && !identical(st_is_longlat(crs), FALSE) && any(full <- (x == "POLYGON FULL")))
+			x[full] = "POLYGON((0 -90,0 -90))" # s2 struct for POLYGON FULL
 		ret = st_sfc(CPL_sfc_from_wkt(x))
 		st_crs(ret) = crs
 		ret

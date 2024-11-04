@@ -70,14 +70,14 @@ Rcpp::CharacterVector CPL_gdalinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVec
 
 // [[Rcpp::export]]
 Rcpp::CharacterVector CPL_ogrinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options, 
-		Rcpp::CharacterVector oo, Rcpp::CharacterVector co) {
+		Rcpp::CharacterVector oo, Rcpp::CharacterVector co, bool read_only = false) {
 	set_config_options(co);
 	std::vector <char *> options_char = create_options(options, true);
 	std::vector <char *> oo_char = create_options(oo, true); // open options
 	GDALDatasetH ds = NULL;
 #if GDAL_VERSION_NUM >= 3070000
 	if (obj.size())
-		ds = GDALOpenEx((const char *) obj[0], GA_ReadOnly, NULL, oo_char.data(), NULL);
+		ds = GDALOpenEx((const char *) obj[0], read_only ? GA_ReadOnly : GA_Update, NULL, oo_char.data(), NULL);
 	GDALVectorInfoOptions* opt = GDALVectorInfoOptionsNew(options_char.data(), NULL);
 	char *ret_val = GDALVectorInfo(ds, opt);
 	if (ret_val == NULL)

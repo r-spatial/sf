@@ -68,7 +68,11 @@ gdal_polygonize(
 
 gdal_rasterize(sf, x, gt, file, driver = "GTiff", options = character())
 
-gdal_extract(f, pts, bilinear = FALSE)
+gdal_extract(
+  f,
+  pts,
+  resampling = c("nearest", "bilinear", "cubic", "cubicspline")
+)
 
 gdal_read_mdim(
   file,
@@ -147,7 +151,8 @@ gdal_create(f, nxy, values, crs, xlim, ylim)
 
 \item{pts}{points matrix}
 
-\item{bilinear}{logical; use bilinear interpolation, rather than nearest neighbor?}
+\item{resampling}{character; resampling method; for method cubic or cubicspline,
+\code{stars_proxy} objects should be used and GDAL should have version >= 3.10.0}
 
 \item{array_name}{array name}
 

@@ -26,6 +26,7 @@ setOldClass(c("sfc_GEOMETRY", "sfc"))
 setOldClass(c("sfc_GEOMETRYCOLLECTION", "sfc"))
 setOldClass("sfg")
 setOldClass("crs")
+setOldClass("bbox")
 
 .sf_cache <- new.env(FALSE, parent=globalenv())
 
@@ -39,6 +40,7 @@ pathGrob <- NULL
 	load_gdal() 
 	if ((s2 <- Sys.getenv("_SF_USE_S2")) != "")
 		options(sf_use_s2 = s2 != "false")
+	FULL_bbox_ <<- st_set_crs(FULL_bbox_, "OGC:CRS84")
 }
 
 .onUnload = function(libname, pkgname) {
