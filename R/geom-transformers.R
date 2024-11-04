@@ -455,6 +455,7 @@ st_minimum_rotated_rectangle.sf = function(x, dTolerance, ...) {
 #' @name geos_unary
 #' @export
 #' @param envelope object of class \code{sfc} or \code{sfg} containing a \code{POLYGON} with the envelope for a voronoi diagram; this only takes effect when it is larger than the default envelope, chosen when \code{envelope} is an empty polygon
+#' @param point_order logical; preserve point order if TRUE and GEOS version >= 3.12; overrides bOnlyEdges
 #' @details \code{st_voronoi} creates voronoi tessellation. \code{st_voronoi} requires GEOS version 3.5 or above
 #' @examples
 #' set.seed(1)
@@ -475,24 +476,39 @@ st_minimum_rotated_rectangle.sf = function(x, dTolerance, ...) {
 #'  # compute Voronoi polygons:
 #'  pols = st_collection_extract(st_voronoi(do.call(c, st_geometry(pts))))
 #'  # match them to points:
-#'  pts$pols = pols[unlist(st_intersects(pts, pols))]
+#'  pts_pol = st_intersects(pts, pols)
+#'  pts$pols = pols[unlist(pts_pol)] # re-order
+#'  if (isTRUE(try(compareVersion(sf_extSoftVersion()["GEOS"], "3.12.0") > -1,
+#'    silent = TRUE))) {
+#'    pols_po = st_collection_extract(st_voronoi(do.call(c, st_geometry(pts)),
+#'      point_order = TRUE)) # GEOS >= 3.12 can preserve order of inputs
+#'    pts_pol_po = st_intersects(pts, pols_po)
+#'    print(all(unlist(pts_pol_po) == 1:(n/2)))
+#'  }
 #'  plot(pts["id"], pch = 16) # ID is color
 #'  plot(st_set_geometry(pts, "pols")["id"], xlim = c(0,1), ylim = c(0,1), reset = FALSE)
 #'  plot(st_geometry(pts), add = TRUE)
 #'  layout(matrix(1)) # reset plot layout
 #' }
-st_voronoi = function(x, envelope, dTolerance = 0.0, bOnlyEdges = FALSE)
+st_voronoi = function(x, envelope, dTolerance = 0.0, bOnlyEdges = FALSE, point_order = FALSE)
 	UseMethod("st_voronoi")
 
 #' @export
-st_voronoi.sfg = function(x, envelope = st_polygon(), dTolerance = 0.0, bOnlyEdges = FALSE)
-	get_first_sfg(st_voronoi(st_sfc(x), st_sfc(envelope), dTolerance, bOnlyEdges = bOnlyEdges))
+st_voronoi.sfg = function(x, envelope = st_polygon(), dTolerance = 0.0, bOnlyEdges = FALSE, point_order = FALSE)
+	get_first_sfg(st_voronoi(st_sfc(x), st_sfc(envelope), dTolerance, bOnlyEdges = bOnlyEdges, point_order = point_order))
 
 #' @export
-st_voronoi.sfc = function(x, envelope = st_polygon(), dTolerance = 0.0, bOnlyEdges = FALSE) {
+st_voronoi.sfc = function(x, envelope = st_polygon(), dTolerance = 0.0, bOnlyEdges = FALSE, point_order = FALSE) {
 	if (compareVersion(CPL_geos_version(), "3.5.0") > -1) {
 		if (isTRUE(st_is_longlat(x)))
 			warning("st_voronoi does not correctly triangulate longitude/latitude data")
+		if (compareVersion(CPL_geos_version(), "3.12.0") > -1) {
+			bOnlyEdges = as.integer(bOnlyEdges)
+			if (point_order) bOnlyEdges = 2L # GEOS enum GEOS_VORONOI_PRESERVE_ORDER
+		} else {
+			if (point_order) 
+				warning("Point order retention not supported for GEOS ", CPL_geos_version())
+		}
 		st_sfc(CPL_geos_voronoi(x, st_sfc(envelope), dTolerance = dTolerance,
 			bOnlyEdges = as.integer(bOnlyEdges)))
 	} else
@@ -500,8 +516,8 @@ st_voronoi.sfc = function(x, envelope = st_polygon(), dTolerance = 0.0, bOnlyEdg
 }
 
 #' @export
-st_voronoi.sf = function(x, envelope = st_polygon(), dTolerance = 0.0, bOnlyEdges = FALSE) {
-	st_set_geometry(x, st_voronoi(st_geometry(x), st_sfc(envelope), dTolerance, bOnlyEdges))
+st_voronoi.sf = function(x, envelope = st_polygon(), dTolerance = 0.0, bOnlyEdges = FALSE, point_order = FALSE) {
+	st_set_geometry(x, st_voronoi(st_geometry(x), st_sfc(envelope), dTolerance, bOnlyEdges = bOnlyEdges, point_order = point_order))
 }
 
 #' @name geos_unary

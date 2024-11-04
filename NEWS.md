@@ -8,6 +8,8 @@
 
 * the `sf` -> `ppp` conversion `as.ppp.sf()` accepts a data.frame of marks instead of just 1 column #2450, by @agila5
 
+* add flag for preservation of point order in `st_voronoi` #1371 for GEOS >= 3.12
+
 # version 1.0-18
 
 * support  `POLYGON FULL` simple feature geometry, representing the entire Earth surface, as used by `s2geometry`; see also https://r-spatial.org/r/2024/10/11/polygonfull.html for a longer introduction; #2441
