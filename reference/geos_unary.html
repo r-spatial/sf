@@ -75,7 +75,13 @@
 <span></span>
 <span><span class="fu">st_minimum_rotated_rectangle</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">st_voronoi</span><span class="op">(</span><span class="va">x</span>, <span class="va">envelope</span>, dTolerance <span class="op">=</span> <span class="fl">0</span>, bOnlyEdges <span class="op">=</span> <span class="cn">FALSE</span>, point_order <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">st_voronoi</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">envelope</span>,</span>
+<span>  dTolerance <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  bOnlyEdges <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  point_order <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">st_polygonize</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
@@ -173,6 +179,10 @@ meters.</p></dd>
 <dd><p>object of class <code>sfc</code> or <code>sfg</code> containing a <code>POLYGON</code> with the envelope for a voronoi diagram; this only takes effect when it is larger than the default envelope, chosen when <code>envelope</code> is an empty polygon</p></dd>
 
 
+<dt id="arg-point-order">point_order<a class="anchor" aria-label="anchor" href="#arg-point-order"></a></dt>
+<dd><p>logical; preserve point order if TRUE and GEOS version &gt;= 3.12; overrides bOnlyEdges</p></dd>
+
+
 <dt id="arg-directed">directed<a class="anchor" aria-label="anchor" href="#arg-directed"></a></dt>
 <dd><p>logical; if <code>TRUE</code>, lines with opposite directions will not be merged</p></dd>
 
@@ -183,10 +193,6 @@ meters.</p></dd>
 
 <dt id="arg-dfmaxlength">dfMaxLength<a class="anchor" aria-label="anchor" href="#arg-dfmaxlength"></a></dt>
 <dd><p>maximum length of a line segment. If <code>x</code> has geographical coordinates (long/lat), <code>dfMaxLength</code> is either a numeric expressed in meter, or an object of class <code>units</code> with length units <code>rad</code> or <code>degree</code>; segmentation in the long/lat case takes place along the great circle, using <a href="https://r-spatial.github.io/lwgeom/reference/geod.html" class="external-link">st_geod_segmentize</a>.</p></dd>
-
-
-<dt id="arg-point-order">point_order<a class="anchor" aria-label="anchor" href="#arg-point-order"></a></dt>
-<dd><p>logical; preserve point order if TRUE and GEOS version &gt;= 3.12; overrides bOnlyEdges</p></dd>
 
 </dl></div>
     <div class="section level2">
