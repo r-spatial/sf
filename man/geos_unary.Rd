@@ -49,7 +49,13 @@ st_inscribed_circle(x, dTolerance, ...)
 
 st_minimum_rotated_rectangle(x, ...)
 
-st_voronoi(x, envelope, dTolerance = 0, bOnlyEdges = FALSE, point_order = FALSE)
+st_voronoi(
+  x,
+  envelope,
+  dTolerance = 0,
+  bOnlyEdges = FALSE,
+  point_order = FALSE
+)
 
 st_polygonize(x)
 
@@ -115,13 +121,13 @@ meters.}
 
 \item{envelope}{object of class \code{sfc} or \code{sfg} containing a \code{POLYGON} with the envelope for a voronoi diagram; this only takes effect when it is larger than the default envelope, chosen when \code{envelope} is an empty polygon}
 
+\item{point_order}{logical; preserve point order if TRUE and GEOS version >= 3.12; overrides bOnlyEdges}
+
 \item{directed}{logical; if \code{TRUE}, lines with opposite directions will not be merged}
 
 \item{of_largest_polygon}{logical; for \code{st_centroid}: if \code{TRUE}, return centroid of the largest (sub)polygon of a \code{MULTIPOLYGON} rather than of the whole \code{MULTIPOLYGON}}
 
 \item{dfMaxLength}{maximum length of a line segment. If \code{x} has geographical coordinates (long/lat), \code{dfMaxLength} is either a numeric expressed in meter, or an object of class \code{units} with length units \code{rad} or \code{degree}; segmentation in the long/lat case takes place along the great circle, using \link[lwgeom:geod]{st_geod_segmentize}.}
-
-\item{point_order}{logical; preserve point order if TRUE and GEOS version >= 3.12; overrides bOnlyEdges}
 }
 \value{
 an object of the same class of \code{x}, with manipulated geometry.
