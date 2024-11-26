@@ -75,6 +75,8 @@
 <span></span>
 <span><span class="fu">st_minimum_rotated_rectangle</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">st_minimum_bounding_circle</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">st_voronoi</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
 <span>  <span class="va">envelope</span>,</span>
@@ -225,6 +227,9 @@ rotated rectangular POLYGON which encloses the input geometry. The
 rectangle has width equal to the minimum diameter, and a longer
 length. If the convex hill of the input is degenerate (a line or
 point) a linestring or point is returned.</p>
+<p><code>st_minimum_bounding_circle</code>
+returns a geometry which represents the "minimum bounding circle",
+the smallest circle that contains the input.</p>
 <p><code>st_voronoi</code> creates voronoi tessellation. <code>st_voronoi</code> requires GEOS version 3.5 or above</p>
 <p><code>st_polygonize</code> creates a polygon from lines that form a closed ring. In case of <code>st_polygonize</code>, <code>x</code> must be an object of class <code>LINESTRING</code> or <code>MULTILINESTRING</code>, or an <code>sfc</code> geometry list-column object containing these</p>
 <p><code>st_line_merge</code> merges lines. In case of <code>st_line_merge</code>, <code>x</code> must be an object of class <code>MULTILINESTRING</code>, or an <code>sfc</code> geometry list-column object containing these</p>
@@ -430,9 +435,9 @@ point) a linestring or point is returned.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Linking to liblwgeom 3.0.0beta1 r16016, GEOS 3.10.2, PROJ 8.2.1</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘lwgeom’</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The following object is masked from ‘package:sf’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:sf’:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>     st_perimeter</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     st_minimum_bounding_circle, st_perimeter</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5</span>
 </code></pre></div>
     </div>
