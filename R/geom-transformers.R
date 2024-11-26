@@ -451,6 +451,34 @@ st_minimum_rotated_rectangle.sf = function(x, dTolerance, ...) {
 	st_set_geometry(x, st_minimum_rotated_rectangle(st_geometry(x)), ...)
 }
 
+#' @name geos_unary
+#' @details \code{st_minimum_bounding_circle} 
+#' returns a geometry which represents the "minimum bounding circle",
+#' the smallest circle that contains the input.
+#' @export
+st_minimum_bounding_circle = function(x, ...)
+	UseMethod("st_minimum_bounding_circle")
+
+#' @export
+st_minimum_bounding_circle.sfg = function(x, ...) {
+	get_first_sfg(st_minimum_bounding_circle(st_sfc(x), ...))
+}
+
+#' @export
+st_minimum_bounding_circle.sfc = function(x, ...) {
+	if (compareVersion(CPL_geos_version(), "3.8.0") > -1) { # >=
+		if (isTRUE(st_is_longlat(x)))
+			warning("st_minimum_rotated_rectangle does not work correctly for longitude/latitude data")
+		st_sfc(CPL_geos_op("bounding_circle", x, 0L, integer(0),
+			dTolerance = 0., logical(0), bOnlyEdges = as.integer(FALSE)))
+	} else
+		stop("for st_minimum_bounding_circle, GEOS version 3.8.0 or higher is required")
+}
+
+#' @export
+st_minimum_bounding_circle.sf = function(x, ...) {
+	st_set_geometry(x, st_minimum_bounding_circle(st_geometry(x)), ...)
+}
 
 #' @name geos_unary
 #' @export

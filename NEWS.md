@@ -1,3 +1,7 @@
+# version 1.0-20
+
+* `st_minimum_bounding_circle()` returns geometries representing the smallest circle that contains the input; #2473
+
 # version 1.0-19
 
 * fix type checks in C++ GDAL area and length computation functions, anticipating GDAL 3.10.0; #2466, #2468, #2469 by @rsbivand and @rouault

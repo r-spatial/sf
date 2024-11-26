@@ -11,6 +11,7 @@
 \alias{st_triangulate_constrained}
 \alias{st_inscribed_circle}
 \alias{st_minimum_rotated_rectangle}
+\alias{st_minimum_bounding_circle}
 \alias{st_voronoi}
 \alias{st_polygonize}
 \alias{st_line_merge}
@@ -48,6 +49,8 @@ st_triangulate_constrained(x)
 st_inscribed_circle(x, dTolerance, ...)
 
 st_minimum_rotated_rectangle(x, ...)
+
+st_minimum_bounding_circle(x, ...)
 
 st_voronoi(
   x,
@@ -168,6 +171,10 @@ rotated rectangular POLYGON which encloses the input geometry. The
 rectangle has width equal to the minimum diameter, and a longer
 length. If the convex hill of the input is degenerate (a line or
 point) a linestring or point is returned.
+
+\code{st_minimum_bounding_circle}
+returns a geometry which represents the "minimum bounding circle",
+the smallest circle that contains the input.
 
 \code{st_voronoi} creates voronoi tessellation. \code{st_voronoi} requires GEOS version 3.5 or above
 
