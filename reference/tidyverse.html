@@ -75,7 +75,7 @@ Use these methods after loading the tidyverse package with the generic (or after
 <span></span>
 <span><span class="fu">summarise.sf</span><span class="op">(</span><span class="va">.data</span>, <span class="va">...</span>, <span class="va">.dots</span>, do_union <span class="op">=</span> <span class="cn">TRUE</span>, is_coverage <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">distinct.sf</span><span class="op">(</span><span class="va">.data</span>, <span class="va">...</span>, .keep_all <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">distinct.sf</span><span class="op">(</span><span class="va">.data</span>, <span class="va">...</span>, .keep_all <span class="op">=</span> <span class="cn">FALSE</span>, exact <span class="op">=</span> <span class="cn">FALSE</span>, par <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">gather.sf</span><span class="op">(</span></span>
 <span>  <span class="va">data</span>,</span>
@@ -220,6 +220,14 @@ more details.</p></dd>
 
 <dt id="arg--keep-all">.keep_all<a class="anchor" aria-label="anchor" href="#arg--keep-all"></a></dt>
 <dd><p>see corresponding function in dplyr</p></dd>
+
+
+<dt id="arg-exact">exact<a class="anchor" aria-label="anchor" href="#arg-exact"></a></dt>
+<dd><p>logical; if <code>TRUE</code> use <a href="geos_binary_pred.html">st_equals_exact</a> for geometry comparisons</p></dd>
+
+
+<dt id="arg-par">par<a class="anchor" aria-label="anchor" href="#arg-par"></a></dt>
+<dd><p>numeric; passed on to <a href="geos_binary_pred.html">st_equals_exact</a></p></dd>
 
 
 <dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
