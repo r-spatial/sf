@@ -1,5 +1,7 @@
 # version 1.0-20
 
+* `distinct.sf()` allows for comparing exact equality of geometries when `exact = TRUE`; #2484
+
 * `st_minimum_bounding_circle()` returns geometries representing the smallest circle that contains the input; #2473
 
 # version 1.0-19
