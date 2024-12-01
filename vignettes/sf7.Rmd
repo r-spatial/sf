@@ -101,7 +101,7 @@ and transformations _on the sphere_. This means:
 The `s2` package is really a wrapper around the C++
 [s2geometry](http://s2geometry.io) library which was written by
 Google, and which is used in many of its products (e.g. Google
-Maps, Google Earth Engine, Bigquery GIS) and has been translated
+Maps, Google Earth Engine, BigQuery GIS) and has been translated
 in several other programming languages.
 
 With projected coordinates `sf` continues to work in $R^2$ as before.
@@ -211,7 +211,7 @@ st_intersects(a, b) # default: closed
 
 Computing the minimum and maximum values over coordinate ranges,
 as `sf` does with `st_bbox()`, is of limited value for spherical
-coordinates because due the the spherical space, the _area covered_
+coordinates because due the spherical space, the _area covered_
 is not necessarily covered by the coordinate range. Two examples:
 
 * small regions covering the antimeridian (longitude +/- 180) end up with a huge longitude range, which doesn't make _clear_ the antimeridian is spanned
@@ -340,7 +340,7 @@ excessive simplification (bottom right). Note that buffers created with s2 _alwa
 follow s2 cell boundaries, they are never smooth. Hence, choosing a large number
 for `max_cells` leads to seemingly smooth but, zoomed in, very complex buffers.
 
-To achieve a similar result you could first transform the result and then use `sf::st_buffer()`. A simple benchmark shows the
+To achieve a similar result, you could first transform the result and then use `sf::st_buffer()`. A simple benchmark shows the
 computational efficiency of the `s2` geometry engine in comparison
 with transforming and then creating buffers:
 
@@ -384,7 +384,7 @@ deciding on workflows and selecting appropriate levels of level of geographic re
 be an iterative process.
 `st_buffer()` as powered by GEOS, for $R^2$ data, are smooth and (nearly) exact.
 `st_buffer()` as powered by $S^2$ is rougher, complex, non-smooth, and may need tuning.
-An common pattern where `st_buffer()` is used is this:
+A common pattern where `st_buffer()` is used is this:
 
 * compute buffers around a set of features `x` (points, lines, polygons)
 * within each of these buffers, find all occurrences of some other spatial 
