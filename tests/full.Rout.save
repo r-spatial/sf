@@ -1,5 +1,5 @@
 
-R version 4.4.1 (2024-06-14) -- "Race for Your Life"
+R version 4.4.2 (2024-10-31) -- "Pile of Leaves"
 Copyright (C) 2024 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
@@ -56,10 +56,9 @@ xmin ymin xmax ymax
 > st_crs(f) = 'OGC:CRS84' # geodetic:
 > st_is_valid(f)
 [1] TRUE TRUE
-> st_crs(f) = NA
-> try(st_make_valid(f))
-Error in (function (msg)  : 
-  IllegalArgumentException: Invalid number of points in LinearRing found 2 - must be 0 or >= 3
+> try(st_set_crs(f, NA)) # errors
+Error in `st_crs<-.sfc`(`*tmp*`, value = value) : 
+  To set the crs to NA, first remove the full polygons; see: st_is_full()
 > st_crs(f) = 'OGC:CRS84' # geodetic:
 > st_make_valid(f)
 Geometry set for 2 features 
@@ -147,4 +146,4 @@ Units: [m]
 > 
 > proc.time()
    user  system elapsed 
-  0.746   1.417   0.668 
+  0.770   1.374   0.670 
