@@ -218,6 +218,9 @@ make_crs = function(x) {
 	if (!is.na(start_crs) && !is.na(end_crs) && start_crs != end_crs)
 		warning("st_crs<- : replacing crs does not reproject data; use st_transform for that", call. = FALSE)
 
+	if (is.na(end_crs) && !is.na(start_crs) && isTRUE(st_is_longlat(start_crs)) && any(st_is_full(x)))
+		stop("To set the crs to NA, first remove the full polygons; see: st_is_full()")
+
 	structure(x, crs = end_crs)
 }
 

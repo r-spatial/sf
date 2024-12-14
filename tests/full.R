@@ -14,8 +14,7 @@ st_bbox(f[2])
 st_is_valid(f) # full polygon NA: right, we don't know the CRS
 st_crs(f) = 'OGC:CRS84' # geodetic:
 st_is_valid(f)
-st_crs(f) = NA
-try(st_make_valid(f))
+try(st_set_crs(f, NA)) # errors
 st_crs(f) = 'OGC:CRS84' # geodetic:
 st_make_valid(f)
 # mixed geometries:

@@ -656,5 +656,5 @@ st_is_full.sf = function(x, ...) {
 #' @export
 #' @name st_is_full
 st_is_full.bbox = function(x, ...) {
-	sf_use_s2() && st_is_longlat(x) && all(x == c(-180,-90,180,90))
+	isTRUE(sf_use_s2() && st_is_longlat(x) && all(x == c(-180,-90,180,90)))
 }
