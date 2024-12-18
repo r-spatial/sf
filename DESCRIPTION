@@ -133,6 +133,7 @@ Collate:
     'wkb.R'
     'wkt.R'
     'plot.R'
+    'geos_binary_pred.R'
     'geom-measures.R'
     'geom-predicates.R'
     'geom-transformers.R'
