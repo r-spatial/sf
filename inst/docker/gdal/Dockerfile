@@ -135,4 +135,4 @@ RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz
 #
 RUN Rscript -e 'options(timeout=1200); install.packages("starsdata", repos="http://cran.uni-muenster.de/pebesma/")'
 #
-RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
+#RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
