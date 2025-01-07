@@ -167,7 +167,7 @@ accurate, but are also slower)</li>
 </ul>
 <p>The <code>s2</code> package is really a wrapper around the C++ <a href="http://s2geometry.io" class="external-link">s2geometry</a> library which was written by
 Google, and which is used in many of its products (e.g. Google Maps,
-Google Earth Engine, Bigquery GIS) and has been translated in several
+Google Earth Engine, BigQuery GIS) and has been translated in several
 other programming languages.</p>
 <p>With projected coordinates <code>sf</code> continues to work in
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
@@ -303,9 +303,9 @@ its upper-left corner and its upper and left sides.</p>
 </h3>
 <p>Computing the minimum and maximum values over coordinate ranges, as
 <code>sf</code> does with <code><a href="../reference/st_bbox.html">st_bbox()</a></code>, is of limited value
-for spherical coordinates because due the the spherical space, the
-<em>area covered</em> is not necessarily covered by the coordinate
-range. Two examples:</p>
+for spherical coordinates because due the spherical space, the <em>area
+covered</em> is not necessarily covered by the coordinate range. Two
+examples:</p>
 <ul>
 <li>small regions covering the antimeridian (longitude +/- 180) end up
 with a huge longitude range, which doesn’t make <em>clear</em> the
@@ -480,7 +480,7 @@ left) and excessive simplification (bottom right). Note that buffers
 created with s2 <em>always</em> follow s2 cell boundaries, they are
 never smooth. Hence, choosing a large number for <code>max_cells</code>
 leads to seemingly smooth but, zoomed in, very complex buffers.</p>
-<p>To achieve a similar result you could first transform the result and
+<p>To achieve a similar result, you could first transform the result and
 then use <code><a href="../reference/geos_unary.html">sf::st_buffer()</a></code>. A simple benchmark shows the
 computational efficiency of the <code>s2</code> geometry engine in
 comparison with transforming and then creating buffers:</p>
@@ -491,14 +491,14 @@ comparison with transforming and then creating buffers:</p>
 <span>  <span class="va">uk_buffer_sf</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">uk_projected</span>, dist <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.023   0.000   0.022</span></span>
+<span><span class="co">##   0.022   0.000   0.023</span></span>
 <span><span class="co"># sf way with few than the 30 segments in the buffer</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">uk_projected</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">uk_sfc</span>, <span class="fl">27700</span><span class="op">)</span></span>
 <span>  <span class="va">uk_buffer_sf2</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">uk_projected</span>, dist <span class="op">=</span> <span class="fl">20000</span>, nQuadSegs <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.005   0.004   0.009</span></span>
+<span><span class="co">##   0.009   0.000   0.009</span></span>
 <span><span class="co"># s2 with default cell size</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">uk_buffer</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span></span>
@@ -510,7 +510,7 @@ comparison with transforming and then creating buffers:</p>
 <span>  <span class="va">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span>, max_cells <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.279   0.000   0.279</span></span>
+<span><span class="co">##   0.280   0.004   0.284</span></span>
 <span><span class="co"># s2 with 100 cells</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span>, max_cells <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
@@ -537,7 +537,7 @@ level of geographic resolution can be an iterative process.
 data, are smooth and (nearly) exact. <code><a href="../reference/geos_unary.html">st_buffer()</a></code> as powered
 by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>S</mi><mn>2</mn></msup><annotation encoding="application/x-tex">S^2</annotation></semantics></math>
-is rougher, complex, non-smooth, and may need tuning. An common pattern
+is rougher, complex, non-smooth, and may need tuning. A common pattern
 where <code><a href="../reference/geos_unary.html">st_buffer()</a></code> is used is this:</p>
 <ul>
 <li>compute buffers around a set of features <code>x</code> (points,
