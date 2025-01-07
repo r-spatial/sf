@@ -798,7 +798,9 @@ be done by:</p>
 <p>we can suppress the output by adding argument <code>quiet=TRUE</code>
 or by using the otherwise nearly identical but more quiet</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="va">filename</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">read_sf</a></span><span class="op">(</span><span class="va">filename</span><span class="op">)</span></span>
+<span><span class="co">## Error in get(paste0(generic, ".", class), envir = get_method_env()) : </span></span>
+<span><span class="co">##   object 'type_sum.accel' not found</span></span></code></pre></div>
 <p>Writing takes place in the same fashion, using
 <code><a href="../reference/st_write.html">st_write()</a></code>:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
