@@ -118,7 +118,7 @@ angles (latitude, longitude) pointing to locations on a sphere (or
 ellipsoid). The flat space is also referred to as
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>,
 the sphere as
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>S</mi><mn>2</mn></msup><annotation encoding="application/x-tex">S^2</annotation></semantics></math></p>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>S</mi><mn>2</mn></msup><annotation encoding="application/x-tex">S^2</annotation></semantics></math>.</p>
 <p>Package <code>sf</code> implements <em>simple features</em>, a
 standard for point, line, and polygon geometries where geometries are
 built from points (nodes) connected by straight lines (edges). The
@@ -130,11 +130,10 @@ the two-dimensional flat space.</p>
 <p>Yet, more and more data are routinely served or exchanged using
 geographic coordinates. Using software that assumes an
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>,
-flat space may work for some problems, and although <code>sf</code> up
-to version 0.9-x had some functions in place for spherical/ellipsoidal
-computations (from package <code>lwgeom</code>, for computing area,
-length, distance, and for segmentizing), it has also happily warned the
-user that it is doing
+flat space may work for some problems, and although <code>sf</code> has
+some functions in place for spherical/ellipsoidal computations (from
+package <code>lwgeom</code>, for computing area, length, distance, and
+for segmentizing), it has also happily warned the user that it is doing
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>,
 flat computations with such coordinates with messages like</p>
 <pre><code>although coordinates are longitude/latitude, st_intersects assumes that they are planar</code></pre>
@@ -356,6 +355,12 @@ instrumented to use GEOS or <code>s2</code>. First we will ask if
 <div class="section level2">
 <h2 id="measures">Measures<a class="anchor" aria-label="anchor" href="#measures"></a>
 </h2>
+<p>This section compares the differences in results between the
+<code>s2</code> and <code>lwgeom</code> (<code>sf_use_s2(FALSE)</code>)
+packages for calculating area, length and distance using geographic
+coordinates. Note that engaging the <code>GEOS</code> engine would
+require reprojection of the vector layer to the planar coordinate system
+(e.g. <code>EPGS:3857</code>).</p>
 <div class="section level3">
 <h3 id="area">Area<a class="anchor" aria-label="anchor" href="#area"></a>
 </h3>
@@ -393,7 +398,7 @@ instrumented to use GEOS or <code>s2</code>. First we will ask if
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="sf7_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">(</span><span class="va">l1</span><span class="op">-</span><span class="va">l2</span><span class="op">)</span><span class="op">/</span><span class="va">l1</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">(</span><span class="va">l1</span> <span class="op">-</span> <span class="va">l2</span><span class="op">)</span><span class="op">/</span><span class="va">l1</span><span class="op">)</span></span>
 <span><span class="co">##       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
 <span><span class="co">## -0.0012301 -0.0004396 -0.0001258 -0.0001123  0.0001742  0.0009660</span></span></code></pre></div>
 </div>
@@ -411,7 +416,7 @@ instrumented to use GEOS or <code>s2</code>. First we will ask if
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="sf7_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">d1</span><span class="op">)</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">d2</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">d1</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">d2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
 <span><span class="co">## -1424.5  -613.2  -236.5  -319.5     0.0   460.1</span></span></code></pre></div>
 </div>
@@ -491,7 +496,7 @@ comparison with transforming and then creating buffers:</p>
 <span>  <span class="va">uk_buffer_sf</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">uk_projected</span>, dist <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.023   0.001   0.022</span></span>
+<span><span class="co">##   0.019   0.004   0.023</span></span>
 <span><span class="co"># sf way with few than the 30 segments in the buffer</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">uk_projected</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">uk_sfc</span>, <span class="fl">27700</span><span class="op">)</span></span>
@@ -516,7 +521,7 @@ comparison with transforming and then creating buffers:</p>
 <span>  <span class="va">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span>, max_cells <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.004   0.000   0.004</span></span></code></pre></div>
+<span><span class="co">##   0.003   0.000   0.004</span></span></code></pre></div>
 <p>The result of the previous benchmarks emphasizes the point that there
 are trade-offs between geographic resolution and computational
 resources, something that web developers working on geographic services
