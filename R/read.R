@@ -61,7 +61,7 @@ set_utf8 = function(x) {
 #'   and if necessary corrected (when seen from above: exterior ring counter
 #'   clockwise, holes clockwise)
 #' @details for \code{geometry_column}, see also
-#' \url{https://trac.osgeo.org/gdal/wiki/rfc41_multiple_geometry_fields}
+#' \url{https://gdal.org/en/latest/development/rfc/rfc41_multiple_geometry_fields.html}
 #'
 #' for values for \code{type} see
 #' \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but

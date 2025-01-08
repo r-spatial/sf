@@ -641,14 +641,9 @@ st_is_full.sfg = function(x, ..., is_longlat = NULL) {
 #' @export
 #' @name st_is_full
 st_is_full.sfc = function(x, ...) {
-	if (sf_use_s2() && inherits(x, c("sfc_POLYGON", "sfc_GEOMETRY"))) {
-		is_longlat = if (!is.null(attr(x, "crs")))
-				st_is_longlat(x)
-			else
-				NA
-		#sapply(x, st_is_full.sfg, ..., is_longlat = is_longlat)
+	if (sf_use_s2() && inherits(x, c("sfc_POLYGON", "sfc_GEOMETRY")))
 		sfc_is_full(x)
-	} else
+	else
 		rep_len(FALSE, length(x))
 }
 
@@ -661,5 +656,5 @@ st_is_full.sf = function(x, ...) {
 #' @export
 #' @name st_is_full
 st_is_full.bbox = function(x, ...) {
-	sf_use_s2() && st_is_longlat(x) && all(x == c(-180,-90,180,90))
+	isTRUE(sf_use_s2() && st_is_longlat(x) && all(x == c(-180,-90,180,90)))
 }

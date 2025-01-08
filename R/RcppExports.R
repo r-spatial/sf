@@ -117,8 +117,8 @@ CPL_gdalinfo <- function(obj, options, oo, co) {
     .Call(`_sf_CPL_gdalinfo`, obj, options, oo, co)
 }
 
-CPL_ogrinfo <- function(obj, options, oo, co) {
-    .Call(`_sf_CPL_ogrinfo`, obj, options, oo, co)
+CPL_ogrinfo <- function(obj, options, oo, co, read_only = FALSE) {
+    .Call(`_sf_CPL_ogrinfo`, obj, options, oo, co, read_only)
 }
 
 CPL_gdaladdo <- function(obj, method, overviews, bands, oo, co, clean = FALSE, read_only = FALSE) {
@@ -393,7 +393,7 @@ CPL_write_gdal <- function(x, fname, driver, options, Type, dims, from, gt, p4s,
     invisible(.Call(`_sf_CPL_write_gdal`, x, fname, driver, options, Type, dims, from, gt, p4s, na_val, scale_offset, create, only_create))
 }
 
-CPL_extract <- function(input, xy, interpolate = FALSE) {
+CPL_extract <- function(input, xy, interpolate) {
     .Call(`_sf_CPL_extract`, input, xy, interpolate)
 }
 

@@ -35,6 +35,9 @@
 # if GEOS_VERSION_MINOR >= 11
 #  define HAVE311
 # endif
+# if GEOS_VERSION_MINOR >= 12
+#  define HAVE312
+# endif
 #else
 # if GEOS_VERSION_MAJOR > 3
 #  define HAVE340
@@ -882,6 +885,13 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 		}
 	} else
 #endif
+#ifdef HAVE380
+	if (op == "bounding_circle") {
+		double r;
+		for (size_t i = 0; i < g.size(); i++)
+			out[i] = geos_ptr(chkNULL(GEOSMinimumBoundingCircle_r(hGEOSCtxt, g[i].get(), &r, NULL)), hGEOSCtxt);
+	} else
+#endif
 #ifdef HAVE390
 	if (op == "inscribed_circle") {
 		for (size_t i = 0; i < g.size(); i++) {
@@ -902,7 +912,6 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 	ret.attr("crs") = sfc.attr("crs");
 	return ret;
 }
-
 
 // [[Rcpp::export]]
 Rcpp::List CPL_geos_voronoi(Rcpp::List sfc, Rcpp::List env, double dTolerance = 0.0, int bOnlyEdges = 1) {

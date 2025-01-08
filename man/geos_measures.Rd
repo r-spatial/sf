@@ -48,7 +48,7 @@ st_distance(
 \value{
 If the coordinate reference system of \code{x} was set, these functions return values with unit of measurement; see \link[units]{set_units}.
 
-st_area returns the area of a geometry, in the coordinate reference system used; in case \code{x} is in degrees longitude/latitude, \link[lwgeom:geod]{st_geod_area} is used for area calculation.
+st_area returns the area of each feature geometry, computed in the coordinate reference system used. In case \code{x} has geodetic coordinates (unprojected), then if \code{sf_use_s2()} is \code{FALSE} \link[lwgeom:geod]{st_geod_area} is used for area calculation, if it is \code{TRUE} then \link[s2:s2_is_collection]{s2_area} is used: the former assumes an ellipsoidal shape, the latter a spherical shape of the Earth. In case of projected data, areas are computed in flat space. The argument \code{...} can be used to specify \code{radius} to \link[s2:s2_is_collection]{s2_area}, to modify the Earth radius.
 
 st_length returns the length of a \code{LINESTRING} or \code{MULTILINESTRING} geometry, using the coordinate reference system.  \code{POINT}, \code{MULTIPOINT}, \code{POLYGON} or \code{MULTIPOLYGON} geometries return zero.
 

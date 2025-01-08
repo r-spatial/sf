@@ -695,35 +695,42 @@ double get_bilinear(GDALRasterBand *poBand, double Pixel, double Line,
 	double pixels[4];
 	double dY  = Line - iLine; // [0, 1) over a raster cell
 	double dX  = Pixel - iPixel; // [0, 1) over a raster cell
-	if ((dY < 0.5 && iLine > 0) || (iLine == RasterYSize - 1)) // where to start reading
+	double eps = 1.0e-13;
+	if ((dY < 0.5 && iLine > 0) || (iLine == RasterYSize - 1)) { // where to start reading
 		iLine -= 1;
-	if ((dX < 0.5 && iPixel > 0) || (iPixel == RasterXSize - 1))
+		dY += 1.0;
+	}
+	if ((dX < 0.5 && iPixel > 0) || (iPixel == RasterXSize - 1)) {
 		iPixel -= 1;
+		dX += 1.0;
+	}
 
 	// x:
-	if (Pixel < 0.5) // border:
+	if (Pixel < (0.5 - eps)) // border:
 		dX = 0.0;
-	else if (Pixel > RasterXSize - 0.5)
+	else if (Pixel > (RasterXSize - 0.5 + eps))
 		dX = 1.0;
-	else if (dX < 0.5) // shift to pixel center:
+	else if (dX < (0.5 - eps)) // shift to pixel center:
 		dX += 0.5;
 	else
 		dX -= 0.5;
 
 	// y:
-	if (Line < 0.5)
+	if (Line < (0.5 - eps))
 		dY = 0.0;
-	else if (Line > RasterYSize - 0.5)
+	else if (Line > (RasterYSize - 0.5 + eps))
 		dY = 1.0;
-	else if (dY < 0.5)
+	else if (dY < (0.5 - eps))
 		dY += 0.5;
 	else
 		dY -= 0.5;
 
 	// read:
-	if (GDALRasterIO(poBand, GF_Read, iPixel, iLine, 2, 2,
-			(void *) pixels, 2, 2, GDT_CFloat64, sizeof(double), 0) != CE_None)
+	if (poBand->RasterIO(GF_Read, iPixel, iLine, 2, 2,
+			(void *) pixels, 2, 2, GDT_CFloat64, sizeof(double), 0, NULL) != CE_None)
 		stop("Error reading!");
+	// Rprintf("px[%g (%g) %g (%g) %g (%g) %g (%g)] dY: %g dX: %g iLine: %d iPixel: %d Line: %g Pixel :%g\n", pixels[0], (1-dX)*(1-dY), pixels[1], dX * (1-dY), pixels[2], (1-dX) * dY, pixels[3], dX * dY, dY, dX, iLine, iPixel, Line, Pixel);
+	//
 	// f(0,0): pixels[0], f(1,0): pixels[1], f(0,1): pixels[2], f(1,1): pixels[3]
 	if (na_set && (pixels[0] == na_value || pixels[1] == na_value ||
 			pixels[2] == na_value || pixels[3] == na_value))
@@ -736,7 +743,7 @@ double get_bilinear(GDALRasterBand *poBand, double Pixel, double Line,
 }
 
 // [[Rcpp::export]]
-NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy, bool interpolate = false) {
+NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy, CharacterVector interpolate) {
 	// mostly taken from gdal/apps/gdallocationinfo.cpp
 
 	GDALDataset *poDataset = (GDALDataset *) GDALOpenEx(input[0], GA_ReadOnly,
@@ -749,6 +756,17 @@ NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy, bool interpol
 	NumericMatrix ret(xy.nrow(), poDataset->GetRasterCount());
 	int xsize = poDataset->GetRasterXSize();
 	int ysize = poDataset->GetRasterYSize();
+	GDALRIOResampleAlg RA;
+	if (interpolate[0] == "nearest")
+		RA = GRIORA_NearestNeighbour;
+	else if (interpolate[0] == "bilinear")
+		RA = GRIORA_Bilinear;
+	else if (interpolate[0] == "cubic")
+		RA = GRIORA_Cubic;
+	else if (interpolate[0] == "cubicspline")
+		RA = GRIORA_CubicSpline;
+	else
+		stop("interpolation method not supported"); // #nocov
 
 	double gt[6];
 	poDataset->GetGeoTransform(gt);
@@ -778,13 +796,20 @@ NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy, bool interpol
 			if (iPixel < 0 || iLine < 0 || iPixel >= xsize || iLine >= ysize) // outside bbox:
 				pixel = NA_REAL;
 			else { // read pixel:
-				if (interpolate)
-					// stop("interpolate not implemented");
+#if GDAL_VERSION_NUM >= 3100000
+				if (poBand->InterpolateAtPoint(Pixel, Line, RA, &pixel, nullptr) != CE_None)
+						// tbd: handle GRIORA_Cubic, GRIORA_CubicSpline
+					stop("Error in InterpolateAtPoint()");
+#else
+				if (RA == GRIORA_Cubic || RA == GRIORA_CubicSpline)
+					stop("cubic or cubicspline requires GDAL >= 3.10.0");
+				if (RA == GRIORA_Bilinear)
 					pixel = get_bilinear(poBand, Pixel, Line, iPixel, iLine,
 						xsize, ysize, nodata_set, nodata);
-				else if (GDALRasterIO(poBand, GF_Read, iPixel, iLine, 1, 1,
-						&pixel, 1, 1, GDT_CFloat64, 0, 0) != CE_None)
+				else if (poBand->RasterIO(GF_Read, iPixel, iLine, 1, 1,
+						&pixel, 1, 1, GDT_CFloat64, 0, 0, NULL) != CE_None)
 					stop("Error reading!");
+#endif
 				if (nodata_set && pixel == nodata)
 					pixel = NA_REAL;
 				else if (dfOffset != 0.0 || dfScale != 1.0)

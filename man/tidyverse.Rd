@@ -61,7 +61,7 @@ slice.sf(.data, ..., .dots)
 
 summarise.sf(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE)
 
-distinct.sf(.data, ..., .keep_all = FALSE)
+distinct.sf(.data, ..., .keep_all = FALSE, exact = FALSE, par = 0)
 
 gather.sf(
   data,
@@ -185,6 +185,10 @@ more details.}
 \item{is_coverage}{logical; if \code{do_union} is \code{TRUE}, use an optimized algorithm for features that form a polygonal coverage (have no overlaps)}
 
 \item{.keep_all}{see corresponding function in dplyr}
+
+\item{exact}{logical; if \code{TRUE} use \link{st_equals_exact} for geometry comparisons}
+
+\item{par}{numeric; passed on to \link{st_equals_exact}}
 
 \item{data}{see original function docs}
 
