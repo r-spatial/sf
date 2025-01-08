@@ -56,7 +56,7 @@ coordinates, meaning that they are associated to points on a flat
 space, or to unprojected or _geographic_ coordinates, when they
 refer to angles (latitude, longitude) pointing to locations on a
 sphere (or ellipsoid). The flat space is also referred to as $R^2$,
-the sphere as $S^2$
+the sphere as $S^2$.
 
 Package `sf` implements _simple features_, a standard for point,
 line, and polygon geometries where geometries are built from points
@@ -68,7 +68,7 @@ to $R^2$, the two-dimensional flat space.
 
 Yet, more and more data are routinely served or exchanged using
 geographic coordinates. Using software that assumes an $R^2$, flat
-space may work for some problems, and although `sf` up to version 0.9-x
+space may work for some problems, and although `sf`
 had some functions in place for spherical/ellipsoidal computations
 (from package `lwgeom`, for computing area,
 length, distance, and for segmentizing), it has also happily warned 
@@ -252,6 +252,12 @@ sf_use_s2(TRUE)
 
 # Measures
 
+This section compares the differences in results between the `s2`
+and `lwgeom` (`sf_use_s2(FALSE)`) packages for calculating area,
+length and distance using geographic coordinates. Note that engaging
+the `GEOS` engine would require reprojection of the vector layer
+to the planar coordinate system (e.g. `EPGS:3857`).
+
 ## Area
 ```{r eval=require("lwgeom", quietly = TRUE)}
 options(s2_oriented = FALSE) # correct orientation from here on
@@ -276,9 +282,8 @@ sf_use_s2(FALSE)
 l2 = st_length(nc_ls)
 plot(l1 , l2)
 abline(0, 1)
-summary((l1-l2)/l1)
+summary((l1 - l2)/l1)
 ```
-
 
 ## Distances
 ```{r}
@@ -288,7 +293,7 @@ sf_use_s2(FALSE)
 d2 = st_distance(nc, nc[1:10,])
 plot(as.vector(d1), as.vector(d2))
 abline(0, 1)
-summary(as.vector(d1)-as.vector(d2))
+summary(as.vector(d1) - as.vector(d2))
 ```
 
 # Predicates
