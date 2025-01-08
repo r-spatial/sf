@@ -69,7 +69,7 @@ to $R^2$, the two-dimensional flat space.
 Yet, more and more data are routinely served or exchanged using
 geographic coordinates. Using software that assumes an $R^2$, flat
 space may work for some problems, and although `sf`
-had some functions in place for spherical/ellipsoidal computations
+has some functions in place for spherical/ellipsoidal computations
 (from package `lwgeom`, for computing area,
 length, distance, and for segmentizing), it has also happily warned 
 the user that it is doing $R^2$, flat computations with such coordinates with messages like
