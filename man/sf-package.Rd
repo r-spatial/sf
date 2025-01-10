@@ -7,7 +7,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Support for simple features, a standardized way to encode spatial vector data. Binds to 'GDAL' for reading and writing data, to 'GEOS' for geometrical operations, and to 'PROJ' for projection conversions and datum transformations. Uses by default the 's2' package for spherical geometry operations on ellipsoidal (long/lat) coordinates.
+Support for simple feature access, a standardized way to encode and analyze spatial vector data. Binds to 'GDAL' \doi{ 10.5281/zenodo.5884351} for reading and writing data, to 'GEOS' \doi{ 10.5281/zenodo.11396894} for geometrical operations, and to 'PROJ' \doi{ 10.5281/zenodo.5884394} for projection conversions and datum transformations. Uses by default the 's2' package for geometry operations on geodetic (long/lat degree) coordinates.
 }
 \references{
 Pebesma, E. and Bivand, R. (2023). Spatial Data
