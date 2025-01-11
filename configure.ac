@@ -19,15 +19,15 @@ RVER_MAJOR=`echo ${RVER} | cut  -f1 -d"."`
 RVER_MINOR=`echo ${RVER} | cut  -f2 -d"."`
 RVER_PATCH=`echo ${RVER} | cut  -f3 -d"."`
 
-if test [$RVER_MAJOR = "development"]; then
+#if test [$RVER_MAJOR = "development"]; then
     CXX=`"${RBIN}" CMD config CXX`
-else
-    if test [$RVER_MAJOR -lt 3] -o [$RVER_MAJOR -eq 3 -a $RVER_MINOR -lt 3]; then
-        AC_MSG_ERROR([sf is not compatible with R versions before 3.3.0])
-    else
-        CXX=`"${RBIN}" CMD config CXX`
-    fi
-fi
+#else
+#    if test [$RVER_MAJOR -lt 3] -o [$RVER_MAJOR -eq 3 -a $RVER_MINOR -lt 3]; then
+#        AC_MSG_ERROR([sf is not compatible with R versions before 3.3.0])
+#    else
+#        CXX=`"${RBIN}" CMD config CXX`
+#    fi
+#fi
 
 # pick all flags for testing from R
 : ${CC=`"${RBIN}" CMD config CC`}
@@ -110,7 +110,8 @@ else
    AC_MSG_RESULT(yes)
 fi
 
-if test [${GDAL_MAJ_VER} -eq 3] -a [${GDAL_MIN_VER} -eq 6] -a [${GDAL_PATCH_VER} -eq 0] ; then
+#if test [${GDAL_MAJ_VER} -eq 3] -a [${GDAL_MIN_VER} -eq 6] -a [${GDAL_PATCH_VER} -eq 0] ; then
+if test "${GDAL_VERSION}" = "3.6.0" ; then
   AC_MSG_ERROR([GDAL version 3.6.0 has been withdrawn, please update GDAL])
 fi
 
