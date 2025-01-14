@@ -80,8 +80,8 @@ st_break_antimeridian.sf = function(x, lon_0=0, tol=0.0001, ...) {
 	}
         s2_status = sf_use_s2()
 	sf_use_s2(FALSE) # avoid s2 because we need a planar bounding box
+	on.exit(sf_use_s2(s2_status))
 	res = st_intersection(x, bb1)
-	sf_use_s2(s2_status)
 	st_crs(res) = st_crs(x)
         res
 }
