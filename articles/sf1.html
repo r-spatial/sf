@@ -348,7 +348,7 @@ features with attributes, the two are put together in <code>sf</code>
 <code>sf</code> package:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span></span>
-<span><span class="co">## Linking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE</span></span>
+<span><span class="co">## Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE</span></span>
 <span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package<span class="op">=</span><span class="st">"sf"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">## Reading layer `nc' from data source </span></span>
 <span><span class="co">##   `/home/runner/work/_temp/Library/sf/shape/nc.shp' using driver `ESRI Shapefile'</span></span>
@@ -940,9 +940,9 @@ NAD27 to web mercator (EPSG:3857) can be done by:</p>
 <code class="sourceCode R"><span><span class="va">nc.web_mercator</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">nc</span>, <span class="fl">3857</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc.web_mercator</span><span class="op">)</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span></span>
 <span><span class="co">##          [,1]    [,2]</span></span>
-<span><span class="co">## [1,] -8463267 4377519</span></span>
-<span><span class="co">## [2,] -8460094 4377510</span></span>
-<span><span class="co">## [3,] -8450437 4375553</span></span></code></pre></div>
+<span><span class="co">## [1,] -8463267 4377507</span></span>
+<span><span class="co">## [2,] -8460094 4377498</span></span>
+<span><span class="co">## [3,] -8450437 4375541</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="conversion-including-to-and-from-sp">Conversion, including to and from sp<a class="anchor" aria-label="anchor" href="#conversion-including-to-and-from-sp"></a>
@@ -1024,9 +1024,9 @@ values for each pair of geometries:</p>
 <span><span class="fu"><a href="../reference/geos_measures.html">st_distance</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">4</span>,<span class="fl">22</span><span class="op">)</span>,<span class="op">]</span>, <span class="va">x</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">33</span>,<span class="fl">55</span>,<span class="fl">56</span><span class="op">)</span>,<span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">## Units: [m]</span></span>
 <span><span class="co">##           [,1]     [,2]      [,3]     [,4]</span></span>
-<span><span class="co">## [1,]      0.00 312184.9 128341.85 475623.3</span></span>
-<span><span class="co">## [2,] 440561.15 114939.7 590434.80      0.0</span></span>
-<span><span class="co">## [3,]  18944.03 352719.1  78756.89 517527.8</span></span>
+<span><span class="co">## [1,]      0.00 312176.2 128338.51 475608.8</span></span>
+<span><span class="co">## [2,] 440548.35 114938.1 590417.79      0.0</span></span>
+<span><span class="co">## [3,]  18943.74 352708.6  78754.75 517511.6</span></span>
 <span><span class="fu"><a href="../reference/st_relate.html">st_relate</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>,<span class="op">]</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,<span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">## although coordinates are longitude/latitude, st_relate assumes that they are</span></span>
 <span><span class="co">## planar</span></span>

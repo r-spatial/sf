@@ -82,7 +82,6 @@ capability to read/create datasets through the VSI*L API. <a href="https://gdal.
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># The following driver lists depend on the GDAL setup and platform used:</span></span></span>
 <span class="r-in"><span><span class="fu">st_drivers</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                          name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ESRIC                   ESRIC</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> FITS                     FITS</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> PCIDSK                 PCIDSK</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> netCDF                 netCDF</span>
@@ -102,7 +101,6 @@ capability to read/create datasets through the VSI*L API. <a href="https://gdal.
 <span class="r-out co"><span class="r-pr">#&gt;</span> S57                       S57</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> DGN                       DGN</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> OGR_VRT               OGR_VRT</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> REC                       REC</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Memory                 Memory</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CSV                       CSV</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NAS                       NAS</span>
@@ -132,7 +130,6 @@ capability to read/create datasets through the VSI*L API. <a href="https://gdal.
 <span class="r-out co"><span class="r-pr">#&gt;</span> FlatGeobuf         FlatGeobuf</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geoconcept         Geoconcept</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> GeoRSS                 GeoRSS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GPSTrackMaker   GPSTrackMaker</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> VFK                       VFK</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> PGDUMP                 PGDUMP</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> OSM                       OSM</span>
@@ -141,18 +138,13 @@ capability to read/create datasets through the VSI*L API. <a href="https://gdal.
 <span class="r-out co"><span class="r-pr">#&gt;</span> WFS                       WFS</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> OAPIF                   OAPIF</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SOSI                     SOSI</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geomedia             Geomedia</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> EDIGEO                 EDIGEO</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SVG                       SVG</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> CouchDB               CouchDB</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cloudant             Cloudant</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Idrisi                 Idrisi</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ARCGEN                 ARCGEN</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> XLS                       XLS</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ODS                       ODS</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> XLSX                     XLSX</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Elasticsearch   Elasticsearch</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Walk                     Walk</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Carto                   Carto</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> AmigoCloud         AmigoCloud</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SXF                       SXF</span>
@@ -165,12 +157,14 @@ capability to read/create datasets through the VSI*L API. <a href="https://gdal.
 <span class="r-out co"><span class="r-pr">#&gt;</span> MVT                       MVT</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NGW                       NGW</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> MapML                   MapML</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GTFS                     GTFS</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> PMTiles               PMTiles</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> JSONFG                 JSONFG</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> TIGER                   TIGER</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> AVCBin                 AVCBin</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> AVCE00                 AVCE00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> HTTP                     HTTP</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                                                    long_name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ESRIC                                                     Esri Compact Cache</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> FITS                                         Flexible Image Transport System</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> PCIDSK                                                  PCIDSK Database File</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> netCDF                                            Network Common Data Format</span>
@@ -190,7 +184,6 @@ capability to read/create datasets through the VSI*L API. <a href="https://gdal.
 <span class="r-out co"><span class="r-pr">#&gt;</span> S57                                                           IHO S-57 (ENC)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> DGN                                                         Microstation DGN</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> OGR_VRT                                             VRT - Virtual Datasource</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> REC                                                            EPIInfo .REC </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Memory                                                                Memory</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CSV                                             Comma Separated Value (.csv)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NAS                                                              NAS - ALKIS</span>
@@ -220,7 +213,6 @@ capability to read/create datasets through the VSI*L API. <a href="https://gdal.
 <span class="r-out co"><span class="r-pr">#&gt;</span> FlatGeobuf                                                        FlatGeobuf</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geoconcept                                                        Geoconcept</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> GeoRSS                                                                GeoRSS</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GPSTrackMaker                                                  GPSTrackMaker</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> VFK                                     Czech Cadastral Exchange Data Format</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> PGDUMP                                                   PostgreSQL SQL dump</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> OSM                                                OpenStreetMap XML and PBF</span>
@@ -229,18 +221,13 @@ capability to read/create datasets through the VSI*L API. <a href="https://gdal.
 <span class="r-out co"><span class="r-pr">#&gt;</span> WFS                                            OGC WFS (Web Feature Service)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> OAPIF                                                     OGC API - Features</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SOSI                                                 Norwegian SOSI Standard</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geomedia                                                       Geomedia .mdb</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> EDIGEO                                         French EDIGEO exchange format</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SVG                                                 Scalable Vector Graphics</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> CouchDB                                                   CouchDB / GeoCouch</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cloudant                                                  Cloudant / CouchDB</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Idrisi                                                  Idrisi Vector (.vct)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ARCGEN                                                     Arc/Info Generate</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> XLS                                                          MS Excel format</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ODS                     Open Document/ LibreOffice / OpenOffice Spreadsheet </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> XLSX                                          MS Office Open XML spreadsheet</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Elasticsearch                                                 Elastic Search</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Walk                                                                        </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Carto                                                                  Carto</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> AmigoCloud                                                        AmigoCloud</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SXF                                              Storage and eXchange Format</span>
@@ -253,12 +240,14 @@ capability to read/create datasets through the VSI*L API. <a href="https://gdal.
 <span class="r-out co"><span class="r-pr">#&gt;</span> MVT                                                      Mapbox Vector Tiles</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NGW                                                              NextGIS Web</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> MapML                                                                  MapML</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GTFS                                      General Transit Feed Specification</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> PMTiles                                                       ProtoMap Tiles</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> JSONFG                                      OGC Features and Geometries JSON</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> TIGER                                                 U.S. Census TIGER/Line</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> AVCBin                                              Arc/Info Binary Coverage</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> AVCE00                                         Arc/Info E00 (ASCII) Coverage</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> HTTP                                                   HTTP Fetching Wrapper</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                write  copy is_raster is_vector   vsi</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ESRIC          FALSE FALSE      TRUE      TRUE  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> FITS            TRUE FALSE      TRUE      TRUE FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> PCIDSK          TRUE FALSE      TRUE      TRUE  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> netCDF          TRUE  TRUE      TRUE      TRUE  TRUE</span>
@@ -278,7 +267,6 @@ capability to read/create datasets through the VSI*L API. <a href="https://gdal.
 <span class="r-out co"><span class="r-pr">#&gt;</span> S57             TRUE FALSE     FALSE      TRUE  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> DGN             TRUE FALSE     FALSE      TRUE  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> OGR_VRT        FALSE FALSE     FALSE      TRUE  TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> REC            FALSE FALSE     FALSE      TRUE FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Memory          TRUE FALSE     FALSE      TRUE FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CSV             TRUE FALSE     FALSE      TRUE  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NAS            FALSE FALSE     FALSE      TRUE  TRUE</span>
@@ -302,13 +290,12 @@ capability to read/create datasets through the VSI*L API. <a href="https://gdal.
 <span class="r-out co"><span class="r-pr">#&gt;</span> OGR_OGDI       FALSE FALSE     FALSE      TRUE FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> PostgreSQL      TRUE FALSE     FALSE      TRUE FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> MySQL           TRUE FALSE     FALSE      TRUE FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> OpenFileGDB    FALSE FALSE     FALSE      TRUE  TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> OpenFileGDB     TRUE FALSE      TRUE      TRUE  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> DXF             TRUE FALSE     FALSE      TRUE  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CAD            FALSE FALSE      TRUE      TRUE  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> FlatGeobuf      TRUE FALSE     FALSE      TRUE  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geoconcept      TRUE FALSE     FALSE      TRUE  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> GeoRSS          TRUE FALSE     FALSE      TRUE  TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> GPSTrackMaker   TRUE FALSE     FALSE      TRUE  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> VFK            FALSE FALSE     FALSE      TRUE FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> PGDUMP          TRUE FALSE     FALSE      TRUE  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> OSM            FALSE FALSE     FALSE      TRUE  TRUE</span>
@@ -317,18 +304,13 @@ capability to read/create datasets through the VSI*L API. <a href="https://gdal.
 <span class="r-out co"><span class="r-pr">#&gt;</span> WFS            FALSE FALSE     FALSE      TRUE  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> OAPIF          FALSE FALSE     FALSE      TRUE FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SOSI           FALSE FALSE     FALSE      TRUE FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Geomedia       FALSE FALSE     FALSE      TRUE FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> EDIGEO         FALSE FALSE     FALSE      TRUE  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SVG            FALSE FALSE     FALSE      TRUE  TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> CouchDB         TRUE FALSE     FALSE      TRUE FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cloudant        TRUE FALSE     FALSE      TRUE FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Idrisi         FALSE FALSE     FALSE      TRUE  TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ARCGEN         FALSE FALSE     FALSE      TRUE  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> XLS            FALSE FALSE     FALSE      TRUE FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ODS             TRUE FALSE     FALSE      TRUE  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> XLSX            TRUE FALSE     FALSE      TRUE  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Elasticsearch   TRUE FALSE     FALSE      TRUE FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Walk           FALSE FALSE     FALSE      TRUE FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Carto           TRUE FALSE     FALSE      TRUE FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> AmigoCloud      TRUE FALSE     FALSE      TRUE FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> SXF            FALSE FALSE     FALSE      TRUE  TRUE</span>
@@ -341,7 +323,10 @@ capability to read/create datasets through the VSI*L API. <a href="https://gdal.
 <span class="r-out co"><span class="r-pr">#&gt;</span> MVT             TRUE FALSE     FALSE      TRUE  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NGW             TRUE  TRUE      TRUE      TRUE FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> MapML           TRUE FALSE     FALSE      TRUE  TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> TIGER           TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GTFS           FALSE FALSE     FALSE      TRUE  TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> PMTiles         TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> JSONFG          TRUE FALSE     FALSE      TRUE  TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> TIGER          FALSE FALSE     FALSE      TRUE  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> AVCBin         FALSE FALSE     FALSE      TRUE  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> AVCE00         FALSE FALSE     FALSE      TRUE  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> HTTP           FALSE FALSE      TRUE      TRUE FALSE</span>
