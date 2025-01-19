@@ -49,6 +49,9 @@ List sfc_unique_sfg_dims_and_types(List sfc) {
 			class_dim.insert("XYZM");
 		}
 		
+		if (!Rf_inherits(item, "sfg"))
+			stop("object(s) should be of class 'sfg'");
+
 		if (Rf_inherits(item, "POINT")) {
 			class_type.insert("POINT");
 			continue;
