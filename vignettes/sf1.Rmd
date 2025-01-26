@@ -28,17 +28,6 @@ ArcGIS](https://www.esri.com/en-us/home)) and forms the vector data basis for
 libraries such as [GDAL](https://gdal.org/). A subset of
 simple features forms the [GeoJSON](https://geojson.org/) standard.
 
-R has well-supported classes for storing spatial
-data ([sp](https://CRAN.R-project.org/package=sp))
-and interfacing to the above mentioned environments
-([rgdal](https://CRAN.R-project.org/package=rgdal),
-[rgeos](https://CRAN.R-project.org/package=rgeos)), but has so far lacked a
-complete implementation of simple features, making conversions
-at times convoluted, inefficient or incomplete. The package
-[sf](https://github.com/r-spatial/sf) tries to fill this gap, and aims
-at succeeding [sp](https://CRAN.R-project.org/package=sp) in the
-long term.
-
 This vignette:
 
 * explains what is meant by features, and by `simple features`
