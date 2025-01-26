@@ -89,13 +89,6 @@ them.</p>
 <p>The standard is widely implemented in spatial databases (such as <a href="https://postgis.net/" class="external-link">PostGIS</a>), commercial GIS (e.g., <a href="https://www.esri.com/en-us/home" class="external-link">ESRI ArcGIS</a>) and forms the
 vector data basis for libraries such as <a href="https://gdal.org/" class="external-link">GDAL</a>. A subset of simple features forms the
 <a href="https://geojson.org/" class="external-link">GeoJSON</a> standard.</p>
-<p>R has well-supported classes for storing spatial data (<a href="https://CRAN.R-project.org/package=sp" class="external-link">sp</a>) and interfacing to
-the above mentioned environments (<a href="https://CRAN.R-project.org/package=rgdal" class="external-link">rgdal</a>, <a href="https://CRAN.R-project.org/package=rgeos" class="external-link">rgeos</a>), but has so
-far lacked a complete implementation of simple features, making
-conversions at times convoluted, inefficient or incomplete. The package
-<a href="https://github.com/r-spatial/sf" class="external-link">sf</a> tries to fill this gap,
-and aims at succeeding <a href="https://CRAN.R-project.org/package=sp" class="external-link">sp</a> in the long
-term.</p>
 <p>This vignette:</p>
 <ul>
 <li>explains what is meant by features, and by
@@ -911,33 +904,29 @@ limited to PostGIS.</p>
 <p>Coordinate reference systems (CRS) are like measurement units for
 coordinates: they specify which location on Earth a particular
 coordinate pair refers to. We saw above that <code>sfc</code> objects
-(geometry list-columns) have two attributes to store a CRS:
-<code>epsg</code> and <code>proj4string</code>. This implies that all
-geometries in a geometry list-column must have the same CRS. Both may be
-<code>NA</code>, e.g. in case the CRS is unknown, or when we work with
-local coordinate systems (e.g. inside a building, a body, or an abstract
-space).</p>
-<p><code>proj4string</code> is a generic, string-based description of a
-CRS, understood by the <a href="https://proj4.org/" class="external-link">PROJ</a> library. It
-defines projection types and (often) defines parameter values for
+(geometry list-columns) have a an attribute of class <code>crs</code>
+that stores the CRS. This implies that all geometries in a geometry
+list-column have the same CRS. It may be <code>NA</code> in case the CRS
+is unknown, or when we work with local coordinate systems (e.g. inside a
+building, a body, or an abstract space); in that case coordinates are
+assumed to be Cartesian (in case of 2D: defining positions on in a flat
+plane).</p>
+<p>A <code>crs</code> object contains two character fields:
+<code>input</code> for the name (if existing) or the user-definition of
+the CRS, and <code>wkt</code> for the WKT-2 specification; WKT-2 is a
+standard encoding for describing CRS that is used throughout the spatial
+data science industry. When defining a CRS, a PROJ string may be used
+that is understood by the <a href="https://proj4.org/" class="external-link">PROJ</a> library.
+It defines projection types and (often) defines parameter values for
 particular projections, and hence can cover an infinite amount of
-different projections. This library (also used by GDAL) provides
-functions to convert or transform between different CRS.
-<code>epsg</code> is the integer ID for a particular, known CRS that can
-be resolved into a <code>proj4string</code>. Some
-<code>proj4string</code> values can resolved back into their
-corresponding <code>epsg</code> ID, but this does not always work.</p>
-<p>The importance of having <code>epsg</code> values stored with data
-besides <code>proj4string</code> values is that the <code>epsg</code>
-refers to particular, well-known CRS, whose parameters may change
-(improve) over time; fixing only the <code>proj4string</code> may remove
-the possibility to benefit from such improvements, and limit some of the
-provenance of datasets, but may help reproducibility.</p>
-<p>Coordinate reference system transformations can be carried out using
+different projections. Alternatively, codes like <code>EPSG:3035</code>
+or <code>OGC:CRS84</code> may be used; these are well-known identifiers
+of CRS defined in the PROJ database.</p>
+<p>Coordinate reference system transformations are carried out using
 <code><a href="../reference/st_transform.html">st_transform()</a></code>, e.g. converting longitudes/latitudes in
 NAD27 to web mercator (EPSG:3857) can be done by:</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">nc.web_mercator</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">nc</span>, <span class="fl">3857</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">nc.web_mercator</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">nc</span>, <span class="st">"EPSG:3857"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc.web_mercator</span><span class="op">)</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,<span class="op">]</span></span>
 <span><span class="co">##          [,1]    [,2]</span></span>
 <span><span class="co">## [1,] -8463267 4377507</span></span>
