@@ -196,7 +196,7 @@ print(nc[9:15], n = 3)
 ```
 which would give the following output:
 
-![](sf_xfig.png)
+![](sf_fig.png)
 
 In the output we see:
 

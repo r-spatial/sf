@@ -101,7 +101,7 @@ Suggests:
     spatstat.random, 
     spatstat.linnet, 
     spatstat.utils,
-    stars (>= 0.2-0),
+    stars (>= 0.6-0),
     terra,
     testthat (>= 3.0.0),
     tibble (>= 1.4.1),
