@@ -74,6 +74,7 @@ Imports:
     units (>= 0.7-0),
     utils
 Suggests:
+    animation,
     blob,
     nanoarrow,
     covr,

@@ -1,6 +1,5 @@
 # see https://gist.github.com/edzer/9c5c24434ffcaf42917796a98c4dd9a6
 library(sf)
-# library(maptools)
 library(animation)
 data(wrld_simpl, package = "maptools")
 w <- st_as_sf(wrld_simpl)
