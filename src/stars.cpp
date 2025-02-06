@@ -527,6 +527,10 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 		eType = GDT_UInt32; // #nocov
 	else if (Type[0] == "Int16")
 		eType = GDT_Int32; // #nocov
+#if GDAL_VERSION_NUM >= 3110000
+	else if (Type[0] == "Float16")
+		eType = GDT_Float16; // #nocov
+#endif
 	else if (Type[0] == "Float32")
 		eType = GDT_Float32;
 	else if (Type[0] == "Float64") // #nocov
