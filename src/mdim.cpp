@@ -114,6 +114,10 @@ List get_geometry(std::shared_ptr<GDALGroup> curGroup) {
 	List lst;
 	for (const auto &an: curGroup->GetMDArrayNames()) {
 		auto a(curGroup->OpenMDArray(an));
+		if (a == nullptr) {
+			Rcout << "could not open geometry array " << an << std::endl;
+			stop("cannot OpenMDArray");
+		}
 		auto geom = a->GetAttribute("geometry");
 		if (geom) {
 			a = curGroup->OpenMDArray(geom->ReadAsString());
