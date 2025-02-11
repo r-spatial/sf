@@ -331,7 +331,7 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	Rcpp::IntegerVector orientation(ac);
 	for (int i = 0; i < ac; i++) {
 		OGRAxisOrientation peOrientation;
-		const char *ret = srs->GetAxis(srs->IsGeographic() ? "GEOGCS" : "PROJCS", 
+		const char *ret = srs->GetAxis(srs->IsGeographic() ? "GEOGCS" : "PROJCS",
 						i, &peOrientation);
 		if (ret != NULL) {
 			nms[i] = ret;

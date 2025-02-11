@@ -874,7 +874,7 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 #ifdef HAVE310
 	if (op == "triangulate_constrained") {
 		for (size_t i = 0; i < g.size(); i++)
-			out[i] = geos_ptr(chkNULL(GEOSConstrainedDelaunayTriangulation_r(hGEOSCtxt, g[i].get())), 
+			out[i] = geos_ptr(chkNULL(GEOSConstrainedDelaunayTriangulation_r(hGEOSCtxt, g[i].get())),
 							hGEOSCtxt);
 	} else
 #endif
@@ -1316,14 +1316,14 @@ Rcpp::List CPL_nary_intersection(Rcpp::List sfc) {
 							errors++;
 						else if (!chk_(GEOSisEmpty_r(hGEOSCtxt, inters.get()))) { // i and k intersection
 							// cut out inters from geom:
-							geom = geos_ptr(GEOSDifference_r(hGEOSCtxt, geom.get(), inters.get()), hGEOSCtxt); 
+							geom = geos_ptr(GEOSDifference_r(hGEOSCtxt, geom.get(), inters.get()), hGEOSCtxt);
 							if (geom == nullptr)
 								Rcpp::stop("GEOS exception"); // #nocov
 							// cut out inters from out[k]:
 #ifndef HAVE_390
-							GeomPtr g = geos_ptr(GEOSDifference_r(hGEOSCtxt, out[k].get(), inters.get()), hGEOSCtxt); 
+							GeomPtr g = geos_ptr(GEOSDifference_r(hGEOSCtxt, out[k].get(), inters.get()), hGEOSCtxt);
 #else
-							GeomPtr g = geos_ptr(GEOSDifferencePrec_r(hGEOSCtxt, out[k].get(), inters.get(), grid_size), hGEOSCtxt); 
+							GeomPtr g = geos_ptr(GEOSDifferencePrec_r(hGEOSCtxt, out[k].get(), inters.get(), grid_size), hGEOSCtxt);
 #endif
 							if (g == nullptr)
 								Rcpp::warning("GEOS difference returns NULL"); // #nocov
