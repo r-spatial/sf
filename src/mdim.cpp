@@ -116,7 +116,7 @@ List get_geometry(std::shared_ptr<GDALGroup> curGroup) {
 		auto a(curGroup->OpenMDArray(an));
 		if (a == nullptr) {
 			Rcout << "could not open geometry array " << an << std::endl;
-			stop("cannot OpenMDArray");
+			stop("get_geometry(): cannot OpenMDArray()");
 		}
 		auto geom = a->GetAttribute("geometry");
 		if (geom) {
