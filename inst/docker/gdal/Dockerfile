@@ -100,10 +100,8 @@ RUN cd proj* \
 #  && cd -
 
 # GDAL:
-ENV GDAL_VERSION 3.10.1
-ENV GDAL_VERSION_NAME 3.10.1rc2
-#https://download.osgeo.org/gdal/3.9.0/gdal-3.9.0beta1.tar.gz
-#https://download.osgeo.org/gdal/3.10.0/gdal-3.10.0beta1.tar.gz
+ENV GDAL_VERSION 3.10.2
+ENV GDAL_VERSION_NAME 3.10.2rc1
 
 RUN wget -q http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
@@ -129,6 +127,9 @@ RUN R CMD build --no-manual stars
 RUN R CMD INSTALL sf
 RUN R CMD INSTALL lwgeom
 RUN R CMD INSTALL stars
+#
+RUN export DEBIAN_FRONTEND=noninteractive; apt-get install -y libmagick++-dev
+RUN Rscript -e 'install.packages("animation")'
 #
 RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
 RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 

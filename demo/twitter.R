@@ -1,6 +1,5 @@
 # see https://gist.github.com/edzer/9c5c24434ffcaf42917796a98c4dd9a6
 library(sf)
-library(animation)
 data(wrld_simpl, package = "maptools")
 w <- st_as_sf(wrld_simpl)
 w = st_make_valid(w)
@@ -40,18 +39,18 @@ circ = function(l = c(-180:180), lon0 = 0, lat0 = 30) {
 
 m = st_make_grid()
 m = st_segmentize(m, 4e5)
-saveGIF(
-#for (i in 0:200) {
-for (i in 0:100) {
-	par(mar = rep(0,4))
-	lat=30+(i/2)
-	lon=-10-(i/2)
-	print(c(i,lon,lat))
-	p4s=paste0("+proj=ortho +lat_0=", lat, " +lon_0=", lon)
-	plot(st_transform(m, st_crs(p4s), check = TRUE), col = 'lightblue', border = 'grey')
-	crc = circ(lat0 = lat, lon0 = lon)
-	w0 = suppressWarnings(st_intersection(w, crc))
-	w0 = st_cast(w0, "MULTIPOLYGON")
-	plot(st_transform(w0["f"], st_crs(p4s), check = TRUE), add = TRUE)
-}
-, interval = 0.05, clean = FALSE)
+#library(animation)
+#saveGIF(
+#for (i in 0:100) {
+#	par(mar = rep(0,4))
+#	lat=30+(i/2)
+#	lon=-10-(i/2)
+#	print(c(i,lon,lat))
+#	p4s=paste0("+proj=ortho +lat_0=", lat, " +lon_0=", lon)
+#	plot(st_transform(m, st_crs(p4s), check = TRUE), col = 'lightblue', border = 'grey')
+#	crc = circ(lat0 = lat, lon0 = lon)
+#	w0 = suppressWarnings(st_intersection(w, crc))
+#	w0 = st_cast(w0, "MULTIPOLYGON")
+#	plot(st_transform(w0["f"], st_crs(p4s), check = TRUE), add = TRUE)
+#}
+#, interval = 0.05, clean = FALSE)
