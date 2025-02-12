@@ -78,6 +78,7 @@ Suggests:
     blob,
     nanoarrow,
     covr,
+    curl,
     dplyr (>= 1.0.0),
     ggplot2,
     knitr,

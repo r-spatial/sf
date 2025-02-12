@@ -202,3 +202,11 @@ test_that("Missing data sources have useful error message (#967)", {
 	# delete temp file
 	file.remove(x)
 })
+
+# https://lists.osgeo.org/pipermail/gdal-dev/2025-February/060229.html
+test_that("GDAL was built with CURL", {
+	skip_if_not(requireNamespace("curl", quietly=TRUE),
+	    message="install curl to check whether GDAL was built with CURL")
+	skip_if_offline(host = "github.com")
+	expect_silent(x <- read_sf("https://github.com/r-spatial/sf/raw/refs/heads/main/inst/gpkg/nc.gpkg"))
+})
