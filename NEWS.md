@@ -1,5 +1,7 @@
 # version 1.0-20
 
+* try `pkg-config gdal` before `gdal-config` in `configure` step during source installation
+
 * `st_buffer()` for geodetic coordinates allows `max_dist` and `min_level` 
    to be specified by feature; #2488 and https://github.com/r-spatial/s2/pull/264
 
