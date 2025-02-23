@@ -191,6 +191,8 @@ the smallest circle that contains the input.
 \code{st_node} adds nodes to linear geometries at intersections without a node, and only works on individual linear geometries
 
 \code{st_segmentize} adds points to straight lines
+
+\code{st_exterior_ring} returns the exterior rings of polygons, removing all holes.
 }
 \examples{
 

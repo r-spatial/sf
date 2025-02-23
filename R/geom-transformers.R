@@ -1200,6 +1200,7 @@ st_line_interpolate = function(line, dist, normalized = FALSE) {
 
 #' @export
 #' @name geos_unary
+#' @details \code{st_exterior_ring} returns the exterior rings of polygons, removing all holes.
 st_exterior_ring = function(x, ...) UseMethod("st_exterior_ring")
 
 #' @export
