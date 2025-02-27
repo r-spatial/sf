@@ -2305,9 +2305,37 @@ GENERIC_INSTALL_MESSAGE="
 *** https://r-spatial.github.io/sf/#installing"
 
 #GDAL
-GDAL_CONFIG="gdal-config"
 
-GDAL_CONFIG_SET="no"
+# try pkg-config first
+
+GDAL_PKG_CONFIG="pkg-config gdal"
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking pkg-config usability" >&5
+printf %s "checking pkg-config usability... " >&6; }
+
+if test `${GDAL_PKG_CONFIG} --modversion`;
+then
+	GDAL_CPPFLAGS=`${GDAL_PKG_CONFIG} --cflags`
+	GDAL_VERSION=`${GDAL_PKG_CONFIG} --modversion`
+	GDAL_LIBS=`${GDAL_PKG_CONFIG} --libs`
+	GDAL_DEP_LIBS=`${GDAL_PKG_CONFIG} --static --libs`
+	GDAL_DATADIR=`${GDAL_PKG_CONFIG} --variable=datadir`
+	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+else
+	GDAL_PKG_CONFIG="no"
+	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: pkg-config gdal not found, falling back on gdal-config." >&5
+printf "%s\n" "$as_me: pkg-config gdal not found, falling back on gdal-config." >&6;}
+fi
+
+
+# fall back on gdal-config
+
+if test "$GDAL_PKG_CONFIG" = "no" ; then
+
+  GDAL_CONFIG="gdal-config"
+
+  GDAL_CONFIG_SET="no"
 
 
 # Check whether --with-gdal-config was given.
@@ -2316,16 +2344,16 @@ then :
   withval=$with_gdal_config; gdal_config=$withval
 fi
 
-if test  -n "$gdal_config"  ; then
+  if test  -n "$gdal_config"  ; then
     GDAL_CONFIG_SET="yes"
     GDAL_CONFIG="${gdal_config}"
 
     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: gdal-config set to $GDAL_CONFIG" >&5
 printf "%s\n" "$as_me: gdal-config set to $GDAL_CONFIG" >&6;}
-fi
+  fi
 
-if test "$GDAL_CONFIG_SET" = "no" ; then
-  # Extract the first word of ""$GDAL_CONFIG"", so it can be a program name with args.
+  if test "$GDAL_CONFIG_SET" = "no" ; then
+    # Extract the first word of ""$GDAL_CONFIG"", so it can be a program name with args.
 set dummy "$GDAL_CONFIG"; ac_word=$2
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 printf %s "checking for $ac_word... " >&6; }
@@ -2372,38 +2400,38 @@ printf "%s\n" "no" >&6; }
 fi
 
 
-  if test "$GDAL_CONFIG" = "no" ; then
-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+    if test "$GDAL_CONFIG" = "no" ; then
+      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
-    as_fn_error $? "gdal-config not found or not executable. ${GENERIC_INSTALL_MESSAGE}" "$LINENO" 5
-  fi
-else
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking gdal-config exists" >&5
+      as_fn_error $? "gdal-config not found or not executable. ${GENERIC_INSTALL_MESSAGE}" "$LINENO" 5
+    fi
+  else
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking gdal-config exists" >&5
 printf %s "checking gdal-config exists... " >&6; }
-  if test -r "${GDAL_CONFIG}"; then
-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+    if test -r "${GDAL_CONFIG}"; then
+      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
-  else
-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+    else
+      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
-    as_fn_error $? "gdal-config not found - configure argument error. ${GENERIC_INSTALL_MESSAGE}" "$LINENO" 5
-  fi
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking gdal-config executable" >&5
+      as_fn_error $? "gdal-config not found - configure argument error. ${GENERIC_INSTALL_MESSAGE}" "$LINENO" 5
+    fi
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking gdal-config executable" >&5
 printf %s "checking gdal-config executable... " >&6; }
-  if test -x "${GDAL_CONFIG}"; then
-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+    if test -x "${GDAL_CONFIG}"; then
+      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
-  else
-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+    else
+      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
-    as_fn_error $? "gdal-config not executable. ${GENERIC_INSTALL_MESSAGE}" "$LINENO" 5
+      as_fn_error $? "gdal-config not executable. ${GENERIC_INSTALL_MESSAGE}" "$LINENO" 5
+    fi
   fi
-fi
 
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking gdal-config usability" >&5
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking gdal-config usability" >&5
 printf %s "checking gdal-config usability... " >&6; }
-if test `${GDAL_CONFIG} --version`;
-then
+  if test `${GDAL_CONFIG} --version`;
+  then
 	GDAL_CPPFLAGS=`${GDAL_CONFIG} --cflags`
 	GDAL_VERSION=`${GDAL_CONFIG} --version`
 	GDAL_LIBS=`${GDAL_CONFIG} --libs`
@@ -2411,9 +2439,10 @@ then
 	GDAL_DATADIR=`${GDAL_CONFIG} --datadir`
 	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
-else
+  else
 	as_fn_error $? "gdal-config not found. ${GENERIC_INSTALL_MESSAGE}" "$LINENO" 5
-fi
+  fi
+fi # gdal-config
 
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: GDAL: ${GDAL_VERSION}" >&5
 printf "%s\n" "$as_me: GDAL: ${GDAL_VERSION}" >&6;}
@@ -3593,9 +3622,9 @@ else
   fi
 fi
 
-GDAL_DATA_TEST_FILE="${GDAL_DATADIR}/pcs.csv"
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking GDAL: ${GDAL_DATADIR}/pcs.csv readable" >&5
-printf %s "checking GDAL: ${GDAL_DATADIR}/pcs.csv readable... " >&6; }
+GDAL_DATA_TEST_FILE="${GDAL_DATADIR}/stateplane.csv"
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking GDAL: ${GDAL_DATADIR}/stateplane.csv readable" >&5
+printf %s "checking GDAL: ${GDAL_DATADIR}/stateplane.csv readable... " >&6; }
 if test -r "${GDAL_DATA_TEST_FILE}" ; then
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
@@ -3603,7 +3632,7 @@ else
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
   if test "${GDAL_GE_250}" = "no" ; then
-    as_fn_error $? "pcs.csv not found in GDAL data directory." "$LINENO" 5
+    as_fn_error $? "stateplane.csv not found in GDAL data directory." "$LINENO" 5
   fi
 fi
 

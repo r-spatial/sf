@@ -48,54 +48,80 @@ GENERIC_INSTALL_MESSAGE="
 *** https://r-spatial.github.io/sf/#installing"
 
 #GDAL
-GDAL_CONFIG="gdal-config"
 
-GDAL_CONFIG_SET="no"
+# try pkg-config first
 
-AC_ARG_WITH([gdal-config],
+GDAL_PKG_CONFIG="pkg-config gdal"
+
+AC_MSG_CHECKING(pkg-config usability)
+
+if test `${GDAL_PKG_CONFIG} --modversion`;
+then
+	GDAL_CPPFLAGS=`${GDAL_PKG_CONFIG} --cflags`
+	GDAL_VERSION=`${GDAL_PKG_CONFIG} --modversion`
+	GDAL_LIBS=`${GDAL_PKG_CONFIG} --libs`
+	GDAL_DEP_LIBS=`${GDAL_PKG_CONFIG} --static --libs`
+	GDAL_DATADIR=`${GDAL_PKG_CONFIG} --variable=datadir`
+	AC_MSG_RESULT(yes)
+else
+	GDAL_PKG_CONFIG="no"
+	AC_MSG_NOTICE([pkg-config gdal not found, falling back on gdal-config.])
+fi
+
+
+# fall back on gdal-config
+
+if test ["$GDAL_PKG_CONFIG" = "no"] ; then
+
+  GDAL_CONFIG="gdal-config"
+
+  GDAL_CONFIG_SET="no"
+
+  AC_ARG_WITH([gdal-config],
     AS_HELP_STRING([--with-gdal-config=GDAL_CONFIG],[the location of gdal-config]),
            [gdal_config=$withval])
-if test [ -n "$gdal_config" ] ; then
+  if test [ -n "$gdal_config" ] ; then
     GDAL_CONFIG_SET="yes"
     AC_SUBST([GDAL_CONFIG],["${gdal_config}"])
     AC_MSG_NOTICE(gdal-config set to $GDAL_CONFIG)
-fi
+  fi
 
-if test ["$GDAL_CONFIG_SET" = "no"] ; then
-  AC_PATH_PROG([GDAL_CONFIG], ["$GDAL_CONFIG"],["no"])
-  if test ["$GDAL_CONFIG" = "no"] ; then
-    AC_MSG_RESULT(no)
-    AC_MSG_ERROR([gdal-config not found or not executable. ${GENERIC_INSTALL_MESSAGE}])
-  fi
-else
-  AC_MSG_CHECKING(gdal-config exists)
-  if test -r "${GDAL_CONFIG}"; then
-    AC_MSG_RESULT(yes)
+  if test ["$GDAL_CONFIG_SET" = "no"] ; then
+    AC_PATH_PROG([GDAL_CONFIG], ["$GDAL_CONFIG"],["no"])
+    if test ["$GDAL_CONFIG" = "no"] ; then
+      AC_MSG_RESULT(no)
+      AC_MSG_ERROR([gdal-config not found or not executable. ${GENERIC_INSTALL_MESSAGE}])
+    fi
   else
-    AC_MSG_RESULT(no)
-    AC_MSG_ERROR([gdal-config not found - configure argument error. ${GENERIC_INSTALL_MESSAGE}])
+    AC_MSG_CHECKING(gdal-config exists)
+    if test -r "${GDAL_CONFIG}"; then
+      AC_MSG_RESULT(yes)
+    else
+      AC_MSG_RESULT(no)
+      AC_MSG_ERROR([gdal-config not found - configure argument error. ${GENERIC_INSTALL_MESSAGE}])
+    fi
+    AC_MSG_CHECKING(gdal-config executable)
+    if test -x "${GDAL_CONFIG}"; then
+      AC_MSG_RESULT(yes)
+    else
+      AC_MSG_RESULT(no)
+      AC_MSG_ERROR([gdal-config not executable. ${GENERIC_INSTALL_MESSAGE}])
+    fi
   fi
-  AC_MSG_CHECKING(gdal-config executable)
-  if test -x "${GDAL_CONFIG}"; then
-    AC_MSG_RESULT(yes)
-  else
-    AC_MSG_RESULT(no)
-    AC_MSG_ERROR([gdal-config not executable. ${GENERIC_INSTALL_MESSAGE}])
-  fi
-fi
 
-AC_MSG_CHECKING(gdal-config usability)
-if test `${GDAL_CONFIG} --version`;
-then
+  AC_MSG_CHECKING(gdal-config usability)
+  if test `${GDAL_CONFIG} --version`;
+  then
 	GDAL_CPPFLAGS=`${GDAL_CONFIG} --cflags`
 	GDAL_VERSION=`${GDAL_CONFIG} --version`
 	GDAL_LIBS=`${GDAL_CONFIG} --libs`
 	GDAL_DEP_LIBS=`${GDAL_CONFIG} --dep-libs`
 	GDAL_DATADIR=`${GDAL_CONFIG} --datadir`
 	AC_MSG_RESULT(yes)
-else
+  else
 	AC_MSG_ERROR([gdal-config not found. ${GENERIC_INSTALL_MESSAGE}])
-fi
+  fi
+fi # gdal-config
 
 AC_MSG_NOTICE([GDAL: ${GDAL_VERSION}])
 AC_MSG_CHECKING([GDAL version >= 2.0.1])
@@ -195,14 +221,14 @@ else
   fi
 fi
 
-GDAL_DATA_TEST_FILE="${GDAL_DATADIR}/pcs.csv"
-AC_MSG_CHECKING(GDAL: ${GDAL_DATADIR}/pcs.csv readable)
+GDAL_DATA_TEST_FILE="${GDAL_DATADIR}/stateplane.csv"
+AC_MSG_CHECKING(GDAL: ${GDAL_DATADIR}/stateplane.csv readable)
 if test -r "${GDAL_DATA_TEST_FILE}" ; then
   AC_MSG_RESULT(yes)
 else
   AC_MSG_RESULT(no)
   if test "${GDAL_GE_250}" = "no" ; then
-    AC_MSG_ERROR([pcs.csv not found in GDAL data directory.])
+    AC_MSG_ERROR([stateplane.csv not found in GDAL data directory.])
   fi
 fi
 
