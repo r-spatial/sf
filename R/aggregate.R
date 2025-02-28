@@ -133,7 +133,8 @@ st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE, na.rm = 
 
 	# https://stackoverflow.com/questions/57767022/how-do-you-use-st-interpolate-aw-with-polygon-layers-that-legitimately-include-p
 	gc = which(st_is(i, "GEOMETRYCOLLECTION"))
-	i[gc] = st_collection_extract(i[gc], "POLYGON")
+	# i[gc] = st_collection_extract(i[gc], "POLYGON") ## breaks if there are several POLYGONs in a GC
+	i[gc] = do.call(c, lapply(i[gc], function(x) st_sfc(st_union(st_collection_extract(x, "POLYGON")))))
 	two_d = which(st_dimension(i) == 2)
 	i[two_d] = st_cast(i[two_d], "MULTIPOLYGON")
 
