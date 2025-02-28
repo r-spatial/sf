@@ -7,6 +7,7 @@
 [![cran checks](https://badges.cranchecks.info/worst/sf.svg)](https://cran.r-project.org/web/checks/check_results_sf.html)
 [![Downloads](https://cranlogs.r-pkg.org/badges/sf?color=brightgreen)](https://www.r-pkg.org/pkg/sf)
 [![status](https://tinyverse.netlify.app/badge/sf)](https://CRAN.R-project.org/package=sf)
+[![StackOverflow](https://img.shields.io/stackexchange/stackoverflow/t/r-sf?logo=stackoverflow&label=Questions&color=yellow)](https://stackoverflow.com/questions/tagged/r-sf)
 <!-- badges: end -->
 
 # Simple Features for R
