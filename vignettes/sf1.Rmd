@@ -94,7 +94,7 @@ The following seven simple feature types are the most common, and are for instan
 | `MULTIPOLYGON` | set of polygons |
 | `GEOMETRYCOLLECTION` | set of geometries of any type except GEOMETRYCOLLECTION |
 
-Each geometry type can also be a (typed) empty set, which contains zero coordinates (it is not clear how to represent an empty geometry for `POINT`). An empty geometry can be thought of as an analogue to missing (`NA`) attributes, NULL values or empty lists.
+Each of the geometry types can also be a (typed) empty set, containing zero coordinates (for `POINT` the standard is not clear how to represent the empty geometry). Empty geometries can be thought of being analogues to missing (`NA`) attributes, NULL values or empty lists.
 
 The remaining ten geometries are rare but are increasingly found:
 
