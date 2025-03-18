@@ -87,16 +87,16 @@ The following seven simple feature types are the most common, and are for instan
 | type | description                                        |
 | ---- | -------------------------------------------------- |
 | `POINT` | zero-dimensional geometry containing a single point |
-| `LINESTRING` | sequence of points connected by straight, non-self intersecting line pieces; one-dimensional geometry |
+| `LINESTRING` | sequence of points connected by straight, non-self intersecting line segments; one-dimensional geometry |
 | `POLYGON` | geometry with a positive area (two-dimensional); sequence of points form a closed, non-self intersecting ring; the first ring denotes the exterior ring, zero or more subsequent rings denote holes in this exterior ring |
 | `MULTIPOINT` | set of points; a MULTIPOINT is simple if no two Points in the MULTIPOINT are equal |
 | `MULTILINESTRING` | set of linestrings |
 | `MULTIPOLYGON` | set of polygons |
 | `GEOMETRYCOLLECTION` | set of geometries of any type except GEOMETRYCOLLECTION |
 
-Each of the geometry types can also be a (typed) empty set, containing zero coordinates (for `POINT` the standard is not clear how to represent the empty geometry). Empty geometries can be thought of being the analogue to missing (`NA`) attributes, NULL values or empty lists.
+Each geometry type can also be a (typed) empty set, which contains zero coordinates (it is not clear how to represent an empty geometry for `POINT`). An empty geometry can be thought of as an analogue to missing (`NA`) attributes, NULL values or empty lists.
 
-The remaining geometries 10 are rarer, but increasingly find implementations:
+The remaining ten geometries are rare but are increasingly found:
 
 | type | description                                        |
 | ---- | -------------------------------------------------- |
