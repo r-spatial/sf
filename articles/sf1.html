@@ -170,7 +170,7 @@ for instance the only ones used for <a href="https://www.rfc-editor.org/rfc/rfc7
 <tr class="even">
 <td><code>LINESTRING</code></td>
 <td>sequence of points connected by straight, non-self intersecting line
-pieces; one-dimensional geometry</td>
+segments; one-dimensional geometry</td>
 </tr>
 <tr class="odd">
 <td><code>POLYGON</code></td>
@@ -201,10 +201,9 @@ MULTIPOINT are equal</td>
 <p>Each of the geometry types can also be a (typed) empty set,
 containing zero coordinates (for <code>POINT</code> the standard is not
 clear how to represent the empty geometry). Empty geometries can be
-thought of being the analogue to missing (<code>NA</code>) attributes,
-NULL values or empty lists.</p>
-<p>The remaining geometries 10 are rarer, but increasingly find
-implementations:</p>
+thought of being analogues to missing (<code>NA</code>) attributes, NULL
+values or empty lists.</p>
+<p>The remaining ten geometries are rare but are increasingly found:</p>
 <table class="table">
 <colgroup>
 <col width="7%">
