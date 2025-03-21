@@ -145,8 +145,8 @@ arguments. The \code{nQuadSegs}, \code{endCapsStyle}, \code{joinStyle}, \code{mi
 \code{singleSide} parameters only work if the GEOS engine is used (i.e. projected coordinates or
 when \code{sf_use_s2()} is set to \code{FALSE}). See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.html}
 for details. The \code{max_cells} and \code{min_level} parameters (\code{\link[s2:s2_boundary]{s2::s2_buffer_cells()}}) work with the S2
-engine (i.e. geographic coordinates) and can be used to change the buffer shape (e.g. smoothing). If
-a negative buffer returns empty polygons instead of shrinking, set \code{sf_use_s2()} to \code{FALSE}.
+engine (i.e. geographic coordinates) and can be used to change the buffer shape (e.g. smoothing).
+A negative \code{dist} value for geodetic coordinates does not give a proper (geodetic) buffer.
 
 \code{st_boundary} returns the boundary of a geometry
 

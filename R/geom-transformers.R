@@ -28,8 +28,8 @@
 #' \code{singleSide} parameters only work if the GEOS engine is used (i.e. projected coordinates or
 #' when \code{sf_use_s2()} is set to \code{FALSE}). See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.html}
 #' for details. The \code{max_cells} and \code{min_level} parameters ([s2::s2_buffer_cells()]) work with the S2
-#' engine (i.e. geographic coordinates) and can be used to change the buffer shape (e.g. smoothing). If
-#' a negative buffer returns empty polygons instead of shrinking, set \code{sf_use_s2()} to \code{FALSE}.
+#' engine (i.e. geographic coordinates) and can be used to change the buffer shape (e.g. smoothing). 
+#' A negative `dist` value for geodetic coordinates does not give a proper (geodetic) buffer.
 #' 
 #' @examples
 #'
@@ -101,7 +101,10 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30,
 						 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0,
 						 singleSide = FALSE, ...) {
 	longlat = isTRUE(st_is_longlat(x))
-	if (longlat && sf_use_s2()) {
+	dist_n = dist
+	if (inherits(dist_n, "units"))
+		dist_n = drop_units(dist_n)
+	if (longlat && sf_use_s2() && dist_n >= 0.0) {
 #		if (!missing(nQuadSegs) || !missing(endCapStyle) || !missing(joinStyle) ||
 #				!missing(mitreLimit) || !missing(singleSide))
 #			warning("all buffer style parameters are ignored; set st_use_s2(FALSE) first to use them")
