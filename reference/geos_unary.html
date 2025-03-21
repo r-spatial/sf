@@ -209,8 +209,8 @@ arguments. The <code>nQuadSegs</code>, <code>endCapsStyle</code>, <code>joinStyl
 <code>singleSide</code> parameters only work if the GEOS engine is used (i.e. projected coordinates or
 when <code><a href="s2.html">sf_use_s2()</a></code> is set to <code>FALSE</code>). See <a href="https://postgis.net/docs/ST_Buffer.html" class="external-link">postgis.net/docs/ST_Buffer.html</a>
 for details. The <code>max_cells</code> and <code>min_level</code> parameters (<code><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2::s2_buffer_cells()</a></code>) work with the S2
-engine (i.e. geographic coordinates) and can be used to change the buffer shape (e.g. smoothing). If
-a negative buffer returns empty polygons instead of shrinking, set <code><a href="s2.html">sf_use_s2()</a></code> to <code>FALSE</code>.</p>
+engine (i.e. geographic coordinates) and can be used to change the buffer shape (e.g. smoothing).
+A negative <code>dist</code> value for geodetic coordinates does not give a proper (geodetic) buffer.</p>
 <p><code>st_boundary</code> returns the boundary of a geometry</p>
 <p><code>st_convex_hull</code> creates the convex hull of a set of points</p>
 <p><code>st_concave_hull</code> creates the concave hull of a geometry</p>
