@@ -1,5 +1,7 @@
 # version 1.0-20
 
+* `st_buffer()` on geodetic coordinates with negative buffer distance now automatically switches to using GEOS, while giving a warning; #1987
+
 * `st_interpolate_aw()` fixes bug when a GEOMETRYCOLLECTION contains multiple POLYGON structures; found by @mtennekes
 
 * `st_buffer()` for geodetic coordinates allows `max_dist` and `min_level` 
