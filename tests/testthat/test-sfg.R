@@ -38,6 +38,11 @@ test_that("xx2multixx works", {
   expect_identical(sf:::POLYGON2MULTIPOLYGON(st_polygon(pts)), st_multipolygon(list(pts)))
 })
 
+test_that("print.sfg returns sfg", {
+  x = st_point(1:2)
+  expect_identical(print(x), x)
+})
+
 test_that("format works", {
 	digits = options("digits")[[1]]
 	options(digits = 16)
