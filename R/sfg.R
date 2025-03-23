@@ -198,7 +198,7 @@ POLYGON2MULTIPOLYGON = function(x, dim = "XYZ") {
 print.sfg = function(x, ..., width = 0) { # avoids having to write print methods for 68 classes:
 	f = format(x, ..., width = width)
 	message(f)
-	invisible(f)
+	invisible(x)
 }
 
 #' @name st
