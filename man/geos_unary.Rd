@@ -79,7 +79,7 @@ st_exterior_ring(x, ...)
 \arguments{
 \item{x}{object of class \code{sfg}, \code{sfc} or \code{sf}}
 
-\item{dist}{numeric or object of class \code{units}; buffer distance for all, or for each of the elements in \code{x}.
+\item{dist}{numeric or object of class \code{units}; buffer distance(s) for all, or for each of the elements in \code{x}.
 In case \code{x} has geodetic coordinates (lon/lat) and \code{sf_use_s2()} is \code{TRUE}, a numeric
 \code{dist} is taken as distance in meters and a \code{units} object in \code{dist} is converted to meters.
 In case \code{x} has geodetic coordinates (lon/lat) and \code{sf_use_s2()} is \code{FALSE}, a numeric

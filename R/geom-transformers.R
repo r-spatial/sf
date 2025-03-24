@@ -6,7 +6,7 @@
 #' Geometric unary operations on simple feature geometries. These are all generics, with methods for \code{sfg}, \code{sfc} and \code{sf} objects, returning an object of the same class. All operations work on a per-feature basis, ignoring all other features.
 #' @name geos_unary
 #' @param x object of class \code{sfg}, \code{sfc} or \code{sf}
-#' @param dist numeric or object of class `units`; buffer distance for all, or for each of the elements in \code{x}. 
+#' @param dist numeric or object of class `units`; buffer distance(s) for all, or for each of the elements in \code{x}. 
 #' In case \code{x} has geodetic coordinates (lon/lat) and `sf_use_s2()` is `TRUE`, a numeric 
 #' `dist` is taken as distance in meters and a `units` object in `dist` is converted to meters.
 #' In case \code{x} has geodetic coordinates (lon/lat) and `sf_use_s2()` is `FALSE`, a numeric 
@@ -104,7 +104,7 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30,
 	dist_n = dist
 	if (inherits(dist_n, "units"))
 		dist_n = drop_units(dist_n)
-	if (longlat && sf_use_s2() && dist_n >= 0.0) {
+	if (longlat && sf_use_s2() && all(dist_n >= 0.0)) {
 #		if (!missing(nQuadSegs) || !missing(endCapStyle) || !missing(joinStyle) ||
 #				!missing(mitreLimit) || !missing(singleSide))
 #			warning("all buffer style parameters are ignored; set st_use_s2(FALSE) first to use them")
