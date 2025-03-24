@@ -48,10 +48,10 @@ Authors@R:
              comment = c(ORCID = "0000-0002-9415-4582"))
 			 )
 Description: Support for simple feature access, a standardized way to
-    encode and analyze spatial vector data. Binds to 'GDAL' <doi:
-    10.5281/zenodo.5884351> for reading and writing data, to 'GEOS'
-    <doi: 10.5281/zenodo.11396894> for geometrical operations,
-    and to 'PROJ' <doi: 10.5281/zenodo.5884394> for projection
+    encode and analyze spatial vector data. Binds to 'GDAL' 
+	<doi:10.5281/zenodo.5884351> for reading and writing data, to 'GEOS'
+    <doi:10.5281/zenodo.11396894> for geometrical operations,
+    and to 'PROJ' <doi:10.5281/zenodo.5884394> for projection
     conversions and datum transformations. Uses by default the 's2'
     package for geometry operations on geodetic (long/lat degree)
 	coordinates.
