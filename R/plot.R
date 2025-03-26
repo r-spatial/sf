@@ -355,7 +355,8 @@ plot.sfc_POINT = function(x, y, ..., pch = 1, cex = 1, col = 1, bg = 0, lwd = 1,
 	col = rep(col, length.out = npts)
 	bg = rep(bg, length.out = npts)
 	cex = rep(cex, length.out = npts)
-	mat = t(matrix(unlist(x, use.names = FALSE), ncol = length(x))) #933
+	#mat = t(matrix(unlist(x, use.names = FALSE), ncol = length(x))) #933
+	mat = st_coordinates(x)
 	if (!is.null(mat)) {
 		ne = !is.na(rowMeans(mat))  ## faster than apply; #933
 		points(mat[ne,, drop = FALSE], pch = pch[ne], col = col[ne], bg = bg[ne],
