@@ -114,7 +114,7 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="sf_extSoftVersion.html">sf_extSoftVersion</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="st">"GDAL"</span><span class="op">]</span> <span class="op">&gt;</span> <span class="st">"2.1.0"</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/compareVersion.html" class="external-link">compareVersion</a></span><span class="op">(</span><span class="fu"><a href="sf_extSoftVersion.html">sf_extSoftVersion</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="st">"GDAL"</span><span class="op">]</span>, <span class="st">"2.1.0"</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="co"># info utils can be used to list information about a raster</span></span></span>
 <span class="r-in"><span><span class="co"># dataset. More info: https://gdal.org/programs/gdalinfo.html</span></span></span>
 <span class="r-in"><span><span class="va">in_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"tif/geomatrix.tif"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span></span></span>
@@ -219,7 +219,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Band 1 Block=20x20 Type=Byte, ColorInterp=Gray</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Computed Min/Max=74.000,255.000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Reading layer `storms_xyz' from data source </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpBgBQmr/file229d7a9a63d7.gpkg' using driver `GPKG'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   `/tmp/RtmpDkT4x6/file22ae791dc1b4.gpkg' using driver `GPKG'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simple feature collection with 71 features and 0 fields</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geometry type: LINESTRING</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XYZ</span>
