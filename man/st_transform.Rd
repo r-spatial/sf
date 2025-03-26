@@ -123,7 +123,7 @@ sfc = st_sfc(p1, p2, crs = 4326)
 sfc
 st_transform(sfc, 3857)
 st_transform(st_sf(a=2:1, geom=sfc), "EPSG:3857")
-if (sf_extSoftVersion()["GDAL"] >= "3.0.0") {
+if (compareVersion(sf_extSoftVersion()["GDAL"], "3.0.0") >= 0) {
   st_transform(sfc, pipeline =
 	  "+proj=pipeline +step +proj=axisswap +order=2,1") # reverse axes
   st_transform(sfc, pipeline =

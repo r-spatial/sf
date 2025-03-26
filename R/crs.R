@@ -187,8 +187,8 @@ make_crs = function(x) {
 		x
 	else if (is.character(x)) {
 		if (grepl("+init=epsg:", x) &&
-				sf_extSoftVersion()[["proj.4"]] >= "6.0.0" &&
-				sf_extSoftVersion()[["proj.4"]] < "6.3.1") { # nocov start FIXME:
+				compareVersion(sf_extSoftVersion()[["proj.4"]], "6.0.0") >= 0 &&
+				compareVersion(sf_extSoftVersion()[["proj.4"]], "6.3.1") < 0) { # nocov start FIXME:
 			x = strsplit(x, " ")[[1]]
 			if (length(x) > 1)
 				warning(paste("the following proj4string elements are ignored:",
@@ -361,7 +361,7 @@ st_as_text.crs = function(x, ..., projjson = FALSE, pretty = FALSE) {
 	if (is.na(x))
 		NA_character_
 	else if (projjson) {
-		if (sf_extSoftVersion()["GDAL"] < "3.1.0" || sf_extSoftVersion()["proj.4"] < "6.2.0")
+		if (compareVersion(sf_extSoftVersion()["GDAL"], "3.1.0") == -1 || compareVersion(sf_extSoftVersion()["proj.4"], "6.2.0") == -1)
 			stop("ProjJson requires GDAL >= 3.1.0 and PROJ >= 6.2.0")
 		crs_parameters(x)$ProjJson
 	} else { # wkt:
@@ -504,7 +504,7 @@ st_crs.Spatial = function(x, ...) {
 #' st_axis_order() # query default: FALSE means interpret pt as (longitude latitude)
 #' st_transform(pt, 3857)[[1]]
 #' old_value = FALSE
-#' if (sf_extSoftVersion()["GDAL"] >= "2.5.0")
+#' if (compareVersion(sf_extSoftVersion()["GDAL"], "2.5.0") >= 0)
 #'    (old_value = st_axis_order(TRUE))
 #' # now interpret pt as (latitude longitude), as EPSG:4326 prescribes:
 #' st_axis_order() # query current value

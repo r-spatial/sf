@@ -44,7 +44,7 @@ Native interface to gdal utils
 }
 \examples{
 
-if (sf_extSoftVersion()["GDAL"] > "2.1.0") {
+if (compareVersion(sf_extSoftVersion()["GDAL"], "2.1.0") == 1) {
 # info utils can be used to list information about a raster
 # dataset. More info: https://gdal.org/programs/gdalinfo.html
 in_file <- system.file("tif/geomatrix.tif", package = "sf")
