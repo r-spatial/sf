@@ -207,11 +207,11 @@ st_poly_sample = function(x, size, ..., type = "random",
 				}
 			}
 			R = s2::s2_earth_radius_meters()
-			toRad = pi / 180
+			toRad = pi / 180.
 			h1 = sin(bb["ymax"] * toRad)
 			h2 = sin(bb["ymin"] * toRad)
-			a0 = 2 * pi * R^2. * (h1 - h2) * (bb["xmax"] - bb["xmin"]) / 360.
-			a1 = sum(s2::s2_area(st_as_s2(x, oriented = oriented)))
+			a0 = sum(s2::s2_area(st_as_s2(x, oriented = oriented))) # total
+			a1 = 2 * pi * R^2. * (h1 - h2) * (bb["xmax"] - bb["xmin"]) / 360. # actual
 			if (!is.finite(a1))
 				stop("One or more geometries have a non-finite area")
 			global = (a1 / a0) > .9999
@@ -219,8 +219,8 @@ st_poly_sample = function(x, size, ..., type = "random",
 				stop(paste0("sampling box is ", format(a0/a1), " times larger than sampling region;\nuse force=TRUE if you really want this, or try setting oriented=TRUE\n(after reading the documentation)"), call. = FALSE)
 			size = round(size * a0 / a1)
 		} else {
-			a0 = as.numeric(st_area(st_as_sfc(bb)))
-			a1 = as.numeric(sum(st_area(x)))
+			a0 = as.numeric(st_area(st_as_sfc(bb))) # total
+			a1 = as.numeric(sum(st_area(x))) # actual
 			# we're sampling from a box, so n should be size_desired * a0 / a1
 			if (is.finite(a0) && is.finite(a1) && a0 > a0 * 0.0 && a1 > a1 * 0.0) { # FIXME: reqs can be removed, now we handle long/lat separately?
 				r = size * a0 / a1
