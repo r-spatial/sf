@@ -13,7 +13,8 @@ gdal_utils(
     ("-multi" \%in\% options),
   processing = character(0),
   colorfilename = character(0),
-  config_options = character(0)
+  config_options = character(0),
+  read_only = FALSE
 )
 }
 \arguments{
@@ -32,6 +33,8 @@ gdal_utils(
 \item{colorfilename}{character; name of color file for \code{demprocessing} (mandatory if \code{processing="color-relief"})}
 
 \item{config_options}{named character vector with GDAL config options, like \code{c(option1=value1, option2=value2)}}
+
+\item{read_only}{logical; only for \code{ogrinfo}: if \code{TRUE}, source is opened in read-only mode}
 }
 \value{
 \code{info} returns a character vector with the raster metadata; all other utils return (invisibly) a logical indicating success (i.e., \code{TRUE}); in case of failure, an error is raised.
@@ -41,7 +44,7 @@ Native interface to gdal utils
 }
 \examples{
 
-if (sf_extSoftVersion()["GDAL"] > "2.1.0") {
+if (compareVersion(sf_extSoftVersion()["GDAL"], "2.1.0") == 1) {
 # info utils can be used to list information about a raster
 # dataset. More info: https://gdal.org/programs/gdalinfo.html
 in_file <- system.file("tif/geomatrix.tif", package = "sf")

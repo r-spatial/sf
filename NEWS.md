@@ -1,6 +1,35 @@
+# version 1.0-21
+
+* fix `st_sample()` on geodetic coordinates; #2515
+
+# version 1.0-20
+
+* `st_buffer()` on geodetic coordinates with negative buffer distance now automatically switches to using GEOS, while giving a warning; #1987
+
+* `st_interpolate_aw()` fixes bug when a GEOMETRYCOLLECTION contains multiple POLYGON structures; found by @mtennekes
+
+* `st_buffer()` for geodetic coordinates allows `max_dist` and `min_level` 
+   to be specified by feature; #2488 and https://github.com/r-spatial/s2/pull/264
+
+* `distinct.sf()` allows for comparing exact equality of geometries when `exact = TRUE`; #2484
+
+* `st_minimum_bounding_circle()` returns geometries representing the smallest circle that contains the input; #2473
+
+# version 1.0-19
+
+* fix type checks in C++ GDAL area and length computation functions, anticipating GDAL 3.10.0; #2466, #2468, #2469 by @rsbivand and @rouault
+
+* improve test on empty geometries, which changed in 1.0-18; #2463
+
+* `gdal_utils()` `ogrinfo` has an argument `read_only` which, when `TRUE` (or `options` includes `"-ro"`), opens a datasource in read-only mode (#2460; `sf` did this before 1.0-17); by default a datasource is opened in update (read-write) mode (since sf 1.0-17; #2420)
+
+* the `sf` -> `ppp` conversion `as.ppp.sf()` accepts a data.frame of marks instead of just 1 column #2450, by @agila5
+
+* add flag for preservation of point order in `st_voronoi` #1371 for GEOS >= 3.12
+
 # version 1.0-18
 
-* support  `POLYGON FULL` simple feature geometry, representing the the entire Earth surface, as used by `s2geometry`; #2441
+* support  `POLYGON FULL` simple feature geometry, representing the entire Earth surface, as used by `s2geometry`; see also https://r-spatial.org/r/2024/10/11/polygonfull.html for a longer introduction; #2441
 
 * `st_sfc()` has an argument `oriented` which, when set to `TRUE`, adds an attribute `oriented=TRUE` to an `sfc` object, indicating that this object should not be reoriented in conversion to `s2_geography` (avoiding using the global option `s2_oriented`); `st_as_sfc.bbox()` sets this to `TRUE`; #2441
 

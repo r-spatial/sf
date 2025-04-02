@@ -49,6 +49,9 @@ List sfc_unique_sfg_dims_and_types(List sfc) {
 			class_dim.insert("XYZM");
 		}
 		
+		if (!Rf_inherits(item, "sfg"))
+			stop("object(s) should be of class 'sfg'");
+
 		if (Rf_inherits(item, "POINT")) {
 			class_type.insert("POINT");
 			continue;
@@ -99,10 +102,9 @@ LogicalVector sfc_is_empty(List sfc) {
 	for (R_xlen_t i = 0; i < sfc.size(); i++) {
 		item = sfc[i];
 		int item_len = Rf_length(item);
+		bool is_empty = true;
 		
 		if (Rf_inherits(item, "POINT")) {
-			bool is_empty = true;
-			
 			if (TYPEOF(item) == REALSXP) {
 				for (int j = 0; j < item_len; j++) {
 					double val = REAL(item)[j];
@@ -120,11 +122,17 @@ LogicalVector sfc_is_empty(List sfc) {
 					}
 				}
 			}
-			
-			out[i] = is_empty;
 		} else {
-			out[i] = item_len == 0;
+			if (item_len == 0) 
+				is_empty = true;
+			else if (TYPEOF(item) == VECSXP) { // #2463
+				item = VECTOR_ELT(item, 0); 
+				is_empty = Rf_length(item) == 0 || // e.g. POLYGON with 1 ring without coordinates
+						(TYPEOF(item) == VECSXP && Rf_length(VECTOR_ELT(item, 0)) == 0); // same for one level deeper, e.g. MULTIPOLYGON:
+			} else
+				is_empty = false;
 		}
+		out[i] = is_empty;
 	}
 	
 	return out;

@@ -19,15 +19,15 @@ RVER_MAJOR=`echo ${RVER} | cut  -f1 -d"."`
 RVER_MINOR=`echo ${RVER} | cut  -f2 -d"."`
 RVER_PATCH=`echo ${RVER} | cut  -f3 -d"."`
 
-if test [$RVER_MAJOR = "development"]; then
+#if test [$RVER_MAJOR = "development"]; then
     CXX=`"${RBIN}" CMD config CXX`
-else
-    if test [$RVER_MAJOR -lt 3] -o [$RVER_MAJOR -eq 3 -a $RVER_MINOR -lt 3]; then
-        AC_MSG_ERROR([sf is not compatible with R versions before 3.3.0])
-    else
-        CXX=`"${RBIN}" CMD config CXX`
-    fi
-fi
+#else
+#    if test [$RVER_MAJOR -lt 3] -o [$RVER_MAJOR -eq 3 -a $RVER_MINOR -lt 3]; then
+#        AC_MSG_ERROR([sf is not compatible with R versions before 3.3.0])
+#    else
+#        CXX=`"${RBIN}" CMD config CXX`
+#    fi
+#fi
 
 # pick all flags for testing from R
 : ${CC=`"${RBIN}" CMD config CC`}
@@ -41,6 +41,11 @@ AC_MSG_NOTICE([CC: ${CC}])
 AC_MSG_NOTICE([CXX: ${CXX}])
 
 # AC_MSG_NOTICE([${PACKAGE_NAME}: ${PACKAGE_VERSION}])
+
+GENERIC_INSTALL_MESSAGE="
+*** Installing this package from source requires the prior 
+*** installation of external software, see for details 
+*** https://r-spatial.github.io/sf/#installing"
 
 #GDAL
 GDAL_CONFIG="gdal-config"
@@ -60,7 +65,7 @@ if test ["$GDAL_CONFIG_SET" = "no"] ; then
   AC_PATH_PROG([GDAL_CONFIG], ["$GDAL_CONFIG"],["no"])
   if test ["$GDAL_CONFIG" = "no"] ; then
     AC_MSG_RESULT(no)
-    AC_MSG_ERROR([gdal-config not found or not executable.])
+    AC_MSG_ERROR([gdal-config not found or not executable. ${GENERIC_INSTALL_MESSAGE}])
   fi
 else
   AC_MSG_CHECKING(gdal-config exists)
@@ -68,14 +73,14 @@ else
     AC_MSG_RESULT(yes)
   else
     AC_MSG_RESULT(no)
-    AC_MSG_ERROR([gdal-config not found - configure argument error.])
+    AC_MSG_ERROR([gdal-config not found - configure argument error. ${GENERIC_INSTALL_MESSAGE}])
   fi
   AC_MSG_CHECKING(gdal-config executable)
   if test -x "${GDAL_CONFIG}"; then
     AC_MSG_RESULT(yes)
   else
     AC_MSG_RESULT(no)
-    AC_MSG_ERROR([gdal-config not executable.])
+    AC_MSG_ERROR([gdal-config not executable. ${GENERIC_INSTALL_MESSAGE}])
   fi
 fi
 
@@ -89,19 +94,7 @@ then
 	GDAL_DATADIR=`${GDAL_CONFIG} --datadir`
 	AC_MSG_RESULT(yes)
 else
-	AC_MSG_RESULT(no)
-	echo "Error: gdal-config not found"
-	echo "The gdal-config script distributed with GDAL could not be found."
-	echo "If you have not installed the GDAL libraries, you can"
-	echo "download the source from  http://www.gdal.org/"
-	echo "If you have installed the GDAL libraries, then make sure that"
-	echo "gdal-config is in your path. Try typing gdal-config at a"
-	echo "shell prompt and see if it runs. If not, use:"
-	echo " --configure-args='--with-gdal-config=/usr/local/bin/gdal-config'"
-	echo "with appropriate values for your installation."
-	echo ""
-
-	exit 1
+	AC_MSG_ERROR([gdal-config not found. ${GENERIC_INSTALL_MESSAGE}])
 fi
 
 AC_MSG_NOTICE([GDAL: ${GDAL_VERSION}])
@@ -117,7 +110,8 @@ else
    AC_MSG_RESULT(yes)
 fi
 
-if test [${GDAL_MAJ_VER} -eq 3] -a [${GDAL_MIN_VER} -eq 6] -a [${GDAL_PATCH_VER} -eq 0] ; then
+#if test [${GDAL_MAJ_VER} -eq 3] -a [${GDAL_MIN_VER} -eq 6] -a [${GDAL_PATCH_VER} -eq 0] ; then
+if test "${GDAL_VERSION}" = "3.6.0" ; then
   AC_MSG_ERROR([GDAL version 3.6.0 has been withdrawn, please update GDAL])
 fi
 
@@ -137,7 +131,7 @@ CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS}"
 gdalok=yes
 AC_CHECK_HEADERS(gdal.h,,gdalok=no)
 if test "${gdalok}" = no; then
-   AC_MSG_ERROR([gdal.h not found in given locations.])
+   AC_MSG_ERROR([gdal.h not found in given locations. ${GENERIC_INSTALL_MESSAGE}])
 fi
 
 NEED_DEPS=no
@@ -183,7 +177,7 @@ fi
 if test "${gdalok}" = no; then
    cat errors.txt
    AC_MSG_NOTICE([Install failure: compilation and/or linkage problems.])
-   AC_MSG_ERROR([GDALAllRegister not found in libgdal.])
+   AC_MSG_ERROR([GDALAllRegister not found in libgdal. ${GENERIC_INSTALL_MESSAGE}])
 fi
 
 rm -f gdal_test errors.txt gdal_test.cpp
@@ -414,7 +408,7 @@ if test "${PROJH}" = no; then
   proj4ok=yes
   AC_CHECK_LIB(proj,pj_init_plus,,proj4ok=no)
   if test "${proj4ok}" = no; then
-     AC_MSG_ERROR([libproj not found in standard or given locations.])
+     AC_MSG_ERROR([libproj not found in standard or given locations. ${GENERIC_INSTALL_MESSAGE}])
   fi
 [cat > proj_conf_test.c <<_EOCONF
 #include <stdio.h>
@@ -448,7 +442,7 @@ _EOCONF]
     AC_MSG_RESULT(yes)
   fi
   if test "${proj6ok}" = no; then
-     AC_MSG_ERROR([libproj or sqlite3 not found in standard or given locations.])
+     AC_MSG_ERROR([libproj or sqlite3 not found in standard or given locations. ${GENERIC_INSTALL_MESSAGE}])
   fi
 
 [cat > proj_conf_test.c <<_EOCONF
@@ -658,7 +652,7 @@ if test ["$GEOS_CONFIG_SET" = "no"] ; then
   AC_PATH_PROG([GEOS_CONFIG], ["$GEOS_CONFIG"],["no"])
   if test ["$GEOS_CONFIG" = "no"] ; then
     AC_MSG_RESULT(no)
-    AC_MSG_ERROR([geos-config not found or not executable.])
+    AC_MSG_ERROR([geos-config not found or not executable. ${GENERIC_INSTALL_MESSAGE}])
   fi
 else
   AC_MSG_CHECKING(geos-config exists)
@@ -666,14 +660,14 @@ else
     AC_MSG_RESULT(yes)
   else
     AC_MSG_RESULT(no)
-    AC_MSG_ERROR([geos-config not found - configure argument error.])
+    AC_MSG_ERROR([geos-config not found - configure argument error. ${GENERIC_INSTALL_MESSAGE}])
   fi
   AC_MSG_CHECKING(geos-config executable)
   if test -x "${GEOS_CONFIG}"; then
     AC_MSG_RESULT(yes)
   else
     AC_MSG_RESULT(no)
-    AC_MSG_ERROR([geos-config not executable.])
+    AC_MSG_ERROR([geos-config not executable. ${GENERIC_INSTALL_MESSAGE}])
   fi
 fi
 
@@ -717,7 +711,7 @@ LIBS="${LIBS} ${PKG_LIBS}"
 geosok=yes
 AC_CHECK_HEADERS(geos_c.h,,geosok=no)
 if test "${geosok}" = no; then
-   AC_MSG_ERROR([geos_c.h not found in given locations.])
+   AC_MSG_ERROR([geos_c.h not found in given locations. ${GENERIC_INSTALL_MESSAGE}])
 fi
 
 [cat > geos_test.cpp <<_EOCONF
@@ -759,7 +753,7 @@ if test "${geosok}" = no; then
     AC_MSG_RESULT(no)
     cat errors.txt
     AC_MSG_NOTICE([Install failure: compilation and/or linkage problems.])
-    AC_MSG_ERROR([initGEOS_r not found in libgeos_c.])
+    AC_MSG_ERROR([initGEOS_r not found in libgeos_c. ${GENERIC_INSTALL_MESSAGE}])
   else
     AC_SUBST([PKG_LIBS], ["${PKG_LIBS} ${GEOS_DEP_CLIBS}"])
     AC_MSG_RESULT(yes)

@@ -23,7 +23,7 @@ st_dimension = function(x, NA_if_empty = TRUE)
 #' @export
 #' @return If the coordinate reference system of \code{x} was set, these functions return values with unit of measurement; see \link[units]{set_units}.
 #'
-#' st_area returns the area of a geometry, in the coordinate reference system used; in case \code{x} is in degrees longitude/latitude, \link[lwgeom:geod]{st_geod_area} is used for area calculation.
+#' st_area returns the area of each feature geometry, computed in the coordinate reference system used. In case \code{x} has geodetic coordinates (unprojected), then if `sf_use_s2()` is `FALSE` \link[lwgeom:geod]{st_geod_area} is used for area calculation, if it is `TRUE` then \link[s2:s2_is_collection]{s2_area} is used: the former assumes an ellipsoidal shape, the latter a spherical shape of the Earth. In case of projected data, areas are computed in flat space. The argument `...` can be used to specify `radius` to \link[s2:s2_is_collection]{s2_area}, to modify the Earth radius.
 #' @examples
 #' b0 = st_polygon(list(rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))))
 #' b1 = b0 + 2

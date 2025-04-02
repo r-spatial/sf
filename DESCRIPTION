@@ -1,5 +1,5 @@
 Package: sf
-Version: 1.0-18
+Version: 1.0-21
 Title: Simple Features for R
 Authors@R:
     c(person(given = "Edzer",
@@ -47,11 +47,14 @@ Authors@R:
              role = "ctb",
              comment = c(ORCID = "0000-0002-9415-4582"))
 			 )
-Description: Support for simple features, a standardized way to
-    encode spatial vector data. Binds to 'GDAL' for reading and writing
-    data, to 'GEOS' for geometrical operations, and to 'PROJ' for
-    projection conversions and datum transformations. Uses by default the 's2'
-    package for spherical geometry operations on ellipsoidal (long/lat) coordinates.
+Description: Support for simple feature access, a standardized way to
+    encode and analyze spatial vector data. Binds to 'GDAL' 
+	<doi:10.5281/zenodo.5884351> for reading and writing data, to 'GEOS'
+    <doi:10.5281/zenodo.11396894> for geometrical operations,
+    and to 'PROJ' <doi:10.5281/zenodo.5884394> for projection
+    conversions and datum transformations. Uses by default the 's2'
+    package for geometry operations on geodetic (long/lat degree)
+	coordinates.
 License: GPL-2 | MIT + file LICENSE
 URL: https://r-spatial.github.io/sf/, https://github.com/r-spatial/sf
 BugReports: https://github.com/r-spatial/sf/issues
@@ -98,7 +101,7 @@ Suggests:
     spatstat.random, 
     spatstat.linnet, 
     spatstat.utils,
-    stars (>= 0.2-0),
+    stars (>= 0.6-0),
     terra,
     testthat (>= 3.0.0),
     tibble (>= 1.4.1),

@@ -58,7 +58,7 @@ sf_project = function(from = character(0), to = character(0), pts, keep = FALSE,
 		stop("'keep' must be single-length non-NA logical value")
 	proj_from_crs = function(x) {
 		if (inherits(x, "crs")) {
-			x = if (sf_extSoftVersion()["proj.4"] >= "6.0.0")
+			x = if (compareVersion(sf_extSoftVersion()["proj.4"], "6.0.0") >= 0)
 				x$wkt
 			else
 				x$proj4string

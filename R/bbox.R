@@ -78,7 +78,7 @@ st_bbox.MULTIPOINT = bbox.Mtrx
 st_bbox.LINESTRING = bbox.Mtrx
 #' @export
 #' @name st_bbox
-st_bbox.POLYGON = function(obj, ...) if (sf_use_s2() && length(obj) == 1 && nrow(obj[[1]]) == 2) FULL_bbox_ else bbox.MtrxSet(obj)
+st_bbox.POLYGON = function(obj, ...) if (st_is_full(obj)) FULL_bbox_ else bbox.MtrxSet(obj)
 #' @export
 #' @name st_bbox
 st_bbox.MULTILINESTRING = bbox.MtrxSet

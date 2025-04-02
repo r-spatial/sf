@@ -351,15 +351,20 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE
 
 #' @name tidyverse
 #' @param .keep_all see corresponding function in dplyr
+#' @param exact logical; if `TRUE` use \link{st_equals_exact} for geometry comparisons
+#' @param par numeric; passed on to \link{st_equals_exact}
 #' @examples
 #' if (require(dplyr, quietly = TRUE)) {
 #'  nc[c(1:100, 1:10), ] %>% distinct() %>% nrow()
 #' }
 #' @details \code{distinct} gives distinct records for which all attributes and geometries are distinct; \link{st_equals} is used to find out which geometries are distinct.
-distinct.sf <- function(.data, ..., .keep_all = FALSE) {
+distinct.sf <- function(.data, ..., .keep_all = FALSE, exact = FALSE, par = 0.) {
 	sf_column = attr(.data, "sf_column")
 	geom = st_geometry(.data)
-	eq = sapply(st_equals(.data), head, n = 1)
+	eq = if (exact)
+			sapply(st_equals_exact(.data, par = par), head, n = 1)
+		else 
+			sapply(st_equals(.data), head, n = 1)
 	if (is.list(eq) && length(eq) == 0) # empty list: geometry was empty set
 		eq = integer(0)
 	empties = which(lengths(eq) == 0)

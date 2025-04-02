@@ -74,19 +74,19 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 			sfc_unique_sfg_dims_and_types(lst)
 	
 	cls = if (length(lst) == 0) # empty set: no geometries read
-		c("sfc_GEOMETRY", "sfc")
-	else {
-		# class: do we have a mix of geometry types?
-		single = if (!is.null(attr(lst, "single_type"))) # set by CPL_read_wkb:
-				attr(lst, "single_type")
+			c("sfc_GEOMETRY", "sfc")
+		else {
+			# class: do we have a mix of geometry types?
+			single = if (!is.null(attr(lst, "single_type"))) # set by CPL_read_wkb:
+					attr(lst, "single_type")
+				else
+					length(dims_and_types[[2]]) == 1L
+			attr(lst, "single_type") = NULL # clean up
+			if (single)
+				c(paste0("sfc_", dims_and_types[[2]][1]), "sfc")
 			else
-				length(dims_and_types[[2]]) == 1L
-		attr(lst, "single_type") = NULL # clean up
-		if (single)
-			c(paste0("sfc_", dims_and_types[[2]][1]), "sfc")
-		else
-			c("sfc_GEOMETRY", "sfc")    # the mix
-	}
+				c("sfc_GEOMETRY", "sfc")    # the mix
+		}
 
 	if (any(is_null)) {
 		if (missing(dim)) {
@@ -691,14 +691,9 @@ st_is_full.sfg = function(x, ..., is_longlat = NULL) {
 #' @export
 #' @name st_is_full
 st_is_full.sfc = function(x, ...) {
-	if (sf_use_s2() && inherits(x, c("sfc_POLYGON", "sfc_GEOMETRY"))) {
-		is_longlat = if (!is.null(attr(x, "crs")))
-				st_is_longlat(x)
-			else
-				NA
-		#sapply(x, st_is_full.sfg, ..., is_longlat = is_longlat)
+	if (sf_use_s2() && inherits(x, c("sfc_POLYGON", "sfc_GEOMETRY")))
 		sfc_is_full(x)
-	} else
+	else
 		rep_len(FALSE, length(x))
 }
 
@@ -711,7 +706,7 @@ st_is_full.sf = function(x, ...) {
 #' @export
 #' @name st_is_full
 st_is_full.bbox = function(x, ...) {
-	sf_use_s2() && st_is_longlat(x) && all(x == c(-180,-90,180,90))
+	isTRUE(sf_use_s2() && st_is_longlat(x) && all(x == c(-180,-90,180,90)))
 }
 
 #' @export

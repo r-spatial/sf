@@ -31,12 +31,13 @@ resampling_method = function(option = "near") {
 #' @param quiet logical; if \code{TRUE}, suppress printing the output for \code{info} and \code{mdiminfo}, and suppress printing progress
 #' @param processing character; processing options for \code{demprocessing}
 #' @param colorfilename character; name of color file for \code{demprocessing} (mandatory if \code{processing="color-relief"})
+#' @param read_only logical; only for `ogrinfo`: if `TRUE`, source is opened in read-only mode
 #' @return \code{info} returns a character vector with the raster metadata; all other utils return (invisibly) a logical indicating success (i.e., \code{TRUE}); in case of failure, an error is raised.
 #' @export
 #' @seealso \link{gdal_addo} for adding overlays to a raster file; \link{st_layers} to query geometry type(s) and crs from layers in a (vector) data source
 #' @examples
 #'
-#' if (sf_extSoftVersion()["GDAL"] > "2.1.0") {
+#' if (compareVersion(sf_extSoftVersion()["GDAL"], "2.1.0") == 1) {
 #' # info utils can be used to list information about a raster
 #' # dataset. More info: https://gdal.org/programs/gdalinfo.html
 #' in_file <- system.file("tif/geomatrix.tif", package = "sf")
@@ -76,7 +77,7 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 		quiet = !(util %in% c("info", "gdalinfo", "ogrinfo", "vectorinfo", 
 							  "mdiminfo")) || ("-multi" %in% options),
 		processing = character(0), colorfilename = character(0),
-		config_options = character(0)) {
+		config_options = character(0), read_only = FALSE) {
 
 	stopifnot(is.character(options), is.character(config_options))
 	if (!quiet && "-multi" %in% options)
@@ -103,7 +104,8 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 
 	ret = switch(util,
 			gdalinfo =, info = CPL_gdalinfo(if (missing(source)) character(0) else source, options, oo, config_options),
-			vectorinfo =, ogrinfo = CPL_ogrinfo(if (missing(source)) character(0) else source, options, oo, config_options),
+			vectorinfo =, ogrinfo = CPL_ogrinfo(if (missing(source)) character(0) else source, options, oo, config_options, 
+												isTRUE(read_only) || "-ro" %in% options),
 			warp = CPL_gdalwarp(source, destination, options, oo, doo, config_options, quiet, "-overwrite" %in% options),
 			warper = CPL_gdal_warper(source, destination, as.integer(resampling_method(options)),
 				oo, doo, config_options, quiet), # nocov

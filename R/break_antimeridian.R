@@ -22,9 +22,9 @@
 #'  opar = par(mfrow=c(3, 2))
 #'  wld = st_as_sf(map(fill=FALSE, interior=FALSE, plot=FALSE), fill=FALSE)
 #'  for (lon_0 in c(-170, -90, -10, 10, 90, 170)) {
-#'   wld |> st_break_antimeridian(lon_0=lon_0) |>
-#'    st_transform(paste0("+proj=natearth +lon_0=", lon_0)) |>
-#'    st_geometry() |> plot(main=lon_0)
+#'    br = st_break_antimeridian(wld, lon_0 = lon_0)
+#'    tr = st_transform(br, paste0("+proj=natearth +lon_0=", lon_0))
+#'    plot(st_geometry(tr), main=lon_0)
 #'  }
 #'  par(opar)
 #' }
@@ -80,8 +80,8 @@ st_break_antimeridian.sf = function(x, lon_0=0, tol=0.0001, ...) {
 	}
         s2_status = sf_use_s2()
 	sf_use_s2(FALSE) # avoid s2 because we need a planar bounding box
+	on.exit(sf_use_s2(s2_status))
 	res = st_intersection(x, bb1)
-	sf_use_s2(s2_status)
 	st_crs(res) = st_crs(x)
         res
 }

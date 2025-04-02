@@ -31,9 +31,16 @@ Return Well-known Text representation of simple feature geometry or coordinate r
 }
 \details{
 The returned WKT representation of simple feature geometry conforms to the
-\href{https://www.ogc.org/standard/sfa/}{simple features access} specification and extensions
+\href{https://www.ogc.org/publications/standard/sfa/}{simple features access} specification and extensions
 (known as EWKT, supported by PostGIS and other simple features implementations for addition of
 a SRID to a WKT string).
+}
+\note{
+To improve conversion performance, the lwgeom package can be used (it must be installed
+beforehand) and set the \code{Sys.setenv("LWGEOM_WKT" = "true")} environment variable. This
+will also result in faster printing of complex geometries. Note that the representation as WKT is
+different from the sf package and may cause reproducibility problems. An alternative solution is
+to use the \code{\link[lwgeom:st_astext]{lwgeom::st_astext()}} or \code{\link[wk:wkt]{wk::as_wkt()}} functions.
 }
 \examples{
 st_as_text(st_point(1:2))

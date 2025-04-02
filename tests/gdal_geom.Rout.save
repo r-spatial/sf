@@ -1,5 +1,5 @@
 
-R version 4.4.1 (2024-06-14) -- "Race for Your Life"
+R version 4.4.2 (2024-10-31) -- "Pile of Leaves"
 Copyright (C) 2024 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
@@ -254,6 +254,7 @@ LINESTRING (1 4, 2 5, 3 6)
 POINT Z (6378137 0 0)
 > 
 > cbind(st_area(nc_tr[1:5,]), a$AREA)
+Units: [m^2]
            [,1]  [,2]
 [1,] 1760230516 0.114
 [2,]  946417787 0.061
@@ -326,4 +327,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-  0.843   1.401   0.740 
+  0.937   1.382   0.822 

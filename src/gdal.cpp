@@ -71,6 +71,7 @@ void unset_error_handler(void)
 void CPL_gdal_init()
 {
     CPLSetErrorHandler((CPLErrorHandler)__err_handler);
+    CPLSetConfigOption("GDAL_NETCDF_REPORT_EXTRA_DIM_VALUES", "YES");
     GDALAllRegister();
     OGRRegisterAll();
 }

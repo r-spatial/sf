@@ -101,13 +101,13 @@ plot(p1, add = TRUE)
 plot(p2, add = TRUE, pch = 2)
 x = st_sfc(st_polygon(list(rbind(c(0,0),c(90,0),c(90,90),c(0,90),c(0,0)))), crs = st_crs(4326))
 plot(x, axes = TRUE, graticule = TRUE)
-if (sf_extSoftVersion()["proj.4"] >= "4.9.0")
+if (compareVersion(sf_extSoftVersion()["proj.4"], "4.9.0") >= 0)
   plot(p <- st_sample(x, 1000), add = TRUE)
 if (require(lwgeom, quietly = TRUE)) { # for st_segmentize()
   x2 = st_transform(st_segmentize(x, 1e4), st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
   g = st_transform(st_graticule(), st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
   plot(x2, graticule = g)
-  if (sf_extSoftVersion()["proj.4"] >= "4.9.0") {
+  if (compareVersion(sf_extSoftVersion()["proj.4"], "4.9.0") >= 0) {
     p2 = st_transform(p, st_crs("+proj=ortho +lat_0=30 +lon_0=45"))
     plot(p2, add = TRUE)
   }
@@ -121,7 +121,7 @@ plot(st_sample(x, 1000), add = TRUE)
 x = st_sfc(st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90)))),
  crs=st_crs(4326))
 # FIXME:
-#if (sf_extSoftVersion()["proj.4"] >= "4.9.0") {
+#if (compareVersion(sf_extSoftVersion()["proj.4"], "4.9.0") >= 0) {
 #  p = st_sample(x, 1000)
 #  st_sample(p, 3)
 #}

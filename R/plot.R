@@ -16,6 +16,14 @@ kw_dflt = function(x, key.pos) {
 		lcm(1.8 * font_scale)
 }
 
+# like cut.default, but only return integers, and allow for duplicate breaks:
+sf_cut = function(values, breaks, include.lowest = TRUE) {
+	i = findInterval(values, breaks, left.open = TRUE)
+	if (include.lowest)
+		i[values == breaks[1]] = 1
+	i[i == 0 | i == length(breaks)] = NA
+	i
+}
 
 #' plot sf object
 #'
@@ -231,8 +239,10 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 								rep(NA_integer_, length(values))
 							else if (!breaks_numeric && diff(range(values, na.rm = TRUE)) == 0)
 								ifelse(is.na(values), NA_integer_, 1L)
-							else
+							else if (inherits(values, c("POSIXt", "Date")))
 								cut(values, breaks, include.lowest = TRUE)
+							else
+								sf_cut(values, breaks, include.lowest = TRUE)
 						colors = if (is.function(pal))
 								pal(nbreaks)
 							else
