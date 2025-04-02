@@ -15,7 +15,7 @@ interfaced and do not use the size argument, see examples.'><meta property="og:i
 
     <a class="navbar-brand me-2" href="../index.html">sf</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0-20</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0-21</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -200,7 +200,7 @@ For instance, to use <code><a href="https://rdrr.io/pkg/spatstat.random/man/rTho
 <span class="r-in"><span><span class="va">p_not_exact</span> <span class="op">=</span> <span class="fu">st_sample</span><span class="op">(</span><span class="va">x</span>, <span class="fl">1000</span>, exact <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">p_exact</span><span class="op">)</span>; <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">p_not_exact</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1001</span>
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="fu">st_sample</span><span class="op">(</span><span class="va">x</span>, <span class="fl">1000</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="st_sample-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="st.html">st_polygon</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>,<span class="op">-</span><span class="fl">90</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">180</span>,<span class="op">-</span><span class="fl">90</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">180</span>,<span class="fl">90</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>,<span class="fl">90</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>,<span class="op">-</span><span class="fl">90</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span></span>
@@ -219,7 +219,7 @@ For instance, to use <code><a href="https://rdrr.io/pkg/spatstat.random/man/rTho
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">h1</span>, col <span class="op">=</span> <span class="st">'red'</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="st_sample-5.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">h</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">h1</span><span class="op">)</span><span class="op">)</span> <span class="co"># approximate!</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 97 99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  94 104</span>
 <span class="r-in"><span><span class="va">pt</span> <span class="op">=</span> <span class="fu"><a href="st.html">st_multipoint</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">20</span>,,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ls</span> <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span> <span class="fu"><a href="st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span></span>
@@ -231,9 +231,9 @@ For instance, to use <code><a href="https://rdrr.io/pkg/spatstat.random/man/rTho
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dimension:     XY</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: 0 ymin: 0 xmax: 0.08531849 ymax: 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> CRS:           NA</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> MULTIPOINT ((0 0.01737041), (0 0.8441574), (0 0...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> MULTIPOINT ((0.03337024 0), (0.03010541 0), (0....</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> MULTIPOINT ((0.04159846 1), (0.06942899 1), (0....</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> MULTIPOINT ((0 0.9358165), (0 0.0832242), (0 0....</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> MULTIPOINT ((0.004848793 0), (0.03337024 0), (0...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> MULTIPOINT ((0.001932966 1), (0.08177992 1), (0...</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> MULTIPOINT EMPTY</span>
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="fu">st_sample</span><span class="op">(</span><span class="va">ls</span>, <span class="fl">80</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="st_sample-6.png" alt="" width="700" height="433"></span>
@@ -251,11 +251,11 @@ For instance, to use <code><a href="https://rdrr.io/pkg/spatstat.random/man/rTho
 <span class="r-in"><span><span class="va">s1</span> <span class="op">=</span> <span class="fu">st_sample</span><span class="op">(</span><span class="va">bbox</span>, <span class="fl">400</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="st_bbox.html">st_bbox</a></span><span class="op">(</span><span class="va">s1</span><span class="op">)</span> <span class="co"># within bbox</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       xmin       ymin       xmax       ymax </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.1809029 60.0231214 39.9875925 69.9900375 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.1809029 60.0009833 39.9875925 69.9900375 </span>
 <span class="r-in"><span><span class="va">s2</span> <span class="op">=</span> <span class="fu">st_sample</span><span class="op">(</span><span class="va">bbox</span>, <span class="fl">400</span>, great_circles <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="st_bbox.html">st_bbox</a></span><span class="op">(</span><span class="va">s2</span><span class="op">)</span> <span class="co"># outside bbox</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       xmin       ymin       xmax       ymax </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.2031083 60.2048778 39.9612431 69.9107718 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.2031083 60.0018621 39.9612431 69.9107718 </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
