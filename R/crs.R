@@ -61,7 +61,7 @@ st_crs.sf = function(x, ...) st_crs(st_geometry(x), ...)
 #' @name st_crs
 #' @export
 st_crs.numeric = function(x, ...) {
-	if (is.na(x))
+	if (!is.finite(x))
 		NA_crs_
 	else
     	make_crs(paste0("EPSG:", x))
