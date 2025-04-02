@@ -511,7 +511,7 @@ st_minimum_bounding_circle.sf = function(x, ...) {
 #'  pts$pols = pols[unlist(pts_pol)] # re-order
 #'  if (isTRUE(try(compareVersion(sf_extSoftVersion()["GEOS"], "3.12.0") > -1,
 #'    silent = TRUE))) {
-#'    pols_po = st_collection_extract(st_voronoi(do.call(c, st_geometry(pts)),
+#'    pols_po = st_collection_extract(st_voronoi(st_combine(st_geometry(pts)),
 #'      point_order = TRUE)) # GEOS >= 3.12 can preserve order of inputs
 #'    pts_pol_po = st_intersects(pts, pols_po)
 #'    print(all(unlist(pts_pol_po) == 1:(n/2)))
