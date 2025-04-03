@@ -196,7 +196,7 @@ std::shared_ptr<GDALMDArray> get_array(std::shared_ptr<GDALGroup> grp, const std
 	const char *pszArrayName = aosTokens[aosTokens.size() - 1];
 	auto array(grp->OpenMDArray(pszArrayName));
 	if (!array) {
-		Rcout << "Cannot open array" << pszArrayName << std::endl;
+		Rcout << "Cannot open array " << pszArrayName << std::endl;
 		stop("array not found");
 	}
 	return array;
