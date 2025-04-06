@@ -71,16 +71,22 @@ Installing sf from source works under Windows when [Rtools](https://cran.r-proje
 
 ### MacOS
 
-MacOS users are strongly encouraged to install the `sf` binary packages from CRAN, unless they are familiar with compilers, linking, C++ source code, and homebrew.
+MacOS users are strongly encouraged to install the `sf` binary packages from CRAN, unless they are familiar with compilers, linking, C++ source code, and homebrew. If you experience that R tries to install `sf` from source (or otherwise your install fails but you don't understand what is going on) try again by explicitly installing the binary, using
 
-The easiest way to install `gdal` is using Homebrew. Recent versions of Homebrew include a full-featured up-to-date [gdal formula](https://github.com/Homebrew/homebrew-core/blob/master/Formula/g/gdal.rb), which installs `proj` and `gdal` at the same time:
+```r
+install.packages("sf", type = "binary")
+```
+
+The remainder of this section is for those who understand what source installs mean, and imply.
+
+Perhaps the easiest way of an install from source is to first install `gdal` using Homebrew. Recent versions of Homebrew include a full-featured up-to-date [gdal formula](https://github.com/Homebrew/homebrew-core/blob/master/Formula/g/gdal.rb), which installs `proj` and `gdal` at the same time:
 
 ```
 brew install pkg-config
 brew install gdal
 ```
 
-Once gdal is installed, you will be able to install `sf` package from source in R. With the current version of `proj` on homebrew, installation requires additional configuration:
+Once gdal is installed, you may be able to install `sf` package from source in R. With the current version of `proj` on homebrew, installation requires additional configuration:
 
 ```r
 install.packages("sf", type = "source", configure.args = "--with-proj-lib=$(brew --prefix)/lib/")
@@ -91,12 +97,6 @@ Or the development version:
 ```r
 library(remotes)
 install_github("r-spatial/sf", configure.args = "--with-proj-lib=$(brew --prefix)/lib/")
-```
-
-If you are using `sf` and `rgdal` together, it is necessary to install `rgdal` from source using this configuration:
-
-```r
-install.packages("rgdal", type = "source", configure.args = c("--with-proj-lib=$(brew --prefix)/lib/", "--with-proj-include=$(brew --prefix)/include/"))
 ```
 
 Alternatively, [these instructions](https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html) explain how to install gdal using kyngchaos frameworks.
