@@ -141,20 +141,20 @@
 <div class="section level3">
 <h3 id="macos">MacOS<a class="anchor" aria-label="anchor" href="#macos"></a>
 </h3>
-<p>MacOS users are strongly encouraged to install the <code>sf</code> binary packages from CRAN, unless they are familiar with compilers, linking, C++ source code, and homebrew.</p>
-<p>The easiest way to install <code>gdal</code> is using Homebrew. Recent versions of Homebrew include a full-featured up-to-date <a href="https://github.com/Homebrew/homebrew-core/blob/master/Formula/g/gdal.rb" class="external-link">gdal formula</a>, which installs <code>proj</code> and <code>gdal</code> at the same time:</p>
+<p>MacOS users are strongly encouraged to install the <code>sf</code> binary packages from CRAN, unless they are familiar with compilers, linking, C++ source code, and homebrew. If you experience that R tries to install <code>sf</code> from source (or otherwise your install fails but you don’t understand what is going on) try again by explicitly installing the binary, using</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"sf"</span>, type <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span></code></pre></div>
+<p>The remainder of this section is for those who understand what source installs mean, and imply.</p>
+<p>Perhaps the easiest way of an install from source is to first install <code>gdal</code> using Homebrew. Recent versions of Homebrew include a full-featured up-to-date <a href="https://github.com/Homebrew/homebrew-core/blob/master/Formula/g/gdal.rb" class="external-link">gdal formula</a>, which installs <code>proj</code> and <code>gdal</code> at the same time:</p>
 <pre><code>brew install pkg-config
 brew install gdal</code></pre>
-<p>Once gdal is installed, you will be able to install <code>sf</code> package from source in R. With the current version of <code>proj</code> on homebrew, installation requires additional configuration:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<p>Once gdal is installed, you may be able to install <code>sf</code> package from source in R. With the current version of <code>proj</code> on homebrew, installation requires additional configuration:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"sf"</span>, type <span class="op">=</span> <span class="st">"source"</span>, configure.args <span class="op">=</span> <span class="st">"--with-proj-lib=$(brew --prefix)/lib/"</span><span class="op">)</span></span></code></pre></div>
 <p>Or the development version:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://remotes.r-lib.org" class="external-link">remotes</a></span><span class="op">)</span></span>
 <span><span class="fu">install_github</span><span class="op">(</span><span class="st">"r-spatial/sf"</span>, configure.args <span class="op">=</span> <span class="st">"--with-proj-lib=$(brew --prefix)/lib/"</span><span class="op">)</span></span></code></pre></div>
-<p>If you are using <code>sf</code> and <code>rgdal</code> together, it is necessary to install <code>rgdal</code> from source using this configuration:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"rgdal"</span>, type <span class="op">=</span> <span class="st">"source"</span>, configure.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"--with-proj-lib=$(brew --prefix)/lib/"</span>, <span class="st">"--with-proj-include=$(brew --prefix)/include/"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Alternatively, <a href="https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html" class="external-link">these instructions</a> explain how to install gdal using kyngchaos frameworks.</p>
 <p>For Mac OS 11 Big Sur source install instruction, see <a href="https://github.com/r-spatial/sf/issues/1536#issuecomment-727342736" class="external-link">here</a></p>
 </div>
