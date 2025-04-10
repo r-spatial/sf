@@ -60,3 +60,67 @@ test_that("st_as_sfc() honors crs argument", {
   expect_identical(st_as_sfc(list, crs = 2056), st_as_sfc(wkb, crs = 2056))
   expect_identical(st_as_sfc(blob, crs = 2056), st_as_sfc(wkb, crs = 2056))
 })
+
+test_that("st_as_sfc() for WKB can promote_to_multi for multipoint + point", {
+  sfc_mixed = st_sfc(
+    st_point(),
+    st_point(c(2, 3)),
+    st_multipoint()
+  )
+
+  wkb_mixed = st_as_binary(sfc_mixed)
+
+  expect_identical(
+    st_as_sfc(wkb_mixed, promote_to_multi = FALSE),
+    sfc_mixed
+  )
+
+  expect_identical(
+    st_as_sfc(wkb_mixed, promote_to_multi = TRUE),
+    st_cast(sfc_mixed, "MULTIPOINT")
+  )
+})
+
+test_that("st_as_sfc() for WKB can promote_to_multi for multilinestring + linestring", {
+  sfc_mixed = st_sfc(
+    st_linestring(),
+    st_linestring(rbind(c(2, 3), c(4, 5))),
+    st_multilinestring()
+  )
+
+  wkb_mixed = st_as_binary(sfc_mixed)
+
+  expect_identical(
+    st_as_sfc(wkb_mixed, promote_to_multi = FALSE),
+    sfc_mixed
+  )
+
+  # st_as_sfc() assigns different attribute order than st_cast, but we ony care
+  # about whether the geometries are correct
+  expect_equivalent(
+    st_as_sfc(wkb_mixed, promote_to_multi = TRUE),
+    st_cast(sfc_mixed, "MULTILINESTRING")
+  )
+})
+
+test_that("st_as_sfc() for WKB can promote_to_multi for multipolygon + polygon", {
+  sfc_mixed = st_sfc(
+    st_polygon(),
+    st_polygon(list(rbind(c(0, 0), c(1, 0), c(0, 1), c(0, 0)))),
+    st_multipolygon()
+  )
+
+  wkb_mixed = st_as_binary(sfc_mixed)
+
+  expect_identical(
+    st_as_sfc(wkb_mixed, promote_to_multi = FALSE),
+    sfc_mixed
+  )
+
+  # st_as_sfc() assigns different attribute order than st_cast, but we ony care
+  # about whether the geometries are correct
+  expect_equivalent(
+    st_as_sfc(wkb_mixed, promote_to_multi = TRUE),
+    st_cast(sfc_mixed, "MULTIPOLYGON")
+  )
+})

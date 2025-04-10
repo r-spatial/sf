@@ -41,7 +41,8 @@
   EWKB = FALSE,
   spatialite = FALSE,
   pureR = FALSE,
-  crs = NA_crs_
+  crs = NA_crs_,
+  promote_to_multi = FALSE
 )
 
 \method{st_as_sfc}{raw}(x, ...)
@@ -83,6 +84,9 @@ st_as_sfc(x, ...)
 \item{pureR}{logical; if \code{TRUE}, use only R code, if \code{FALSE}, use compiled (C++) code; use \code{TRUE} when the endian-ness of the binary differs from the host machine (\code{.Platform$endian}).}
 
 \item{crs}{coordinate reference system to be assigned; object of class \code{crs}}
+
+\item{promote_to_multi}{logical; if \code{TRUE}, attempt to promote combinations of simple/multi
+such that all output geometries are multi geometries of the same type.}
 
 \item{GeoJSON}{logical; if \code{TRUE}, try to read geometries from GeoJSON text strings
 geometry, see \code{\link[=st_crs]{st_crs()}}}

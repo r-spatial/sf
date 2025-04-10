@@ -400,11 +400,108 @@ int native_endian(void) {
 	return (int) *cp;
 }
 
-// [[Rcpp::export]]
-Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, bool spatialite = false) {
+static int64_t sf_type_bitmask(int sf_type) {
+	return static_cast<int64_t>(1) << sf_type;
+}
+
+static Rcpp::NumericMatrix read_wkb_promote_sfg_multipoint(Rcpp::NumericVector item) {
+	SEXP cls_old = Rf_getAttrib(item, R_ClassSymbol);
+	Rcpp::CharacterVector cls_new = Rf_duplicate(cls_old);
+	cls_new[1] = "MULTIPOINT";
+
+	bool is_empty = true;
+	for (const auto ordinate : item) {
+		if (!ISNAN(ordinate)) {
+			is_empty = false;
+			break;
+		}
+	}
+
+	Rcpp::NumericMatrix multi;
+	if (is_empty) {
+		multi = Rcpp::NumericMatrix(0, item.size());
+	} else {
+		multi = Rcpp::NumericMatrix(1, item.size());
+		memcpy(REAL(multi), REAL(item), item.size() * sizeof(double));
+	}
+
+	multi.attr("class") = cls_new;
+	return multi;
+}
+
+static Rcpp::List read_wkb_promote_sfg_multipolygon_or_linestring(SEXP item, const char* cls_multi) {
+	// Technically we could mutate this class because we allocated it above; however,
+	// safer to not make this assumption.
+	SEXP cls_old = Rf_getAttrib(item, R_ClassSymbol);
+	Rcpp::CharacterVector cls_new = Rf_duplicate(cls_old);
+	cls_new[1] = cls_multi;
+
+	Rcpp::List multi;
+	if (Rf_length(item) == 0) {
+		multi = Rcpp::List::create();
+	} else {
+		multi = Rcpp::List::create(item);
+	}
+
+	multi.attr("class") = cls_new;
+	return multi;
+}
+
+static void read_wkb_promote_multi_if_possible(Rcpp::List output, int64_t* all_types) {
+	int64_t can_promote_multipoint = sf_type_bitmask(SF_Point) |
+		sf_type_bitmask(SF_MultiPoint);
+	int64_t can_promote_multilinestring = sf_type_bitmask(SF_LineString) |
+		sf_type_bitmask(SF_MultiLineString);
+	int64_t can_promote_multipolygon = sf_type_bitmask(SF_Polygon) |
+		sf_type_bitmask(SF_MultiPolygon);
+
+	const char* cls_simple;
+	int sf_type_multi;
+	if (*all_types == can_promote_multipoint) {
+		cls_simple = "POINT";
+		sf_type_multi = SF_MultiPoint;
+	} else if (*all_types == can_promote_multilinestring) {
+		cls_simple = "LINESTRING";
+		sf_type_multi = SF_MultiLineString;
+	} else if (*all_types == can_promote_multipolygon) {
+		cls_simple = "POLYGON";
+		sf_type_multi = SF_MultiPolygon;
+	} else {
+		// Promotion is not possible or is not necessary
+		return;
+	}
+
+	for (int i = 0; i < output.size(); i++) {
+		SEXP item = output[i];
+		if (!Rf_inherits(item, cls_simple)) {
+			continue;
+		}
+
+		switch (sf_type_multi) {
+			case SF_MultiPoint:
+				output[i] = read_wkb_promote_sfg_multipoint(item);
+				break;
+			case SF_MultiLineString:
+				output[i] = read_wkb_promote_sfg_multipolygon_or_linestring(item, "MULTILINESTRING");
+				break;
+			case SF_MultiPolygon:
+				output[i] = read_wkb_promote_sfg_multipolygon_or_linestring(item, "MULTIPOLYGON");
+				break;
+			default:
+				Rcpp::stop("promote to multi not implemented");
+		}
+	}
+
+	*all_types = sf_type_bitmask(sf_type_multi);
+}
+
+static Rcpp::List CPL_read_wkb_internal(Rcpp::List wkb_list, bool EWKB = false, bool spatialite = false, bool promote_multi = false) {
 	Rcpp::List output(wkb_list.size());
 
-	int type = 0, last_type = 0, n_types = 0, n_empty = 0;
+	int type = 0, n_empty = 0;
+	// An integer such that (all_types & (1 << sf_type)) != 0 if sf_type was
+	// encountered while reading the wkb items.
+	int64_t all_types = 0;
 	int endian = native_endian();
 
 	uint32_t srid = 0;
@@ -421,16 +518,56 @@ Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, bool spatialite 
 			n_empty++;
 		}
 		// Rcpp::Rcout << "type is " << type << "\n";
-		if (n_types <= 1 && type != last_type) {
-			last_type = type;
-			n_types++; // check if there's more than 1 type:
+		all_types |= sf_type_bitmask(type);
+	}
+
+	if (promote_multi) {
+		read_wkb_promote_multi_if_possible(output, &all_types);
+	}
+
+	int n_types = 0;
+	for (int i = 0; i < SF_Type_Max; i++) {
+		if (all_types & sf_type_bitmask(i)) {
+			n_types++;
 		}
 	}
+
 	output.attr("single_type") = n_types <= 1; // if 0, we have only empty geometrycollections
 	output.attr("n_empty") = (int) n_empty;
 	if ((EWKB || spatialite) && srid != 0)
 		output.attr("srid") = (int) srid;
 	return output;
+}
+
+
+// This function is used by other packages that link to sf, so its signature cannot be changed
+// [[Rcpp::export]]
+Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, bool spatialite = false) {
+	return CPL_read_wkb_internal(wkb_list, EWKB, spatialite);
+}
+
+
+// This version of the function is designed to allow evolution of options without
+// breaking compatability with existing usage
+// [[Rcpp::export]]
+Rcpp::List CPL_read_wkb2(Rcpp::List wkb_list, Rcpp::List options) {
+	bool EWKB = false;
+	bool spatialite = false;
+	bool promote_to_multi = false;
+
+	if (options.containsElementNamed("EWKB")) {
+		EWKB = options("EWKB");
+	}
+
+	if (options.containsElementNamed("spatialite")) {
+		spatialite = options("spatialite");
+	}
+
+	if (options.containsElementNamed("promote_to_multi")) {
+		promote_to_multi = options("promote_to_multi");
+	}
+
+	return CPL_read_wkb_internal(wkb_list, EWKB, spatialite, promote_to_multi);
 }
 
 //
@@ -679,8 +816,8 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false) {
 	}
 
 	int srid = 0;
-	if (EWKB) { 
-		// get SRID from crs[["input"]], either of the form "4326" 
+	if (EWKB) {
+		// get SRID from crs[["input"]], either of the form "4326"
 		// or "XXXX:4326" with arbitrary XXXX string,
 		// or else from the wkt field of the crs using srid_from_crs()
 		Rcpp::List crs = sfc.attr("crs");

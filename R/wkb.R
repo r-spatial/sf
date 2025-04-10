@@ -25,6 +25,8 @@ skip0x = function(x) {
 #' @param EWKB logical; if `TRUE`, parse as EWKB (extended WKB; PostGIS: ST_AsEWKB), otherwise as ISO WKB (PostGIS: ST_AsBinary)
 #' @param spatialite logical; if \code{TRUE}, WKB is assumed to be in the spatialite dialect, see \url{https://www.gaia-gis.it/gaia-sins/BLOB-Geometry.html}; this is only supported in native endian-ness (i.e., files written on system with the same endian-ness as that on which it is being read).
 #' @param pureR logical; if `TRUE`, use only R code, if `FALSE`, use compiled (C++) code; use `TRUE` when the endian-ness of the binary differs from the host machine (\code{.Platform$endian}).
+#' @param promote_to_multi logical; if `TRUE`, attempt to promote combinations of simple/multi
+#'   such that all output geometries are multi geometries of the same type.
 #' @details When converting from WKB, the object \code{x} is either a character vector such as typically obtained from PostGIS (either with leading "0x" or without), or a list with raw vectors representing the features in binary (raw) form.
 #' @examples
 #' wkb = structure(list("01010000204071000000000000801A064100000000AC5C1441"), class = "WKB")
@@ -32,7 +34,8 @@ skip0x = function(x) {
 #' wkb = structure(list("0x01010000204071000000000000801A064100000000AC5C1441"), class = "WKB")
 #' st_as_sfc(wkb, EWKB = TRUE)
 #' @export
-st_as_sfc.WKB = function(x, ..., EWKB = FALSE, spatialite = FALSE, pureR = FALSE, crs = NA_crs_) {
+st_as_sfc.WKB = function(x, ..., EWKB = FALSE, spatialite = FALSE, pureR = FALSE, crs = NA_crs_,
+					     promote_to_multi = FALSE) {
 	if (EWKB && spatialite)
 		stop("arguments EWKB and spatialite cannot both be TRUE")
 	if (spatialite && pureR)
@@ -49,7 +52,10 @@ st_as_sfc.WKB = function(x, ..., EWKB = FALSE, spatialite = FALSE, pureR = FALSE
 	ret = if (pureR)
 			R_read_wkb(x, readWKB, EWKB = EWKB)
 		else
-			CPL_read_wkb(x, EWKB, spatialite)
+			CPL_read_wkb2(x,
+						  list(EWKB = EWKB,
+						  	   spatialite = spatialite,
+						  	   promote_to_multi = promote_to_multi))
 	if (is.na(crs) && (EWKB || spatialite) && !is.null(attr(ret, "srid")) && attr(ret, "srid") != 0)
 		crs = attr(ret, "srid")
 	if (! is.na(st_crs(crs))) {

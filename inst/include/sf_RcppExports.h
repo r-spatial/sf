@@ -45,6 +45,27 @@ namespace sf {
         return Rcpp::as<Rcpp::List >(rcpp_result_gen);
     }
 
+    inline Rcpp::List CPL_read_wkb2(Rcpp::List wkb_list, Rcpp::List options) {
+        typedef SEXP(*Ptr_CPL_read_wkb2)(SEXP,SEXP);
+        static Ptr_CPL_read_wkb2 p_CPL_read_wkb2 = NULL;
+        if (p_CPL_read_wkb2 == NULL) {
+            validateSignature("Rcpp::List(*CPL_read_wkb2)(Rcpp::List,Rcpp::List)");
+            p_CPL_read_wkb2 = (Ptr_CPL_read_wkb2)R_GetCCallable("sf", "_sf_CPL_read_wkb2");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_CPL_read_wkb2(Shield<SEXP>(Rcpp::wrap(wkb_list)), Shield<SEXP>(Rcpp::wrap(options)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<Rcpp::List >(rcpp_result_gen);
+    }
+
     inline Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false) {
         typedef SEXP(*Ptr_CPL_write_wkb)(SEXP,SEXP);
         static Ptr_CPL_write_wkb p_CPL_write_wkb = NULL;
