@@ -171,7 +171,7 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 	}
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer,
 	Rcpp::CharacterVector driver, Rcpp::CharacterVector dco, Rcpp::CharacterVector lco,
 	Rcpp::List geom, Rcpp::CharacterVector dim, Rcpp::CharacterVector fids,
@@ -381,7 +381,7 @@ int CPL_write_ogr(Rcpp::List obj, Rcpp::CharacterVector dsn, Rcpp::CharacterVect
 }
 
 // delete a data source, or one or more layers within a data source
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 int CPL_delete_ogr(Rcpp::CharacterVector dsn, Rcpp::CharacterVector layer,
 	Rcpp::CharacterVector driver, bool quiet = true) {
 

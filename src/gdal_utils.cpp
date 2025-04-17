@@ -46,7 +46,7 @@ int CPL_STDCALL GDALRProgress( double dfComplete,
 #if GDAL_VERSION_NUM >= 2010000
 # include "gdal_utils.h" // requires >= 2.1
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::CharacterVector CPL_gdalinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options, 
 		Rcpp::CharacterVector oo, Rcpp::CharacterVector co) {
 	set_config_options(co);
@@ -68,7 +68,7 @@ Rcpp::CharacterVector CPL_gdalinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVec
 	return ret;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::CharacterVector CPL_ogrinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options, 
 		Rcpp::CharacterVector oo, Rcpp::CharacterVector co, bool read_only = false) {
 	set_config_options(co);
@@ -95,7 +95,7 @@ Rcpp::CharacterVector CPL_ogrinfo(Rcpp::CharacterVector obj, Rcpp::CharacterVect
 	return ret;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::LogicalVector CPL_gdaladdo(Rcpp::CharacterVector obj, Rcpp::CharacterVector method, 
 		Rcpp::IntegerVector overviews, Rcpp::IntegerVector bands, Rcpp::CharacterVector oo,
 		Rcpp::CharacterVector co, bool clean = false, bool read_only = false) {
@@ -135,7 +135,7 @@ Rcpp::LogicalVector CPL_gdaladdo(Rcpp::CharacterVector obj, Rcpp::CharacterVecto
 
 // #nocov start
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::LogicalVector CPL_gdalwarp(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
 		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo,
 		Rcpp::CharacterVector co, bool quiet = true, bool overwrite = false) {
@@ -178,7 +178,7 @@ Rcpp::LogicalVector CPL_gdalwarp(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 	return result == NULL || err;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::LogicalVector CPL_gdalrasterize(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
 		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo,
 		Rcpp::CharacterVector co, bool overwrite = false, bool quiet = true) {
@@ -217,7 +217,7 @@ Rcpp::LogicalVector CPL_gdalrasterize(Rcpp::CharacterVector src, Rcpp::Character
 // #nocov end
 
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::LogicalVector CPL_gdaltranslate(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
 		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector co,
 		bool quiet = true) {
@@ -248,7 +248,7 @@ Rcpp::LogicalVector CPL_gdaltranslate(Rcpp::CharacterVector src, Rcpp::Character
 }
 
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::LogicalVector CPL_gdalfootprint(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
         Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector co,
         bool quiet = true) {
@@ -283,7 +283,7 @@ Rcpp::LogicalVector CPL_gdalfootprint(Rcpp::CharacterVector src, Rcpp::Character
 #endif
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::LogicalVector CPL_gdalvectortranslate(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
 		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo,
 		Rcpp::CharacterVector co, bool quiet = true) {
@@ -316,7 +316,7 @@ Rcpp::LogicalVector CPL_gdalvectortranslate(Rcpp::CharacterVector src, Rcpp::Cha
 	return result == NULL || err;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::LogicalVector CPL_gdalbuildvrt(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
 		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, 
 		Rcpp::CharacterVector co, bool quiet = true) {
@@ -358,7 +358,7 @@ Rcpp::LogicalVector CPL_gdalbuildvrt(Rcpp::CharacterVector src, Rcpp::CharacterV
 	return result == NULL || err;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::LogicalVector CPL_gdaldemprocessing(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
 		Rcpp::CharacterVector options, Rcpp::CharacterVector processing, 
 		Rcpp::CharacterVector colorfilename, Rcpp::CharacterVector oo, 
@@ -391,7 +391,7 @@ Rcpp::LogicalVector CPL_gdaldemprocessing(Rcpp::CharacterVector src, Rcpp::Chara
 	return result == NULL || err;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::LogicalVector CPL_gdalnearblack(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
 		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo, 
 		Rcpp::CharacterVector co, bool quiet = true) {
@@ -420,7 +420,7 @@ Rcpp::LogicalVector CPL_gdalnearblack(Rcpp::CharacterVector src, Rcpp::Character
 	return result == NULL || err;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::LogicalVector CPL_gdalgrid(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
 		Rcpp::CharacterVector options, Rcpp::CharacterVector oo,
 		Rcpp::CharacterVector co, bool quiet = true) {
@@ -449,7 +449,7 @@ Rcpp::LogicalVector CPL_gdalgrid(Rcpp::CharacterVector src, Rcpp::CharacterVecto
 
 // gdal >= 3.1: mdim utils:
 #if GDAL_VERSION_NUM >= 3010000
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::CharacterVector CPL_gdalmdiminfo(Rcpp::CharacterVector obj, Rcpp::CharacterVector options,
 		Rcpp::CharacterVector oo, Rcpp::CharacterVector co) { 
 	set_config_options(co);
@@ -473,7 +473,7 @@ Rcpp::CharacterVector CPL_gdalmdiminfo(Rcpp::CharacterVector obj, Rcpp::Characte
 	return ret;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::LogicalVector CPL_gdalmdimtranslate(Rcpp::CharacterVector src, Rcpp::CharacterVector dst,
 		Rcpp::CharacterVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector co,
 		bool quiet = true) {
@@ -583,7 +583,7 @@ Rcpp::LogicalVector CPL_gdalmdimtranslate(Rcpp::CharacterVector src, Rcpp::Chara
 
 // #nocov start
 // https://gdal.org/tutorials/warp_tut.html
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::LogicalVector CPL_gdal_warper(Rcpp::CharacterVector infile, Rcpp::CharacterVector outfile,
 		Rcpp::IntegerVector options, Rcpp::CharacterVector oo, Rcpp::CharacterVector doo,
 		Rcpp::CharacterVector co, bool quiet = true) {

@@ -3,7 +3,7 @@
 #ifdef HAVE_PROJ_H
 #include <proj.h>
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_proj_info(int type) {
 
 	Rcpp::List ret;

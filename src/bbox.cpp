@@ -2,7 +2,7 @@
 
 #include "bbox.h"
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::NumericVector CPL_get_bbox(Rcpp::List sf, int depth = 0) {
 	Rcpp::NumericVector bb(4);
 	bb[0] = bb[1] = bb[2] = bb[3] = NA_REAL;

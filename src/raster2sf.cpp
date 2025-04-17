@@ -2,7 +2,7 @@
 
 using namespace Rcpp;
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 List CPL_xy2sfc(NumericMatrix cc, IntegerVector dim, bool to_points, IntegerVector which, bool cc_has_NAs) {
 	if (cc.nrow() != dim[0] * dim[1])
 		stop("xy2sfc: wrong dimensions"); // #nocov

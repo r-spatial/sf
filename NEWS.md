@@ -1,5 +1,7 @@
 # version 1.0-21
 
+* loading `sf` no longer initializes the RNG state; see https://github.com/r-quantities/units/issues/409
+
 * fix `st_sample()` on geodetic coordinates; #2515
 
 # version 1.0-20

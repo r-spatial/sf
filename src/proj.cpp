@@ -8,7 +8,7 @@
 #define NO_GDAL_CPP_HEADERS
 #include "gdal_sf_pkg.h"
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::LogicalVector CPL_proj_h(bool b = false) {
 #if defined(HAVE_PROJ_H) && !defined(ACCEPT_USE_OF_DEPRECATED_PROJ_API_H)
 	return true;
@@ -30,7 +30,7 @@ Rcpp::LogicalVector CPL_proj_h(bool b = false) {
 # endif
 #endif
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVector authority, 
 		Rcpp::NumericVector AOI, Rcpp::CharacterVector Use, 
 		Rcpp::CharacterVector grid_availability,
@@ -184,7 +184,7 @@ Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVect
 #endif
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::CharacterVector CPL_get_data_dir(bool from_proj = false) {
 	if (from_proj) {
 		Rcpp::CharacterVector ret(proj_info().searchpath);
@@ -201,7 +201,7 @@ Rcpp::CharacterVector CPL_get_data_dir(bool from_proj = false) {
 	}
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::LogicalVector CPL_is_network_enabled(bool b = false) {
 #if PROJ_VERSION_MAJOR >= 7
 #if GDAL_VERSION_NUM >= 3040000
@@ -214,7 +214,7 @@ Rcpp::LogicalVector CPL_is_network_enabled(bool b = false) {
 #endif
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::CharacterVector CPL_enable_network(Rcpp::CharacterVector url, bool enable = true) {
 #ifdef HAVE_71
 	if (enable) {
@@ -237,7 +237,7 @@ Rcpp::CharacterVector CPL_enable_network(Rcpp::CharacterVector url, bool enable 
 #endif
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::LogicalVector CPL_set_data_dir(Rcpp::CharacterVector data_dir, bool with_proj) {
 	if (with_proj) {
 		if (data_dir.size() != 1)
@@ -256,13 +256,13 @@ Rcpp::LogicalVector CPL_set_data_dir(Rcpp::CharacterVector data_dir, bool with_p
 	return true;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::LogicalVector CPL_use_proj4_init_rules(Rcpp::IntegerVector v) {
 	proj_context_use_proj4_init_rules(PJ_DEFAULT_CTX, v[0]);
 	return true;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 std::string CPL_proj_version(bool b = false) {
 
 	std::stringstream buffer;
@@ -270,7 +270,7 @@ std::string CPL_proj_version(bool b = false) {
 	return buffer.str();
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_proj_is_valid(std::string proj4string) {
 	Rcpp::List out(2);
 
@@ -289,7 +289,7 @@ Rcpp::List CPL_proj_is_valid(std::string proj4string) {
 	return out;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 bool CPL_have_datum_files(SEXP foo) {
 
 	// TODO:
@@ -298,7 +298,7 @@ bool CPL_have_datum_files(SEXP foo) {
 	return true;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::NumericMatrix pts, 
 		bool keep, bool warn = true, bool authority_compliant = false) {
 

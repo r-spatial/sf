@@ -70,7 +70,7 @@ private:
 
 #endif
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_read_gdal_stream(
         Rcpp::RObject stream_xptr,
         Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer,

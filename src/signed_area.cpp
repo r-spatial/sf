@@ -5,7 +5,7 @@ using namespace Rcpp;
 // positive area indicates a counter clock-wise ring direction
 // https://en.wikipedia.org/wiki/Shoelace_formula
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 double CPL_signed_area(NumericMatrix pts) {
 	double sum = 0.0;
 	double x0, x, y1, y2;
