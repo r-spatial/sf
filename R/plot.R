@@ -114,7 +114,23 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 	reset_layout_needed = reset
 
 	x = swap_axes_if_needed(x)
-
+	
+	# The following code defines an expression which resets the plotting layout.
+	# The on.exit approach is needed since the plotting routing may fail for
+	# various reasons leaving the plot layout in a broken state. The on.exit
+	# ensures that we "clean" such broken state regardless of the failure/success
+	# of the plotting routing. See also #2519 for more details.
+	on.exit(
+		expr = {
+			if (!isTRUE(dots$add) && reset) { # reset device: 
+				if (reset_layout_needed) 
+					layout(matrix(1))
+				par(opar)
+			}
+		}, 
+		add = TRUE
+	)
+	
 	opar = par(no.readonly = TRUE)
 	if (ncol(x) > 2 && !isTRUE(dots$add)) { # multiple maps to plot...
 		cols = setdiff(names(x), attr(x, "sf_column"))
@@ -197,8 +213,10 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 			# store attribute in "values":
 			values = x[[setdiff(names(x), attr(x, "sf_column"))]]
 
-			if (is.list(values))
+			if (is.list(values)) {
+				reset_layout_needed = TRUE # nocov
 				stop("plotting list-columns not supported") # nocov
+			}
 
 			if (is.character(values))
 				values = as.factor(values)
@@ -207,8 +225,11 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 
 			if (is.null(pal))
 				pal = function(n) sf.colors(n, categorical = is.factor(values))
-			else if (! col_missing)
+			else if (! col_missing) {
+				reset_layout_needed = TRUE
 				stop("specify only one of `col' and `pal'")
+			}
+				
 
 			if (col_missing) { # compute colors from values:
 				col = if (is.factor(values)) {
@@ -304,11 +325,6 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 			localTitle(main, ...)
 		}
 	}
-	if (!isTRUE(dots$add) && reset) { # reset device: 
-		if (reset_layout_needed) 
-			layout(matrix(1))
-		par(opar)
-	} 
 	invisible()
 }
 
