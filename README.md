@@ -1,8 +1,8 @@
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/r-spatial/sf/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-spatial/sf/actions/workflows/R-CMD-check.yaml)
 [![tic-db](https://github.com/r-spatial/sf/actions/workflows/tic-db.yml/badge.svg)](https://github.com/r-spatial/sf/actions/workflows/tic-db.yml)
-[![Coverage Status](https://img.shields.io/codecov/c/github/r-spatial/sf/main.svg)](https://app.codecov.io/gh/r-spatial/sf)
-[![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html)
+[![Codecov test coverage](https://codecov.io/gh/r-spatial/sf/graph/badge.svg)](https://app.codecov.io/gh/r-spatial/sf)
+[![License](https://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
 [![CRAN](https://www.r-pkg.org/badges/version/sf)](https://cran.r-project.org/package=sf)
 [![cran checks](https://badges.cranchecks.info/worst/sf.svg)](https://cran.r-project.org/web/checks/check_results_sf.html)
 [![Downloads](https://cranlogs.r-pkg.org/badges/sf?color=brightgreen)](https://www.r-pkg.org/pkg/sf)
@@ -24,9 +24,9 @@ Package sf:
 * represents natively in R all 17 simple feature types for all dimensions (XY, XYZ, XYM, XYZM)
 * interfaces to [GEOS](https://libgeos.org) for geometrical operations on projected coordinates, and (through R package [s2](https://cran.r-project.org/package=s2)) to [s2geometry](http://s2geometry.io/) for geometrical operations on ellipsoidal coordinates
 * interfaces to [GDAL](https://gdal.org/), supporting all driver options, `Date` and `POSIXct` and list-columns
-* interfaces to [PRØJ](http://proj.org/) for coordinate reference system conversion and transformation
+* interfaces to [PRØJ](https://proj.org/) for coordinate reference system conversion and transformation
 * uses [well-known-binary](https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary) serialisations written in C++/Rcpp for fast I/O with GDAL and GEOS 
-* reads from and writes to spatial databases such as [PostGIS](http://postgis.net/) using [DBI](https://cran.r-project.org/package=DBI)
+* reads from and writes to spatial databases such as [PostGIS](https://postgis.net/) using [DBI](https://cran.r-project.org/package=DBI)
 * is extended by 
     * [lwgeom](https://github.com/r-spatial/lwgeom/) for selected liblwgeom/PostGIS functions
     * [stars](https://github.com/r-spatial/stars/) for raster data, and raster or vector data cubes (spatial time series)
