@@ -197,9 +197,9 @@ arguments, the object and a filename:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/st_write.html">st_write</a></span><span class="op">(</span><span class="va">nc</span>, <span class="st">"nc1.shp"</span><span class="op">)</span></span></code></pre></div>
 <p>The file name is taken as the data source name. The default for the
-layer name is the basename (filename without path) of the the data
-source name. For this, <code><a href="../reference/st_write.html">st_write()</a></code> needs to guess the
-driver. The above command is, for instance, equivalent to:</p>
+layer name is the basename (filename without path) of the data source
+name. For this, <code><a href="../reference/st_write.html">st_write()</a></code> needs to guess the driver. The
+above command is, for instance, equivalent to:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/st_write.html">st_write</a></span><span class="op">(</span><span class="va">nc</span>, dsn <span class="op">=</span> <span class="st">"nc1.shp"</span>, layer <span class="op">=</span> <span class="st">"nc.shp"</span>, driver <span class="op">=</span> <span class="st">"ESRI Shapefile"</span><span class="op">)</span></span>
 <span><span class="co">## Writing layer `nc' to data source `nc1.shp' using driver `ESRI Shapefile'</span></span>
