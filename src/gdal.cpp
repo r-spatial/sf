@@ -203,8 +203,8 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	if (srs == NULL)
 		Rcpp::stop("crs not found"); // #nocov
 
-	Rcpp::List out(16);
-	Rcpp::CharacterVector names(16);
+	Rcpp::List out(17);
+	Rcpp::CharacterVector names(17);
 	out(0) = Rcpp::NumericVector::create(srs->GetSemiMajor());
 	names(0) = "SemiMajor";
 
@@ -346,6 +346,18 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 		Rcpp::_["orientation"] = orientation);
 	out(15) = axes_df;
 	names(15) = "axes";
+	// base GEOGCRS: https://github.com/r-spatial/sf/issues/2524
+	OGRSpatialReference *base_srs = new OGRSpatialReference;
+	if (base_srs->CopyGeogCSFrom(srs) == OGRERR_NONE) {
+		if (base_srs->exportToWkt(&cp) == OGRERR_NONE) {
+			out(16) = Rcpp::CharacterVector::create(cp);
+			CPLFree(cp);
+		} else
+			out(16) = Rcpp::CharacterVector::create(NA_STRING);
+	} else 
+		out(16) = Rcpp::CharacterVector::create(NA_STRING);
+	names(16) = "gcs_crs";
+	delete base_srs;
 
 	set_error_handler();
 
