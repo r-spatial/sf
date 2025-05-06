@@ -58,6 +58,9 @@ RUN apt-get update && apt-get install -y --fix-missing \
 	libopenjp2-7-dev
 
 RUN locale-gen en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
 
 #ENV PROJ_VERSION=7.1.0
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
@@ -100,8 +103,8 @@ RUN cd proj* \
 #  && cd -
 
 # GDAL:
-ENV GDAL_VERSION 3.10.2
-ENV GDAL_VERSION_NAME 3.10.2rc1
+ENV GDAL_VERSION 3.11.0
+ENV GDAL_VERSION_NAME 3.11.0rc1
 
 RUN wget -q http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
@@ -128,12 +131,15 @@ RUN R CMD INSTALL sf
 RUN R CMD INSTALL lwgeom
 RUN R CMD INSTALL stars
 #
-RUN export DEBIAN_FRONTEND=noninteractive; apt-get install -y libmagick++-dev
-RUN Rscript -e 'install.packages("animation")'
+#RUN export DEBIAN_FRONTEND=noninteractive; apt-get install -y --fix-missing libmagick++-dev
+#RUN Rscript -e 'install.packages("animation")'
 #
 RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
 RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
 #
 RUN Rscript -e 'options(timeout=1200); install.packages("starsdata", repos="http://cran.uni-muenster.de/pebesma/")'
-#
 RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
+#
+RUN wget -q https://cran.r-project.org/src/contrib/terra_1.8-42.tar.gz
+RUN Rscript -e 'install.packages("tinytest")'
+RUN R CMD check terra_1.8-42.tar.gz
