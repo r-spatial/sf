@@ -112,15 +112,15 @@ For Unix-alikes, GDAL (>= 2.0.1), GEOS (>= 3.4.0) and Proj.4 (>= 4.8.0) are requ
 Dependencies for recent versions of Ubuntu (18.04 and later) are available in the official repositories; you can install them with:
 
 ```sh
-apt-get -y update && apt-get install -y  libudunits2-dev libgdal-dev libgeos-dev libproj-dev
+sudo apt -y update && apt install -y libudunits2-dev libgdal-dev libgeos-dev libproj-dev libsqlite3-dev
 ```
 
-However, to get more up-to-date versions of dependencies such as GDAL, we recommend adding the [ubuntugis-unstable](http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/) PPA to the package repositories and installing them as follows:
+However, to get more up-to-date versions of dependencies such as GDAL, GEOS and PROJ we recommend adding the [ubuntugis-unstable](http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/) PPA to the package repositories and installing them as follows:
 
 ```sh
 sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
-sudo apt-get update
-sudo apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev libsqlite0-dev
+sudo apt update
+sudo apt install libudunits2-dev libgdal-dev libgeos-dev libproj-dev libsqlite3-dev
 ```
 
 Adding this PPA is required for installing `sf` on older versions of Ubuntu (e.g. Xenial).
