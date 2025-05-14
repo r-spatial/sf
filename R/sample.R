@@ -207,14 +207,15 @@ st_poly_sample = function(x, size, ..., type = "random",
 				}
 			}
 			R = s2::s2_earth_radius_meters()
+			earth_surface = 4 * pi * R^2.
 			toRad = pi / 180.
 			h1 = sin(bb["ymax"] * toRad)
 			h2 = sin(bb["ymin"] * toRad)
-			a0 = sum(s2::s2_area(st_as_s2(x, oriented = oriented))) # total
-			a1 = 2 * pi * R^2. * (h1 - h2) * (bb["xmax"] - bb["xmin"]) / 360. # actual
+			a0 = 2 * pi * R^2. * (h1 - h2) * (bb["xmax"] - bb["xmin"]) / 360. # total
+			a1 = sum(s2::s2_area(st_as_s2(x, oriented = oriented))) # actual
 			if (!is.finite(a1))
 				stop("One or more geometries have a non-finite area")
-			global = (a1 / a0) > .9999
+			global = (a0 / earth_surface) > .9999
 			if (a0 / a1 > 1e4 && !force)
 				stop(paste0("sampling box is ", format(a0/a1), " times larger than sampling region;\nuse force=TRUE if you really want this, or try setting oriented=TRUE\n(after reading the documentation)"), call. = FALSE)
 			size = round(size * a0 / a1)
@@ -230,6 +231,7 @@ st_poly_sample = function(x, size, ..., type = "random",
 						round(r)
 			}
 		}
+		size = max(1, size)
 
 		pts = if (type == "hexagonal") {
 				dx = sqrt(a0 / size / (sqrt(3)/2))
