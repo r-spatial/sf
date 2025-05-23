@@ -9,6 +9,10 @@ zb_wrap = function(zb) {
 	structure(zb, names = c("zmin", "zmax"), class = "z_range")
 }
 
+z_range.pointmatrix = function(obj, ...) {
+	zb_wrap(range(obj[,3]))
+}
+
 z_range.Set = function(obj, ...) {
 	sel = vapply(obj, function(x) { length(x) && !all(is.na(x)) }, TRUE)
 	if (! any(sel))
@@ -129,7 +133,9 @@ print.z_range = function(x, ...) {
 }
 
 compute_z_range = function(obj) {
-	switch(class(obj)[1],
+	if (!is.null(pts <- attr(obj, "points")))
+		z_range.pointmatrix(pts)
+	else switch(class(obj)[1],
 		   sfc_POINT = zb_wrap(z_range.Set(obj)),
 		   sfc_MULTIPOINT = zb_wrap(z_range.MtrxSet(obj)),
 		   sfc_LINESTRING = zb_wrap(z_range.MtrxSet(obj)),

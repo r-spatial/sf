@@ -430,7 +430,32 @@ Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, bool spatialite 
 	output.attr("n_empty") = (int) n_empty;
 	if ((EWKB || spatialite) && srid != 0)
 		output.attr("srid") = (int) srid;
-	return output;
+	if (n_types <= 1 && type == SF_Point) { // xxx
+		using namespace Rcpp; // so that later on the (i,_) works
+		NumericVector pt = output[0];
+		CharacterVector cls = pt.attr("class");
+		int nc = 2;
+		if (cls[0] == "XYZ" || cls[0] == "XYM")
+			nc = 3;
+		if (cls[0] == "XYZM")
+			nc = 4;
+		NumericMatrix m(wkb_list.size(), nc);
+		for (int i = 0; i < wkb_list.size(); i++) {
+			NumericVector nv = output[i];
+			m(i, _) = nv;
+		}
+		Rcpp::List ret(wkb_list.size());
+		ret.attr("points") = m;
+		CharacterVector points_dim(1);
+		points_dim(0) = cls(0);
+		ret.attr("points_dim") = points_dim;
+		ret.attr("single_type") = n_types <= 1; // if 0, we have only empty geometrycollections
+		ret.attr("n_empty") = (int) n_empty;
+		if ((EWKB || spatialite) && srid != 0)
+			ret.attr("srid") = (int) srid;
+		return ret; 
+	} else 
+		return output;
 }
 
 //
@@ -700,18 +725,39 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false) {
 		}
 	}
 
-	for (int i = 0; i < sfc.size(); i++) {
-		Rcpp::checkUserInterrupt();
-		std::ostringstream os;
-		if (have_classes)
-			cls = classes[i];
-		write_data(os, sfc, i, EWKB, endian, cls, dm, precision, srid);
-		Rcpp::RawVector raw(os.str().size()); // os -> raw:
-		std::string str = os.str();
-		const char *cp = str.c_str();
-		for (size_t j = 0; j < str.size(); j++)
-			raw[j] = cp[j];
-		output[i] = raw; // raw vector to list
+	if (sfc.attr("points") != R_NilValue) {
+		using namespace Rcpp; // so that later on the (i,_) works
+		Rcpp::NumericMatrix m = sfc.attr("points");
+		unsigned int sf_type = make_type(cls, dm, EWKB, NULL, srid);
+		for (int i = 0; i < m.nrow(); i++) {
+			std::ostringstream os;
+			add_byte(os, (char) endian);
+			add_int(os, sf_type);
+			if (EWKB && srid != 0)
+				add_int(os, srid);
+			for (int j = 0; j < m.ncol(); j++)
+				add_double(os, m(i, j), precision);
+			Rcpp::RawVector raw(os.str().size()); // os -> raw:
+			std::string str = os.str();
+			const char *cp = str.c_str();
+			for (size_t j = 0; j < str.size(); j++)
+				raw[j] = cp[j];
+			output[i] = raw; // raw vector to list
+		}
+	} else {
+		for (int i = 0; i < sfc.size(); i++) {
+			Rcpp::checkUserInterrupt();
+			std::ostringstream os;
+			if (have_classes)
+				cls = classes[i];
+			write_data(os, sfc, i, EWKB, endian, cls, dm, precision, srid);
+			Rcpp::RawVector raw(os.str().size()); // os -> raw:
+			std::string str = os.str();
+			const char *cp = str.c_str();
+			for (size_t j = 0; j < str.size(); j++)
+				raw[j] = cp[j];
+			output[i] = raw; // raw vector to list
+		}
 	}
 	return output;
 }
@@ -725,6 +771,13 @@ Rcpp::List get_dim_sfc(Rcpp::List sfc) {
 			Rcpp::Named("_cls") = Rcpp::CharacterVector::create("XY"),
 			Rcpp::Named("_dim") = Rcpp::IntegerVector::create(2)
 		);
+	if (sfc.attr("points") != R_NilValue) {
+		Rcpp::NumericMatrix m = sfc.attr("points");
+		return Rcpp::List::create(
+			Rcpp::Named("_cls") = sfc.attr("points_dim"),
+			Rcpp::Named("_dim") = Rcpp::IntegerVector::create(m.ncol())
+		);
+	}
 
 	// we have data:
 	Rcpp::CharacterVector cls = sfc.attr("class");
