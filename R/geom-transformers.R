@@ -29,7 +29,13 @@
 #' when \code{sf_use_s2()} is set to \code{FALSE}). See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.html}
 #' for details. The \code{max_cells} and \code{min_level} parameters ([s2::s2_buffer_cells()]) work with the S2
 #' engine (i.e. geographic coordinates) and can be used to change the buffer shape (e.g. smoothing). 
-#' A negative `dist` value for geodetic coordinates does not give a proper (geodetic) buffer.
+#' The S2 engine returns a polygon _around_ a number of S2 cells that
+#' contain the buffer, and hence will always have an area larger than the
+#' true buffer, depending on `max_cells`, and will be non-smooth when sufficiently zoomed in. 
+#' The GEOS engine will return line segments between points
+#' on the circle, and so will always be _smaller_ than the true
+#' buffer, and be smooth, depending on the number of segments `nQuadSegs`.
+#' A negative `dist` value for geodetic coordinates using S2 does not give a proper (geodetic) buffer.
 #' 
 #' @examples
 #'
@@ -69,6 +75,27 @@
 #'    main = "mitreLimit: 3")
 #' plot(l2, col = 'blue', add = TRUE)
 #' par(op)
+#'
+#' # compare approximation errors depending on S2 or GEOS backend:
+#' # geographic coordinates, uses S2:
+#' x = st_buffer(st_as_sf(data.frame(lon=0,lat=0), coords=c("lon","lat"),crs='OGC:CRS84'), units::as_units(1,"km"))
+#' y = units::set_units(st_area(x), "km^2")
+#' # error: postive, default maxcells = 1000
+#' (units::drop_units(y)-pi)/pi
+#' x = st_buffer(st_as_sf(data.frame(lon=0,lat=0), coords=c("lon","lat"),crs='OGC:CRS84'), units::as_units(1,"km"), max_cells=1e5)
+#' y = units::set_units(st_area(x), "km^2")
+#' # error: positive but smaller:
+#' (units::drop_units(y)-pi)/pi
+#' 
+#' # no CRS set: assumes Cartesian (projected) coordinates
+#' x = st_buffer(st_as_sf(data.frame(lon=0,lat=0), coords=c("lon","lat")), 1)
+#' y = st_area(x)
+#' # error: negative, nQuadSegs default at 30
+#' ((y)-pi)/pi
+#' x = st_buffer(st_as_sf(data.frame(lon=0,lat=0), coords=c("lon","lat")), 1, nQuadSegs = 100)
+#' y = st_area(x)
+#' # error: negative but smaller:
+#' ((y)-pi)/pi
 st_buffer = function(x, dist, nQuadSegs = 30,
 					 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0, singleSide = FALSE, ...)
 	UseMethod("st_buffer")

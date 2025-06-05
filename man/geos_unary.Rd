@@ -146,7 +146,13 @@ arguments. The \code{nQuadSegs}, \code{endCapsStyle}, \code{joinStyle}, \code{mi
 when \code{sf_use_s2()} is set to \code{FALSE}). See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.html}
 for details. The \code{max_cells} and \code{min_level} parameters (\code{\link[s2:s2_boundary]{s2::s2_buffer_cells()}}) work with the S2
 engine (i.e. geographic coordinates) and can be used to change the buffer shape (e.g. smoothing).
-A negative \code{dist} value for geodetic coordinates does not give a proper (geodetic) buffer.
+The S2 engine returns a polygon \emph{around} a number of S2 cells that
+contain the buffer, and hence will always have an area larger than the
+true buffer, depending on \code{max_cells}, and will be non-smooth when sufficiently zoomed in.
+The GEOS engine will return line segments between points
+on the circle, and so will always be \emph{smaller} than the true
+buffer, and be smooth, depending on the number of segments \code{nQuadSegs}.
+A negative \code{dist} value for geodetic coordinates using S2 does not give a proper (geodetic) buffer.
 
 \code{st_boundary} returns the boundary of a geometry
 
@@ -232,6 +238,27 @@ plot(st_buffer(l2, dist = 1, joinStyle="MITRE",mitreLimit=3), reset = FALSE,
    main = "mitreLimit: 3")
 plot(l2, col = 'blue', add = TRUE)
 par(op)
+
+# compare approximation errors depending on S2 or GEOS backend:
+# geographic coordinates, uses S2:
+x = st_buffer(st_as_sf(data.frame(lon=0,lat=0), coords=c("lon","lat"),crs='OGC:CRS84'), units::as_units(1,"km"))
+y = units::set_units(st_area(x), "km^2")
+# error: postive, default maxcells = 1000
+(units::drop_units(y)-pi)/pi
+x = st_buffer(st_as_sf(data.frame(lon=0,lat=0), coords=c("lon","lat"),crs='OGC:CRS84'), units::as_units(1,"km"), max_cells=1e5)
+y = units::set_units(st_area(x), "km^2")
+# error: positive but smaller:
+(units::drop_units(y)-pi)/pi
+
+# no CRS set: assumes Cartesian (projected) coordinates
+x = st_buffer(st_as_sf(data.frame(lon=0,lat=0), coords=c("lon","lat")), 1)
+y = st_area(x)
+# error: negative, nQuadSegs default at 30
+((y)-pi)/pi
+x = st_buffer(st_as_sf(data.frame(lon=0,lat=0), coords=c("lon","lat")), 1, nQuadSegs = 100)
+y = st_area(x)
+# error: negative but smaller:
+((y)-pi)/pi
 nc = st_read(system.file("shape/nc.shp", package="sf"))
 nc_g = st_geometry(nc)
 plot(st_convex_hull(nc_g))
