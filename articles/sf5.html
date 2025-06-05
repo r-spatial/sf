@@ -222,7 +222,7 @@ are most likely many cases where it does not succeed in doing this well,
 and examples of these are welcomed as <a href="https://github.com/r-spatial/sf/issues" class="external-link">sf issues</a>.</p>
 <p>The following plot shows a graticule geometry on itself,</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">maps</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/adeckmyn/maps" class="external-link">maps</a></span><span class="op">)</span></span>
 <span><span class="va">usa</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/maps/man/map.html" class="external-link">map</a></span><span class="op">(</span><span class="st">'usa'</span>, plot <span class="op">=</span> <span class="cn">FALSE</span>, fill <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">laea</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="st">"+proj=laea +lat_0=30 +lon_0=-95"</span><span class="op">)</span> <span class="co"># Lambert equal area</span></span>
 <span><span class="va">usa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">usa</span>, <span class="va">laea</span><span class="op">)</span></span>
@@ -366,7 +366,7 @@ tmap</em> by Martijn Tennekes and Jakub Nowosad is found at <a href="https://r-t
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>
