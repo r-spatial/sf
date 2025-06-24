@@ -78,11 +78,13 @@
 #'
 #' # compare approximation errors depending on S2 or GEOS backend:
 #' # geographic coordinates, uses S2:
-#' x = st_buffer(st_as_sf(data.frame(lon=0,lat=0), coords=c("lon","lat"),crs='OGC:CRS84'), units::as_units(1,"km"))
+#' x = st_buffer(st_as_sf(data.frame(lon=0,lat=0), coords=c("lon","lat"),crs='OGC:CRS84'), 
+#'       units::as_units(1,"km"))
 #' y = units::set_units(st_area(x), "km^2")
 #' # error: postive, default maxcells = 1000
 #' (units::drop_units(y)-pi)/pi
-#' x = st_buffer(st_as_sf(data.frame(lon=0,lat=0), coords=c("lon","lat"),crs='OGC:CRS84'), units::as_units(1,"km"), max_cells=1e5)
+#' x = st_buffer(st_as_sf(data.frame(lon=0,lat=0), coords=c("lon","lat"),crs='OGC:CRS84'), 
+#'       units::as_units(1,"km"), max_cells=1e5)
 #' y = units::set_units(st_area(x), "km^2")
 #' # error: positive but smaller:
 #' (units::drop_units(y)-pi)/pi

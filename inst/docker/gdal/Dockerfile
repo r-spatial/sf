@@ -103,8 +103,8 @@ RUN cd proj* \
 #  && cd -
 
 # GDAL:
-ENV GDAL_VERSION 3.11.0
-ENV GDAL_VERSION_NAME 3.11.0rc1
+ENV GDAL_VERSION 3.11.1
+ENV GDAL_VERSION_NAME 3.11.1rc1
 
 RUN wget -q http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
@@ -134,6 +134,10 @@ RUN R CMD INSTALL stars
 #RUN export DEBIAN_FRONTEND=noninteractive; apt-get install -y --fix-missing libmagick++-dev
 #RUN Rscript -e 'install.packages("animation")'
 #
+RUN apt update
+RUN apt install -y libharfbuzz-dev
+RUN apt install --fix-missing -y libharfbuzz-dev libfribidi-dev
+RUN Rscript -e 'install.packages("mapview")'
 RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
 RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
 #
