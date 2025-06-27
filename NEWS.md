@@ -1,5 +1,7 @@
 # version 1.0-22
 
+* `st_as_sf.owin()` and `st_as_sfc.owin()` no longer ignore `crs` argument; #2532
+
 * clarify approximation errors in `st_buffer()` and how they differ for the GEOS or S2 backends, with examples by David Kaplan @dmkaplan2000; #2528
 
 # version 1.0-21
