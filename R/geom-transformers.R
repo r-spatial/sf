@@ -170,7 +170,9 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30,
 			singleSide = rep(as.logical(singleSide), length.out = length(x))
 			if (any(endCapStyle == 2) && any(st_geometry_type(x) == "POINT" | st_geometry_type(x) == "MULTIPOINT"))
 				stop("Flat capstyle is incompatible with POINT/MULTIPOINT geometries") # nocov
-			if (any(drop_units(dist) < 0) && any(st_dimension(x) < 1))
+			if (inherits(dist, "units"))
+				dist = drop_units(dist)
+			if (any(dist < 0) && any(st_dimension(x) < 1))
 				stop("Negative dist values may only be used with 1-D or 2-D geometries") # nocov
 
 			st_sfc(CPL_geos_op("buffer_with_style", x, dist, nQ, numeric(0), logical(0),
