@@ -1,5 +1,7 @@
 # version 1.0-22
 
+* for geodetic coordinates, `st_perimeter()` uses ellipsoid if `sf_use_s2()` is `FALSE`; #2541
+
 * `st_as_sf.owin()` and `st_as_sfc.owin()` no longer ignore `crs` argument; #2532
 
 * clarify approximation errors in `st_buffer()` and how they differ for the GEOS or S2 backends, with examples by David Kaplan @dmkaplan2000; #2528
