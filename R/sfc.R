@@ -54,14 +54,24 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 		lst = lst[[1]]
 	stopifnot(is.numeric(crs) || is.character(crs) || inherits(crs, "crs"))
 
+	points_in_attr <- !is.null(attr(lst, "points"))
+
 	# check for NULLs:
 	a = attributes(lst)
-	is_null = sfc_is_null(lst)
+	is_null = if (points_in_attr)
+			rep(FALSE, length(lst))
+		else
+			sfc_is_null(lst)
 	lst = unclass(lst)
-	lst = lst[! is_null]
+	if (!points_in_attr)
+		lst = lst[! is_null]
+
 	attributes(lst) = a
 
-	dims_and_types = sfc_unique_sfg_dims_and_types(lst)
+	dims_and_types = if (points_in_attr)
+			list(class_dim = attr(lst, "points_dim"), class_type = "POINT")
+		else
+			sfc_unique_sfg_dims_and_types(lst)
 	
 	cls = if (length(lst) == 0) # empty set: no geometries read
 			c("sfc_GEOMETRY", "sfc")
@@ -155,21 +165,46 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 #' @details if `x` has a `dim` attribute (i.e. is an `array` or `matrix`) then `op` cannot be used.
 #' @export
 "[.sfc" = function(x, i, j, ..., op = st_intersects) {
-	precision = st_precision(x)
-	crs = st_crs(x)
-	dim = if (length(x)) class(x[[1]])[1] else "XY"
-	if (!missing(i) && (inherits(i, c("sf", "sfc", "sfg"))))
+
+	if (!missing(i) && (inherits(i, "sf") || inherits(i, "sfc") || inherits(i, "sfg")))
 		i = lengths(op(x, i, ...)) != 0
-	if (!is.null(dim(x))) # x is an array with geometries
-		st_sfc(NextMethod(), crs = crs, precision = precision, dim = dim)
-	else # x is a list but avoid NextMethod() to allow j, ... to be specified & ignored:
-		st_sfc(unclass(x)[i], crs = crs, precision = precision, dim = dim)
+	if (inherits(x, "sfc_POINT") && !is.null(attr(x, "points")))
+		st_sfc(restore_points(x, i), crs = st_crs(x), precision = st_precision(x),
+			dim = if(length(x)) class(x[[1]])[1] else "XY")
+	else {
+		precision = st_precision(x)
+		crs = st_crs(x)
+		dim = if (length(x)) class(x[[1]])[1] else "XY"
+		if (!is.null(dim(x))) # x is an array with geometries
+			st_sfc(NextMethod(), crs = crs, precision = precision, dim = dim)
+		else # x is a list but avoid NextMethod() to allow j, ... to be specified & ignored:
+			st_sfc(unclass(x)[i], crs = crs, precision = precision, dim = dim)
+	}
 }
 
 #' @export
-"[<-.sfc" = function (x, i, j, ..., value) {
-	if (is.null(value) || inherits(value, "sfg"))
+"[<-.sfc" = function (x, i, value) {
+	if (is.null(value) || inherits(value, "sfg")) {
+		is_points = inherits(value, "POINT")
 		value = list(value)
+	} else
+		is_points = inherits(value, "sfc_POINT")
+	if (inherits(x, "sfc_POINT") && !is.null(attr(x, "points"))) {
+		if (is_points) {
+			repl = if (!is.null(pts <- attr(value, "points")))
+					pts
+				else
+					do.call(rbind, value)
+			attr(x, "points")[i, ] = repl
+			return(structure(x, 
+							 n_empty = sum(is.na(attr(x, "points")[,1])), 
+							 bbox = bbox.pointmatrix(attr(x, "points"))
+							 )) # RETURNS
+		} else
+			x = x[] # realize
+	} 
+	value = value[] # realize in case sfc_POINT while x is not 
+	x = unclass(x) # becomes a list, but keeps attributes
 	ret = st_sfc(NextMethod(), recompute_bbox = TRUE)
 	structure(ret, n_empty = sum(sfc_is_empty(ret)))
 }
@@ -188,8 +223,17 @@ c.sfc = function(..., recursive = FALSE) {
 		else
 			c(ucls, "sfc")
 
+	points_attr = sapply(lst, function(x) !is.null(attr(x, "points")))
+	if (any(points_attr) && !all(points_attr)) {
+		for (i in seq_along(lst))
+			lst[[i]] = lst[[i]][] # realize
+		points_attr = FALSE
+	}
+
 	ret = unlist(lapply(lst, unclass), recursive = FALSE)
 	attributes(ret) = attributes(lst[[1]]) # crs
+	if (all(points_attr))
+		attr(ret, "points") = do.call(rbind, lapply(lst, attr, "points"))
 	class(ret) = cls
 	attr(ret, "bbox") = compute_bbox(ret) # dispatch on class
 	attr(ret, "n_empty") = sum(sapply(lst, attr, which = "n_empty"))
@@ -518,8 +562,11 @@ st_coordinates.sfc = function(x, ...) {
 		return(matrix(nrow = 0, ncol = 2))
 
 	ret = switch(class(x)[1],
-		sfc_POINT = matrix(unlist(x, use.names = FALSE), nrow = length(x), byrow = TRUE,
-		     dimnames = NULL),
+		sfc_POINT = if (is.null(attr(x, "points"))) {
+					matrix(unlist(x, use.names = FALSE), nrow = length(x), byrow = TRUE, dimnames = NULL)
+				} else {
+					attr(x, "points")
+				},
 		sfc_MULTIPOINT = ,
 		sfc_LINESTRING = coord_2(x),
 		sfc_MULTILINESTRING = ,
@@ -527,7 +574,10 @@ st_coordinates.sfc = function(x, ...) {
 		sfc_MULTIPOLYGON = coord_4(x),
 		stop(paste("not implemented for objects of class", class(x)[1]))
 	)
-	Dims = class(x[[1]])[1]
+	Dims = if (!is.null(attr(x, "points_dim")))
+			attr(x, "points_dim")
+		else
+			class(x[[1]])[1]
 	ncd = nchar(Dims)
 	colnames(ret)[1:ncd] = vapply(seq_len(ncd), function(i) substr(Dims, i, i), "")
 	ret
@@ -657,4 +707,25 @@ st_is_full.sf = function(x, ...) {
 #' @name st_is_full
 st_is_full.bbox = function(x, ...) {
 	isTRUE(sf_use_s2() && st_is_longlat(x) && all(x == c(-180,-90,180,90)))
+}
+
+#' @export
+`[[.sfc` = function(x, i, j, ..., exaxt = TRUE) {
+	if (inherits(x, "sfc_POINT") && !is.null(attr(x, "points")))
+		restore_point(x, i)
+	else
+		NextMethod()
+}
+
+restore_point = function(x, i = TRUE) {
+	restore_points(x, i)[[1]]
+}
+
+restore_points = function(x, i = TRUE) {
+	a = attributes(x)
+	points = a$points[i, , drop=FALSE]
+	structure(points_rcpp(points, a$points_dim),
+		n_empty = 0L, precision = a$precision, crs = a$crs,
+		bbox = bbox.pointmatrix(points), class = a$class, 
+		points = NULL, points_dim = NULL)
 }

@@ -258,6 +258,8 @@ c.sfg = function(..., recursive = FALSE, flatten = TRUE) {
 	Paste0 = function(lst) lapply(lst, unclass)
 	Paste1 = function(lst) do.call(c, lapply(lst, unclass))
 	lst = list(...)
+	if (length(lst) && is.null(lst[[1]]))
+		stop("to combine POINTs into MULTIPOINT, use st_combine(), or realize them first using x[]")
 	if (flatten) {
 		cls = vapply(lst, function(x) class(x)[2], "")
 		ucls = unique(cls)
