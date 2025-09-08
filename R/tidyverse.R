@@ -43,8 +43,14 @@ dplyr_reconstruct.sf = function(data, template) {
 #' }
 filter.sf <- function(.data, ..., .dots) {
 	agr = st_agr(.data)
+	g = st_geometry(.data)
 	class(.data) <- setdiff(class(.data), "sf")
-	.re_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"), agr)
+	if (inherits(g, "sfc_POINT") && !is.null(pts <- attr(g, "points"))) {
+		.data[[ attr(.data, "sf_column") ]] = pts
+		st_as_sf(NextMethod(), coords = attr(.data, "sf_column"), agr = agr, remove = FALSE,
+			crs = st_crs(g)) # FIXME: doesn't handle tibble?
+	} else
+		.re_sf(NextMethod(), sf_column_name = attr(.data, "sf_column"), agr)
 }
 
 #' @name tidyverse
@@ -566,6 +572,8 @@ nest.sf = function(.data, ...) {
 	if (!requireNamespace("tidyr", quietly = TRUE))
 		stop("tidyr required: install first?")
 
+	if (inherits(g <- st_geometry(.data), "sfc_POINT") && !is.null(attr(g, "points")))
+		st_geometry(.data) = g[] # realize
 	class(.data) <- setdiff(class(.data), "sf")
 	ret = tidyr::nest(.data, ...)
 	lst = which(sapply(ret, inherits, "list"))[1]
@@ -655,7 +663,7 @@ type_sum.sfc <- function(x, ...) {
 
 #' @rdname tibble
 obj_sum.sfc <- function(x) {
-	vapply(x, function(sfg) format(sfg, width = 15L), "")
+	vapply(x[], function(sfg) format(sfg, width = 15L), "")
 }
 
 #' @rdname tibble

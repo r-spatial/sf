@@ -1,6 +1,6 @@
 
-R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
-Copyright (C) 2019 The R Foundation for Statistical Computing
+R version 4.2.2 Patched (2022-11-10 r83330) -- "Innocent and Trusting"
+Copyright (C) 2022 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -23,7 +23,7 @@ Type 'q()' to quit R.
 + 	class(wkb) = "WKB"
 + 	# print(wkb)
 + 	y = st_as_sfc(wkb, EWKB = EWKB, pureR = pureR)
-+ 	a = all.equal(x, y)
++ 	a = all.equal(x[], y[]) # realize both
 + 	if (length(a) == 1 && is.logical(a) && a)
 + 		TRUE
 + 	else {
@@ -99,4 +99,4 @@ POINT (0 0)
 > 
 > proc.time()
    user  system elapsed 
-  0.505   0.036   0.532 
+  1.022   0.741   0.874 

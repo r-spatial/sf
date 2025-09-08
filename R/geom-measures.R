@@ -210,6 +210,7 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE,
 				else
 					CPL_geos_dist(x, y, which, par)
 			}
+		d[is.nan(d)] = NA_real_
 		if (!is.null(u <- st_crs(x)$ud_unit))
 			units(d) = u
 		d
@@ -258,7 +259,7 @@ st_line_project = function(line, point, normalized = FALSE) {
 		is.logical(normalized), length(normalized) == 1,
 		st_crs(line) == st_crs(point))
 	line = st_cast(line, "LINESTRING")
-	point = st_cast(point, "POINT")
+	point = st_cast(point[], "POINT")
 	if (isTRUE(st_is_longlat(line)))
 		message_longlat("st_project_point")
 	recycled = recycle_common(list(line, point))

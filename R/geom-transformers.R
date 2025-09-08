@@ -536,13 +536,13 @@ st_minimum_bounding_circle.sf = function(x, ...) {
 #'  n = 100
 #'  pts = st_as_sf(data.frame(matrix(runif(n), , 2), id = 1:(n/2)), coords = c("X1", "X2"))
 #'  # compute Voronoi polygons:
-#'  pols = st_collection_extract(st_voronoi(do.call(c, st_geometry(pts))))
+#'  pols = st_collection_extract(st_voronoi(st_combine(pts)))
 #'  # match them to points:
 #'  pts_pol = st_intersects(pts, pols)
 #'  pts$pols = pols[unlist(pts_pol)] # re-order
 #'  if (isTRUE(try(compareVersion(sf_extSoftVersion()["GEOS"], "3.12.0") > -1,
 #'    silent = TRUE))) {
-#'    pols_po = st_collection_extract(st_voronoi(do.call(c, st_geometry(pts)),
+#'    pols_po = st_collection_extract(st_voronoi(st_combine(st_geometry(pts)),
 #'      point_order = TRUE)) # GEOS >= 3.12 can preserve order of inputs
 #'    pts_pol_po = st_intersects(pts, pols_po)
 #'    print(all(unlist(pts_pol_po) == 1:(n/2)))
@@ -821,8 +821,14 @@ st_segmentize.sf = function(x, dfMaxLength, ...) {
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' st_combine(nc)
-st_combine = function(x)
-	st_sfc(do.call(c, st_geometry(x)), crs = st_crs(x)) # flatten/merge
+st_combine = function(x) {
+	x = st_geometry(x)
+	if (inherits(x, "sfc_POINT") && !is.null(pts <- attr(x, "points"))) {
+		mp = structure(list(st_multipoint(pts, attr(x, "point_dim"))), bbox = st_bbox(x))
+		st_sfc(mp, crs = st_crs(x))
+	} else
+		st_sfc(do.call(c, x), crs = st_crs(x)) # flatten/merge
+}
 
 # x: object of class sf
 # y: object of class sf or sfc

@@ -46,24 +46,31 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 		else
 			x$geometry = st_as_sfc(as.character(x[[wkt]]))
 	} else if (! missing(coords)) {
-		cc = as.data.frame(lapply(x[coords], as.numeric))
-		if (na.fail && anyNA(cc))
-			stop("missing values in coordinates not allowed")
-		# classdim = getClassDim(rep(0, length(coords)), length(coords), dim, "POINT")
+		if (length(coords) == 1) {
+			stopifnot(is.matrix(x[[coords]]), is.numeric(x[[coords]]))
+			cc = x[[coords]]
+		} else {
+			if (length(coords) == 2)
+				dim = "XY"
+			stopifnot(length(coords) == nchar(dim), dim %in% c("XY", "XYZ", "XYZM", "XYM"))
+			cc = do.call(cbind, lapply(x[coords], as.numeric))
+			if (na.fail && anyNA(cc))
+				stop("missing values in coordinates not allowed")
+		}
+		dimnames(cc) = NULL
 		if (is.null(sf_column_name))
 			sf_column_name = "geometry"
+
 		x[[sf_column_name]] = if (nchar(dim) < 4 && ncol(cc) == 4) { # create POLYGONs:
 				fn = function(x) st_as_sfc(st_bbox(c(xmin = x[[1]], ymin = x[[2]], xmax = x[[3]], ymax = x[[4]])))
 				do.call(c, apply(as.matrix(cc), 1, fn))
 			} else { # points:
-				structure( points_rcpp(as.matrix(cc), dim),
+				structure(vector("list", length = nrow(cc)),
+				points = cc,
+				points_dim = dim,
 				n_empty = 0L, precision = 0, crs = NA_crs_,
-				bbox = structure(
-					c(xmin = min(cc[[1]], na.rm = TRUE),
-					ymin = min(cc[[2]], na.rm = TRUE),
-					xmax = max(cc[[1]], na.rm = TRUE),
-					ymax = max(cc[[2]], na.rm = TRUE)), class = "bbox"),
-				class =  c("sfc_POINT", "sfc" ), names = NULL)
+				bbox = bbox.pointmatrix(cc),
+				class = c("sfc_POINT", "sfc"), names = NULL)
 			}
 
 		if (remove) {
@@ -430,9 +437,10 @@ print.sf = function(x, ..., n = getOption("sf_max_print", default = 10)) {
 		app = paste0(app, "\n", "Active geometry column: ", attr(x, "sf_column"))
 	print(st_geometry(x), n = 0, what = "Simple feature collection with", append = app)
 	if (n > 0) {
-		if (inherits(x, c("tbl_df", "tbl")))
+		if (inherits(x, c("tbl_df", "tbl"))) {
+			st_geometry(x) = x[[attr(x, "sf_column")]][] # note the extra []: this reloads points
 			NextMethod()
-		else {
+		} else {
 			y <- x
 			if (nrow(y) > n) {
 				cat(paste("First", n, "features:\n"))

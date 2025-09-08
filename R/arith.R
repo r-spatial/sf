@@ -133,6 +133,11 @@ Ops.sfc <- function(e1, e2) {
 	if (length(e1) == 0) # empty set
 		return(e1)
 
+	if (inherits(e1, "sfc")) # realize
+		e1 = e1[]
+	if (inherits(e2, "sfc"))
+		e2 = e2[]
+
 	if (is.numeric(e2) && !is.matrix(e2) && length(e2) <= 2 && .Generic %in% c("+", "-")) {
 		if (.Generic == "-")
 			e2 <- -e2

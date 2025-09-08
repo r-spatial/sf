@@ -36,7 +36,12 @@ rbind.sf = function(..., deparse.level = 1) {
 		else
 			NULL
 	chk_equal_crs(dots)
-	ret = st_sf(rbind.data.frame(...), crs = st_crs(dots[[1]]), sf_column_name = sf_column)
+	crs0 = st_crs(dots[[1]])
+	for (i in seq_along(dots)) {
+		if (all(sapply(unclass(st_geometry(dots[[i]])), is.null)))
+			st_geometry(dots[[i]]) = st_geometry(dots[[i]])[] # realize
+	}
+	ret = st_sf(do.call(rbind.data.frame, dots), crs = crs0, sf_column_name = sf_column)
 	st_geometry(ret) = st_sfc(st_geometry(ret)) # might need to reclass to GEOMETRY
 	bb = do.call(rbind, lapply(dots, st_bbox))
 	bb = bb_wrap(c(min(bb[,1L], na.rm = TRUE), min(bb[,2L], na.rm = TRUE),

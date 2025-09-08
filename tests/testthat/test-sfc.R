@@ -120,10 +120,17 @@ test_that("st_is_longlat warns on invalid bounding box", {
 	expect_warning(st_is_longlat(st_sfc(st_point(c(0,-95)), crs = 4326)))
 })
 
+test_that("value replacement works for sfc_POINT",{
+	pts1<-st_geometry(st_as_sf(data.frame(x=1:3,y=1:3), coords = c("x","y")))
+	pts2<-st_geometry(st_as_sf(data.frame(x=4:5,y=4:5), coords = c("x","y")))
+	expect_identical(replace(pts1[],2:3,pts2), replace(pts1[],2:3,pts2[]))
+	expect_identical(replace(pts1,2:3,pts2[])[], replace(pts1[],2:3,pts2[]))
+	expect_identical(replace(pts1,2:3,pts2)[], replace(pts1[],2:3,pts2[]))
+	expect_identical(st_bbox(replace(pts1,2:3,pts2)),
+					 st_bbox(replace(pts1[],2:3,pts2[])))# check if bbox is correct without realization
+})
 test_that("bounding box is flipped when geometry is flipped", {
 	foo <- st_bbox(c(xmin = 0, xmax = 100, ymin = 0, ymax = 200)) |> st_as_sfc()
 	bar <- foo * matrix(c(1,0,0,-1), nrow = 2)
 	expect_equal(st_bbox(bar), st_bbox(c(xmin=0, ymin=-200, xmax=100, ymax=0)))
 })
-
-
