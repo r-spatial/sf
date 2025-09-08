@@ -47,6 +47,7 @@
     <li><a class="dropdown-item" href="../articles/sf7.html">7. Spherical geometry in sf using s2geometry</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="external-link nav-link" href="https://r-spatial.org/book/">Book</a></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -329,8 +330,8 @@ are found <a href="https://r-spatial.github.io/mapview/" class="external-link">h
 <p>An example is obtained by</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-spatial/mapview" class="external-link">mapview</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/mapview/man/mapviewOptions.html" class="external-link">mapviewOptions</a></span><span class="op">(</span>fgb <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># needed when creating web pages</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/mapview/man/mapView.html" class="external-link">mapview</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="st">"BIR74"</span><span class="op">]</span>, col.regions <span class="op">=</span> <span class="fu"><a href="../reference/plot.html">sf.colors</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span>, fgb <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://r-spatial.github.io/mapview/reference/mapviewOptions.html" class="external-link">mapviewOptions</a></span><span class="op">(</span>fgb <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># needed when creating web pages</span></span>
+<span><span class="fu"><a href="https://r-spatial.github.io/mapview/reference/mapView.html" class="external-link">mapview</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="st">"BIR74"</span><span class="op">]</span>, col.regions <span class="op">=</span> <span class="fu"><a href="../reference/plot.html">sf.colors</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span>, fgb <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>gives a map which is interactive: you can zoom and pan, and query
 features by clicking on them.</p>
 </div>
