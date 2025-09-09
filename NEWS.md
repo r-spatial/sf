@@ -1,5 +1,7 @@
 # version 1.0-22
 
+* `unique.sfc()` added; #2546
+
 * for geodetic coordinates, `st_perimeter()` uses ellipsoid if `sf_use_s2()` is `FALSE`; #2541
 
 * `st_as_sf.owin()` and `st_as_sfc.owin()` no longer ignore `crs` argument; #2532

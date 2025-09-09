@@ -658,3 +658,8 @@ st_is_full.sf = function(x, ...) {
 st_is_full.bbox = function(x, ...) {
 	isTRUE(sf_use_s2() && st_is_longlat(x) && all(x == c(-180,-90,180,90)))
 }
+
+#' @export
+unique.sfc = function(x, ...) {
+	st_sfc(unique(unclass(x),...), crs = st_crs(x), precision = st_precision(x))
+}
