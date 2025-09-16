@@ -564,11 +564,10 @@ st_voronoi.sfc = function(x, envelope = st_polygon(), dTolerance = 0.0, bOnlyEdg
 	if (compareVersion(CPL_geos_version(), "3.5.0") > -1) {
 		if (isTRUE(st_is_longlat(x)))
 			warning("st_voronoi does not correctly triangulate longitude/latitude data")
-		if (compareVersion(CPL_geos_version(), "3.12.0") > -1) {
-			bOnlyEdges = as.integer(bOnlyEdges)
-			if (point_order) bOnlyEdges = 2L # GEOS enum GEOS_VORONOI_PRESERVE_ORDER
-		} else {
-			if (point_order) 
+		if (point_order) {
+			if (compareVersion(CPL_geos_version(), "3.12.0") > -1)
+				bOnlyEdges = 2L # GEOS enum GEOS_VORONOI_PRESERVE_ORDER
+			else
 				warning("Point order retention not supported for GEOS ", CPL_geos_version())
 		}
 		st_sfc(CPL_geos_voronoi(x, st_sfc(envelope), dTolerance = dTolerance,
