@@ -37,7 +37,7 @@ resampling_method = function(option = "near") {
 #' @seealso \link{gdal_addo} for adding overlays to a raster file; \link{st_layers} to query geometry type(s) and crs from layers in a (vector) data source
 #' @examples
 #'
-#' if (sf_extSoftVersion()["GDAL"] > "2.1.0") {
+#' if (compareVersion(sf_extSoftVersion()["GDAL"], "2.1.0") == 1) {
 #' # info utils can be used to list information about a raster
 #' # dataset. More info: https://gdal.org/programs/gdalinfo.html
 #' in_file <- system.file("tif/geomatrix.tif", package = "sf")

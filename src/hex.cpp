@@ -11,7 +11,7 @@ inline unsigned char char2int(char c) {
 	return '0'; // never reached, satisfy -Wreturn-type #nocov
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx) {
 // convert hexadecimal string into a raw vector:
 	Rcpp::List output(cx.size());
@@ -31,7 +31,7 @@ Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx) {
 	return output;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::CharacterVector CPL_raw_to_hex(Rcpp::RawVector raw) {
 // convert a raw vector into hexadecimal string:
 	std::vector<char> str(raw.size() * 2 + 1);

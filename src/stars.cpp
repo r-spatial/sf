@@ -46,7 +46,7 @@ List get_band_meta_data(GDALDataset *poDataset) {
 	return ret;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 CharacterVector CPL_get_metadata(CharacterVector obj, CharacterVector domain_item,
 		CharacterVector options) {
 
@@ -58,7 +58,7 @@ CharacterVector CPL_get_metadata(CharacterVector obj, CharacterVector domain_ite
 	return ret;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 List CPL_get_crs(CharacterVector obj, CharacterVector options) {
 	List ret(4);
 	GDALDatasetH ds = GDALOpenEx(obj[0], GDAL_OF_RASTER | GDAL_OF_READONLY, NULL, NULL,
@@ -88,7 +88,7 @@ List CPL_get_crs(CharacterVector obj, CharacterVector options) {
 
 	return ret;
 }
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 NumericVector CPL_inv_geotransform(NumericVector gt_r) {
 	if (gt_r.size() != 6)
 		stop("wrong length geotransform"); // #nocov
@@ -282,7 +282,7 @@ List get_rat(GDALRasterAttributeTable *tbl) {
 	return t;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVector driver,
 		bool read_data, NumericVector NA_value, List RasterIO_parameters, double max_cells) {
 // reads and returns data set metadata, and adds data array if read_data is true, or less 
@@ -491,7 +491,7 @@ List CPL_read_gdal(CharacterVector fname, CharacterVector options, CharacterVect
 	return ReturnList;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driver,
 		CharacterVector options, CharacterVector Type, IntegerVector dims, IntegerVector from,
 		NumericVector gt, CharacterVector p4s, NumericVector na_val, NumericVector scale_offset,
@@ -527,6 +527,10 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 		eType = GDT_UInt32; // #nocov
 	else if (Type[0] == "Int16")
 		eType = GDT_Int32; // #nocov
+#if GDAL_VERSION_NUM >= 3110000
+	else if (Type[0] == "Float16")
+		eType = GDT_Float16; // #nocov
+#endif
 	else if (Type[0] == "Float32")
 		eType = GDT_Float32;
 	else if (Type[0] == "Float64") // #nocov
@@ -742,7 +746,7 @@ double get_bilinear(GDALRasterBand *poBand, double Pixel, double Line,
 				pixels[3] * dX     * dY;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy, CharacterVector interpolate) {
 	// mostly taken from gdal/apps/gdallocationinfo.cpp
 
@@ -822,7 +826,7 @@ NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy, CharacterVect
 	return ret;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 void CPL_create(CharacterVector file, IntegerVector nxy, NumericVector value, CharacterVector wkt,
 				NumericVector xlim, NumericVector ylim) {
 //

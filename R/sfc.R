@@ -64,19 +64,19 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 	dims_and_types = sfc_unique_sfg_dims_and_types(lst)
 	
 	cls = if (length(lst) == 0) # empty set: no geometries read
-		c("sfc_GEOMETRY", "sfc")
-	else {
-		# class: do we have a mix of geometry types?
-		single = if (!is.null(attr(lst, "single_type"))) # set by CPL_read_wkb:
-				attr(lst, "single_type")
+			c("sfc_GEOMETRY", "sfc")
+		else {
+			# class: do we have a mix of geometry types?
+			single = if (!is.null(attr(lst, "single_type"))) # set by CPL_read_wkb:
+					attr(lst, "single_type")
+				else
+					length(dims_and_types[[2]]) == 1L
+			attr(lst, "single_type") = NULL # clean up
+			if (single)
+				c(paste0("sfc_", dims_and_types[[2]][1]), "sfc")
 			else
-				length(dims_and_types[[2]]) == 1L
-		attr(lst, "single_type") = NULL # clean up
-		if (single)
-			c(paste0("sfc_", dims_and_types[[2]][1]), "sfc")
-		else
-			c("sfc_GEOMETRY", "sfc")    # the mix
-	}
+				c("sfc_GEOMETRY", "sfc")    # the mix
+		}
 
 	if (any(is_null)) {
 		if (missing(dim)) {
@@ -657,4 +657,9 @@ st_is_full.sf = function(x, ...) {
 #' @name st_is_full
 st_is_full.bbox = function(x, ...) {
 	isTRUE(sf_use_s2() && st_is_longlat(x) && all(x == c(-180,-90,180,90)))
+}
+
+#' @export
+unique.sfc = function(x, ...) {
+	st_sfc(unique(unclass(x),...), crs = st_crs(x), precision = st_precision(x))
 }

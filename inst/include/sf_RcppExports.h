@@ -33,7 +33,6 @@ namespace sf {
         }
         RObject rcpp_result_gen;
         {
-            RNGScope RCPP_rngScope_gen;
             rcpp_result_gen = p_CPL_read_wkb(Shield<SEXP>(Rcpp::wrap(wkb_list)), Shield<SEXP>(Rcpp::wrap(EWKB)), Shield<SEXP>(Rcpp::wrap(spatialite)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
@@ -54,7 +53,6 @@ namespace sf {
         }
         RObject rcpp_result_gen;
         {
-            RNGScope RCPP_rngScope_gen;
             rcpp_result_gen = p_CPL_write_wkb(Shield<SEXP>(Rcpp::wrap(sfc)), Shield<SEXP>(Rcpp::wrap(EWKB)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))

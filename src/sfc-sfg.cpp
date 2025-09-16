@@ -3,7 +3,7 @@ using namespace Rcpp;
 
 #include <unordered_set>
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 LogicalVector sfc_is_null(List sfc) {
 	LogicalVector out(sfc.size());
 	
@@ -22,7 +22,7 @@ LogicalVector sfc_is_null(List sfc) {
 	return out;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 List sfc_unique_sfg_dims_and_types(List sfc) {
 	if (sfc.size() == 0) {
 		return List::create(
@@ -49,6 +49,9 @@ List sfc_unique_sfg_dims_and_types(List sfc) {
 			class_dim.insert("XYZM");
 		}
 		
+		if (!Rf_inherits(item, "sfg"))
+			stop("object(s) should be of class 'sfg'");
+
 		if (Rf_inherits(item, "POINT")) {
 			class_type.insert("POINT");
 			continue;
@@ -90,7 +93,7 @@ List sfc_unique_sfg_dims_and_types(List sfc) {
 		_["class_type"] = class_type_chr);
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 LogicalVector sfc_is_empty(List sfc) {
 	LogicalVector out(sfc.size());
 	
@@ -135,7 +138,7 @@ LogicalVector sfc_is_empty(List sfc) {
 	return out;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 LogicalVector sfc_is_full(List sfc) {
 	LogicalVector out(sfc.size());
 	
@@ -155,7 +158,7 @@ LogicalVector sfc_is_full(List sfc) {
 	return out;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 List points_cpp(NumericMatrix pts, CharacterVector gdim = "XY") {
 	int n = pts.nrow();
 	List out(n);

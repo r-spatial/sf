@@ -302,7 +302,8 @@ gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", 
 		else
 			character(0)
 
-	pol = CPL_polygonize(file, mask_name, "GTiff", "Memory", "foo", options, 0, 
+	mem = ifelse(compareVersion(sf_extSoftVersion()["GDAL"], "3.11.0") >= 0, "MEM", "Memory")
+	pol = CPL_polygonize(file, mask_name, "GTiff", mem, "foo", options, 0, 
 		contour_options, use_contours, use_integer)
 	out = process_cpl_read_ogr(pol, quiet = TRUE)
 	names(out)[1] = names(x)[1]

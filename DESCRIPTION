@@ -1,5 +1,5 @@
 Package: sf
-Version: 1.0-20
+Version: 1.0-22
 Title: Simple Features for R
 Authors@R:
     c(person(given = "Edzer",
@@ -48,10 +48,10 @@ Authors@R:
              comment = c(ORCID = "0000-0002-9415-4582"))
 			 )
 Description: Support for simple feature access, a standardized way to
-    encode and analyze spatial vector data. Binds to 'GDAL' <doi:
-    10.5281/zenodo.5884351> for reading and writing data, to 'GEOS'
-    <doi: 10.5281/zenodo.11396894> for geometrical operations,
-    and to 'PROJ' <doi: 10.5281/zenodo.5884394> for projection
+    encode and analyze spatial vector data. Binds to 'GDAL' 
+	<doi:10.5281/zenodo.5884351> for reading and writing data, to 'GEOS'
+    <doi:10.5281/zenodo.11396894> for geometrical operations,
+    and to 'PROJ' <doi:10.5281/zenodo.5884394> for projection
     conversions and datum transformations. Uses by default the 's2'
     package for geometry operations on geodetic (long/lat degree)
 	coordinates.
@@ -101,7 +101,7 @@ Suggests:
     spatstat.random, 
     spatstat.linnet, 
     spatstat.utils,
-    stars (>= 0.2-0),
+    stars (>= 0.6-0),
     terra,
     testthat (>= 3.0.0),
     tibble (>= 1.4.1),
@@ -115,7 +115,7 @@ LinkingTo:
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 2
 Config/needs/coverage: XML

@@ -400,7 +400,7 @@ int native_endian(void) {
 	return (int) *cp;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_read_wkb(Rcpp::List wkb_list, bool EWKB = false, bool spatialite = false) {
 	Rcpp::List output(wkb_list.size());
 
@@ -651,7 +651,7 @@ void write_data(std::ostringstream& os, Rcpp::List sfc, int i = 0, bool EWKB = f
 	}
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false) {
 
 	double precision = sfc.attr("precision");

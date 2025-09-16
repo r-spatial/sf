@@ -76,7 +76,7 @@ void transform_bbox(SEXP &feature, SEXP &value, int mult) {
 	}
 }
 
-//[[Rcpp::export]]
+//[[Rcpp::export(rng=false)]]
 SEXP opp_sfc(SEXP geom, SEXP value, SEXP mult, SEXP crs) {
 	SEXP new_geom = PROTECT(Rf_duplicate(geom));
 
@@ -90,7 +90,7 @@ SEXP opp_sfc(SEXP geom, SEXP value, SEXP mult, SEXP crs) {
 	return new_geom;
 }
 
-//[[Rcpp::export]]
+//[[Rcpp::export(rng=false)]]
 SEXP normalize_sfc(SEXP geom, SEXP min, SEXP range, SEXP crs) {
 	SEXP new_geom = PROTECT(Rf_duplicate(geom));
 

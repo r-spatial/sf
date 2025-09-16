@@ -5,7 +5,7 @@
 
 #include "gdal_sf_pkg.h"
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::NumericVector CPL_area(Rcpp::List sfc) { 
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
 	Rcpp::NumericVector out(sfc.length());
@@ -29,7 +29,7 @@ Rcpp::NumericVector CPL_area(Rcpp::List sfc) {
 	return out;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::IntegerVector CPL_gdal_dimension(Rcpp::List sfc, bool NA_if_empty = true) {
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
 	Rcpp::IntegerVector out(sfc.length());
@@ -44,7 +44,7 @@ Rcpp::IntegerVector CPL_gdal_dimension(Rcpp::List sfc, bool NA_if_empty = true) 
 	return out;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::NumericVector CPL_length(Rcpp::List sfc) { 
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
 	Rcpp::NumericVector out(sfc.length());
@@ -80,7 +80,7 @@ Rcpp::NumericVector CPL_length(Rcpp::List sfc) {
 	return out;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_gdal_segmentize(Rcpp::List sfc, double dfMaxLength = 0.0) {
 
 	if (dfMaxLength <= 0.0)
@@ -94,7 +94,7 @@ Rcpp::List CPL_gdal_segmentize(Rcpp::List sfc, double dfMaxLength = 0.0) {
 	return ret;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_gdal_linestring_sample(Rcpp::List sfc, Rcpp::List distLst) {
 	if (sfc.size() != distLst.size())
 		Rcpp::stop("sfc and dist should have equal length"); // #nocov

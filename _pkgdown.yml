@@ -45,3 +45,11 @@ reference:
     - sf_extSoftVersion
     - sf_project
     
+navbar:
+  structure:
+    left:  [reference, articles, book, news]
+    right: [search, github]
+  components:
+    book:
+      text: Book
+      href: https://r-spatial.org/book/

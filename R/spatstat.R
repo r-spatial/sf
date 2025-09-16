@@ -195,7 +195,7 @@ as.owin.sf = function(W, ...) {
 }
 
 #' @export
-st_as_sfc.owin = function(x, ...) {
+st_as_sfc.owin = function(x, ..., crs = NA) {
 # FROM: methods for coercion to Spatial Polygons by Adrian Baddeley, pkg maptools
 	check_spatstat("spatstat.geom")
 	# Check internal spatstat multiplier:
@@ -220,6 +220,7 @@ st_as_sfc.owin = function(x, ...) {
 		w = which.min(st_area(exteriors[ cb[[i]] ]))
 		pieces[[w]] = st_polygon(c(unclass(pieces[[w]]), unclass(holes[[i]])))
 	}
+	st_crs(pieces) = crs
 	if (length(pieces) > 1) # multiple POLYGONs, collapse:
 		st_sfc(do.call(c, pieces))
 	else

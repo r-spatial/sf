@@ -31,7 +31,7 @@ Return Well-known Text representation of simple feature geometry or coordinate r
 }
 \details{
 The returned WKT representation of simple feature geometry conforms to the
-\href{https://www.ogc.org/publications/standard/sfa/}{simple features access} specification and extensions
+\href{https://www.ogc.org/standards/sfa/}{simple features access} specification and extensions
 (known as EWKT, supported by PostGIS and other simple features implementations for addition of
 a SRID to a WKT string).
 }

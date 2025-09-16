@@ -135,7 +135,7 @@ size_t count_features(OGRLayer *poLayer) {
 	return n;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_get_layers(Rcpp::CharacterVector datasource, Rcpp::CharacterVector options, bool do_count = false) {
 
 	if (datasource.size() != 1)
@@ -633,7 +633,7 @@ Rcpp::List CPL_ogr_layer_setup(Rcpp::CharacterVector datasource, Rcpp::Character
 	return Rcpp::List::create(dataset_xptr, layer_xptr);
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer,
 		Rcpp::CharacterVector query,
 		Rcpp::CharacterVector options, bool quiet, Rcpp::NumericVector toTypeUser,

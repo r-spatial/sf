@@ -144,7 +144,7 @@ st_write(nc, "nc1.shp")
 ```
 
 The file name is taken as the data source name. The default for
-the layer name is the basename (filename without path) of the the
+the layer name is the basename (filename without path) of the
 data source name. For this, `st_write()` needs to guess the driver. The
 above command is, for instance, equivalent to:
 

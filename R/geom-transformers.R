@@ -6,7 +6,7 @@
 #' Geometric unary operations on simple feature geometries. These are all generics, with methods for \code{sfg}, \code{sfc} and \code{sf} objects, returning an object of the same class. All operations work on a per-feature basis, ignoring all other features.
 #' @name geos_unary
 #' @param x object of class \code{sfg}, \code{sfc} or \code{sf}
-#' @param dist numeric or object of class `units`; buffer distance for all, or for each of the elements in \code{x}. 
+#' @param dist numeric or object of class `units`; buffer distance(s) for all, or for each of the elements in \code{x}. 
 #' In case \code{x} has geodetic coordinates (lon/lat) and `sf_use_s2()` is `TRUE`, a numeric 
 #' `dist` is taken as distance in meters and a `units` object in `dist` is converted to meters.
 #' In case \code{x} has geodetic coordinates (lon/lat) and `sf_use_s2()` is `FALSE`, a numeric 
@@ -28,8 +28,14 @@
 #' \code{singleSide} parameters only work if the GEOS engine is used (i.e. projected coordinates or
 #' when \code{sf_use_s2()} is set to \code{FALSE}). See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.html}
 #' for details. The \code{max_cells} and \code{min_level} parameters ([s2::s2_buffer_cells()]) work with the S2
-#' engine (i.e. geographic coordinates) and can be used to change the buffer shape (e.g. smoothing). If
-#' a negative buffer returns empty polygons instead of shrinking, set \code{sf_use_s2()} to \code{FALSE}.
+#' engine (i.e. geographic coordinates) and can be used to change the buffer shape (e.g. smoothing). 
+#' The S2 engine returns a polygon _around_ a number of S2 cells that
+#' contain the buffer, and hence will always have an area larger than the
+#' true buffer, depending on `max_cells`, and will be non-smooth when sufficiently zoomed in. 
+#' The GEOS engine will return line segments between points
+#' on the circle, and so will always be _smaller_ than the true
+#' buffer, and be smooth, depending on the number of segments `nQuadSegs`.
+#' A negative `dist` value for geodetic coordinates using S2 does not give a proper (geodetic) buffer.
 #' 
 #' @examples
 #'
@@ -69,6 +75,29 @@
 #'    main = "mitreLimit: 3")
 #' plot(l2, col = 'blue', add = TRUE)
 #' par(op)
+#'
+#' # compare approximation errors depending on S2 or GEOS backend:
+#' # geographic coordinates, uses S2:
+#' x = st_buffer(st_as_sf(data.frame(lon=0,lat=0), coords=c("lon","lat"),crs='OGC:CRS84'), 
+#'       units::as_units(1,"km"))
+#' y = units::set_units(st_area(x), "km^2")
+#' # error: postive, default maxcells = 1000
+#' (units::drop_units(y)-pi)/pi
+#' x = st_buffer(st_as_sf(data.frame(lon=0,lat=0), coords=c("lon","lat"),crs='OGC:CRS84'), 
+#'       units::as_units(1,"km"), max_cells=1e5)
+#' y = units::set_units(st_area(x), "km^2")
+#' # error: positive but smaller:
+#' (units::drop_units(y)-pi)/pi
+#' 
+#' # no CRS set: assumes Cartesian (projected) coordinates
+#' x = st_buffer(st_as_sf(data.frame(lon=0,lat=0), coords=c("lon","lat")), 1)
+#' y = st_area(x)
+#' # error: negative, nQuadSegs default at 30
+#' ((y)-pi)/pi
+#' x = st_buffer(st_as_sf(data.frame(lon=0,lat=0), coords=c("lon","lat")), 1, nQuadSegs = 100)
+#' y = st_area(x)
+#' # error: negative but smaller:
+#' ((y)-pi)/pi
 st_buffer = function(x, dist, nQuadSegs = 30,
 					 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0, singleSide = FALSE, ...)
 	UseMethod("st_buffer")
@@ -101,7 +130,10 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30,
 						 endCapStyle = "ROUND", joinStyle = "ROUND", mitreLimit = 1.0,
 						 singleSide = FALSE, ...) {
 	longlat = isTRUE(st_is_longlat(x))
-	if (longlat && sf_use_s2()) {
+	dist_n = dist
+	if (inherits(dist_n, "units"))
+		dist_n = drop_units(dist_n)
+	if (longlat && sf_use_s2() && all(dist_n >= 0.0)) {
 #		if (!missing(nQuadSegs) || !missing(endCapStyle) || !missing(joinStyle) ||
 #				!missing(mitreLimit) || !missing(singleSide))
 #			warning("all buffer style parameters are ignored; set st_use_s2(FALSE) first to use them")
@@ -138,6 +170,8 @@ st_buffer.sfc = function(x, dist, nQuadSegs = 30,
 			singleSide = rep(as.logical(singleSide), length.out = length(x))
 			if (any(endCapStyle == 2) && any(st_geometry_type(x) == "POINT" | st_geometry_type(x) == "MULTIPOINT"))
 				stop("Flat capstyle is incompatible with POINT/MULTIPOINT geometries") # nocov
+			if (inherits(dist, "units"))
+				dist = drop_units(dist)
 			if (any(dist < 0) && any(st_dimension(x) < 1))
 				stop("Negative dist values may only be used with 1-D or 2-D geometries") # nocov
 
@@ -1200,6 +1234,7 @@ st_line_interpolate = function(line, dist, normalized = FALSE) {
 
 #' @export
 #' @name geos_unary
+#' @details \code{st_exterior_ring} returns the exterior rings of polygons, removing all holes.
 st_exterior_ring = function(x, ...) UseMethod("st_exterior_ring")
 
 #' @export

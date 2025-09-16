@@ -20,24 +20,13 @@ if (file.exists("nc.shp"))
 	file.remove("nc.shp", "nc.dbf", "nc.shx")
 ```
 
-[Simple features](https://en.wikipedia.org/wiki/Simple_Features) or [_simple feature access_](https://www.ogc.org/publications/standard/sfa/) refers to a formal standard (ISO 19125-1:2004) that describes how objects in the real world can be represented in computers, with emphasis on the _spatial_ geometry of these objects. It also describes how such objects can be stored in and retrieved from databases, and which geometrical operations should be defined for them.
+[Simple features](https://en.wikipedia.org/wiki/Simple_Features) or [_simple feature access_](https://www.ogc.org/standards/sfa/) refers to a formal standard (ISO 19125-1:2004) that describes how objects in the real world can be represented in computers, with emphasis on the _spatial_ geometry of these objects. It also describes how such objects can be stored in and retrieved from databases, and which geometrical operations should be defined for them.
 
 The standard is widely implemented in spatial
 databases (such as [PostGIS](https://postgis.net/)), commercial GIS (e.g., [ESRI
 ArcGIS](https://www.esri.com/en-us/home)) and forms the vector data basis for
 libraries such as [GDAL](https://gdal.org/). A subset of
 simple features forms the [GeoJSON](https://geojson.org/) standard.
-
-R has well-supported classes for storing spatial
-data ([sp](https://CRAN.R-project.org/package=sp))
-and interfacing to the above mentioned environments
-([rgdal](https://CRAN.R-project.org/package=rgdal),
-[rgeos](https://CRAN.R-project.org/package=rgeos)), but has so far lacked a
-complete implementation of simple features, making conversions
-at times convoluted, inefficient or incomplete. The package
-[sf](https://github.com/r-spatial/sf) tries to fill this gap, and aims
-at succeeding [sp](https://CRAN.R-project.org/package=sp) in the
-long term.
 
 This vignette:
 
@@ -72,7 +61,7 @@ features are based on 2D geometry with linear interpolation between
 vertices._"  We will see soon that the same standard will extend
 its coverage beyond 2D and beyond linear interpolation. Here, we
 take simple features as the data structures and operations described
-in the [standard](https://www.ogc.org/publications/standard/sfa/).
+in the [standard](https://www.ogc.org/standards/sfa/).
 
 ## Dimensions
 
@@ -98,16 +87,16 @@ The following seven simple feature types are the most common, and are for instan
 | type | description                                        |
 | ---- | -------------------------------------------------- |
 | `POINT` | zero-dimensional geometry containing a single point |
-| `LINESTRING` | sequence of points connected by straight, non-self intersecting line pieces; one-dimensional geometry |
+| `LINESTRING` | sequence of points connected by straight, non-self intersecting line segments; one-dimensional geometry |
 | `POLYGON` | geometry with a positive area (two-dimensional); sequence of points form a closed, non-self intersecting ring; the first ring denotes the exterior ring, zero or more subsequent rings denote holes in this exterior ring |
 | `MULTIPOINT` | set of points; a MULTIPOINT is simple if no two Points in the MULTIPOINT are equal |
 | `MULTILINESTRING` | set of linestrings |
 | `MULTIPOLYGON` | set of polygons |
 | `GEOMETRYCOLLECTION` | set of geometries of any type except GEOMETRYCOLLECTION |
 
-Each of the geometry types can also be a (typed) empty set, containing zero coordinates (for `POINT` the standard is not clear how to represent the empty geometry). Empty geometries can be thought of being the analogue to missing (`NA`) attributes, NULL values or empty lists.
+Each of the geometry types can also be a (typed) empty set, containing zero coordinates (for `POINT` the standard is not clear how to represent the empty geometry). Empty geometries can be thought of being analogues to missing (`NA`) attributes, NULL values or empty lists.
 
-The remaining geometries 10 are rarer, but increasingly find implementations:
+The remaining ten geometries are rare but are increasingly found:
 
 | type | description                                        |
 | ---- | -------------------------------------------------- |
@@ -196,7 +185,7 @@ print(nc[9:15], n = 3)
 ```
 which would give the following output:
 
-![](sf_xfig.png)
+![](sf_fig.png)
 
 In the output we see:
 
@@ -578,38 +567,35 @@ functions are limited to PostGIS.
 
 ## Coordinate reference systems and transformations {#crs}
 
-Coordinate reference systems (CRS) are like measurement units for
-coordinates: they specify which location on Earth a particular
-coordinate pair refers to. We saw above that `sfc` objects
-(geometry list-columns) have two attributes to store a CRS: `epsg`
-and `proj4string`.  This implies that all geometries in a geometry
-list-column must have the same CRS. Both may be `NA`, e.g. in case
-the CRS is unknown, or when we work with local coordinate systems
-(e.g. inside a building, a body, or an abstract space).
+Coordinate reference systems (CRS) are like measurement units
+for coordinates: they specify which location on Earth a particular
+coordinate pair refers to. We saw above that `sfc` objects (geometry
+list-columns) have an attribute of class `crs` that stores the
+CRS. This implies that all geometries in a geometry list-column
+have the same CRS. It may be `NA` in case the CRS is unknown, or
+when we work with local coordinate systems (e.g. inside a building,
+a body, or an abstract space); in that case coordinates are assumed
+to be Cartesian (in case of 2D: defining positions on in a flat
+plane).
 
-`proj4string` is a generic, string-based description of a CRS,
-understood by the [PROJ](https://proj4.org/) library. It defines
+A `crs` object contains two character fields: `input` for the
+name (if existing) or the user-definition of the CRS, and `wkt`
+for the WKT-2 specification; WKT-2 is a standard encoding for
+describing CRS that is used throughout the spatial data science
+industry.  When defining a CRS, a PROJ string may be used that is
+understood by the [PROJ](https://proj.org/) library. It defines
 projection types and (often) defines parameter values for particular
 projections, and hence can cover an infinite amount of different
-projections.  This library (also used by GDAL) provides functions
-to convert or transform between different CRS.  `epsg` is the
-integer ID for a particular, known CRS that can be resolved into a
-`proj4string`. Some `proj4string` values can resolved back into
-their corresponding `epsg` ID, but this does not always work.
+projections. Alternatively, codes like `EPSG:3035` or `OGC:CRS84`
+may be used; these are well-known identifiers of CRS defined in
+the PROJ database.
 
-The importance of having `epsg` values stored with data besides
-`proj4string` values is that the `epsg` refers to particular,
-well-known CRS, whose parameters may change (improve) over time;
-fixing only the `proj4string` may remove the possibility to benefit
-from such improvements, and limit some of the provenance of datasets,
-but may help reproducibility.
-
-Coordinate reference system transformations can be carried out using
+Coordinate reference system transformations are carried out using
 `st_transform()`, e.g. converting longitudes/latitudes in NAD27 to
-web mercator (EPSG:3857) can be done by:
+Web Mercator (EPSG:3857) can be done by:
 
 ```{r}
-nc.web_mercator <- st_transform(nc, 3857)
+nc.web_mercator <- st_transform(nc, "EPSG:3857")
 st_geometry(nc.web_mercator)[[4]][[2]][[1]][1:3,]
 ```
 

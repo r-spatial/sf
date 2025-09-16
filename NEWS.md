@@ -1,4 +1,28 @@
+# version 1.0-22
+
+* `unique.sfc()` added; #2546
+
+* for geodetic coordinates, `st_perimeter()` uses ellipsoid if `sf_use_s2()` is `FALSE`; #2541
+
+* `st_as_sf.owin()` and `st_as_sfc.owin()` no longer ignore `crs` argument; #2532
+
+* clarify approximation errors in `st_buffer()` and how they differ for the GEOS or S2 backends, with examples by David Kaplan @dmkaplan2000; #2528
+
+# version 1.0-21
+
+* `st_crs(..., parameters = TRUE)` returns base geographic CRS as `gcs_crs`; #2524
+
+* loading `sf` no longer initializes the RNG state; see https://github.com/r-quantities/units/issues/409
+
+* fix `st_sample()` on geodetic coordinates; #2515
+
+* use `compareVersion()` consistently to compare GDAL versions; #2512
+
 # version 1.0-20
+
+* `st_buffer()` on geodetic coordinates with negative buffer distance now automatically switches to using GEOS, while giving a warning; #1987
+
+* `st_interpolate_aw()` fixes bug when a GEOMETRYCOLLECTION contains multiple POLYGON structures; found by @mtennekes
 
 * `st_buffer()` for geodetic coordinates allows `max_dist` and `min_level` 
    to be specified by feature; #2488 and https://github.com/r-spatial/s2/pull/264

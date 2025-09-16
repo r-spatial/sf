@@ -342,7 +342,7 @@ Rcpp::LogicalVector get_dense(std::vector<size_t> items, int length) {
 }
 */
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double par = 0.0,
 		std::string pattern = "", bool prepared = false) {
 
@@ -547,7 +547,7 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 	return ret_list;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::CharacterVector CPL_geos_is_valid_reason(Rcpp::List sfc) {
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 
@@ -571,7 +571,7 @@ Rcpp::CharacterVector CPL_geos_is_valid_reason(Rcpp::List sfc) {
 }
 
 // #nocov start - no GEOS 3.8.0 on travis yet
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_geos_make_valid(Rcpp::List sfc, std::string method, bool keep_collapsed) {
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 
@@ -603,7 +603,7 @@ Rcpp::List CPL_geos_make_valid(Rcpp::List sfc, std::string method, bool keep_col
 }
 // #nocov end
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = true) {
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 
@@ -652,7 +652,7 @@ Rcpp::LogicalVector CPL_geos_is_valid(Rcpp::List sfc, bool NA_on_exception = tru
 	return out;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::LogicalVector CPL_geos_is_simple(Rcpp::List sfc) {
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 	Rcpp::LogicalVector out(sfc.length());
@@ -664,7 +664,7 @@ Rcpp::LogicalVector CPL_geos_is_simple(Rcpp::List sfc) {
 	return out;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::LogicalVector CPL_geos_is_empty(Rcpp::List sfc) {
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 	Rcpp::LogicalVector out(sfc.length());
@@ -676,7 +676,7 @@ Rcpp::LogicalVector CPL_geos_is_empty(Rcpp::List sfc) {
 	return out;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_geos_normalize(Rcpp::List sfc) { // #nocov start
 	int dim = 2;
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
@@ -692,7 +692,7 @@ Rcpp::List CPL_geos_normalize(Rcpp::List sfc) { // #nocov start
 	return out;
 } // #nocov end
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_geos_union(Rcpp::List sfc, bool by_feature = false, bool is_coverage = false) {
 
 #ifndef HAVE380
@@ -746,7 +746,7 @@ Rcpp::List CPL_geos_union(Rcpp::List sfc, bool by_feature = false, bool is_cover
 	return out;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_geos_snap(Rcpp::List sfc0, Rcpp::List sfc1, Rcpp::NumericVector tolerance) {
 	int dim = 2;
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
@@ -779,7 +779,7 @@ GEOSGeometry *chkNULL(GEOSGeometry *value) {
 	return value;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
                        Rcpp::NumericVector bufferDist, Rcpp::IntegerVector nQuadSegs,
                        Rcpp::NumericVector dTolerance, Rcpp::LogicalVector preserveTopology,
@@ -913,7 +913,7 @@ Rcpp::List CPL_geos_op(std::string op, Rcpp::List sfc,
 	return ret;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_geos_voronoi(Rcpp::List sfc, Rcpp::List env, double dTolerance = 0.0, int bOnlyEdges = 1) {
 
 	int dim = 2;
@@ -947,7 +947,7 @@ Rcpp::List CPL_geos_voronoi(Rcpp::List sfc, Rcpp::List env, double dTolerance = 
 	return ret;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 
 	using namespace Rcpp; // so that later on the (_,1) works
@@ -1062,7 +1062,7 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 	return ret;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 std::string CPL_geos_version(bool runtime = false, bool capi = false) {
 	if (runtime)
 		return GEOSversion();
@@ -1074,7 +1074,7 @@ std::string CPL_geos_version(bool runtime = false, bool capi = false) {
 	}
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::NumericMatrix CPL_geos_dist(Rcpp::List sfc0, Rcpp::List sfc1,
 		Rcpp::CharacterVector which, double par) {
 	Rcpp::NumericMatrix out = CPL_geos_binop(sfc0, sfc1, Rcpp::as<std::string>(which), par, "", false)[0];
@@ -1090,7 +1090,7 @@ int distance_fn(const void *item1, const void *item2, double *distance, void *us
 	return GEOSDistance_r( (GEOSContextHandle_t) userdata, ((item_g *)item1)->g, ((item_g *)item2)->g, distance);
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::IntegerVector CPL_geos_nearest_feature(Rcpp::List sfc0, Rcpp::List sfc1) {
 	// for every feature in sf0, find the index (1-based) of the nearest feature in sfc1
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
@@ -1135,7 +1135,7 @@ Rcpp::IntegerVector CPL_geos_nearest_feature(Rcpp::List sfc0, Rcpp::List sfc1) {
 }
 #endif // HAVE_361
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_geos_nearest_points(Rcpp::List sfc0, Rcpp::List sfc1, bool pairwise) {
 	int dim = 2;
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
@@ -1166,7 +1166,7 @@ Rcpp::List CPL_geos_nearest_points(Rcpp::List sfc0, Rcpp::List sfc1, bool pairwi
 	return out;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_transpose_sparse_incidence(Rcpp::List m, int n) {
 // transpose a sparse incidence matrix list m that has n columns
 	std::vector<size_t> sizes(n);
@@ -1195,7 +1195,7 @@ Rcpp::List CPL_transpose_sparse_incidence(Rcpp::List m, int n) {
 	return out;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_nary_difference(Rcpp::List sfc) {
 	// initialize objects
 	int dim = 2;
@@ -1266,7 +1266,7 @@ Rcpp::List CPL_nary_difference(Rcpp::List sfc) {
 	return ret;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_nary_intersection(Rcpp::List sfc) {
 	// initialize objects
 	int dim = 2;
@@ -1386,7 +1386,7 @@ Rcpp::List CPL_nary_intersection(Rcpp::List sfc) {
 	return ret;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::NumericVector CPL_line_project(Rcpp::List lines, Rcpp::List points, bool normalized) {
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 	int dim = 2;
@@ -1405,7 +1405,7 @@ Rcpp::NumericVector CPL_line_project(Rcpp::List lines, Rcpp::List points, bool n
 	return ret;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_line_interpolate(Rcpp::List lines, Rcpp::NumericVector dists, bool normalized) {
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 	int dim = 2;

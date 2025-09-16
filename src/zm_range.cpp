@@ -32,7 +32,7 @@ int get_z_position(Rcpp::NumericMatrix& nm) {
 	return 2;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::NumericVector CPL_get_z_range(Rcpp::List sf, int depth) {
 
 	Rcpp::NumericVector bb_na(2);
@@ -100,7 +100,7 @@ Rcpp::NumericVector CPL_get_z_range(Rcpp::List sf, int depth) {
 	return bb;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::NumericVector CPL_get_m_range(Rcpp::List sf, int depth) {
 
 	Rcpp::NumericVector bb_na(2);

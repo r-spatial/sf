@@ -71,16 +71,22 @@ Installing sf from source works under Windows when [Rtools](https://cran.r-proje
 
 ### MacOS
 
-MacOS users are strongly encouraged to install the `sf` binary packages from CRAN, unless they are familiar with compilers, linking, C++ source code, and homebrew.
+MacOS users are strongly encouraged to install the `sf` binary packages from CRAN, unless they are familiar with compilers, linking, C++ source code, and homebrew. If you experience that R tries to install `sf` from source (or otherwise your install fails but you don't understand what is going on) try again by explicitly installing the binary, using
 
-The easiest way to install `gdal` is using Homebrew. Recent versions of Homebrew include a full-featured up-to-date [gdal formula](https://github.com/Homebrew/homebrew-core/blob/master/Formula/g/gdal.rb), which installs `proj` and `gdal` at the same time:
+```r
+install.packages("sf", type = "binary")
+```
+
+The remainder of this section is for those who understand what source installs mean, and imply.
+
+Perhaps the easiest way of an install from source is to first install `gdal` using Homebrew. Recent versions of Homebrew include a full-featured up-to-date [gdal formula](https://github.com/Homebrew/homebrew-core/blob/master/Formula/g/gdal.rb), which installs `proj` and `gdal` at the same time:
 
 ```
 brew install pkg-config
 brew install gdal
 ```
 
-Once gdal is installed, you will be able to install `sf` package from source in R. With the current version of `proj` on homebrew, installation requires additional configuration:
+Once gdal is installed, you may be able to install `sf` package from source in R. With the current version of `proj` on homebrew, installation requires additional configuration:
 
 ```r
 install.packages("sf", type = "source", configure.args = "--with-proj-lib=$(brew --prefix)/lib/")
@@ -91,12 +97,6 @@ Or the development version:
 ```r
 library(remotes)
 install_github("r-spatial/sf", configure.args = "--with-proj-lib=$(brew --prefix)/lib/")
-```
-
-If you are using `sf` and `rgdal` together, it is necessary to install `rgdal` from source using this configuration:
-
-```r
-install.packages("rgdal", type = "source", configure.args = c("--with-proj-lib=$(brew --prefix)/lib/", "--with-proj-include=$(brew --prefix)/include/"))
 ```
 
 Alternatively, [these instructions](https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html) explain how to install gdal using kyngchaos frameworks.
@@ -112,15 +112,15 @@ For Unix-alikes, GDAL (>= 2.0.1), GEOS (>= 3.4.0) and Proj.4 (>= 4.8.0) are requ
 Dependencies for recent versions of Ubuntu (18.04 and later) are available in the official repositories; you can install them with:
 
 ```sh
-apt-get -y update && apt-get install -y  libudunits2-dev libgdal-dev libgeos-dev libproj-dev
+sudo apt -y update && apt install -y libudunits2-dev libgdal-dev libgeos-dev libproj-dev libsqlite3-dev
 ```
 
-However, to get more up-to-date versions of dependencies such as GDAL, we recommend adding the [ubuntugis-unstable](http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/) PPA to the package repositories and installing them as follows:
+However, to get more up-to-date versions of dependencies such as GDAL, GEOS and PROJ we recommend adding the [ubuntugis-unstable](http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/) PPA to the package repositories and installing them as follows:
 
 ```sh
 sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
-sudo apt-get update
-sudo apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev libsqlite0-dev
+sudo apt update
+sudo apt install libudunits2-dev libgdal-dev libgeos-dev libproj-dev libsqlite3-dev
 ```
 
 Adding this PPA is required for installing `sf` on older versions of Ubuntu (e.g. Xenial).

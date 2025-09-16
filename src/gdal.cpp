@@ -67,7 +67,7 @@ void unset_error_handler(void)
     CPLSetErrorHandler((CPLErrorHandler)__err_silent);
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 void CPL_gdal_init()
 {
     CPLSetErrorHandler((CPLErrorHandler)__err_handler);
@@ -77,7 +77,7 @@ void CPL_gdal_init()
 }
 
 // #nocov start
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 void CPL_gdal_cleanup_all()
 {
     OGRCleanupAll();
@@ -85,7 +85,7 @@ void CPL_gdal_cleanup_all()
 }
 // #nocov end
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 const char* CPL_gdal_version(const char* what = "RELEASE_NAME")
 {
 	return GDALVersionInfo(what);
@@ -193,7 +193,7 @@ OGRSpatialReference *OGRSrs_from_crs(Rcpp::List crs) {
 	return dest;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 
 	char *cp = NULL;
@@ -203,8 +203,8 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	if (srs == NULL)
 		Rcpp::stop("crs not found"); // #nocov
 
-	Rcpp::List out(16);
-	Rcpp::CharacterVector names(16);
+	Rcpp::List out(17);
+	Rcpp::CharacterVector names(17);
 	out(0) = Rcpp::NumericVector::create(srs->GetSemiMajor());
 	names(0) = "SemiMajor";
 
@@ -346,6 +346,18 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 		Rcpp::_["orientation"] = orientation);
 	out(15) = axes_df;
 	names(15) = "axes";
+	// base GEOGCRS: https://github.com/r-spatial/sf/issues/2524
+	OGRSpatialReference *base_srs = new OGRSpatialReference;
+	if (base_srs->CopyGeogCSFrom(srs) == OGRERR_NONE) {
+		if (base_srs->exportToWkt(&cp) == OGRERR_NONE) {
+			out(16) = Rcpp::CharacterVector::create(cp);
+			CPLFree(cp);
+		} else
+			out(16) = Rcpp::CharacterVector::create(NA_STRING);
+	} else 
+		out(16) = Rcpp::CharacterVector::create(NA_STRING);
+	names(16) = "gcs_crs";
+	delete base_srs;
 
 	set_error_handler();
 
@@ -370,7 +382,7 @@ int srid_from_crs(Rcpp::List crs) {
 	return(ret_val);
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::LogicalVector CPL_crs_equivalent(Rcpp::List crs1, Rcpp::List crs2) {
 
 	OGRSpatialReference *srs1 = OGRSrs_from_crs(crs1);
@@ -504,7 +516,7 @@ Rcpp::List sfc_from_ogr(std::vector<OGRGeometry *> g, bool destroy = false) {
 	return ret;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_crs_from_input(Rcpp::CharacterVector input) {
 	OGRSpatialReference *ref = new OGRSpatialReference;
 	handle_axis_order(ref);
@@ -519,7 +531,7 @@ Rcpp::List CPL_crs_from_input(Rcpp::CharacterVector input) {
 	return crs;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_roundtrip(Rcpp::List sfc) { // for debug purposes
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
 	for (size_t i = 0; i < g.size(); i++) {
@@ -531,7 +543,7 @@ Rcpp::List CPL_roundtrip(Rcpp::List sfc) { // for debug purposes
 	return sfc_from_ogr(g, true); // destroys g;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_circularstring_to_linestring(Rcpp::List sfc) { // need to pass more parameters?
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
 	std::vector<OGRGeometry *> out(g.size());
@@ -543,7 +555,7 @@ Rcpp::List CPL_circularstring_to_linestring(Rcpp::List sfc) { // need to pass mo
 	return sfc_from_ogr(out, true); // destroys out;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_multisurface_to_multipolygon(Rcpp::List sfc) { // need to pass more parameters?
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
 	std::vector<OGRGeometry *> out(g.size());
@@ -560,7 +572,7 @@ Rcpp::List CPL_multisurface_to_multipolygon(Rcpp::List sfc) { // need to pass mo
 	return sfc_from_ogr(out, true); // destroys out;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_compoundcurve_to_linear(Rcpp::List sfc) { // need to pass more parameters?
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
 	std::vector<OGRGeometry *> out(g.size());
@@ -572,7 +584,7 @@ Rcpp::List CPL_compoundcurve_to_linear(Rcpp::List sfc) { // need to pass more pa
 	return sfc_from_ogr(out, true); // destroys out;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_curve_to_linestring(Rcpp::List sfc) { // need to pass more parameters? #nocov start
 	std::vector<OGRGeometry *> g = ogr_from_sfc(sfc, NULL);
 	std::vector<OGRGeometry *> out(g.size());
@@ -583,7 +595,7 @@ Rcpp::List CPL_curve_to_linestring(Rcpp::List sfc) { // need to pass more parame
 	return sfc_from_ogr(out, true); // destroys out;
 } // #nocov end
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::LogicalVector CPL_can_transform(Rcpp::List src, Rcpp::List dst) {
 	if (src.size() != 2 || dst.size() != 2)
 		return false;
@@ -605,7 +617,7 @@ Rcpp::LogicalVector CPL_can_transform(Rcpp::List src, Rcpp::List dst) {
 		return false;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 		Rcpp::NumericVector AOI, Rcpp::CharacterVector pipeline, bool reverse = false,
 		double desired_accuracy = -1.0, bool allow_ballpark = true) {
@@ -674,7 +686,7 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 	return ret;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::NumericVector CPL_transform_bounds(Rcpp::NumericVector bb, Rcpp::List crs_dst,
 		int densify_pts = 21) {
 
@@ -722,7 +734,7 @@ Rcpp::NumericVector CPL_transform_bounds(Rcpp::NumericVector bb, Rcpp::List crs_
 	return ret;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_wrap_dateline(Rcpp::List sfc, Rcpp::CharacterVector opt, bool quiet = true) {
 
 	std::vector <char *> options = create_options(opt, quiet);
@@ -735,7 +747,7 @@ Rcpp::List CPL_wrap_dateline(Rcpp::List sfc, Rcpp::CharacterVector opt, bool qui
 	return sfc_from_ogr(ret, true); // destroys ret;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_get_gdal_drivers(int dummy) {
 
 	int ndr = GetGDALDriverManager()->GetDriverCount();
@@ -766,7 +778,7 @@ Rcpp::List CPL_get_gdal_drivers(int dummy) {
 		Rcpp::Named("vsi") = vsi_attr);
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_sfc_from_wkt(Rcpp::CharacterVector wkt) {
 	std::vector<OGRGeometry *> g(wkt.size());
 	OGRGeometryFactory f;
@@ -781,13 +793,13 @@ Rcpp::List CPL_sfc_from_wkt(Rcpp::CharacterVector wkt) {
 	return sfc_from_ogr(g, true);
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::LogicalVector CPL_gdal_with_geos() {
 	bool withGEOS = OGRGeometryFactory::haveGEOS();
 	return Rcpp::LogicalVector::create(withGEOS);
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::LogicalVector CPL_axis_order_authority_compliant(Rcpp::LogicalVector authority_compliant) {
 	if (authority_compliant.size() > 1)
 		Rcpp::stop("argument authority_compliant should have length 0 or 1"); // #nocov

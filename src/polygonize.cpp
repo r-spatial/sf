@@ -20,7 +20,7 @@
 #include "gdal_sf_pkg.h"
 
 // # nocov start
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector mask_name,
 		Rcpp::CharacterVector raster_driver, 
 		Rcpp::CharacterVector vector_driver, Rcpp::CharacterVector vector_dsn,
@@ -142,7 +142,7 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
 } 
 // # nocov end
 
-// [[Rcpp::export]]
+// [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_rasterize(Rcpp::CharacterVector raster, Rcpp::CharacterVector raster_driver,
 		Rcpp::List sfc, Rcpp::NumericVector values,
 		Rcpp::CharacterVector options,

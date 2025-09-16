@@ -82,7 +82,7 @@ prnt.GEOMETRYCOLLECTION = function(x, ..., EWKT = TRUE) {
 #' @param ... modifiers; in particular \code{digits} can be passed to control the number of digits used
 #' @name st_as_text
 #' @details The returned WKT representation of simple feature geometry conforms to the
-#' \href{https://www.ogc.org/publications/standard/sfa/}{simple features access} specification and extensions
+#' \href{https://www.ogc.org/standards/sfa/}{simple features access} specification and extensions
 #' (known as EWKT, supported by PostGIS and other simple features implementations for addition of 
 #' a SRID to a WKT string).
 #' @note To improve conversion performance, the lwgeom package can be used (it must be installed
@@ -144,7 +144,7 @@ st_as_text.sfc = function(x, ..., EWKT = FALSE) {
 #' @rdname st_as_sfc
 #' @md
 #' @details If `x` is a character vector, it should be a vector containing
-#' [well-known-text](https://www.ogc.org/publications/standard/wkt-crs/), or
+#' [well-known-text](https://www.ogc.org/standards/wkt-crs/), or
 #' Postgis EWKT or GeoJSON representations of a single geometry for each vector element.
 #' @param crs integer or character; coordinate reference system for the
 #' @param GeoJSON logical; if \code{TRUE}, try to read geometries from GeoJSON text strings
