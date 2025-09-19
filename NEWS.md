@@ -1,5 +1,7 @@
 # version 1.0-22
 
+* for unprojected lines, `st_line_interpolate()` requires distance values with degree units; #2542
+
 * `unique.sfc()` added; #2546
 
 * for geodetic coordinates, `st_perimeter()` uses ellipsoid if `sf_use_s2()` is `FALSE`; #2541

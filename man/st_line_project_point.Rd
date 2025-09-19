@@ -17,7 +17,7 @@ st_line_interpolate(line, dist, normalized = FALSE)
 
 \item{normalized}{logical; if \code{TRUE}, use or return distance normalised to 0-1}
 
-\item{dist}{numeric, vector with distance value(s)}
+\item{dist}{numeric or units, vector with distance value(s), in units of the coordinates}
 }
 \value{
 \code{st_line_project} returns the distance(s) of point(s) along line(s), when projected on the line(s)
@@ -35,4 +35,8 @@ st_line_project(st_as_sfc("LINESTRING (0 0, 10 10)"), st_as_sfc(c("POINT (0 0)",
 st_line_project(st_as_sfc("LINESTRING (0 0, 10 10)"), st_as_sfc("POINT (5 5)"), TRUE)
 st_line_interpolate(st_as_sfc("LINESTRING (0 0, 1 1)"), 1)
 st_line_interpolate(st_as_sfc("LINESTRING (0 0, 1 1)"), 1, TRUE)
+# https://github.com/r-spatial/sf/issues/2542; use for geographic coordinates:
+l1 <- st_as_sfc("LINESTRING (10.1 50.1, 10.2 50.2)", crs = 'OGC:CRS84')
+dists = units::set_units(seq(0, sqrt(2)/10, length.out = 5), degrees)
+st_line_interpolate(l1, dists)
 }

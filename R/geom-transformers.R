@@ -1212,19 +1212,26 @@ st_line_sample = function(x, n, density, type = "regular", sample = NULL) {
   		assign(".geos_error", st_point(pts), envir=.sf_cache)
 } #nocov end
 
-#' @param dist numeric, vector with distance value(s)
+#' @param dist numeric or units, vector with distance value(s), in units of the coordinates
 #' @name st_line_project_point
 #' @returns `st_line_interpolate` returns the point(s) at dist(s), when measured along (interpolated on) the line(s)
 #' @export
 #' @examples 
 #' st_line_interpolate(st_as_sfc("LINESTRING (0 0, 1 1)"), 1)
 #' st_line_interpolate(st_as_sfc("LINESTRING (0 0, 1 1)"), 1, TRUE)
+#' # https://github.com/r-spatial/sf/issues/2542; use for geographic coordinates:
+#' l1 <- st_as_sfc("LINESTRING (10.1 50.1, 10.2 50.2)", crs = 'OGC:CRS84')
+#' dists = units::set_units(seq(0, sqrt(2)/10, length.out = 5), degrees)
+#' st_line_interpolate(l1, dists)
 st_line_interpolate = function(line, dist, normalized = FALSE) {
 	stopifnot(inherits(line, "sfc"), all(st_dimension(line) == 1), 
 		is.logical(normalized), length(normalized) == 1,
 		is.numeric(dist))
-	if (isTRUE(st_is_longlat(line)))
+	if (isTRUE(st_is_longlat(line))) {
 		message_longlat("st_project_point")
+		if (!inherits(dist, "units") || units(dist) != units(units::set_units(1, "degree", mode = "standard")))
+			stop("for interpolating geographic coordinates, dist should have units degree; see examples")
+	}
 	line = st_cast(line, "LINESTRING")
 	recycled = recycle_common(list(line, dist))
 	st_sfc(CPL_line_interpolate(recycled[[1]], recycled[[2]], normalized), 
