@@ -1229,7 +1229,9 @@ st_line_interpolate = function(line, dist, normalized = FALSE) {
 		is.numeric(dist))
 	if (isTRUE(st_is_longlat(line))) {
 		message_longlat("st_project_point")
-		if (!inherits(dist, "units") || units(dist) != units(units::set_units(1, "degree", mode = "standard")))
+		if (inherits(dist, "units"))
+			dist = units::set_units(dist, "degree", mode = "standard")
+		else
 			stop("for interpolating geographic coordinates, dist should have units degree; see examples")
 	}
 	line = st_cast(line, "LINESTRING")
