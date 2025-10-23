@@ -75,3 +75,10 @@ crs <- gdal_crs(tif)
 
 try(gdal_metadata("foo"))
 gdal_metadata(tif)
+
+if (require(stars, quietly = TRUE)) {
+	z = system.file("nc/ones.zarr", package = "sf")
+	print(gdal_utils("mdiminfo", z))
+	print(read_stars(z))
+	print(read_mdim(z))
+}
