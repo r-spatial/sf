@@ -1,6 +1,6 @@
 # version 1.0-22
 
-* handle empty points in `st_distance()`; https://github.com/r-spatial/s2/issues/289
+* handle empty points better in `st_point()`, `st_as_sf.data.frame()` and `st_distance()`; https://github.com/r-spatial/s2/issues/289
 
 * for unprojected lines, `st_line_interpolate()` requires distance values with degree units; #2542
 
