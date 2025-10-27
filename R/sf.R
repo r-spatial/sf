@@ -46,23 +46,26 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 		else
 			x$geometry = st_as_sfc(as.character(x[[wkt]]))
 	} else if (! missing(coords)) {
-		cc = as.data.frame(lapply(x[coords], as.numeric))
-		if (na.fail && anyNA(cc))
+		cc = as.matrix(as.data.frame(lapply(x[coords], as.numeric)))
+		anyna = anyNA(cc)
+		if (na.fail && anyna)
 			stop("missing values in coordinates not allowed")
+		if (anyna)
+			cc[apply(cc, 1, anyNA),] = NA_real_
 		# classdim = getClassDim(rep(0, length(coords)), length(coords), dim, "POINT")
 		if (is.null(sf_column_name))
 			sf_column_name = "geometry"
 		x[[sf_column_name]] = if (nchar(dim) < 4 && ncol(cc) == 4) { # create POLYGONs:
 				fn = function(x) st_as_sfc(st_bbox(c(xmin = x[[1]], ymin = x[[2]], xmax = x[[3]], ymax = x[[4]])))
-				do.call(c, apply(as.matrix(cc), 1, fn))
+				do.call(c, apply(cc, 1, fn))
 			} else { # points:
-				structure( points_rcpp(as.matrix(cc), dim),
+				structure(points_rcpp(cc, dim),
 				n_empty = 0L, precision = 0, crs = NA_crs_,
 				bbox = structure(
-					c(xmin = min(cc[[1]], na.rm = TRUE),
-					ymin = min(cc[[2]], na.rm = TRUE),
-					xmax = max(cc[[1]], na.rm = TRUE),
-					ymax = max(cc[[2]], na.rm = TRUE)), class = "bbox"),
+					c(xmin = min(cc[,1], na.rm = TRUE),
+					ymin =   min(cc[,2], na.rm = TRUE),
+					xmax =   max(cc[,1], na.rm = TRUE),
+					ymax =   max(cc[,2], na.rm = TRUE)), class = "bbox"),
 				class =  c("sfc_POINT", "sfc" ), names = NULL)
 			}
 
