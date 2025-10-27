@@ -1,7 +1,7 @@
 
-R version 4.3.3 (2024-02-29) -- "Angel Food Cake"
-Copyright (C) 2024 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu (64-bit)
+R version 4.5.1 (2025-06-13) -- "Great Square Root"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -259,6 +259,64 @@ First 10 features:
 > gdal_metadata(tif)
 [1] "AREA_OR_POINT=Point"
 > 
+> if (require(stars, quietly = TRUE)) {
++ 	z = paste0("ZARR:/vsizip/", system.file("nc/ones.zarr.zip", package = "sf"), "/ones.zarr")
++ 	gdal_utils("mdiminfo", z)
++ 	cat("\n")
++ 	print(read_stars(z))
++ 	print(read_mdim(z))
++ }
+{
+  "type": "group",
+  "driver": "Zarr",
+  "name": "/",
+  "arrays": {
+    "ones": {
+      "datatype": "Int32",
+      "dimensions": [
+        {
+          "name": "dim0",
+          "full_name": "dim0",
+          "size": 100
+        },
+        {
+          "name": "dim1",
+          "full_name": "dim1",
+          "size": 100
+        }
+      ],
+      "dimension_size": [
+        100,
+        100
+      ],
+      "block_size": [
+        50,
+        50
+      ],
+      "nodata_value": 0,
+      "structural_info": {
+        "COMPRESSOR": "{ \"blocksize\": 0, \"clevel\": 5, \"cname\": \"lz4\", \"id\": \"blosc\", \"shuffle\": 1 }"
+      }
+    }
+  }
+}
+stars object with 2 dimensions and 1 attribute
+attribute(s):
+           Min. 1st Qu. Median Mean 3rd Qu. Max.
+ones.zarr     1       1      1    1       1    1
+dimension(s):
+  from  to offset delta x/y
+x    1 100      0     1 [x]
+y    1 100    100    -1 [y]
+stars object with 2 dimensions and 1 attribute
+attribute(s):
+      Min. 1st Qu. Median Mean 3rd Qu. Max.
+ones     1       1      1    1       1    1
+dimension(s):
+     from  to offset delta x/y
+dim1    1 100    0.5     1 [x]
+dim0    1 100    0.5     1 [y]
+> 
 > proc.time()
    user  system elapsed 
-  2.705   3.789   2.027 
+  1.923   4.072   1.546 
