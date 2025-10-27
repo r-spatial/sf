@@ -7,7 +7,7 @@ MAINTAINER "edzerpebesma" edzer.pebesma@uni-muenster.de
 RUN apt-get update && apt-get install -y software-properties-common
 RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 
-RUN echo "deb http://cran.rstudio.com/bin/linux/ubuntu xenial/  " >> /etc/apt/sources.list
+RUN echo "deb https://cran.rstudio.com/bin/linux/ubuntu xenial/  " >> /etc/apt/sources.list
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
 
 RUN apt-get update
