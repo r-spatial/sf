@@ -205,9 +205,12 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE,
 				} else
 					mapply(st_distance, x, y, by_element = FALSE, which = which, par = par)
 			} else {
-				if (missing_y && inherits(x, "sfc_POINT") && which == "Euclidean")
-					as.matrix(stats::dist(st_coordinates(x)))
-				else
+				if (missing_y && inherits(x, "sfc_POINT") && which == "Euclidean") {
+					m = as.matrix(stats::dist(cc <- st_coordinates(x)))
+					e = is.na(cc[,1])
+					diag(m)[e] = NA_real_
+					m
+				} else
 					CPL_geos_dist(x, y, which, par)
 			}
 		if (!is.null(u <- st_crs(x)$ud_unit))

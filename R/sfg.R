@@ -131,9 +131,11 @@ points_rcpp <- function(pts, gdim = "XY", ...) {
 #' st_geometrycollection() # empty geometry
 #' @export
 st_point = function(x = c(NA_real_, NA_real_), dim = "XYZ") {
-	stopifnot(is.numeric(x))
+	stopifnot(is.numeric(x) && length(x) >= 2)
 	if (is.matrix(x))
 		stopifnot(nrow(x) == 1) # because we want to be able to call rbind on points
+	if (any(is.na(x)))
+		x = rep(NA_real_, length(x))
 	structure(x, class = getClassDim(x, length(x), dim, "POINT"))
 }
 #' @name st
