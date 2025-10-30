@@ -44,7 +44,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0-22" id="version-10-22">version 1.0-22<a class="anchor" aria-label="anchor" href="#version-10-22"></a></h2>
-<ul><li><p>handle empty points better in <code><a href="../reference/st.html">st_point()</a></code>, <code><a href="../reference/st_as_sf.html">st_as_sf.data.frame()</a></code> and <code><a href="../reference/geos_measures.html">st_distance()</a></code>; <a href="https://github.com/r-spatial/s2/issues/289" class="external-link uri">https://github.com/r-spatial/s2/issues/289</a></p></li>
+<ul><li><p><code><a href="../reference/geos_combine.html">st_combine()</a></code> on <code>POINT</code> geometries ignores empty points; <a href="https://github.com/r-spatial/sf/issues/2551" class="external-link">#2551</a></p></li>
+<li><p>handle empty points better in <code><a href="../reference/st.html">st_point()</a></code>, <code><a href="../reference/st_as_sf.html">st_as_sf.data.frame()</a></code> and <code><a href="../reference/geos_measures.html">st_distance()</a></code>; <a href="https://github.com/r-spatial/s2/issues/289" class="external-link uri">https://github.com/r-spatial/s2/issues/289</a></p></li>
 <li><p>for unprojected lines, <code><a href="../reference/st_line_project_point.html">st_line_interpolate()</a></code> requires distance values with degree units; <a href="https://github.com/r-spatial/sf/issues/2542" class="external-link">#2542</a></p></li>
 <li><p><code>unique.sfc()</code> added; <a href="https://github.com/r-spatial/sf/issues/2546" class="external-link">#2546</a></p></li>
 <li><p>for geodetic coordinates, <code><a href="../reference/geos_measures.html">st_perimeter()</a></code> uses ellipsoidal computation if <code><a href="../reference/s2.html">sf_use_s2()</a></code> is <code>FALSE</code>; <a href="https://github.com/r-spatial/sf/issues/2541" class="external-link">#2541</a></p></li>
