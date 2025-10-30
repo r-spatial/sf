@@ -265,7 +265,7 @@ c.sfg = function(..., recursive = FALSE, flatten = TRUE) {
 		ucls = unique(cls)
 		if (length(ucls) == 1) {
 			switch(ucls,
-				POINT = st_multipoint(do.call(rbind, lst)),
+				POINT = st_multipoint(na.omit(do.call(rbind, lst))),
 				# CURVE = st_multicurve(Paste0(lst))
 				# CIRCULARSTRING = st_geometrycollection(lst), # FIXME??
 				LINESTRING = st_multilinestring(Paste0(lst)),
