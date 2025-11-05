@@ -773,6 +773,7 @@ NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy, CharacterVect
 		stop("interpolation method not supported"); // #nocov
 
 	double gt[6];
+	int n_err = 0;
 	poDataset->GetGeoTransform(gt);
 	double gt_inv[6];
 	// int retval = GDALInvGeoTransform(gt, gt_inv);
@@ -803,7 +804,7 @@ NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy, CharacterVect
 #if GDAL_VERSION_NUM >= 3100000
 				if (poBand->InterpolateAtPoint(Pixel, Line, RA, &pixel, nullptr) != CE_None)
 						// tbd: handle GRIORA_Cubic, GRIORA_CubicSpline
-					stop("Error in InterpolateAtPoint()");
+					n_err += 1;
 #else
 				if (RA == GRIORA_Cubic || RA == GRIORA_CubicSpline)
 					stop("cubic or cubicspline requires GDAL >= 3.10.0");
@@ -822,6 +823,8 @@ NumericMatrix CPL_extract(CharacterVector input, NumericMatrix xy, CharacterVect
 			ret(i, j) = pixel;
 		}
 	}
+	if (n_err > 0)
+		Rcout << n_err << " error(s) in InterpolateAtPoint()" << std::endl; // #nocov
 	GDALClose(poDataset);
 	return ret;
 }

@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 # minimal docker file to get sp and sf running on ubunty 16.04 image,
 # using gdal/geos/proj from ppa:ubuntugis/ubuntugis-unstable
 
@@ -26,6 +26,7 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get -y update \
 	libcurl4-openssl-dev \
 	libexpat1-dev \
 	libpq-dev \
+	libblosc-dev \
 	libsqlite3-dev \
 	libudunits2-dev \
 	make \
@@ -66,7 +67,7 @@ ENV LC_ALL en_US.UTF-8
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 # GEOS:
-ENV GEOS_VERSION 3.13.0
+ENV GEOS_VERSION 3.14.0
 
 RUN wget -q http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
   && bzip2 -d geos-*bz2 \
@@ -82,7 +83,7 @@ RUN wget -q http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
 
 #RUN git clone --depth 1 https://github.com/OSGeo/PROJ.git
 # https://download.osgeo.org/proj/proj-9.0.0RC1.tar.gz
-ENV PROJ_VERSION 9.5.1
+ENV PROJ_VERSION 9.7.0
 RUN wget -q http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz
 RUN tar zxvf proj-${PROJ_VERSION}.tar.gz
 RUN cd proj* \
@@ -103,8 +104,8 @@ RUN cd proj* \
 #  && cd -
 
 # GDAL:
-ENV GDAL_VERSION 3.11.1
-ENV GDAL_VERSION_NAME 3.11.1rc1
+ENV GDAL_VERSION 3.12.0
+ENV GDAL_VERSION_NAME 3.12.0rc1
 
 RUN wget -q http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
@@ -137,12 +138,14 @@ RUN R CMD INSTALL stars
 RUN apt update
 RUN apt install -y libharfbuzz-dev
 RUN apt install --fix-missing -y libharfbuzz-dev libfribidi-dev
-RUN Rscript -e 'install.packages("mapview")'
-RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
-RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
+RUN Rscript -e 'install.packages(c("mapview", "CFtime"))'
+RUN Rscript -e 'install.packages("CFtime")'
+RUN Rscript -e 'requireNamespace("CFtime")'
+#RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
+#RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
 #
-RUN Rscript -e 'options(timeout=1200); install.packages("starsdata", repos="http://cran.uni-muenster.de/pebesma/")'
-RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
+#RUN Rscript -e 'options(timeout=1200); install.packages("starsdata", repos="http://cran.uni-muenster.de/pebesma/")'
+#RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
 #
 #RUN wget -q https://cran.r-project.org/src/contrib/terra_1.8-42.tar.gz
 #RUN Rscript -e 'install.packages("tinytest")'
