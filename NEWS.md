@@ -716,7 +716,7 @@
 
 * fix plotting of `sf` objects without attributes; #755
 
-* add reference to the [R Journal article](https://journal.r-project.org/archive/2018/RJ-2018-009/index.html) in CITATION
+* add reference to the [R Journal article](https://journal.r-project.org/articles/RJ-2018-009/index.html) in CITATION
 
 # version 0.6-3
 

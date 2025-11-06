@@ -1,7 +1,7 @@
 
-R version 4.3.3 (2024-02-29) -- "Angel Food Cake"
-Copyright (C) 2024 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu (64-bit)
+R Under development (unstable) (2025-11-05 r88988 ucrt) -- "Unsuffered Consequences"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -125,9 +125,33 @@ Type 'q()' to quit R.
 + (x = st_as_sf(as.psp(sf)))
 + (y = st_as_sfc(as.psp(sf)))
 + all.equal(st_geometry(x), y)
++ 
++ # Test sf -> ppp conversion when the conversion involves more than 1 column of mark(s)
++ # (https://github.com/r-spatial/sf/issues/2450)
++ reference_ppp <- ppp(
++ 	x = c(0.25, 0.75),
++ 	y = c(0.25, 0.75), 
++ 	# We consider a data.frame of marks which includes several types of columns
++ 	# (and also a list column)
++ 	marks = data.frame(
++ 		a = TRUE, b = 1L, c = pi, d = I(list(list(1, 2), list("A", "B", "C"))), 
++ 		#NB: row.names should always defined as a vector with character character
++ 		#since they are converted as characters when applying st_as_sf (see line
++ 		#below) which mixes NA and not-NA row.names
++ 		row.names = c("point1", "point2")
++ 	)
++ )
++ # The st_as_sf conversion returns an sf object where the first row is the Window
++ # and the other rows are the points
++ tmp <- st_as_sf(reference_ppp)
++ pts <- tmp[tmp$label == "point", 1:4]
++ target_ppp <- as.ppp(pts)
++ Window(target_ppp) <- owin()
++ all.equal(reference_ppp, target_ppp)
 + }
-spatstat.geom 3.2-9
-spatstat.random 3.2-3
+spatstat.univar 3.1-4
+spatstat.geom 3.6-0
+spatstat.random 3.4-2
 Simple feature collection with 51 features and 1 field
 Geometry type: GEOMETRY
 Dimension:     XY
@@ -156,8 +180,6 @@ Error in spatstat_fun(..., win = spatstat.geom::as.owin(x)) :
 Error : Only projected coordinates may be converted to spatstat class objects
 Error in `marks<-.ppp`(`*tmp*`, value = value) : 
   number of rows of data frame != number of points
-In addition: Warning message:
-In as.ppp.sf(sf) : only first attribute column is used for marks
 Error : Only projected coordinates may be converted to spatstat class objects
 [1] TRUE
 Warning message:
@@ -167,4 +189,4 @@ In st_as_sfc.owin(spatstat.geom::as.owin(x)) :
 > 
 > proc.time()
    user  system elapsed 
-  2.074   1.308   1.918 
+   1.92    0.46    2.39 

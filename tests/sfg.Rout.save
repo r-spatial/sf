@@ -1,7 +1,7 @@
 
-R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
-Copyright (C) 2019 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu (64-bit)
+R Under development (unstable) (2025-11-05 r88988 ucrt) -- "Unsuffered Consequences"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -75,4 +75,4 @@ Error in Ops.sfg(pt) : unary ! not defined for "sfg" objects
 > 
 > proc.time()
    user  system elapsed 
-  0.331   0.016   0.340 
+   0.42    0.14    0.54 
