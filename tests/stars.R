@@ -77,9 +77,12 @@ try(gdal_metadata("foo"))
 gdal_metadata(tif)
 
 if (require(stars, quietly = TRUE)) {
-	z = paste0("ZARR:/vsizip/", system.file("nc/ones.zarr.zip", package = "sf"), "/ones.zarr")
+	p = normalizePath(system.file("nc/ones.zarr.zip", package = "sf"))
+	z = paste0('ZARR:/vsizip/"', p, '"/ones.zarr')
 	gdal_utils("mdiminfo", z)
 	cat("\n")
-	print(read_stars(z))
-	print(read_mdim(z))
+	print(read_stars(z, normalizePath = FALSE))
+	print(read_mdim(z, normalizePath = FALSE))
 }
+
+library(stars)

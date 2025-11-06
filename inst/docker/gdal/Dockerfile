@@ -56,7 +56,10 @@ RUN apt-get update && apt-get install -y --fix-missing \
 	libtiff-dev \
 	cmake \
 	libtiff5-dev \
-	libopenjp2-7-dev
+	libopenjp2-7-dev \
+	libharfbuzz-dev \
+	libharfbuzz-dev \
+	libfribidi-dev
 
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
@@ -68,7 +71,6 @@ ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 # GEOS:
 ENV GEOS_VERSION 3.14.0
-
 RUN wget -q http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
   && bzip2 -d geos-*bz2 \
   && tar xf geos*tar \
@@ -81,8 +83,7 @@ RUN wget -q http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
   && cd ../.. \
   && ldconfig
 
-#RUN git clone --depth 1 https://github.com/OSGeo/PROJ.git
-# https://download.osgeo.org/proj/proj-9.0.0RC1.tar.gz
+# PROJ
 ENV PROJ_VERSION 9.7.0
 RUN wget -q http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz
 RUN tar zxvf proj-${PROJ_VERSION}.tar.gz
@@ -96,17 +97,9 @@ RUN cd proj* \
   && cd ../.. \
   && ldconfig
 
-# install proj-data:
-#RUN cd /usr/local/share/proj \
-#  && wget http://download.osgeo.org/proj/proj-data-1.1RC1.zip \
-#  && unzip -o proj-data*zip \
-#  && rm proj-data*zip \
-#  && cd -
-
 # GDAL:
 ENV GDAL_VERSION 3.12.0
 ENV GDAL_VERSION_NAME 3.12.0rc1
-
 RUN wget -q http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
   && cd gdal* \
@@ -117,36 +110,31 @@ RUN wget -q http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_N
   && make install \
   && ldconfig
 
-RUN Rscript -e 'install.packages(c("sp", "RPostgreSQL", "RSQLite", "testthat", "knitr", "tidyr", "geosphere", "maps", "microbenchmark", "raster", "dplyr", "tibble", "units", "DBI",  "covr", "protolite", "tmap", "mapview", "odbc", "pool", "rmarkdown", "RPostgres","spatstat", "stars", "XML", "tmaptools", "tmap", "terra", "PCICt", "RNetCDF", "future.apply", "ggforce", "ggthemes", "gstat", "ncmeta", "pbapply", "plm", "spacetime", "xts", "zoo", "tidync", "ncdfgeom", "cubelyr", "clue", "classInt", "mapdata", "ncdfgeom", "exactextractr", "randomForest", "nanoarrow", "mapview", "tmap", "spatstat", "spatstat.linnet", "viridis"))'
+RUN Rscript -e 'install.packages(c("sp", "RPostgreSQL", "RSQLite", "testthat", "knitr", "tidyr", "geosphere", "maps", "microbenchmark", "raster", "dplyr", "tibble", "units", "DBI",  "covr", "protolite", "tmap", "mapview", "odbc", "pool", "rmarkdown", "RPostgres","spatstat", "stars", "XML", "tmaptools", "tmap", "terra", "PCICt", "RNetCDF", "future.apply", "ggforce", "ggthemes", "gstat", "ncmeta", "pbapply", "plm", "spacetime", "xts", "zoo", "tidync", "ncdfgeom", "cubelyr", "clue", "classInt", "mapdata", "ncdfgeom", "exactextractr", "randomForest", "nanoarrow", "tmap", "spatstat", "spatstat.linnet", "viridis", "CFtime", "tinytest", "lwgeom", "stars"))'
 
+# sf:
 RUN git clone --depth 10 https://github.com/r-spatial/sf.git
-RUN git clone --depth 10 https://github.com/r-spatial/lwgeom.git
-RUN git clone --depth 10 https://github.com/r-spatial/stars.git
-#RUN git config --global user.email "edzer.pebesma@uni-muenster.de"
-
-RUN R CMD build --no-build-vignettes --no-manual lwgeom
 RUN R CMD build --no-build-vignettes --no-manual sf
+RUN R CMD INSTALL sf_*.tar.gz
+RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
+
+# lwgeom:
+RUN git clone --depth 10 https://github.com/r-spatial/lwgeom.git
+RUN R CMD build --no-build-vignettes --no-manual lwgeom
+RUN R CMD INSTALL lwgeom_*.tar.gz
+RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
+
+# stars:
+RUN git clone --depth 10 https://github.com/r-spatial/stars.git
 RUN R CMD build --no-manual stars
-# RUN pkg-config proj --modversion
-RUN R CMD INSTALL sf
-RUN R CMD INSTALL lwgeom
-RUN R CMD INSTALL stars
+RUN R CMD INSTALL stars_*.tar.gz
+RUN Rscript -e 'options(timeout=1200); install.packages("starsdata", repos="http://cran.uni-muenster.de/pebesma/")'
+RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
+
 #
 #RUN export DEBIAN_FRONTEND=noninteractive; apt-get install -y --fix-missing libmagick++-dev
 #RUN Rscript -e 'install.packages("animation")'
-#
-RUN apt update
-RUN apt install -y libharfbuzz-dev
-RUN apt install --fix-missing -y libharfbuzz-dev libfribidi-dev
-RUN Rscript -e 'install.packages(c("mapview", "CFtime"))'
-RUN Rscript -e 'install.packages("CFtime")'
-RUN Rscript -e 'requireNamespace("CFtime")'
-#RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
-#RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
-#
-#RUN Rscript -e 'options(timeout=1200); install.packages("starsdata", repos="http://cran.uni-muenster.de/pebesma/")'
-#RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
-#
-#RUN wget -q https://cran.r-project.org/src/contrib/terra_1.8-42.tar.gz
-#RUN Rscript -e 'install.packages("tinytest")'
-#RUN R CMD check terra_1.8-42.tar.gz
+
+# terra:
+RUN wget -q https://cran.r-project.org/src/contrib/terra_1.8-80.tar.gz
+RUN R CMD check --no-manual terra_1.8-80.tar.gz
