@@ -81,8 +81,8 @@ if (require(stars, quietly = TRUE)) {
 	z = paste0('ZARR:/vsizip/"', p, '"/ones.zarr')
 	gdal_utils("mdiminfo", z)
 	cat("\n")
-	print(read_stars(z, normalizePath = FALSE))
-	print(read_mdim(z, normalizePath = FALSE))
+	print(read_stars(z, normalize_path = FALSE))
+	print(read_mdim(z, normalize_path = FALSE))
 }
 
 library(stars)
