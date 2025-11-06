@@ -84,5 +84,3 @@ if (require(stars, quietly = TRUE)) {
 	print(read_stars(z, normalize_path = FALSE))
 	print(read_mdim(z, normalize_path = FALSE))
 }
-
-library(stars)
