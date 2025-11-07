@@ -60,13 +60,13 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 				do.call(c, apply(cc, 1, fn))
 			} else { # points:
 				structure(points_rcpp(cc, dim),
-				n_empty = 0L, precision = 0, crs = NA_crs_,
-				bbox = structure(
-					c(xmin = min(cc[,1], na.rm = TRUE),
-					ymin =   min(cc[,2], na.rm = TRUE),
-					xmax =   max(cc[,1], na.rm = TRUE),
-					ymax =   max(cc[,2], na.rm = TRUE)), class = "bbox"),
-				class =  c("sfc_POINT", "sfc" ), names = NULL)
+					n_empty = 0L, precision = 0, crs = NA_crs_,
+					bbox = structure(
+						c(xmin = min(cc[,1], na.rm = TRUE),
+						ymin =   min(cc[,2], na.rm = TRUE),
+						xmax =   max(cc[,1], na.rm = TRUE),
+						ymax =   max(cc[,2], na.rm = TRUE)), class = "bbox"),
+					class =  c("sfc_POINT", "sfc" ), names = NULL)
 			}
 
 		if (remove) {
@@ -74,6 +74,10 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 				coords = match(coords, names(x))
 			x = x[-coords]
 		}
+		if (grepl("Z", dim))
+			attr(x[[sf_column_name]], "z_range") = compute_z_range(x[[sf_column_name]])
+		if (grepl("M", dim))
+			attr(x[[sf_column_name]], "m_range") = compute_m_range(x[[sf_column_name]])
 
 	}
 	st_sf(x, ..., agr = agr, sf_column_name = sf_column_name)

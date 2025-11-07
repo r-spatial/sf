@@ -1,3 +1,7 @@
+# version 1.0-23
+
+* `st_as_sf.data.frame()` sets `z_range` and `m_range`; https://github.com/geoarrow/geoarrow-r/issues/75
+
 # version 1.0-22
 
 * `st_combine()` on `POINT` geometries ignores empty points; #2551
