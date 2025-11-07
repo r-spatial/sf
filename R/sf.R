@@ -74,9 +74,9 @@ st_as_sf.data.frame = function(x, ..., agr = NA_agr_, coords, wkt,
 				coords = match(coords, names(x))
 			x = x[-coords]
 		}
-		if (grepl("Z", dim))
+		if (length(coords) > 2 && grepl("Z", dim))
 			attr(x[[sf_column_name]], "z_range") = compute_z_range(x[[sf_column_name]])
-		if (grepl("M", dim))
+		if (length(coords) > 2 && grepl("M", dim))
 			attr(x[[sf_column_name]], "m_range") = compute_m_range(x[[sf_column_name]])
 
 	}
