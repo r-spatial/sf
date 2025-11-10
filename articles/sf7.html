@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">sf</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0-22</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0-23</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -239,7 +239,7 @@ from the full polygon representing the entire globe,</p>
 <span><span class="va">b</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_as_sfc.html">st_as_sfc</a></span><span class="op">(</span><span class="st">"POINT(-30 52)"</span>, crs <span class="op">=</span> <span class="st">'EPSG:4326'</span><span class="op">)</span>, <span class="fl">9800000</span><span class="op">)</span> <span class="co"># visible half</span></span>
 <span><span class="va">i</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_binary_ops.html">st_intersection</a></span><span class="op">(</span><span class="va">b</span>, <span class="va">oc</span><span class="op">)</span> <span class="co"># visible ocean</span></span>
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">i</span>, <span class="st">"+proj=ortho +lat_0=52 +lon_0=-30"</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">'blue'</span><span class="op">)</span></span></code></pre></div>
-<p><img src="sf7_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<p><img src="sf7_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="700"></p>
 <p>(Note that the printing of <code>POLYGON FULL</code> is not valid WKT
 according to the simple feature standard, which does not include
 this.)</p>
@@ -375,7 +375,7 @@ require reprojection of the vector layer to the planar coordinate system
 <span><span class="va">a2</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_measures.html">st_area</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">a1</span>, <span class="va">a2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="sf7_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
+<p><img src="sf7_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" width="700"></p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">(</span><span class="va">a1</span> <span class="op">-</span> <span class="va">a2</span><span class="op">)</span><span class="op">/</span><span class="va">a1</span><span class="op">)</span></span>
 <span><span class="co">##       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
@@ -394,7 +394,7 @@ require reprojection of the vector layer to the planar coordinate system
 <span><span class="va">l2</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_measures.html">st_length</a></span><span class="op">(</span><span class="va">nc_ls</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">l1</span> , <span class="va">l2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="sf7_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
+<p><img src="sf7_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" width="700"></p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="op">(</span><span class="va">l1</span> <span class="op">-</span> <span class="va">l2</span><span class="op">)</span><span class="op">/</span><span class="va">l1</span><span class="op">)</span></span>
 <span><span class="co">##       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
@@ -412,7 +412,7 @@ require reprojection of the vector layer to the planar coordinate system
 <span><span class="va">d2</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_measures.html">st_distance</a></span><span class="op">(</span><span class="va">nc</span>, <span class="va">nc</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">d1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">d2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="sf7_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
+<p><img src="sf7_files/figure-html/unnamed-chunk-16-1.png" class="r-plt" width="700"></p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">d1</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">d2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
@@ -473,7 +473,7 @@ example:</p>
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">uk_buffer2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">uk_buffer3</span><span class="op">)</span></span>
 <span><span class="va">uk_sf</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span><span class="va">uk</span><span class="op">)</span> </span></code></pre></div>
-<p><img src="sf7_files/figure-html/unnamed-chunk-18-1.png" width="50%"><img src="sf7_files/figure-html/unnamed-chunk-18-2.png" width="50%"><img src="sf7_files/figure-html/unnamed-chunk-18-3.png" width="50%"><img src="sf7_files/figure-html/unnamed-chunk-18-4.png" width="50%"></p>
+<p><img src="sf7_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" width="50%"><img src="sf7_files/figure-html/unnamed-chunk-18-2.png" class="r-plt" width="50%"><img src="sf7_files/figure-html/unnamed-chunk-18-3.png" class="r-plt" width="50%"><img src="sf7_files/figure-html/unnamed-chunk-18-4.png" class="r-plt" width="50%"></p>
 <p>The plots above show that you can adjust the level of spatial
 precision in the results of s2 buffer operations with the
 <code>max_cells</code> argument, set to 1000 by default. Deciding on an
@@ -494,14 +494,14 @@ comparison with transforming and then creating buffers:</p>
 <span>  <span class="va">uk_buffer_sf</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">uk_projected</span>, dist <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.028   0.000   0.028</span></span>
+<span><span class="co">##   0.028   0.000   0.029</span></span>
 <span><span class="co"># sf way with few than the 30 segments in the buffer</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">uk_projected</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">uk_sfc</span>, <span class="fl">27700</span><span class="op">)</span></span>
 <span>  <span class="va">uk_buffer_sf2</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">uk_projected</span>, dist <span class="op">=</span> <span class="fl">20000</span>, nQuadSegs <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.008   0.000   0.007</span></span>
+<span><span class="co">##   0.008   0.000   0.008</span></span>
 <span><span class="co"># s2 with default cell size</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">uk_buffer</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span></span>
@@ -513,13 +513,13 @@ comparison with transforming and then creating buffers:</p>
 <span>  <span class="va">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span>, max_cells <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.223   0.000   0.222</span></span>
+<span><span class="co">##   0.225   0.000   0.226</span></span>
 <span><span class="co"># s2 with 100 cells</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span>, max_cells <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.004   0.000   0.004</span></span></code></pre></div>
+<span><span class="co">##   0.003   0.000   0.003</span></span></code></pre></div>
 <p>The result of the previous benchmarks emphasizes the point that there
 are trade-offs between geographic resolution and computational
 resources, something that web developers working on geographic services
@@ -583,7 +583,7 @@ Geometry Library. <a href="https://r-spatial.github.io/s2/" class="external-link
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

@@ -1,0 +1,699 @@
+# Simple Features for R
+
+[![](https://user-images.githubusercontent.com/520851/34887433-ce1d130e-f7c6-11e7-83fc-d60ad4fae6bd.gif)](https://gist.github.com/edzer/f461a3a95570c4ab7edf3125c2f19d20)
+
+A package that provides [simple features
+access](https://en.wikipedia.org/wiki/Simple_Features) for R.
+
+[Blogs, links](#blogs-presentations-vignettes-sp-sf-wiki) •
+[Cheatsheet](#cheatsheet) • [Installing](#installing) •
+[Contributing](#contributing) • [Acknowledgment](#acknowledgment) • [How
+to cite](#how-to-cite)
+
+Package sf:
+
+- represents simple features as records in a `data.frame` or `tibble`
+  with a geometry list-column
+- represents natively in R all 17 simple feature types for all
+  dimensions (XY, XYZ, XYM, XYZM)
+- interfaces to [GEOS](https://libgeos.org) for geometrical operations
+  on projected coordinates, and (through R package
+  [s2](https://cran.r-project.org/package=s2)) to
+  [s2geometry](http://s2geometry.io/) for geometrical operations on
+  ellipsoidal coordinates
+- interfaces to [GDAL](https://gdal.org/), supporting all driver
+  options, `Date` and `POSIXct` and list-columns
+- interfaces to [PRØJ](http://proj.org/) for coordinate reference system
+  conversion and transformation
+- uses
+  [well-known-binary](https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary)
+  serialisations written in C++/Rcpp for fast I/O with GDAL and GEOS
+- reads from and writes to spatial databases such as
+  [PostGIS](http://postgis.net/) using
+  [DBI](https://cran.r-project.org/package=DBI)
+- is extended by
+  - [lwgeom](https://github.com/r-spatial/lwgeom/) for selected
+    liblwgeom/PostGIS functions
+  - [stars](https://github.com/r-spatial/stars/) for raster data, and
+    raster or vector data cubes (spatial time series)
+  - [sfnetworks](https://luukvdmeer.github.io/sfnetworks/) for
+    geospatial network data
+
+[![](https://user-images.githubusercontent.com/520851/50280460-e35c1880-044c-11e9-9ed7-cc46754e49db.jpg)](https://gist.github.com/edzer/442d74a5775abcd5068cf3e73b23687b)
+
+(Illustration (c) 2018 by [Allison
+Horst](https://twitter.com/allison_horst/status/1071456081308614656))
+
+## Books, journal articles, blogs, presentations, vignettes, sp-sf wiki
+
+- an open access [R Journal
+  article](https://journal.r-project.org/archive/2018/RJ-2018-009/index.html)
+  summarizes the package
+- two books: [Spatial Data Science: with applications in
+  R](https://r-spatial.org/book/), [Geocomputation with
+  R](https://r.geocompx.org/)
+- package vignettes:
+  [first](https://r-spatial.github.io/sf/articles/sf1.html),
+  [second](https://r-spatial.github.io/sf/articles/sf2.html),
+  [third](https://r-spatial.github.io/sf/articles/sf3.html),
+  [fourth](https://r-spatial.github.io/sf/articles/sf4.html),
+  [fifth](https://r-spatial.github.io/sf/articles/sf5.html),
+  [sixth](https://r-spatial.github.io/sf/articles/sf6.html),
+  [seventh](https://r-spatial.github.io/sf/articles/sf7.html)
+- blog posts:
+  [first](https://r-spatial.org/r/2016/02/15/simple-features-for-r.html),
+  [second](https://r-spatial.org/r/2016/07/18/sf2.html),
+  [third](https://r-spatial.org/r/2016/11/02/sfcran.html),
+  [fourth](https://r-spatial.org/r/2017/01/12/newssf.html)
+- the original R Consortium ISC
+  [proposal](https://r-spatial.github.io/sf/PROPOSAL.md), the R
+  Consortium [blog
+  post](https://www.r-consortium.org/blog/2017/01/03/simple-features-now-on-cran)
+- presentations: [rstudio::conf
+  2018](https://edzer.github.io/rstudio_conf/#1)
+  ([video](https://posit.co/resources/videos/tidy-spatial-data-analysis/)),
+  [UseR! 2016](http://pebesma.staff.ifgi.de/pebesma_sfr.pdf)
+- wiki page describing [sp-sf
+  migration](https://github.com/r-spatial/sf/wiki/Migrating)
+
+## Cheatsheet
+
+[CC 4.0](https://creativecommons.org/licenses/by/4.0/) BY [Ryan
+Garnett](https://github.com/ryangarnett)
+
+[![](https://raw.githubusercontent.com/rstudio/cheatsheets/main/pngs/sf.png)](https://github.com/rstudio/cheatsheets/blob/main/sf.pdf)
+
+## Installing
+
+Install either from CRAN with:
+
+``` r
+install.packages("sf")
+```
+
+This will install binary packages on Windows and MacOS, unless you
+configured R such that it tries to install source packages; in that
+case, see below.
+
+Install development versions from GitHub with:
+
+``` r
+library(remotes)
+install_github("r-spatial/sf")
+```
+
+### Windows
+
+Installing sf from source works under Windows when
+[Rtools](https://cran.r-project.org/bin/windows/Rtools/) is installed.
+
+### MacOS
+
+MacOS users are strongly encouraged to install the `sf` binary packages
+from CRAN, unless they are familiar with compilers, linking, C++ source
+code, and homebrew. If you experience that R tries to install `sf` from
+source (or otherwise your install fails but you don’t understand what is
+going on) try again by explicitly installing the binary, using
+
+``` r
+install.packages("sf", type = "binary")
+```
+
+The remainder of this section is for those who understand what source
+installs mean, and imply.
+
+Perhaps the easiest way of an install from source is to first install
+`gdal` using Homebrew. Recent versions of Homebrew include a
+full-featured up-to-date [gdal
+formula](https://github.com/Homebrew/homebrew-core/blob/master/Formula/g/gdal.rb),
+which installs `proj` and `gdal` at the same time:
+
+    brew install pkg-config
+    brew install gdal
+
+Once gdal is installed, you may be able to install `sf` package from
+source in R. With the current version of `proj` on homebrew,
+installation requires additional configuration:
+
+``` r
+install.packages("sf", type = "source", configure.args = "--with-proj-lib=$(brew --prefix)/lib/")
+```
+
+Or the development version:
+
+``` r
+library(remotes)
+install_github("r-spatial/sf", configure.args = "--with-proj-lib=$(brew --prefix)/lib/")
+```
+
+Alternatively, [these
+instructions](https://stat.ethz.ch/pipermail/r-sig-mac/2017-June/012429.html)
+explain how to install gdal using kyngchaos frameworks.
+
+For Mac OS 11 Big Sur source install instruction, see
+[here](https://github.com/r-spatial/sf/issues/1536#issuecomment-727342736)
+
+### Linux
+
+For Unix-alikes, GDAL (\>= 2.0.1), GEOS (\>= 3.4.0) and Proj.4 (\>=
+4.8.0) are required.
+
+#### Ubuntu
+
+Dependencies for recent versions of Ubuntu (18.04 and later) are
+available in the official repositories; you can install them with:
+
+``` sh
+sudo apt -y update && apt install -y libudunits2-dev libgdal-dev libgeos-dev libproj-dev libsqlite3-dev
+```
+
+However, to get more up-to-date versions of dependencies such as GDAL,
+GEOS and PROJ we recommend adding the
+[ubuntugis-unstable](http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/)
+PPA to the package repositories and installing them as follows:
+
+``` sh
+sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+sudo apt update
+sudo apt install libudunits2-dev libgdal-dev libgeos-dev libproj-dev libsqlite3-dev
+```
+
+Adding this PPA is required for installing `sf` on older versions of
+Ubuntu (e.g. Xenial).
+
+Another option, for advanced users, is to install dependencies from
+source; see e.g. an older
+[Travis](https://github.com/r-spatial/sf/blob/593ee48b34001fe3b383ea73ea57063ecf690732/.travis.yml)
+config file for hints.
+
+#### Fedora
+
+The following command installs all required dependencies:
+
+``` sh
+sudo dnf install gdal-devel proj-devel geos-devel sqlite-devel udunits2-devel
+```
+
+#### Arch
+
+Get gdal, proj, geos and podofo from the main repos, and udunits from
+the AUR:
+
+    pacman -S gdal proj geos arrow podofo
+    yay/pacaur/yaourt/whatever -S udunits
+
+#### `renv` or `conda`
+
+There are several reports that `sf` fails to install as a source package
+when R is used with `renv`, or when R is installed in a `conda`
+environment. If you experience this, please do not raise an issue here,
+but
+
+- try to sort this out with the `renv` developers or the `conda`
+  maintainers, or
+- try to use binary installs of the `sf` package, e.g. from
+  [r2u](https://github.com/eddelbuettel/r2u), or the Posit package
+  manager
+
+#### Other
+
+To install on Debian, the [rocker
+geospatial](https://github.com/rocker-org/geospatial) Dockerfiles may be
+helpful. Ubuntu Dockerfiles are found
+[here](https://github.com/r-spatial/sf/tree/main/inst/docker).
+
+### Multiple GDAL, GEOS and/or PROJ versions on your system
+
+If you use dynamic linking (installation from source) and have multiple
+versions of these libraries installed (e.g. one from ubuntugis-unstable,
+another installed from source in `/usr/local/lib`) then this will in
+general not work, even when setting `LD_LIBRARY_PATH` manually. See
+[here](https://github.com/r-spatial/sf/issues/844) for the reason why.
+
+### lwgeom
+
+Functions and methods that require `liblwgeom`, including ellipsoidal
+(not spherical or Euclidean) metrics (area, distances), are provide by
+and used from [lwgeom](https://github.com/r-spatial/lwgeom), which is
+also on [CRAN](https://cran.r-project.org/package=lwgeom).
+
+## Contributing
+
+- Contributions of all sorts are most welcome, issues and pull requests
+  are the preferred ways of sharing them.
+- When contributing pull requests, please adhere to the package style
+  (in package code use `=` rather than `<-`; don’t change indentation;
+  tab stops of 4 spaces are preferred).
+- This project is released with a [Contributor Code of
+  Conduct](https://r-spatial.github.io/sf/CONDUCT.md). By participating
+  in this project, you agree to abide by its terms.
+
+## How to cite
+
+Package `sf` can be cited as:
+
+- Edzer Pebesma, 2018. Simple Features for R: Standardized Support for
+  Spatial Vector Data. The R Journal [10:1,
+  439-446.](https://journal.r-project.org/archive/2018/RJ-2018-009/index.html)
+
+- Pebesma, E.; Bivand, R. (2023). [Spatial Data Science: With
+  Applications in R](https://r-spatial.org/book/) (1st ed.). 314 pages.
+  [Chapman and Hall/CRC](https://doi.org/10.1201/9780429459016).
+
+## Acknowledgment
+
+This project gratefully acknowledges financial
+[support](https://www.r-consortium.org/projects) from the
+
+[![](https://r-consortium.org/images/RConsortium_Horizontal_Pantone.webp)](https://r-consortium.org/all-projects/2016-group-1.html#simple-features-for-r)
+
+# Package index
+
+## All functions
+
+- [`Ops(`*`<sfg>`*`)`](https://r-spatial.github.io/sf/reference/Ops.md)
+  [`Ops(`*`<sfc>`*`)`](https://r-spatial.github.io/sf/reference/Ops.md)
+  : Arithmetic operators for simple feature geometries
+
+- [`aggregate(`*`<sf>`*`)`](https://r-spatial.github.io/sf/reference/aggregate.sf.md)
+  :
+
+  aggregate an `sf` object
+
+- [`rbind(`*`<sf>`*`)`](https://r-spatial.github.io/sf/reference/bind.md)
+  [`cbind(`*`<sf>`*`)`](https://r-spatial.github.io/sf/reference/bind.md)
+  [`st_bind_cols()`](https://r-spatial.github.io/sf/reference/bind.md) :
+  Bind rows (features) of sf objects
+
+- [`as_Spatial()`](https://r-spatial.github.io/sf/reference/coerce-methods.md)
+  :
+
+  Methods to coerce simple features to `Spatial*` and
+  `Spatial*DataFrame` objects
+
+- [`dbDataType(`*`<PostgreSQLConnection>`*`,`*`<sf>`*`)`](https://r-spatial.github.io/sf/reference/dbDataType.md)
+  [`dbDataType(`*`<DBIObject>`*`,`*`<sf>`*`)`](https://r-spatial.github.io/sf/reference/dbDataType.md)
+  : Determine database type for R vector
+
+- [`dbWriteTable(`*`<PostgreSQLConnection>`*`,`*`<character>`*`,`*`<sf>`*`)`](https://r-spatial.github.io/sf/reference/dbWriteTable.md)
+  [`dbWriteTable(`*`<DBIObject>`*`,`*`<character>`*`,`*`<sf>`*`)`](https://r-spatial.github.io/sf/reference/dbWriteTable.md)
+  :
+
+  Write `sf` object to Database
+
+- [`db_drivers`](https://r-spatial.github.io/sf/reference/db_drivers.md)
+  :
+
+  Drivers for which update should be `TRUE` by default
+
+- [`extension_map`](https://r-spatial.github.io/sf/reference/extension_map.md)
+  : Map extension to driver
+
+- [`gdal_addo()`](https://r-spatial.github.io/sf/reference/gdal_addo.md)
+  : Add or remove overviews to/from a raster image
+
+- [`gdal_utils()`](https://r-spatial.github.io/sf/reference/gdal_utils.md)
+  : Native interface to gdal utils
+
+- [`st_intersection()`](https://r-spatial.github.io/sf/reference/geos_binary_ops.md)
+  [`st_difference()`](https://r-spatial.github.io/sf/reference/geos_binary_ops.md)
+  [`st_sym_difference()`](https://r-spatial.github.io/sf/reference/geos_binary_ops.md)
+  [`st_snap()`](https://r-spatial.github.io/sf/reference/geos_binary_ops.md)
+  : Geometric operations on pairs of simple feature geometry sets
+
+- [`st_intersects()`](https://r-spatial.github.io/sf/reference/geos_binary_pred.md)
+  [`st_disjoint()`](https://r-spatial.github.io/sf/reference/geos_binary_pred.md)
+  [`st_touches()`](https://r-spatial.github.io/sf/reference/geos_binary_pred.md)
+  [`st_crosses()`](https://r-spatial.github.io/sf/reference/geos_binary_pred.md)
+  [`st_within()`](https://r-spatial.github.io/sf/reference/geos_binary_pred.md)
+  [`st_contains()`](https://r-spatial.github.io/sf/reference/geos_binary_pred.md)
+  [`st_contains_properly()`](https://r-spatial.github.io/sf/reference/geos_binary_pred.md)
+  [`st_overlaps()`](https://r-spatial.github.io/sf/reference/geos_binary_pred.md)
+  [`st_equals()`](https://r-spatial.github.io/sf/reference/geos_binary_pred.md)
+  [`st_covers()`](https://r-spatial.github.io/sf/reference/geos_binary_pred.md)
+  [`st_covered_by()`](https://r-spatial.github.io/sf/reference/geos_binary_pred.md)
+  [`st_equals_exact()`](https://r-spatial.github.io/sf/reference/geos_binary_pred.md)
+  [`st_is_within_distance()`](https://r-spatial.github.io/sf/reference/geos_binary_pred.md)
+  : Geometric binary predicates on pairs of simple feature geometry sets
+
+- [`st_combine()`](https://r-spatial.github.io/sf/reference/geos_combine.md)
+  [`st_union()`](https://r-spatial.github.io/sf/reference/geos_combine.md)
+  : Combine or union feature geometries
+
+- [`st_area()`](https://r-spatial.github.io/sf/reference/geos_measures.md)
+  [`st_length()`](https://r-spatial.github.io/sf/reference/geos_measures.md)
+  [`st_perimeter()`](https://r-spatial.github.io/sf/reference/geos_measures.md)
+  [`st_distance()`](https://r-spatial.github.io/sf/reference/geos_measures.md)
+  : Compute geometric measurements
+
+- [`st_dimension()`](https://r-spatial.github.io/sf/reference/geos_query.md)
+  [`st_is_simple()`](https://r-spatial.github.io/sf/reference/geos_query.md)
+  [`st_is_empty()`](https://r-spatial.github.io/sf/reference/geos_query.md)
+  : Dimension, simplicity, validity or is_empty queries on simple
+  feature geometries
+
+- [`st_buffer()`](https://r-spatial.github.io/sf/reference/geos_unary.md)
+  [`st_boundary()`](https://r-spatial.github.io/sf/reference/geos_unary.md)
+  [`st_convex_hull()`](https://r-spatial.github.io/sf/reference/geos_unary.md)
+  [`st_concave_hull()`](https://r-spatial.github.io/sf/reference/geos_unary.md)
+  [`st_simplify()`](https://r-spatial.github.io/sf/reference/geos_unary.md)
+  [`st_triangulate()`](https://r-spatial.github.io/sf/reference/geos_unary.md)
+  [`st_triangulate_constrained()`](https://r-spatial.github.io/sf/reference/geos_unary.md)
+  [`st_inscribed_circle()`](https://r-spatial.github.io/sf/reference/geos_unary.md)
+  [`st_minimum_rotated_rectangle()`](https://r-spatial.github.io/sf/reference/geos_unary.md)
+  [`st_minimum_bounding_circle()`](https://r-spatial.github.io/sf/reference/geos_unary.md)
+  [`st_voronoi()`](https://r-spatial.github.io/sf/reference/geos_unary.md)
+  [`st_polygonize()`](https://r-spatial.github.io/sf/reference/geos_unary.md)
+  [`st_line_merge()`](https://r-spatial.github.io/sf/reference/geos_unary.md)
+  [`st_centroid()`](https://r-spatial.github.io/sf/reference/geos_unary.md)
+  [`st_point_on_surface()`](https://r-spatial.github.io/sf/reference/geos_unary.md)
+  [`st_reverse()`](https://r-spatial.github.io/sf/reference/geos_unary.md)
+  [`st_node()`](https://r-spatial.github.io/sf/reference/geos_unary.md)
+  [`st_segmentize()`](https://r-spatial.github.io/sf/reference/geos_unary.md)
+  [`st_exterior_ring()`](https://r-spatial.github.io/sf/reference/geos_unary.md)
+  : Geometric unary operations on simple feature geometry sets
+
+- [`st_interpolate_aw()`](https://r-spatial.github.io/sf/reference/interpolate_aw.md)
+  : Areal-weighted interpolation of polygon data
+
+- [`is_driver_available()`](https://r-spatial.github.io/sf/reference/is_driver_available.md)
+  : Check if driver is available
+
+- [`is_driver_can()`](https://r-spatial.github.io/sf/reference/is_driver_can.md)
+  : Check if a driver can perform an action
+
+- [`is_geometry_column()`](https://r-spatial.github.io/sf/reference/is_geometry_column.md)
+  : Check if the columns could be of a coercable type for sf
+
+- [`merge(`*`<sf>`*`)`](https://r-spatial.github.io/sf/reference/merge.sf.md)
+  : merge method for sf and data.frame object
+
+- [`nc`](https://r-spatial.github.io/sf/reference/nc.md) : North
+  Carolina SIDS data
+
+- [`plot(`*`<sf>`*`)`](https://r-spatial.github.io/sf/reference/plot.md)
+  [`get_key_pos()`](https://r-spatial.github.io/sf/reference/plot.md)
+  [`plot(`*`<sfc_POINT>`*`)`](https://r-spatial.github.io/sf/reference/plot.md)
+  [`plot(`*`<sfc_MULTIPOINT>`*`)`](https://r-spatial.github.io/sf/reference/plot.md)
+  [`plot(`*`<sfc_LINESTRING>`*`)`](https://r-spatial.github.io/sf/reference/plot.md)
+  [`plot(`*`<sfc_CIRCULARSTRING>`*`)`](https://r-spatial.github.io/sf/reference/plot.md)
+  [`plot(`*`<sfc_MULTILINESTRING>`*`)`](https://r-spatial.github.io/sf/reference/plot.md)
+  [`plot(`*`<sfc_POLYGON>`*`)`](https://r-spatial.github.io/sf/reference/plot.md)
+  [`plot(`*`<sfc_MULTIPOLYGON>`*`)`](https://r-spatial.github.io/sf/reference/plot.md)
+  [`plot(`*`<sfc_GEOMETRYCOLLECTION>`*`)`](https://r-spatial.github.io/sf/reference/plot.md)
+  [`plot(`*`<sfc_GEOMETRY>`*`)`](https://r-spatial.github.io/sf/reference/plot.md)
+  [`plot(`*`<sfg>`*`)`](https://r-spatial.github.io/sf/reference/plot.md)
+  [`plot_sf()`](https://r-spatial.github.io/sf/reference/plot.md)
+  [`sf.colors()`](https://r-spatial.github.io/sf/reference/plot.md)
+  [`text(`*`<sf>`*`)`](https://r-spatial.github.io/sf/reference/plot.md)
+  [`text(`*`<sfc>`*`)`](https://r-spatial.github.io/sf/reference/plot.md)
+  [`points(`*`<sf>`*`)`](https://r-spatial.github.io/sf/reference/plot.md)
+  [`points(`*`<sfc>`*`)`](https://r-spatial.github.io/sf/reference/plot.md)
+  : plot sf object
+
+- [`prefix_map`](https://r-spatial.github.io/sf/reference/prefix_map.md)
+  : Map prefix to driver
+
+- [`sf_proj_search_paths()`](https://r-spatial.github.io/sf/reference/proj_tools.md)
+  [`sf_proj_network()`](https://r-spatial.github.io/sf/reference/proj_tools.md)
+  [`sf_proj_pipelines()`](https://r-spatial.github.io/sf/reference/proj_tools.md)
+  : Manage PROJ settings
+
+- [`rawToHex()`](https://r-spatial.github.io/sf/reference/rawToHex.md) :
+  Convert raw vector(s) into hexadecimal character string(s)
+
+- [`sf_use_s2()`](https://r-spatial.github.io/sf/reference/s2.md)
+  [`st_as_s2()`](https://r-spatial.github.io/sf/reference/s2.md) :
+  functions for spherical geometry, using s2 package
+
+- [`st_sf()`](https://r-spatial.github.io/sf/reference/sf.md)
+  [`` `[`( ``*`<sf>`*`)`](https://r-spatial.github.io/sf/reference/sf.md)
+  [`print(`*`<sf>`*`)`](https://r-spatial.github.io/sf/reference/sf.md)
+  : Create sf object
+
+- [`sf_extSoftVersion()`](https://r-spatial.github.io/sf/reference/sf_extSoftVersion.md)
+  : Provide the external dependencies versions of the libraries linked
+  to sf
+
+- [`sf_add_proj_units()`](https://r-spatial.github.io/sf/reference/sf_project.md)
+  [`sf_project()`](https://r-spatial.github.io/sf/reference/sf_project.md)
+  : directly transform a set of coordinates
+
+- [`st_sfc()`](https://r-spatial.github.io/sf/reference/sfc.md)
+  [`` `[`( ``*`<sfc>`*`)`](https://r-spatial.github.io/sf/reference/sfc.md)
+  : Create simple feature geometry list column
+
+- [`print(`*`<sgbp>`*`)`](https://r-spatial.github.io/sf/reference/sgbp.md)
+  [`t(`*`<sgbp>`*`)`](https://r-spatial.github.io/sf/reference/sgbp.md)
+  [`as.matrix(`*`<sgbp>`*`)`](https://r-spatial.github.io/sf/reference/sgbp.md)
+  [`dim(`*`<sgbp>`*`)`](https://r-spatial.github.io/sf/reference/sgbp.md)
+  [`Ops(`*`<sgbp>`*`)`](https://r-spatial.github.io/sf/reference/sgbp.md)
+  [`as.data.frame(`*`<sgbp>`*`)`](https://r-spatial.github.io/sf/reference/sgbp.md)
+  : Methods for dealing with sparse geometry binary predicate lists
+
+- [`st_point()`](https://r-spatial.github.io/sf/reference/st.md)
+  [`st_multipoint()`](https://r-spatial.github.io/sf/reference/st.md)
+  [`st_linestring()`](https://r-spatial.github.io/sf/reference/st.md)
+  [`st_polygon()`](https://r-spatial.github.io/sf/reference/st.md)
+  [`st_multilinestring()`](https://r-spatial.github.io/sf/reference/st.md)
+  [`st_multipolygon()`](https://r-spatial.github.io/sf/reference/st.md)
+  [`st_geometrycollection()`](https://r-spatial.github.io/sf/reference/st.md)
+  [`print(`*`<sfg>`*`)`](https://r-spatial.github.io/sf/reference/st.md)
+  [`head(`*`<sfg>`*`)`](https://r-spatial.github.io/sf/reference/st.md)
+  [`format(`*`<sfg>`*`)`](https://r-spatial.github.io/sf/reference/st.md)
+  [`c(`*`<sfg>`*`)`](https://r-spatial.github.io/sf/reference/st.md)
+  [`as.matrix(`*`<sfg>`*`)`](https://r-spatial.github.io/sf/reference/st.md)
+  : Create simple feature from a numeric vector, matrix or list
+
+- [`NA_agr_`](https://r-spatial.github.io/sf/reference/st_agr.md)
+  [`st_agr()`](https://r-spatial.github.io/sf/reference/st_agr.md)
+  [`` `st_agr<-`() ``](https://r-spatial.github.io/sf/reference/st_agr.md)
+  [`st_set_agr()`](https://r-spatial.github.io/sf/reference/st_agr.md) :
+
+  get or set relation_to_geometry attribute of an `sf` object
+
+- [`st_as_binary()`](https://r-spatial.github.io/sf/reference/st_as_binary.md)
+  : Convert sfc object to an WKB object
+
+- [`st_as_grob()`](https://r-spatial.github.io/sf/reference/st_as_grob.md)
+  : Convert sf\* object to a grob
+
+- [`st_as_sf()`](https://r-spatial.github.io/sf/reference/st_as_sf.md) :
+  Convert foreign object to an sf object
+
+- [`st_as_sfc()`](https://r-spatial.github.io/sf/reference/st_as_sfc.md)
+  : Convert foreign geometry object to an sfc object
+
+- [`st_as_text()`](https://r-spatial.github.io/sf/reference/st_as_text.md)
+  : Return Well-known Text representation of simple feature geometry or
+  coordinate reference system
+
+- [`is.na(`*`<bbox>`*`)`](https://r-spatial.github.io/sf/reference/st_bbox.md)
+  [`st_bbox()`](https://r-spatial.github.io/sf/reference/st_bbox.md)
+  [`NA_bbox_`](https://r-spatial.github.io/sf/reference/st_bbox.md)
+  [`FULL_bbox_`](https://r-spatial.github.io/sf/reference/st_bbox.md)
+  [`format(`*`<bbox>`*`)`](https://r-spatial.github.io/sf/reference/st_bbox.md)
+  : Return bounding of a simple feature or simple feature set
+
+- [`st_break_antimeridian()`](https://r-spatial.github.io/sf/reference/st_break_antimeridian.md)
+  : Break antimeridian for plotting not centred on Greenwich
+
+- [`st_cast()`](https://r-spatial.github.io/sf/reference/st_cast.md) :
+  Cast geometry to another type: either simplify, or cast explicitly
+
+- [`st_cast_sfc_default()`](https://r-spatial.github.io/sf/reference/st_cast_sfc_default.md)
+  : Coerce geometry to MULTI\* geometry
+
+- [`st_collection_extract()`](https://r-spatial.github.io/sf/reference/st_collection_extract.md)
+  :
+
+  Given an object with geometries of type `GEOMETRY` or
+  `GEOMETRYCOLLECTION`, return an object consisting only of elements of
+  the specified type.
+
+- [`st_coordinates()`](https://r-spatial.github.io/sf/reference/st_coordinates.md)
+  : retrieve coordinates in matrix form
+
+- [`st_crop()`](https://r-spatial.github.io/sf/reference/st_crop.md) :
+  crop an sf object to a specific rectangle
+
+- [`st_crs()`](https://r-spatial.github.io/sf/reference/st_crs.md)
+  [`` `st_crs<-`() ``](https://r-spatial.github.io/sf/reference/st_crs.md)
+  [`st_set_crs()`](https://r-spatial.github.io/sf/reference/st_crs.md)
+  [`NA_crs_`](https://r-spatial.github.io/sf/reference/st_crs.md)
+  [`is.na(`*`<crs>`*`)`](https://r-spatial.github.io/sf/reference/st_crs.md)
+  [`` `$`( ``*`<crs>`*`)`](https://r-spatial.github.io/sf/reference/st_crs.md)
+  [`format(`*`<crs>`*`)`](https://r-spatial.github.io/sf/reference/st_crs.md)
+  [`st_axis_order()`](https://r-spatial.github.io/sf/reference/st_crs.md)
+  : Retrieve coordinate reference system from object
+
+- [`st_drivers()`](https://r-spatial.github.io/sf/reference/st_drivers.md)
+  : Get GDAL drivers
+
+- [`st_geometry()`](https://r-spatial.github.io/sf/reference/st_geometry.md)
+  [`` `st_geometry<-`() ``](https://r-spatial.github.io/sf/reference/st_geometry.md)
+  [`st_set_geometry()`](https://r-spatial.github.io/sf/reference/st_geometry.md)
+  [`st_drop_geometry()`](https://r-spatial.github.io/sf/reference/st_geometry.md)
+  : Get, set, replace or rename geometry from an sf object
+
+- [`st_geometry_type()`](https://r-spatial.github.io/sf/reference/st_geometry_type.md)
+  : Return geometry type of an object
+
+- [`st_graticule()`](https://r-spatial.github.io/sf/reference/st_graticule.md)
+  : Compute graticules and their parameters
+
+- [`st_is()`](https://r-spatial.github.io/sf/reference/st_is.md) : test
+  equality between the geometry type and a class or set of classes
+
+- [`st_is_full()`](https://r-spatial.github.io/sf/reference/st_is_full.md)
+  : predicate whether a geometry is equal to a POLYGON FULL
+
+- [`st_is_longlat()`](https://r-spatial.github.io/sf/reference/st_is_longlat.md)
+  : Assert whether simple feature coordinates are longlat degrees
+
+- [`st_jitter()`](https://r-spatial.github.io/sf/reference/st_jitter.md)
+  : jitter geometries
+
+- [`st_join()`](https://r-spatial.github.io/sf/reference/st_join.md)
+  [`st_filter()`](https://r-spatial.github.io/sf/reference/st_join.md) :
+  spatial join, spatial filter
+
+- [`st_layers()`](https://r-spatial.github.io/sf/reference/st_layers.md)
+  : Return properties of layers in a datasource
+
+- [`st_line_project()`](https://r-spatial.github.io/sf/reference/st_line_project_point.md)
+  [`st_line_interpolate()`](https://r-spatial.github.io/sf/reference/st_line_project_point.md)
+  : Project point on linestring, interpolate along a linestring
+
+- [`st_line_sample()`](https://r-spatial.github.io/sf/reference/st_line_sample.md)
+  : Sample points on a linear geometry
+
+- [`is.na(`*`<m_range>`*`)`](https://r-spatial.github.io/sf/reference/st_m_range.md)
+  [`st_m_range()`](https://r-spatial.github.io/sf/reference/st_m_range.md)
+  [`NA_m_range_`](https://r-spatial.github.io/sf/reference/st_m_range.md)
+  : Return 'm' range of a simple feature or simple feature set
+
+- [`st_make_grid()`](https://r-spatial.github.io/sf/reference/st_make_grid.md)
+  : Create a regular tesselation over the bounding box of an sf or sfc
+  object
+
+- [`st_nearest_feature()`](https://r-spatial.github.io/sf/reference/st_nearest_feature.md)
+  : get index of nearest feature
+
+- [`st_nearest_points()`](https://r-spatial.github.io/sf/reference/st_nearest_points.md)
+  : get nearest points between pairs of geometries
+
+- [`st_normalize()`](https://r-spatial.github.io/sf/reference/st_normalize.md)
+  : Normalize simple features
+
+- [`st_precision()`](https://r-spatial.github.io/sf/reference/st_precision.md)
+  [`st_set_precision()`](https://r-spatial.github.io/sf/reference/st_precision.md)
+  [`` `st_precision<-`() ``](https://r-spatial.github.io/sf/reference/st_precision.md)
+  : Get precision
+
+- [`st_read()`](https://r-spatial.github.io/sf/reference/st_read.md)
+  [`read_sf()`](https://r-spatial.github.io/sf/reference/st_read.md) :
+  Read simple features or layers from file or database
+
+- [`st_relate()`](https://r-spatial.github.io/sf/reference/st_relate.md)
+  : Compute DE9-IM relation between pairs of geometries, or match it to
+  a given pattern
+
+- [`st_sample()`](https://r-spatial.github.io/sf/reference/st_sample.md)
+  : sample points on or in (sets of) spatial features
+
+- [`st_shift_longitude()`](https://r-spatial.github.io/sf/reference/st_shift_longitude.md)
+  : Shift or re-center geographical coordinates for a Pacific view
+
+- [`st_can_transform()`](https://r-spatial.github.io/sf/reference/st_transform.md)
+  [`st_transform()`](https://r-spatial.github.io/sf/reference/st_transform.md)
+  [`st_wrap_dateline()`](https://r-spatial.github.io/sf/reference/st_transform.md)
+  [`sf_proj_info()`](https://r-spatial.github.io/sf/reference/st_transform.md)
+  : Transform or convert coordinates of simple feature
+
+- [`st_viewport()`](https://r-spatial.github.io/sf/reference/st_viewport.md)
+  : Create viewport from sf, sfc or sfg object
+
+- [`st_write()`](https://r-spatial.github.io/sf/reference/st_write.md)
+  [`write_sf()`](https://r-spatial.github.io/sf/reference/st_write.md)
+  [`st_delete()`](https://r-spatial.github.io/sf/reference/st_write.md)
+  : Write simple features object to file or database
+
+- [`is.na(`*`<z_range>`*`)`](https://r-spatial.github.io/sf/reference/st_z_range.md)
+  [`st_z_range()`](https://r-spatial.github.io/sf/reference/st_z_range.md)
+  [`NA_z_range_`](https://r-spatial.github.io/sf/reference/st_z_range.md)
+  : Return 'z' range of a simple feature or simple feature set
+
+- [`st_zm()`](https://r-spatial.github.io/sf/reference/st_zm.md) : Drop
+  or add Z and/or M dimensions from feature geometries
+
+- [`summary(`*`<sfc>`*`)`](https://r-spatial.github.io/sf/reference/summary.sfc.md)
+  : Summarize simple feature column
+
+- [`type_sum.sfc()`](https://r-spatial.github.io/sf/reference/tibble.md)
+  [`obj_sum.sfc()`](https://r-spatial.github.io/sf/reference/tibble.md)
+  [`pillar_shaft.sfc()`](https://r-spatial.github.io/sf/reference/tibble.md)
+  : Summarize simple feature type for tibble
+
+- [`filter.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`arrange.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`group_by.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`ungroup.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`rowwise.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`mutate.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`transmute.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`select.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`rename.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`rename_with.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`slice.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`summarise.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`distinct.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`gather.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`pivot_longer.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`pivot_wider.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`spread.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`sample_n.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`sample_frac.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`group_split.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`nest.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`separate.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`separate_rows.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`unite.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`unnest.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`drop_na.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`inner_join.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`left_join.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`right_join.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`full_join.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`semi_join.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`anti_join.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  : Tidyverse methods for sf objects
+
+- [`transform(`*`<sf>`*`)`](https://r-spatial.github.io/sf/reference/transform.sf.md)
+  : transform method for sf objects
+
+- [`st_is_valid()`](https://r-spatial.github.io/sf/reference/valid.md)
+  [`st_make_valid()`](https://r-spatial.github.io/sf/reference/valid.md)
+  : Check validity or make an invalid geometry valid
+
+- [`vec_ptype2.sfc()`](https://r-spatial.github.io/sf/reference/vctrs.md)
+  [`vec_cast.sfc()`](https://r-spatial.github.io/sf/reference/vctrs.md)
+  : vctrs methods for sf objects
+
+# Articles
+
+### All vignettes
+
+- [1. Simple Features for
+  R](https://r-spatial.github.io/sf/articles/sf1.md):
+- [2. Reading, Writing and Converting Simple
+  Features](https://r-spatial.github.io/sf/articles/sf2.md):
+- [3. Manipulating Simple Feature
+  Geometries](https://r-spatial.github.io/sf/articles/sf3.md):
+- [4. Manipulating Simple
+  Features](https://r-spatial.github.io/sf/articles/sf4.md):
+- [5. Plotting Simple
+  Features](https://r-spatial.github.io/sf/articles/sf5.md):
+- [6. Miscellaneous](https://r-spatial.github.io/sf/articles/sf6.md):
+- [7. Spherical geometry in sf using
+  s2geometry](https://r-spatial.github.io/sf/articles/sf7.md):
