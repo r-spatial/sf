@@ -99,7 +99,7 @@ RUN cd proj* \
 
 # GDAL:
 ENV GDAL_VERSION 3.12.0
-ENV GDAL_VERSION_NAME 3.12.0rc1
+ENV GDAL_VERSION_NAME 3.12.0
 RUN wget -q http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
   && cd gdal* \
@@ -138,3 +138,14 @@ RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual 
 # terra:
 RUN wget -q https://cran.r-project.org/src/contrib/terra_1.8-80.tar.gz
 RUN R CMD check --no-manual terra_1.8-80.tar.gz
+
+RUN wget -q https://cran.r-project.org/src/contrib/vapour_0.12.0.tar.gz
+RUN R -e 'install.packages(c("markdown", "spelling"))'
+#RUN R CMD INSTALL vapour*gz
+#RUN R CMD check --no-manual vapour*gz
+
+RUN R -e 'install.packages(c("gt"))'
+RUN wget -q https://cran.r-project.org/src/contrib/gdalraster_2.2.1.tar.gz
+RUN R -e 'install.packages(c("RcppInt64"))'
+RUN R CMD INSTALL gdalraster*gz
+RUN R CMD check --no-manual gdalraster*gz

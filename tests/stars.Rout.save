@@ -1,7 +1,7 @@
 
-R Under development (unstable) (2025-11-05 r88988 ucrt) -- "Unsuffered Consequences"
+R version 4.5.2 (2025-10-31) -- "[Not] Part in a Rumble"
 Copyright (C) 2025 The R Foundation for Statistical Computing
-Platform: x86_64-w64-mingw32/x64
+Platform: x86_64-pc-linux-gnu
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -264,8 +264,15 @@ First 10 features:
 + 	z = paste0('ZARR:/vsizip/"', p, '"/ones.zarr')
 + 	gdal_utils("mdiminfo", z)
 + 	cat("\n")
-+ 	print(read_stars(z, normalize_path = FALSE))
-+ 	print(read_mdim(z, normalize_path = FALSE))
++ 	e = try(read_stars(z, normalize_path = FALSE), silent = TRUE)
++ 	f = try(read_mdim(z, normalize_path = FALSE), silent = TRUE)
++ 	if (inherits(e, "try-error") || inherits(f, "try-error")) {
++ 		print(e)
++ 		print("error when reading blosc-compressed Zarr file: blosc not supported?")
++ 	} else { 
++ 		print(e)
++ 		print(f)
++ 	}
 + }
 {
   "type": "group",
@@ -320,4 +327,4 @@ dim0    1 100    0.5     1 [y]
 > 
 > proc.time()
    user  system elapsed 
-   2.10    0.23    2.32 
+  1.943   3.833   1.595 

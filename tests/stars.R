@@ -81,6 +81,13 @@ if (require(stars, quietly = TRUE)) {
 	z = paste0('ZARR:/vsizip/"', p, '"/ones.zarr')
 	gdal_utils("mdiminfo", z)
 	cat("\n")
-	print(read_stars(z, normalize_path = FALSE))
-	print(read_mdim(z, normalize_path = FALSE))
+	e = try(read_stars(z, normalize_path = FALSE), silent = TRUE)
+	f = try(read_mdim(z, normalize_path = FALSE), silent = TRUE)
+	if (inherits(e, "try-error") || inherits(f, "try-error")) {
+		print(e)
+		print("error when reading blosc-compressed Zarr file: blosc not supported?")
+	} else { 
+		print(e)
+		print(f)
+	}
 }
