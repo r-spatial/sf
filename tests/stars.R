@@ -84,7 +84,6 @@ if (require(stars, quietly = TRUE)) {
 	e = try(read_stars(z, normalize_path = FALSE), silent = TRUE)
 	f = try(read_mdim(z, normalize_path = FALSE), silent = TRUE)
 	if (inherits(e, "try-error") || inherits(f, "try-error")) {
-		print(e)
 		print("error when reading blosc-compressed Zarr file: blosc not supported?")
 	} else { 
 		print(e)
