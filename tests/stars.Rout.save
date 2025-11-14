@@ -262,12 +262,14 @@ First 10 features:
 > if (require(stars, quietly = TRUE)) {
 + 	p = normalizePath(system.file("nc/ones.zarr.zip", package = "sf"))
 + 	z = paste0('ZARR:/vsizip/"', p, '"/ones.zarr')
-+ 	gdal_utils("mdiminfo", z)
-+ 	cat("\n")
++ 	d = try(gdal_utils("mdiminfo", z))
++ 	if (!inherits(d, "try-error")) {
++ 		print(d)
++ 		cat("\n")
++ 	}
 + 	e = try(read_stars(z, normalize_path = FALSE), silent = TRUE)
 + 	f = try(read_mdim(z, normalize_path = FALSE), silent = TRUE)
 + 	if (inherits(e, "try-error") || inherits(f, "try-error")) {
-+ 		print(e)
 + 		print("error when reading blosc-compressed Zarr file: blosc not supported?")
 + 	} else { 
 + 		print(e)
@@ -307,7 +309,8 @@ First 10 features:
       }
     }
   }
-}
+}[1] "{\n  \"type\": \"group\",\n  \"driver\": \"Zarr\",\n  \"name\": \"/\",\n  \"arrays\": {\n    \"ones\": {\n      \"datatype\": \"Int32\",\n      \"dimensions\": [\n        {\n          \"name\": \"dim0\",\n          \"full_name\": \"dim0\",\n          \"size\": 100\n        },\n        {\n          \"name\": \"dim1\",\n          \"full_name\": \"dim1\",\n          \"size\": 100\n        }\n      ],\n      \"dimension_size\": [\n        100,\n        100\n      ],\n      \"block_size\": [\n        50,\n        50\n      ],\n      \"nodata_value\": 0,\n      \"structural_info\": {\n        \"COMPRESSOR\": \"{ \\\"blocksize\\\": 0, \\\"clevel\\\": 5, \\\"cname\\\": \\\"lz4\\\", \\\"id\\\": \\\"blosc\\\", \\\"shuffle\\\": 1 }\"\n      }\n    }\n  }\n}"
+
 stars object with 2 dimensions and 1 attribute
 attribute(s):
            Min. 1st Qu. Median Mean 3rd Qu. Max.
@@ -327,4 +330,4 @@ dim0    1 100    0.5     1 [y]
 > 
 > proc.time()
    user  system elapsed 
-  1.943   3.833   1.595 
+  2.402   4.034   2.082 
