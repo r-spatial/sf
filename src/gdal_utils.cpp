@@ -457,7 +457,7 @@ Rcpp::CharacterVector CPL_gdalmdiminfo(Rcpp::CharacterVector obj, Rcpp::Characte
 	GDALDatasetH ds = GDALOpenEx((const char *) obj[0], GDAL_OF_MULTIDIM_RASTER | GDAL_OF_VERBOSE_ERROR , NULL, oo_char.data(), NULL);
 	if (ds == NULL) {
 		Rcpp::Rcout << "failed to open " << obj[0] << std::endl;
-		Rcpp::stop("Error opening data source");
+		Rcpp::stop("cannot open data source");
 	}
 	std::vector <char *> options_char = create_options(options, true);
 	GDALMultiDimInfoOptions* opt = GDALMultiDimInfoOptionsNew(options_char.data(), NULL);
