@@ -2,6 +2,8 @@
 
 ## version 1.0-23
 
+- allow tests reading blosc compressed Zarr files to fail
+
 - [`st_as_sf.data.frame()`](https://r-spatial.github.io/sf/reference/st_as_sf.md)
   sets `z_range` and `m_range` if needed;
   <https://github.com/geoarrow/geoarrow-r/issues/75>
