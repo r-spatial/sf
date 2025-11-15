@@ -64,8 +64,8 @@ set_utf8 = function(x) {
 #' \url{https://gdal.org/en/latest/development/rfc/rfc41_multiple_geometry_fields.html}
 #'
 #' for values for \code{type} see
-#' \url{https://en.wikipedia.org/wiki/Well-known_text#Well-known_binary}, but
-#' note that not every target value may lead to successful conversion. The
+#' \url{https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry#Well-known_binary}, 
+#' but note that not every target value may lead to successful conversion. The
 #' typical conversion from POLYGON (3) to MULTIPOLYGON (6) should work; the
 #' other way around (type=3), secondary rings from MULTIPOLYGONS may be dropped
 #' without warnings. \code{promote_to_multi} is handled on a per-geometry column
