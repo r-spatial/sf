@@ -564,10 +564,6 @@ CRS:           NA
 
 Attaching package: 'dplyr'
 
-The following object is masked from 'package:testthat':
-
-    matches
-
 The following objects are masked from 'package:stats':
 
     filter, lag
@@ -1144,4 +1140,4 @@ Geodetic CRS:  WGS 84
 > 
 > proc.time()
    user  system elapsed 
-  5.480   1.465   5.555 
+  5.292   1.417   5.383 

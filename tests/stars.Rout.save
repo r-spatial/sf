@@ -259,10 +259,12 @@ First 10 features:
 > gdal_metadata(tif)
 [1] "AREA_OR_POINT=Point"
 > 
-> if (require(stars, quietly = TRUE)) {
+> suppressMessages(
++ suppressWarnings(
++ if (require(stars, quietly = TRUE)) {
 + 	p = normalizePath(system.file("nc/ones.zarr.zip", package = "sf"))
 + 	z = paste0('ZARR:/vsizip/"', p, '"/ones.zarr')
-+ 	d = try(gdal_utils("mdiminfo", z))
++ 	d = try(gdal_utils("mdiminfo", z), silent = TRUE)
 + 	if (!inherits(d, "try-error")) {
 + 		print(d)
 + 		cat("\n")
@@ -270,12 +272,13 @@ First 10 features:
 + 	e = try(read_stars(z, normalize_path = FALSE), silent = TRUE)
 + 	f = try(read_mdim(z, normalize_path = FALSE), silent = TRUE)
 + 	if (inherits(e, "try-error") || inherits(f, "try-error")) {
-+ 		print("error when reading blosc-compressed Zarr file: blosc not supported?")
++ 		print("Cannot read blosc-compressed Zarr file: blosc not supported?")
 + 	} else { 
 + 		print(e)
 + 		print(f)
 + 	}
 + }
++ ))
 {
   "type": "group",
   "driver": "Zarr",
@@ -330,4 +333,4 @@ dim0    1 100    0.5     1 [y]
 > 
 > proc.time()
    user  system elapsed 
-  2.402   4.034   2.082 
+  1.948   4.046   1.515 
