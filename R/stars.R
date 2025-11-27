@@ -38,7 +38,7 @@ gdal_write = function(x, ..., file, driver = "GTiff", options = character(0), ty
 		warning("handling scale_offset requires sf > 1.0-9")
 	d = stars::st_dimensions(x)
 	xydims = attr(d, "raster")$dimensions
-	if (!all.equal(match(xydims, names(d)), 1:2))
+	if (!isTRUE(all.equal(match(xydims, names(d)), 1:2)))
 		stop("x and y raster dimensions need to be in place 1 and 2")
 	from = c(d[[1]]$from, d[[2]]$from) - 1
 	dims = c(d[[1]]$to, d[[2]]$to)
