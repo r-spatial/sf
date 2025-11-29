@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">sf</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0-23</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0-24</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -161,9 +161,7 @@ automatically. If we want to drop geometry, we can coerce to
 <p>and use the <code>drop</code> argument to drop geometries:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nc</span><span class="op">[</span><span class="fl">1</span>, <span class="st">"NWBIR74"</span>, drop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">]</span></span>
-<span><span class="co">## [1] 10</span></span>
-<span><span class="co">## attr(,"class")</span></span>
-<span><span class="co">## [1] "numeric"</span></span></code></pre></div>
+<span><span class="co">## [1] 10</span></span></code></pre></div>
 <p>but we can also use a spatial object as the row selector, to select
 features that intersect with another spatial feature:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">

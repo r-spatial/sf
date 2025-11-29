@@ -96,8 +96,6 @@ and use the `drop` argument to drop geometries:
 ``` r
 nc[1, "NWBIR74", drop = TRUE]
 ## [1] 10
-## attr(,"class")
-## [1] "numeric"
 ```
 
 but we can also use a spatial object as the row selector, to select

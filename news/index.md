@@ -1,6 +1,13 @@
 # Changelog
 
+## version 1.0-24
+
+- fix class label setting in `[.sf()`;
+  [\#2557](https://github.com/r-spatial/sf/issues/2557)
+
 ## version 1.0-23
+
+CRAN release: 2025-11-28
 
 - allow tests reading blosc compressed Zarr files to fail
 
