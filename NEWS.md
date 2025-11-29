@@ -1,3 +1,7 @@
+# version 1.0-24
+
+* fix class label setting in `[.sf()`; #2557
+
 # version 1.0-23
 
 * allow tests reading blosc compressed Zarr files to fail

@@ -378,8 +378,12 @@ st_sf = function(..., agr = NA_agr_, row.names,
 		x[[ sf_column ]] = geom
 		x = st_sf(x, sf_column_name = sf_column, sfc_last = FALSE)
 		st_set_agr(x, agr[match(setdiff(names(x), sf_column), names(agr))])
-	} else
-		structure(x, class = setdiff(class(x), "sf"))
+	} else { 
+		if (inherits(x, "sf"))
+			structure(x, class = setdiff(class(x), "sf"))
+		else
+			x
+	}
 }
 
 #' @export
