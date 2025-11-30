@@ -52,7 +52,7 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">st_graticule</span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">180</span>, <span class="op">-</span><span class="fl">90</span>, <span class="fl">180</span>, <span class="fl">90</span><span class="op">)</span>,</span>
 <span>  crs <span class="op">=</span> <span class="fu"><a href="st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
-<span>  datum <span class="op">=</span> <span class="fu"><a href="st_crs.html">st_crs</a></span><span class="op">(</span><span class="fl">4326</span><span class="op">)</span>,</span>
+<span>  datum <span class="op">=</span> <span class="fu"><a href="st_crs.html">st_crs</a></span><span class="op">(</span><span class="st">"OGC:CRS84"</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span>,</span>
 <span>  lon <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  lat <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -74,7 +74,7 @@
 
 
 <dt id="arg-datum">datum<a class="anchor" aria-label="anchor" href="#arg-datum"></a></dt>
-<dd><p>either an object of class <code>crs</code> with the coordinate reference system for the graticules, or <code>NULL</code> in which case a grid in the coordinate system of <code>x</code> is drawn, or <code>NA</code>, in which case an empty <code>sf</code> object is returned.</p></dd>
+<dd><p>either an object of class <code>crs</code> with the coordinate reference system for the graticules, or <code>NULL</code> in which case a grid in the coordinate system of <code>x</code> is drawn, or <code>NA</code>, in which case an empty <code>sf</code> object is returned. If missing and <code>x</code> has a crs with a datum, the geographic coordinate system (datum) of <code>x</code> is taken.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

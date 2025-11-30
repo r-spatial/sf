@@ -2,6 +2,11 @@
 
 ## version 1.0-24
 
+- [`st_graticule()`](https://r-spatial.github.io/sf/reference/st_graticule.md)
+  creates graticule by default in the geographic coordinate reference
+  system of arguments `x` or `crs`, and only if nothing is found or
+  provided in `OGC:CRS84`
+
 - the figure margins parameter `mar` can be specified in a call to
   [`plot.sf()`](https://r-spatial.github.io/sf/reference/plot.md);
   [\#2558](https://github.com/r-spatial/sf/issues/2558)

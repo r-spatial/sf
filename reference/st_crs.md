@@ -72,9 +72,14 @@ An object of class `crs` of length 2.
 
 - parameters:
 
-  logical; `FALSE` by default; if `TRUE` return a list of coordinate
-  reference system parameters, with named elements `SemiMajor`,
-  `InvFlattening`, `units_gdal`, `IsVertical`, `WktPretty`, and `Wkt`
+  logical; `FALSE` by default; only for the `st_crs.sfc()` method: if
+  `TRUE` return a classed list of coordinate reference system
+  parameters, with named elements `SemiMajor`, `InvFlattening`,
+  `units_gdal`, `IsVertical`, `WktPretty`, `Wkt`, `Name`, `proj4string`,
+  `epsg`, `yx`, `ProjJson`, `WKT1_ESRI`, `srid` (in authority:code
+  form), `axes` (a data.frame with columns `name` and `orientation`),
+  `gcs_crs` with the WKT of the base geographic coordinate system,
+  `ud_unit`. The list has class `crs_parameters`.
 
 - value:
 

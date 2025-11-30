@@ -116,7 +116,7 @@ Set or replace retrieve coordinate reference system from object"><meta property=
 
 
 <dt id="arg-parameters">parameters<a class="anchor" aria-label="anchor" href="#arg-parameters"></a></dt>
-<dd><p>logical; <code>FALSE</code> by default; if <code>TRUE</code> return a list of coordinate reference system parameters, with named elements <code>SemiMajor</code>, <code>InvFlattening</code>, <code>units_gdal</code>, <code>IsVertical</code>, <code>WktPretty</code>, and <code>Wkt</code></p></dd>
+<dd><p>logical; <code>FALSE</code> by default; only for the <code>st_crs.sfc()</code> method: if <code>TRUE</code> return a classed list of coordinate reference system parameters, with named elements <code>SemiMajor</code>, <code>InvFlattening</code>, <code>units_gdal</code>, <code>IsVertical</code>, <code>WktPretty</code>, <code>Wkt</code>, <code>Name</code>, <code>proj4string</code>, <code>epsg</code>, <code>yx</code>, <code>ProjJson</code>, <code>WKT1_ESRI</code>, <code>srid</code> (in authority:code form), <code>axes</code> (a data.frame with columns <code>name</code> and <code>orientation</code>), <code>gcs_crs</code> with the WKT of the base geographic coordinate system, <code>ud_unit</code>. The list has class <code>crs_parameters</code>.</p></dd>
 
 
 <dt id="arg-value">value<a class="anchor" aria-label="anchor" href="#arg-value"></a></dt>

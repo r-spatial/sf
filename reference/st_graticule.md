@@ -8,7 +8,7 @@ Compute graticules and their parameters
 st_graticule(
   x = c(-180, -90, 180, 90),
   crs = st_crs(x),
-  datum = st_crs(4326),
+  datum = st_crs("OGC:CRS84"),
   ...,
   lon = NULL,
   lat = NULL,
@@ -33,7 +33,8 @@ st_graticule(
   either an object of class `crs` with the coordinate reference system
   for the graticules, or `NULL` in which case a grid in the coordinate
   system of `x` is drawn, or `NA`, in which case an empty `sf` object is
-  returned.
+  returned. If missing and `x` has a crs with a datum, the geographic
+  coordinate system (datum) of `x` is taken.
 
 - ...:
 
