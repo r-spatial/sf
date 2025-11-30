@@ -1,5 +1,7 @@
 # version 1.0-24
 
+* the figure margins parameter `mar` can be specified in a call to `plot.sf()`; #2558
+
 * fix class label setting in `[.sf()`; #2557
 
 # version 1.0-23

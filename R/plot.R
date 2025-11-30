@@ -69,6 +69,8 @@ sf_cut = function(values, breaks, include.lowest = TRUE) {
 #' When setting \code{reset} to \code{FALSE}, the original device parameters are lost, and the device must be reset using \code{dev.off()} in order to reset it.
 #'
 #' parameter \code{at} can be set to specify where labels are placed along the key; see examples.
+#'
+#' parameter \code{mar} can be set in \code{...} to override default margins.
 #' 
 #' The features are plotted in the order as they apppear in the sf object. See examples for when a different plotting order is wanted.
 #'
@@ -139,10 +141,14 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 			key.pos = lt$key.pos
 		layout(lt$m, widths = lt$widths, heights = lt$heights, respect = compact)
 
-		if (isTRUE(dots$axes))
-			par(mar = c(2.1, 2.1, 1.2, 0))
-		else
-			par(mar = c(0, 0, 1.2, 0))
+		mar = if (is.null(dots$mar)) {
+				if (isTRUE(dots$axes))
+					c(2.1, 2.1, 1.2, 0)
+				else
+					c(0, 0, 1.2, 0)
+			} else
+				dots$mar
+		par(mar = mar)
 
 		if (max_plot_missing)
 			max.plot = prod(lt$mfrow)
@@ -302,9 +308,12 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 				reset_layout_needed = FALSE # as we didn't call layout()
 			# plot the map:
 			if (!isTRUE(dots$add)) {
-				mar = c(1, 1, 1.2, 1)
-				if (isTRUE(dots$axes))
-					mar[1:2] = 2.1
+				if (is.null(dots$mar)) {
+					mar = c(1, 1, 1.2, 1)
+					if (isTRUE(dots$axes))
+						mar[1:2] = 2.1
+				} else
+					mar = dots$mar
 				par(mar = mar)
 			}
 			if (col_missing)

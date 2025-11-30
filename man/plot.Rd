@@ -276,6 +276,8 @@ When setting \code{reset} to \code{FALSE}, the original device parameters are lo
 
 parameter \code{at} can be set to specify where labels are placed along the key; see examples.
 
+parameter \code{mar} can be set in \code{...} to override default margins.
+
 The features are plotted in the order as they apppear in the sf object. See examples for when a different plotting order is wanted.
 
 \code{plot_sf} sets up the plotting area, axes, graticule, or webmap background; it
