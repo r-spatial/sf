@@ -606,7 +606,7 @@ plot.sfg = function(x, ...) {
 #' @param bgMap object of class \code{ggmap}, or returned by function \code{RgoogleMaps::GetMap}
 #' @param expandBB numeric; fractional values to expand the bounding box with,
 #' in each direction (bottom, left, top, right)
-#' @param graticule logical, or object of class \code{crs} (e.g., \code{st_crs(4326)} for a WGS84 graticule), or object created by \link{st_graticule}; \code{TRUE} will give the WGS84 graticule
+#' @param graticule logical, or object of class \code{crs} (e.g., \code{st_crs('OGC:CRS84')} for a WGS84 graticule), or object created by \link{st_graticule}
 #' or object returned by \link{st_graticule}
 #' @param col_graticule color to used for the graticule (if present)
 #' @export
@@ -657,9 +657,9 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = pa
 	rect(xleft = pl_reg[1], ybottom = pl_reg[3], xright = pl_reg[2],
 		ytop = pl_reg[4], col = bgc, border = FALSE)
 	linAxis = function(side, ..., lon, lat, ndiscr, reset, at) axis(side = side, ...)
-	if (! missing(graticule)) {
+	if (!missing(graticule) && !identical(graticule, FALSE)) {
 		g = if (isTRUE(graticule))
-				st_graticule(pl_reg[c(1,3,2,4)], st_crs(x), st_crs(4326), ...)
+				st_graticule(pl_reg[c(1,3,2,4)], st_crs(x), st_crs('OGC:CRS84'), ...)
 			else if (inherits(graticule, "crs") && !is.na(graticule))
 				st_graticule(pl_reg[c(1,3,2,4)], st_crs(x), graticule, ...)
 			else
