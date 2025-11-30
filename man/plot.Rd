@@ -242,7 +242,7 @@ sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE)
 \item{expandBB}{numeric; fractional values to expand the bounding box with,
 in each direction (bottom, left, top, right)}
 
-\item{graticule}{logical, or object of class \code{crs} (e.g., \code{st_crs(4326)} for a WGS84 graticule), or object created by \link{st_graticule}; \code{TRUE} will give the WGS84 graticule
+\item{graticule}{logical, or object of class \code{crs} (e.g., \code{st_crs('OGC:CRS84')} for a WGS84 graticule), or object created by \link{st_graticule}
 or object returned by \link{st_graticule}}
 
 \item{col_graticule}{color to used for the graticule (if present)}

@@ -1,5 +1,7 @@
 # version 1.0-24
 
+* `st_graticule()` creates graticule by default in the geographic coordinate reference system of arguments `x` or `crs`, and only if nothing is found or provided in `OGC:CRS84`
+
 * the figure margins parameter `mar` can be specified in a call to `plot.sf()`; #2558
 
 * fix class label setting in `[.sf()`; #2557

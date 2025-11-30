@@ -659,7 +659,7 @@ plot_sf = function(x, xlim = NULL, ylim = NULL, asp = NA, axes = FALSE, bgc = pa
 	linAxis = function(side, ..., lon, lat, ndiscr, reset, at) axis(side = side, ...)
 	if (!missing(graticule) && !identical(graticule, FALSE)) {
 		g = if (isTRUE(graticule))
-				st_graticule(pl_reg[c(1,3,2,4)], st_crs(x), st_crs('OGC:CRS84'), ...)
+				st_graticule(pl_reg[c(1,3,2,4)], st_crs(x), st_datum(x), ...)
 			else if (inherits(graticule, "crs") && !is.na(graticule))
 				st_graticule(pl_reg[c(1,3,2,4)], st_crs(x), graticule, ...)
 			else

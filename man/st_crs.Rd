@@ -63,7 +63,7 @@ st_axis_order(authority_compliant = logical(0))
 
 \item{...}{ignored}
 
-\item{parameters}{logical; \code{FALSE} by default; if \code{TRUE} return a list of coordinate reference system parameters, with named elements \code{SemiMajor}, \code{InvFlattening}, \code{units_gdal}, \code{IsVertical}, \code{WktPretty}, and \code{Wkt}}
+\item{parameters}{logical; \code{FALSE} by default; only for the \code{st_crs.sfc()} method: if \code{TRUE} return a classed list of coordinate reference system parameters, with named elements \code{SemiMajor}, \code{InvFlattening}, \code{units_gdal}, \code{IsVertical}, \code{WktPretty}, \code{Wkt}, \code{Name}, \code{proj4string}, \code{epsg}, \code{yx}, \code{ProjJson}, \code{WKT1_ESRI}, \code{srid} (in authority:code form), \code{axes} (a data.frame with columns \code{name} and \code{orientation}), \code{gcs_crs} with the WKT of the base geographic coordinate system, \code{ud_unit}. The list has class \code{crs_parameters}.}
 
 \item{value}{one of (i) character: a string accepted by GDAL, (ii) integer, a valid EPSG value (numeric), or (iii) an object of class \code{crs}.}
 

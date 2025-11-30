@@ -7,7 +7,7 @@
 st_graticule(
   x = c(-180, -90, 180, 90),
   crs = st_crs(x),
-  datum = st_crs(4326),
+  datum = st_crs("OGC:CRS84"),
   ...,
   lon = NULL,
   lat = NULL,
@@ -20,7 +20,7 @@ st_graticule(
 
 \item{crs}{object of class \code{crs}, with the display coordinate reference system}
 
-\item{datum}{either an object of class \code{crs} with the coordinate reference system for the graticules, or \code{NULL} in which case a grid in the coordinate system of \code{x} is drawn, or \code{NA}, in which case an empty \code{sf} object is returned.}
+\item{datum}{either an object of class \code{crs} with the coordinate reference system for the graticules, or \code{NULL} in which case a grid in the coordinate system of \code{x} is drawn, or \code{NA}, in which case an empty \code{sf} object is returned. If missing and \code{x} has a crs with a datum, the geographic coordinate system (datum) of \code{x} is taken.}
 
 \item{...}{ignored}
 

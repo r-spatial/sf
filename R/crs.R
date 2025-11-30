@@ -98,11 +98,11 @@ fix_crs = function(x) {
 
 
 #' @name st_crs
-#' @param parameters logical; \code{FALSE} by default; if \code{TRUE} return a list of coordinate reference system parameters, with named elements \code{SemiMajor}, \code{InvFlattening}, \code{units_gdal}, \code{IsVertical}, \code{WktPretty}, and \code{Wkt}
+#' @param parameters logical; \code{FALSE} by default; only for the `st_crs.sfc()` method: if \code{TRUE} return a classed list of coordinate reference system parameters, with named elements \code{SemiMajor}, \code{InvFlattening}, \code{units_gdal}, \code{IsVertical}, \code{WktPretty}, \code{Wkt}, \code{Name}, \code{proj4string}, \code{epsg}, \code{yx}, \code{ProjJson}, \code{WKT1_ESRI}, \code{srid} (in authority:code form), \code{axes} (a data.frame with columns \code{name} and \code{orientation}), \code{gcs_crs} with the WKT of the base geographic coordinate system, \code{ud_unit}. The list has class \code{crs_parameters}.
 #' @export
 st_crs.sfc = function(x, ..., parameters = FALSE) {
 	crs = fix_crs(attr(x, "crs"))
-	if (parameters) {
+	if (isTRUE(parameters)) {
 		p = crs_parameters(crs)
 		p$ud_unit = crs_ud_unit(crs)
 		p
