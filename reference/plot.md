@@ -402,6 +402,8 @@ it.
 parameter `at` can be set to specify where labels are placed along the
 key; see examples.
 
+parameter `mar` can be set in `...` to override default margins.
+
 The features are plotted in the order as they apppear in the sf object.
 See examples for when a different plotting order is wanted.
 

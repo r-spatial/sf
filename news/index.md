@@ -2,6 +2,10 @@
 
 ## version 1.0-24
 
+- the figure margins parameter `mar` can be specified in a call to
+  [`plot.sf()`](https://r-spatial.github.io/sf/reference/plot.md);
+  [\#2558](https://github.com/r-spatial/sf/issues/2558)
+
 - fix class label setting in `[.sf()`;
   [\#2557](https://github.com/r-spatial/sf/issues/2557)
 
