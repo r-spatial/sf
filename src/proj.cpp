@@ -349,7 +349,7 @@ Rcpp::NumericMatrix CPL_proj_direct(Rcpp::CharacterVector from_to, Rcpp::Numeric
 	// transform:
 	if (keep) {
 		// use proj_trans() on individual points, making unprojectable points be NA
-		PJ_COORD row = { 0.0, 0.0, 0.0, 0.0 }, projected;
+		PJ_COORD row = {{ 0.0, 0.0, 0.0, 0.0 }}, projected;
 		for (int i = 0; i < pts.nrow(); i++) {
 			/*
 			row.lpzt.lam = x.data()[i].lpzt.lam;
