@@ -74,7 +74,7 @@ RUN cd geos \
 	&& make install
 
 #RUN git clone --depth 1 https://github.com/OSGeo/PROJ.git
-RUN wget http://download.osgeo.org/proj/proj-8.0.0.tar.gz
+RUN wget https://download.osgeo.org/proj/proj-8.0.0.tar.gz
 RUN tar zxvf proj-8.0.0.tar.gz
 RUN cd proj-8.0.0 \
   && ls -l \
