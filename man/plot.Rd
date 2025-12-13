@@ -242,7 +242,7 @@ sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE)
 \item{expandBB}{numeric; fractional values to expand the bounding box with,
 in each direction (bottom, left, top, right)}
 
-\item{graticule}{logical, or object of class \code{crs} (e.g., \code{st_crs(4326)} for a WGS84 graticule), or object created by \link{st_graticule}; \code{TRUE} will give the WGS84 graticule
+\item{graticule}{logical, or object of class \code{crs} (e.g., \code{st_crs('OGC:CRS84')} for a WGS84 graticule), or object created by \link{st_graticule}
 or object returned by \link{st_graticule}}
 
 \item{col_graticule}{color to used for the graticule (if present)}
@@ -275,6 +275,8 @@ to control color, lines or symbols.
 When setting \code{reset} to \code{FALSE}, the original device parameters are lost, and the device must be reset using \code{dev.off()} in order to reset it.
 
 parameter \code{at} can be set to specify where labels are placed along the key; see examples.
+
+parameter \code{mar} can be set in \code{...} to override default margins.
 
 The features are plotted in the order as they apppear in the sf object. See examples for when a different plotting order is wanted.
 

@@ -1,3 +1,15 @@
+st_datum = function(x) {
+	stopifnot(inherits(x, c("crs", "sf", "sfc")))
+	if (inherits(x, "crs"))
+		x = st_sfc(st_point(), crs = x)
+	x = st_geometry(x) # in case inherits(x, "sf")
+	datum = st_crs(st_crs(x, parameters = TRUE)$gcs_crs)
+	if (is.na(datum))
+		st_crs('OGC:CRS84') # + message or warning?
+	else
+		datum
+}
+
 #' Compute graticules and their parameters
 #'
 #' Compute graticules and their parameters
@@ -15,7 +27,7 @@
 #' @export
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg} or numeric vector with bounding box given as (minx, miny, maxx, maxy).
 #' @param crs object of class \code{crs}, with the display coordinate reference system
-#' @param datum either an object of class \code{crs} with the coordinate reference system for the graticules, or \code{NULL} in which case a grid in the coordinate system of \code{x} is drawn, or \code{NA}, in which case an empty \code{sf} object is returned.
+#' @param datum either an object of class \code{crs} with the coordinate reference system for the graticules, or \code{NULL} in which case a grid in the coordinate system of \code{x} is drawn, or \code{NA}, in which case an empty \code{sf} object is returned. If missing and \code{x} has a crs with a datum, the geographic coordinate system (datum) of \code{x} is taken.
 #' @param lon numeric; values in degrees East for the meridians, associated with \code{datum}
 #' @param lat numeric; values in degrees North for the parallels, associated with \code{datum}
 #' @param ndiscr integer; number of points to discretize a parallel or meridian
@@ -61,7 +73,7 @@
 #' plot(usa, graticule = st_crs(4326), axes = TRUE, lon = seq(-60,-130,by=-10))
 #' }
 st_graticule = function(x = c(-180, -90, 180, 90), crs = st_crs(x),
-	datum = st_crs(4326), ..., lon = NULL, lat = NULL, ndiscr = 100,
+	datum = st_crs('OGC:CRS84'), ..., lon = NULL, lat = NULL, ndiscr = 100,
 	margin = 0.001)
 {
 	s2 = sf_use_s2()
@@ -74,6 +86,11 @@ st_graticule = function(x = c(-180, -90, 180, 90), crs = st_crs(x),
 			lon = seq(-180, 180, by = 20)
 		if (is.null(lat))
 			lat = seq(-80, 80, by = 20)
+	} else if (missing(datum)) {
+		datum = if (inherits(x, c("sf", "sfc")))
+				st_datum(x)
+			else
+				st_datum(crs)
 	}
 
 	if (is.null(crs))
