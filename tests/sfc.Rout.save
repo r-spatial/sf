@@ -218,7 +218,7 @@ CRS:           NA
 POINT (0 1)
 POINT (0 1)
 Warning message:
-In st_cast.MULTIPOINT(X[[i]], ...) : point from first coordinate only
+In st_cast.MULTIPOINT(y, to = to) : point from first coordinate only
 > 
 > sf = st_sf(a = 3:2, geom = x)
 > st_cast(sf, "POINT")
@@ -231,7 +231,7 @@ CRS:           NA
 1 3 POINT (0 1)
 2 2 POINT (0 1)
 Warning message:
-In st_cast.MULTIPOINT(X[[i]], ...) : point from first coordinate only
+In st_cast.MULTIPOINT(y, to = to) : point from first coordinate only
 > 
 > 
 > x %>% st_cast("POINT")
@@ -243,7 +243,7 @@ CRS:           NA
 POINT (0 1)
 POINT (0 1)
 Warning message:
-In st_cast.MULTIPOINT(X[[i]], ...) : point from first coordinate only
+In st_cast.MULTIPOINT(y, to = to) : point from first coordinate only
 > 
 > # points:
 > mp = st_multipoint(rbind(c(0,1))) # single-point multipoint
@@ -256,7 +256,7 @@ CRS:           NA
 POINT (0 1)
 POINT (0 1)
 Warning message:
-In st_cast.MULTIPOINT(X[[i]], ...) : point from first coordinate only
+In st_cast.MULTIPOINT(y, to = to) : point from first coordinate only
 > st_sfc(p,mp) %>% st_cast("MULTIPOINT")
 Geometry set for 2 features 
 Geometry type: MULTIPOINT
@@ -324,7 +324,7 @@ CRS:           NA
 POINT (0 1)
 POINT (0 1)
 Warning message:
-In st_cast.MULTIPOINT(X[[i]], ...) : point from first coordinate only
+In st_cast.MULTIPOINT(y, to = to) : point from first coordinate only
 > 
 > p = rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))
 > pol = st_polygon(list(p))
@@ -1140,4 +1140,4 @@ Geodetic CRS:  WGS 84
 > 
 > proc.time()
    user  system elapsed 
-  5.292   1.417   5.383 
+  5.304   1.442   5.355 

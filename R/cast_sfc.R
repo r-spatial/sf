@@ -52,9 +52,9 @@ add_attributes = function(x, y) {
 close_polygon_or_multipolygon = function(x, to) {
 	to_col = which_sfc_col(to)
 	close_mat = function(m) {
-		if (nrow(m) > 0 && any(m[1,] != m[nrow(m),]))
+		if (nrow(m) > 1 && any(m[1,] != m[nrow(m),]))
 			m = rbind(m, m[1,])
-		if (nrow(m) < 4 && nrow(m) > 0)
+		if (nrow(m) < 4 && nrow(m) > 1) # 1 is invalid, but intruduced by mock_ below
 			stop("polygons require at least 4 points")
 		unclass(m)
 	}
@@ -164,12 +164,12 @@ mockup_empty = function(x, from_col) {
 		return(x)
 	xu = unclass(x)
 	cls = class(x[[1]])
-	m = matrix(nrow = 0, ncol = 2)
+	m = matrix(NA_real_, nrow = 1, ncol = 2)
 	if (from_col == 1)
 		xu[e] = list(structure(list(m), class = cls)) # makes the thing invalid
 	else
 		xu[e] = list(structure(list(list(m)), class = cls)) # makes the thing invalid
-	structure(xu, class = class(x))	
+	structure(xu, class = class(x))
 }
 
 unmock_empty = function(x, to) {
@@ -208,14 +208,25 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 	else if (to == "GEOMETRY") # we can always do that:
 		structure(x, class = c("sfc_GEOMETRY", "sfc"))
 	else if (from_cls == "GEOMETRY" || !group_or_split)
-		st_sfc(lapply(x, st_cast, to = to), crs = st_crs(x), precision = st_precision(x))
+		st_sfc(lapply(x, function(y) {
+							if (st_is_empty(y))
+								empty_sfg(to)
+							else
+								st_cast(y, to = to)
+						}), 
+			   crs = st_crs(x), precision = st_precision(x))
 	else if (from_col == to_col) # "vertical" conversion: only reclass, possibly close polygons
 		reclass(x, to, need_close(to))
 	else if (abs(from_col - to_col) > 1) {
 		if (to == "POINT")
 			st_cast(st_cast(x, "MULTIPOINT"), "POINT")
 		else if (to == "MULTIPOINT") {
-			ret = lapply(x, function(y) structure(as.matrix(y), class = c(class(y)[1], to, "sfg")))
+			ret = lapply(x, function(y) {
+					if (length(y) == 0)
+						st_multipoint()
+					else
+						structure(as.matrix(y), class = c(class(y)[1], to, "sfg"))
+	   			})
 			ret = copy_sfc_attributes_from(x, ret)
 			reclass(ret, to, FALSE)
 		} else
@@ -240,10 +251,17 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 		ret = copy_sfc_attributes_from(x, ret)
 		structure(reclass(ret, to, FALSE))
 	} else { # "horizontal", to the left: split
-		x = mockup_empty(x, from_col)
-		ret = if (from_col == 1) # LINESTRING or MULTIPOINT to POINT
-				unlist(lapply(x, function(m) lapply(seq_len(nrow(m)), function(i) m[i,])), recursive = FALSE)
-			else {
+		if (from_col > 1)
+			x = mockup_empty(x, from_col)
+		ret = if (from_col == 1) { # LINESTRING or MULTIPOINT to POINT
+				unlist(lapply(x, function(m) { 
+								if (length(m) == 0)
+									list(st_point())
+								else
+									lapply(seq_len(nrow(m)), function(i) m[i,])
+							}),
+					   recursive = FALSE)
+			} else {
 				if (to_col == 0 && from_cls == "POLYGON") # POLYGON -> POINT
 					lapply(x, function(y) do.call(rbind, y))
 				else
@@ -251,8 +269,10 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 			}
 		ret = lapply(ret, function(y) structure(y, class = class(x[[1]]))) # will be reset by reclass()
 		ret = copy_sfc_attributes_from(x, ret)
-		# EJP: FIXME:
-		unmock_empty(structure(reclass(ret, to, need_close(to)), ids = get_lengths(x)), to)
+		ret = structure(reclass(ret, to, need_close(to)), ids = get_lengths(x))
+		if (from_col > 1)
+			ret = unmock_empty(ret)
+		ret
 	}
 }
 
