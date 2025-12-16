@@ -52,9 +52,9 @@ add_attributes = function(x, y) {
 close_polygon_or_multipolygon = function(x, to) {
 	to_col = which_sfc_col(to)
 	close_mat = function(m) {
-		if (any(m[1,] != m[nrow(m),]))
+		if (nrow(m) > 0 && any(m[1,] != m[nrow(m),]))
 			m = rbind(m, m[1,])
-		if (nrow(m) < 4)
+		if (nrow(m) < 4 && nrow(m) > 0)
 			stop("polygons require at least 4 points")
 		unclass(m)
 	}
@@ -158,6 +158,28 @@ is_exotic = function(x) {
 		FALSE
 }
 
+mockup_empty = function(x, from_col) {
+	e = st_is_empty(x)
+	if (! any(e))
+		return(x)
+	xu = unclass(x)
+	cls = class(x[[1]])
+	m = matrix(nrow = 0, ncol = 2)
+	if (from_col == 1)
+		xu[e] = list(structure(list(m), class = cls)) # makes the thing invalid
+	else
+		xu[e] = list(structure(list(list(m)), class = cls)) # makes the thing invalid
+	structure(xu, class = class(x))	
+}
+
+unmock_empty = function(x, to) {
+	e = st_is_empty(x)
+	if (! any(e))
+		return(x)
+	x[e] = list(empty_sfg(to))
+	x
+}
+
 #' @name st_cast
 #' @param ids integer vector, denoting how geometries should be grouped (default: no grouping)
 #' @param group_or_split logical; if TRUE, group or split geometries; if FALSE, carry out a 1-1 per-geometry conversion.
@@ -178,20 +200,10 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 	if (missing(to) || length(x) == 0)
 		return(st_cast_sfc_default(x))
 
-	e = rep(FALSE, length(x))
-	if (!is_exotic(x)) { # for which GEOS has no st_is_empty()
-		e = st_is_empty(x)
-		if (all(e)) {
-			x[e] = empty_sfg(to)
-			return(x) # RETURNS
-		}
-	}
-	if (any(e))
-		x = x[!e]
 	from_cls = substr(class(x)[1], 5, 100)
 	from_col = which_sfc_col(from_cls)
 	to_col = which_sfc_col(to)
-	ret = if (from_cls == to)
+	if (from_cls == to)
 		x # returns x: do nothing
 	else if (to == "GEOMETRY") # we can always do that:
 		structure(x, class = c("sfc_GEOMETRY", "sfc"))
@@ -228,6 +240,7 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 		ret = copy_sfc_attributes_from(x, ret)
 		structure(reclass(ret, to, FALSE))
 	} else { # "horizontal", to the left: split
+		x = mockup_empty(x, from_col)
 		ret = if (from_col == 1) # LINESTRING or MULTIPOINT to POINT
 				unlist(lapply(x, function(m) lapply(seq_len(nrow(m)), function(i) m[i,])), recursive = FALSE)
 			else {
@@ -239,16 +252,8 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 		ret = lapply(ret, function(y) structure(y, class = class(x[[1]]))) # will be reset by reclass()
 		ret = copy_sfc_attributes_from(x, ret)
 		# EJP: FIXME:
-		structure(reclass(ret, to, need_close(to)), ids = get_lengths(x))
+		unmock_empty(structure(reclass(ret, to, need_close(to)), ids = get_lengths(x)), to)
 	}
-	if (any(e)) {
-		crs = st_crs(x)
-		x = vector("list", length = length(e))
-		x[e] = list(empty_sfg(to))
-		x[!e] = ret
-		st_set_crs(do.call(st_sfc, x), crs)
-	} else
-		ret
 }
 
 #' @name st_cast
@@ -265,6 +270,7 @@ st_cast.sf = function(x, to, ..., warn = TRUE, do_split = TRUE) {
 	# class(x) = setdiff(class(x), "sf")
 	ids = attr(geom, "ids")          # e.g. 3 2 4
 	if (!is.null(ids)) { # split:
+		ids[ids == 0] = 1
 		if (warn && ! all_const)
 			warning("repeating attributes for all sub-geometries for which they may not be constant")
 		reps = rep(seq_len(length(ids)), ids) # 1 1 1 2 2 3 3 3 3 etc
