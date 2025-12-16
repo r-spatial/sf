@@ -44,7 +44,7 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0-24" id="version-10-24">version 1.0-24<a class="anchor" aria-label="anchor" href="#version-10-24"></a></h2>
-<ul><li><p><code><a href="../reference/st_graticule.html">st_graticule()</a></code> creates graticule by default in the geographic coordinate reference system of arguments <code>x</code> or <code>crs</code>, and only if nothing is found or provided in <code>OGC:CRS84</code></p></li>
+<ul><li><p>if <code>datum</code> is missing in a call to <code><a href="../reference/st_graticule.html">st_graticule()</a></code>, a graticule by default will try to use the geographic coordinate reference system of arguments <code>x</code> or <code>crs</code>; when nothing is found there it falls back to <code>OGC:CRS84</code> (WGS84).</p></li>
 <li><p>the figure margins parameter <code>mar</code> can be specified in a call to <code><a href="../reference/plot.html">plot.sf()</a></code>; <a href="https://github.com/r-spatial/sf/issues/2558" class="external-link">#2558</a></p></li>
 <li><p>fix class label setting in <code>[.sf()</code>; <a href="https://github.com/r-spatial/sf/issues/2557" class="external-link">#2557</a></p></li>
 </ul></div>
