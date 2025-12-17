@@ -158,22 +158,23 @@ is_exotic = function(x) {
 		FALSE
 }
 
+m_empty = matrix(NA_real_, nrow = 1, ncol = 2)
+
 mockup_empty = function(x, from_col) {
 	e = st_is_empty(x)
 	if (! any(e))
 		return(x)
 	xu = unclass(x)
 	cls = class(x[[1]])
-	m = matrix(NA_real_, nrow = 1, ncol = 2)
 	if (from_col == 1)
-		xu[e] = list(structure(list(m), class = cls)) # makes the thing invalid
+		xu[e] = list(structure(list(m_empty), class = cls)) # makes the thing invalid
 	else
-		xu[e] = list(structure(list(list(m)), class = cls)) # makes the thing invalid
+		xu[e] = list(structure(list(list(m_empty)), class = cls)) # makes the thing invalid
 	structure(xu, class = class(x))
 }
 
 unmock_empty = function(x, to) {
-	e = st_is_empty(x)
+	e = sapply(x, function(y) identical(unclass(y), list(m_empty)))
 	if (! any(e))
 		return(x)
 	x[e] = list(empty_sfg(to))
@@ -271,7 +272,7 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 		ret = copy_sfc_attributes_from(x, ret)
 		ret = structure(reclass(ret, to, need_close(to)), ids = get_lengths(x))
 		if (from_col > 1)
-			ret = unmock_empty(ret)
+			ret = unmock_empty(ret, to)
 		ret
 	}
 }
