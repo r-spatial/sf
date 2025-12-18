@@ -1,5 +1,9 @@
 # version 1.0-24
 
+* deprecated argument `dist_fun` was removed from `st_distance()`
+
+* `st_distance()` got an argument `ignore_ZM` that, when set to `FALSE`, takes Z and/or M coordinates into account for some POINT-POINT Cartesian distance calculations; by default all distance calculations now only account for X and Y coordinates; #2564
+
 * `st_cast()` handles more cases with empty geometries; #2555
 
 * if `datum` is missing in a call to `st_graticule()`, a graticule by default will try to use the geographic coordinate reference system of arguments `x` or `crs`; when nothing is found there it falls back to `OGC:CRS84` (WGS84).

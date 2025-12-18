@@ -21,11 +21,11 @@ st_distance(
   x,
   y,
   ...,
-  dist_fun,
   by_element = FALSE,
   which = ifelse(isTRUE(st_is_longlat(x)), "Great Circle", "Euclidean"),
   par = 0,
-  tolerance = 0
+  tolerance = 0,
+  ignore_ZM = TRUE
 )
 }
 \arguments{
@@ -35,8 +35,6 @@ st_distance(
 
 \item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}}
 
-\item{dist_fun}{deprecated}
-
 \item{by_element}{logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc; an error is raised if \code{x} and \code{y} are not the same length. If \code{FALSE}, return the dense matrix with all pairwise distances.}
 
 \item{which}{character; for Cartesian coordinates only: one of \code{Euclidean}, \code{Hausdorff} or \code{Frechet}; for geodetic coordinates, great circle distances are computed; see details}
@@ -44,6 +42,8 @@ st_distance(
 \item{par}{for \code{which} equal to \code{Hausdorff} or \code{Frechet}, optionally use a value between 0 and 1 to densify the geometry}
 
 \item{tolerance}{ignored if \code{st_is_longlat(x)} is \code{FALSE}; otherwise, if set to a positive value, the first distance smaller than \code{tolerance} will be returned, and true distance may be smaller; this may speed up computation. In meters, or a \code{units} object convertible to meters.}
+
+\item{ignore_ZM}{logical; if set to FALSE, only for some POINT-POINT Cartesian distances Z and/or M coordinates are accounted for in distance calculation.}
 }
 \value{
 If the coordinate reference system of \code{x} was set, these functions return values with unit of measurement; see \link[units]{set_units}.
@@ -58,7 +58,7 @@ If \code{by_element} is \code{FALSE} \code{st_distance} returns a dense numeric 
 Compute Euclidean or great circle distance between pairs of geometries; compute, the area or the length of a set of geometries.
 }
 \details{
-great circle distance calculations use by default spherical distances (\link[s2]{s2_distance} or \link[s2]{s2_distance_matrix}); if \code{sf_use_s2()} is \code{FALSE}, ellipsoidal distances are computed using \link[lwgeom]{st_geod_distance} which uses function \code{geod_inverse} from GeographicLib (part of PROJ); see Karney, Charles FF, 2013, Algorithms for geodesics, Journal of Geodesy 87(1), 43--55
+Spatial distances are by default computed in 2 spatial dimensions X and Y.  Great circle distance calculations use by default spherical distances (\link[s2]{s2_distance} or \link[s2]{s2_distance_matrix}); if \code{sf_use_s2()} is \code{FALSE}, ellipsoidal distances are computed using \link[lwgeom]{st_geod_distance} which uses function \code{geod_inverse} from GeographicLib (part of PROJ); see Karney, Charles FF, 2013, Algorithms for geodesics, Journal of Geodesy 87(1), 43--55
 }
 \examples{
 b0 = st_polygon(list(rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))))

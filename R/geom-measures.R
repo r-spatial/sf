@@ -143,21 +143,21 @@ st_perimeter = function(x, ...) {
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}, defaults to \code{x}
 #' @param ... passed on to \link[s2]{s2_distance}, \link[s2]{s2_distance_matrix}, or \link[s2]{s2_perimeter}
-#' @param dist_fun deprecated
 #' @param by_element logical; if \code{TRUE}, return a vector with distance between the first elements of \code{x} and \code{y}, the second, etc; an error is raised if \code{x} and \code{y} are not the same length. If \code{FALSE}, return the dense matrix with all pairwise distances.
 #' @param which character; for Cartesian coordinates only: one of \code{Euclidean}, \code{Hausdorff} or \code{Frechet}; for geodetic coordinates, great circle distances are computed; see details
 #' @param par for \code{which} equal to \code{Hausdorff} or \code{Frechet}, optionally use a value between 0 and 1 to densify the geometry
 #' @param tolerance ignored if \code{st_is_longlat(x)} is \code{FALSE}; otherwise, if set to a positive value, the first distance smaller than \code{tolerance} will be returned, and true distance may be smaller; this may speed up computation. In meters, or a \code{units} object convertible to meters.
+#' @param ignore_ZM logical; if set to FALSE, only for some POINT-POINT Cartesian distances Z and/or M coordinates are accounted for in distance calculation.
 #' @return If \code{by_element} is \code{FALSE} \code{st_distance} returns a dense numeric matrix of dimension length(x) by length(y); otherwise it returns a numeric vector the same length as \code{x} and \code{y} with an error raised if the lengths of \code{x} and \code{y} are unequal. Distances involving empty geometries are \code{NA}.
-#' @details great circle distance calculations use by default spherical distances (\link[s2]{s2_distance} or \link[s2]{s2_distance_matrix}); if \code{sf_use_s2()} is \code{FALSE}, ellipsoidal distances are computed using \link[lwgeom]{st_geod_distance} which uses function \code{geod_inverse} from GeographicLib (part of PROJ); see Karney, Charles FF, 2013, Algorithms for geodesics, Journal of Geodesy 87(1), 43--55
+#' @details Spatial distances are by default computed in 2 spatial dimensions X and Y.  Great circle distance calculations use by default spherical distances (\link[s2]{s2_distance} or \link[s2]{s2_distance_matrix}); if \code{sf_use_s2()} is \code{FALSE}, ellipsoidal distances are computed using \link[lwgeom]{st_geod_distance} which uses function \code{geod_inverse} from GeographicLib (part of PROJ); see Karney, Charles FF, 2013, Algorithms for geodesics, Journal of Geodesy 87(1), 43--55
 #' @examples
 #' p = st_sfc(st_point(c(0,0)), st_point(c(0,1)), st_point(c(0,2)))
 #' st_distance(p, p)
 #' st_distance(p, p, by_element = TRUE)
 #' @export
-st_distance = function(x, y, ..., dist_fun, by_element = FALSE, 
+st_distance = function(x, y, ..., by_element = FALSE, 
 		which = ifelse(isTRUE(st_is_longlat(x)), "Great Circle", "Euclidean"), 
-		par = 0.0, tolerance = 0.0) {
+		par = 0.0, tolerance = 0.0, ignore_ZM = TRUE) {
 
 	missing_y = FALSE
 	if (missing(y)) {
@@ -165,9 +165,6 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE,
 		missing_y = TRUE
 	} else
 		stopifnot(st_crs(x) == st_crs(y))
-
-	if (! missing(dist_fun))
-		stop("dist_fun is deprecated: lwgeom is used for distance calculation")
 
 	x = st_geometry(x)
 	y = st_geometry(y)
@@ -201,12 +198,18 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE,
 				if (inherits(x, "sfc_POINT") && inherits(y, "sfc_POINT") && which == "Euclidean") {
 					xc = st_coordinates(x)
 					yc = st_coordinates(y)
-					sqrt((xc[,1] - yc[,1])^2 + (xc[,2] - yc[,2])^2)
+					if (ignore_ZM)
+						sqrt(rowSums((xc[,1:2,drop=FALSE] - yc[,1:2,drop=FALSE])^2))
+					else
+						sqrt(rowSums((xc - yc)^2))
 				} else
-					mapply(st_distance, x, y, by_element = FALSE, which = which, par = par)
+					mapply(st_distance, x, y, by_element = FALSE, which = which, par = par, ignore_ZM = ignore_ZM)
 			} else {
 				if (missing_y && inherits(x, "sfc_POINT") && which == "Euclidean") {
-					m = as.matrix(stats::dist(cc <- st_coordinates(x)))
+					cc = st_coordinates(x)
+					if (ignore_ZM)
+						cc = cc[,1:2,drop=FALSE]
+					m = as.matrix(stats::dist(cc))
 					e = is.na(cc[,1])
 					diag(m)[e] = NA_real_
 					m
