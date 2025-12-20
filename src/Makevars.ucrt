@@ -1,4 +1,3 @@
-
 PKG_CPPFLAGS = \
 	-DHAVE_PROJ_H
 
@@ -15,8 +14,6 @@ all: clean winlibs
 winlibs:
 	cp -r "$(R_TOOLS_SOFT)/share/gdal" ../inst/
 	cp -r "$(R_TOOLS_SOFT)/share/proj" ../inst/
-
-CXX_STD = CXX
 
 clean:
 	rm -f $(SHLIB) $(OBJECTS)

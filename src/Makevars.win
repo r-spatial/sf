@@ -20,8 +20,6 @@ PKG_LIBS = \
 
 all: clean winlibs
 
-CXX_STD = CXX
-
 winlibs:
 	mkdir -p ../inst
 	"${R_HOME}/bin${R_ARCH_BIN}/Rscript.exe" --vanilla "../tools/winlibs.R" $(VERSION)
