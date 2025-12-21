@@ -178,6 +178,7 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 	if (missing(to) || length(x) == 0)
 		return(st_cast_sfc_default(x))
 
+	x_orig = x # keep original ordering/length for later reassembly of empties
 	e = rep(FALSE, length(x))
 	if (!is_exotic(x)) { # for which GEOS has no st_is_empty()
 		e = st_is_empty(x)
@@ -242,11 +243,40 @@ st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 		structure(reclass(ret, to, need_close(to)), ids = get_lengths(x))
 	}
 	if (any(e)) {
-		crs = st_crs(x)
-		x = vector("list", length = length(e))
-		x[e] = list(empty_sfg(to))
-		x[!e] = ret
-		st_set_crs(do.call(st_sfc, x), crs)
+		crs = st_crs(x_orig)
+		ids_attr = attr(ret, "ids")
+		# ids_attr is NULL when no split happened; otherwise contains sub-geom counts
+		ids_full = NULL
+		if (!is.null(ids_attr)) {
+			ids_full = integer(length(e))
+			ids_full[e] = 1L                              # keep one empty geometry per empty feature
+			ids_full[!e] = ids_attr                       # split counts for non-empty geometries
+		}
+
+		# rebuild output list following original order, inserting empties and all split parts
+		out_len = if (is.null(ids_attr)) length(e) else sum(ids_full)
+		out = vector("list", out_len)
+		out_i = 1L
+		ret_i = 1L
+		non_empty_i = 1L
+		for (i in seq_along(e)) {
+			if (e[i]) {
+				out[[out_i]] = empty_sfg(to)
+				out_i = out_i + 1L
+			} else {
+				n_parts = if (is.null(ids_attr)) 1L else ids_attr[non_empty_i]
+				for (k in seq_len(n_parts)) {
+					out[[out_i]] = ret[[ret_i]]
+					out_i = out_i + 1L
+					ret_i = ret_i + 1L
+				}
+				non_empty_i = non_empty_i + 1L
+			}
+		}
+		ret = st_sfc(out, crs = crs, precision = st_precision(x_orig))
+		if (!is.null(ids_full))
+			attr(ret, "ids") = ids_full
+		ret
 	} else
 		ret
 }
