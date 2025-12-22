@@ -132,7 +132,8 @@ st_cast_sfc_default = function(x) {
 
 copy_sfc_attributes_from = function(x, ret) {
 	structure(ret, precision = attr(x, "precision"),
-		bbox = attr(x, "bbox"), crs = attr(x, "crs"), n_empty = attr(x, "n_empty"))
+		bbox = attr(x, "bbox"), crs = attr(x, "crs"), n_empty = attr(x, "n_empty"), 
+		z_range = attr(x, "z_range"), m_range = attr(x, "m_range"))
 }
 
 empty_sfg <- function(to) {
