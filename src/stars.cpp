@@ -553,23 +553,17 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 
 	// create dataset:
 	GDALDataset *poDstDS;
+	bool createCopy = false;
 	if (create) {
 		if (from[0] != 0 || from[1] != 0)
 			stop("from values should be zero when creating a dataset"); // #nocov
 
 		if (poDriver->GetMetadataItem(GDAL_DCAP_CREATE) == NULL && 
 						poDriver->GetMetadataItem(GDAL_DCAP_CREATECOPY) != NULL) {
+			createCopy = true;
 			GDALDriver *memDriver = GetGDALDriverManager()->GetDriverByName("MEM");
-			GDALDataset *memDS;
-			if ((memDS = memDriver->Create(fname[0], dims[0], dims[1], dims[2], eType, NULL)) == NULL)
+			if ((poDstDS = memDriver->Create(fname[0], dims[0], dims[1], dims[2], eType, NULL)) == NULL)
 				stop("cannot create copy in memory"); // #nocov
-			options.push_back("APPEND_SUBDATASET=YES");
-			if ((poDstDS = poDriver->CreateCopy(fname[0], memDS, FALSE, 
-										create_options(options).data(), NULL, NULL)) == NULL) {
-				GDALClose(memDS);
-				stop("cannot CreateCopy from memory dataset");
-			} else
-				GDALClose(memDS);
 		} else if ((poDstDS = poDriver->Create( fname[0], dims[0], dims[1], dims[2], eType,
 				create_options(options).data())) == NULL)
 			stop("creating dataset failed"); // #nocov
@@ -685,6 +679,15 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 				x.begin(), dims[0] - from[0], dims[1] - from[1], GDT_Float64,
 				dims[2], NULL, 0, 0, 0, NULL) == CE_Failure)
 			stop("write failure"); // #nocov
+
+		if (createCopy) { // so far in memory, still need to write to disk:
+			options.push_back("APPEND_SUBDATASET=YES");
+			GDALDataset *poCopyDS;
+			if ((poCopyDS = poDriver->CreateCopy(fname[0], poDstDS, FALSE, 
+										create_options(options).data(), NULL, NULL)) == NULL)
+				stop("cannot CreateCopy from memory dataset");
+			GDALClose(poCopyDS);
+		}
 	}
 
 	/* close: */

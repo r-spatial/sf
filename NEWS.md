@@ -1,5 +1,7 @@
 # version 1.0-24
 
+* `gdal_write()` handles drivers that only have a `CreateCopy()` option; https://github.com/r-spatial/stars/issues/762 
+
 * if `datum` is missing in a call to `st_graticule()`, a graticule by default will try to use the geographic coordinate reference system of arguments `x` or `crs`; when nothing is found there it falls back to `OGC:CRS84` (WGS84).
 
 * the figure margins parameter `mar` can be specified in a call to `plot.sf()`; #2558
