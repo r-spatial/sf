@@ -2,6 +2,10 @@
 
 ## version 1.0-24
 
+- [`gdal_write()`](https://r-spatial.github.io/sf/reference/gdal.md)
+  handles drivers that only have a `CreateCopy()` option;
+  <https://github.com/r-spatial/stars/issues/762>
+
 - if `datum` is missing in a call to
   [`st_graticule()`](https://r-spatial.github.io/sf/reference/st_graticule.md),
   a graticule by default will try to use the geographic coordinate
