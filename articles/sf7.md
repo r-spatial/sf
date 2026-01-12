@@ -3,7 +3,7 @@
 ## Introduction
 
 This vignette describes what spherical geometry implies, and how package
-`sf` uses the s2geometry library (<http://s2geometry.io>) for
+`sf` uses the s2geometry library (<https://s2geometry.io>) for
 geometrical measures, predicates and transformations.  
 After `sf` has been loaded, it will report whether `s2` is being used;
 it can be switched off (resorting to flat space geometry) by
@@ -87,7 +87,7 @@ transformations *on the sphere*. This means:
   but are also slower)
 
 The `s2` package is really a wrapper around the C++
-[s2geometry](http://s2geometry.io) library which was written by Google,
+[s2geometry](https://s2geometry.io) library which was written by Google,
 and which is used in many of its products (e.g. Google Maps, Google
 Earth Engine, BigQuery GIS) and has been translated in several other
 programming languages.
@@ -466,7 +466,7 @@ system.time({
   uk_buffer2 = s2_buffer_cells(uk, distance = 20000, max_cells = 10000)
 })
 ##    user  system elapsed 
-##   0.224   0.000   0.224
+##   0.223   0.000   0.223
 # s2 with 100 cells
 system.time({
   uk_buffer2 = s2_buffer_cells(uk, distance = 20000, max_cells = 100)

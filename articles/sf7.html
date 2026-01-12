@@ -82,7 +82,7 @@ and Dewey Dunnington</h4>
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>This vignette describes what spherical geometry implies, and how
-package <code>sf</code> uses the s2geometry library (<a href="http://s2geometry.io" class="external-link uri">http://s2geometry.io</a>) for
+package <code>sf</code> uses the s2geometry library (<a href="https://s2geometry.io" class="external-link uri">https://s2geometry.io</a>) for
 geometrical measures, predicates and transformations.<br>
 After <code>sf</code> has been loaded, it will report whether
 <code>s2</code> is being used; it can be switched off (resorting to flat
@@ -164,7 +164,7 @@ with annoying messages, some on the ellipsoid</li>
 <li>no computations on the ellipsoid (which are considered more
 accurate, but are also slower)</li>
 </ul>
-<p>The <code>s2</code> package is really a wrapper around the C++ <a href="http://s2geometry.io" class="external-link">s2geometry</a> library which was written by
+<p>The <code>s2</code> package is really a wrapper around the C++ <a href="https://s2geometry.io" class="external-link">s2geometry</a> library which was written by
 Google, and which is used in many of its products (e.g. Google Maps,
 Google Earth Engine, BigQuery GIS) and has been translated in several
 other programming languages.</p>
@@ -513,7 +513,7 @@ comparison with transforming and then creating buffers:</p>
 <span>  <span class="va">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span>, max_cells <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.224   0.000   0.224</span></span>
+<span><span class="co">##   0.223   0.000   0.223</span></span>
 <span><span class="co"># s2 with 100 cells</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span>, max_cells <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
