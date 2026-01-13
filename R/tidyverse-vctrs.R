@@ -88,6 +88,35 @@ vec_cast.sfc.default = function(x, to, ...) {
 	vctrs::vec_default_cast(x, to) # nocov end
 }
 
+#' @name vctrs
+#' @export
+vec_ptype.sfc = function(x, ...) {
+	x[0]
+}
+
+#' @name vctrs
+#' @export
+vec_ptype.sfc_POINT = function(x, ...) {
+	x[0]
+}
+
+#' @name vctrs
+#' @method vec_ptype2.sfc sfc
+#' @export
+vec_ptype2.sfc_POINT.sfc_POINT = function(x, y, ...) {
+	crs = common_crs(x, y)
+	prec = common_prec(x, y)
+	ret = st_sfc(crs = crs, precision = prec)
+
+	ucls = unique(c(class(x)[1], class(y)[1]))
+	class(ret) =
+		if (length(ucls) > 1) # a mix:
+			c("sfc_GEOMETRY", "sfc")
+		else
+			c(ucls, "sfc")
+
+	ret
+}
 
 #nocov start
 register_vctrs_methods = function() {
@@ -95,5 +124,7 @@ register_vctrs_methods = function() {
 	s3_register("vctrs::vec_restore", "sfc")
 	s3_register("vctrs::vec_ptype2", "sfc")
 	s3_register("vctrs::vec_cast", "sfc")
+	s3_register("vctrs::vec_ptype", "sfc")
+	s3_register("vctrs::vec_ptype", "sfc_POINT")
 }
 #nocov end

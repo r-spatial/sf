@@ -8,6 +8,9 @@
 \alias{vec_cast.sfc}
 \alias{vec_cast.sfc.sfc}
 \alias{vec_cast.sfc.default}
+\alias{vec_ptype.sfc}
+\alias{vec_ptype.sfc_POINT}
+\alias{vec_ptype2.sfc_POINT.sfc_POINT}
 \title{vctrs methods for sf objects}
 \usage{
 vec_ptype2.sfc(x, y, ...)
@@ -21,6 +24,12 @@ vec_cast.sfc(x, to, ...)
 \method{vec_cast.sfc}{sfc}(x, to, ...)
 
 \method{vec_cast.sfc}{default}(x, to, ...)
+
+vec_ptype.sfc(x, ...)
+
+vec_ptype.sfc_POINT(x, ...)
+
+\method{vec_ptype2.sfc}{sfc}(x, y, ...)
 }
 \arguments{
 \item{x, y}{Vector types.}
