@@ -2,6 +2,8 @@
 
 ## version 1.0-24
 
+CRAN release: 2026-01-12
+
 - [`gdal_write()`](https://r-spatial.github.io/sf/reference/gdal.md)
   handles drivers that only have a `CreateCopy()` option;
   <https://github.com/r-spatial/stars/issues/762>
