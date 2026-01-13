@@ -20,7 +20,8 @@ st_sfc(
   check_ring_dir = FALSE,
   dim,
   recompute_bbox = FALSE,
-  oriented = NA
+  oriented = NA,
+  fall_back_class = c("sfc_GEOMETRY", "sfc")
 )
 
 \method{[}{sfc}(x, i, j, ..., op = st_intersects)

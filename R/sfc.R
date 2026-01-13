@@ -42,7 +42,7 @@ format.sfc = function(x, ..., width = 30) {
 #' d = st_sf(data.frame(a=1:2, geom=sfc))
 #' @export
 st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, dim,
-				  recompute_bbox = FALSE, oriented = NA) {
+				  recompute_bbox = FALSE, oriented = NA, fall_back_class = c("sfc_GEOMETRY", "sfc")) {
 	lst = list(...)
 	# if we have only one arg, which is already a list with sfg's, but NOT a geometrycollection:
 	# (this is the old form of calling st_sfc; it is way faster to call st_sfc(lst) if lst
@@ -63,8 +63,8 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 
 	dims_and_types = sfc_unique_sfg_dims_and_types(lst)
 	
-	cls = if (length(lst) == 0) # empty set: no geometries read
-			c("sfc_GEOMETRY", "sfc")
+	cls = if (length(lst) == 0) # empty set: no geometries to learn from
+			fall_back_class
 		else {
 			# class: do we have a mix of geometry types?
 			single = if (!is.null(attr(lst, "single_type"))) # set by CPL_read_wkb:
@@ -158,12 +158,11 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 	precision = st_precision(x)
 	crs = st_crs(x)
 	dim = if (length(x)) class(x[[1]])[1] else "XY"
-	if (!missing(i) && (inherits(i, c("sf", "sfc", "sfg"))))
+	if (!missing(i) && inherits(i, c("sf", "sfc", "sfg"))) {
 		i = lengths(op(x, i, ...)) != 0
-	if (!is.null(dim(x))) # x is an array with geometries
-		st_sfc(NextMethod(), crs = crs, precision = precision, dim = dim)
-	else # x is a list but avoid NextMethod() to allow j, ... to be specified & ignored:
 		st_sfc(unclass(x)[i], crs = crs, precision = precision, dim = dim)
+	} else
+		st_sfc(NextMethod(), crs = crs, precision = precision, dim = dim, fall_back_class = class(x))
 }
 
 #' @export
@@ -211,8 +210,9 @@ print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 	if (!is.null(dim(x)))
 		cat(paste0(" [dim: ", paste(dim(x), collapse = " x "), "]"))
 	cat("\n")
-	if (length(x)) {
+	if (length(x) || !inherits(x, "sfc_GEOMETRY"))
 		cat(paste0("Geometry type: ", cls, "\n"))
+	if (length(x)) {
 		u = sort(unique(sapply(x, function(x) class(x)[1])))
 		cat(paste0("Dimension:     ", paste(u, collapse = ", "), "\n"))
 	}
