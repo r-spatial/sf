@@ -4,18 +4,23 @@
 register_vctrs_methods = function() {
 	s3_register("vctrs::vec_proxy", "sfc_POINT")
 	s3_register("vctrs::vec_proxy", "sfc_LINESTRING")
+	s3_register("vctrs::vec_proxy", "sfc_GEOMETRY")
 
 	s3_register("vctrs::vec_restore", "sfc_POINT")
 	s3_register("vctrs::vec_restore", "sfc_LINESTRING")
+	s3_register("vctrs::vec_restore", "sfc_GEOMETRY")
 
 	s3_register("vctrs::vec_ptype", "sfc_POINT")
 	s3_register("vctrs::vec_ptype", "sfc_LINESTRING")
+	s3_register("vctrs::vec_ptype", "sfc_GEOMETRY")
 
 	s3_register("vctrs::vec_ptype2", "sfc_POINT.sfc_POINT")
 	s3_register("vctrs::vec_ptype2", "sfc_LINESTRING.sfc_LINESTRING")
+	s3_register("vctrs::vec_ptype2", "sfc_GEOMETRY.sfc_GEOMETRY")
 
 	s3_register("vctrs::vec_cast", "sfc_POINT.sfc_POINT")
 	s3_register("vctrs::vec_cast", "sfc_LINESTRING.sfc_LINESTRING")
+	s3_register("vctrs::vec_cast", "sfc_GEOMETRY.sfc_GEOMETRY")
 }
 #nocov end
 
@@ -23,6 +28,9 @@ vec_proxy.sfc_POINT = function(x, ...) {
 	vec_proxy_sfc(x)
 }
 vec_proxy.sfc_LINESTRING = function(x, ...) {
+	vec_proxy_sfc(x)
+}
+vec_proxy.sfc_GEOMETRY = function(x, ...) {
 	vec_proxy_sfc(x)
 }
 vec_proxy_sfc = function(x) {
@@ -33,6 +41,9 @@ vec_restore.sfc_POINT = function(x, to, ...) {
 	vec_restore_sfc(x, to)
 }
 vec_restore.sfc_LINESTRING = function(x, to, ...) {
+	vec_restore_sfc(x, to)
+}
+vec_restore.sfc_GEOMETRY = function(x, to, ...) {
 	vec_restore_sfc(x, to)
 }
 vec_restore_sfc = function(x, to) {
@@ -50,6 +61,9 @@ vec_ptype.sfc_POINT = function(x, ...) {
 vec_ptype.sfc_LINESTRING = function(x, ...) {
 	vec_ptype_sfc(x)
 }
+vec_ptype.sfc_GEOMETRY = function(x, ...) {
+	vec_ptype_sfc(x)
+}
 vec_ptype_sfc = function(x) {
 	st_sfc(
 		crs = st_crs(x),
@@ -64,6 +78,9 @@ vec_ptype2.sfc_POINT.sfc_POINT = function(x, y, ...) {
 vec_ptype2.sfc_LINESTRING.sfc_LINESTRING = function(x, y, ...) {
 	vec_ptype2_sfc_sfc(x, y)
 }
+vec_ptype2.sfc_GEOMETRY.sfc_GEOMETRY = function(x, y, ...) {
+	vec_ptype2_sfc_sfc(x, y)
+}
 vec_ptype2_sfc_sfc = function(x, y) {
 	check_same_crs(x, y)
 	check_same_precision(x, y)
@@ -74,6 +91,9 @@ vec_cast.sfc_POINT.sfc_POINT = function(x, to, ...) {
 	vec_cast_sfc_sfc(x, to)
 }
 vec_cast.sfc_LINESTRING.sfc_LINESTRING = function(x, to, ...) {
+	vec_cast_sfc_sfc(x, to)
+}
+vec_cast.sfc_GEOMETRY.sfc_GEOMETRY = function(x, to, ...) {
 	vec_cast_sfc_sfc(x, to)
 }
 vec_cast_sfc_sfc = function(x, to) {
