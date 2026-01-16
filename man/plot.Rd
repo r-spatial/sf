@@ -20,7 +20,7 @@
 \alias{text.sfc}
 \alias{points.sf}
 \alias{points.sfc}
-\title{plot sf object}
+\title{Plot sf object}
 \usage{
 \method{plot}{sf}(
   x,
@@ -260,8 +260,7 @@ or object returned by \link{st_graticule}}
 \item{of_largest_polygon}{logical, passed on to \link{st_centroid}}
 }
 \description{
-plot one or more attributes of an sf object on a map
-Plot sf object
+Plot one or more attributes of an sf object on a map
 }
 \details{
 \code{plot.sf} maximally plots \code{max.plot} maps with colors following from attribute columns,
@@ -326,4 +325,7 @@ plot(x[order(st_area(x), decreasing = TRUE),], col = 2:5) # plot largest polygon
 
 sf.colors(10)
 text(nc, labels = substring(nc$NAME,1,1))
+}
+\seealso{
+\code{vignette("sf5")}
 }
