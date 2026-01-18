@@ -27,7 +27,7 @@ st_sfc(
 \method{[}{sfc}(x, i, j, ..., op = st_intersects)
 }
 \arguments{
-\item{...}{zero or more simple feature geometries (objects of class \code{sfg}), or a single list of such objects; \code{NULL} values will get replaced by empty geometries.}
+\item{...}{input: zero or more simple feature geometries (objects of class \code{sfg}), or a single list of such objects; \code{NULL} values will get replaced by empty geometries.}
 
 \item{crs}{coordinate reference system: integer with the EPSG code, or character with proj4string}
 
@@ -41,6 +41,8 @@ st_sfc(
 
 \item{oriented}{logical; if \code{TRUE}, the ring is oriented such that left of the edges is inside the polygon; this is
 needed for convering polygons larger than half the globe to s2}
+
+\item{fall_back_class}{character; class for return object when no geometries are provided as input}
 
 \item{x}{object of class \code{sfc}}
 
