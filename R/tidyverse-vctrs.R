@@ -3,23 +3,43 @@
 #nocov start
 register_vctrs_methods = function() {
 	s3_register("vctrs::vec_proxy", "sfc_POINT")
+	s3_register("vctrs::vec_proxy", "sfc_MULTIPOINT")
 	s3_register("vctrs::vec_proxy", "sfc_LINESTRING")
+	s3_register("vctrs::vec_proxy", "sfc_MULTILINESTRING")
+	s3_register("vctrs::vec_proxy", "sfc_POLYGON")
+	s3_register("vctrs::vec_proxy", "sfc_MULTIPOLYGON")
 	s3_register("vctrs::vec_proxy", "sfc_GEOMETRY")
 
 	s3_register("vctrs::vec_restore", "sfc_POINT")
+	s3_register("vctrs::vec_restore", "sfc_MULTIPOINT")
 	s3_register("vctrs::vec_restore", "sfc_LINESTRING")
+	s3_register("vctrs::vec_restore", "sfc_MULTILINESTRING")
+	s3_register("vctrs::vec_restore", "sfc_POLYGON")
+	s3_register("vctrs::vec_restore", "sfc_MULTIPOLYGON")
 	s3_register("vctrs::vec_restore", "sfc_GEOMETRY")
 
 	s3_register("vctrs::vec_ptype", "sfc_POINT")
+	s3_register("vctrs::vec_ptype", "sfc_MULTIPOINT")
 	s3_register("vctrs::vec_ptype", "sfc_LINESTRING")
+	s3_register("vctrs::vec_ptype", "sfc_MULTILINESTRING")
+	s3_register("vctrs::vec_ptype", "sfc_POLYGON")
+	s3_register("vctrs::vec_ptype", "sfc_MULTIPOLYGON")
 	s3_register("vctrs::vec_ptype", "sfc_GEOMETRY")
 
 	s3_register("vctrs::vec_ptype2", "sfc_POINT.sfc_POINT")
+	s3_register("vctrs::vec_ptype2", "sfc_MULTIPOINT.sfc_MULTIPOINT")
 	s3_register("vctrs::vec_ptype2", "sfc_LINESTRING.sfc_LINESTRING")
+	s3_register("vctrs::vec_ptype2", "sfc_MULTILINESTRING.sfc_MULTILINESTRING")
+	s3_register("vctrs::vec_ptype2", "sfc_POLYGON.sfc_POLYGON")
+	s3_register("vctrs::vec_ptype2", "sfc_MULTIPOLYGON.sfc_MULTIPOLYGON")
 	s3_register("vctrs::vec_ptype2", "sfc_GEOMETRY.sfc_GEOMETRY")
 
 	s3_register("vctrs::vec_cast", "sfc_POINT.sfc_POINT")
+	s3_register("vctrs::vec_cast", "sfc_MULTIPOINT.sfc_MULTIPOINT")
 	s3_register("vctrs::vec_cast", "sfc_LINESTRING.sfc_LINESTRING")
+	s3_register("vctrs::vec_cast", "sfc_MULTILINESTRING.sfc_MULTILINESTRING")
+	s3_register("vctrs::vec_cast", "sfc_POLYGON.sfc_POLYGON")
+	s3_register("vctrs::vec_cast", "sfc_MULTIPOLYGON.sfc_MULTIPOLYGON")
 	s3_register("vctrs::vec_cast", "sfc_GEOMETRY.sfc_GEOMETRY")
 }
 #nocov end
@@ -27,7 +47,19 @@ register_vctrs_methods = function() {
 vec_proxy.sfc_POINT = function(x, ...) {
 	vec_proxy_sfc(x)
 }
+vec_proxy.sfc_MULTIPOINT = function(x, ...) {
+	vec_proxy_sfc(x)
+}
 vec_proxy.sfc_LINESTRING = function(x, ...) {
+	vec_proxy_sfc(x)
+}
+vec_proxy.sfc_MULTILINESTRING = function(x, ...) {
+	vec_proxy_sfc(x)
+}
+vec_proxy.sfc_POLYGON = function(x, ...) {
+	vec_proxy_sfc(x)
+}
+vec_proxy.sfc_MULTIPOLYGON = function(x, ...) {
 	vec_proxy_sfc(x)
 }
 vec_proxy.sfc_GEOMETRY = function(x, ...) {
@@ -40,7 +72,19 @@ vec_proxy_sfc = function(x) {
 vec_restore.sfc_POINT = function(x, to, ...) {
 	vec_restore_sfc(x, to)
 }
+vec_restore.sfc_MULTIPOINT = function(x, to, ...) {
+	vec_restore_sfc(x, to)
+}
 vec_restore.sfc_LINESTRING = function(x, to, ...) {
+	vec_restore_sfc(x, to)
+}
+vec_restore.sfc_MULTILINESTRING = function(x, to, ...) {
+	vec_restore_sfc(x, to)
+}
+vec_restore.sfc_POLYGON = function(x, to, ...) {
+	vec_restore_sfc(x, to)
+}
+vec_restore.sfc_MULTIPOLYGON = function(x, to, ...) {
 	vec_restore_sfc(x, to)
 }
 vec_restore.sfc_GEOMETRY = function(x, to, ...) {
@@ -58,7 +102,19 @@ vec_restore_sfc = function(x, to) {
 vec_ptype.sfc_POINT = function(x, ...) {
 	vec_ptype_sfc(x)
 }
+vec_ptype.sfc_MULTIPOINT = function(x, ...) {
+	vec_ptype_sfc(x)
+}
 vec_ptype.sfc_LINESTRING = function(x, ...) {
+	vec_ptype_sfc(x)
+}
+vec_ptype.sfc_MULTILINESTRING = function(x, ...) {
+	vec_ptype_sfc(x)
+}
+vec_ptype.sfc_POLYGON = function(x, ...) {
+	vec_ptype_sfc(x)
+}
+vec_ptype.sfc_MULTIPOLYGON = function(x, ...) {
 	vec_ptype_sfc(x)
 }
 vec_ptype.sfc_GEOMETRY = function(x, ...) {
@@ -75,7 +131,19 @@ vec_ptype_sfc = function(x) {
 vec_ptype2.sfc_POINT.sfc_POINT = function(x, y, ...) {
 	vec_ptype2_sfc_sfc(x, y)
 }
+vec_ptype2.sfc_MULTIPOINT.sfc_MULTIPOINT = function(x, y, ...) {
+	vec_ptype2_sfc_sfc(x, y)
+}
 vec_ptype2.sfc_LINESTRING.sfc_LINESTRING = function(x, y, ...) {
+	vec_ptype2_sfc_sfc(x, y)
+}
+vec_ptype2.sfc_MULTILINESTRING.sfc_MULTILINESTRING = function(x, y, ...) {
+	vec_ptype2_sfc_sfc(x, y)
+}
+vec_ptype2.sfc_POLYGON.sfc_POLYGON = function(x, y, ...) {
+	vec_ptype2_sfc_sfc(x, y)
+}
+vec_ptype2.sfc_MULTIPOLYGON.sfc_MULTIPOLYGON = function(x, y, ...) {
 	vec_ptype2_sfc_sfc(x, y)
 }
 vec_ptype2.sfc_GEOMETRY.sfc_GEOMETRY = function(x, y, ...) {
@@ -90,7 +158,19 @@ vec_ptype2_sfc_sfc = function(x, y) {
 vec_cast.sfc_POINT.sfc_POINT = function(x, to, ...) {
 	vec_cast_sfc_sfc(x, to)
 }
+vec_cast.sfc_MULTIPOINT.sfc_MULTIPOINT = function(x, to, ...) {
+	vec_cast_sfc_sfc(x, to)
+}
 vec_cast.sfc_LINESTRING.sfc_LINESTRING = function(x, to, ...) {
+	vec_cast_sfc_sfc(x, to)
+}
+vec_cast.sfc_MULTILINESTRING.sfc_MULTILINESTRING = function(x, to, ...) {
+	vec_cast_sfc_sfc(x, to)
+}
+vec_cast.sfc_POLYGON.sfc_POLYGON = function(x, to, ...) {
+	vec_cast_sfc_sfc(x, to)
+}
+vec_cast.sfc_MULTIPOLYGON.sfc_MULTIPOLYGON = function(x, to, ...) {
 	vec_cast_sfc_sfc(x, to)
 }
 vec_cast.sfc_GEOMETRY.sfc_GEOMETRY = function(x, to, ...) {

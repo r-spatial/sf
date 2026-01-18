@@ -20,7 +20,7 @@ format.sfc = function(x, ..., width = 30) {
 #'
 #' @name sfc
 #' @aliases sfc_POINT sfc_LINESTRING sfc_POLYGON sfc_MULTIPOINT sfc_MULTILINESTRING sfc_MULTIPOLYGON sfc_GEOMETRYCOLLECTION
-#' @param ... zero or more simple feature geometries (objects of class \code{sfg}), or a single list of such objects; \code{NULL} values will get replaced by empty geometries.
+#' @param ... input: zero or more simple feature geometries (objects of class \code{sfg}), or a single list of such objects; \code{NULL} values will get replaced by empty geometries.
 #' @param crs coordinate reference system: integer with the EPSG code, or character with proj4string
 #' @param precision numeric; see \link{st_as_binary}
 #' @param check_ring_dir see \link{st_read}
@@ -28,6 +28,7 @@ format.sfc = function(x, ..., width = 30) {
 #' @param recompute_bbox logical; use \code{TRUE} to force recomputation of the bounding box
 #' @param oriented logical; if \code{TRUE}, the ring is oriented such that left of the edges is inside the polygon; this is
 #' needed for convering polygons larger than half the globe to s2
+#' @param fall_back_class character; class for return object when no geometries are provided as input
 #' @return an object of class \code{sfc}, which is a classed list-column with simple feature geometries.
 #'
 #' @details A simple feature geometry list-column is a list of class
