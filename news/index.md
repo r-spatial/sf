@@ -1,5 +1,11 @@
 # Changelog
 
+## version 1.0-25
+
+- When sampling a degenerate (zero length) line, a warning is raised
+  rather than a message;
+  [\#2575](https://github.com/r-spatial/sf/issues/2575)
+
 ## version 1.0-24
 
 CRAN release: 2026-01-12

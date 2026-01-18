@@ -217,7 +217,7 @@ if (require(spatstat.geom)) {
 #> Loading required package: spatstat.geom
 #> Loading required package: spatstat.data
 #> Loading required package: spatstat.univar
-#> spatstat.univar 3.1-5
+#> spatstat.univar 3.1-6
 #> spatstat.geom 3.6-1
 #> Simple feature collection with 647 features and 4 fields
 #> Geometry type: POINT
