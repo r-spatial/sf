@@ -1,3 +1,7 @@
+# version 1.0-25
+
+* When sampling a degenerate (zero length) line, a warning is raised rather than a message; #2575
+
 # version 1.0-24
 
 * `gdal_write()` handles drivers that only have a `CreateCopy()` option; https://github.com/r-spatial/stars/issues/762 
