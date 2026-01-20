@@ -7,4 +7,4 @@ Rcpp::List create_crs(const OGRSpatialReference *ref, bool set_input = true);
 
 void handle_error(OGRErr err);
 std::vector<char *> create_options(Rcpp::CharacterVector lco, bool quiet = true);
-Rcpp::CharacterVector charpp2CV(char **cp);
+Rcpp::CharacterVector charpp2CV(CSLConstList cp);

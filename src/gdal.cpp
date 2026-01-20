@@ -456,7 +456,7 @@ std::vector<char *> create_options(Rcpp::CharacterVector lco, bool quiet) {
 }
 
 // convert NULL-terminated array of strings to Rcpp::CharacterVector
-Rcpp::CharacterVector charpp2CV(char **cp) {
+Rcpp::CharacterVector charpp2CV(CSLConstList cp) {
 	int n = 0;
 	while (cp && cp[n] != NULL)
 		n++; // count
