@@ -1,4 +1,5 @@
-
+#ifndef SF_GDAL_READ_H_
+#define SF_GDAL_READ_H_
 Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
 		Rcpp::NumericVector toTypeUser, Rcpp::CharacterVector fid_column, bool promote_to_multi,
 		int nfeatures);
@@ -13,3 +14,4 @@ Rcpp::List CPL_ogr_layer_setup(Rcpp::CharacterVector datasource, Rcpp::Character
 
 Rcpp::List CPL_read_gdal(Rcpp::CharacterVector fname, Rcpp::CharacterVector options, Rcpp::CharacterVector driver,
 		bool read_data, Rcpp::NumericVector NA_value, Rcpp::List RasterIO_parameters);
+#endif //  SF_GDAL_READ_H_
