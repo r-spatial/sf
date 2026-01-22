@@ -34,6 +34,9 @@ register_vctrs_methods = function() {
 	s3_register("vctrs::vec_ptype2", "sfc_MULTIPOLYGON.sfc_MULTIPOLYGON")
 	s3_register("vctrs::vec_ptype2", "sfc_GEOMETRY.sfc_GEOMETRY")
 
+	s3_register("vctrs::vec_ptype2", "sfc_POINT.sfc_LINESTRING")
+	s3_register("vctrs::vec_ptype2", "sfc_LINESTRING.sfc_POINT")
+
 	s3_register("vctrs::vec_cast", "sfc_POINT.sfc_POINT")
 	s3_register("vctrs::vec_cast", "sfc_MULTIPOINT.sfc_MULTIPOINT")
 	s3_register("vctrs::vec_cast", "sfc_LINESTRING.sfc_LINESTRING")
@@ -41,6 +44,9 @@ register_vctrs_methods = function() {
 	s3_register("vctrs::vec_cast", "sfc_POLYGON.sfc_POLYGON")
 	s3_register("vctrs::vec_cast", "sfc_MULTIPOLYGON.sfc_MULTIPOLYGON")
 	s3_register("vctrs::vec_cast", "sfc_GEOMETRY.sfc_GEOMETRY")
+
+	s3_register("vctrs::vec_cast", "sfc_GEOMETRY.sfc_POINT")
+	s3_register("vctrs::vec_cast", "sfc_GEOMETRY.sfc_LINESTRING")
 }
 #nocov end
 
@@ -155,6 +161,22 @@ vec_ptype2_sfc_sfc = function(x, y) {
 	x
 }
 
+vec_ptype2.sfc_POINT.sfc_LINESTRING = function(x, y, ...) {
+	vec_ptype2_geometry(x, y)
+}
+vec_ptype2.sfc_LINESTRING.sfc_POINT = function(x, y, ...) {
+	vec_ptype2_geometry(x, y)
+}
+vec_ptype2_geometry = function(x, y) {
+	check_same_crs(x, y)
+	check_same_precision(x, y)
+	# Returns `sfc_GEOMETRY` abstract class
+	st_sfc(
+		crs = st_crs(x),
+		precision = st_precision(x)
+	)
+}
+
 vec_cast.sfc_POINT.sfc_POINT = function(x, to, ...) {
 	vec_cast_sfc_sfc(x, to)
 }
@@ -180,6 +202,19 @@ vec_cast_sfc_sfc = function(x, to) {
 	check_same_crs(x, to)
 	check_same_precision(x, to)
 	x
+}
+
+vec_cast.sfc_GEOMETRY.sfc_POINT = function(x, to, ...) {
+	vec_cast_geometry(x, to)
+}
+vec_cast.sfc_GEOMETRY.sfc_LINESTRING = function(x, to, ...) {
+	vec_cast_geometry(x, to)
+}
+vec_cast_geometry <- function(x, to) {
+	check_same_crs(x, to)
+	check_same_precision(x, to)
+	x <- sf_unstructure(x)
+	st_sfc(x) # TODO: This needs to FORCE `sfc_GEOMETRY`, regardless of values in `x`
 }
 
 sf_unstructure = function(x) {
