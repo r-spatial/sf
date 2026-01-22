@@ -33,6 +33,8 @@ register_vctrs_methods = function() {
 	s3_register("vctrs::vec_ptype2", "sfc_POLYGON.sfc_POLYGON")
 	s3_register("vctrs::vec_ptype2", "sfc_MULTIPOLYGON.sfc_MULTIPOLYGON")
 	s3_register("vctrs::vec_ptype2", "sfc_GEOMETRY.sfc_GEOMETRY")
+	s3_register("vctrs::vec_ptype2", "sfc_POINT.sfc_LINESTRING")
+	s3_register("vctrs::vec_ptype2", "sfc_LINESTRING.sfc_POINT")
 
 	s3_register("vctrs::vec_cast", "sfc_POINT.sfc_POINT")
 	s3_register("vctrs::vec_cast", "sfc_MULTIPOINT.sfc_MULTIPOINT")
@@ -41,6 +43,8 @@ register_vctrs_methods = function() {
 	s3_register("vctrs::vec_cast", "sfc_POLYGON.sfc_POLYGON")
 	s3_register("vctrs::vec_cast", "sfc_MULTIPOLYGON.sfc_MULTIPOLYGON")
 	s3_register("vctrs::vec_cast", "sfc_GEOMETRY.sfc_GEOMETRY")
+	s3_register("vctrs::vec_cast", "sfc_GEOMETRY.sfc_POINT")
+	s3_register("vctrs::vec_cast", "sfc_GEOMETRY.sfc_LINESTRING")
 }
 #nocov end
 
@@ -152,7 +156,16 @@ vec_ptype2.sfc_GEOMETRY.sfc_GEOMETRY = function(x, y, ...) {
 vec_ptype2_sfc_sfc = function(x, y) {
 	check_same_crs(x, y)
 	check_same_precision(x, y)
-	x
+	if (identical(class(x), class(y)))
+		x	
+	else # empty sfc_GEOMETRY:
+		st_sfc(crs = st_crs(x), precision = st_precision(x))
+}
+vec_ptype2.sfc_POINT.sfc_LINESTRING = function(x, y, ...) {
+	vec_ptype2_sfc_sfc(x, y)
+}
+vec_ptype2.sfc_LINESTRING.sfc_POINT = function(x, y, ...) {
+	vec_ptype2_sfc_sfc(x, y)
 }
 
 vec_cast.sfc_POINT.sfc_POINT = function(x, to, ...) {
@@ -180,6 +193,21 @@ vec_cast_sfc_sfc = function(x, to) {
 	check_same_crs(x, to)
 	check_same_precision(x, to)
 	x
+}
+vec_cast.sfc_GEOMETRY.sfc_POINT = function(x, to, ...) {
+	vec_cast_to_geometry(x, to)
+}
+vec_cast.sfc_GEOMETRY.sfc_LINESTRING = function(x, to, ...) {
+	vec_cast_to_geometry(x, to)
+}
+vec_cast_to_geometry = function(x, to) {
+	check_same_crs(x, to)
+	check_same_precision(x, to)
+	# print(paste("cast from", class(x), "to sfc_GEOMETRY"))
+	if (length(x))
+		st_cast(x, "GEOMETRY")
+	else
+		st_sfc(crs = st_crs(x), precision = st_precision(x))
 }
 
 sf_unstructure = function(x) {
