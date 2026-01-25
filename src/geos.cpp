@@ -1087,7 +1087,7 @@ Rcpp::NumericMatrix CPL_geos_dist(Rcpp::List sfc0, Rcpp::List sfc1,
 typedef struct { GEOSGeom g; size_t id; } item_g;
 
 int distance_fn(const void *item1, const void *item2, double *distance, void *userdata) {
-	return GEOSDistance_r( (GEOSContextHandle_t) userdata, ((item_g *)item1)->g, ((item_g *)item2)->g, distance);
+	return GEOSDistance_r( (GEOSContextHandle_t) userdata, ((const item_g *)item1)->g, ((const item_g *)item2)->g, distance);
 }
 
 // [[Rcpp::export(rng=false)]]
@@ -1112,11 +1112,12 @@ Rcpp::IntegerVector CPL_geos_nearest_feature(Rcpp::List sfc0, Rcpp::List sfc1) {
 	Rcpp::IntegerVector out(gmv0.size());
 	for (size_t i = 0; i < gmv0.size(); i++) {
 		if (!GEOSisEmpty_r(hGEOSCtxt, gmv0[i].get()) && !tree_is_empty) {
-			item_g item, *ret_item;
+			item_g item;
 			item.id = 0; // is irrelevant
 			item.g = gmv0[i].get();
+			const item_g *ret_item;
 			// now query tree for nearest GEOM at item:
-			ret_item = (item_g *) GEOSSTRtree_nearest_generic_r(hGEOSCtxt, tree.get(), &item,
+			ret_item = (const item_g *) GEOSSTRtree_nearest_generic_r(hGEOSCtxt, tree.get(), &item,
 					gmv0[i].get(), distance_fn, hGEOSCtxt);
 			if (ret_item != NULL)
 				out[i] = ret_item->id; // the index (1-based) of nearest GEOM
