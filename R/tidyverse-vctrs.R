@@ -1,99 +1,49 @@
+types = c("POINT", "MULTIPOINT", "LINESTRING", "MULTILINESTRING", 
+            "POLYGON", "MULTIPOLYGON", "GEOMETRY")
+sfc_types = paste0("sfc_", types)
+
 # All S3 methods in this file are registered lazily when vctrs is loaded
-
-#nocov start
 register_vctrs_methods = function() {
-	s3_register("vctrs::vec_proxy", "sfc_POINT")
-	s3_register("vctrs::vec_proxy", "sfc_MULTIPOINT")
-	s3_register("vctrs::vec_proxy", "sfc_LINESTRING")
-	s3_register("vctrs::vec_proxy", "sfc_MULTILINESTRING")
-	s3_register("vctrs::vec_proxy", "sfc_POLYGON")
-	s3_register("vctrs::vec_proxy", "sfc_MULTIPOLYGON")
-	s3_register("vctrs::vec_proxy", "sfc_GEOMETRY")
-
-	s3_register("vctrs::vec_restore", "sfc_POINT")
-	s3_register("vctrs::vec_restore", "sfc_MULTIPOINT")
-	s3_register("vctrs::vec_restore", "sfc_LINESTRING")
-	s3_register("vctrs::vec_restore", "sfc_MULTILINESTRING")
-	s3_register("vctrs::vec_restore", "sfc_POLYGON")
-	s3_register("vctrs::vec_restore", "sfc_MULTIPOLYGON")
-	s3_register("vctrs::vec_restore", "sfc_GEOMETRY")
-
-	s3_register("vctrs::vec_ptype", "sfc_POINT")
-	s3_register("vctrs::vec_ptype", "sfc_MULTIPOINT")
-	s3_register("vctrs::vec_ptype", "sfc_LINESTRING")
-	s3_register("vctrs::vec_ptype", "sfc_MULTILINESTRING")
-	s3_register("vctrs::vec_ptype", "sfc_POLYGON")
-	s3_register("vctrs::vec_ptype", "sfc_MULTIPOLYGON")
-	s3_register("vctrs::vec_ptype", "sfc_GEOMETRY")
-
-	s3_register("vctrs::vec_ptype2", "sfc_POINT.sfc_POINT")
-	s3_register("vctrs::vec_ptype2", "sfc_MULTIPOINT.sfc_MULTIPOINT")
-	s3_register("vctrs::vec_ptype2", "sfc_LINESTRING.sfc_LINESTRING")
-	s3_register("vctrs::vec_ptype2", "sfc_MULTILINESTRING.sfc_MULTILINESTRING")
-	s3_register("vctrs::vec_ptype2", "sfc_POLYGON.sfc_POLYGON")
-	s3_register("vctrs::vec_ptype2", "sfc_MULTIPOLYGON.sfc_MULTIPOLYGON")
-	s3_register("vctrs::vec_ptype2", "sfc_GEOMETRY.sfc_GEOMETRY")
-	s3_register("vctrs::vec_ptype2", "sfc_POINT.sfc_LINESTRING")
-	s3_register("vctrs::vec_ptype2", "sfc_LINESTRING.sfc_POINT")
-
-	s3_register("vctrs::vec_cast", "sfc_POINT.sfc_POINT")
-	s3_register("vctrs::vec_cast", "sfc_MULTIPOINT.sfc_MULTIPOINT")
-	s3_register("vctrs::vec_cast", "sfc_LINESTRING.sfc_LINESTRING")
-	s3_register("vctrs::vec_cast", "sfc_MULTILINESTRING.sfc_MULTILINESTRING")
-	s3_register("vctrs::vec_cast", "sfc_POLYGON.sfc_POLYGON")
-	s3_register("vctrs::vec_cast", "sfc_MULTIPOLYGON.sfc_MULTIPOLYGON")
-	s3_register("vctrs::vec_cast", "sfc_GEOMETRY.sfc_GEOMETRY")
-	s3_register("vctrs::vec_cast", "sfc_GEOMETRY.sfc_POINT")
-	s3_register("vctrs::vec_cast", "sfc_GEOMETRY.sfc_LINESTRING")
-}
-#nocov end
-
-vec_proxy.sfc_POINT = function(x, ...) {
-	vec_proxy_sfc(x)
-}
-vec_proxy.sfc_MULTIPOINT = function(x, ...) {
-	vec_proxy_sfc(x)
-}
-vec_proxy.sfc_LINESTRING = function(x, ...) {
-	vec_proxy_sfc(x)
-}
-vec_proxy.sfc_MULTILINESTRING = function(x, ...) {
-	vec_proxy_sfc(x)
-}
-vec_proxy.sfc_POLYGON = function(x, ...) {
-	vec_proxy_sfc(x)
-}
-vec_proxy.sfc_MULTIPOLYGON = function(x, ...) {
-	vec_proxy_sfc(x)
-}
-vec_proxy.sfc_GEOMETRY = function(x, ...) {
-	vec_proxy_sfc(x)
-}
-vec_proxy_sfc = function(x) {
-	sf_unstructure(x)
+  # Register vec_proxy, vec_restore, vec_ptype for all types
+  for (type in sfc_types) {
+    s3_register("vctrs::vec_proxy", type)
+    s3_register("vctrs::vec_restore", type)
+    s3_register("vctrs::vec_ptype", type)
+  }
+  
+  # Register vec_ptype2 for all pairs
+  for (i in seq_along(sfc_types)) {
+    for (j in seq_along(sfc_types)) {
+      s3_register("vctrs::vec_ptype2", paste0(sfc_types[i], ".", sfc_types[j]))
+    }
+  }
+  
+  # Register vec_cast for all pairs
+  for (i in seq_along(sfc_types)) {
+    for (j in seq_along(sfc_types)) {
+      s3_register("vctrs::vec_cast", paste0(sfc_types[i], ".", sfc_types[j]))
+    }
+  }
 }
 
-vec_restore.sfc_POINT = function(x, to, ...) {
-	vec_restore_sfc(x, to)
-}
-vec_restore.sfc_MULTIPOINT = function(x, to, ...) {
-	vec_restore_sfc(x, to)
-}
-vec_restore.sfc_LINESTRING = function(x, to, ...) {
-	vec_restore_sfc(x, to)
-}
-vec_restore.sfc_MULTILINESTRING = function(x, to, ...) {
-	vec_restore_sfc(x, to)
-}
-vec_restore.sfc_POLYGON = function(x, to, ...) {
-	vec_restore_sfc(x, to)
-}
-vec_restore.sfc_MULTIPOLYGON = function(x, to, ...) {
-	vec_restore_sfc(x, to)
-}
-vec_restore.sfc_GEOMETRY = function(x, to, ...) {
-	vec_restore_sfc(x, to)
-}
+# vec_proxy implementations:
+vec_proxy.sfc_POINT = function(x, ...)  vec_proxy_sfc(x)
+vec_proxy.sfc_MULTIPOINT = function(x, ...) vec_proxy_sfc(x)
+vec_proxy.sfc_LINESTRING = function(x, ...) vec_proxy_sfc(x)
+vec_proxy.sfc_MULTILINESTRING = function(x, ...) vec_proxy_sfc(x)
+vec_proxy.sfc_POLYGON = function(x, ...) vec_proxy_sfc(x)
+vec_proxy.sfc_MULTIPOLYGON = function(x, ...) vec_proxy_sfc(x)
+vec_proxy.sfc_GEOMETRY = function(x, ...) vec_proxy_sfc(x)
+vec_proxy_sfc = function(x) sf_unstructure(x)
+
+vec_restore.sfc_POINT = function(x, to, ...) vec_restore_sfc(x, to)
+vec_restore.sfc_MULTIPOINT = function(x, to, ...) vec_restore_sfc(x, to)
+vec_restore.sfc_LINESTRING = function(x, to, ...) vec_restore_sfc(x, to)
+vec_restore.sfc_MULTILINESTRING = function(x, to, ...) vec_restore_sfc(x, to)
+vec_restore.sfc_POLYGON = function(x, to, ...) vec_restore_sfc(x, to)
+vec_restore.sfc_MULTIPOLYGON = function(x, to, ...) vec_restore_sfc(x, to)
+vec_restore.sfc_GEOMETRY = function(x, to, ...) vec_restore_sfc(x, to)
+
 vec_restore_sfc = function(x, to) {
 	st_sfc(
 		x,
@@ -103,27 +53,15 @@ vec_restore_sfc = function(x, to) {
 	)
 }
 
-vec_ptype.sfc_POINT = function(x, ...) {
-	vec_ptype_sfc(x)
-}
-vec_ptype.sfc_MULTIPOINT = function(x, ...) {
-	vec_ptype_sfc(x)
-}
-vec_ptype.sfc_LINESTRING = function(x, ...) {
-	vec_ptype_sfc(x)
-}
-vec_ptype.sfc_MULTILINESTRING = function(x, ...) {
-	vec_ptype_sfc(x)
-}
-vec_ptype.sfc_POLYGON = function(x, ...) {
-	vec_ptype_sfc(x)
-}
-vec_ptype.sfc_MULTIPOLYGON = function(x, ...) {
-	vec_ptype_sfc(x)
-}
-vec_ptype.sfc_GEOMETRY = function(x, ...) {
-	vec_ptype_sfc(x)
-}
+# vec_type methods:
+vec_ptype.sfc_POINT = function(x, ...) vec_ptype_sfc(x)
+vec_ptype.sfc_MULTIPOINT = function(x, ...) vec_ptype_sfc(x)
+vec_ptype.sfc_LINESTRING = function(x, ...) vec_ptype_sfc(x)
+vec_ptype.sfc_MULTILINESTRING = function(x, ...) vec_ptype_sfc(x)
+vec_ptype.sfc_POLYGON = function(x, ...) vec_ptype_sfc(x)
+vec_ptype.sfc_MULTIPOLYGON = function(x, ...) vec_ptype_sfc(x)
+vec_ptype.sfc_GEOMETRY = function(x, ...) vec_ptype_sfc(x)
+
 vec_ptype_sfc = function(x) {
 	st_sfc(
 		crs = st_crs(x),
@@ -132,74 +70,41 @@ vec_ptype_sfc = function(x) {
 	)
 }
 
-vec_ptype2.sfc_POINT.sfc_POINT = function(x, y, ...) {
-	vec_ptype2_sfc_sfc(x, y)
-}
-vec_ptype2.sfc_MULTIPOINT.sfc_MULTIPOINT = function(x, y, ...) {
-	vec_ptype2_sfc_sfc(x, y)
-}
-vec_ptype2.sfc_LINESTRING.sfc_LINESTRING = function(x, y, ...) {
-	vec_ptype2_sfc_sfc(x, y)
-}
-vec_ptype2.sfc_MULTILINESTRING.sfc_MULTILINESTRING = function(x, y, ...) {
-	vec_ptype2_sfc_sfc(x, y)
-}
-vec_ptype2.sfc_POLYGON.sfc_POLYGON = function(x, y, ...) {
-	vec_ptype2_sfc_sfc(x, y)
-}
-vec_ptype2.sfc_MULTIPOLYGON.sfc_MULTIPOLYGON = function(x, y, ...) {
-	vec_ptype2_sfc_sfc(x, y)
-}
-vec_ptype2.sfc_GEOMETRY.sfc_GEOMETRY = function(x, y, ...) {
-	vec_ptype2_sfc_sfc(x, y)
-}
-vec_ptype2_sfc_sfc = function(x, y) {
-	check_same_crs(x, y)
-	check_same_precision(x, y)
-	if (identical(class(x), class(y)))
-		x	
-	else # empty sfc_GEOMETRY:
-		st_sfc(crs = st_crs(x), precision = st_precision(x))
-}
-vec_ptype2.sfc_POINT.sfc_LINESTRING = function(x, y, ...) {
-	vec_ptype2_sfc_sfc(x, y)
-}
-vec_ptype2.sfc_LINESTRING.sfc_POINT = function(x, y, ...) {
-	vec_ptype2_sfc_sfc(x, y)
+# Single implementation that works for all type pairs
+vec_ptype2_impl = function(x, y) {
+  check_same_crs(x, y)
+  check_same_precision(x, y)
+  if (identical(class(x), class(y)))
+    x
+  else # return empty sfc_GEOMETRY for mixed types
+    st_sfc(crs = st_crs(x), precision = st_precision(x))
 }
 
-vec_cast.sfc_POINT.sfc_POINT = function(x, to, ...) {
-	vec_cast_sfc_sfc(x, to)
+# Then assign to all pairs
+for (type1 in sfc_types) {
+  for (type2 in sfc_types) {
+    assign(paste0("vec_ptype2.", type1, ".", type2), 
+           function(x, y, ...) vec_ptype2_impl(x, y))
+  }
 }
-vec_cast.sfc_MULTIPOINT.sfc_MULTIPOINT = function(x, to, ...) {
-	vec_cast_sfc_sfc(x, to)
+
+for (type1 in sfc_types) {
+  for (type2 in sfc_types) {
+	if (type1 == type2)
+      assign(paste0("vec_cast", type1, ".", type2), 
+             function(x, y, ...) vec_cast_sfc_sfc(x, y))
+	else 
+      assign(paste0("vec_cast", type1, ".", type2), 
+             function(x, y, ...) vec_cast_to_geometry(x, y))
+  }
 }
-vec_cast.sfc_LINESTRING.sfc_LINESTRING = function(x, to, ...) {
-	vec_cast_sfc_sfc(x, to)
-}
-vec_cast.sfc_MULTILINESTRING.sfc_MULTILINESTRING = function(x, to, ...) {
-	vec_cast_sfc_sfc(x, to)
-}
-vec_cast.sfc_POLYGON.sfc_POLYGON = function(x, to, ...) {
-	vec_cast_sfc_sfc(x, to)
-}
-vec_cast.sfc_MULTIPOLYGON.sfc_MULTIPOLYGON = function(x, to, ...) {
-	vec_cast_sfc_sfc(x, to)
-}
-vec_cast.sfc_GEOMETRY.sfc_GEOMETRY = function(x, to, ...) {
-	vec_cast_sfc_sfc(x, to)
-}
+
 vec_cast_sfc_sfc = function(x, to) {
 	check_same_crs(x, to)
 	check_same_precision(x, to)
 	x
 }
-vec_cast.sfc_GEOMETRY.sfc_POINT = function(x, to, ...) {
-	vec_cast_to_geometry(x, to)
-}
-vec_cast.sfc_GEOMETRY.sfc_LINESTRING = function(x, to, ...) {
-	vec_cast_to_geometry(x, to)
-}
+
 vec_cast_to_geometry = function(x, to) {
 	check_same_crs(x, to)
 	check_same_precision(x, to)
@@ -223,24 +128,20 @@ sf_unstructure = function(x) {
 
 # Take conservative approach of requiring equal CRS
 check_same_crs = function(x, y) {
-	lhs = st_crs(x)
-	rhs = st_crs(y)
-
-	if (lhs != rhs) {
-		stop("arguments have different crs")
-	}
-
-	invisible()
+  lhs = st_crs(x)
+  rhs = st_crs(y)
+  
+  if (lhs != rhs)
+    stop(paste("CRS mismatch:",  lhs$input %||% "NA", "vs", rhs$input %||% "NA"), 
+         call. = FALSE)
+  invisible()
 }
 
-# Take conservative approach of requiring equal precision
 check_same_precision = function(x, y) {
-	lhs = st_precision(x)
-	rhs = st_precision(y)
-
-	if (lhs != rhs) {
-		stop("precisions not equal")
-	}
-
-	invisible()
+  lhs = st_precision(x)
+  rhs = st_precision(y)
+  
+  if (lhs != rhs) 
+    stop(paste("Precision mismatch:", lhs, "vs", rhs), call. = FALSE)
+  invisible()
 }
