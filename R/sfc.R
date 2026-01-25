@@ -130,8 +130,9 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 	st_crs(lst) = crs
 
 	# set classes attr in case of GEOMETRY
-	if (inherits(lst, "sfc_GEOMETRY")) # recompute, as NULL's may have been substituted:
-		attr(lst, "classes") = vapply(lst, class, rep(NA_character_, 3))[2L,]
+	attr(lst, "classes") = if (inherits(lst, "sfc_GEOMETRY")) # recompute, as NULL's may have been substituted:
+		vapply(lst, class, rep(NA_character_, 3))[2L,]
+		# else NULL: removes when present; #2567
 
 	# set n_empty, check XY* is uniform:
 	if (is.null(attr(lst, "n_empty")) || any(is_null)) { # n_empty is set by CPL_read_wkb:

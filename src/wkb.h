@@ -1,3 +1,5 @@
+#ifndef SF_WKB_H_
+#define SF_WKB_H_
 /*      NULL/EMPTY             0 */
 #define SF_Unknown             0 /* sfc_GEOMETRY */
 #define SF_Point               1
@@ -23,3 +25,4 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB);
 unsigned int make_type(const char *cls, const char *dim, bool EWKB, int *tp, int srid);
 Rcpp::List get_dim_sfc(Rcpp::List sfc);
 int srid_from_crs(Rcpp::List crs);
+#endif // SF_WKB_H_

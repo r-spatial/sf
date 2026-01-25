@@ -105,7 +105,7 @@ For Mac OS 11 Big Sur source install instruction, see [here](https://github.com/
 
 ### Linux
 
-For Unix-alikes, GDAL (>= 2.0.1), GEOS (>= 3.4.0) and Proj.4 (>= 4.8.0) are required.
+For Unix-alikes, GDAL (>= 2.0.1), GEOS (>= 3.4.0) and PROJ (>= 4.8.0) are required.
 
 #### Ubuntu
 
@@ -159,7 +159,7 @@ If you use dynamic linking (installation from source) and have multiple versions
 
 ### lwgeom
 
-Functions and methods that require `liblwgeom`, including ellipsoidal (not spherical or Euclidean) metrics (area, distances), are provide by and used from [lwgeom](https://github.com/r-spatial/lwgeom), which is also on [CRAN](https://cran.r-project.org/package=lwgeom).
+Functions and methods that require `liblwgeom`, including ellipsoidal (not spherical or Euclidean) metrics (area, distances), are provided by and used from [lwgeom](https://github.com/r-spatial/lwgeom), which is also on [CRAN](https://cran.r-project.org/package=lwgeom).
 
 ## Contributing
 
