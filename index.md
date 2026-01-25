@@ -155,8 +155,8 @@ For Mac OS 11 Big Sur source install instruction, see
 
 ### Linux
 
-For Unix-alikes, GDAL (\>= 2.0.1), GEOS (\>= 3.4.0) and Proj.4 (\>=
-4.8.0) are required.
+For Unix-alikes, GDAL (\>= 2.0.1), GEOS (\>= 3.4.0) and PROJ (\>= 4.8.0)
+are required.
 
 #### Ubuntu
 
@@ -233,7 +233,7 @@ general not work, even when setting `LD_LIBRARY_PATH` manually. See
 ### lwgeom
 
 Functions and methods that require `liblwgeom`, including ellipsoidal
-(not spherical or Euclidean) metrics (area, distances), are provide by
+(not spherical or Euclidean) metrics (area, distances), are provided by
 and used from [lwgeom](https://github.com/r-spatial/lwgeom), which is
 also on [CRAN](https://cran.r-project.org/package=lwgeom).
 

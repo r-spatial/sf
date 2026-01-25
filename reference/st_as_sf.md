@@ -218,7 +218,7 @@ if (require(spatstat.geom)) {
 #> Loading required package: spatstat.data
 #> Loading required package: spatstat.univar
 #> spatstat.univar 3.1-6
-#> spatstat.geom 3.6-1
+#> spatstat.geom 3.7-0
 #> Simple feature collection with 647 features and 4 fields
 #> Geometry type: POINT
 #> Dimension:     XY
@@ -243,7 +243,7 @@ if (require(spatstat.linnet)) {
 }
 #> Loading required package: spatstat.linnet
 #> Loading required package: spatstat.random
-#> spatstat.random 3.4-3
+#> spatstat.random 3.4-4
 #> Loading required package: spatstat.explore
 #> Loading required package: nlme
 #> 
@@ -251,7 +251,7 @@ if (require(spatstat.linnet)) {
 #> The following object is masked from ‘package:dplyr’:
 #> 
 #>     collapse
-#> spatstat.explore 3.6-0
+#> spatstat.explore 3.7-0
 #> Loading required package: spatstat.model
 #> Loading required package: rpart
 #> spatstat.model 3.5-0
