@@ -5,7 +5,7 @@
 \alias{st_nearest_points.sfc}
 \alias{st_nearest_points.sfg}
 \alias{st_nearest_points.sf}
-\title{get nearest points between pairs of geometries}
+\title{Get nearest points between pairs of geometries}
 \usage{
 st_nearest_points(x, y, ...)
 
@@ -16,16 +16,16 @@ st_nearest_points(x, y, ...)
 \method{st_nearest_points}{sf}(x, y, ...)
 }
 \arguments{
-\item{x}{object of class \code{sfg}, \code{sfc} or \code{sf}}
+\item{x, y}{object of class \code{sfg}, \code{sfc} or \code{sf}}
 
-\item{y}{object of class \code{sfg}, \code{sfc} or \code{sf}}
+\item{...}{passed on to methods. Currently, only \code{pairwise} is implemented.}
 
-\item{...}{ignored}
-
-\item{pairwise}{logical; if \code{FALSE} (default) return nearest points between all pairs, if \code{TRUE}, return nearest points between subsequent pairs.}
+\item{pairwise}{logical; if \code{FALSE} (default) return nearest points between all pairs,
+if \code{TRUE}, return nearest points between subsequent pairs.}
 }
 \value{
-an \link{sfc} object with all two-point \code{LINESTRING} geometries of point pairs from the first to the second geometry, of length x * y, with y cycling fastest. See examples for ideas how to convert these to \code{POINT} geometries.
+an \link{sfc} object with all two-point \code{LINESTRING} geometries of point pairs from the first to the second geometry, of length x * y, with y cycling fastest.
+See examples for ideas how to convert these to \code{POINT} geometries.
 }
 \description{
 get nearest points between pairs of geometries
