@@ -119,18 +119,18 @@ of the datasource, by trying them all in turn.
 
 `st_read()` follows the conventions of base R, similar to how it
 reads tabular data into `data.frame`s. This means that character
-data are read, by default as `factor`s.  For those who insist
-on retrieving character data as character vectors, the argument
-`stringsAsFactors` can be set to `FALSE`:
+data are read as `character` vectors by default (since R 4.1.0).
+For those who insist on retrieving character data as `factor`s,
+the argument `stringsAsFactors` can be set to `TRUE`:
 
 ```{r eval=FALSE}
-st_read(fname, stringsAsFactors = FALSE)
+st_read(fname, stringsAsFactors = TRUE)
 ```
 
 Alternatively, a user can set the global option `stringsAsFactors`, and this will have the same effect:
 
 ```{r}
-options(stringsAsFactors = FALSE)
+options(stringsAsFactors = TRUE)
 st_read(fname)
 ```
 
