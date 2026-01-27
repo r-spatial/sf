@@ -1,5 +1,7 @@
 # version 1.0-25
 
+* for an `sfc` object `x`, `x[0]` retains the class of `x`; reorganize `vctrs` methods; #2568
+
 * When sampling a degenerate (zero length) line, a warning is raised rather than a message; #2575
 
 # version 1.0-24

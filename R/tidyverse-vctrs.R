@@ -26,23 +26,7 @@ register_vctrs_methods = function() {
   }
 }
 
-# vec_proxy implementations:
-vec_proxy.sfc_POINT = function(x, ...)  vec_proxy_sfc(x)
-vec_proxy.sfc_MULTIPOINT = function(x, ...) vec_proxy_sfc(x)
-vec_proxy.sfc_LINESTRING = function(x, ...) vec_proxy_sfc(x)
-vec_proxy.sfc_MULTILINESTRING = function(x, ...) vec_proxy_sfc(x)
-vec_proxy.sfc_POLYGON = function(x, ...) vec_proxy_sfc(x)
-vec_proxy.sfc_MULTIPOLYGON = function(x, ...) vec_proxy_sfc(x)
-vec_proxy.sfc_GEOMETRY = function(x, ...) vec_proxy_sfc(x)
 vec_proxy_sfc = function(x) sf_unstructure(x)
-
-vec_restore.sfc_POINT = function(x, to, ...) vec_restore_sfc(x, to)
-vec_restore.sfc_MULTIPOINT = function(x, to, ...) vec_restore_sfc(x, to)
-vec_restore.sfc_LINESTRING = function(x, to, ...) vec_restore_sfc(x, to)
-vec_restore.sfc_MULTILINESTRING = function(x, to, ...) vec_restore_sfc(x, to)
-vec_restore.sfc_POLYGON = function(x, to, ...) vec_restore_sfc(x, to)
-vec_restore.sfc_MULTIPOLYGON = function(x, to, ...) vec_restore_sfc(x, to)
-vec_restore.sfc_GEOMETRY = function(x, to, ...) vec_restore_sfc(x, to)
 
 vec_restore_sfc = function(x, to) {
 	st_sfc(
@@ -53,21 +37,19 @@ vec_restore_sfc = function(x, to) {
 	)
 }
 
-# vec_type methods:
-vec_ptype.sfc_POINT = function(x, ...) vec_ptype_sfc(x)
-vec_ptype.sfc_MULTIPOINT = function(x, ...) vec_ptype_sfc(x)
-vec_ptype.sfc_LINESTRING = function(x, ...) vec_ptype_sfc(x)
-vec_ptype.sfc_MULTILINESTRING = function(x, ...) vec_ptype_sfc(x)
-vec_ptype.sfc_POLYGON = function(x, ...) vec_ptype_sfc(x)
-vec_ptype.sfc_MULTIPOLYGON = function(x, ...) vec_ptype_sfc(x)
-vec_ptype.sfc_GEOMETRY = function(x, ...) vec_ptype_sfc(x)
-
 vec_ptype_sfc = function(x) {
 	st_sfc(
 		crs = st_crs(x),
 		precision = st_precision(x),
 		fall_back_class = class(x)
 	)
+}
+
+# vec_proxy:
+for (type in sfc_types) {
+  assign(paste0("vec_proxy.", type), function(x, y, ...) vec_proxy_sfc(x))
+  assign(paste0("vec_restore.", type), function(x, to, ...) vec_restore_sfc(x, to))
+  assign(paste0("vec_ptype.", type), function(x, ...) vec_ptype_sfc(x))
 }
 
 # Single implementation that works for all type pairs
@@ -91,11 +73,11 @@ for (type1 in sfc_types) {
 for (type1 in sfc_types) {
   for (type2 in sfc_types) {
 	if (type1 == type2)
-      assign(paste0("vec_cast", type1, ".", type2), 
-             function(x, y, ...) vec_cast_sfc_sfc(x, y))
+      assign(paste0("vec_cast.", type1, ".", type2), 
+             function(x, to, ...) vec_cast_sfc_sfc(x, to))
 	else 
-      assign(paste0("vec_cast", type1, ".", type2), 
-             function(x, y, ...) vec_cast_to_geometry(x, y))
+      assign(paste0("vec_cast.", type1, ".", type2), 
+             function(x, to, ...) vec_cast_to_geometry(x, to))
   }
 }
 

@@ -56,7 +56,9 @@ test_that("`sfc` vector ptype2 is correct", {
 	expect_identical(vctrs::vec_ptype2(x, x), x[0])
 	expect_error(vctrs::vec_ptype2(x, y))
 	expect_error(vctrs::vec_ptype2(x, z))
-	expect_error(vctrs::vec_ptype2(x, st_sfc(st_linestring())))
+	xl = vctrs::vec_ptype2(x, st_sfc(st_linestring()))
+	expect_true(inherits(xl, "sfc_GEOMETRY"))
+	expect_true(inherits(xl, "sfc"))
 
 	x = st_sfc(st_linestring())
 	y = st_sfc(st_linestring(), crs = 3857)
@@ -64,7 +66,9 @@ test_that("`sfc` vector ptype2 is correct", {
 	expect_identical(vctrs::vec_ptype2(x, x), x[0])
 	expect_error(vctrs::vec_ptype2(x, y))
 	expect_error(vctrs::vec_ptype2(x, z))
-	expect_error(vctrs::vec_ptype2(x, st_sfc(st_point())))
+	lp = vctrs::vec_ptype2(x, st_sfc(st_point()))
+	expect_true(inherits(lp, "sfc_GEOMETRY"))
+	expect_true(inherits(lp, "sfc"))
 
 	x = st_sfc(st_point(), st_linestring())
 	y = st_sfc(st_point(), st_linestring(), crs = 3857)
@@ -72,21 +76,29 @@ test_that("`sfc` vector ptype2 is correct", {
 	expect_identical(vctrs::vec_ptype2(x, x), x[0])
 	expect_error(vctrs::vec_ptype2(x, y))
 	expect_error(vctrs::vec_ptype2(x, z))
-	expect_error(vctrs::vec_ptype2(x, st_sfc(st_point())))
+	xp = vctrs::vec_ptype2(x, st_sfc(st_point()))
+	expect_true(inherits(xp, "sfc_GEOMETRY"))
+	expect_true(inherits(xp, "sfc"))
 })
 
 test_that("`sfc` vector cast is correct", {
 	x = st_sfc(st_point())
 	expect_identical(vctrs::vec_cast(x, x), x)
-	expect_error(vctrs::vec_cast(x, st_sfc(st_linestring())))
+	y = vctrs::vec_cast(x, st_sfc(st_linestring()))
+	expect_true(inherits(y, "sfc_GEOMETRY"))
+	expect_true(inherits(y, "sfc"))
 
 	x = st_sfc(st_linestring())
 	expect_identical(vctrs::vec_cast(x, x), x)
-	expect_error(vctrs::vec_cast(x, st_sfc(st_point())))
+	y = vctrs::vec_cast(x, st_sfc(st_point()))
+	expect_true(inherits(y, "sfc_GEOMETRY"))
+	expect_true(inherits(y, "sfc"))
 
 	x = st_sfc(st_point(), st_linestring())
 	expect_identical(vctrs::vec_cast(x, x), x)
-	expect_error(vctrs::vec_cast(x, st_sfc(st_point())))
+	y = vctrs::vec_cast(x, st_sfc(st_point()))
+	expect_true(inherits(y, "sfc_GEOMETRY"))
+	expect_true(inherits(y, "sfc"))
 })
 
 test_that("`sfc` vectors can be sliced", {
@@ -277,8 +289,8 @@ test_that("`precision` and `crs` attributes of `sfc` vectors must be the same wh
 	z = st_sfc(st_point(c(0, 0)), precision = 1e-4, crs = 4326)
 	expect_identical(st_precision(x), st_precision(vctrs::vec_c(x, x)))
 	expect_identical(st_crs(x), st_crs(vctrs::vec_c(x, x)))
-	expect_error(vctrs::vec_c(x, y), "precisions not equal")
-	expect_error(vctrs::vec_c(x, z), "arguments have different crs")
+	expect_error(vctrs::vec_c(x, y), "Precision mismatch: 1e-04 vs 0.01")
+	expect_error(vctrs::vec_c(x, z), "CRS mismatch: EPSG:3857 vs EPSG:4326")
 	expect_error(c(x, z), "arguments have different crs")
 
 	x = st_sfc(st_linestring(matrix(1:2, nrow = 1)), precision = 1e-4, crs = 3857)
@@ -286,8 +298,8 @@ test_that("`precision` and `crs` attributes of `sfc` vectors must be the same wh
 	z = st_sfc(st_linestring(matrix(1:2, nrow = 1)), precision = 1e-4, crs = 4326)
 	expect_identical(st_precision(x), st_precision(vctrs::vec_c(x, x)))
 	expect_identical(st_crs(x), st_crs(vctrs::vec_c(x, x)))
-	expect_error(vctrs::vec_c(x, y), "precisions not equal")
-	expect_error(vctrs::vec_c(x, z), "arguments have different crs")
+	expect_error(vctrs::vec_c(x, y), "Precision mismatch: 1e-04 vs 0.01")
+	expect_error(vctrs::vec_c(x, z), "CRS mismatch: EPSG:3857 vs EPSG:4326")
 	expect_error(c(x, z), "arguments have different crs")
 
 	point = st_point()
@@ -297,8 +309,8 @@ test_that("`precision` and `crs` attributes of `sfc` vectors must be the same wh
 	z = st_sfc(point, line, precision = 1e-4, crs = 4326)
 	expect_identical(st_precision(x), st_precision(vctrs::vec_c(x, x)))
 	expect_identical(st_crs(x), st_crs(vctrs::vec_c(x, x)))
-	expect_error(vctrs::vec_c(x, y), "precisions not equal")
-	expect_error(vctrs::vec_c(x, z), "arguments have different crs")
+	expect_error(vctrs::vec_c(x, y), "Precision mismatch: 1e-04 vs 0.01")
+	expect_error(vctrs::vec_c(x, z), "CRS mismatch: EPSG:3857 vs EPSG:4326")
 	expect_error(c(x, z), "arguments have different crs")
 })
 
