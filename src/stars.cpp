@@ -505,7 +505,7 @@ void CPL_write_gdal(NumericMatrix x, CharacterVector fname, CharacterVector driv
 		stop("driver not recognized."); // #nocov
 
 	// can this driver Create()?
-	char **papszMetadata = poDriver->GetMetadata();
+	CSLConstList papszMetadata = poDriver->GetMetadata();
 	if (!CSLFetchBoolean( papszMetadata, GDAL_DCAP_CREATE, FALSE ) && !CSLFetchBoolean( papszMetadata, GDAL_DCAP_CREATECOPY, FALSE ) )
 		stop("driver does not support Create() or CreateCopy() method."); // #nocov
 
