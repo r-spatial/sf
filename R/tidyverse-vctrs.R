@@ -229,7 +229,7 @@ check_same_crs = function(x, y) {
   rhs = st_crs(y)
   
   if (lhs != rhs)
-    stop(paste0("CRS mismatch: \"",  lhs$input, "\" vs \"", rhs$input, "\""), 
+    stop(paste("CRS mismatch:",  lhs$input, "vs", rhs$input), 
          call. = FALSE)
   invisible()
 }

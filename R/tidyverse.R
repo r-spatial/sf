@@ -9,17 +9,16 @@ dplyr_reconstruct.sf = function(data, template) {
 	sfc_name = attr(template, "sf_column")
 	if (inherits(template, "tbl_df"))
 		data = dplyr::as_tibble(data)
-	# Return a bare data frame is the geometry column is no longer there
-	if (!sfc_name %in% names(data))
-		return(data)
-	prec = st_precision(template)
-	crs = st_crs(template)
-	st_as_sf(
-		data,
-		sf_column_name = sfc_name,
-		crs = crs,
-		precision = prec
-	)
+	# Return a bare data frame if the geometry column is no longer there
+	if (sfc_name %in% names(data)) # reconstruct sf:
+		st_as_sf(
+			data,
+			sf_column_name = sfc_name,
+			crs = st_crs(template),
+			precision = st_precision(template)
+		)
+	else
+		data
 }
 
 #' Tidyverse methods for sf objects
