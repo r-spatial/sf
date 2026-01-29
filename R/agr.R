@@ -17,7 +17,8 @@ st_agr = function(x, ...) UseMethod("st_agr")
 
 #' @export
 st_agr.sf = function(x, ...) {
-	nm = setdiff(names(x), attr(x, "sf_column"))
+	sfc_s = sapply(x, inherits, "sfc")
+	nm = names(x)[!sfc_s]
 	ret = attr(x, "agr")[nm]
 	if (is.null(names(ret)) || all(is.na(names(ret))))
 		structure(rep(NA_agr_, length(nm)), names = nm)
@@ -51,7 +52,9 @@ st_agr.default = function(x = NA_character_, ...) {
 #' @export
 `st_agr<-.sf` = function(x, value) {
 	stopifnot(is.character(value) || is.factor(value))
-	nv = setdiff(names(x), attr(x, "sf_column"))
+	sfc_s = sapply(x, inherits, "sfc")
+	# nv = setdiff(names(x), attr(x, "sf_column"))
+	nv = names(x)[!sfc_s]
 	if (length(value) == 0)
 		attr(x, "agr") = setNames(NA_agr_[0], character())
 	else if (! is.null(names(value)) && length(value) == 1) { 
@@ -61,13 +64,15 @@ st_agr.default = function(x = NA_character_, ...) {
 		else
 			attr(x, "agr") = st_agr(value)
 	} else {
-		value = rep(st_agr(value), length.out = ncol(x) - 1)
+		value = rep(st_agr(value), length.out = length(nv))
 		if (! is.null(names(value)))
 			value = value[match(nv, names(value))]
 		else
 			names(value) = nv
 		attr(x, "agr") <- value
 	}
+ 	#print(paste("vars: ", paste(nv, collapse=","), "value(s):", paste(value, collapse = ",")))
+ 	#print(rlang::trace_back())
 #	a = st_agr(x)
 #	absent = setdiff(names(x), c(na.omit(names(a)), attr(x, "sf_column")))
 #	if (length(absent)) { # repair:
