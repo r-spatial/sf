@@ -40,7 +40,7 @@ demo(nc, ask = FALSE, echo = FALSE)
 nc$geom2 = st_centroid(st_geometry(nc))
 print(nc, n = 2)
 ## Simple feature collection with 100 features and 14 fields
-## Attribute-geometry relationships: aggregate (8), identity (6), NA's (1)
+## Attribute-geometry relationships: aggregate (8), identity (6)
 ## Active geometry column: geom
 ## Geometry type: MULTIPOLYGON
 ## Dimension:     XY
