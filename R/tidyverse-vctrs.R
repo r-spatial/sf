@@ -160,7 +160,7 @@ sf_ptype2 = function(x, y, ...) {
   check_same_crs(x, y)
   check_same_precision(x, y)
 
-  st_sf(data, sf_column_name = sf_column_name)
+  st_as_sf(data, sf_column_name = sf_column_name)
 }
 
 vec_ptype2.sf.sf = function(x, y, ...) {
@@ -229,7 +229,7 @@ check_same_crs = function(x, y) {
   rhs = st_crs(y)
   
   if (lhs != rhs)
-    stop(paste("CRS mismatch:",  lhs$input %||% "NA", "vs", rhs$input %||% "NA"), 
+    stop(paste0("CRS mismatch: \"",  lhs$input, "\" vs \"", rhs$input, "\""), 
          call. = FALSE)
   invisible()
 }
