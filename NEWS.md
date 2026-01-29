@@ -1,4 +1,8 @@
-# version 1.0-25
+# version 1.1-0
+
+* rewrite/migrate `vctrs` methods for `sf` and `sfc`; #2568, #2584, w. support from @DavisVaughan
+
+* `st_agr()` and `st_agr<-()` better handle multiple geometry columns
 
 * for an `sfc` object `x`, `x[0]` retains the class of `x`; reorganize `vctrs` methods; #2568
 
