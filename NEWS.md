@@ -1,5 +1,7 @@
 # version 1.1-0
 
+* `st_cast.sfc()` deals with zero-length objects; #2584
+
 * rewrite/migrate `vctrs` methods for `sf` and `sfc`; #2568, #2584, w. support from @DavisVaughan
 
 * `st_agr()` and `st_agr<-()` better handle multiple geometry columns

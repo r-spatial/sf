@@ -7,6 +7,7 @@ register_vctrs_methods = function() {
   # Register vec_proxy, vec_restore, vec_ptype for all types
   for (type in sfc_types) {
     s3_register("vctrs::vec_proxy", type)
+    s3_register("vctrs::vec_proxy_order", type)
     s3_register("vctrs::vec_restore", type)
     s3_register("vctrs::vec_ptype", type)
   }
@@ -31,6 +32,7 @@ register_vctrs_methods = function() {
   s3_register("vctrs::vec_ptype2", "data.frame.sf")
   s3_register("vctrs::vec_ptype2", "sf.tbl_df")
   s3_register("vctrs::vec_ptype2", "tbl_df.sf")
+  s3_register("vctrs::vec_cast", "sf.sf")
   s3_register("vctrs::vec_cast", "data.frame.sf")
   s3_register("vctrs::vec_cast", "sf.data.frame")
   s3_register("vctrs::vec_cast", "sf.tbl_df")
@@ -56,9 +58,22 @@ vec_ptype_sfc = function(x) {
 	)
 }
 
-# vec_proxy:
+vec_proxy_order_sfc = function(x, ...) {
+  # Same as `vctrs:::vec_proxy_order.list()`.
+  # Allows sfc columns to be "sorted" by first appearance.
+  x = sf_unstructure(x)
+  out = vctrs::vec_duplicate_id(x)
+  if (vctrs::vec_any_missing(x)) {
+    missing = vctrs::vec_detect_missing(x)
+    out = vctrs::vec_assign(out, missing, NA_integer_)
+  }
+  out
+}
+
+# sfc single methods:
 for (type in sfc_types) {
   assign(paste0("vec_proxy.", type), function(x, y, ...) vec_proxy_sfc(x))
+  assign(paste0("vec_proxy_order.", type), function(x, y, ...) vec_proxy_order_sfc(x))
   assign(paste0("vec_restore.", type), function(x, to, ...) vec_restore_sfc(x, to))
   assign(paste0("vec_ptype.", type), function(x, ...) vec_ptype_sfc(x))
 }
@@ -101,11 +116,7 @@ vec_cast_sfc_sfc = function(x, to) {
 vec_cast_to_geometry = function(x, to) {
 	check_same_crs(x, to)
 	check_same_precision(x, to)
-	# print(paste("cast from", class(x), "to sfc_GEOMETRY"))
-	if (length(x))
-		st_cast(x, "GEOMETRY")
-	else
-		st_sfc(crs = st_crs(x), precision = st_precision(x))
+	st_cast(x, "GEOMETRY")
 }
 
 ## sf methods:
@@ -181,26 +192,37 @@ vec_ptype2.tbl_df.sf = function(x, y, ...) {
   vctrs::tib_ptype2(x, y, ...)
 }
 
+#sf_cast = function(x, to, ...) {
+#  data = vctrs::df_cast(x, to, ...)
+#
+#  sf_column_name = attr(to, "sf_column")
+#  crs = st_crs(to)
+#  prec = st_precision(to)
+#
+#  st_as_sf(
+#    data,
+#    sf_column_name = sf_column_name,
+#    crs = crs,
+#    precision = prec,
+#    stringsAsFactors = FALSE
+#  )
+#}
+
 sf_cast = function(x, to, ...) {
   data = vctrs::df_cast(x, to, ...)
 
-  sf_column_name = attr(to, "sf_column")
-  crs = st_crs(to)
-  prec = st_precision(to)
+  # CRS and precision must match
+  check_same_crs(x, to)
+  check_same_precision(x, to)
 
-  st_as_sf(
-    data,
-    sf_column_name = sf_column_name,
-    crs = crs,
-    precision = prec,
-    stringsAsFactors = FALSE
-  )
+  sf_column_name = attr(to, "sf_column")
+
+  st_as_sf(data, sf_column_name = sf_column_name)
 }
 
 # Because `vec_ptype2.sf.sf()` returns a sf
 vec_cast.sf.sf = function(x, to, ...) {
-  # sf_cast(x, to, ...)
-  x
+  sf_cast(x, to, ...)
 }
 
 # Because `vec_ptype2.sf.data.frame()` returns a data frame

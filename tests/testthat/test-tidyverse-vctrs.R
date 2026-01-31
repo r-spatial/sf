@@ -335,3 +335,16 @@ test_that("`vec_locate_matches()` works with `sfc` vectors", {
 	expect_identical(out$needles, c(1L, 1L, 2L, 3L))
 	expect_identical(out$haystack, c(1L, 3L, 4L, NA))
 })
+
+test_that("`vec_ptype2(<sf>, <sf>)` retains CRS and precision", {
+  g = st_sfc(st_point(1:2))
+  x = st_sf(a = 3, g, crs = 8123, precision = .1)
+  out = vctrs::vec_ptype2(x, x)
+  expect_identical(st_crs(out), st_crs(x))
+  expect_identical(st_precision(out), st_precision(x))
+})
+
+test_that("`vec_proxy_order(<sfc>)` works", {
+  x = st_sfc(st_point(1:2), st_point(2:3), st_point(1:2))
+  expect_identical(vctrs::vec_proxy_order(x), c(1L, 2L, 1L))
+})

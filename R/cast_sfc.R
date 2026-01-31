@@ -176,8 +176,12 @@ is_exotic = function(x) {
 #' st_cast(d, "POINT") # will not convert the entire MULTIPOINT, and warns
 #' st_cast(d, "MULTIPOINT") %>% st_cast("POINT")
 st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
-	if (missing(to) || length(x) == 0)
+
+	if (missing(to))
 		return(st_cast_sfc_default(x))
+
+	if (length(x) == 0) # empty set
+		return(structure(x, class = c(paste0("sfc_", to), "sfc")))
 
 	e = rep(FALSE, length(x))
 	if (!is_exotic(x)) { # for which GEOS has no st_is_empty()
