@@ -58,6 +58,12 @@ vec_ptype_sfc = function(x) {
 	)
 }
 
+#vec_proxy_order_sfc = function(x, ...) {
+  # Same as `vctrs:::vec_proxy_order.list()`.
+  # Allows sfc columns to be "sorted" by first appearance.
+#  xtfrm(x)
+#}
+
 vec_proxy_order_sfc = function(x, ...) {
   # Same as `vctrs:::vec_proxy_order.list()`.
   # Allows sfc columns to be "sorted" by first appearance.

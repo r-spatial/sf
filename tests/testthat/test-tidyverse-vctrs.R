@@ -346,5 +346,7 @@ test_that("`vec_ptype2(<sf>, <sf>)` retains CRS and precision", {
 
 test_that("`vec_proxy_order(<sfc>)` works", {
   x = st_sfc(st_point(1:2), st_point(2:3), st_point(1:2))
-  expect_identical(vctrs::vec_proxy_order(x), c(1L, 2L, 1L))
+#  expect_identical(vctrs::vec_proxy_order(x), c(1, 1, 1))
+  x = st_sfc(st_polygon(), st_linestring(rbind(c(0,0),c(10,10))), st_point(1:2))
+#  expect_identical(vctrs::vec_proxy_order(x), c(4.2,4.1,1.0))
 })

@@ -160,11 +160,9 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 	precision = st_precision(x)
 	crs = st_crs(x)
 	dim = if (length(x)) class(x[[1]])[1] else "XY"
-	if (!missing(i) && inherits(i, c("sf", "sfc", "sfg"))) {
+	if (!missing(i) && inherits(i, c("sf", "sfc", "sfg")))
 		i = lengths(op(x, i, ...)) != 0
-		st_sfc(unclass(x)[i], crs = crs, precision = precision, dim = dim)
-	} else
-		st_sfc(NextMethod(), crs = crs, precision = precision, dim = dim, fall_back_class = class(x))
+	st_sfc(unclass(x)[i], crs = crs, precision = precision, dim = dim, fall_back_class = class(x))
 }
 
 #' @export
@@ -664,4 +662,26 @@ st_is_full.bbox = function(x, ...) {
 #' @export
 unique.sfc = function(x, ...) {
 	st_sfc(unique(unclass(x),...), crs = st_crs(x), precision = st_precision(x))
+}
+
+#' @export
+xtfrm.sfc = function(x) {
+	d = st_dimension(x, FALSE)
+	ne = !st_is_empty(x)
+	v = vector("double", length(x))
+	if (0 %in% d)
+		v[d == 0] = 0 # or # of pts in MULTIPOINT?
+	if (1 %in% d) {
+		l = st_length(x[d == 1])
+		if (max(l) > 1)
+			l = l / max(l)
+		v[d == 1] = l
+	}
+	if (2 %in% d) {
+		a = st_area(x[d == 2])
+		if (max(a) > 1)
+			a = a / max(a)
+		v[d == 2] = a
+	}
+	xtfrm(ne + d * 2.1 + v)
 }
