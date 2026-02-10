@@ -44,7 +44,7 @@ test_that("sf can write units (#264)", {
 test_that("delete and update work (#304)", {
   skip_if_not("GPKG" %in% st_drivers()$name)  # shapefiles can't write point+multipoint mix:
   skip_on_os("mac")
-  skip_if_not(Sys.getenv("USER") %in% c("edzer", "travis"))
+  skip_if_not(Sys.getenv("USER") == "edzer")
   # FIXME: conditional, because it caused memory leaks on CRAN testing
 
   gpkg <- tempfile(fileext = ".gpkg")
@@ -127,7 +127,7 @@ test_that("FID feature ID gets written and read", {
 })
 
 test_that("append errors work", {
-  skip_if_not(Sys.getenv("USER") %in% c("edzer", "travis"))
+  skip_if_not(Sys.getenv("USER") == "edzer")
 
   # update to non-writable, non-existing file:
   x = st_sf(a = 1, geom = st_sfc(st_point(0:1)))
