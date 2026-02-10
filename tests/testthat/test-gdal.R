@@ -52,7 +52,7 @@ test_that('gdal_subdatasets works', {
 # context("gdal utils")
 test_that('gdal_utils work', {
   skip_on_appveyor() # FIXME:
-  skip_if_not(Sys.getenv("USER") %in% c("edzer", "travis"))
+  skip_if_not(Sys.getenv("USER") == "edzer")
   skip_if_not(sf_extSoftVersion()[["GDAL"]] >= "2.1.0")
 
   fname = system.file("nc/cropped.nc", package = "sf")

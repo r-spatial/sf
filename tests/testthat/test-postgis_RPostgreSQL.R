@@ -48,7 +48,6 @@ test_that("can handle multiple geom columns", {
 	expect_silent(st_write(multi, pg, "meuse_multi", overwrite = TRUE))
 	multi2 <- cbind(pts[["geometry"]], st_set_crs(st_transform(pts, 4326), NA))
 	expect_silent(st_write(multi2, pg, "meuse_multi2", overwrite = TRUE))
-	skip_on_travis()
 	expect_silent(x <- st_read("PG:host=localhost dbname=postgis", "meuse_multi", quiet = TRUE))
 	# expect_equal(st_crs(x[["geometry"]]), st_crs(multi[["geometry"]])) -->> not generally true in case of different EPSG databases
 	expect_equal(st_crs(x[["geometry.1"]]), st_crs(multi[["geometry.1"]]))
