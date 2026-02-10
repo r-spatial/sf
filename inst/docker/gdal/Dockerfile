@@ -70,7 +70,7 @@ ENV LC_ALL en_US.UTF-8
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 # GEOS:
-ENV GEOS_VERSION 3.14.0
+ENV GEOS_VERSION 3.14.1
 RUN wget -q http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
   && bzip2 -d geos-*bz2 \
   && tar xf geos*tar \
@@ -84,7 +84,7 @@ RUN wget -q http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
   && ldconfig
 
 # PROJ
-ENV PROJ_VERSION 9.7.0
+ENV PROJ_VERSION 9.7.1
 RUN wget -q http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz
 RUN tar zxvf proj-${PROJ_VERSION}.tar.gz
 RUN cd proj* \
@@ -98,8 +98,8 @@ RUN cd proj* \
   && ldconfig
 
 # GDAL:
-ENV GDAL_VERSION 3.12.0
-ENV GDAL_VERSION_NAME 3.12.0
+ENV GDAL_VERSION 3.12.2
+ENV GDAL_VERSION_NAME 3.12.2
 RUN wget -q http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
   && cd gdal* \
@@ -136,16 +136,16 @@ RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual 
 #RUN Rscript -e 'install.packages("animation")'
 
 # terra:
-RUN wget -q https://cran.r-project.org/src/contrib/terra_1.8-80.tar.gz
-RUN R CMD check --no-manual terra_1.8-80.tar.gz
+#RUN wget -q https://cran.r-project.org/src/contrib/terra_1.8-80.tar.gz
+#RUN R CMD check --no-manual terra_1.8-80.tar.gz
 
-RUN wget -q https://cran.r-project.org/src/contrib/vapour_0.12.0.tar.gz
-RUN R -e 'install.packages(c("markdown", "spelling"))'
+#RUN wget -q https://cran.r-project.org/src/contrib/vapour_0.12.0.tar.gz
+#RUN R -e 'install.packages(c("markdown", "spelling"))'
 #RUN R CMD INSTALL vapour*gz
 #RUN R CMD check --no-manual vapour*gz
 
-RUN R -e 'install.packages(c("gt"))'
-RUN wget -q https://cran.r-project.org/src/contrib/gdalraster_2.2.1.tar.gz
-RUN R -e 'install.packages(c("RcppInt64"))'
-RUN R CMD INSTALL gdalraster*gz
-RUN R CMD check --no-manual gdalraster*gz
+#RUN R -e 'install.packages(c("gt"))'
+#RUN wget -q https://cran.r-project.org/src/contrib/gdalraster_2.2.1.tar.gz
+#RUN R -e 'install.packages(c("RcppInt64"))'
+#RUN R CMD INSTALL gdalraster*gz
+#RUN R CMD check --no-manual gdalraster*gz
