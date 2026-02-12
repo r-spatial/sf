@@ -139,7 +139,7 @@ POLYGON ((0.5 3.5, 0.5 4.5, 1.5 4.5, 1.5 3.5, 0...
 POLYGON ((1.5 0.5, 1.5 1.5, 2.5 1.5, 2.5 0.5, 1...
 stars object with 2 dimensions and 12 attributes
 attribute(s):
-                Min.   1st Qu.    Median         Mean   3rd Qu.      Max.  NA's
+                Min.   1st Qu.    Median         Mean   3rd Qu.      Max.   NAs
 AREA           0.042     0.108     0.142 1.451932e-01     0.181     0.241 30904
 PERIMETER      0.999     1.461     1.716 1.786110e+00     2.004     3.640 30904
 CNTY_       1825.000  1907.000  1989.000 1.998403e+03  2085.000  2241.000 30904
