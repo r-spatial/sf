@@ -40,13 +40,13 @@ merge(a, b)
 #> 2 6 2 c POINT (1 1)
 merge(a, b, all = TRUE)
 #> Simple feature collection with 4 features and 3 fields (with 1 geometry empty)
-#> Geometry type: GEOMETRY
+#> Geometry type: POINT
 #> Dimension:     XY
 #> Bounding box:  xmin: 0 ymin: 0 xmax: 2 ymax: 2
 #> CRS:           NA
-#>   b  a    x                 geometry
-#> 1 2 NA    a GEOMETRYCOLLECTION EMPTY
-#> 2 5  1    b              POINT (0 0)
-#> 3 6  2    c              POINT (1 1)
-#> 4 7  3 <NA>              POINT (2 2)
+#>   b  a    x    geometry
+#> 1 2 NA    a POINT EMPTY
+#> 2 5  1    b POINT (0 0)
+#> 3 6  2    c POINT (1 1)
+#> 4 7  3 <NA> POINT (2 2)
 ```

@@ -9,7 +9,7 @@ For data.frame alternatives see st_sf(). To convert a foreign object to sfc, see
 
     <a class="navbar-brand me-2" href="../index.html">sf</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0-25</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1-0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,7 +59,8 @@ For data.frame alternatives see <code><a href="sf.html">st_sf()</a></code>. To c
 <span>  check_ring_dir <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">dim</span>,</span>
 <span>  recompute_bbox <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  oriented <span class="op">=</span> <span class="cn">NA</span></span>
+<span>  oriented <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  fall_back_class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sfc_GEOMETRY"</span>, <span class="st">"sfc"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'sfc'</span></span>
@@ -71,7 +72,7 @@ For data.frame alternatives see <code><a href="sf.html">st_sf()</a></code>. To c
 
 
 <dl><dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>zero or more simple feature geometries (objects of class <code>sfg</code>), or a single list of such objects; <code>NULL</code> values will get replaced by empty geometries.</p></dd>
+<dd><p>input: zero or more simple feature geometries (objects of class <code>sfg</code>), or a single list of such objects; <code>NULL</code> values will get replaced by empty geometries.</p></dd>
 
 
 <dt id="arg-crs">crs<a class="anchor" aria-label="anchor" href="#arg-crs"></a></dt>
@@ -97,6 +98,10 @@ For data.frame alternatives see <code><a href="sf.html">st_sf()</a></code>. To c
 <dt id="arg-oriented">oriented<a class="anchor" aria-label="anchor" href="#arg-oriented"></a></dt>
 <dd><p>logical; if <code>TRUE</code>, the ring is oriented such that left of the edges is inside the polygon; this is
 needed for convering polygons larger than half the globe to s2</p></dd>
+
+
+<dt id="arg-fall-back-class">fall_back_class<a class="anchor" aria-label="anchor" href="#arg-fall-back-class"></a></dt>
+<dd><p>character; class for return object when no geometries are provided as input</p></dd>
 
 
 <dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>

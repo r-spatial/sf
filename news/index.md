@@ -1,6 +1,21 @@
 # Changelog
 
-## version 1.0-25
+## version 1.1-0
+
+- [`st_cast.sfc()`](https://r-spatial.github.io/sf/reference/st_cast.md)
+  deals with zero-length objects;
+  [\#2584](https://github.com/r-spatial/sf/issues/2584)
+
+- rewrite/migrate `vctrs` methods for `sf` and `sfc`;
+  [\#2568](https://github.com/r-spatial/sf/issues/2568),
+  [\#2584](https://github.com/r-spatial/sf/issues/2584), w. help from
+  [@DavisVaughan](https://github.com/DavisVaughan)
+
+- [`st_agr()`](https://r-spatial.github.io/sf/reference/st_agr.md) and
+  `st_agr<-()` better handle multiple geometry columns
+
+- for an `sfc` object `x`, `x[0]` retains the class of `x`;
+  [\#2568](https://github.com/r-spatial/sf/issues/2568)
 
 - When sampling a degenerate (zero length) line, a warning is raised
   rather than a message;

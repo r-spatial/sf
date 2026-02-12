@@ -401,7 +401,7 @@ methods(class = 'sfc')
 ## [69] st_z_range                   st_zm                       
 ## [71] str                          summary                     
 ## [73] text                         unique                      
-## [75] vec_cast.sfc                 vec_ptype2.sfc              
+## [75] xtfrm                       
 ## see '?methods' for accessing help and source code
 ```
 

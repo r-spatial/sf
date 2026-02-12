@@ -406,7 +406,3 @@
 - [`st_is_valid()`](https://r-spatial.github.io/sf/reference/valid.md)
   [`st_make_valid()`](https://r-spatial.github.io/sf/reference/valid.md)
   : Check validity or make an invalid geometry valid
-
-- [`vec_ptype2.sfc()`](https://r-spatial.github.io/sf/reference/vctrs.md)
-  [`vec_cast.sfc()`](https://r-spatial.github.io/sf/reference/vctrs.md)
-  : vctrs methods for sf objects

@@ -16,7 +16,8 @@ st_sfc(
   check_ring_dir = FALSE,
   dim,
   recompute_bbox = FALSE,
-  oriented = NA
+  oriented = NA,
+  fall_back_class = c("sfc_GEOMETRY", "sfc")
 )
 
 # S3 method for class 'sfc'
@@ -27,9 +28,9 @@ x[i, j, ..., op = st_intersects]
 
 - ...:
 
-  zero or more simple feature geometries (objects of class `sfg`), or a
-  single list of such objects; `NULL` values will get replaced by empty
-  geometries.
+  input: zero or more simple feature geometries (objects of class
+  `sfg`), or a single list of such objects; `NULL` values will get
+  replaced by empty geometries.
 
 - crs:
 
@@ -59,6 +60,11 @@ x[i, j, ..., op = st_intersects]
   logical; if `TRUE`, the ring is oriented such that left of the edges
   is inside the polygon; this is needed for convering polygons larger
   than half the globe to s2
+
+- fall_back_class:
+
+  character; class for return object when no geometries are provided as
+  input
 
 - x:
 

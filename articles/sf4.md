@@ -213,14 +213,14 @@ merge(x, y)
 ## 1 2 POINT (1 1)
 merge(x, y, all = TRUE)
 ## Simple feature collection with 3 features and 1 field (with 1 geometry empty)
-## Geometry type: GEOMETRY
+## Geometry type: POINT
 ## Dimension:     XY
 ## Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1
 ## CRS:           NA
-##   a                     geom
-## 1 1              POINT (0 0)
-## 2 2              POINT (1 1)
-## 3 3 GEOMETRYCOLLECTION EMPTY
+##   a        geom
+## 1 1 POINT (0 0)
+## 2 2 POINT (1 1)
+## 3 3 POINT EMPTY
 right_join(x, y)
 ## Joining with `by = join_by(a)`
 ## Simple feature collection with 2 features and 1 field (with 1 geometry empty)
