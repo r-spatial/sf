@@ -192,7 +192,7 @@ yay/pacaur/yaourt/whatever -S udunits</code></pre>
 <code>renv</code> or <code>conda</code>
 <a class="anchor" aria-label="anchor" href="#renv-or-conda"></a>
 </h4>
-<p>There are several reports that <code>sf</code> fails to install as a source package when R is used with <code>renv</code>, or when R is installed in a <code>conda</code> environment. If you experience this, please do not raise an issue here, but</p>
+<p>There are several reports that <code>sf</code> fails to install as a source package when R is used with <code>renv</code>, or when R is installed in a <code>conda</code> environment. If you experience this, please only raise an issue here if the problem persists without <code>renv</code> or <code>conda</code>, and otherwise</p>
 <ul>
 <li>try to sort this out with the <code>renv</code> developers or the <code>conda</code> maintainers, or</li>
 <li>try to use binary installs of the <code>sf</code> package, e.g. from <a href="https://github.com/eddelbuettel/r2u" class="external-link">r2u</a>, or the Posit package manager</li>
@@ -203,6 +203,11 @@ yay/pacaur/yaourt/whatever -S udunits</code></pre>
 </h4>
 <p>To install on Debian, the <a href="https://github.com/rocker-org/geospatial" class="external-link">rocker geospatial</a> Dockerfiles may be helpful. Ubuntu Dockerfiles are found <a href="https://github.com/r-spatial/sf/tree/main/inst/docker" class="external-link">here</a>.</p>
 </div>
+</div>
+<div class="section level3">
+<h3 id="support-for-geoparquet-and-arrow">Support for (Geo)Parquet and Arrow<a class="anchor" aria-label="anchor" href="#support-for-geoparquet-and-arrow"></a>
+</h3>
+<p><code>sf</code> links to GDAL, but does not control how GDAL was configured and built. Not every GDAL installation has built-in support for GeoParquet or Arrow. Please see <a href="https://github.com/r-spatial/sf/issues/2585" class="external-link">this issue</a>, or configure and compile GDAL with Parquet support e.g. using <a href="https://github.com/r-spatial/sf/tree/main/inst/docker/parquet" class="external-link">this Dockerfile</a>.</p>
 </div>
 <div class="section level3">
 <h3 id="multiple-gdal-geos-andor-proj-versions-on-your-system">Multiple GDAL, GEOS and/or PROJ versions on your system<a class="anchor" aria-label="anchor" href="#multiple-gdal-geos-andor-proj-versions-on-your-system"></a>

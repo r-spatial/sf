@@ -162,12 +162,12 @@ nc = st_read(system.file("shape/nc.shp", package="sf"))
 #> Geodetic CRS:  NAD27
 st_write(nc, paste0(tempdir(), "/", "nc.shp"))
 #> Writing layer `nc' to data source 
-#>   `/tmp/RtmpFbGc8t/nc.shp' using driver `ESRI Shapefile'
+#>   `/tmp/Rtmpp1bE8x/nc.shp' using driver `ESRI Shapefile'
 #> Writing 100 features with 14 fields and geometry type Multi Polygon.
 st_write(nc, paste0(tempdir(), "/", "nc.shp"), delete_layer = TRUE) # overwrites
 #> Deleting layer `nc' using driver `ESRI Shapefile'
 #> Writing layer `nc' to data source 
-#>   `/tmp/RtmpFbGc8t/nc.shp' using driver `ESRI Shapefile'
+#>   `/tmp/Rtmpp1bE8x/nc.shp' using driver `ESRI Shapefile'
 #> Writing 100 features with 14 fields and geometry type Multi Polygon.
 if (require(sp, quietly = TRUE)) {
  data(meuse, package = "sp") # loads data.frame from sp
@@ -185,11 +185,11 @@ if (FALSE) { # \dontrun{
  try(st_write(nc, "PG:dbname=postgis", "sids", layer_options = "OVERWRITE=true"))
 } # }
 }
-#> Writing layer `meuse' to data source `/tmp/RtmpFbGc8t/meuse.csv' using driver `CSV'
+#> Writing layer `meuse' to data source `/tmp/Rtmpp1bE8x/meuse.csv' using driver `CSV'
 #> options:        GEOMETRY=AS_XY 
 #> Writing 155 features with 12 fields and geometry type Point.
-#> Deleting source `/tmp/RtmpFbGc8t/meuse.csv' using driver `CSV'
-#> Writing layer `meuse' to data source `/tmp/RtmpFbGc8t/meuse.csv' using driver `CSV'
+#> Deleting source `/tmp/Rtmpp1bE8x/meuse.csv' using driver `CSV'
+#> Writing layer `meuse' to data source `/tmp/Rtmpp1bE8x/meuse.csv' using driver `CSV'
 #> options:        GEOMETRY=AS_WKT 
 #> Writing 155 features with 12 fields and geometry type Point.
 ```
