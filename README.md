@@ -144,7 +144,7 @@ yay/pacaur/yaourt/whatever -S udunits
 
 #### `renv` or `conda`
 
-There are several reports that `sf` fails to install as a source package when R is used with `renv`, or when R is installed in a `conda` environment. If you experience this, please do not raise an issue here, but 
+There are several reports that `sf` fails to install as a source package when R is used with `renv`, or when R is installed in a `conda` environment. If you experience this, please only raise an issue here if the problem persists without `renv` or `conda`, and otherwise 
 
 * try to sort this out with the `renv` developers or the `conda` maintainers, or
 * try to use binary installs of the `sf` package, e.g. from [r2u](https://github.com/eddelbuettel/r2u), or the Posit package manager
@@ -152,6 +152,10 @@ There are several reports that `sf` fails to install as a source package when R 
 #### Other
 
 To install on Debian, the [rocker geospatial](https://github.com/rocker-org/geospatial) Dockerfiles may be helpful. Ubuntu Dockerfiles are found [here](https://github.com/r-spatial/sf/tree/main/inst/docker).
+
+### Support for (Geo)Parquet and Arrow
+
+`sf` links to GDAL, but does not control how GDAL was configured and built. Not every GDAL installation has built-in support for GeoParquet or Arrow. Please see [this issue](https://github.com/r-spatial/sf/issues/2585), or configure and compile GDAL with Parquet support e.g. using [this Dockerfile](https://github.com/r-spatial/sf/tree/main/inst/docker/parquet).
 
 ### Multiple GDAL, GEOS and/or PROJ versions on your system
 
