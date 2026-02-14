@@ -63,7 +63,7 @@ RUN locale-gen en_US.UTF-8
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 # GEOS:
-ENV GEOS_VERSION 3.13.0
+ENV GEOS_VERSION 3.14.0
 
 RUN wget -q http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
   && bzip2 -d geos-*bz2 \
@@ -79,7 +79,7 @@ RUN wget -q http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
 
 #RUN git clone --depth 1 https://github.com/OSGeo/PROJ.git
 # https://download.osgeo.org/proj/proj-9.0.0RC1.tar.gz
-ENV PROJ_VERSION 9.5.1
+ENV PROJ_VERSION 9.7.1
 RUN wget -q http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz
 RUN tar zxvf proj-${PROJ_VERSION}.tar.gz
 RUN cd proj* \
@@ -100,7 +100,8 @@ RUN cd proj* \
 #  && cd -
 
 # FROM https://arrow.apache.org/install/ ; probably only a subset is needed:
-RUN apt install -y -V ca-certificates lsb-release wget apt-utils
+RUN apt update
+RUN apt install -y -V ca-certificates lsb-release wget
 RUN wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
 RUN apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
 RUN apt update
@@ -112,8 +113,8 @@ RUN apt install -y -V libparquet-dev # For Apache Parquet C++
 RUN apt install -y -V libparquet-glib-dev # For Apache Parquet GLib (C)
 
 # GDAL:
-ENV GDAL_VERSION 3.10.2
-ENV GDAL_VERSION_NAME 3.10.2
+ENV GDAL_VERSION 3.12.2
+ENV GDAL_VERSION_NAME 3.12.2
 
 RUN wget -q http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
