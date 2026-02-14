@@ -460,13 +460,13 @@ system.time({
   uk_buffer = s2_buffer_cells(uk, distance = 20000)
 })
 ##    user  system elapsed 
-##   0.024   0.000   0.025
+##   0.024   0.000   0.024
 # s2 with 10000 cells
 system.time({
   uk_buffer2 = s2_buffer_cells(uk, distance = 20000, max_cells = 10000)
 })
 ##    user  system elapsed 
-##   0.222   0.000   0.223
+##   0.223   0.000   0.223
 # s2 with 100 cells
 system.time({
   uk_buffer2 = s2_buffer_cells(uk, distance = 20000, max_cells = 100)
