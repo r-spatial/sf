@@ -460,19 +460,19 @@ system.time({
   uk_buffer = s2_buffer_cells(uk, distance = 20000)
 })
 ##    user  system elapsed 
-##   0.024   0.000   0.024
+##   0.024   0.000   0.025
 # s2 with 10000 cells
 system.time({
   uk_buffer2 = s2_buffer_cells(uk, distance = 20000, max_cells = 10000)
 })
 ##    user  system elapsed 
-##   0.225   0.000   0.225
+##   0.222   0.000   0.223
 # s2 with 100 cells
 system.time({
   uk_buffer2 = s2_buffer_cells(uk, distance = 20000, max_cells = 100)
 })
 ##    user  system elapsed 
-##   0.003   0.000   0.002
+##   0.003   0.000   0.003
 ```
 
 The result of the previous benchmarks emphasizes the point that there
