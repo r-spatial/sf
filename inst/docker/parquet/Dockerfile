@@ -129,29 +129,5 @@ RUN wget -q http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_N
 RUN gdalinfo --formats
 
 RUN Rscript -e 'install.packages(c("sf"))'
-RUN Rscript -e 'sf::st_drivers()'
-
-#RUN Rscript -e 'install.packages(c("sp", "RPostgreSQL", "RSQLite", "testthat", "knitr", "tidyr", "geosphere", "maps", "microbenchmark", "raster", "dplyr", "tibble", "units", "DBI",  "covr", "protolite", "tmap", "mapview", "odbc", "pool", "rmarkdown", "RPostgres","spatstat", "stars", "XML", "tmaptools", "tmap", "terra", "PCICt", "RNetCDF", "future.apply", "ggforce", "ggthemes", "gstat", "ncmeta", "pbapply", "plm", "spacetime", "xts", "zoo", "tidync", "ncdfgeom", "cubelyr", "clue", "classInt", "mapdata", "ncdfgeom", "exactextractr", "randomForest", "nanoarrow", "mapview", "tmap", "spatstat", "spatstat.linnet", "viridis"))'
-
-#RUN git clone --depth 10 https://github.com/r-spatial/sf.git
-#RUN git clone --depth 10 https://github.com/r-spatial/lwgeom.git
-#RUN git clone --depth 10 https://github.com/r-spatial/stars.git
-##RUN git config --global user.email "edzer.pebesma@uni-muenster.de"
-
-#RUN R CMD build --no-build-vignettes --no-manual lwgeom
-#RUN R CMD build --no-build-vignettes --no-manual sf
-#RUN R CMD build --no-manual stars
-## RUN pkg-config proj --modversion
-#RUN R CMD INSTALL sf
-#RUN R CMD INSTALL lwgeom
-#RUN R CMD INSTALL stars
-##
-#RUN export DEBIAN_FRONTEND=noninteractive; apt-get install -y libmagick++-dev
-#RUN Rscript -e 'install.packages("animation")'
-##
-#RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
-#RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
-##
-#RUN Rscript -e 'options(timeout=1200); install.packages("starsdata", repos="http://cran.uni-muenster.de/pebesma/")'
-##
-#RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
+RUN Rscript -e 'sf::st_drivers("vector", "Arrow")'
+RUN Rscript -e 'sf::st_drivers("vector", "Parquet")'
