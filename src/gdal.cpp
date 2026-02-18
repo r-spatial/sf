@@ -9,6 +9,10 @@
 #include <cpl_conv.h>
 #include <cpl_string.h>
 
+#if GDAL_VERSION_NUM >= 3040000
+#include <cpl_compressor.h>
+#endif
+
 #include <stdlib.h> // atoi
 #include <string.h>
 
@@ -824,3 +828,28 @@ OGRSpatialReference *handle_axis_order(OGRSpatialReference *sr) {
 #endif
 	return sr;
 }
+
+Rcpp::CharacterVector to_cv(char **cpp) {
+	Rcpp::CharacterVector cv;
+	for (int i = 0; cpp[i] != NULL; i++)
+		cv.push_back(cpp[i]);
+	CSLDestroy(cpp);
+	return cv;
+}
+
+#if GDAL_VERSION_NUM >= 3040000
+// [[Rcpp::export(rng=false)]]
+Rcpp::List CPL_compressors() {
+	Rcpp::CharacterVector compressors =   to_cv(CPLGetCompressors());
+	Rcpp::CharacterVector decompressors = to_cv(CPLGetDecompressors());
+	return Rcpp::List::create(
+			Rcpp::_["compressors"] = compressors,
+			Rcpp::_["decompressors"] = decompressors
+		);
+}
+#else
+Rcpp::CharacterVector CPL_compressors() {
+	Rcpp::stop("CPL_compressors() requires GDAL >= 3.4\n");
+	return Rcpp::NumericVector::create(0);
+}
+#endif

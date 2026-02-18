@@ -81,6 +81,10 @@ CPL_axis_order_authority_compliant <- function(authority_compliant) {
     .Call(`_sf_CPL_axis_order_authority_compliant`, authority_compliant)
 }
 
+CPL_compressors <- function() {
+    .Call(`_sf_CPL_compressors`)
+}
+
 CPL_area <- function(sfc) {
     .Call(`_sf_CPL_area`, sfc)
 }

@@ -410,3 +410,12 @@ gdal_addo = function(file, overviews = c(2,4,8,16), method = "NEAREST", layers =
 	invisible(CPL_gdaladdo(file, method, as.integer(overviews), as.integer(layers), as.character(options), 
 				 config_options, as.logical(clean)[1], as.logical(read_only)[1]))
 }
+
+#' List GDAL compressors and decompressors
+#'
+#' List GDAL compressors and decompressors
+#' @return named list with two character vectors, containing compressors and decompressors
+#' @export
+gdal_compressors = function() {
+	CPL_compressors()
+}
