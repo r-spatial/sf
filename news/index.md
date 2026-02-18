@@ -1,5 +1,11 @@
 # Changelog
 
+## version 1.1-1
+
+- add
+  [`gdal_compressors()`](https://r-spatial.github.io/sf/reference/gdal_compressors.md)
+  to query GDAL compressor and decomporessor capability
+
 ## version 1.1-0
 
 - [`st_cast.sfc()`](https://r-spatial.github.io/sf/reference/st_cast.md)

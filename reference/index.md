@@ -43,6 +43,9 @@
 - [`gdal_addo()`](https://r-spatial.github.io/sf/reference/gdal_addo.md)
   : Add or remove overviews to/from a raster image
 
+- [`gdal_compressors()`](https://r-spatial.github.io/sf/reference/gdal_compressors.md)
+  : List GDAL compressors and decompressors
+
 - [`gdal_utils()`](https://r-spatial.github.io/sf/reference/gdal_utils.md)
   : Native interface to gdal utils
 
