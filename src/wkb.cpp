@@ -396,7 +396,7 @@ Rcpp::List read_data(wkb_buf *wkb, bool EWKB = false, bool spatialite = false,
 
 int native_endian(void) {
 	const int one = 1;
-	unsigned char *cp = (unsigned char *) &one;
+	const unsigned char *cp = (const unsigned char *) &one;
 	return (int) *cp;
 }
 
@@ -505,7 +505,7 @@ void add_byte(std::ostringstream& os, char c) {
 }
 
 void add_int(std::ostringstream& os, unsigned int i) {
-  const char *cp = (char *)&i;
+  char *cp = (char *)&i;
   os.write((char*) cp, sizeof(int));
 }
 
@@ -521,7 +521,7 @@ double make_precise(double d, double precision) {
 
 void add_double(std::ostringstream& os, double d, double prec = 0.0) {
   d = make_precise(d, prec); // doubles are ALWAYS coordinates
-  const char *cp = (char *)&d;
+  char *cp = (char *)&d;
   os.write((char*) cp, sizeof(double));
 }
 

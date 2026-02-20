@@ -80,12 +80,12 @@ Rcpp::List CPL_polygonize(Rcpp::CharacterVector raster, Rcpp::CharacterVector ma
 	if (wkt != NULL && *wkt != '\0') {
 		sr = new OGRSpatialReference;
 		sr = handle_axis_order(sr);
-		char **ppt = (char **) &wkt;
 #if GDAL_VERSION_NUM < 2030000
-		sr->importFromWkt(ppt);
+		char **ppt = (char **) &wkt;
 #else
-		sr->importFromWkt( (const char**) ppt);
+		const char **ppt = (const char **) &wkt;
 #endif
+		sr->importFromWkt(ppt);
 	}
 	OGRLayer *poLayer = poDS->CreateLayer("raster", sr, wkbMultiPolygon, NULL);
 	delete sr;
