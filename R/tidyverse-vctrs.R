@@ -157,6 +157,8 @@ vec_restore.sf = function(x, to, ...) {
   sf_column_name = attr(to, "sf_column")
   crs = st_crs(to)
   prec = st_precision(to)
+  if (inherits(to, "tbl_df"))
+    x = tibble::as_tibble(x)
 
   st_as_sf(
     x,
