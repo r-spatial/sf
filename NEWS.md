@@ -1,8 +1,6 @@
-# version 1.1-1
-
-* add `gdal_compressors()` to query GDAL compressor and decomporessor capability
-
 # version 1.1-0
+
+* add `gdal_compressors()` to query GDAL compressor and decomporessor capabilities
 
 * `st_cast.sfc()` deals with zero-length objects; #2584
 
