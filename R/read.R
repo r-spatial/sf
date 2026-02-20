@@ -50,7 +50,7 @@ set_utf8 = function(x) {
 #' @param promote_to_multi logical; in case of a mix of Point and MultiPoint, or
 #'   of LineString and MultiLineString, or of Polygon and MultiPolygon, convert
 #'   all to the Multi variety; defaults to \code{TRUE}
-#' @param stringsAsFactors logical; logical: should character vectors be
+#' @param stringsAsFactors logical; should character vectors be
 #'   converted to factors?  Default for \code{read_sf} or R version >= 4.1.0 is
 #' \code{FALSE}, for \code{st_read} and R version < 4.1.0 equal to
 #' \code{default.stringsAsFactors()}
