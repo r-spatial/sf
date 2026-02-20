@@ -557,6 +557,7 @@ setMethod("dbDataType", c("DBIObject", "sf"), function(dbObj, obj) {
 #' @param con database connection
 #' @param x inherits data.frame
 #' @param classes classes inherited
+#' @noRd
 is_geometry_column <- function(con, x, classes = "") UseMethod("is_geometry_column")
 
 #' @export

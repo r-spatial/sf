@@ -25,10 +25,9 @@ sf_cut = function(values, breaks, include.lowest = TRUE) {
 	i
 }
 
-#' plot sf object
-#'
-#' plot one or more attributes of an sf object on a map
 #' Plot sf object
+#'
+#' Plot one or more attributes of an sf object on a map
 #'
 #' @param x object of class sf
 #' @param y ignored
@@ -73,7 +72,8 @@ sf_cut = function(values, breaks, include.lowest = TRUE) {
 #' parameter \code{mar} can be set in \code{...} to override default margins.
 #' 
 #' The features are plotted in the order as they apppear in the sf object. See examples for when a different plotting order is wanted.
-#'
+#' 
+#' @seealso `vignette("sf5")`
 #' @examples
 #' nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)
 #' # plot single attribute, auto-legend:
@@ -863,7 +863,7 @@ get_asp = function(bb) {
 
 bb2merc = function(x, cls = "ggmap") { # return bbox in the appropriate "web mercator" CRS
 	wgs84 = st_crs(4326)
-	merc =  st_crs(3857) # http://wiki.openstreetmap.org/wiki/EPSG:3857
+	merc =  st_crs(3857) # https://wiki.openstreetmap.org/wiki/Web_Mercator
 	pts = if (cls == "ggmap") {
 		b = vapply(attr(x, "bb"), c, 0.0)
 		st_sfc(st_point(c(b[2:1])), st_point(c(b[4:3])), crs = wgs84)

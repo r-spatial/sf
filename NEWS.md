@@ -996,7 +996,7 @@
 
 # version 0.5-1
 
-* add spatial indexes to most binary geometry operations; #394 and http://r-spatial.org/r/2017/06/22/spatial-index.html
+* add spatial indexes to most binary geometry operations; #394 and https://r-spatial.org/r/2017/06/22/spatial-index.html
 
 * drastically reduce memory footprint of `st_intersection` and similar; #394
 

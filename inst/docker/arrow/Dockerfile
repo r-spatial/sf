@@ -89,7 +89,7 @@ ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 # GEOS:
 ENV GEOS_VERSION 3.11.0
 
-RUN wget -q http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
+RUN wget -q https://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
   && bzip2 -d geos-*bz2 \
   && tar xf geos*tar \
   && cd geos* \
@@ -104,7 +104,7 @@ RUN wget -q http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
 #RUN git clone --depth 1 https://github.com/OSGeo/PROJ.git
 # https://download.osgeo.org/proj/proj-9.0.0RC1.tar.gz
 ENV PROJ_VERSION 9.0.1
-RUN wget -q http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz
+RUN wget -q https://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz
 RUN tar zxvf proj-${PROJ_VERSION}.tar.gz
 RUN cd proj* \
   && ls -l \
@@ -120,7 +120,7 @@ RUN cd proj* \
 ENV GDAL_VERSION 3.5.1
 ENV GDAL_VERSION_NAME 3.5.1
 
-RUN wget -q http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
+RUN wget -q https://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
   && cd gdal* \
   && mkdir build \

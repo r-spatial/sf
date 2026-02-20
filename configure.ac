@@ -622,7 +622,7 @@ if test "$WARN" = "warn" ; then
     echo "Note: proj/conus not found"
     echo "No support available in PROJ4 for NAD grid datum transformations"
     echo "If required, consider re-installing from source with the contents"
-    echo "of proj-datumgrid-1.<latest>.zip from http://download.osgeo.org/proj/ in nad/."
+    echo "of proj-datumgrid-1.<latest>.zip from https://download.osgeo.org/proj/ in nad/."
 fi
 
 fi # PROJH = no

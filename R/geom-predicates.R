@@ -116,26 +116,24 @@ st_relate	= function(x, y, pattern = NA_character_, sparse = !is.na(pattern)) {
 		st_geos_binop("relate", x, y, sparse = FALSE)
 }
 
-#' Geometric binary predicates on pairs of simple feature geometry sets
+#' Identify if `x` and `y` share any space
 #'
-#' Geometric binary predicates on pairs of simple feature geometry sets
-#' @name geos_binary_pred
+#' 
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}; if missing, \code{x} is used
 #' @param sparse logical; should a sparse index list be returned (`TRUE`) or a dense logical matrix? See below.
 #' @inheritDotParams s2::s2_options
-#' @param prepared logical; prepare geometry for `x`, before looping over `y`? See Details.
-#' @details If \code{prepared} is \code{TRUE}, and \code{x} contains POINT geometries and \code{y} contains polygons, then the polygon geometries are prepared, rather than the points.
 #' @return If \code{sparse=FALSE}, \code{st_predicate} (with \code{predicate} e.g. "intersects") returns a dense logical matrix with element \code{i,j} equal to \code{TRUE} when \code{predicate(x[i], y[j])} (e.g., when geometry of feature i and j intersect); if \code{sparse=TRUE}, an object of class \code{\link{sgbp}} is returned, which is a sparse list representation of the same matrix, with list element \code{i} an integer vector with all indices \code{j} for which \code{predicate(x[i],y[j])} is \code{TRUE} (and hence a zero-length integer vector if none of them is \code{TRUE}). From the dense matrix, one can find out if one or more elements intersect by \code{apply(mat, 1, any)}, and from the sparse list by \code{lengths(lst) > 0}, see examples below.
 #' @details For most predicates, a spatial index is built on argument \code{x}; see \url{https://r-spatial.org/r/2017/06/22/spatial-index.html}.
 #' Specifically, \code{st_intersects}, \code{st_disjoint}, \code{st_touches} \code{st_crosses}, \code{st_within}, \code{st_contains}, \code{st_contains_properly}, \code{st_overlaps}, \code{st_equals}, \code{st_covers} and \code{st_covered_by} all build spatial indexes for more efficient geometry calculations. \code{st_relate}, \code{st_equals_exact}, and do not; \code{st_is_within_distance} uses a spatial index for geographic coordinates when \code{sf_use_s2()} is true.
 #'
-#' If \code{y} is missing, `st_predicate(x, x)` is effectively called, and a square matrix is returned with diagonal elements `st_predicate(x[i], x[i])`.
+#' If \code{y} is missing, `st_<predicate>(x, x)` is effectively called, and a square matrix is returned with diagonal elements `st_predicate(x[i], x[i])`.
 #'
 #' Sparse geometry binary predicate (\code{\link{sgbp}}) lists have the following attributes: \code{region.id} with the \code{row.names} of \code{x} (if any, else \code{1:n}), \code{ncol} with the number of features in \code{y}, and \code{predicate} with the name of the predicate used.
 #'
 #' @note For intersection on pairs of simple feature geometries, use
 #' the function \code{\link{st_intersection}} instead of \code{st_intersects}.
+#' @family geometric binary predicates for two spatial objects
 #'
 #' @examples
 #' pts = st_sfc(st_point(c(.5,.5)), st_point(c(1.5, 1.5)), st_point(c(2.5, 2.5)))
@@ -147,15 +145,7 @@ st_relate	= function(x, y, pattern = NA_character_, sparse = !is.na(pattern)) {
 #' lengths(lst) > 0
 #' # which points fall inside the first polygon?
 #' st_intersects(pol, pts)[[1]]
-#' # remove duplicate geometries:
-#' p1 = st_point(0:1)
-#' p2 = st_point(2:1)
-#' p = st_sf(a = letters[1:8], geom = st_sfc(p1, p1, p2, p1, p1, p2, p2, p1))
-#' st_equals(p)
-#' st_equals(p, remove_self = TRUE)
-#' (u = st_equals(p, retain_unique = TRUE))
 #' # retain the records with unique geometries:
-#' p[-unlist(u),]
 #' @export
 st_intersects	= function(x, y, sparse = TRUE, ...) UseMethod("st_intersects")
 
@@ -188,6 +178,11 @@ st_disjoint		= function(x, y = x, sparse = TRUE, prepared = TRUE, ...) {
 }
 
 #' @name geos_binary_pred
+#' @inheritParams st_intersects
+#' @inheritDotParams s2::s2_options
+#' @details If \code{prepared} is \code{TRUE}, and \code{x} contains POINT geometries and \code{y} contains polygons, then the polygon geometries are prepared, rather than the points.
+
+#' @param prepared logical; prepare geometry for `x`, before looping over `y`? See Details.
 #' @export
 st_touches		= function(x, y, sparse = TRUE, prepared = TRUE, ...)
 	st_geos_binop("touches", x, y, sparse = sparse, prepared = prepared, ...)
@@ -202,18 +197,23 @@ st_crosses		= function(x, y, sparse = TRUE, prepared = TRUE, ...)
 st_within	= function(x, y, sparse = TRUE, prepared = TRUE, ...)
 	st_geos_binop("within", x, y, sparse = sparse, prepared = prepared, ...)
 
-#' @name geos_binary_pred
+#' Identify if y is within x
+#' 
+#' * `st_contains()` is true if 
+#' * `st_contains_properly(x, y)` is true if `x` intersects `y`'s interior, but not its edges or exterior; `x` contains `x`, but `x` does not properly contain `x`.
 #' @param model character; polygon/polyline model; one of
 #' "open", "semi-open" or "closed"; see Details.
 #' @details for \code{model}, see https://github.com/r-spatial/s2/issues/32
+#' @inheritParams geos_binary_pred
+#' @param ... passed on to [s2::s2_contains()]
 #' @export
+#' @family geometric binary predicates for two spatial objects
 st_contains	= function(x, y, sparse = TRUE, prepared = TRUE, ..., model = "open")
 	st_geos_binop("contains", x, y, sparse = sparse, prepared = prepared, ..., model = model)
 
-#' @name geos_binary_pred
+#' @rdname st_contains
 #' @export
-#' @details `st_contains_properly(A,B)` is true if A intersects B's interior, but not its edges or exterior; A contains A, but A does not properly contain A.
-#'
+#' @details 
 #' See also \link{st_relate} and \url{https://en.wikipedia.org/wiki/DE-9IM} for a more detailed description of the underlying algorithms.
 st_contains_properly = function(x, y, sparse = TRUE, prepared = TRUE, ...) {
 	if (! prepared)
@@ -226,10 +226,32 @@ st_contains_properly = function(x, y, sparse = TRUE, prepared = TRUE, ...) {
 st_overlaps		= function(x, y, sparse = TRUE, prepared = TRUE, ...)
 	st_geos_binop("overlaps", x, y, sparse = sparse, prepared = prepared, ...)
 
-#' @name geos_binary_pred
-#' @param retain_unique logical; if `TRUE` (and `y` is missing) return only indexes of points larger than the current index; this can be used to select unique geometries, see examples. This argument can be used for all geometry predicates; see also \link{distinct.sf} to find records where geometries AND attributes are distinct.
-#' @param remove_self logical; if `TRUE` (and `y` is missing) return only indexes of geometries different from the current index; this can be used to omit self-intersections; see examples. This argument can be used for all geometry predicates
+
+#' Verify if geographies are equal
+#' 
+#' * `st_equals()` validate if x and y are equal.
+#' * `st_equals_exact()` returns true for two geometries of the same type and their vertices corresponding by index are equal up to a specified tolerance.
+#' 
+#' @inheritParams geos_binary_pred
+#' @param retain_unique logical; if `TRUE` (and `y` is missing) return only
+#'   indexes of points larger than the current index; this can be used to select
+#'   unique geometries, see examples. This argument can be used for all geometry predicates;
+#'   see also \link{distinct.sf} to find records where geometries AND attributes are distinct.
+#' @param remove_self logical; if `TRUE` (and `y` is missing) return only indexes of geometries different from the current index; this can be used to omit self-intersections; see examples.
+#' This argument can be used for all geometry predicates
+#' @param ... passed on to [s2::s2_options()]
 #' @export
+#' @family geometric binary predicates for two spatial objects
+#' @examples
+#' # remove duplicate geometries:
+#' p1 = st_point(0:1)
+#' p2 = st_point(2:1)
+#' p = st_sf(a = letters[1:8], geom = st_sfc(p1, p1, p2, p1, p1, p2, p2, p1))
+#' st_equals(p)
+#' st_equals(p, remove_self = TRUE)
+#' (u = st_equals(p, retain_unique = TRUE))
+#' # retain the records with unique geometries:
+#' p[-unlist(u),]
 st_equals		= function(x, y, sparse = TRUE, prepared = FALSE, ..., 
 							retain_unique = FALSE, remove_self = FALSE) {
 	if (prepared)
@@ -239,6 +261,9 @@ st_equals		= function(x, y, sparse = TRUE, prepared = FALSE, ...,
 }
 
 #' @name geos_binary_pred
+#' @param model character; polygon/polyline model; one of
+#' `"open"`, `"semi-open"` or `"closed"`; see Details.
+#' @details for \code{model}, see https://github.com/r-spatial/s2/issues/32
 #' @export
 st_covers = function(x, y, sparse = TRUE, prepared = TRUE, ..., model = "closed")
 	st_geos_binop("covers", x, y, sparse = sparse, prepared = prepared, ..., model = model)
@@ -250,10 +275,9 @@ st_covered_by = function(x, y = x, sparse = TRUE, prepared = TRUE, ..., model = 
 	st_geos_binop("covered_by", x, y, sparse = sparse, prepared = prepared, ...)
 
 
-#' @name geos_binary_pred
+#' @rdname st_equals
 #' @export
 #' @param par numeric; parameter used for "equals_exact" (margin);
-#' @details \code{st_equals_exact} returns true for two geometries of the same type and their vertices corresponding by index are equal up to a specified tolerance.
 st_equals_exact = function(x, y, par, sparse = TRUE, prepared = FALSE, ...) {
 	if (prepared)
 		stop("prepared geometries not supported for st_equals_exact")
