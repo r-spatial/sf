@@ -47,10 +47,10 @@ st_as_text(x, ..., EWKT = FALSE)
 ## Details
 
 The returned WKT representation of simple feature geometry conforms to
-the [simple features access](https://www.ogc.org/standards/sfa/)
-specification and extensions (known as EWKT, supported by PostGIS and
-other simple features implementations for addition of a SRID to a WKT
-string).
+the [simple features
+access](https://en.wikipedia.org/wiki/Simple_Features) specification and
+extensions (known as EWKT, supported by PostGIS and other simple
+features implementations for addition of a SRID to a WKT string).
 
 ## Note
 
