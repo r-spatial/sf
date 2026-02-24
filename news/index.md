@@ -2,9 +2,10 @@
 
 ## version 1.1-0
 
-- add
-  [`gdal_compressors()`](https://r-spatial.github.io/sf/reference/gdal_compressors.md)
-  to query GDAL compressor and decomporessor capabilities
+CRAN release: 2026-02-24
+
+- [`gdal_compressors()`](https://r-spatial.github.io/sf/reference/gdal_compressors.md)
+  queries GDAL compressor and decompressor capabilities
 
 - [`st_cast.sfc()`](https://r-spatial.github.io/sf/reference/st_cast.md)
   deals with zero-length objects;

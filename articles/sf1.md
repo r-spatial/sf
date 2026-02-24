@@ -1,12 +1,11 @@
 # 1. Simple Features for R
 
 [Simple features](https://en.wikipedia.org/wiki/Simple_Features) or
-[*simple feature access*](https://www.ogc.org/standards/sfa/) refers to
-a formal standard (ISO 19125-1:2004) that describes how objects in the
-real world can be represented in computers, with emphasis on the
-*spatial* geometry of these objects. It also describes how such objects
-can be stored in and retrieved from databases, and which geometrical
-operations should be defined for them.
+*simple feature access* refers to a formal standard (ISO 19125-1:2004)
+that describes how objects in the real world can be represented in
+computers, with emphasis on the *spatial* geometry of these objects. It
+also describes how such objects can be stored in and retrieved from
+databases, and which geometrical operations should be defined for them.
 
 The standard is widely implemented in spatial databases (such as
 [PostGIS](https://postgis.net/)), commercial GIS (e.g., [ESRI
@@ -46,8 +45,7 @@ attributes are geometry valued, and simple features are based on 2D
 geometry with linear interpolation between vertices.*” We will see soon
 that the same standard will extend its coverage beyond 2D and beyond
 linear interpolation. Here, we take simple features as the data
-structures and operations described in the
-[standard](https://www.ogc.org/standards/sfa/).
+structures and operations described in the standard.
 
 ### Dimensions
 
