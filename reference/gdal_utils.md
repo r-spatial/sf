@@ -186,7 +186,8 @@ st_read(in_file)
 #> Center      ( 1840966.750, 1143938.250) (104d50'48.65"W, 10d 7'11.53"N)
 #> Band 1 Block=20x20 Type=Byte, ColorInterp=Gray
 #>     Computed Min/Max=74.000,255.000
-#> Reading layer `storms_xyz' from data source `/tmp/RtmpXxXIR1/file20c3c24b26b.gpkg' using driver `GPKG'
+#> Reading layer `storms_xyz' from data source 
+#>   `/tmp/RtmpEoWS3c/file20f35675a134.gpkg' using driver `GPKG'
 #> Simple feature collection with 71 features and 0 fields
 #> Geometry type: LINESTRING
 #> Dimension:     XYZ
