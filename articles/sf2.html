@@ -170,16 +170,18 @@ geometry column only.</p>
 the datasource, by trying them all in turn.</p>
 <p><code><a href="../reference/st_read.html">st_read()</a></code> follows the conventions of base R, similar to
 how it reads tabular data into <code>data.frame</code>s. This means that
-character data are read, by default as <code>factor</code>s. For those
-who insist on retrieving character data as character vectors, the
-argument <code>stringsAsFactors</code> can be set to
-<code>FALSE</code>:</p>
+character data are read as <code>character</code> vectors by default
+(since R 4.1.0). For those who insist on retrieving character data as
+<code>factor</code>s, the argument <code>stringsAsFactors</code> can be
+set to <code>TRUE</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">fname</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">fname</span>, stringsAsFactors <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>Alternatively, a user can set the global option
 <code>stringsAsFactors</code>, and this will have the same effect:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>stringsAsFactors <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">## Warning in options(stringsAsFactors = TRUE): 'options(stringsAsFactors = TRUE)'</span></span>
+<span><span class="co">## is deprecated and will be disabled</span></span>
 <span><span class="fu"><a href="../reference/st_read.html">st_read</a></span><span class="op">(</span><span class="va">fname</span><span class="op">)</span></span>
 <span><span class="co">## Reading layer `nc' from data source </span></span>
 <span><span class="co">##   `/home/runner/work/_temp/Library/sf/shape/nc.shp' using driver `ESRI Shapefile'</span></span>

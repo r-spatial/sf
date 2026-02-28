@@ -114,20 +114,22 @@ datasource, by trying them all in turn.
 
 [`st_read()`](https://r-spatial.github.io/sf/reference/st_read.md)
 follows the conventions of base R, similar to how it reads tabular data
-into `data.frame`s. This means that character data are read, by default
-as `factor`s. For those who insist on retrieving character data as
-character vectors, the argument `stringsAsFactors` can be set to
-`FALSE`:
+into `data.frame`s. This means that character data are read as
+`character` vectors by default (since R 4.1.0). For those who insist on
+retrieving character data as `factor`s, the argument `stringsAsFactors`
+can be set to `TRUE`:
 
 ``` r
-st_read(fname, stringsAsFactors = FALSE)
+st_read(fname, stringsAsFactors = TRUE)
 ```
 
 Alternatively, a user can set the global option `stringsAsFactors`, and
 this will have the same effect:
 
 ``` r
-options(stringsAsFactors = FALSE)
+options(stringsAsFactors = TRUE)
+## Warning in options(stringsAsFactors = TRUE): 'options(stringsAsFactors = TRUE)'
+## is deprecated and will be disabled
 st_read(fname)
 ## Reading layer `nc' from data source 
 ##   `/home/runner/work/_temp/Library/sf/shape/nc.shp' using driver `ESRI Shapefile'
