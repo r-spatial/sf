@@ -110,9 +110,9 @@ st_read(
 
 - stringsAsFactors:
 
-  logical; logical: should character vectors be converted to factors?
-  Default for `read_sf` or R version \>= 4.1.0 is `FALSE`, for `st_read`
-  and R version \< 4.1.0 equal to
+  logical; should character vectors be converted to factors? Default for
+  `read_sf` or R version \>= 4.1.0 is `FALSE`, for `st_read` and R
+  version \< 4.1.0 equal to
   [`default.stringsAsFactors()`](https://rdrr.io/r/base/base-defunct.html)
 
 - int64_as_string:

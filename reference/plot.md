@@ -349,8 +349,6 @@ points(x, ..., of_largest_polygon = FALSE)
   logical, or object of class `crs` (e.g., `st_crs('OGC:CRS84')` for a
   WGS84 graticule), or object created by
   [st_graticule](https://r-spatial.github.io/sf/reference/st_graticule.md)
-  or object returned by
-  [st_graticule](https://r-spatial.github.io/sf/reference/st_graticule.md)
 
 - col_graticule:
 
