@@ -56,7 +56,7 @@ st_is_valid.sfg = function(x, ...) {
 #' suppressWarnings(st_is_valid(x))
 #' y = st_make_valid(x)
 #' st_is_valid(y)
-#' y %>% st_cast()
+#' y |> st_cast()
 #' @export
 st_make_valid = function(x, ...) UseMethod("st_make_valid")
 

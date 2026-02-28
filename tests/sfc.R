@@ -64,27 +64,27 @@ sf = st_sf(a = 3:2, geom = x)
 st_cast(sf, "POINT")
 
 
-x %>% st_cast("POINT")
+x |> st_cast("POINT")
 
 # points:
 mp = st_multipoint(rbind(c(0,1))) # single-point multipoint
-st_sfc(p,mp) %>% st_cast("POINT")
-st_sfc(p,mp) %>% st_cast("MULTIPOINT")
+st_sfc(p,mp) |> st_cast("POINT")
+st_sfc(p,mp) |> st_cast("MULTIPOINT")
 
 # lines:
 pts = rbind(c(0,0), c(1,1), c(2,1))
-st_sfc(st_linestring(pts), st_multilinestring(list(pts))) %>% st_cast("LINESTRING")
-st_sfc(st_linestring(pts), st_multilinestring(list(pts))) %>% st_cast("MULTILINESTRING")
+st_sfc(st_linestring(pts), st_multilinestring(list(pts))) |> st_cast("LINESTRING")
+st_sfc(st_linestring(pts), st_multilinestring(list(pts))) |> st_cast("MULTILINESTRING")
 
 # polygons:
 pts = rbind(c(0,0), c(1,1), c(0,1), c(0,0))
-st_sfc(st_polygon(list(pts)), st_multipolygon(list(list(pts)))) %>% st_cast("POLYGON")
-st_sfc(st_polygon(list(pts)), st_multipolygon(list(list(pts)))) %>% st_cast("MULTIPOLYGON")
+st_sfc(st_polygon(list(pts)), st_multipolygon(list(list(pts)))) |> st_cast("POLYGON")
+st_sfc(st_polygon(list(pts)), st_multipolygon(list(list(pts)))) |> st_cast("MULTIPOLYGON")
 
 
-st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) %>% st_cast()
-st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) %>%
-	st_cast() %>%
+st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) |> st_cast()
+st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) |>
+	st_cast() |>
 	st_cast("POINT")
 
 p = rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))
@@ -128,7 +128,7 @@ format(st_bbox(nc))
 st_agr("constant")
 st_agr()
 x <- st_sf(a = 1:2, b = 3:4, geom = x, agr = c("constant", "aggregate"))
-y <- x %>% st_set_agr("constant")
+y <- x |> st_set_agr("constant")
 y
 
 sf1 <- st_sf(a = c("x", "y"), geom = st_sfc(st_point(3:4), st_point(3:4)))
@@ -214,7 +214,7 @@ ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
 st_sample(ls, 80)
 st_sample(nc[1:2,], size = c(10,20))
 # try with LINES, LongLat, should generate a warning:
-nc[1:2,] %>% st_transform(4326) %>% st_cast("MULTILINESTRING") %>% st_sample(size = c(10,20))
+nc[1:2,] |> st_transform(4326) |> st_cast("MULTILINESTRING") |> st_sample(size = c(10,20))
 st_sample(ls, 80, type = "regular")
 p_sample = lapply(1:10, function(i) st_sample(nc[i, ], 100, exact = FALSE))
 lengths(p_sample)
@@ -274,7 +274,7 @@ x = st_sfc(st_polygon(list(m[c(1,3,1),])), check_ring_dir=TRUE)
 
 mp = st_multipolygon(list(pol, pol))
 try(x <- st_sfc(mp, st_polygon(), check_ring_dir=TRUE))
-x <- st_sfc(mp, pol) %>% st_cast("MULTIPOLYGON") %>% st_sfc(check_ring_dir=TRUE)
+x <- st_sfc(mp, pol) |> st_cast("MULTIPOLYGON") |> st_sfc(check_ring_dir=TRUE)
 x
 str(x)
 
@@ -331,7 +331,7 @@ st_union(shape1, shape4)
 st_union(shape4, shape1)
 
 # transform empty:
-tr = st_sf(geom=st_sfc()) %>% st_set_crs(3587) %>% st_transform(4326)
+tr = st_sf(geom=st_sfc()) |> st_set_crs(3587) |> st_transform(4326)
 
 # NA values are converted to empty; #1114:
 x <- data.frame(name=LETTERS)

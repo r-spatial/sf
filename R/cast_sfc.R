@@ -174,7 +174,7 @@ is_exotic = function(x) {
 #' pt23 <- st_multipoint(matrix(c(1,2,3,4), ncol = 2, byrow = TRUE))
 #' d <- st_sf(geom = st_sfc(pt1, pt23))
 #' st_cast(d, "POINT") # will not convert the entire MULTIPOINT, and warns
-#' st_cast(d, "MULTIPOINT") %>% st_cast("POINT")
+#' st_cast(d, "MULTIPOINT") |> st_cast("POINT")
 st_cast.sfc = function(x, to, ..., ids = seq_along(x), group_or_split = TRUE) {
 
 	if (missing(to))

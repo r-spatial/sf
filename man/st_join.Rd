@@ -78,9 +78,10 @@ b = st_sf(a = 11:14,
 st_join(a, b)
 st_join(a, b, left = FALSE)
 # two ways to aggregate y's attribute values outcome over x's geometries:
-st_join(a, b) \%>\% aggregate(list(.$a.x), mean)
+j = st_join(a, b)
+aggregate(j, list(j$a.x), mean)
 if (require(dplyr, quietly = TRUE)) {
- st_join(a, b) \%>\% group_by(a.x) \%>\% summarise(mean(a.y))
+ st_join(a, b) |> group_by(a.x) |> summarise(mean(a.y))
 }
 # example of largest = TRUE:
 nc <- st_transform(st_read(system.file("shape/nc.shp", package="sf")), 2264)                

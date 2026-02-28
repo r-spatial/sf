@@ -2,17 +2,17 @@ m <- rbind(c(0,0), c(1,0), c(1, 1), c(0,1), c(0,0))
 s <- matrix(c(2, 0), 5, 2, byrow = TRUE)
 cc <- list(
   points = list(
-    single = m[1, ] %>% st_point(),
-    multi = m %>% st_multipoint(),
+    single = m[1, ] |> st_point(),
+    multi = m |> st_multipoint(),
     multi_empty = st_multipoint()
   ),
   lines = list(
-    single = m %>% st_linestring(), 
-    multi = list(m, m + s) %>% st_multilinestring()
+    single = m |> st_linestring(), 
+    multi = list(m, m + s) |> st_multilinestring()
   ),
   polygons = list(
-    single = list(m + s)  %>% st_polygon(), 
-    multi = list(list(m), list(m + s)) %>% st_multipolygon()
+    single = list(m + s)  |> st_polygon(), 
+    multi = list(list(m), list(m + s)) |> st_multipolygon()
   )
 )
 
@@ -92,8 +92,8 @@ test_that("st_cast() can coerce to MULTI* or GEOMETRY", {
 })
 
 test_that("st_cast preserves crs (#154)", {
-  expect_identical(st_cast(st_sfc(cc$points$single, cc$lines$multi, crs = 4326)) %>% st_crs(), 
-              st_sfc(cc$points$single, cc$lines$multi, crs = 4326) %>% st_crs())
+  expect_identical(st_cast(st_sfc(cc$points$single, cc$lines$multi, crs = 4326)) |> st_crs(), 
+              st_sfc(cc$points$single, cc$lines$multi, crs = 4326) |> st_crs())
 })
 
 test_that("st_cast can crack GEOMETRYCOLLECTION", {
@@ -108,13 +108,13 @@ test_that("st_cast can crack GEOMETRYCOLLECTION", {
   expect_s3_class(st_cast(sfc), "sfc_GEOMETRY")  # first, it cracks the collection
   expect_s3_class(st_cast(st_cast(sfc)), "sfc_MULTILINESTRING")  # then cast to multi*
 #  expect_warning(expect_s3_class(st_cast(sfc, "POINT"), "sfc_POINT"), "first coordinate")
-#  expect_equal(st_cast(sfc, "POINT") %>% length, sfc %>% length)
+#  expect_equal(st_cast(sfc, "POINT") |> length, sfc |> length)
 # @etienne: I think this is more useful; attr(x, "ids") contains the original lengths
   expect_s3_class(st_cast(sfc, "MULTIPOINT"), "sfc_MULTIPOINT")
   # expect_s3_class(st_cast(sfc, "LINESTRING"), "sfc_LINESTRING")
   expect_error(st_cast(sfc, "LINESTRING"))
   expect_error(st_cast(sfc, "MULTILINESTRING"))
-  expect_s3_class(st_cast(sfc) %>% st_cast("MULTILINESTRING"), "sfc_MULTILINESTRING")
+  expect_s3_class(st_cast(sfc) |> st_cast("MULTILINESTRING"), "sfc_MULTILINESTRING")
 
   # Can deal with GCs containing empty geometries - #1767
   gc5 <- st_as_sfc(
@@ -126,8 +126,8 @@ test_that("st_cast can crack GEOMETRYCOLLECTION", {
   expect_equal(st_is_empty(st_cast(gc5)), c(FALSE, TRUE))
 
   sfc2 <- st_sfc(gc1, gc2, gc4)
-  expect_s3_class(sfc2 %>% st_cast, "sfc_GEOMETRY")
-  expect_equal(sapply(sfc2 %>% st_cast, class)[2, ], c("LINESTRING", "MULTILINESTRING", "MULTIPOINT"))
+  expect_s3_class(sfc2 |> st_cast(), "sfc_GEOMETRY")
+  expect_equal(sapply(sfc2 |> st_cast(), class)[2, ], c("LINESTRING", "MULTILINESTRING", "MULTIPOINT"))
 })
 
 test_that("can cast empty polygon (#1094)", {

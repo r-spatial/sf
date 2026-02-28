@@ -1,7 +1,7 @@
 
-R Under development (unstable) (2025-11-05 r88988 ucrt) -- "Unsuffered Consequences"
+R version 4.5.2 (2025-10-31) -- "[Not] Part in a Rumble"
 Copyright (C) 2025 The R Foundation for Statistical Computing
-Platform: x86_64-w64-mingw32/x64
+Platform: x86_64-pc-linux-gnu
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -302,10 +302,10 @@ Error in st_buffer.sfc(sfc, units::set_units(1000, km)) :
 lines[GRID.lines.1] 
 > 
 > x = st_as_sfc("MULTISURFACE(CURVEPOLYGON(COMPOUNDCURVE(LINESTRING(-159.399779123 22.226016471, -159.399699153 22.226276431, -159.398736217 22.226118372, -159.398260872 22.226095318, -159.398140792 22.2260564590001, -159.398163058 22.2257268010001, -159.397882642 22.225394244, -159.397397157 22.225057335, -159.397318825 22.2251780230001, -159.396993115 22.225177984, -159.396748242 22.2248808800001, -159.396901679 22.224770398, -159.396876329 22.224673093, -159.399167008 22.224731392, -159.399502204 22.225551382), CIRCULARSTRING(-159.399502204 22.225551382, -159.399622762077 22.2257930044972, -159.399779123 22.226016471))))")
-> mp <- x[[1]] %>% st_cast("MULTIPOLYGON")
+> mp <- x[[1]] |> st_cast("MULTIPOLYGON")
 > 
 > x = st_as_sfc("COMPOUNDCURVE(CIRCULARSTRING(0 0, 1 1, 1 0),(1 0, 0 1))")
-> ls <- x[[1]] %>% st_cast()
+> ls <- x[[1]] |> st_cast()
 > class(ls)
 [1] "XY"         "LINESTRING" "sfg"       
 > 
@@ -327,4 +327,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-   1.04    0.12    1.15 
+  0.844   1.405   0.746 

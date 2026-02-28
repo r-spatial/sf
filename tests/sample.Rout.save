@@ -1,7 +1,7 @@
 
-R Under development (unstable) (2025-11-05 r88988 ucrt) -- "Unsuffered Consequences"
+R version 4.5.2 (2025-10-31) -- "[Not] Part in a Rumble"
 Copyright (C) 2025 The R Foundation for Statistical Computing
-Platform: x86_64-w64-mingw32/x64
+Platform: x86_64-pc-linux-gnu
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -24,13 +24,13 @@ Type 'q()' to quit R.
 > x <- st_make_grid(st_as_sfc(bb), square = FALSE, what = "corners")
 > plot(x, col = 'orange', add = TRUE)
 > plot(st_as_sfc(bb), add = TRUE, border = 'red')
-> st_overlaps(xx) %>% 
-+ 	lengths() %>% 
+> st_overlaps(xx) |> 
++ 	lengths() |> 
 + 	sum()
 [1] 0
 > 
-> st_as_sfc(bb) %>%
-+ 	st_difference(st_union(xx)) %>%
+> st_as_sfc(bb) |>
++ 	st_difference(st_union(xx)) |>
 + 	st_area()
 numeric(0)
 > 
@@ -41,16 +41,16 @@ numeric(0)
 > x <- st_make_grid(st_as_sfc(bb), square = FALSE, what = "corners", flat_topped = TRUE)
 > plot(x, col = 'orange', add = TRUE)
 > plot(st_as_sfc(bb), add = TRUE, border = 'red')
-> st_overlaps(xx) %>% 
-+ 	lengths() %>% 
+> st_overlaps(xx) |> 
++ 	lengths() |> 
 + 	sum()
 [1] 0
 > 
-> st_as_sfc(bb) %>%
-+ 	st_difference(st_union(xx)) %>%
+> st_as_sfc(bb) |>
++ 	st_difference(st_union(xx)) |>
 + 	st_area()
 numeric(0)
 > 
 > proc.time()
    user  system elapsed 
-   0.59    0.12    0.70 
+  0.580   1.388   0.463 

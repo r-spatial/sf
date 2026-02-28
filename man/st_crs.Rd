@@ -137,7 +137,7 @@ sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
 st_crs(sfc) = 4326
 sfc
 sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
-sfc \%>\% st_set_crs(4326) \%>\% st_transform(3857)
+sfc |> st_set_crs(4326) |> st_transform(3857)
 st_crs("EPSG:3857")$input
 st_crs(3857)$proj4string
 pt = st_sfc(st_point(c(0, 60)), crs = 4326)

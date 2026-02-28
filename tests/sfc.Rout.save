@@ -234,7 +234,7 @@ Warning message:
 In st_cast.MULTIPOINT(X[[i]], ...) : point from first coordinate only
 > 
 > 
-> x %>% st_cast("POINT")
+> x |> st_cast("POINT")
 Geometry set for 2 features 
 Geometry type: POINT
 Dimension:     XY
@@ -247,7 +247,7 @@ In st_cast.MULTIPOINT(X[[i]], ...) : point from first coordinate only
 > 
 > # points:
 > mp = st_multipoint(rbind(c(0,1))) # single-point multipoint
-> st_sfc(p,mp) %>% st_cast("POINT")
+> st_sfc(p,mp) |> st_cast("POINT")
 Geometry set for 2 features 
 Geometry type: POINT
 Dimension:     XY
@@ -257,7 +257,7 @@ POINT (0 1)
 POINT (0 1)
 Warning message:
 In st_cast.MULTIPOINT(X[[i]], ...) : point from first coordinate only
-> st_sfc(p,mp) %>% st_cast("MULTIPOINT")
+> st_sfc(p,mp) |> st_cast("MULTIPOINT")
 Geometry set for 2 features 
 Geometry type: MULTIPOINT
 Dimension:     XY
@@ -268,7 +268,7 @@ MULTIPOINT ((0 1))
 > 
 > # lines:
 > pts = rbind(c(0,0), c(1,1), c(2,1))
-> st_sfc(st_linestring(pts), st_multilinestring(list(pts))) %>% st_cast("LINESTRING")
+> st_sfc(st_linestring(pts), st_multilinestring(list(pts))) |> st_cast("LINESTRING")
 Geometry set for 2 features 
 Geometry type: LINESTRING
 Dimension:     XY
@@ -276,7 +276,7 @@ Bounding box:  xmin: 0 ymin: 0 xmax: 2 ymax: 1
 CRS:           NA
 LINESTRING (0 0, 1 1, 2 1)
 LINESTRING (0 0, 1 1, 2 1)
-> st_sfc(st_linestring(pts), st_multilinestring(list(pts))) %>% st_cast("MULTILINESTRING")
+> st_sfc(st_linestring(pts), st_multilinestring(list(pts))) |> st_cast("MULTILINESTRING")
 Geometry set for 2 features 
 Geometry type: MULTILINESTRING
 Dimension:     XY
@@ -287,7 +287,7 @@ MULTILINESTRING ((0 0, 1 1, 2 1))
 > 
 > # polygons:
 > pts = rbind(c(0,0), c(1,1), c(0,1), c(0,0))
-> st_sfc(st_polygon(list(pts)), st_multipolygon(list(list(pts)))) %>% st_cast("POLYGON")
+> st_sfc(st_polygon(list(pts)), st_multipolygon(list(list(pts)))) |> st_cast("POLYGON")
 Geometry set for 2 features 
 Geometry type: POLYGON
 Dimension:     XY
@@ -295,7 +295,7 @@ Bounding box:  xmin: 0 ymin: 0 xmax: 1 ymax: 1
 CRS:           NA
 POLYGON ((0 0, 1 1, 0 1, 0 0))
 POLYGON ((0 0, 1 1, 0 1, 0 0))
-> st_sfc(st_polygon(list(pts)), st_multipolygon(list(list(pts)))) %>% st_cast("MULTIPOLYGON")
+> st_sfc(st_polygon(list(pts)), st_multipolygon(list(list(pts)))) |> st_cast("MULTIPOLYGON")
 Geometry set for 2 features 
 Geometry type: MULTIPOLYGON
 Dimension:     XY
@@ -305,7 +305,7 @@ MULTIPOLYGON (((0 0, 1 1, 0 1, 0 0)))
 MULTIPOLYGON (((0 0, 1 1, 0 1, 0 0)))
 > 
 > 
-> st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) %>% st_cast()
+> st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) |> st_cast()
 Geometry set for 2 features 
 Geometry type: GEOMETRY
 Dimension:     XY
@@ -313,8 +313,8 @@ Bounding box:  xmin: 0 ymin: 1 xmax: 0 ymax: 1
 CRS:           NA
 POINT (0 1)
 MULTIPOINT ((0 1))
-> st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) %>%
-+ 	st_cast() %>%
+> st_sfc(st_geometrycollection(list(p)), st_geometrycollection(list(mp))) |>
++ 	st_cast() |>
 + 	st_cast("POINT")
 Geometry set for 2 features 
 Geometry type: POINT
@@ -450,7 +450,7 @@ Levels: constant aggregate identity
 [1] <NA>
 Levels: constant aggregate identity
 > x <- st_sf(a = 1:2, b = 3:4, geom = x, agr = c("constant", "aggregate"))
-> y <- x %>% st_set_agr("constant")
+> y <- x |> st_set_agr("constant")
 > y
 Simple feature collection with 2 features and 2 fields
 Attribute-geometry relationships: constant (2)
@@ -742,7 +742,7 @@ POINT (1222665 972624)
 POINT (1333528 968263)
 POINT (1310837 958630)
 > # try with LINES, LongLat, should generate a warning:
-> nc[1:2,] %>% st_transform(4326) %>% st_cast("MULTILINESTRING") %>% st_sample(size = c(10,20))
+> nc[1:2,] |> st_transform(4326) |> st_cast("MULTILINESTRING") |> st_sample(size = c(10,20))
 although coordinates are longitude/latitude, st_sample assumes that they are
 planar
 although coordinates are longitude/latitude, st_sample assumes that they are
@@ -877,7 +877,7 @@ sfc_POLYGON of length 2; first list element:  list()
 > try(x <- st_sfc(mp, st_polygon(), check_ring_dir=TRUE))
 Error in check_ring_dir(lst) : 
   check_ring_dir: not supported for class sfc_GEOMETRY
-> x <- st_sfc(mp, pol) %>% st_cast("MULTIPOLYGON") %>% st_sfc(check_ring_dir=TRUE)
+> x <- st_sfc(mp, pol) |> st_cast("MULTIPOLYGON") |> st_sfc(check_ring_dir=TRUE)
 > x
 Geometry set for 2 features 
 Geometry type: MULTIPOLYGON
@@ -1064,7 +1064,7 @@ CRS:           NA
 POLYGON ((0 0, 1 0, 3 2, 2 4, 1 4, 0 0))
 > 
 > # transform empty:
-> tr = st_sf(geom=st_sfc()) %>% st_set_crs(3587) %>% st_transform(4326)
+> tr = st_sf(geom=st_sfc()) |> st_set_crs(3587) |> st_transform(4326)
 > 
 > # NA values are converted to empty; #1114:
 > x <- data.frame(name=LETTERS)
@@ -1140,4 +1140,4 @@ Geodetic CRS:  WGS 84
 > 
 > proc.time()
    user  system elapsed 
-  5.109   1.538   5.147 
+  5.476   1.458   5.453 

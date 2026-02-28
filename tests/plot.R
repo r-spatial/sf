@@ -72,8 +72,8 @@ plot(nc, axes = TRUE)
 plot(nc, col="lightgrey") 
 plot(st_centroid(nc), add = TRUE, col = 1)
 if ("geometry" %in% names(nc)) {
- nc %>% 
-  select(geometry) %>% 
+ nc |> 
+  select(geometry) |> 
   plot()
 }
 

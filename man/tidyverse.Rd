@@ -303,63 +303,63 @@ In case \code{do_union} is \code{FALSE}, \code{summarise} will simply combine ge
 \examples{
 if (require(dplyr, quietly = TRUE)) {
  nc = read_sf(system.file("shape/nc.shp", package="sf"))
- nc \%>\% filter(AREA > .1) \%>\% plot()
+ nc |> filter(AREA > .1) |> plot()
  # plot 10 smallest counties in grey:
- st_geometry(nc) \%>\% plot()
- nc \%>\% select(AREA) \%>\% arrange(AREA) \%>\% slice(1:10) \%>\% plot(add = TRUE, col = 'grey')
+ st_geometry(nc) |> plot()
+ nc |> select(AREA) |> arrange(AREA) |> slice(1:10) |> plot(add = TRUE, col = 'grey')
  title("the ten counties with smallest area")
- nc2 <- nc \%>\% mutate(area10 = AREA/10)
- nc \%>\% slice(1:2)
+ nc2 <- nc |> mutate(area10 = AREA/10)
+ nc |> slice(1:2)
 }
 # plot 10 smallest counties in grey:
 if (require(dplyr, quietly = TRUE)) {
- st_geometry(nc) \%>\% plot()
- nc \%>\% select(AREA) \%>\% arrange(AREA) \%>\% slice(1:10) \%>\% plot(add = TRUE, col = 'grey')
+ st_geometry(nc) |> plot()
+ nc |> select(AREA) |> arrange(AREA) |> slice(1:10) |> plot(add = TRUE, col = 'grey')
  title("the ten counties with smallest area")
 }
 if (require(dplyr, quietly = TRUE)) {
  nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
- nc \%>\% group_by(area_cl) \%>\% class()
+ nc |> group_by(area_cl) |> class()
 }
 if (require(dplyr, quietly = TRUE)) {
- nc2 <- nc \%>\% mutate(area10 = AREA/10)
+ nc2 <- nc |> mutate(area10 = AREA/10)
 }
 if (require(dplyr, quietly = TRUE)) {
- nc \%>\% transmute(AREA = AREA/10) \%>\% class()
+ nc |> transmute(AREA = AREA/10) |> class()
 }
 if (require(dplyr, quietly = TRUE)) {
- nc \%>\% select(SID74, SID79) \%>\% names()
- nc \%>\% select(SID74, SID79) \%>\% class()
+ nc |> select(SID74, SID79) |> names()
+ nc |> select(SID74, SID79) |> class()
 }
 if (require(dplyr, quietly = TRUE)) {
- nc2 <- nc \%>\% rename(area = AREA)
+ nc2 <- nc |> rename(area = AREA)
 }
 if (require(dplyr, quietly = TRUE)) {
- nc \%>\% slice(1:2)
+ nc |> slice(1:2)
 }
 if (require(dplyr, quietly = TRUE)) {
  nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
- nc.g <- nc \%>\% group_by(area_cl)
- nc.g \%>\% summarise(mean(AREA))
- nc.g \%>\% summarise(mean(AREA)) \%>\% plot(col = grey(3:6 / 7))
- nc \%>\% as.data.frame \%>\% summarise(mean(AREA))
+ nc.g <- nc |> group_by(area_cl)
+ nc.g |> summarise(mean(AREA))
+ nc.g |> summarise(mean(AREA)) |> plot(col = grey(3:6 / 7))
+ nc |> as.data.frame() |> summarise(mean(AREA))
 }
 if (require(dplyr, quietly = TRUE)) {
- nc[c(1:100, 1:10), ] \%>\% distinct() \%>\% nrow()
+ nc[c(1:100, 1:10), ] |> distinct() |> nrow()
 }
 if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE) && "geometry" \%in\% names(nc)) {
- nc \%>\% select(SID74, SID79) \%>\% gather("VAR", "SID", -geometry) \%>\% summary()
+ nc |> select(SID74, SID79) |> gather("VAR", "SID", -geometry) |> summary()
 }
 if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE) && "geometry" \%in\% names(nc)) {
  nc$row = 1:100 # needed for spread to work
- nc \%>\% select(SID74, SID79, geometry, row) \%>\%
-	gather("VAR", "SID", -geometry, -row) \%>\%
-	spread(VAR, SID) \%>\% head()
+ nc |> select(SID74, SID79, geometry, row) |>
+	gather("VAR", "SID", -geometry, -row) |>
+	spread(VAR, SID) |> head()
 }
 if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE)) {
  storms.sf = st_as_sf(storms, coords = c("long", "lat"), crs = 4326)
- x <- storms.sf \%>\% group_by(name, year) \%>\% nest
- trs = lapply(x$data, function(tr) st_cast(st_combine(tr), "LINESTRING")[[1]]) \%>\%
+ x <- storms.sf |> group_by(name, year) |> nest()
+ trs = lapply(x$data, function(tr) st_cast(st_combine(tr), "LINESTRING")[[1]]) |>
     st_sfc(crs = 4326)
  trs.sf = st_sf(x[,1:2], trs)
  plot(trs.sf["year"], axes = TRUE)

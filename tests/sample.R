@@ -7,12 +7,12 @@ plot(x, add = TRUE)
 x <- st_make_grid(st_as_sfc(bb), square = FALSE, what = "corners")
 plot(x, col = 'orange', add = TRUE)
 plot(st_as_sfc(bb), add = TRUE, border = 'red')
-st_overlaps(xx) %>% 
-	lengths() %>% 
+st_overlaps(xx) |> 
+	lengths() |> 
 	sum()
 
-st_as_sfc(bb) %>%
-	st_difference(st_union(xx)) %>%
+st_as_sfc(bb) |>
+	st_difference(st_union(xx)) |>
 	st_area()
 
 xx <- st_make_grid(st_as_sfc(bb), square = FALSE, what = "polygons", flat_topped = TRUE)
@@ -22,10 +22,10 @@ plot(x, add = TRUE)
 x <- st_make_grid(st_as_sfc(bb), square = FALSE, what = "corners", flat_topped = TRUE)
 plot(x, col = 'orange', add = TRUE)
 plot(st_as_sfc(bb), add = TRUE, border = 'red')
-st_overlaps(xx) %>% 
-	lengths() %>% 
+st_overlaps(xx) |> 
+	lengths() |> 
 	sum()
 
-st_as_sfc(bb) %>%
-	st_difference(st_union(xx)) %>%
+st_as_sfc(bb) |>
+	st_difference(st_union(xx)) |>
 	st_area()

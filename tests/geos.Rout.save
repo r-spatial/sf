@@ -1,7 +1,7 @@
 
-R Under development (unstable) (2025-11-05 r88988 ucrt) -- "Unsuffered Consequences"
+R version 4.5.2 (2025-10-31) -- "[Not] Part in a Rumble"
 Copyright (C) 2025 The R Foundation for Statistical Computing
-Platform: x86_64-w64-mingw32/x64
+Platform: x86_64-pc-linux-gnu
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -600,31 +600,31 @@ CRS:           NA
 > y = st_sfc(p)
 > x = st_sfc(p + 1.001)
 > 
-> x %>% st_set_precision(0) %>% st_intersects(y)
+> x |> st_set_precision(0) |> st_intersects(y)
 Sparse geometry binary predicate list of length 1, where the predicate
 was `intersects'
  1: (empty)
-> x %>% st_set_precision(10000) %>% st_intersects(y)
+> x |> st_set_precision(10000) |> st_intersects(y)
 Sparse geometry binary predicate list of length 1, where the predicate
 was `intersects'
  1: (empty)
-> x %>% st_set_precision(1000) %>% st_intersects(y)
+> x |> st_set_precision(1000) |> st_intersects(y)
 Sparse geometry binary predicate list of length 1, where the predicate
 was `intersects'
  1: (empty)
-> x %>% st_set_precision(501) %>% st_intersects(y) # no
+> x |> st_set_precision(501) |> st_intersects(y) # no
 Sparse geometry binary predicate list of length 1, where the predicate
 was `intersects'
  1: (empty)
-> x %>% st_set_precision(500) %>% st_intersects(y) # yes
+> x |> st_set_precision(500) |> st_intersects(y) # yes
 Sparse geometry binary predicate list of length 1, where the predicate
 was `intersects'
  1: 1
-> x %>% st_set_precision(100) %>% st_intersects(y)
+> x |> st_set_precision(100) |> st_intersects(y)
 Sparse geometry binary predicate list of length 1, where the predicate
 was `intersects'
  1: 1
-> x %>% st_set_precision(10) %>% st_intersects(y)
+> x |> st_set_precision(10) |> st_intersects(y)
 Sparse geometry binary predicate list of length 1, where the predicate
 was `intersects'
  1: 1
@@ -678,4 +678,4 @@ CRS:           NA
 > 
 > proc.time()
    user  system elapsed 
-  14.53    0.54   15.06 
+ 11.306   1.440  11.246 

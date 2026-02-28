@@ -36,11 +36,11 @@ prints the first record.
 Many of the tidyverse/dplyr verbs have methods for `sf` objects. This means that if both `sf` and `dplyr` are loaded, manipulations such as selecting a single attribute will return an `sf` object:
 ```{r}
 library(dplyr)
-nc %>% select(NWBIR74) %>% head(2)
+nc |> select(NWBIR74) |> head(2)
 ```
 which implies that the geometry is sticky, and gets added automatically. If we want to drop geometry, we can coerce to `data.frame` first, this drops geometry list-columns:
 ```{r}
-nc %>% as.data.frame %>% select(NWBIR74) %>% head(2)
+nc |> as.data.frame() |> select(NWBIR74) |> head(2)
 ```
 
 ## Subsetting feature sets
@@ -67,7 +67,7 @@ nc[Ashe, op = st_touches]
 ```
 Using `dplyr`, we can do the same by calling the predicate directly:
 ```{r}
-nc %>% filter(lengths(st_touches(., Ashe)) > 0)
+nc |> filter(lengths(st_touches(nc, Ashe)) > 0)
 ```
 
 ## Aggregating or summarizing feature sets
@@ -75,7 +75,7 @@ nc %>% filter(lengths(st_touches(., Ashe)) > 0)
 Suppose we want to compare the 1974 fraction of SID (sudden infant death) of the counties that intersect with `Ashe` to the remaining ones. We can do this by:
 ```{r}
 a <- aggregate(nc[, c("SID74", "BIR74")], list(Ashe_nb = lengths(st_intersects(nc, Ashe)) > 0), sum)
-(a <- a %>% mutate(frac74 = SID74 / BIR74) %>% select(frac74))
+a <- a |> mutate(frac74 = SID74 / BIR74) |> select(frac74)
 plot(a[2], col = c(grey(.8), grey(.5)))
 plot(st_geometry(Ashe), border = '#ff8888', add = TRUE, lwd = 2)
 ```

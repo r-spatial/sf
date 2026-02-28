@@ -243,10 +243,10 @@ st_as_binary = function(x, ...) UseMethod("st_as_binary")
 #' @export
 #' @examples
 #' # examples of setting precision:
-#' st_point(c(1/3, 1/6)) %>% st_sfc(precision = 1000) %>% st_as_binary %>% st_as_sfc
-#' st_point(c(1/3, 1/6)) %>% st_sfc(precision =  100) %>% st_as_binary %>% st_as_sfc
-#' st_point(1e6 * c(1/3, 1/6)) %>% st_sfc(precision = 0.01) %>% st_as_binary %>% st_as_sfc
-#' st_point(1e6 * c(1/3, 1/6)) %>% st_sfc(precision = 0.001) %>% st_as_binary %>% st_as_sfc
+#' st_point(c(1/3, 1/6)) |> st_sfc(precision = 1000) |> st_as_binary() |> st_as_sfc()
+#' st_point(c(1/3, 1/6)) |> st_sfc(precision =  100) |> st_as_binary() |> st_as_sfc()
+#' st_point(1e6 * c(1/3, 1/6)) |> st_sfc(precision = 0.01) |> st_as_binary() |> st_as_sfc()
+#' st_point(1e6 * c(1/3, 1/6)) |> st_sfc(precision = 0.001) |> st_as_binary() |> st_as_sfc()
 st_as_binary.sfc = function(x, ..., EWKB = FALSE, endian = .Platform$endian, pureR = FALSE,
 		precision = attr(x, "precision"), hex = FALSE) {
 	stopifnot(endian %in% c("big", "little"))

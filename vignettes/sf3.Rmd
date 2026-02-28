@@ -43,13 +43,13 @@ Examples of the first three types are:
 ```{r}
 library(sf)
 suppressPackageStartupMessages(library(dplyr))
-st_point(c(1,1)) %>% st_cast("MULTIPOINT")
-st_multipoint(rbind(c(1,1))) %>% st_cast("POINT")
-st_multipoint(rbind(c(1,1),c(2,2))) %>% st_cast("POINT")
+st_point(c(1,1)) |> st_cast("MULTIPOINT")
+st_multipoint(rbind(c(1,1))) |> st_cast("POINT")
+st_multipoint(rbind(c(1,1),c(2,2))) |> st_cast("POINT")
 ```
 Examples of the fourth type are:
 ```{r}
-st_geometrycollection(list(st_point(c(1,1)))) %>% st_cast("POINT")
+st_geometrycollection(list(st_point(c(1,1)))) |> st_cast("POINT")
 ```
 
 ### For collections of geometry (sfc) and simple feature collections (sf)
@@ -144,7 +144,7 @@ all.equal(s1, s2)
 ```
 An alternative, more pipe-friendly version of `st_crs<-` is 
 ```{r}
-s1 %>% st_set_crs(4326)
+s1 |> st_set_crs(4326)
 ```
 
 ### Coordinate reference system transformations
@@ -154,18 +154,18 @@ value into another non-missing value, the CRS is is changed without
 modifying any coordinates, but a warning is issued that this
 did not reproject values:
 ```{r}
-s3 <- s1 %>% st_set_crs(4326) %>% st_set_crs(3857)
+s3 <- s1 |> st_set_crs(4326) |> st_set_crs(3857)
 ```
 A cleaner way to do this that better expresses intention and does
 not generate this warning is to first wipe the CRS by assigning it 
 a missing value, and then set it to the intended value.
 ```{r}
-s3 <- s1  %>% st_set_crs(NA) %>% st_set_crs(3857)
+s3 <- s1  |> st_set_crs(NA) |> st_set_crs(3857)
 ```
 To carry out a coordinate conversion or transformation, we use
 `st_transform()`
 ```{r}
-s3 <- s1 %>% st_transform(3857)
+s3 <- s1 |> st_transform(3857)
 s3
 ```
 for which we see that coordinates are actually modified (projected).

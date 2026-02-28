@@ -3,8 +3,8 @@ nc <- st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 
 test_that("select works", {
   skip_if_not_installed("dplyr")
-  expect_s3_class(nc %>% select("AREA", attr(., "sf_column")), "sf")
-  expect_s3_class(nc %>% select(AREA), "sf")
+  expect_s3_class(nc |> select("AREA", attr(nc, "sf_column")), "sf")
+  expect_s3_class(nc |> select(AREA), "sf")
 })
 
 test_that("filter to sfc works", {
@@ -14,9 +14,9 @@ test_that("filter to sfc works", {
                                 st_point(),
                                 st_linestring()))
   d = st_sf(tbl)
-  expect_identical(d %>% filter(!st_is_empty(geometry)) %>% st_cast(),
+  expect_identical(d |> filter(!st_is_empty(geometry)) |> st_cast(),
                    d[1, ])
-  expect_identical(d %>% filter(st_is(geometry, "POINT")) %>% st_cast(),
+  expect_identical(d |> filter(st_is(geometry, "POINT")) |> st_cast(),
                    d[1:2, ])
 })
 
@@ -24,8 +24,8 @@ suppressMessages(require(tidyr, quietly = TRUE))
 test_that("separate and unite work", {
   skip_if_not_installed("dplyr")
   skip_if_not_installed("tidyr")
-  expect_s3_class(nc %>% separate(CNTY_ID, c("a", "b"), sep = 2), "sf")
-  expect_s3_class(nc %>% separate(CNTY_ID, c("a", "b"), sep = 2) %>%
+  expect_s3_class(nc |> separate(CNTY_ID, c("a", "b"), sep = 2), "sf")
+  expect_s3_class(nc |> separate(CNTY_ID, c("a", "b"), sep = 2) |>
 	unite(CNTY_ID_NEW, c("a", "b"), sep = ""), "sf")
 })
 
@@ -40,8 +40,8 @@ test_that("separate_rows work", {
                       st_point(c(3, 3))),
     stringsAsFactors = FALSE))
   expect_s3_class(separate_rows(d, y, convert = TRUE), "sf")
-  expect_identical(d %>%
-      separate_rows(y, convert = TRUE) %>%
+  expect_identical(d |>
+      separate_rows(y, convert = TRUE) |>
       st_geometry(),
     st_sfc(st_point(c(1, 1)),
            st_point(c(2, 2)),
@@ -55,7 +55,7 @@ test_that("group/ungroup works", {
  skip_if_not_installed("dplyr")
  tbl = tibble(a = c(1,1,2,2), g = st_sfc(st_point(0:1), st_point(1:2), st_point(2:3), st_point(3:4)))
  d = st_sf(tbl)
- e <- d %>% group_by(a) %>% ungroup()
+ e <- d |> group_by(a) |> ungroup()
  expect_equal(as.data.frame(d), as.data.frame(e))
 })
 
@@ -80,11 +80,11 @@ test_that("nest() works", {
 	skip_if_not_installed("tidyr")
 	tbl = tibble(a = c(1,1,2,2), g = st_sfc(st_point(0:1), st_point(1:2), st_point(2:3), st_point(3:4)))
 	d = st_sf(tbl)
-	out = d %>% group_by(a) %>% nest()
+	out = d |> group_by(a) |> nest()
 
 	exp_data = list(d[1:2, "g"], d[3:4, "g"])
 
-	exp = tibble(a = c(1, 2), data = exp_data) %>% group_by(a)
+	exp = tibble(a = c(1, 2), data = exp_data) |> group_by(a)
 	expect_identical(out, exp)
 })
 
@@ -100,12 +100,12 @@ test_that("unnest works", {
   skip_if_not_installed("dplyr")
   skip_if_not_installed("tidyr")
   skip_if_not(utils::packageVersion("tidyr") > "0.7.2")
-  nc = read_sf(system.file("shape/nc.shp", package = "sf")) %>%
-    slice(1:2) %>%
+  nc = read_sf(system.file("shape/nc.shp", package = "sf")) |>
+    slice(1:2) |>
     transmute(y = list(c("a"), c("b", "c")))
   unnest_explicit = unnest(nc, y)
   # The second row is duplicated because the "b" and "c" become separate rows
-  expected = nc[c(1,2,2), ] %>% mutate(y = c("a", "b", "c"))
+  expected = nc[c(1,2,2), ] |> mutate(y = c("a", "b", "c"))
   # Would use expect_equal, but doesn't work with geometry cols
   expect_identical(unnest_explicit, expected)
 })
@@ -251,9 +251,9 @@ test_that("`rename_with()` correctly changes the sf_column attribute (#2215)", {
 	sf_column = attr(nc, "sf_column")
 	fn = function(x) paste0(x, "_renamed")
 	
-	expect_equal(nc %>% rename_with(fn) %>% attr("sf_column"), fn(sf_column))
-	expect_equal(nc %>% rename_with(fn, "NAME") %>% attr("sf_column"), sf_column)
-	expect_equal(nc %>% rename_with(fn, "geometry") %>% attr("sf_column"), fn(sf_column))
+	expect_equal(nc |> rename_with(fn) |> attr("sf_column"), fn(sf_column))
+	expect_equal(nc |> rename_with(fn, "NAME") |> attr("sf_column"), sf_column)
+	expect_equal(nc |> rename_with(fn, "geometry") |> attr("sf_column"), fn(sf_column))
 })
 
 test_that("`rename_with()` works for unquoted `.cols` (#2220)", {
@@ -262,8 +262,8 @@ test_that("`rename_with()` works for unquoted `.cols` (#2220)", {
 	sf_column = attr(nc, "sf_column")
 	fn = function(x) paste0(x, "_renamed")
 	
-	expect_identical(nc %>% rename_with(fn, c(FIPS, FIPSNO)), 
-					 nc %>% rename_with(fn, c("FIPS", "FIPSNO")))
+	expect_identical(nc |> rename_with(fn, c(FIPS, FIPSNO)), 
+					 nc |> rename_with(fn, c("FIPS", "FIPSNO")))
 })
 
 test_that("`select()` and `transmute()` observe back-stickiness of geometry column (#1425)", {
@@ -281,28 +281,28 @@ test_that("rowwise_df class is retained on row slice", {
 
 test_that("grouped_df class is retained on row slice", {
 	skip_if_not_installed("dplyr")
-	expect_s3_class(nc %>% group_by(PERIMETER > 2) %>% slice(1), "grouped_df")
+	expect_s3_class(nc |> group_by(PERIMETER > 2) |> slice(1), "grouped_df")
 })
 
 test_that("rowwise_df class is retained on filtered rows", {
 	skip_if_not_installed("dplyr")
-	expect_s3_class(nc %>% rowwise() %>% filter(AREA > .1), "rowwise_df")
+	expect_s3_class(nc |> rowwise() |> filter(AREA > .1), "rowwise_df")
 })
 
 test_that("`group_split.sf()` ignores `.keep` for rowwise_df class", {
 	skip_if_not_installed("dplyr")
-	expect_no_warning(nc %>% rowwise() %>% group_split())
+	expect_no_warning(nc |> rowwise() |> group_split())
 })
 
 test_that("group_split.sf()` does not ignore `.keep` for grouped_df class", {
 	skip_if_not_installed("dplyr")
 
-	nc_kept <- nc %>%
-		group_by(CNTY_ID) %>%
+	nc_kept <- nc |>
+		group_by(CNTY_ID) |>
 		group_split(.keep = TRUE)
 
-	nc_notkept <- nc %>%
-		group_by(CNTY_ID) %>%
+	nc_notkept <- nc |>
+		group_by(CNTY_ID) |>
 		group_split(.keep = FALSE)
 
 	expect_identical(names(nc_kept[[1]]), names(nc))
@@ -314,25 +314,25 @@ test_that("`pivot_wider()` works", {
 	skip_if_not_installed("tidyr")
 
 	# Work for unquoted arguments (#2220)
-	expect_identical(nc %>%
+	expect_identical(nc |>
 					 	tidyr::pivot_wider(names_from = NAME,
 					 					   values_from = AREA),
-					 nc %>%
+					 nc |>
 					 	tidyr::pivot_wider(names_from = "NAME",
 					 					   values_from = "AREA"))
 	
 	# Pivot data from long sf to wide sf
-	nc2 = nc %>%
+	nc2 = nc |>
 		mutate(name1 = "value_1",
 			   name2 = "value_2",
-			   name3 = "value_3") %>%
-		as_tibble() %>%
+			   name3 = "value_3") |>
+		as_tibble() |>
 		st_as_sf() 
-	nc2_longer = nc2 %>%
+	nc2_longer = nc2 |>
 		tidyr::pivot_longer(c(name1, name2, name3),
 							names_to = "foo",
 							values_to = "bar")
-	nc2_wider = nc2_longer %>%
+	nc2_wider = nc2_longer |>
 		tidyr::pivot_wider(names_from = foo,
 						   values_from = bar)
 	expect_identical(st_geometry(nc2), st_geometry(nc2_wider))

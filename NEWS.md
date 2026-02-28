@@ -1,3 +1,7 @@
+# version 1.1-1
+
+* replace magrittr pipe `%>%` with base pipe `|>`, hence require R >= 4.1.0
+
 # version 1.1-0
 
 * `gdal_compressors()` queries GDAL compressor and decompressor capabilities

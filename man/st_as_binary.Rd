@@ -55,8 +55,8 @@ For the precision model used, see also \url{https://locationtech.github.io/jts/j
 }
 \examples{
 # examples of setting precision:
-st_point(c(1/3, 1/6)) \%>\% st_sfc(precision = 1000) \%>\% st_as_binary \%>\% st_as_sfc
-st_point(c(1/3, 1/6)) \%>\% st_sfc(precision =  100) \%>\% st_as_binary \%>\% st_as_sfc
-st_point(1e6 * c(1/3, 1/6)) \%>\% st_sfc(precision = 0.01) \%>\% st_as_binary \%>\% st_as_sfc
-st_point(1e6 * c(1/3, 1/6)) \%>\% st_sfc(precision = 0.001) \%>\% st_as_binary \%>\% st_as_sfc
+st_point(c(1/3, 1/6)) |> st_sfc(precision = 1000) |> st_as_binary() |> st_as_sfc()
+st_point(c(1/3, 1/6)) |> st_sfc(precision =  100) |> st_as_binary() |> st_as_sfc()
+st_point(1e6 * c(1/3, 1/6)) |> st_sfc(precision = 0.01) |> st_as_binary() |> st_as_sfc()
+st_point(1e6 * c(1/3, 1/6)) |> st_sfc(precision = 0.001) |> st_as_binary() |> st_as_sfc()
 }

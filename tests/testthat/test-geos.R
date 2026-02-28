@@ -64,8 +64,8 @@ test_that("geos ops give warnings and errors on longlat", {
 
 test_that("st_area() works on GEOMETRY in longlat (#131)", {
   skip_if_not_installed("lwgeom")
-  single <- list(rbind(c(0,0), c(1,0), c(1, 1), c(0,1), c(0,0))) %>% st_polygon()
-  multi <- list(single + 2, single + 4) %>% st_multipolygon()
+  single <- list(rbind(c(0,0), c(1,0), c(1, 1), c(0,1), c(0,0))) |> st_polygon()
+  multi <- list(single + 2, single + 4) |> st_multipolygon()
 
   w <- st_sfc(single + 0.1, multi)
   expect_equal(st_area(w), 1:2)

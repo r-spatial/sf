@@ -11,10 +11,6 @@
 #' @useDynLib sf, .registration=TRUE
 NULL
 
-#' @importFrom magrittr %>%
-#' @export
-magrittr::`%>%`
-
 setOldClass("sf")
 setOldClass(c("sfc_POINT", "sfc"))
 setOldClass(c("sfc_MULTIPOINT", "sfc"))

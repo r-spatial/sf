@@ -103,7 +103,7 @@ test_that("can write to other schema", {
 	skip_if_not(can_con(pg), "could not connect to postgis database")
 	try(DBI::dbSendQuery(pg, "CREATE SCHEMA sf_test__;"), silent = TRUE)
 	q <- "SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'sf_test__';"
-	suppressWarnings(could_schema <- DBI::dbGetQuery(pg, q) %>% nrow() > 0)
+	suppressWarnings(could_schema <- DBI::dbGetQuery(pg, q) |> nrow() > 0)
 
 	skip_if_not(could_schema, "Could not create schema (might need to run 'GRANT CREATE ON DATABASE postgis TO <user>')")
 	expect_error(st_write(pts, pg, Id(schema = "public", table = "sf_meuse__")), "exists")
@@ -126,7 +126,7 @@ test_that("support for capital names (#571)", {
 	expect_true(DBI::dbRemoveTable(pg, "Meuse_tbl"))
 	try(DBI::dbSendQuery(pg, "CREATE SCHEMA \"CAP__\";"), silent = TRUE)
 	q <- "SELECT schema_name FROM information_schema.schemata WHERE schema_name = 'CAP__';"
-	suppressWarnings(could_schema <- DBI::dbGetQuery(pg, q) %>% nrow() > 0)
+	suppressWarnings(could_schema <- DBI::dbGetQuery(pg, q) |> nrow() > 0)
 	skip_if_not(could_schema, "Could not create schema (might need to run 'GRANT CREATE ON DATABASE postgis TO <user>')")
 	expect_silent(st_write(pts, pg, Id(schema = "CAP__", table = "Meuse_tbl")))
 	expect_true(DBI::dbRemoveTable(pg, Id(schema = "CAP__", table = "Meuse_tbl")))

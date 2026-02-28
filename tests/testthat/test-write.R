@@ -2,7 +2,7 @@ if (require(sp, quietly = TRUE)) {
 data(meuse, package = "sp")
 meuse <- st_as_sf(meuse, coords = c("x", "y"), crs = 28992)
 drvs <- st_drivers()$name[sapply(st_drivers()$name,
-	function(x) is_driver_can(x, operation = "write"))] %>% as.character()
+	function(x) is_driver_can(x, operation = "write"))] |> as.character()
 }
 
 test_that("sf can write to all writable formats", {

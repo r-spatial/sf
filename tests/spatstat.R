@@ -11,7 +11,7 @@ marks(g) = NULL
 st_as_sf(g)
 
 # multipolygon: https://github.com/r-spatial/sf/issues/1161
-window = read_sf(system.file("shape/nc.shp", package = "sf")) %>%
+window = read_sf(system.file("shape/nc.shp", package = "sf")) |>
   st_transform(32119)
 
 win = spatstat.geom::as.owin(window)

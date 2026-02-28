@@ -1,7 +1,7 @@
 
-R Under development (unstable) (2025-11-05 r88988 ucrt) -- "Unsuffered Consequences"
+R version 4.5.2 (2025-10-31) -- "[Not] Part in a Rumble"
 Copyright (C) 2025 The R Foundation for Statistical Computing
-Platform: x86_64-w64-mingw32/x64
+Platform: x86_64-pc-linux-gnu
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -89,8 +89,8 @@ Type 'q()' to quit R.
 + plot(nc, col="lightgrey") 
 + plot(st_centroid(nc), add = TRUE, col = 1)
 + if ("geometry" %in% names(nc)) {
-+  nc %>% 
-+   select(geometry) %>% 
++  nc |> 
++   select(geometry) |> 
 +   plot()
 + }
 + 
@@ -152,4 +152,4 @@ There were 13 warnings (use warnings() to see them)
 > 
 > proc.time()
    user  system elapsed 
-   4.14    0.50    4.62 
+  3.065   1.396   3.020 

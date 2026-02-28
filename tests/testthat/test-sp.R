@@ -58,8 +58,8 @@ test_that("we can convert SpatialPolygons objects without SF comments to sfc and
 
 test_that("as() can convert GEOMETRY to Spatial (#131)", {
   skip_if_not_installed("sp")
-  single <- list(rbind(c(0,0), c(1,0), c(1, 1), c(0,1), c(0,0))) %>% st_polygon()
-  multi <- list(single + 2, single + 4) %>% st_multipolygon()
+  single <- list(rbind(c(0,0), c(1,0), c(1, 1), c(0,1), c(0,0))) |> st_polygon()
+  multi <- list(single + 2, single + 4) |> st_multipolygon()
 
   # polygons
   w <- st_sfc(single, multi)

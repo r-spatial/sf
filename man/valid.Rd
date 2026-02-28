@@ -71,5 +71,5 @@ x = st_sfc(st_polygon(list(rbind(c(0,0),c(0.5,0),c(0.5,0.5),c(0.5,0),c(1,0),c(1,
 suppressWarnings(st_is_valid(x))
 y = st_make_valid(x)
 st_is_valid(y)
-y \%>\% st_cast()
+y |> st_cast()
 }
