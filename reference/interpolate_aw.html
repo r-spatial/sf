@@ -69,15 +69,15 @@
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>object of class <code>sf</code>, for which we want to aggregate attributes</p></dd>
+<dd><p>object of class <code>sf</code> with source geometries, from which we want to aggregate or disaggregate attributes to geometries in <code>to</code></p></dd>
 
 
 <dt id="arg-to">to<a class="anchor" aria-label="anchor" href="#arg-to"></a></dt>
-<dd><p>object of class <code>sf</code> or <code>sfc</code>, with the target geometries</p></dd>
+<dd><p>object of class <code>sf</code> or <code>sfc</code>, with the target geometries; see Details</p></dd>
 
 
 <dt id="arg-extensive">extensive<a class="anchor" aria-label="anchor" href="#arg-extensive"></a></dt>
-<dd><p>logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population) and the sum is preserved, otherwise, spatially intensive (like population density) and the mean is preserved.</p></dd>
+<dd><p>logical; if <code>TRUE</code>, the attribute variables of <code>x</code> are spatially extensive (like population count) and the sum is preserved; if <code>FALSE</code> spatially intensive (like population density) and the mean is preserved.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>

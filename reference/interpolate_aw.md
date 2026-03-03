@@ -24,16 +24,17 @@ st_interpolate_aw(
 
 - x:
 
-  object of class `sf`, for which we want to aggregate attributes
+  object of class `sf` with source geometries, from which we want to
+  aggregate or disaggregate attributes to geometries in `to`
 
 - to:
 
-  object of class `sf` or `sfc`, with the target geometries
+  object of class `sf` or `sfc`, with the target geometries; see Details
 
 - extensive:
 
-  logical; if TRUE, the attribute variables are assumed to be spatially
-  extensive (like population) and the sum is preserved, otherwise,
+  logical; if `TRUE`, the attribute variables of `x` are spatially
+  extensive (like population count) and the sum is preserved; if `FALSE`
   spatially intensive (like population density) and the mean is
   preserved.
 
