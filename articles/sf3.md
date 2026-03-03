@@ -35,20 +35,22 @@ Examples of the first three types are:
 library(sf)
 ## Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
 suppressPackageStartupMessages(library(dplyr))
-st_point(c(1,1)) %>% st_cast("MULTIPOINT")
+st_point(c(1,1)) |> st_cast("MULTIPOINT")
 ## MULTIPOINT ((1 1))
-st_multipoint(rbind(c(1,1))) %>% st_cast("POINT")
-## Warning in st_cast.MULTIPOINT(., "POINT"): point from first coordinate only
+st_multipoint(rbind(c(1,1))) |> st_cast("POINT")
+## Warning in st_cast.MULTIPOINT(st_multipoint(rbind(c(1, 1))), "POINT"): point
+## from first coordinate only
 ## POINT (1 1)
-st_multipoint(rbind(c(1,1),c(2,2))) %>% st_cast("POINT")
-## Warning in st_cast.MULTIPOINT(., "POINT"): point from first coordinate only
+st_multipoint(rbind(c(1,1),c(2,2))) |> st_cast("POINT")
+## Warning in st_cast.MULTIPOINT(st_multipoint(rbind(c(1, 1), c(2, 2))), "POINT"):
+## point from first coordinate only
 ## POINT (1 1)
 ```
 
 Examples of the fourth type are:
 
 ``` r
-st_geometrycollection(list(st_point(c(1,1)))) %>% st_cast("POINT")
+st_geometrycollection(list(st_point(c(1,1)))) |> st_cast("POINT")
 ## POINT (1 1)
 ```
 
@@ -262,7 +264,7 @@ all.equal(s1, s2)
 An alternative, more pipe-friendly version of `st_crs<-` is
 
 ``` r
-s1 %>% st_set_crs(4326)
+s1 |> st_set_crs(4326)
 ## Simple feature collection with 2 features and 1 field
 ## Geometry type: POINT
 ## Dimension:     XY
@@ -281,7 +283,7 @@ any coordinates, but a warning is issued that this did not reproject
 values:
 
 ``` r
-s3 <- s1 %>% st_set_crs(4326) %>% st_set_crs(3857)
+s3 <- s1 |> st_set_crs(4326) |> st_set_crs(3857)
 ## Warning: st_crs<- : replacing crs does not reproject data; use st_transform for
 ## that
 ```
@@ -291,14 +293,14 @@ generate this warning is to first wipe the CRS by assigning it a missing
 value, and then set it to the intended value.
 
 ``` r
-s3 <- s1  %>% st_set_crs(NA) %>% st_set_crs(3857)
+s3 <- s1  |> st_set_crs(NA) |> st_set_crs(3857)
 ```
 
 To carry out a coordinate conversion or transformation, we use
 [`st_transform()`](https://r-spatial.github.io/sf/reference/st_transform.md)
 
 ``` r
-s3 <- s1 %>% st_transform(3857)
+s3 <- s1 |> st_transform(3857)
 s3
 ## Simple feature collection with 2 features and 1 field
 ## Geometry type: POINT

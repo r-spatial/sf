@@ -145,7 +145,8 @@ st_join(a, b, left = FALSE)
 #> 2.1   2  13 POINT (2 2)
 #> 3     3  14 POINT (3 3)
 # two ways to aggregate y's attribute values outcome over x's geometries:
-st_join(a, b) %>% aggregate(list(.$a.x), mean)
+j = st_join(a, b)
+aggregate(j, list(j$a.x), mean)
 #> Simple feature collection with 3 features and 3 fields
 #> Attribute-geometry relationships: aggregate (2), identity (1)
 #> Geometry type: POINT
@@ -157,7 +158,7 @@ st_join(a, b) %>% aggregate(list(.$a.x), mean)
 #> 2       2   2 12.5 POINT (2 2)
 #> 3       3   3 14.0 POINT (3 3)
 if (require(dplyr, quietly = TRUE)) {
- st_join(a, b) %>% group_by(a.x) %>% summarise(mean(a.y))
+ st_join(a, b) |> group_by(a.x) |> summarise(mean(a.y))
 }
 #> Simple feature collection with 3 features and 2 fields
 #> Geometry type: POINT

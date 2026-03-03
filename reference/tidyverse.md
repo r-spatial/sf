@@ -399,13 +399,13 @@ columns that were nested.
 ``` r
 if (require(dplyr, quietly = TRUE)) {
  nc = read_sf(system.file("shape/nc.shp", package="sf"))
- nc %>% filter(AREA > .1) %>% plot()
+ nc |> filter(AREA > .1) |> plot()
  # plot 10 smallest counties in grey:
- st_geometry(nc) %>% plot()
- nc %>% select(AREA) %>% arrange(AREA) %>% slice(1:10) %>% plot(add = TRUE, col = 'grey')
+ st_geometry(nc) |> plot()
+ nc |> select(AREA) |> arrange(AREA) |> slice(1:10) |> plot(add = TRUE, col = 'grey')
  title("the ten counties with smallest area")
- nc2 <- nc %>% mutate(area10 = AREA/10)
- nc %>% slice(1:2)
+ nc2 <- nc |> mutate(area10 = AREA/10)
+ nc |> slice(1:2)
 }
 #> Warning: plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all
 
@@ -424,32 +424,32 @@ if (require(dplyr, quietly = TRUE)) {
 #> #   geometry <MULTIPOLYGON [°]>
 # plot 10 smallest counties in grey:
 if (require(dplyr, quietly = TRUE)) {
- st_geometry(nc) %>% plot()
- nc %>% select(AREA) %>% arrange(AREA) %>% slice(1:10) %>% plot(add = TRUE, col = 'grey')
+ st_geometry(nc) |> plot()
+ nc |> select(AREA) |> arrange(AREA) |> slice(1:10) |> plot(add = TRUE, col = 'grey')
  title("the ten counties with smallest area")
 }
 if (require(dplyr, quietly = TRUE)) {
  nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
- nc %>% group_by(area_cl) %>% class()
+ nc |> group_by(area_cl) |> class()
 }
 #> [1] "sf"         "grouped_df" "tbl_df"     "tbl"        "data.frame"
 if (require(dplyr, quietly = TRUE)) {
- nc2 <- nc %>% mutate(area10 = AREA/10)
+ nc2 <- nc |> mutate(area10 = AREA/10)
 }
 if (require(dplyr, quietly = TRUE)) {
- nc %>% transmute(AREA = AREA/10) %>% class()
-}
-#> [1] "sf"         "tbl_df"     "tbl"        "data.frame"
-if (require(dplyr, quietly = TRUE)) {
- nc %>% select(SID74, SID79) %>% names()
- nc %>% select(SID74, SID79) %>% class()
+ nc |> transmute(AREA = AREA/10) |> class()
 }
 #> [1] "sf"         "tbl_df"     "tbl"        "data.frame"
 if (require(dplyr, quietly = TRUE)) {
- nc2 <- nc %>% rename(area = AREA)
+ nc |> select(SID74, SID79) |> names()
+ nc |> select(SID74, SID79) |> class()
+}
+#> [1] "sf"         "tbl_df"     "tbl"        "data.frame"
+if (require(dplyr, quietly = TRUE)) {
+ nc2 <- nc |> rename(area = AREA)
 }
 if (require(dplyr, quietly = TRUE)) {
- nc %>% slice(1:2)
+ nc |> slice(1:2)
 }
 #> Simple feature collection with 2 features and 15 fields
 #> Geometry type: MULTIPOLYGON
@@ -465,20 +465,20 @@ if (require(dplyr, quietly = TRUE)) {
 #> #   geometry <MULTIPOLYGON [°]>, area_cl <fct>
 if (require(dplyr, quietly = TRUE)) {
  nc$area_cl = cut(nc$AREA, c(0, .1, .12, .15, .25))
- nc.g <- nc %>% group_by(area_cl)
- nc.g %>% summarise(mean(AREA))
- nc.g %>% summarise(mean(AREA)) %>% plot(col = grey(3:6 / 7))
- nc %>% as.data.frame %>% summarise(mean(AREA))
+ nc.g <- nc |> group_by(area_cl)
+ nc.g |> summarise(mean(AREA))
+ nc.g |> summarise(mean(AREA)) |> plot(col = grey(3:6 / 7))
+ nc |> as.data.frame() |> summarise(mean(AREA))
 }
 
 #>   mean(AREA)
 #> 1    0.12626
 if (require(dplyr, quietly = TRUE)) {
- nc[c(1:100, 1:10), ] %>% distinct() %>% nrow()
+ nc[c(1:100, 1:10), ] |> distinct() |> nrow()
 }
 #> [1] 100
 if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE) && "geometry" %in% names(nc)) {
- nc %>% select(SID74, SID79) %>% gather("VAR", "SID", -geometry) %>% summary()
+ nc |> select(SID74, SID79) |> gather("VAR", "SID", -geometry) |> summary()
 }
 #>           geometry       VAR                 SID        
 #>  MULTIPOLYGON :200   Length:200         Min.   : 0.000  
@@ -489,9 +489,9 @@ if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE) && "geometr
 #>                                         Max.   :57.000  
 if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE) && "geometry" %in% names(nc)) {
  nc$row = 1:100 # needed for spread to work
- nc %>% select(SID74, SID79, geometry, row) %>%
-  gather("VAR", "SID", -geometry, -row) %>%
-  spread(VAR, SID) %>% head()
+ nc |> select(SID74, SID79, geometry, row) |>
+  gather("VAR", "SID", -geometry, -row) |>
+  spread(VAR, SID) |> head()
 }
 #> Simple feature collection with 6 features and 3 fields
 #> Geometry type: MULTIPOLYGON
@@ -509,8 +509,8 @@ if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE) && "geometr
 #> 6 (((-76.74506 36.23392, -76.98069 36.23024, -76.99475 36.235…     6     7     5
 if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE)) {
  storms.sf = st_as_sf(storms, coords = c("long", "lat"), crs = 4326)
- x <- storms.sf %>% group_by(name, year) %>% nest
- trs = lapply(x$data, function(tr) st_cast(st_combine(tr), "LINESTRING")[[1]]) %>%
+ x <- storms.sf |> group_by(name, year) |> nest()
+ trs = lapply(x$data, function(tr) st_cast(st_combine(tr), "LINESTRING")[[1]]) |>
     st_sfc(crs = 4326)
  trs.sf = st_sf(x[,1:2], trs)
  plot(trs.sf["year"], axes = TRUE)

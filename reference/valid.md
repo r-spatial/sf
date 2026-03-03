@@ -124,7 +124,7 @@ suppressWarnings(st_is_valid(x))
 y = st_make_valid(x)
 st_is_valid(y)
 #> [1] TRUE
-y %>% st_cast()
+y |> st_cast()
 #> Geometry set for 1 feature 
 #> Geometry type: POLYGON
 #> Dimension:     XY

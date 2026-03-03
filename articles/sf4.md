@@ -54,7 +54,7 @@ library(dplyr)
 ## The following objects are masked from 'package:base':
 ## 
 ##     intersect, setdiff, setequal, union
-nc %>% select(NWBIR74) %>% head(2)
+nc |> select(NWBIR74) |> head(2)
 ## Simple feature collection with 2 features and 1 field
 ## Geometry type: MULTIPOLYGON
 ## Dimension:     XY
@@ -70,7 +70,7 @@ If we want to drop geometry, we can coerce to `data.frame` first, this
 drops geometry list-columns:
 
 ``` r
-nc %>% as.data.frame %>% select(NWBIR74) %>% head(2)
+nc |> as.data.frame() |> select(NWBIR74) |> head(2)
 ##   NWBIR74
 ## 1      10
 ## 2      10
@@ -152,7 +152,7 @@ nc[Ashe, op = st_touches]
 Using `dplyr`, we can do the same by calling the predicate directly:
 
 ``` r
-nc %>% filter(lengths(st_touches(., Ashe)) > 0)
+nc |> filter(lengths(st_touches(nc, Ashe)) > 0)
 ## Simple feature collection with 3 features and 14 fields
 ## Geometry type: MULTIPOLYGON
 ## Dimension:     XY
@@ -176,15 +176,7 @@ We can do this by:
 
 ``` r
 a <- aggregate(nc[, c("SID74", "BIR74")], list(Ashe_nb = lengths(st_intersects(nc, Ashe)) > 0), sum)
-(a <- a %>% mutate(frac74 = SID74 / BIR74) %>% select(frac74))
-## Simple feature collection with 2 features and 1 field
-## Geometry type: GEOMETRY
-## Dimension:     XY
-## Bounding box:  xmin: 406265 ymin: 48359.7 xmax: 3052877 ymax: 1044143
-## Projected CRS: NAD83 / North Carolina (ftUS)
-##         frac74                       geometry
-## 1 0.0020406588 MULTIPOLYGON (((454155.5 58...
-## 2 0.0009922276 POLYGON ((1372051 837036.9,...
+a <- a |> mutate(frac74 = SID74 / BIR74) |> select(frac74)
 plot(a[2], col = c(grey(.8), grey(.5)))
 plot(st_geometry(Ashe), border = '#ff8888', add = TRUE, lwd = 2)
 ```

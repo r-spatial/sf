@@ -1,5 +1,10 @@
 # Changelog
 
+## version 1.1-1
+
+- replace magrittr pipe `%>%` with base pipe `|>`, and hence require R
+  \>= 4.1.0
+
 ## version 1.1-0
 
 CRAN release: 2026-02-24

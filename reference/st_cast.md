@@ -256,7 +256,7 @@ st_cast(d, "POINT") # will not convert the entire MULTIPOINT, and warns
 #>          geom
 #> 1 POINT (0 1)
 #> 2 POINT (1 2)
-st_cast(d, "MULTIPOINT") %>% st_cast("POINT")
+st_cast(d, "MULTIPOINT") |> st_cast("POINT")
 #> Simple feature collection with 3 features and 0 fields
 #> Geometry type: POINT
 #> Dimension:     XY

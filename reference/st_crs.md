@@ -176,7 +176,7 @@ sfc
 #> POINT (0 0)
 #> POINT (1 1)
 sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
-sfc %>% st_set_crs(4326) %>% st_transform(3857)
+sfc |> st_set_crs(4326) |> st_transform(3857)
 #> Geometry set for 2 features 
 #> Geometry type: POINT
 #> Dimension:     XY
