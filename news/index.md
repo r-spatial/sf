@@ -2,6 +2,13 @@
 
 ## version 1.1-1
 
+- add argument `include_non_intersected` to
+  [`st_interpolate_aw()`](https://r-spatial.github.io/sf/reference/interpolate_aw.md)
+
+- add argument `weights`, for dasymetric mapping, to
+  [`st_interpolate_aw()`](https://r-spatial.github.io/sf/reference/interpolate_aw.md)
+  (experimental)
+
 - replace magrittr pipe `%>%` with base pipe `|>`, and hence require R
   \>= 4.1.0
 

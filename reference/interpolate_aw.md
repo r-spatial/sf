@@ -8,7 +8,16 @@ Areal-weighted interpolation of polygon data
 st_interpolate_aw(x, to, extensive, ...)
 
 # S3 method for class 'sf'
-st_interpolate_aw(x, to, extensive, ..., keep_NA = FALSE, na.rm = FALSE)
+st_interpolate_aw(
+  x,
+  to,
+  extensive,
+  ...,
+  keep_NA = FALSE,
+  na.rm = FALSE,
+  include_non_intersected = FALSE,
+  weights = character(0)
+)
 ```
 
 ## Arguments
@@ -43,10 +52,23 @@ st_interpolate_aw(x, to, extensive, ..., keep_NA = FALSE, na.rm = FALSE)
   logical; if `TRUE` remove features with `NA` attributes from `x`
   before interpolating
 
+- include_non_intersected:
+
+  logical; for the case when `extensive=FALSE`, when set to `TRUE`
+  divide by the target areas (including non-intersected areas), when
+  `FALSE` divide by the sum of the source areas.
+
+- weights:
+
+  character; name of variable in `x` (and possibly `to`) with weights
+  for dasymetric mapping; if omitted, areas are used for weighting
+
 ## Details
 
 if `extensive` is `TRUE` and `na.rm` is set to `TRUE`, geometries with
-`NA` are effectively treated as having zero attribute values.
+`NA` attribute values are effectively treated as having zero attribute
+values. The `weights` column in `to` is required only when
+`extensive=FALSE` and `include_non_intersected=TRUE`
 
 ## Examples
 
