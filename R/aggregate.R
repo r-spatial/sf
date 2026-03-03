@@ -94,9 +94,9 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 #'
 #' Areal-weighted interpolation of polygon data
 #' @name interpolate_aw
-#' @param x object of class \code{sf}, for which we want to aggregate attributes
-#' @param to object of class \code{sf} or \code{sfc}, with the target geometries
-#' @param extensive logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population) and the sum is preserved, otherwise, spatially intensive (like population density) and the mean is preserved.
+#' @param x object of class `sf` with source geometries, from which we want to aggregate or disaggregate attributes to geometries in `to`
+#' @param to object of class `sf` or `sfc`, with the target geometries; see Details
+#' @param extensive logical; if `TRUE`, the attribute variables of `x` are spatially extensive (like population count) and the sum is preserved; if `FALSE` spatially intensive (like population density) and the mean is preserved.
 #' @param ... ignored
 #' @param keep_NA logical; if \code{TRUE}, return all features in \code{to}, if \code{FALSE} return only those with non-NA values (but with \code{row.names} the index corresponding to the feature in \code{to})
 #' @param na.rm logical; if `TRUE` remove features with `NA` attributes from `x` before interpolating
@@ -157,7 +157,7 @@ st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE, na.rm = 
 		st_geometry(i) = g
 	}
 
-	x_st = st_set_geometry(x, NULL)[idx[,1],, drop=FALSE]   # create st table, remove geom
+	x_st = st_set_geometry(i, NULL) # create st attribute table, remove geom
 	if (any(!sapply(x_st, is.numeric)))
 		stop("x contains non-numeric column(s)")
 	area_i = try(get_wts(i), silent = TRUE)

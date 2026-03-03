@@ -20,11 +20,11 @@ st_interpolate_aw(x, to, extensive, ...)
 )
 }
 \arguments{
-\item{x}{object of class \code{sf}, for which we want to aggregate attributes}
+\item{x}{object of class \code{sf} with source geometries, from which we want to aggregate or disaggregate attributes to geometries in \code{to}}
 
-\item{to}{object of class \code{sf} or \code{sfc}, with the target geometries}
+\item{to}{object of class \code{sf} or \code{sfc}, with the target geometries; see Details}
 
-\item{extensive}{logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population) and the sum is preserved, otherwise, spatially intensive (like population density) and the mean is preserved.}
+\item{extensive}{logical; if \code{TRUE}, the attribute variables of \code{x} are spatially extensive (like population count) and the sum is preserved; if \code{FALSE} spatially intensive (like population density) and the mean is preserved.}
 
 \item{...}{ignored}
 
