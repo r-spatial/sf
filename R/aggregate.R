@@ -97,10 +97,14 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 #' @param x object of class \code{sf}, for which we want to aggregate attributes
 #' @param to object of class \code{sf} or \code{sfc}, with the target geometries
 #' @param extensive logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population) and the sum is preserved, otherwise, spatially intensive (like population density) and the mean is preserved.
-#' @param na.rm logical; if `TRUE` remove features with `NA` attributes from `x` before interpolating
 #' @param ... ignored
 #' @param keep_NA logical; if \code{TRUE}, return all features in \code{to}, if \code{FALSE} return only those with non-NA values (but with \code{row.names} the index corresponding to the feature in \code{to})
-#' @details if `extensive` is `TRUE` and `na.rm` is set to `TRUE`, geometries with `NA` are effectively treated as having zero attribute values.
+#' @param na.rm logical; if `TRUE` remove features with `NA` attributes from `x` before interpolating
+#' @param include_non_intersected logical; for the case when `extensive=FALSE`, when set to `TRUE` divide by the target areas (including non-intersected areas), 
+#' when `FALSE` divide by the sum of the source areas.
+#' @param weights character; name of variable in `x` (and possibly `to`) with weights for dasymetric mapping; if omitted, areas are used for weighting
+#' @details if `extensive` is `TRUE` and `na.rm` is set to `TRUE`, geometries with `NA` attribute values are effectively treated as having zero attribute values.
+#'  The `weights` column in `to` is required only when `extensive=FALSE` and `include_non_intersected=TRUE`
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' g = st_make_grid(nc, n = c(10, 5))
@@ -117,11 +121,12 @@ st_interpolate_aw = function(x, to, extensive, ...) UseMethod("st_interpolate_aw
 
 #' @export
 #' @name interpolate_aw
-st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE, na.rm = FALSE) {
+st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE, na.rm = FALSE,
+								include_non_intersected = FALSE, weights = character(0)) {
 	if (!inherits(to, "sf") && !inherits(to, "sfc")) {
 		to <- try(st_as_sf(to))
 		if (inherits(to, "try-error"))
-			stop("st_interpolate_aw requires geometries in argument to")
+			stop("st_interpolate_aw requires an argument to that has an st_as_sf() method")
 	}
 	if (isTRUE(na.rm))
 		x = x[! apply(is.na(x), 1, any),]
@@ -130,29 +135,48 @@ st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE, na.rm = 
 		warning("st_interpolate_aw assumes attributes are constant or uniform over areas of x")
 	i = st_intersection(st_geometry(x), st_geometry(to), dimensions = "polygon")
 	idx = attr(i, "idx")
+	i = st_set_geometry(x[idx[,1], , drop = FALSE], st_geometry(i))
+	get_wts = if (length(weights)) {
+			stopifnot(is.character(weights), length(weights)==1, !is.null(x[[weights]]), !is.null(i[[weights]]))
+			function(x) x[[weights]]
+		} else
+			st_area
 
 	# https://stackoverflow.com/questions/57767022/how-do-you-use-st-interpolate-aw-with-polygon-layers-that-legitimately-include-p
 	gc = which(st_is(i, "GEOMETRYCOLLECTION"))
 	# i[gc] = st_collection_extract(i[gc], "POLYGON") ## breaks if there are several POLYGONs in a GC
-	i[gc] = do.call(c, lapply(i[gc], function(x) st_sfc(st_union(st_collection_extract(x, "POLYGON")))))
+	if (length(gc)) {
+		g = st_geometry(i)
+		g[gc] = do.call(c, lapply(g[gc,], function(x) st_sfc(st_union(st_collection_extract(x, "POLYGON")))))
+		st_geometry(i) = g
+	}
 	two_d = which(st_dimension(i) == 2)
-	i[two_d] = st_cast(i[two_d], "MULTIPOLYGON")
+	if (any(two_d)) {
+		g = st_geometry(i)
+		g[two_d] = st_cast(g[two_d], "MULTIPOLYGON")
+		st_geometry(i) = g
+	}
 
 	x_st = st_set_geometry(x, NULL)[idx[,1],, drop=FALSE]   # create st table, remove geom
 	if (any(!sapply(x_st, is.numeric)))
 		stop("x contains non-numeric column(s)")
-	area_i = try(st_area(i), silent = TRUE)
+	area_i = try(get_wts(i), silent = TRUE)
 	if (inherits(area_i, "try-error"))
-		area_i <- st_area(st_make_valid(i)) # work-around for https://github.com/r-spatial/sf/issues/1810
-	x_st$...area_st = unclass(area_i)
+		area_i <- get_wts(st_make_valid(i)) # work-around for https://github.com/r-spatial/sf/issues/1810
+	x_st$...area_st = as.numeric(area_i)
 
 	x_st = if (extensive) {
-			# compute area_s:
-			x_st$...area_s = unclass(st_area(x))[idx[,1]]
+			# compute source weights:
+			x_st$...area_s = as.numeric(get_wts(x))[idx[,1]]
 			lapply(x_st, function(v) v * x_st$...area_st / x_st$...area_s)
 		} else {
-			# compute area_t:
-			target = sapply(split(area_i, idx[, 2]), sum) # and not st_area(to)?
+			# compute target area:
+			target = if (include_non_intersected) {
+						if (length(weights))
+							stopifnot(is.data.frame(to) && !is.null(to[[weights]]))
+						setNames(as.numeric(get_wts(to)), seq_len(NROW(to)))
+					} else
+						sapply(split(area_i, idx[, 2]), sum)
 			df = data.frame(area = target, idx = as.integer(names(target)))
 			x_st$...area_t = merge(data.frame(idx = idx[,2]), df)$area
 			lapply(x_st, function(v) v * x_st$...area_st / x_st$...area_t)

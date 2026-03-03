@@ -8,7 +8,16 @@
 \usage{
 st_interpolate_aw(x, to, extensive, ...)
 
-\method{st_interpolate_aw}{sf}(x, to, extensive, ..., keep_NA = FALSE, na.rm = FALSE)
+\method{st_interpolate_aw}{sf}(
+  x,
+  to,
+  extensive,
+  ...,
+  keep_NA = FALSE,
+  na.rm = FALSE,
+  include_non_intersected = FALSE,
+  weights = character(0)
+)
 }
 \arguments{
 \item{x}{object of class \code{sf}, for which we want to aggregate attributes}
@@ -22,12 +31,18 @@ st_interpolate_aw(x, to, extensive, ...)
 \item{keep_NA}{logical; if \code{TRUE}, return all features in \code{to}, if \code{FALSE} return only those with non-NA values (but with \code{row.names} the index corresponding to the feature in \code{to})}
 
 \item{na.rm}{logical; if \code{TRUE} remove features with \code{NA} attributes from \code{x} before interpolating}
+
+\item{include_non_intersected}{logical; for the case when \code{extensive=FALSE}, when set to \code{TRUE} divide by the target areas (including non-intersected areas),
+when \code{FALSE} divide by the sum of the source areas.}
+
+\item{weights}{character; name of variable in \code{x} (and possibly \code{to}) with weights for dasymetric mapping; if omitted, areas are used for weighting}
 }
 \description{
 Areal-weighted interpolation of polygon data
 }
 \details{
-if \code{extensive} is \code{TRUE} and \code{na.rm} is set to \code{TRUE}, geometries with \code{NA} are effectively treated as having zero attribute values.
+if \code{extensive} is \code{TRUE} and \code{na.rm} is set to \code{TRUE}, geometries with \code{NA} attribute values are effectively treated as having zero attribute values.
+The \code{weights} column in \code{to} is required only when \code{extensive=FALSE} and \code{include_non_intersected=TRUE}
 }
 \examples{
 nc = st_read(system.file("shape/nc.shp", package="sf"))
