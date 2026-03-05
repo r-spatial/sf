@@ -96,7 +96,15 @@ to modify the Earth radius.
 
 st_length returns the length of a `LINESTRING` or `MULTILINESTRING`
 geometry, using the coordinate reference system. `POINT`, `MULTIPOINT`,
-`POLYGON` or `MULTIPOLYGON` geometries return zero.
+`POLYGON` or `MULTIPOLYGON` geometries return zero. If coordinates are
+geodetic (i.e., long/lat), great circle calculations are carried out on
+a spheroid (if
+[`sf_use_s2()`](https://r-spatial.github.io/sf/reference/s2.md) is
+`TRUE`) or an ellipsoid (if
+[`sf_use_s2()`](https://r-spatial.github.io/sf/reference/s2.md) is
+`FALSE`). For al other non-geodetic, projected coordinate systems,
+length calculations are planar, Euclidean distance calculations in the
+units of the coordinate system.
 
 If `by_element` is `FALSE` `st_distance` returns a dense numeric matrix
 of dimension length(x) by length(y); otherwise it returns a numeric
