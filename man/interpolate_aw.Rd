@@ -4,7 +4,7 @@
 \alias{interpolate_aw}
 \alias{st_interpolate_aw}
 \alias{st_interpolate_aw.sf}
-\title{Areal-weighted interpolation of polygon data}
+\title{Areal-weighted interpolation or dasymetric mapping of polygon data}
 \usage{
 st_interpolate_aw(x, to, extensive, ...)
 
@@ -20,11 +20,11 @@ st_interpolate_aw(x, to, extensive, ...)
 )
 }
 \arguments{
-\item{x}{object of class \code{sf} with source geometries, from which we want to aggregate or disaggregate attributes to geometries in \code{to}}
+\item{x}{object of class \code{sf}, for which we want to aggregate attributes}
 
-\item{to}{object of class \code{sf} or \code{sfc}, with the target geometries; see Details}
+\item{to}{object of class \code{sf} or \code{sfc}, with the target geometries}
 
-\item{extensive}{logical; if \code{TRUE}, the attribute variables of \code{x} are spatially extensive (like population count) and the sum is preserved; if \code{FALSE} spatially intensive (like population density) and the mean is preserved.}
+\item{extensive}{logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population) and the sum is preserved, otherwise, spatially intensive (like population density) and the mean is preserved.}
 
 \item{...}{ignored}
 
@@ -32,17 +32,16 @@ st_interpolate_aw(x, to, extensive, ...)
 
 \item{na.rm}{logical; if \code{TRUE} remove features with \code{NA} attributes from \code{x} before interpolating}
 
-\item{include_non_intersected}{logical; for the case when \code{extensive=FALSE}, when set to \code{TRUE} divide by the target areas (including non-intersected areas),
-when \code{FALSE} divide by the sum of the source areas.}
+\item{include_non_intersected}{logical; for the case when \code{extensive=FALSE}, when set to \code{TRUE} divide by the target areas (including non-intersected areas),}
 
-\item{weights}{character; name of variable in \code{x} (and possibly \code{to}) with weights for dasymetric mapping; if omitted, areas are used for weighting}
+\item{weights}{character; name of column in \code{to} that indicates (extensive) weights, to be used instead of areas, for redistributing attributes in \code{x}; currently only works for \code{extensive=TRUE}.
+when \code{FALSE} divide by the sum of the source areas.}
 }
 \description{
-Areal-weighted interpolation of polygon data
+Areal-weighted interpolation or dasymetric mapping of polygon data
 }
 \details{
-if \code{extensive} is \code{TRUE} and \code{na.rm} is set to \code{TRUE}, geometries with \code{NA} attribute values are effectively treated as having zero attribute values.
-The \code{weights} column in \code{to} is required only when \code{extensive=FALSE} and \code{include_non_intersected=TRUE}
+if \code{extensive} is \code{TRUE} and \code{na.rm} is set to \code{TRUE}, geometries with \code{NA} are effectively treated as having zero attribute values. Dasymetric mapping is obtained when \code{weights} are specified.
 }
 \examples{
 nc = st_read(system.file("shape/nc.shp", package="sf"))

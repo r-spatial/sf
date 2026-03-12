@@ -1,5 +1,7 @@
 # version 1.1-1
 
+* add `MULTISURFACE` to vctrs methods; #2589
+
 * add argument `include_non_intersected` to `st_interpolate_aw()`
 
 * add argument `weights`, for dasymetric mapping, to `st_interpolate_aw()` (experimental)
