@@ -386,7 +386,7 @@ This project gratefully acknowledges financial
   : Geometric unary operations on simple feature geometry sets
 
 - [`st_interpolate_aw()`](https://r-spatial.github.io/sf/reference/interpolate_aw.md)
-  : Areal-weighted interpolation of polygon data
+  : Areal-weighted interpolation or dasymetric mapping of polygon data
 
 - [`is_driver_available()`](https://r-spatial.github.io/sf/reference/is_driver_available.md)
   : Check if driver is available

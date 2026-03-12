@@ -2,6 +2,9 @@
 
 ## version 1.1-1
 
+- add `MULTISURFACE` to vctrs methods;
+  [\#2589](https://github.com/r-spatial/sf/issues/2589)
+
 - add argument `include_non_intersected` to
   [`st_interpolate_aw()`](https://r-spatial.github.io/sf/reference/interpolate_aw.md)
 

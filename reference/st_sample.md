@@ -183,7 +183,7 @@ p_exact = st_sample(x, 1000, exact = TRUE)
 p_not_exact = st_sample(x, 1000, exact = FALSE)
 length(p_exact); length(p_not_exact)
 #> [1] 1000
-#> [1] 1007
+#> [1] 1000
 plot(st_sample(x, 1000), add = TRUE)
 
 x = st_sfc(st_polygon(list(rbind(c(-180,-90),c(180,-90),c(180,90),c(-180,90),c(-180,-90)))),
@@ -202,7 +202,7 @@ plot(h, add = TRUE)
 plot(h1, col = 'red', add = TRUE)
 
 c(length(h), length(h1)) # approximate!
-#> [1] 102 105
+#> [1] 97 99
 pt = st_multipoint(matrix(1:20,,2))
 ls = st_sfc(st_linestring(rbind(c(0,0),c(0,1))),
  st_linestring(rbind(c(0,0),c(.1,0))),
@@ -212,11 +212,11 @@ st_sample(ls, 80)
 #> Geometry set for 4 features  (with 1 geometry empty)
 #> Geometry type: MULTIPOINT
 #> Dimension:     XY
-#> Bounding box:  xmin: 0 ymin: 0 xmax: 0.09748792 ymax: 1
+#> Bounding box:  xmin: 0 ymin: 0 xmax: 0.08531849 ymax: 1
 #> CRS:           NA
-#> MULTIPOINT ((0 0.9803703), (0 0.4858044), (0 0....
-#> MULTIPOINT ((0.02948884 0), (0.01759714 0), (0....
-#> MULTIPOINT ((0.03806426 1), (0.04518011 1), (0....
+#> MULTIPOINT ((0 0.01737041), (0 0.8441574), (0 0...
+#> MULTIPOINT ((0.03337024 0), (0.03010541 0), (0....
+#> MULTIPOINT ((0.04159846 1), (0.06942899 1), (0....
 #> MULTIPOINT EMPTY
 plot(st_sample(ls, 80))
 

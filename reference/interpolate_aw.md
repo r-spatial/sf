@@ -1,6 +1,6 @@
-# Areal-weighted interpolation of polygon data
+# Areal-weighted interpolation or dasymetric mapping of polygon data
 
-Areal-weighted interpolation of polygon data
+Areal-weighted interpolation or dasymetric mapping of polygon data
 
 ## Usage
 
@@ -24,17 +24,16 @@ st_interpolate_aw(
 
 - x:
 
-  object of class `sf` with source geometries, from which we want to
-  aggregate or disaggregate attributes to geometries in `to`
+  object of class `sf`, for which we want to aggregate attributes
 
 - to:
 
-  object of class `sf` or `sfc`, with the target geometries; see Details
+  object of class `sf` or `sfc`, with the target geometries
 
 - extensive:
 
-  logical; if `TRUE`, the attribute variables of `x` are spatially
-  extensive (like population count) and the sum is preserved; if `FALSE`
+  logical; if TRUE, the attribute variables are assumed to be spatially
+  extensive (like population) and the sum is preserved, otherwise,
   spatially intensive (like population density) and the mean is
   preserved.
 
@@ -56,20 +55,20 @@ st_interpolate_aw(
 - include_non_intersected:
 
   logical; for the case when `extensive=FALSE`, when set to `TRUE`
-  divide by the target areas (including non-intersected areas), when
-  `FALSE` divide by the sum of the source areas.
+  divide by the target areas (including non-intersected areas),
 
 - weights:
 
-  character; name of variable in `x` (and possibly `to`) with weights
-  for dasymetric mapping; if omitted, areas are used for weighting
+  character; name of column in `to` that indicates (extensive) weights,
+  to be used instead of areas, for redistributing attributes in `x`;
+  currently only works for `extensive=TRUE`. when `FALSE` divide by the
+  sum of the source areas.
 
 ## Details
 
 if `extensive` is `TRUE` and `na.rm` is set to `TRUE`, geometries with
-`NA` attribute values are effectively treated as having zero attribute
-values. The `weights` column in `to` is required only when
-`extensive=FALSE` and `include_non_intersected=TRUE`
+`NA` are effectively treated as having zero attribute values. Dasymetric
+mapping is obtained when `weights` are specified.
 
 ## Examples
 
