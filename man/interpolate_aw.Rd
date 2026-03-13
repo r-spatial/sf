@@ -4,7 +4,7 @@
 \alias{interpolate_aw}
 \alias{st_interpolate_aw}
 \alias{st_interpolate_aw.sf}
-\title{Areal-weighted interpolation or dasymetric mapping of polygon data}
+\title{Area-weighted interpolation or dasymetric mapping of polygon data}
 \usage{
 st_interpolate_aw(x, to, extensive, ...)
 
@@ -32,13 +32,13 @@ st_interpolate_aw(x, to, extensive, ...)
 
 \item{na.rm}{logical; if \code{TRUE} remove features with \code{NA} attributes from \code{x} before interpolating}
 
-\item{include_non_intersected}{logical; for the case when \code{extensive=FALSE}, when set to \code{TRUE} divide by the target areas (including non-intersected areas),}
-
-\item{weights}{character; name of column in \code{to} that indicates (extensive) weights, to be used instead of areas, for redistributing attributes in \code{x}; currently only works for \code{extensive=TRUE}.
+\item{include_non_intersected}{logical; for the case when \code{extensive=FALSE}, when set to \code{TRUE} divide by the target areas (including non-intersected areas),
 when \code{FALSE} divide by the sum of the source areas.}
+
+\item{weights}{character; name of column in \code{to} that indicates (extensive) weights, to be used instead of areas, for redistributing attributes in \code{x}; currently only works for \code{extensive=TRUE}.}
 }
 \description{
-Areal-weighted interpolation or dasymetric mapping of polygon data
+Area-weighted interpolation or dasymetric mapping of polygon data
 }
 \details{
 if \code{extensive} is \code{TRUE} and \code{na.rm} is set to \code{TRUE}, geometries with \code{NA} are effectively treated as having zero attribute values. Dasymetric mapping is obtained when \code{weights} are specified.
@@ -59,8 +59,8 @@ a1$extensive = a2$BIR74
 # example Dasymetric mapping:
 # load nr of addresses per 10 km grid cell, to proxy population -> birth density:
 grd.addr = system.file("gpkg/grd_addr.gpkg", package="sf") |> read_sf()
-xgrd.addr = grd.addr
-xgrd.addr$ones[grd.addr$ones==0] = 1 # so that logz does not gives finite values
+xgrd.addr = grd.addr # copy for plotting
+xgrd.addr$ones[grd.addr$ones==0] = 1 # so that logz shows finite values
 \donttest{plot(xgrd.addr, logz=TRUE) # log scale}
 nc = st_transform(nc, st_crs(grd.addr))
 # avoid "assumes attributes are constant or uniform over areas" warnings:
@@ -68,11 +68,13 @@ st_agr(nc) = c(BIR74 = "constant", BIR79 = "constant")
 st_agr(grd.addr) = c(ones = "constant")
 # dasymetric mapping
 bir.grd = st_interpolate_aw(nc[c("BIR74","BIR79")], extensive = TRUE, grd.addr, weights = "ones")
-\donttest{plot(bir.grd)}
-# check sum:
+xbir.grd = bir.grd # copy for plotting
+xbir.grd$BIR74[xbir.grd$BIR74 == 0] = 1 # so that logz shows finite values
+\donttest{plot(xbir.grd["BIR74"], logz = TRUE)}
+# verify sums:
 apply(as.data.frame(bir.grd)[1:2], 2, sum)
 apply(as.data.frame(nc)[c("BIR74", "BIR79")], 2, sum)
-# compare:
+# compare county-wise:
 st_agr(bir.grd) = c(BIR74 = "constant")
 aw = st_interpolate_aw(bir.grd["BIR74"], st_geometry(nc), extensive = TRUE)
 plot(nc$BIR74, aw$BIR74, log = 'xy', xlab = 'county-value', ylab = 'area-w interpolated')

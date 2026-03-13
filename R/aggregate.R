@@ -90,9 +90,9 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 	}
 }
 
-#' Areal-weighted interpolation or dasymetric mapping of polygon data
+#' Area-weighted interpolation or dasymetric mapping of polygon data
 #'
-#' Areal-weighted interpolation or dasymetric mapping of polygon data
+#' Area-weighted interpolation or dasymetric mapping of polygon data
 #' @name interpolate_aw
 #' @param x object of class \code{sf}, for which we want to aggregate attributes
 #' @param to object of class \code{sf} or \code{sfc}, with the target geometries
@@ -101,8 +101,8 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 #' @param ... ignored
 #' @param keep_NA logical; if \code{TRUE}, return all features in \code{to}, if \code{FALSE} return only those with non-NA values (but with \code{row.names} the index corresponding to the feature in \code{to})
 #' @param include_non_intersected logical; for the case when `extensive=FALSE`, when set to `TRUE` divide by the target areas (including non-intersected areas), 
-#' @param weights character; name of column in `to` that indicates (extensive) weights, to be used instead of areas, for redistributing attributes in `x`; currently only works for `extensive=TRUE`.
 #' when `FALSE` divide by the sum of the source areas.
+#' @param weights character; name of column in `to` that indicates (extensive) weights, to be used instead of areas, for redistributing attributes in `x`; currently only works for `extensive=TRUE`.
 #' @details if `extensive` is `TRUE` and `na.rm` is set to `TRUE`, geometries with `NA` are effectively treated as having zero attribute values. Dasymetric mapping is obtained when `weights` are specified.
 #' @examples
 #' # example Area-weighted interpolation:
@@ -120,8 +120,8 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 #' # example Dasymetric mapping:
 #' # load nr of addresses per 10 km grid cell, to proxy population -> birth density:
 #' grd.addr = system.file("gpkg/grd_addr.gpkg", package="sf") |> read_sf()
-#' xgrd.addr = grd.addr
-#' xgrd.addr$ones[grd.addr$ones==0] = 1 # so that logz does not gives finite values
+#' xgrd.addr = grd.addr # copy for plotting
+#' xgrd.addr$ones[grd.addr$ones==0] = 1 # so that logz shows finite values
 #' \donttest{plot(xgrd.addr, logz=TRUE) # log scale}
 #' nc = st_transform(nc, st_crs(grd.addr))
 #' # avoid "assumes attributes are constant or uniform over areas" warnings:
@@ -129,11 +129,13 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 #' st_agr(grd.addr) = c(ones = "constant")
 #' # dasymetric mapping
 #' bir.grd = st_interpolate_aw(nc[c("BIR74","BIR79")], extensive = TRUE, grd.addr, weights = "ones")
-#' \donttest{plot(bir.grd)}
-#' # check sum:
+#' xbir.grd = bir.grd # copy for plotting
+#' xbir.grd$BIR74[xbir.grd$BIR74 == 0] = 1 # so that logz shows finite values
+#' \donttest{plot(xbir.grd["BIR74"], logz = TRUE)}
+#' # verify sums:
 #' apply(as.data.frame(bir.grd)[1:2], 2, sum)
 #' apply(as.data.frame(nc)[c("BIR74", "BIR79")], 2, sum)
-#' # compare:
+#' # compare county-wise:
 #' st_agr(bir.grd) = c(BIR74 = "constant")
 #' aw = st_interpolate_aw(bir.grd["BIR74"], st_geometry(nc), extensive = TRUE)
 #' plot(nc$BIR74, aw$BIR74, log = 'xy', xlab = 'county-value', ylab = 'area-w interpolated')
