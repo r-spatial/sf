@@ -102,7 +102,7 @@ plot(a1[c("intensive", "extensive")], key.pos = 4)
 grd.addr = system.file("gpkg/grd_addr.gpkg", package="sf") |> read_sf()
 xgrd.addr = grd.addr # copy for plotting
 xgrd.addr$ones[grd.addr$ones==0] = 1 # so that logz shows finite values
-plot(xgrd.addr, logz=TRUE) # log scale
+plot(xgrd.addr, logz=TRUE, main = "nr of addresses per cell") # log scale
 
 nc = st_transform(nc, st_crs(grd.addr))
 # avoid "assumes attributes are constant or uniform over areas" warnings:
@@ -112,7 +112,7 @@ st_agr(grd.addr) = c(ones = "constant")
 bir.grd = st_interpolate_aw(nc[c("BIR74","BIR79")], extensive = TRUE, grd.addr, weights = "ones")
 xbir.grd = bir.grd # copy for plotting
 xbir.grd$BIR74[xbir.grd$BIR74 == 0] = 1 # so that logz shows finite values
-plot(xbir.grd["BIR74"], logz = TRUE)
+plot(xbir.grd["BIR74"], logz = TRUE, main = "redistributed birth counts, 1974-")
 
 # verify sums:
 apply(as.data.frame(bir.grd)[1:2], 2, sum)
