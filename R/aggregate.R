@@ -118,6 +118,7 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 #' \donttest{plot(a1[c("intensive", "extensive")], key.pos = 4)}
 #' 
 #' # example Dasymetric mapping:
+#' # load nr of addresses per 10 km grid cell, to proxy population -> birth density:
 #' grd.addr = system.file("gpkg/grd_addr.gpkg", package="sf") |> read_sf()
 #' xgrd.addr = grd.addr
 #' xgrd.addr$ones[grd.addr$ones==0] = 1 # so that logz does not gives finite values
