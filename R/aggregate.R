@@ -235,10 +235,8 @@ dasymetric = function(x, to, extensive, keep_NA, include_non_intersected) {
 	}
 
 	x$...x_st = st_interpolate_aw(to, i, extensive = extensive)[[1]] # distribute weights over the intersection geometries
-	# x$...x_st = to[[1]][idx[,2]]
-	# x_s = to[[1]][idx[,2]]
 	# split according to source regions:
-	# copy over idx[,2], as split() will rearrange records
+	# first copy over idx[,2], as split() will rearrange records
 	x$...idx2 = idx[,2]
 	spl = split(x, idx[,1])
 	# reconstruct idx2:
