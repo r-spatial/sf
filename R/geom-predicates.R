@@ -124,11 +124,11 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 #' # queen neighbours, see \url{https://github.com/r-spatial/sf/issues/234#issuecomment-300511129}
 #' st_queen <- function(a, b = a) st_relate(a, b, pattern = "F***T****")
 st_relate = function(x, y, pattern = NA_character_, sparse = !is.na(pattern), ...) {
-  if (!is.na(pattern)) {
-    stopifnot(is.character(pattern), length(pattern) == 1, nchar(pattern) == 9)
-    st_geos_binop("relate_pattern", x, y, pattern = pattern, sparse = sparse, ...)
-  } else
-    st_geos_binop("relate", x, y, sparse = FALSE, ...)
+	if (!is.na(pattern)) {
+		stopifnot(is.character(pattern), length(pattern) == 1, nchar(pattern) == 9)
+		st_geos_binop("relate_pattern", x, y, pattern = pattern, sparse = sparse, ...)
+	} else
+		st_geos_binop("relate", x, y, sparse = FALSE, ...)
 }
 
 #' Geometric binary predicates on pairs of simple feature geometry sets
