@@ -623,6 +623,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_geos_binop_by_element
+Rcpp::List CPL_geos_binop_by_element(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, double par, std::string pattern, bool prepared);
+RcppExport SEXP _sf_CPL_geos_binop_by_element(SEXP sfc0SEXP, SEXP sfc1SEXP, SEXP opSEXP, SEXP parSEXP, SEXP patternSEXP, SEXP preparedSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc0(sfc0SEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc1(sfc1SEXP);
+    Rcpp::traits::input_parameter< std::string >::type op(opSEXP);
+    Rcpp::traits::input_parameter< double >::type par(parSEXP);
+    Rcpp::traits::input_parameter< std::string >::type pattern(patternSEXP);
+    Rcpp::traits::input_parameter< bool >::type prepared(preparedSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_binop_by_element(sfc0, sfc1, op, par, pattern, prepared));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_geos_is_valid_reason
 Rcpp::CharacterVector CPL_geos_is_valid_reason(Rcpp::List sfc);
 RcppExport SEXP _sf_CPL_geos_is_valid_reason(SEXP sfcSEXP) {
@@ -755,6 +770,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_geos_dist_by_element
+Rcpp::NumericVector CPL_geos_dist_by_element(Rcpp::List sfc0, Rcpp::List sfc1, std::string which, double par);
+RcppExport SEXP _sf_CPL_geos_dist_by_element(SEXP sfc0SEXP, SEXP sfc1SEXP, SEXP whichSEXP, SEXP parSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc0(sfc0SEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfc1(sfc1SEXP);
+    Rcpp::traits::input_parameter< std::string >::type which(whichSEXP);
+    Rcpp::traits::input_parameter< double >::type par(parSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_dist_by_element(sfc0, sfc1, which, par));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_geos_version
 std::string CPL_geos_version(bool runtime, bool capi);
 RcppExport SEXP _sf_CPL_geos_version(SEXP runtimeSEXP, SEXP capiSEXP) {
@@ -763,6 +791,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type runtime(runtimeSEXP);
     Rcpp::traits::input_parameter< bool >::type capi(capiSEXP);
     rcpp_result_gen = Rcpp::wrap(CPL_geos_version(runtime, capi));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CPL_geos_op2_by_element
+Rcpp::List CPL_geos_op2_by_element(std::string op, Rcpp::List sfcx, Rcpp::List sfcy);
+RcppExport SEXP _sf_CPL_geos_op2_by_element(SEXP opSEXP, SEXP sfcxSEXP, SEXP sfcySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< std::string >::type op(opSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfcx(sfcxSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type sfcy(sfcySEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_op2_by_element(op, sfcx, sfcy));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1306,7 +1346,7 @@ RcppExport SEXP _sf_CPL_read_wkb(SEXP wkb_listSEXP, SEXP EWKBSEXP, SEXP spatiali
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        (Rf_error)("%s", CHAR(rcpp_msgSEXP_gen));
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
@@ -1340,7 +1380,7 @@ RcppExport SEXP _sf_CPL_write_wkb(SEXP sfcSEXP, SEXP EWKBSEXP) {
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
         UNPROTECT(1);
-        (Rf_error)("%s", CHAR(rcpp_msgSEXP_gen));
+        Rf_error("%s", CHAR(rcpp_msgSEXP_gen));
     }
     UNPROTECT(1);
     return rcpp_result_gen;
@@ -1434,6 +1474,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_write_ogr", (DL_FUNC) &_sf_CPL_write_ogr, 16},
     {"_sf_CPL_delete_ogr", (DL_FUNC) &_sf_CPL_delete_ogr, 4},
     {"_sf_CPL_geos_binop", (DL_FUNC) &_sf_CPL_geos_binop, 6},
+    {"_sf_CPL_geos_binop_by_element", (DL_FUNC) &_sf_CPL_geos_binop_by_element, 6},
     {"_sf_CPL_geos_is_valid_reason", (DL_FUNC) &_sf_CPL_geos_is_valid_reason, 1},
     {"_sf_CPL_geos_make_valid", (DL_FUNC) &_sf_CPL_geos_make_valid, 3},
     {"_sf_CPL_geos_is_valid", (DL_FUNC) &_sf_CPL_geos_is_valid, 2},
@@ -1445,7 +1486,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_geos_op", (DL_FUNC) &_sf_CPL_geos_op, 11},
     {"_sf_CPL_geos_voronoi", (DL_FUNC) &_sf_CPL_geos_voronoi, 4},
     {"_sf_CPL_geos_op2", (DL_FUNC) &_sf_CPL_geos_op2, 3},
+    {"_sf_CPL_geos_dist_by_element", (DL_FUNC) &_sf_CPL_geos_dist_by_element, 4},
     {"_sf_CPL_geos_version", (DL_FUNC) &_sf_CPL_geos_version, 2},
+    {"_sf_CPL_geos_op2_by_element", (DL_FUNC) &_sf_CPL_geos_op2_by_element, 3},
     {"_sf_CPL_geos_dist", (DL_FUNC) &_sf_CPL_geos_dist, 4},
     {"_sf_CPL_geos_nearest_feature", (DL_FUNC) &_sf_CPL_geos_nearest_feature, 2},
     {"_sf_CPL_geos_nearest_points", (DL_FUNC) &_sf_CPL_geos_nearest_points, 3},

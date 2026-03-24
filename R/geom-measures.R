@@ -204,7 +204,7 @@ st_distance = function(x, y, ..., dist_fun, by_element = FALSE,
 					yc = st_coordinates(y)
 					sqrt((xc[,1] - yc[,1])^2 + (xc[,2] - yc[,2])^2)
 				} else
-					mapply(st_distance, x, y, by_element = FALSE, which = which, par = par)
+				  CPL_geos_dist_by_element(x, y, which, par)
 			} else {
 				if (missing_y && inherits(x, "sfc_POINT") && which == "Euclidean") {
 					m = as.matrix(stats::dist(cc <- st_coordinates(x)))

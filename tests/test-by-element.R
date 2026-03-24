@@ -1,0 +1,55 @@
+suppressPackageStartupMessages(library(sf))
+
+# setup
+b0 = st_polygon(list(rbind(c(0,0), c(2,0), c(2,2), c(0,2), c(0,0))))
+b1 = st_polygon(list(rbind(c(1,1), c(3,1), c(3,3), c(1,3), c(1,1))))
+b2 = st_polygon(list(rbind(c(5,5), c(6,5), c(6,6), c(5,6), c(5,5))))
+a0 = st_polygon(list(rbind(c(0.5,0.5), c(1.5,0.5), c(1.5,1.5), c(0.5,1.5), c(0.5,0.5))))
+a1 = st_polygon(list(rbind(c(1.5,1.5), c(2.5,1.5), c(2.5,2.5), c(1.5,2.5), c(1.5,1.5))))
+a2 = st_polygon(list(rbind(c(5.1,5.1), c(5.9,5.1), c(5.9,5.9), c(5.1,5.9), c(5.1,5.1))))
+x = st_sfc(b0, b1, b2)
+y = st_sfc(a0, a1, a2)
+
+# predicates
+r = st_intersects(x, y, by_element = TRUE)
+stopifnot(is.logical(r), length(r) == 3, all(r))
+r = st_contains(x, y, by_element = TRUE)
+stopifnot(is.logical(r), all(r))
+r = !st_intersects(st_sfc(b0, b2), st_sfc(b2, b0), by_element = TRUE)
+stopifnot(is.logical(r), all(r))
+
+# relate
+r = st_relate(x, y, by_element = TRUE)
+stopifnot(is.character(r), length(r) == 3, all(nchar(r) == 9))
+r = st_relate(x, y, pattern = "T********", by_element = TRUE)
+stopifnot(is.logical(r), length(r) == 3)
+
+# geometric ops: correctness
+r = st_intersection(x, y, by_element = TRUE)
+m = st_sfc(st_intersection(b0, a0), st_intersection(b1, a1), st_intersection(b2, a2))
+stopifnot(inherits(r, "sfc"), length(r) == 3)
+stopifnot(all(st_equals(r, m, sparse = FALSE)[cbind(1:3, 1:3)]))
+
+# geometric ops: empty result for disjoint pair
+r = st_intersection(st_sfc(b0), st_sfc(b2), by_element = TRUE)
+stopifnot(st_is_empty(r[1]))
+
+# difference and sym_difference
+r = st_difference(st_sfc(b0), st_sfc(a0), by_element = TRUE)
+stopifnot(st_equals(r[[1]], st_difference(b0, a0), sparse = FALSE)[1,1])
+r = st_sym_difference(st_sfc(b0), st_sfc(a0), by_element = TRUE)
+stopifnot(st_equals(r[[1]], st_sym_difference(b0, a0), sparse = FALSE)[1,1])
+
+# unequal lengths error
+try(st_intersects(st_sfc(b0, b1), st_sfc(a0), by_element = TRUE))
+try(st_intersection(st_sfc(b0, b1), st_sfc(a0), by_element = TRUE))
+
+# distance: non-POINT geometries
+l = st_sfc(st_linestring(rbind(c(0,0), c(1,0))), st_linestring(rbind(c(0,1), c(1,1))))
+m = st_sfc(st_linestring(rbind(c(0,2), c(1,2))), st_linestring(rbind(c(0,3), c(1,3))))
+d = st_distance(l, m, by_element = TRUE)
+stopifnot(all.equal(as.numeric(d), c(2, 2)))
+
+# defaults unchanged
+stopifnot(length(st_intersection(x, x)) >= 3)
+stopifnot(inherits(st_intersects(x, y), "sgbp"))

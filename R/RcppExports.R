@@ -189,6 +189,10 @@ CPL_geos_binop <- function(sfc0, sfc1, op, par = 0.0, pattern = "", prepared = F
     .Call(`_sf_CPL_geos_binop`, sfc0, sfc1, op, par, pattern, prepared)
 }
 
+CPL_geos_binop_by_element <- function(sfc0, sfc1, op, par, pattern, prepared) {
+    .Call(`_sf_CPL_geos_binop_by_element`, sfc0, sfc1, op, par, pattern, prepared)
+}
+
 CPL_geos_is_valid_reason <- function(sfc) {
     .Call(`_sf_CPL_geos_is_valid_reason`, sfc)
 }
@@ -233,8 +237,16 @@ CPL_geos_op2 <- function(op, sfcx, sfcy) {
     .Call(`_sf_CPL_geos_op2`, op, sfcx, sfcy)
 }
 
+CPL_geos_dist_by_element <- function(sfc0, sfc1, which, par) {
+    .Call(`_sf_CPL_geos_dist_by_element`, sfc0, sfc1, which, par)
+}
+
 CPL_geos_version <- function(runtime = FALSE, capi = FALSE) {
     .Call(`_sf_CPL_geos_version`, runtime, capi)
+}
+
+CPL_geos_op2_by_element <- function(op, sfcx, sfcy) {
+    .Call(`_sf_CPL_geos_op2_by_element`, op, sfcx, sfcy)
 }
 
 CPL_geos_dist <- function(sfc0, sfc1, which, par) {

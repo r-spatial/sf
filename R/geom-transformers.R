@@ -854,28 +854,43 @@ geos_op2_df = function(x, y, geoms) {
 # after checking identical crs,
 # call geos_op2 function op on x and y:
 # DE-9IM compliant should use model = "closed", more robust seems:
-geos_op2_geom = function(op, x, y, model = "semi-open", ...) {
-	stopifnot(st_crs(x) == st_crs(y))
-	x = st_geometry(x)
-	y = st_geometry(y)
-	longlat = isTRUE(st_is_longlat(x))
-	if (longlat && sf_use_s2()) {
-		fn = switch(op, intersection = s2::s2_intersection,
-				difference = s2::s2_difference,
-				sym_difference = s2::s2_sym_difference,
-				union = s2::s2_union, stop("invalid operator"))
-		# to be optimized -- this doesn't index on y:
-		lst = structure(unlist(lapply(y, function(yy) fn(x, yy, s2::s2_options(model = model, ...))),
-			recursive = FALSE), class = "s2_geography")
-		e = s2::s2_is_empty(lst)
-		idx = cbind(rep(seq_along(x), length(y)), rep(seq_along(y), each = length(x)))
-		lst = st_as_sfc(lst, crs = st_crs(x))
-		structure(lst[!e], idx = idx[!e,,drop = FALSE])
-	} else {
-		if (longlat)
-			message_longlat(paste0("st_", op))
-		st_sfc(CPL_geos_op2(op, x, y), crs = st_crs(x))
-	}
+geos_op2_geom = function(op, x, y, ..., by_element = FALSE, model = "semi-open") {
+  stopifnot(st_crs(x) == st_crs(y))
+  x = st_geometry(x)
+  y = st_geometry(y)
+  if (by_element) {
+    stopifnot(length(x) == length(y))
+    longlat = isTRUE(st_is_longlat(x))
+    if (longlat && sf_use_s2()) {
+      fn = switch(op, intersection = s2::s2_intersection,
+                  difference = s2::s2_difference,
+                  sym_difference = s2::s2_sym_difference,
+                  union = s2::s2_union, stop("invalid operator"))
+      return(st_as_sfc(fn(x, y, s2::s2_options(model = model, ...)),
+                       crs = st_crs(x)))
+    }
+    if (longlat)
+      message_longlat(paste0("st_", op))
+    return(st_sfc(CPL_geos_op2_by_element(op, x, y), crs = st_crs(x)))
+  }
+  longlat = isTRUE(st_is_longlat(x))
+  if (longlat && sf_use_s2()) {
+    fn = switch(op, intersection = s2::s2_intersection,
+                difference = s2::s2_difference,
+                sym_difference = s2::s2_sym_difference,
+                union = s2::s2_union, stop("invalid operator"))
+    # to be optimized -- this doesn't index on y:
+    lst = structure(unlist(lapply(y, function(yy) fn(x, yy, s2::s2_options(model = model, ...))),
+                           recursive = FALSE), class = "s2_geography")
+    e = s2::s2_is_empty(lst)
+    idx = cbind(rep(seq_along(x), length(y)), rep(seq_along(y), each = length(x)))
+    lst = st_as_sfc(lst, crs = st_crs(x))
+    structure(lst[!e], idx = idx[!e,,drop = FALSE])
+  } else {
+    if (longlat)
+      message_longlat(paste0("st_", op))
+    st_sfc(CPL_geos_op2(op, x, y), crs = st_crs(x))
+  }
 }
 
 # return first sfg, or empty geometry in case of zero features
