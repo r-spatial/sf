@@ -42,74 +42,64 @@ is_symmetric = function(operation, pattern) {
 
 # returning matrix, distance or relation string -- the work horse is:
 st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
-                sparse = TRUE, prepared = FALSE, model = "closed", ...,
-                remove_self = FALSE, retain_unique = FALSE, 
-                by_element = FALSE) {
-  if (by_element) {
-    if (missing(y))
-      stop("y is required when by_element = TRUE")
-    if (inherits(x, c("sf", "sfc")) && inherits(y, c("sf", "sfc")))
-      stopifnot(st_crs(x) == st_crs(y))
-    x = st_geometry(x)
-    y = st_geometry(y)
-    stopifnot(length(x) == length(y))
-    longlat = inherits(x, "s2geography") || isTRUE(st_is_longlat(x))
-    if (longlat && sf_use_s2() && op %in% c("intersects", "contains", "within",
-                                            "covers", "covered_by", "disjoint", "equals", "touches")) {
-      fn = get(paste0("s2_", op), envir = getNamespace("s2"))
-      return(fn(x, y, s2::s2_options(model = model, ...)))
-    }
-    return(CPL_geos_binop_by_element(x, y, op, par, pattern, prepared)[[1]])
-  }
-  if (missing(y))
-    y = x
-  else if (inherits(x, c("sf", "sfc")) && inherits(y, c("sf", "sfc")))
-    stopifnot(st_crs(x) == st_crs(y))
-  longlat = inherits(x, "s2geography") || isTRUE(st_is_longlat(x))
-  if (longlat && sf_use_s2() && op %in% c("intersects", "contains", "within",
-                                          "covers", "covered_by", "disjoint", "equals", "touches")) {
-    fn = get(paste0("s2_", op, "_matrix"), envir = getNamespace("s2")) # get op function
-    lst = fn(x, y, s2::s2_options(model = model, ...)) # call function
-    id = if (is.null(row.names(x)))
-      as.character(seq_along(lst))
-    else
-      row.names(x)
-    sgbp(lst, predicate = op, region.id = id, ncol = length(st_geometry(y)), sparse,
-         remove_self = remove_self, retain_unique = retain_unique)
-  } else {
-    if (longlat && !(op %in% c("equals", "equals_exact")))
-      message_longlat(paste0("st_", op))
-    if (prepared && is_symmetric(op, pattern) &&
-        length(dx <- st_dimension(x)) && length(dy <- st_dimension(y)) &&
-        isTRUE(all(dx == 0)) && isTRUE(all(dy == 2))) {
-      t(st_geos_binop(op, y, x, par = par, pattern = pattern, sparse = sparse,
-                      prepared = prepared, remove_self = remove_self, retain_unique = retain_unique,
-                      ...))
-    } else {
-      ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern, prepared)
-      if (length(ret) == 0 || is.null(dim(ret[[1]]))) {
-        id = if (is.null(row.names(x)))
-          as.character(seq_along(ret))
-        else
-          row.names(x)
-        sgbp(ret, predicate = op, region.id = id, ncol = length(st_geometry(y)), sparse,
-             remove_self = remove_self, retain_unique = retain_unique)
-      } else # CPL_geos_binop returned a matrix, e.g. from op = "relate"
-        ret[[1]]
-    }
-  }
+		sparse = TRUE, prepared = FALSE, model = "closed", ...,
+		remove_self = FALSE, retain_unique = FALSE,
+		by_element = FALSE) {
+	if (by_element) {
+		if (missing(y))
+			stop("y is required when by_element = TRUE")
+		if (inherits(x, c("sf", "sfc")) && inherits(y, c("sf", "sfc")))
+			stopifnot(st_crs(x) == st_crs(y))
+		x = st_geometry(x)
+		y = st_geometry(y)
+		stopifnot(length(x) == length(y))
+		longlat = inherits(x, "s2geography") || isTRUE(st_is_longlat(x))
+		if (longlat && sf_use_s2() && op %in% c("intersects", "contains", "within",
+				"covers", "covered_by", "disjoint", "equals", "touches")) {
+			fn = get(paste0("s2_", op), envir = getNamespace("s2"))
+			return(fn(x, y, s2::s2_options(model = model, ...)))
+		}
+		return(CPL_geos_binop_by_element(x, y, op, par, pattern, prepared)[[1]])
+	}
+	if (missing(y))
+		y = x
+	else if (inherits(x, c("sf", "sfc")) && inherits(y, c("sf", "sfc")))
+		stopifnot(st_crs(x) == st_crs(y))
+	longlat = inherits(x, "s2geography") || isTRUE(st_is_longlat(x))
+	if (longlat && sf_use_s2() && op %in% c("intersects", "contains", "within",
+			"covers", "covered_by", "disjoint", "equals", "touches")) {
+		fn = get(paste0("s2_", op, "_matrix"), envir = getNamespace("s2")) # get op function
+		lst = fn(x, y, s2::s2_options(model = model, ...)) # call function
+		id = if (is.null(row.names(x)))
+				as.character(seq_along(lst))
+			else
+				row.names(x)
+		sgbp(lst, predicate = op, region.id = id, ncol = length(st_geometry(y)), sparse,
+			remove_self = remove_self, retain_unique = retain_unique)
+	} else {
+		if (longlat && !(op %in% c("equals", "equals_exact")))
+			message_longlat(paste0("st_", op))
+		if (prepared && is_symmetric(op, pattern) &&
+				length(dx <- st_dimension(x)) && length(dy <- st_dimension(y)) &&
+				isTRUE(all(dx == 0)) && isTRUE(all(dy == 2))) {
+			t(st_geos_binop(op, y, x, par = par, pattern = pattern, sparse = sparse, 
+				prepared = prepared, remove_self = remove_self, retain_unique = retain_unique,
+				...))
+		} else {
+			ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern, prepared)
+			if (length(ret) == 0 || is.null(dim(ret[[1]]))) {
+				id = if (is.null(row.names(x)))
+						as.character(seq_along(ret))
+					else
+						row.names(x)
+				sgbp(ret, predicate = op, region.id = id, ncol = length(st_geometry(y)), sparse,
+					remove_self = remove_self, retain_unique = retain_unique)
+			} else # CPL_geos_binop returned a matrix, e.g. from op = "relate"
+				ret[[1]]
+		}
+	}
 }
 
-st_relate = function(x, y, pattern = NA_character_, sparse = !is.na(pattern), ...) {
-  if (!is.na(pattern)) {
-    stopifnot(is.character(pattern), length(pattern) == 1, nchar(pattern) == 9)
-    st_geos_binop("relate_pattern", x, y, pattern = pattern, sparse = sparse, ...)
-  } else
-    st_geos_binop("relate", x, y, sparse = FALSE, ...)
-}
-
-#' Compute DE9-IM relation between pairs of geometries, or match it to a given pattern
-#'
 #' Compute DE9-IM relation between pairs of geometries, or match it to a given pattern
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
