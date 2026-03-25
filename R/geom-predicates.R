@@ -42,8 +42,25 @@ is_symmetric = function(operation, pattern) {
 
 # returning matrix, distance or relation string -- the work horse is:
 st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
-		sparse = TRUE, prepared = FALSE, model = "closed", ..., 
-		remove_self = FALSE, retain_unique = FALSE) {
+		sparse = TRUE, prepared = FALSE, model = "closed", ...,
+		remove_self = FALSE, retain_unique = FALSE,
+		by_element = FALSE) {
+	if (by_element) {
+		if (missing(y))
+			stop("y is required when by_element = TRUE")
+		if (inherits(x, c("sf", "sfc")) && inherits(y, c("sf", "sfc")))
+			stopifnot(st_crs(x) == st_crs(y))
+		x = st_geometry(x)
+		y = st_geometry(y)
+		stopifnot(length(x) == length(y))
+		longlat = inherits(x, "s2geography") || isTRUE(st_is_longlat(x))
+		if (longlat && sf_use_s2() && op %in% c("intersects", "contains", "within",
+				"covers", "covered_by", "disjoint", "equals", "touches")) {
+			fn = get(paste0("s2_", op), envir = getNamespace("s2"))
+			return(fn(x, y, s2::s2_options(model = model, ...)))
+		}
+		return(CPL_geos_binop_by_element(x, y, op, par, pattern, prepared)[[1]])
+	}
 	if (missing(y))
 		y = x
 	else if (inherits(x, c("sf", "sfc")) && inherits(y, c("sf", "sfc")))
@@ -84,8 +101,6 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 }
 
 #' Compute DE9-IM relation between pairs of geometries, or match it to a given pattern
-#'
-#' Compute DE9-IM relation between pairs of geometries, or match it to a given pattern
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param pattern character; define the pattern to match to, see details.
@@ -108,12 +123,12 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 #' st_rook(grd)
 #' # queen neighbours, see \url{https://github.com/r-spatial/sf/issues/234#issuecomment-300511129}
 #' st_queen <- function(a, b = a) st_relate(a, b, pattern = "F***T****")
-st_relate	= function(x, y, pattern = NA_character_, sparse = !is.na(pattern)) {
+st_relate = function(x, y, pattern = NA_character_, sparse = !is.na(pattern), ...) {
 	if (!is.na(pattern)) {
 		stopifnot(is.character(pattern), length(pattern) == 1, nchar(pattern) == 9)
-		st_geos_binop("relate_pattern", x, y, pattern = pattern, sparse = sparse)
+		st_geos_binop("relate_pattern", x, y, pattern = pattern, sparse = sparse, ...)
 	} else
-		st_geos_binop("relate", x, y, sparse = FALSE)
+		st_geos_binop("relate", x, y, sparse = FALSE, ...)
 }
 
 #' Geometric binary predicates on pairs of simple feature geometry sets

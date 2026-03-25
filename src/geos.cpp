@@ -548,6 +548,74 @@ Rcpp::List CPL_geos_binop(Rcpp::List sfc0, Rcpp::List sfc1, std::string op, doub
 }
 
 // [[Rcpp::export(rng=false)]]
+Rcpp::List CPL_geos_binop_by_element(Rcpp::List sfc0, Rcpp::List sfc1,
+                                     std::string op, double par, std::string pattern, bool prepared) {
+  
+  GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
+  std::vector<GeomPtr> gmv0 = geometries_from_sfc(hGEOSCtxt, sfc0, NULL);
+  std::vector<GeomPtr> gmv1 = geometries_from_sfc(hGEOSCtxt, sfc1, NULL);
+  if (gmv0.size() != gmv1.size()) {
+    CPL_geos_finish(hGEOSCtxt);
+    Rcpp::stop("for element-wise predicates, x and y must have equal length");
+  }
+  size_t n = gmv0.size();
+  Rcpp::List ret_list;
+  
+  if (op == "relate") {
+    Rcpp::CharacterVector out(n);
+    for (size_t i = 0; i < n; i++) {
+      char *cp = GEOSRelate_r(hGEOSCtxt, gmv0[i].get(), gmv1[i].get());
+      if (cp == NULL) {
+        CPL_geos_finish(hGEOSCtxt); // #nocov
+        Rcpp::stop("GEOS error in GEOSRelate_r"); // #nocov
+      }
+      out[i] = cp;
+      GEOSFree_r(hGEOSCtxt, cp);
+      Rcpp::checkUserInterrupt();
+    }
+    ret_list = Rcpp::List::create(out);
+  } else if (op == "relate_pattern") {
+    Rcpp::LogicalVector out(n);
+    for (size_t i = 0; i < n; i++) {
+      out[i] = chk_(GEOSRelatePattern_r(hGEOSCtxt,
+                                        gmv0[i].get(), gmv1[i].get(), pattern.c_str()));
+      Rcpp::checkUserInterrupt();
+    }
+    ret_list = Rcpp::List::create(out);
+  } else if (op == "equals_exact") {
+    Rcpp::LogicalVector out(n);
+    for (size_t i = 0; i < n; i++) {
+      out[i] = chk_(GEOSEqualsExact_r(hGEOSCtxt,
+                                      gmv0[i].get(), gmv1[i].get(), par));
+      Rcpp::checkUserInterrupt();
+    }
+    ret_list = Rcpp::List::create(out);
+  } else if (op == "is_within_distance") {
+    Rcpp::LogicalVector out(n);
+    for (size_t i = 0; i < n; i++) {
+      double dist = -1.0;
+      if (GEOSDistance_r(hGEOSCtxt, gmv0[i].get(), gmv1[i].get(), &dist) == 0) {
+        CPL_geos_finish(hGEOSCtxt); // #nocov
+        Rcpp::stop("GEOS error in GEOSDistance_r"); // #nocov
+      }
+      out[i] = dist <= par;
+      Rcpp::checkUserInterrupt();
+    }
+    ret_list = Rcpp::List::create(out);
+  } else {
+    log_fn logical_fn = which_geom_fn(op);
+    Rcpp::LogicalVector out(n);
+    for (size_t i = 0; i < n; i++) {
+      out[i] = chk_(logical_fn(hGEOSCtxt, gmv0[i].get(), gmv1[i].get()));
+      Rcpp::checkUserInterrupt();
+    }
+    ret_list = Rcpp::List::create(out);
+  }
+  CPL_geos_finish(hGEOSCtxt);
+  return ret_list;
+}
+
+// [[Rcpp::export(rng=false)]]
 Rcpp::CharacterVector CPL_geos_is_valid_reason(Rcpp::List sfc) {
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
 
@@ -1063,6 +1131,75 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 }
 
 // [[Rcpp::export(rng=false)]]
+Rcpp::NumericVector CPL_geos_dist_by_element(Rcpp::List sfc0, Rcpp::List sfc1,
+                                             std::string which, double par) {
+  
+  GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
+  int dim = 2;
+  std::vector<GeomPtr> gmv0 = geometries_from_sfc(hGEOSCtxt, sfc0, &dim);
+  std::vector<GeomPtr> gmv1 = geometries_from_sfc(hGEOSCtxt, sfc1, &dim);
+  if (gmv0.size() != gmv1.size()) {
+    CPL_geos_finish(hGEOSCtxt);
+    Rcpp::stop("for element-wise distance, x and y must have equal length");
+  }
+  size_t n = gmv0.size();
+  Rcpp::NumericVector out(n);
+  
+  if (par <= 0.0) {
+    dist_fn dist_function;
+    if (which == "Euclidean")       dist_function = GEOSDistance_r;
+    else if (which == "Hausdorff")  dist_function = GEOSHausdorffDistance_r;
+#ifdef HAVE370
+    else if (which == "Frechet")    dist_function = GEOSFrechetDistance_r;
+#endif
+    else {
+      CPL_geos_finish(hGEOSCtxt); // #nocov
+      Rcpp::stop("distance function not supported"); // #nocov
+    }
+    for (size_t i = 0; i < n; i++) {
+      if (GEOSisEmpty_r(hGEOSCtxt, gmv0[i].get()) ||
+          GEOSisEmpty_r(hGEOSCtxt, gmv1[i].get()))
+        out[i] = NA_REAL;
+      else {
+        double dist = -1.0;
+        if (dist_function(hGEOSCtxt, gmv0[i].get(), gmv1[i].get(), &dist) == 0) {
+          CPL_geos_finish(hGEOSCtxt); // #nocov
+          Rcpp::stop("GEOS error in GEOS_xx_Distance_r"); // #nocov
+        }
+        out[i] = dist;
+      }
+      Rcpp::checkUserInterrupt();
+    }
+  } else {
+    dist_parfn dist_function = NULL;
+    if (which == "Hausdorff")       dist_function = GEOSHausdorffDistanceDensify_r;
+#ifdef HAVE370
+    else if (which == "Frechet")    dist_function = GEOSFrechetDistanceDensify_r;
+#endif
+    else {
+      CPL_geos_finish(hGEOSCtxt); // #nocov
+      Rcpp::stop("distance function not supported"); // #nocov
+    }
+    for (size_t i = 0; i < n; i++) {
+      if (GEOSisEmpty_r(hGEOSCtxt, gmv0[i].get()) ||
+          GEOSisEmpty_r(hGEOSCtxt, gmv1[i].get()))
+        out[i] = NA_REAL;
+      else {
+        double dist = -1.0;
+        if (dist_function(hGEOSCtxt, gmv0[i].get(), gmv1[i].get(), par, &dist) == 0) {
+          CPL_geos_finish(hGEOSCtxt); // #nocov
+          Rcpp::stop("GEOS error in GEOS_xx_Distance_r"); // #nocov
+        }
+        out[i] = dist;
+      }
+      Rcpp::checkUserInterrupt();
+    }
+  }
+  CPL_geos_finish(hGEOSCtxt);
+  return out;
+}
+
+// [[Rcpp::export(rng=false)]]
 std::string CPL_geos_version(bool runtime = false, bool capi = false) {
 	if (runtime)
 		return GEOSversion();
@@ -1072,6 +1209,75 @@ std::string CPL_geos_version(bool runtime = false, bool capi = false) {
 		else
 			return GEOS_VERSION;
 	}
+}
+
+// [[Rcpp::export(rng=false)]]
+Rcpp::List CPL_geos_op2_by_element(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
+  
+  using namespace Rcpp;
+  
+  int dim = 2;
+  GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
+  std::vector<GeomPtr> x = geometries_from_sfc(hGEOSCtxt, sfcx, &dim);
+  std::vector<GeomPtr> y = geometries_from_sfc(hGEOSCtxt, sfcy, &dim);
+  if (x.size() != y.size()) {
+    CPL_geos_finish(hGEOSCtxt);
+    Rcpp::stop("for element-wise operations, x and y must have equal length");
+  }
+  size_t n = x.size();
+  std::vector<GeomPtr> out(n);
+#ifdef HAVE390
+  double grid_size = geos_grid_size_xy(sfcx, sfcy);
+#endif
+  
+#ifndef HAVE390
+  geom_fn geom_function;
+  if (op == "intersection")        geom_function = (geom_fn) GEOSIntersection_r;
+  else if (op == "union")          geom_function = (geom_fn) GEOSUnion_r;
+  else if (op == "difference")     geom_function = (geom_fn) GEOSDifference_r;
+  else if (op == "sym_difference") geom_function = (geom_fn) GEOSSymDifference_r;
+#else
+  geom_fnp geom_function;
+  if (op == "intersection")        geom_function = (geom_fnp) GEOSIntersectionPrec_r;
+  else if (op == "union")          geom_function = (geom_fnp) GEOSUnionPrec_r;
+  else if (op == "difference")     geom_function = (geom_fnp) GEOSDifferencePrec_r;
+  else if (op == "sym_difference") geom_function = (geom_fnp) GEOSSymDifferencePrec_r;
+#endif
+  else {
+    CPL_geos_finish(hGEOSCtxt);
+    Rcpp::stop("invalid operation"); // #nocov
+  }
+  
+  for (size_t i = 0; i < n; i++) {
+    if (GEOSisEmpty_r(hGEOSCtxt, x[i].get()) || GEOSisEmpty_r(hGEOSCtxt, y[i].get())) {
+      out[i] = geos_ptr(GEOSGeom_createEmptyCollection_r(hGEOSCtxt,
+                                                         GEOS_GEOMETRYCOLLECTION), hGEOSCtxt);
+    } else {
+#ifndef HAVE390
+      GeomPtr geom = geos_ptr(geom_function(hGEOSCtxt, x[i].get(), y[i].get()), hGEOSCtxt);
+#else
+      GeomPtr geom = geos_ptr(geom_function(hGEOSCtxt, x[i].get(), y[i].get(), grid_size), hGEOSCtxt);
+#endif
+      if (geom == nullptr)
+        out[i] = geos_ptr(GEOSGeom_createEmptyCollection_r(hGEOSCtxt,
+                                                           GEOS_GEOMETRYCOLLECTION), hGEOSCtxt);
+      else
+        out[i] = std::move(geom);
+    }
+    Rcpp::checkUserInterrupt();
+  }
+  
+  Rcpp::NumericMatrix m(n, 2);
+  for (size_t i = 0; i < n; i++) {
+    m(i, 0) = i + 1;
+    m(i, 1) = i + 1;
+  }
+  
+  Rcpp::List ret = sfc_from_geometry(hGEOSCtxt, out, dim);
+  ret.attr("crs") = sfcx.attr("crs");
+  ret.attr("idx") = m;
+  CPL_geos_finish(hGEOSCtxt);
+  return ret;
 }
 
 // [[Rcpp::export(rng=false)]]
