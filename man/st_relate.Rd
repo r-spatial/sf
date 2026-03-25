@@ -4,7 +4,7 @@
 \alias{st_relate}
 \title{Compute DE9-IM relation between pairs of geometries, or match it to a given pattern}
 \usage{
-st_relate(x, y, pattern = NA_character_, sparse = !is.na(pattern))
+st_relate(x, y, pattern = NA_character_, sparse = !is.na(pattern), ...)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
