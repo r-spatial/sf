@@ -31,7 +31,7 @@ st_relate(x, y, pattern = NA_character_, sparse = !is.na(pattern), ...)
 - ...:
 
   may be used to specify `by_element=TRUE` to return a vector with
-  element-wise relations
+  element-wise relations or matches
 
 ## Value
 

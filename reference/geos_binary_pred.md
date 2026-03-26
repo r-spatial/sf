@@ -5,7 +5,7 @@ Geometric binary predicates on pairs of simple feature geometry sets
 ## Usage
 
 ``` r
-st_intersects(x, y, sparse = TRUE, ...)
+st_intersects(x, y, sparse = TRUE, ..., by_element = FALSE)
 
 st_disjoint(x, y = x, sparse = TRUE, prepared = TRUE, ...)
 
@@ -119,6 +119,11 @@ st_is_within_distance(x, y = x, dist, sparse = TRUE, ..., remove_self = FALSE)
       [`s2_rebuild()`](https://r-spatial.github.io/s2/reference/s2_boundary.html)
       or a boolean operation.
 
+- by_element:
+
+  logical; if `TRUE`, return logical vector with x-y pair-wise predicate
+  values
+
 - prepared:
 
   logical; prepare geometry for `x`, before looping over `y`? See
@@ -167,7 +172,8 @@ element `i` an integer vector with all indices `j` for which
 `predicate(x[i],y[j])` is `TRUE` (and hence a zero-length integer vector
 if none of them is `TRUE`). From the dense matrix, one can find out if
 one or more elements intersect by `apply(mat, 1, any)`, and from the
-sparse list by `lengths(lst) > 0`, see examples below.
+sparse list by `lengths(lst) > 0`, see examples below. If
+`by_element=TRUE`, return a vector of pair-wise predicate values.
 
 ## Details
 

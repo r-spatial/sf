@@ -5,10 +5,10 @@ get nearest points between pairs of geometries
 ## Usage
 
 ``` r
-st_nearest_points(x, y, ...)
+st_nearest_points(x, y, ..., by_element = FALSE)
 
 # S3 method for class 'sfc'
-st_nearest_points(x, y, ..., pairwise = FALSE)
+st_nearest_points(x, y, ..., pairwise = by_element, by_element = FALSE)
 
 # S3 method for class 'sfg'
 st_nearest_points(x, y, ...)
@@ -25,22 +25,29 @@ st_nearest_points(x, y, ...)
 
 - y:
 
-  object of class `sfg`, `sfc` or `sf`
+  object of class `sfg`, `sfc` or `sf`; needs to have the same number of
+  geometries of `x` when `by_element=TRUE`
 
 - ...:
 
   ignored
 
+- by_element:
+
+  logical; if `FALSE` (default) return nearest points between all
+  possible pairs, if `TRUE`, return nearest points between row-wise x-y
+  pairs.
+
 - pairwise:
 
-  logical; if `FALSE` (default) return nearest points between all pairs,
-  if `TRUE`, return nearest points between subsequent pairs.
+  logical; deprecated in favour of `by_element`
 
 ## Value
 
 an [sfc](https://r-spatial.github.io/sf/reference/sfc.md) object with
 all two-point `LINESTRING` geometries of point pairs from the first to
-the second geometry, of length x \* y, with y cycling fastest. See
+the second geometry, of length x \* y if `by_element=FALSE` (with y
+cycling fastest), or lf length `length(x)` when `by_element=TRUE`. See
 examples for ideas how to convert these to `POINT` geometries.
 
 ## Details

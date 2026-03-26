@@ -49,10 +49,10 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">st_nearest_points</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">...</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">st_nearest_points</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">...</span>, by_element <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'sfc'</span></span>
-<span><span class="fu">st_nearest_points</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">...</span>, pairwise <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">st_nearest_points</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">...</span>, pairwise <span class="op">=</span> <span class="va">by_element</span>, by_element <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'sfg'</span></span>
 <span><span class="fu">st_nearest_points</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -70,20 +70,24 @@
 
 
 <dt id="arg-y">y<a class="anchor" aria-label="anchor" href="#arg-y"></a></dt>
-<dd><p>object of class <code>sfg</code>, <code>sfc</code> or <code>sf</code></p></dd>
+<dd><p>object of class <code>sfg</code>, <code>sfc</code> or <code>sf</code>; needs to have the same number of geometries of <code>x</code> when <code>by_element=TRUE</code></p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>ignored</p></dd>
 
 
+<dt id="arg-by-element">by_element<a class="anchor" aria-label="anchor" href="#arg-by-element"></a></dt>
+<dd><p>logical; if <code>FALSE</code> (default) return nearest points between all possible pairs, if <code>TRUE</code>, return nearest points between row-wise x-y pairs.</p></dd>
+
+
 <dt id="arg-pairwise">pairwise<a class="anchor" aria-label="anchor" href="#arg-pairwise"></a></dt>
-<dd><p>logical; if <code>FALSE</code> (default) return nearest points between all pairs, if <code>TRUE</code>, return nearest points between subsequent pairs.</p></dd>
+<dd><p>logical; deprecated in favour of <code>by_element</code></p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>an <a href="sfc.html">sfc</a> object with all two-point <code>LINESTRING</code> geometries of point pairs from the first to the second geometry, of length x * y, with y cycling fastest. See examples for ideas how to convert these to <code>POINT</code> geometries.</p>
+    <p>an <a href="sfc.html">sfc</a> object with all two-point <code>LINESTRING</code> geometries of point pairs from the first to the second geometry, of length x * y if <code>by_element=FALSE</code> (with y cycling fastest), or lf length <code>length(x)</code> when <code>by_element=TRUE</code>. See examples for ideas how to convert these to <code>POINT</code> geometries.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

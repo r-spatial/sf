@@ -2,7 +2,7 @@
 
 ## version 1.1-1
 
-- add the option `by_element = TRUE` to most geometry predicates,
+- add the option `by_element = TRUE` to binary geometry predicates,
   measures and transformers;
   [\#2594](https://github.com/r-spatial/sf/issues/2594) and
   [\#2595](https://github.com/r-spatial/sf/issues/2595) by

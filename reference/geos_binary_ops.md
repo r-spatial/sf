@@ -6,7 +6,7 @@ collections
 ## Usage
 
 ``` r
-st_intersection(x, y, ...)
+st_intersection(x, y, ..., by_element = FALSE)
 
 # S3 method for class 'sfc'
 st_intersection(x, y, ...)
@@ -38,6 +38,11 @@ st_snap(x, y, tolerance)
 
   arguments passed on to
   [s2_options](https://r-spatial.github.io/s2/reference/s2_options.html)
+
+- by_element:
+
+  logical; if `TRUE`, return pair-wise computed geometries, rather than
+  set-wise; can be used for all binary operations
 
 - tolerance:
 
