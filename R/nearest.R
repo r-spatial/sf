@@ -2,11 +2,12 @@
 #' 
 #' get nearest points between pairs of geometries
 #' @param x object of class \code{sfg}, \code{sfc} or \code{sf}
-#' @param y object of class \code{sfg}, \code{sfc} or \code{sf}
-#' @param pairwise logical; if \code{FALSE} (default) return nearest points between all pairs, if \code{TRUE}, return nearest points between subsequent pairs.
+#' @param y object of class \code{sfg}, \code{sfc} or \code{sf}; needs to have the same number of geometries of `x` when `by_element=TRUE`
+#' @param by_element logical; if \code{FALSE} (default) return nearest points between all possible pairs, if \code{TRUE}, return nearest points between row-wise x-y pairs.
+#' @param pairwise logical; deprecated in favour of `by_element`
 #' @param ... ignored
 #' @seealso \link{st_nearest_feature} for finding the nearest feature
-#' @return an \link{sfc} object with all two-point \code{LINESTRING} geometries of point pairs from the first to the second geometry, of length x * y, with y cycling fastest. See examples for ideas how to convert these to \code{POINT} geometries.
+#' @return an \link{sfc} object with all two-point \code{LINESTRING} geometries of point pairs from the first to the second geometry, of length x * y if `by_element=FALSE` (with y cycling fastest), or lf length `length(x)` when `by_element=TRUE`. See examples for ideas how to convert these to \code{POINT} geometries.
 #' @details in case \code{x} lies inside \code{y}, when using S2, the end points 
 #' are on polygon boundaries, when using GEOS the end point are identical to \code{x}.
 #' @examples
@@ -34,11 +35,11 @@
 #' plot(pts[seq(2, 200, 2)], add = TRUE, col = 'green')
 #' 
 #' @export
-st_nearest_points = function(x, y, ...) UseMethod("st_nearest_points")
+st_nearest_points = function(x, y, ..., by_element = FALSE) UseMethod("st_nearest_points")
 
 #' @export
 #' @name st_nearest_points
-st_nearest_points.sfc = function(x, y, ..., pairwise = FALSE) {
+st_nearest_points.sfc = function(x, y, ..., pairwise = by_element, by_element = FALSE) {
 	stopifnot(st_crs(x) == st_crs(y))
 	longlat = isTRUE(st_is_longlat(x))
 	if (longlat && sf_use_s2()) {
