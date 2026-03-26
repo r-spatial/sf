@@ -858,38 +858,38 @@ geos_op2_geom = function(op, x, y, ..., by_element = FALSE, model = "semi-open")
 	stopifnot(st_crs(x) == st_crs(y))
 	x = st_geometry(x)
 	y = st_geometry(y)
+	longlat = isTRUE(st_is_longlat(x))
 	if (by_element) {
 		stopifnot(length(x) == length(y))
-		longlat = isTRUE(st_is_longlat(x))
 		if (longlat && sf_use_s2()) {
 			fn = switch(op, intersection = s2::s2_intersection,
 				difference = s2::s2_difference,
 				sym_difference = s2::s2_sym_difference,
 				union = s2::s2_union, stop("invalid operator"))
-			return(st_as_sfc(fn(x, y, s2::s2_options(model = model, ...)),
-				crs = st_crs(x)))
+			st_as_sfc(fn(x, y, s2::s2_options(model = model, ...)), crs = st_crs(x))
+		} else {
+			if (longlat)
+				message_longlat(paste0("st_", op))
+			st_sfc(CPL_geos_op2_by_element(op, x, y), crs = st_crs(x))
 		}
-		if (longlat)
-			message_longlat(paste0("st_", op))
-		return(st_sfc(CPL_geos_op2_by_element(op, x, y), crs = st_crs(x)))
-	}
-	longlat = isTRUE(st_is_longlat(x))
-	if (longlat && sf_use_s2()) {
-		fn = switch(op, intersection = s2::s2_intersection,
-			difference = s2::s2_difference,
-			sym_difference = s2::s2_sym_difference,
-			union = s2::s2_union, stop("invalid operator"))
-		# to be optimized -- this doesn't index on y:
-		lst = structure(unlist(lapply(y, function(yy) fn(x, yy, s2::s2_options(model = model, ...))),
-			recursive = FALSE), class = "s2_geography")
-		e = s2::s2_is_empty(lst)
-		idx = cbind(rep(seq_along(x), length(y)), rep(seq_along(y), each = length(x)))
-		lst = st_as_sfc(lst, crs = st_crs(x))
-		structure(lst[!e], idx = idx[!e,,drop = FALSE])
 	} else {
-		if (longlat)
-			message_longlat(paste0("st_", op))
-		st_sfc(CPL_geos_op2(op, x, y), crs = st_crs(x))
+		if (longlat && sf_use_s2()) {
+			fn = switch(op, intersection = s2::s2_intersection,
+				difference = s2::s2_difference,
+				sym_difference = s2::s2_sym_difference,
+				union = s2::s2_union, stop("invalid operator"))
+			# to be optimized -- this doesn't index on y:
+			lst = structure(unlist(lapply(y, function(yy) fn(x, yy, s2::s2_options(model = model, ...))),
+				recursive = FALSE), class = "s2_geography")
+			e = s2::s2_is_empty(lst)
+			idx = cbind(rep(seq_along(x), length(y)), rep(seq_along(y), each = length(x)))
+			lst = st_as_sfc(lst, crs = st_crs(x))
+			structure(lst[!e], idx = idx[!e,,drop = FALSE])
+		} else {
+			if (longlat)
+				message_longlat(paste0("st_", op))
+			st_sfc(CPL_geos_op2(op, x, y), crs = st_crs(x))
+		}
 	}
 }
 
@@ -1107,7 +1107,7 @@ st_union.sfg = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 }
 
 #' @export
-st_union.sfc = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
+st_union.sfc = function(x, y, ..., by_feature = isTRUE(list(...)$by_element), is_coverage = FALSE) {
 	ll = isTRUE(st_is_longlat(x))
 	if (missing(y)) { # unary union, possibly by_feature:
 		if (ll && sf_use_s2()) { 
@@ -1126,27 +1126,25 @@ st_union.sfc = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 	} else {
 		y = st_geometry(y)
 		stopifnot(st_crs(x) == st_crs(y))
-		if (by_feature) {
+		if (is_coverage)
+			message("in st_union(), is_coverage is ignored when y is given")
+		if (by_feature)
 			stopifnot(length(x) == length(y))
-			if (ll && sf_use_s2())
+		if (ll && sf_use_s2()) {
+			if (by_feature)
 				st_as_sfc(s2::s2_union(x, y, ...), crs = st_crs(x)) 
 			else {
-				if (ll)
-					message_longlat("st_union")
-				st_as_sfc(mapply(st_union, x, y, MoreArgs = list(is_coverage = is_coverage), SIMPLIFY = FALSE),
-						  crs = st_crs(x), precision = st_precision(x))
-			}
-		} else {
-			if (ll && sf_use_s2()) {
 				i = rep(seq_along(x), each = length(y))
 				j = rep(seq_along(y), length(x))
-				st_as_sfc(s2::s2_union(x[i], y[j], ...), crs = st_crs(x),
-					precision = st_precision(x)) 
-			} else {
-				if (ll)
-					message_longlat("st_union")
-				geos_op2_geom("union", x, y, ...)
+				st_as_sfc(s2::s2_union(x[i], y[j], ...), crs = st_crs(x), precision = st_precision(x)) 
 			}
+		} else {
+			if (ll)
+				message_longlat("st_union")
+			if (by_feature) # old-style: in case by_element is not specified
+				geos_op2_geom("union", x, y, by_element = TRUE, ...)
+			else
+				geos_op2_geom("union", x, y, ...) # handles by_element
 		}
 	}
 }
