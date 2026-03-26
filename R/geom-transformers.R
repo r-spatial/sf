@@ -908,6 +908,7 @@ get_first_sfg = function(x) {
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param ... arguments passed on to \link[s2]{s2_options}
+#' @param by_element logical; if `TRUE`, return pair-wise computed geometries, rather than set-wise; can be used for all binary operations
 #' @export
 #' @return The intersection, difference or symmetric difference between two sets of geometries.
 #' The returned object has the same class as that of the first argument (\code{x}) with the non-empty geometries resulting from applying the operation to all geometry pairs in \code{x} and \code{y}. In case \code{x} is of class \code{sf}, the matching attributes of the original object(s) are added. The \code{sfc} geometry list-column returned carries an attribute \code{idx}, which is an \code{n}-by-2 matrix with every row the index of the corresponding entries of \code{x} and \code{y}, respectively.
@@ -943,7 +944,7 @@ get_first_sfg = function(x) {
 #' i = st_intersection(sf) # all intersections
 #' plot(i["n.overlaps"])
 #' summary(i$n.overlaps - lengths(i$origins))
-st_intersection = function(x, y, ...) UseMethod("st_intersection")
+st_intersection = function(x, y, ..., by_element = FALSE) UseMethod("st_intersection")
 
 #' @export
 st_intersection.sfg = function(x, y, ...)

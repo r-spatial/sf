@@ -45,6 +45,8 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 		sparse = TRUE, prepared = FALSE, model = "closed", ...,
 		remove_self = FALSE, retain_unique = FALSE,
 		by_element = FALSE) {
+
+	longlat = inherits(x, "s2geography") || isTRUE(st_is_longlat(x))
 	if (by_element) {
 		if (missing(y))
 			stop("y is required when by_element = TRUE")
@@ -53,59 +55,60 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 		x = st_geometry(x)
 		y = st_geometry(y)
 		stopifnot(length(x) == length(y))
-		longlat = inherits(x, "s2geography") || isTRUE(st_is_longlat(x))
 		if (longlat && sf_use_s2() && op %in% c("intersects", "contains", "within",
 				"covers", "covered_by", "disjoint", "equals", "touches")) {
 			fn = get(paste0("s2_", op), envir = getNamespace("s2"))
-			return(fn(x, y, s2::s2_options(model = model, ...)))
-		}
-		return(CPL_geos_binop_by_element(x, y, op, par, pattern, prepared)[[1]])
-	}
-	if (missing(y))
-		y = x
-	else if (inherits(x, c("sf", "sfc")) && inherits(y, c("sf", "sfc")))
-		stopifnot(st_crs(x) == st_crs(y))
-	longlat = inherits(x, "s2geography") || isTRUE(st_is_longlat(x))
-	if (longlat && sf_use_s2() && op %in% c("intersects", "contains", "within",
-			"covers", "covered_by", "disjoint", "equals", "touches")) {
-		fn = get(paste0("s2_", op, "_matrix"), envir = getNamespace("s2")) # get op function
-		lst = fn(x, y, s2::s2_options(model = model, ...)) # call function
-		id = if (is.null(row.names(x)))
-				as.character(seq_along(lst))
-			else
-				row.names(x)
-		sgbp(lst, predicate = op, region.id = id, ncol = length(st_geometry(y)), sparse,
-			remove_self = remove_self, retain_unique = retain_unique)
-	} else {
-		if (longlat && !(op %in% c("equals", "equals_exact")))
-			message_longlat(paste0("st_", op))
-		if (prepared && is_symmetric(op, pattern) &&
-				length(dx <- st_dimension(x)) && length(dy <- st_dimension(y)) &&
-				isTRUE(all(dx == 0)) && isTRUE(all(dy == 2))) {
-			t(st_geos_binop(op, y, x, par = par, pattern = pattern, sparse = sparse, 
-				prepared = prepared, remove_self = remove_self, retain_unique = retain_unique,
-				...))
+			fn(x, y, s2::s2_options(model = model, ...))
 		} else {
-			ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern, prepared)
-			if (length(ret) == 0 || is.null(dim(ret[[1]]))) {
-				id = if (is.null(row.names(x)))
-						as.character(seq_along(ret))
-					else
-						row.names(x)
-				sgbp(ret, predicate = op, region.id = id, ncol = length(st_geometry(y)), sparse,
-					remove_self = remove_self, retain_unique = retain_unique)
-			} else # CPL_geos_binop returned a matrix, e.g. from op = "relate"
-				ret[[1]]
+			if (longlat && !(op %in% c("equals", "equals_exact")))
+				message_longlat(paste0("st_", op))
+			CPL_geos_binop_by_element(x, y, op, par, pattern, prepared)[[1]]
+		}
+	} else {
+		if (missing(y))
+			y = x
+		else if (inherits(x, c("sf", "sfc")) && inherits(y, c("sf", "sfc")))
+			stopifnot(st_crs(x) == st_crs(y))
+		if (longlat && sf_use_s2() && op %in% c("intersects", "contains", "within",
+				"covers", "covered_by", "disjoint", "equals", "touches")) {
+			fn = get(paste0("s2_", op, "_matrix"), envir = getNamespace("s2")) # get op function
+			lst = fn(x, y, s2::s2_options(model = model, ...)) # call function
+			id = if (is.null(row.names(x)))
+					as.character(seq_along(lst))
+				else
+					row.names(x)
+			sgbp(lst, predicate = op, region.id = id, ncol = length(st_geometry(y)), sparse,
+				remove_self = remove_self, retain_unique = retain_unique)
+		} else {
+			if (longlat && !(op %in% c("equals", "equals_exact")))
+				message_longlat(paste0("st_", op))
+			if (prepared && is_symmetric(op, pattern) &&
+					length(dx <- st_dimension(x)) && length(dy <- st_dimension(y)) &&
+					isTRUE(all(dx == 0)) && isTRUE(all(dy == 2))) {
+				t(st_geos_binop(op, y, x, par = par, pattern = pattern, sparse = sparse, 
+					prepared = prepared, remove_self = remove_self, retain_unique = retain_unique,
+					...))
+			} else {
+				ret = CPL_geos_binop(st_geometry(x), st_geometry(y), op, par, pattern, prepared)
+				if (length(ret) == 0 || is.null(dim(ret[[1]]))) {
+					id = if (is.null(row.names(x)))
+							as.character(seq_along(ret))
+						else
+							row.names(x)
+					sgbp(ret, predicate = op, region.id = id, ncol = length(st_geometry(y)), sparse,
+						remove_self = remove_self, retain_unique = retain_unique)
+				} else # CPL_geos_binop returned a matrix, e.g. from op = "relate"
+					ret[[1]]
+			}
 		}
 	}
 }
-
 #' Compute DE9-IM relation between pairs of geometries, or match it to a given pattern
 #' @param x object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param y object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @param pattern character; define the pattern to match to, see details.
 #' @param sparse logical; should a sparse matrix be returned (`TRUE`) or a dense matrix?
-#' @param ... may be used to specify `by_element=TRUE` to return a vector with element-wise relations
+#' @param ... may be used to specify `by_element=TRUE` to return a vector with element-wise relations or matches
 #' @return In case \code{pattern} is not given, \code{st_relate} returns a dense \code{character} matrix; element `[i,j]` has nine characters, referring to the DE9-IM relationship between `x[i]` and `y[j]`, encoded as IxIy,IxBy,IxEy,BxIy,BxBy,BxEy,ExIy,ExBy,ExEy where I refers to interior, B to boundary, and E to exterior, and e.g. BxIy the dimensionality of the intersection of the the boundary of `x[i]` and the interior of `y[j]`, which is one of: 0, 1, 2, or F; digits denoting dimensionality of intersection, F denoting no intersection. When \code{pattern} is given, a dense logical matrix or sparse index list returned with matches to the given pattern; see \link{st_intersects} for a description of the returned matrix or list. See also \url{https://en.wikipedia.org/wiki/DE-9IM} for further explanation.
 #' @export
 #' @examples
@@ -141,8 +144,9 @@ st_relate = function(x, y, pattern = NA_character_, sparse = !is.na(pattern), ..
 #' @param sparse logical; should a sparse index list be returned (`TRUE`) or a dense logical matrix? See below.
 #' @inheritDotParams s2::s2_options
 #' @param prepared logical; prepare geometry for `x`, before looping over `y`? See Details.
+#' @param by_element logical; if `TRUE`, return logical vector with x-y pair-wise predicate values
 #' @details If \code{prepared} is \code{TRUE}, and \code{x} contains POINT geometries and \code{y} contains polygons, then the polygon geometries are prepared, rather than the points.
-#' @return If \code{sparse=FALSE}, \code{st_predicate} (with \code{predicate} e.g. "intersects") returns a dense logical matrix with element \code{i,j} equal to \code{TRUE} when \code{predicate(x[i], y[j])} (e.g., when geometry of feature i and j intersect); if \code{sparse=TRUE}, an object of class \code{\link{sgbp}} is returned, which is a sparse list representation of the same matrix, with list element \code{i} an integer vector with all indices \code{j} for which \code{predicate(x[i],y[j])} is \code{TRUE} (and hence a zero-length integer vector if none of them is \code{TRUE}). From the dense matrix, one can find out if one or more elements intersect by \code{apply(mat, 1, any)}, and from the sparse list by \code{lengths(lst) > 0}, see examples below.
+#' @return If \code{sparse=FALSE}, \code{st_predicate} (with \code{predicate} e.g. "intersects") returns a dense logical matrix with element \code{i,j} equal to \code{TRUE} when \code{predicate(x[i], y[j])} (e.g., when geometry of feature i and j intersect); if \code{sparse=TRUE}, an object of class \code{\link{sgbp}} is returned, which is a sparse list representation of the same matrix, with list element \code{i} an integer vector with all indices \code{j} for which \code{predicate(x[i],y[j])} is \code{TRUE} (and hence a zero-length integer vector if none of them is \code{TRUE}). From the dense matrix, one can find out if one or more elements intersect by \code{apply(mat, 1, any)}, and from the sparse list by \code{lengths(lst) > 0}, see examples below. If `by_element=TRUE`, return a vector of pair-wise predicate values.
 #' @details For most predicates, a spatial index is built on argument \code{x}; see \url{https://r-spatial.org/r/2017/06/22/spatial-index.html}.
 #' Specifically, \code{st_intersects}, \code{st_disjoint}, \code{st_touches} \code{st_crosses}, \code{st_within}, \code{st_contains}, \code{st_contains_properly}, \code{st_overlaps}, \code{st_equals}, \code{st_covers} and \code{st_covered_by} all build spatial indexes for more efficient geometry calculations. \code{st_relate}, \code{st_equals_exact}, and do not; \code{st_is_within_distance} uses a spatial index for geographic coordinates when \code{sf_use_s2()} is true.
 #'
@@ -173,7 +177,7 @@ st_relate = function(x, y, pattern = NA_character_, sparse = !is.na(pattern), ..
 #' # retain the records with unique geometries:
 #' p[-unlist(u),]
 #' @export
-st_intersects	= function(x, y, sparse = TRUE, ...) UseMethod("st_intersects")
+st_intersects	= function(x, y, sparse = TRUE, ..., by_element = FALSE) UseMethod("st_intersects")
 
 #' @export
 st_intersects.sfc = function(x, y, sparse = TRUE, prepared = TRUE, ...)

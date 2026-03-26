@@ -11,7 +11,7 @@
 \alias{st_snap}
 \title{Geometric operations on pairs of simple feature geometry sets}
 \usage{
-st_intersection(x, y, ...)
+st_intersection(x, y, ..., by_element = FALSE)
 
 \method{st_intersection}{sfc}(x, y, ...)
 
@@ -31,6 +31,8 @@ st_snap(x, y, tolerance)
 \item{y}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
 \item{...}{arguments passed on to \link[s2]{s2_options}}
+
+\item{by_element}{logical; if \code{TRUE}, return pair-wise computed geometries, rather than set-wise; can be used for all binary operations}
 
 \item{tolerance}{tolerance values used for \code{st_snap}; numeric value or object of class \code{units}; may have tolerance values for each feature in \code{x}}
 }
