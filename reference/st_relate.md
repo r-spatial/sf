@@ -6,7 +6,7 @@ given pattern
 ## Usage
 
 ``` r
-st_relate(x, y, pattern = NA_character_, sparse = !is.na(pattern))
+st_relate(x, y, pattern = NA_character_, sparse = !is.na(pattern), ...)
 ```
 
 ## Arguments
@@ -27,6 +27,11 @@ st_relate(x, y, pattern = NA_character_, sparse = !is.na(pattern))
 
   logical; should a sparse matrix be returned (`TRUE`) or a dense
   matrix?
+
+- ...:
+
+  may be used to specify `by_element=TRUE` to return a vector with
+  element-wise relations
 
 ## Value
 

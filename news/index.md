@@ -2,6 +2,12 @@
 
 ## version 1.1-1
 
+- add the option `by_element = TRUE` to most geometry predicates,
+  measures and transformers;
+  [\#2594](https://github.com/r-spatial/sf/issues/2594) and
+  [\#2595](https://github.com/r-spatial/sf/issues/2595) by
+  [@rariariari](https://github.com/rariariari) w. help from Claude
+
 - add `MULTISURFACE` to vctrs methods;
   [\#2589](https://github.com/r-spatial/sf/issues/2589)
 
