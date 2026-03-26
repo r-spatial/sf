@@ -1,5 +1,7 @@
 # version 1.1-1
 
+* add the option `by_element = TRUE` to most geometry predicates, measures and transformers; #2594 and #2595 by @rariariari w. help from Claude
+
 * add `MULTISURFACE` to vctrs methods; #2589
 
 * add argument `include_non_intersected` to `st_interpolate_aw()`
