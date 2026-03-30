@@ -222,16 +222,16 @@ graticule_attributes = function(df) {
 	df
 }
 
-trim_bb = function(bb = c(-180, -90, 180, 90), margin, wrap=c(-180,180)) {
+# make sure lat stays slightly inside [-90,90], and lon inside [-180,180] or [0,360]
+trim_bb = function(bb = c(-180, -90, 180, 90), margin) {
 	stopifnot(margin > 0, margin <= 1.0)
 	fr = 1.0 - margin
-	if (min(bb[c(1,3)]) >= -15. && max(bb[c(1,3)]) > 195.) { # 0-360 span:
-		wrap=c(0., 360.)
-		bb[1] = max(bb[1], .5 * wrap[1] * fr)
-		bb[3] = min(bb[3], wrap[2] * fr)
+	if (min(bb[c(1,3)]) >= -1. && max(bb[c(1,3)]) > 181.) { # 0-360 span:
+		bb[1] = max(bb[1], 0.)
+		bb[3] = min(bb[3], 360. * fr)
 	} else {
-		bb[1] = max(bb[1], wrap[1] * fr)
-		bb[3] = min(bb[3], wrap[2] * fr)
+		bb[1] = max(bb[1], -180. * fr)
+		bb[3] = min(bb[3],  180. * fr)
 	}
 	bb[2] = max(bb[2], -90. * fr)
 	bb[4] = min(bb[4],  90. * fr)
