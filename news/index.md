@@ -2,6 +2,9 @@
 
 ## version 1.1-1
 
+- better handle graticules crossing the antemeridian;
+  [\#2561](https://github.com/r-spatial/sf/issues/2561)
+
 - add the option `by_element = TRUE` to binary geometry predicates,
   measures and transformers;
   [\#2594](https://github.com/r-spatial/sf/issues/2594) and
