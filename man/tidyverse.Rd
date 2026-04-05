@@ -15,6 +15,8 @@
 \alias{slice.sf}
 \alias{summarise.sf}
 \alias{summarise}
+\alias{count.sf}
+\alias{tally.sf}
 \alias{distinct.sf}
 \alias{gather.sf}
 \alias{pivot_longer.sf}
@@ -60,6 +62,10 @@ rename_with.sf(.data, .fn, .cols, ...)
 slice.sf(.data, ..., .dots)
 
 summarise.sf(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE)
+
+count.sf(x, ...)
+
+tally.sf(x, ...)
 
 distinct.sf(.data, ..., .keep_all = FALSE, exact = FALSE, par = 0)
 
@@ -296,6 +302,10 @@ In case one or more of the arguments (expressions) in the \code{summarise} call 
 
 In case \code{do_union} is \code{FALSE}, \code{summarise} will simply combine geometries using \link{c.sfg}. When polygons sharing a boundary are combined, this leads to geometries that are invalid; see for instance \url{https://github.com/r-spatial/sf/issues/681}.
 
+\code{count} drops all geometries.
+
+\code{tally} drops all geometries.
+
 \code{distinct} gives distinct records for which all attributes and geometries are distinct; \link{st_equals} is used to find out which geometries are distinct.
 
 \code{nest} assumes that a simple feature geometry list-column was among the columns that were nested.
@@ -343,6 +353,14 @@ if (require(dplyr, quietly = TRUE)) {
  nc.g |> summarise(mean(AREA))
  nc.g |> summarise(mean(AREA)) |> plot(col = grey(3:6 / 7))
  nc |> as.data.frame() |> summarise(mean(AREA))
+}
+if (require(dplyr, quietly = TRUE)) {
+  nc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
+  nc |> count(area_cl)
+}
+if (require(dplyr, quietly = TRUE)) {
+  nc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
+  nc |> group_by(area_cl) |> tally()
 }
 if (require(dplyr, quietly = TRUE)) {
  nc[c(1:100, 1:10), ] |> distinct() |> nrow()

@@ -341,6 +341,33 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE
 	st_as_sf(structure(ret, sf_column = NULL))
 }
 
+#' @name tidyverse
+#' @examples
+#' if (require(dplyr, quietly = TRUE)) {
+#'   nc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
+#'   nc |> count(area_cl)
+#' }
+#' @details \code{count} drops all geometries.
+count.sf <- function(x, ...) {
+	class(x) <- setdiff(class(x), "sf")
+	if (!requireNamespace("dplyr", quietly = TRUE))
+		stop("dplyr required: install that first") # nocov
+	NextMethod()
+}
+
+#' @name tidyverse
+#' @examples
+#' if (require(dplyr, quietly = TRUE)) {
+#'   nc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
+#'   nc |> group_by(area_cl) |> tally()
+#' }
+#' @details \code{tally} drops all geometries.
+tally.sf <- function(x, ...) {
+	class(x) <- setdiff(class(x), "sf")
+	if (!requireNamespace("dplyr", quietly = TRUE))
+		stop("dplyr required: install that first") # nocov
+	NextMethod()
+}
 
 #' @name tidyverse
 #' @param .keep_all see corresponding function in dplyr
@@ -692,6 +719,8 @@ register_all_s3_methods = function() {
 	s3_register("dplyr::semi_join", "sf")
 	s3_register("dplyr::slice", "sf")
 	s3_register("dplyr::summarise", "sf")
+	s3_register("dplyr::count", "sf")
+	s3_register("dplyr::tally", "sf")
 	s3_register("dplyr::transmute", "sf")
 	s3_register("dplyr::ungroup", "sf")
 	s3_register("tidyr::drop_na", "sf")
