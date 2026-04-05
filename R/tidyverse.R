@@ -349,6 +349,7 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE
 #' }
 #' @details \code{count} drops all geometries.
 count.sf <- function(x, ...) {
+	x <- st_drop_geometry(x)
 	class(x) <- setdiff(class(x), "sf")
 	if (!requireNamespace("dplyr", quietly = TRUE))
 		stop("dplyr required: install that first") # nocov
@@ -363,6 +364,7 @@ count.sf <- function(x, ...) {
 #' }
 #' @details \code{tally} drops all geometries.
 tally.sf <- function(x, ...) {
+	x <- st_drop_geometry(x)
 	class(x) <- setdiff(class(x), "sf")
 	if (!requireNamespace("dplyr", quietly = TRUE))
 		stop("dplyr required: install that first") # nocov

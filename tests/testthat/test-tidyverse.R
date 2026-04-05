@@ -346,6 +346,7 @@ test_that("`count()` works", {
 		sorted_and_named <- count(nc, area_cl, sort = TRUE, name = "number")
 		expect_equal(unsorted$n, c(35, 15, 22, 28))
 		expect_equal(sorted_and_named$number, c(35, 28, 22, 15))
+		expect_false("sf" %in% class(unsorted))
 	})
 
 test_that("`tally()` works", {
@@ -355,4 +356,5 @@ test_that("`tally()` works", {
 	sorted_and_named <- tally(group_by(nc, area_cl), sort = TRUE, name = "number")
 	expect_equal(unsorted$n, c(35, 15, 22, 28))
 	expect_equal(sorted_and_named$number, c(35, 28, 22, 15))
+	expect_false("sf" %in% class(unsorted))
 })
