@@ -45,7 +45,11 @@ Authors@R:
       person(given = "Dewey",
              family = "Dunnington",
              role = "ctb",
-             comment = c(ORCID = "0000-0002-9415-4582"))
+             comment = c(ORCID = "0000-0002-9415-4582")),
+      person(given = "Alexandre",
+             family = "Courtiol",
+             role = "ctb",
+             comment = c(ORCID = "0000-0003-0637-2959"))
 			 )
 Description: Support for simple feature access, a standardized way to
     encode and analyze spatial vector data. Binds to 'GDAL' 
