@@ -295,6 +295,9 @@ slice.sf <- function(.data, ..., .dots) {
 #'  nc.g |> summarise(mean(AREA))
 #'  nc.g |> summarise(mean(AREA)) |> plot(col = grey(3:6 / 7))
 #'  nc |> as.data.frame() |> summarise(mean(AREA))
+#'  # counting geometries (after duplicating each row):
+#'  nc.dupl <- nc[rep(seq_along(nc), each = 2), ]
+#'  nc.dupl |> summarise(n = n(), .by = "geometry")
 #' }
 summarise.sf <- function(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE) {
 	sf_column = attr(.data, "sf_column")
@@ -349,8 +352,10 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE
 #' if (require(dplyr, quietly = TRUE)) {
 #'   nc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
 #'   nc |> count(area_cl)
+#'   nc |> group_by(area_cl) |> tally()
 #' }
-#' @details \code{count} drops all geometries.
+#' @details The functions \code{count} and \code{tally} drop all geometries.
+#' For counting geometries use \code{summarise(.data, n = n(), .by = "geometry")}.
 count.sf <- function(x, ..., wt = NULL, sort = FALSE, name = "n") {
 	x <- st_drop_geometry(x)
 	class(x) <- setdiff(class(x), "sf")
@@ -360,12 +365,6 @@ count.sf <- function(x, ..., wt = NULL, sort = FALSE, name = "n") {
 }
 
 #' @name tidyverse
-#' @examples
-#' if (require(dplyr, quietly = TRUE)) {
-#'   nc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
-#'   nc |> group_by(area_cl) |> tally()
-#' }
-#' @details \code{tally} drops all geometries.
 tally.sf <- function(x, ..., wt = NULL, sort = FALSE, name = "n") {
 	x <- st_drop_geometry(x)
 	class(x) <- setdiff(class(x), "sf")

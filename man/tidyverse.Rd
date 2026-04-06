@@ -308,9 +308,8 @@ In case one or more of the arguments (expressions) in the \code{summarise} call 
 
 In case \code{do_union} is \code{FALSE}, \code{summarise} will simply combine geometries using \link{c.sfg}. When polygons sharing a boundary are combined, this leads to geometries that are invalid; see for instance \url{https://github.com/r-spatial/sf/issues/681}.
 
-\code{count} drops all geometries.
-
-\code{tally} drops all geometries.
+The functions \code{count} and \code{tally} drop all geometries.
+For counting geometries use \code{summarise(.data, n = n(), .by = "geometry")}.
 
 \code{distinct} gives distinct records for which all attributes and geometries are distinct; \link{st_equals} is used to find out which geometries are distinct.
 
@@ -359,13 +358,13 @@ if (require(dplyr, quietly = TRUE)) {
  nc.g |> summarise(mean(AREA))
  nc.g |> summarise(mean(AREA)) |> plot(col = grey(3:6 / 7))
  nc |> as.data.frame() |> summarise(mean(AREA))
+ # counting geometries (after duplicating each row):
+ nc.dupl <- nc[rep(seq_along(nc), each = 2), ]
+ nc.dupl |> summarise(n = n(), .by = "geometry")
 }
 if (require(dplyr, quietly = TRUE)) {
   nc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
   nc |> count(area_cl)
-}
-if (require(dplyr, quietly = TRUE)) {
-  nc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
   nc |> group_by(area_cl) |> tally()
 }
 if (require(dplyr, quietly = TRUE)) {
