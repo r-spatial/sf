@@ -358,7 +358,6 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE
 #' For counting geometries use \code{summarise(.data, n = n(), .by = "geometry")}.
 count.sf <- function(x, ..., wt = NULL, sort = FALSE, name = "n") {
 	x <- st_drop_geometry(x)
-	class(x) <- setdiff(class(x), "sf")
 	if (!requireNamespace("dplyr", quietly = TRUE))
 		stop("dplyr required: install that first") # nocov
 	NextMethod()
@@ -367,7 +366,6 @@ count.sf <- function(x, ..., wt = NULL, sort = FALSE, name = "n") {
 #' @name tidyverse
 tally.sf <- function(x, ..., wt = NULL, sort = FALSE, name = "n") {
 	x <- st_drop_geometry(x)
-	class(x) <- setdiff(class(x), "sf")
 	if (!requireNamespace("dplyr", quietly = TRUE))
 		stop("dplyr required: install that first") # nocov
 	NextMethod()
