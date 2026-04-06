@@ -295,6 +295,9 @@ slice.sf <- function(.data, ..., .dots) {
 #'  nc.g |> summarise(mean(AREA))
 #'  nc.g |> summarise(mean(AREA)) |> plot(col = grey(3:6 / 7))
 #'  nc |> as.data.frame() |> summarise(mean(AREA))
+#'  # counting geometries (after duplicating each row):
+#'  nc.dupl <- nc[rep(seq_along(nc), each = 2), ]
+#'  nc.dupl |> summarise(n = n(), .by = "geometry")
 #' }
 summarise.sf <- function(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE) {
 	sf_column = attr(.data, "sf_column")
@@ -341,6 +344,32 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE
 	st_as_sf(structure(ret, sf_column = NULL))
 }
 
+#' @name tidyverse
+#' @param wt see original function docs
+#' @param sort see original function docs
+#' @param name see original function docs
+#' @examples
+#' if (require(dplyr, quietly = TRUE)) {
+#'   nc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
+#'   nc |> count(area_cl)
+#'   nc |> group_by(area_cl) |> tally()
+#' }
+#' @details The functions \code{count} and \code{tally} drop all geometries.
+#' For counting geometries use \code{summarise(.data, n = n(), .by = "geometry")}.
+count.sf <- function(x, ..., wt = NULL, sort = FALSE, name = "n") {
+	x <- st_drop_geometry(x)
+	if (!requireNamespace("dplyr", quietly = TRUE))
+		stop("dplyr required: install that first") # nocov
+	NextMethod()
+}
+
+#' @name tidyverse
+tally.sf <- function(x, ..., wt = NULL, sort = FALSE, name = "n") {
+	x <- st_drop_geometry(x)
+	if (!requireNamespace("dplyr", quietly = TRUE))
+		stop("dplyr required: install that first") # nocov
+	NextMethod()
+}
 
 #' @name tidyverse
 #' @param .keep_all see corresponding function in dplyr
@@ -692,6 +721,8 @@ register_all_s3_methods = function() {
 	s3_register("dplyr::semi_join", "sf")
 	s3_register("dplyr::slice", "sf")
 	s3_register("dplyr::summarise", "sf")
+	s3_register("dplyr::count", "sf")
+	s3_register("dplyr::tally", "sf")
 	s3_register("dplyr::transmute", "sf")
 	s3_register("dplyr::ungroup", "sf")
 	s3_register("tidyr::drop_na", "sf")
