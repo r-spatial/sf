@@ -342,13 +342,16 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE
 }
 
 #' @name tidyverse
+#' @param wt see original function docs
+#' @param sort see original function docs
+#' @param name see original function docs
 #' @examples
 #' if (require(dplyr, quietly = TRUE)) {
 #'   nc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
 #'   nc |> count(area_cl)
 #' }
 #' @details \code{count} drops all geometries.
-count.sf <- function(x, ...) {
+count.sf <- function(x, ..., wt = NULL, sort = FALSE, name = "n") {
 	x <- st_drop_geometry(x)
 	class(x) <- setdiff(class(x), "sf")
 	if (!requireNamespace("dplyr", quietly = TRUE))
@@ -363,7 +366,7 @@ count.sf <- function(x, ...) {
 #'   nc |> group_by(area_cl) |> tally()
 #' }
 #' @details \code{tally} drops all geometries.
-tally.sf <- function(x, ...) {
+tally.sf <- function(x, ..., wt = NULL, sort = FALSE, name = "n") {
 	x <- st_drop_geometry(x)
 	class(x) <- setdiff(class(x), "sf")
 	if (!requireNamespace("dplyr", quietly = TRUE))

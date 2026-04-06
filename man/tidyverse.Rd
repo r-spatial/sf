@@ -63,9 +63,9 @@ slice.sf(.data, ..., .dots)
 
 summarise.sf(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE)
 
-count.sf(x, ...)
+count.sf(x, ..., wt = NULL, sort = FALSE, name = "n")
 
-tally.sf(x, ...)
+tally.sf(x, ..., wt = NULL, sort = FALSE, name = "n")
 
 distinct.sf(.data, ..., .keep_all = FALSE, exact = FALSE, par = 0)
 
@@ -189,6 +189,12 @@ more details.}
 \item{do_union}{logical; in case \code{summary} does not create a geometry column, should geometries be created by unioning using \link{st_union}, or simply by combining using \link{st_combine}? Using \link{st_union} resolves internal boundaries, but in case of unioning points, this will likely change the order of the points; see Details.}
 
 \item{is_coverage}{logical; if \code{do_union} is \code{TRUE}, use an optimized algorithm for features that form a polygonal coverage (have no overlaps)}
+
+\item{wt}{see original function docs}
+
+\item{sort}{see original function docs}
+
+\item{name}{see original function docs}
 
 \item{.keep_all}{see corresponding function in dplyr}
 

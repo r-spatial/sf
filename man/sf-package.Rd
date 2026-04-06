@@ -45,6 +45,7 @@ Other contributors:
   \item Thomas Lin Pedersen [contributor]
   \item Dan Baston [contributor]
   \item Dewey Dunnington (\href{https://orcid.org/0000-0002-9415-4582}{ORCID}) [contributor]
+  \item Alexandre Courtiol (\href{https://orcid.org/0000-0003-0637-2959}{ORCID}) [contributor]
 }
 
 }
