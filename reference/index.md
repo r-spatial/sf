@@ -381,6 +381,8 @@
   [`rename_with.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
   [`slice.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
   [`summarise.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`count.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
+  [`tally.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
   [`distinct.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
   [`gather.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)
   [`pivot_longer.sf()`](https://r-spatial.github.io/sf/reference/tidyverse.md)

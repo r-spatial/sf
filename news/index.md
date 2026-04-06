@@ -2,6 +2,12 @@
 
 ## version 1.1-1
 
+- [`dplyr::count()`](https://dplyr.tidyverse.org/reference/count.html)
+  and
+  [`dplyr::tally()`](https://dplyr.tidyverse.org/reference/count.html)
+  no longer preserve geometries;
+  [\#2596](https://github.com/r-spatial/sf/issues/2596)
+
 - better handle graticules crossing the antemeridian;
   [\#2561](https://github.com/r-spatial/sf/issues/2561)
 

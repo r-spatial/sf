@@ -254,7 +254,7 @@ if (require(spatstat.linnet)) {
 #> spatstat.explore 3.8-0
 #> Loading required package: spatstat.model
 #> Loading required package: rpart
-#> spatstat.model 3.6-1
-#> spatstat.linnet 3.4-1
+#> spatstat.model 3.7-0
+#> spatstat.linnet 3.5-0
 
 ```

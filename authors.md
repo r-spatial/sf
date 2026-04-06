@@ -32,6 +32,9 @@
 - **Dewey Dunnington**. Contributor.
   [](https://orcid.org/0000-0002-9415-4582)
 
+- **Alexandre Courtiol**. Contributor.
+  [](https://orcid.org/0000-0003-0637-2959)
+
 ## Citation
 
 Source:

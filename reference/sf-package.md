@@ -66,3 +66,6 @@ Other contributors:
 
 - Dewey Dunnington ([ORCID](https://orcid.org/0000-0002-9415-4582))
   \[contributor\]
+
+- Alexandre Courtiol ([ORCID](https://orcid.org/0000-0003-0637-2959))
+  \[contributor\]

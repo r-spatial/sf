@@ -32,6 +32,10 @@ slice.sf(.data, ..., .dots)
 
 summarise.sf(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE)
 
+count.sf(x, ..., wt = NULL, sort = FALSE, name = "n")
+
+tally.sf(x, ..., wt = NULL, sort = FALSE, name = "n")
+
 distinct.sf(.data, ..., .keep_all = FALSE, exact = FALSE, par = 0)
 
 gather.sf(
@@ -182,6 +186,18 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 
   logical; if `do_union` is `TRUE`, use an optimized algorithm for
   features that form a polygonal coverage (have no overlaps)
+
+- wt:
+
+  see original function docs
+
+- sort:
+
+  see original function docs
+
+- name:
+
+  see original function docs
 
 - .keep_all:
 
@@ -386,6 +402,9 @@ geometries using
 sharing a boundary are combined, this leads to geometries that are
 invalid; see for instance <https://github.com/r-spatial/sf/issues/681>.
 
+The functions `count` and `tally` drop all geometries. For counting
+geometries use `summarise(.data, n = n(), .by = "geometry")`.
+
 `distinct` gives distinct records for which all attributes and
 geometries are distinct;
 [st_equals](https://r-spatial.github.io/sf/reference/geos_binary_pred.md)
@@ -469,10 +488,47 @@ if (require(dplyr, quietly = TRUE)) {
  nc.g |> summarise(mean(AREA))
  nc.g |> summarise(mean(AREA)) |> plot(col = grey(3:6 / 7))
  nc |> as.data.frame() |> summarise(mean(AREA))
+ # counting geometries (after duplicating each row):
+ nc.dupl <- nc[rep(seq_along(nc), each = 2), ]
+ nc.dupl |> summarise(n = n(), .by = "geometry")
 }
 
-#>   mean(AREA)
-#> 1    0.12626
+#> Simple feature collection with 16 features and 1 field
+#> Geometry type: MULTIPOLYGON
+#> Dimension:     XY
+#> Bounding box:  xmin: -81.74107 ymin: 35.99472 xmax: -75.77316 ymax: 36.58965
+#> Geodetic CRS:  NAD27
+#> # A tibble: 16 × 2
+#>                                                                   geometry     n
+#>                                                         <MULTIPOLYGON [°]> <int>
+#>  1 (((-81.47276 36.23436, -81.54084 36.27251, -81.56198 36.27359, -81.633…     2
+#>  2 (((-81.23989 36.36536, -81.24069 36.37942, -81.26284 36.40504, -81.266…     2
+#>  3 (((-80.45634 36.24256, -80.47639 36.25473, -80.53688 36.25674, -80.545…     2
+#>  4 (((-76.00897 36.3196, -76.01735 36.33773, -76.03288 36.33598, -76.0439…     2
+#>  5 (((-77.21767 36.24098, -77.23461 36.2146, -77.29861 36.21153, -77.2935…     2
+#>  6 (((-76.74506 36.23392, -76.98069 36.23024, -76.99475 36.23558, -77.130…     2
+#>  7 (((-76.00897 36.3196, -75.95718 36.19377, -75.98134 36.16973, -76.1831…     2
+#>  8 (((-76.56251 36.34057, -76.60424 36.31498, -76.64822 36.31532, -76.688…     2
+#>  9 (((-78.30876 36.26004, -78.28293 36.29188, -78.32125 36.54553, -78.051…     2
+#> 10 (((-80.02567 36.25023, -80.45301 36.25709, -80.43531 36.55104, -80.048…     2
+#> 11 (((-79.53051 36.24614, -79.5103 36.54766, -79.21706 36.54978, -79.1443…     2
+#> 12 (((-79.53051 36.24614, -79.53058 36.23616, -80.02567 36.25023, -80.024…     2
+#> 13 (((-78.74912 36.06359, -78.78841 36.06218, -78.80405 36.08094, -78.810…     2
+#> 14 (((-78.8068 36.23158, -78.95108 36.23384, -79.15927 36.23367, -79.1443…     2
+#> 15 (((-78.49252 36.17359, -78.51472 36.17522, -78.51709 36.46148, -78.502…     2
+#> 16 (((-77.33221 36.06798, -77.40531 35.99472, -77.42574 35.99606, -77.438…     2
+if (require(dplyr, quietly = TRUE)) {
+  nc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
+  nc |> count(area_cl)
+  nc |> group_by(area_cl) |> tally()
+}
+#> # A tibble: 4 × 2
+#>   area_cl         n
+#>   <fct>       <int>
+#> 1 (0,0.1]        35
+#> 2 (0.1,0.12]     15
+#> 3 (0.12,0.15]    22
+#> 4 (0.15,0.25]    28
 if (require(dplyr, quietly = TRUE)) {
  nc[c(1:100, 1:10), ] |> distinct() |> nrow()
 }
