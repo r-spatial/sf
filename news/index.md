@@ -2,6 +2,10 @@
 
 ## version 1.1-1
 
+- [`st_graticule()`](https://r-spatial.github.io/sf/reference/st_graticule.md)
+  simplifies output lines;
+  [\#1364](https://github.com/r-spatial/sf/issues/1364)
+
 - [`dplyr::count()`](https://dplyr.tidyverse.org/reference/count.html)
   and
   [`dplyr::tally()`](https://dplyr.tidyverse.org/reference/count.html)
