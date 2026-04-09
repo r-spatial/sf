@@ -1,5 +1,7 @@
 # version 1.1-1
 
+* `st_graticule()` simplifies output lines; #1364
+
 * `dplyr::count()` and `dplyr::tally()` no longer preserve geometries; #2596
 
 * better handle graticules crossing the antemeridian; #2561
