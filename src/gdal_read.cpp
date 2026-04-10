@@ -19,6 +19,7 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, bool int64
 	Rcpp::List out(n);
 	Rcpp::CharacterVector names(n);
 	Rcpp::CharacterVector domains(poFDefn->GetFieldCount()); // field domain names
+	Rcpp::CharacterVector attr_names(poFDefn->GetFieldCount()); // names of attributes
 	for (int i = 0; i < poFDefn->GetFieldCount(); i++) {
 		OGRFieldDefn *poFieldDefn = poFDefn->GetFieldDefn(i);
 		switch (poFieldDefn->GetType()) {
@@ -64,12 +65,14 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, bool int64
 				break;
 		}
 		names[i] = poFieldDefn->GetNameRef();
+		attr_names[i] = poFieldDefn->GetNameRef();
 		domains[i] = NA_STRING;
 #if GDAL_VERSION_NUM >= 3030000
 		if (poFieldDefn->GetDomainName() != "")
 			domains[i] = poFieldDefn->GetDomainName();
 #endif
 	}
+	domains.attr("names") = attr_names;
 
 	if (fid_column.size())
 		names[ poFDefn->GetFieldCount() ] = fid_column[0];
