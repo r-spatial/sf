@@ -170,6 +170,7 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 	nm = names(x)[which.geom]
 	Encoding(nm) = "UTF-8"
 	geom = x[which.geom]
+	fd = attr(x, "FieldDomains")
 
 	lc.other = setdiff(which(vapply(x, is.list, TRUE)), which.geom) # non-sfc list-columns
 	list.cols = x[lc.other]
@@ -200,9 +201,9 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 		}
 	}
 
-	x = st_as_sf(x, ...,
+	x = structure(st_as_sf(x, ...,
 		sf_column_name = if (is.character(geometry_column)) geometry_column else nm[geometry_column],
-		check_ring_dir = check_ring_dir)
+		check_ring_dir = check_ring_dir), FieldDomains = fd)
 	if (! quiet)
 		print(x, n = 0)
 	else

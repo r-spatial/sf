@@ -633,6 +633,43 @@ Rcpp::List CPL_ogr_layer_setup(Rcpp::CharacterVector datasource, Rcpp::Character
 	return Rcpp::List::create(dataset_xptr, layer_xptr);
 }
 
+Rcpp::List get_field_domains(OGRDataSource *poDS, Rcpp::CharacterVector fdn) {
+#if GDAL_VERSION_NUM >= 3050000
+	Rcpp::List fd(fdn.size());
+	for (size_t i = 0; i < fdn.size(); i++) {
+		const OGRFieldDomain *d = poDS->GetFieldDomain(Rcpp::as<std::string>(fdn[i]));
+		if (d != NULL) {
+			Rcpp::List fdi(3);
+			Rcpp::CharacterVector descr = Rcpp::wrap(d->GetDescription());
+			fdi[0] = descr;
+			fdi.attr("names") = Rcpp::CharacterVector::create("description", "merge_sum", "split_geom_ratio");
+			OGRFieldDomainMergePolicy mp = d->GetMergePolicy();
+			Rcpp::LogicalVector l(1);
+			if (mp == OFDMP_DEFAULT_VALUE)
+				l[0] = NA_LOGICAL;
+			else if (mp == OFDMP_SUM)
+				l[0] = true;
+			else if (mp == OFDMP_GEOMETRY_WEIGHTED)
+				l[0] = false;
+			fdi[1] = l;
+			OGRFieldDomainSplitPolicy sp = d->GetSplitPolicy();
+			if (sp == OFDSP_DEFAULT_VALUE)
+				l[0] = NA_LOGICAL;
+			else if (sp == OFDSP_DUPLICATE)
+				l[0] = false;
+			else if (sp == OFDSP_GEOMETRY_RATIO)
+				l[0] = true;
+			fdi[2] = l;
+			fd[i] = fdi;
+		}
+	}
+	fd.attr("names") = fdn;
+	return fd;
+#else
+	return Rcpp::List::create();
+#endif
+}
+
 // [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer,
 		Rcpp::CharacterVector query,
@@ -652,6 +689,12 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 
 	Rcpp::List out = sf_from_ogrlayer(poLayer, quiet, int64_as_string, toTypeUser, fid_column_name,
 		promote_to_multi, -1);
+
+#if GDAL_VERSION_NUM >= 3050000
+	Rcpp::CharacterVector fdn = Rcpp::wrap(poDS->GetFieldDomainNames());
+	if (fdn.size() > 0)
+		out.attr("FieldDomains") = get_field_domains(poDS, fdn);
+#endif
 
 	// clean up if SQL was used https://www.gdal.org/classGDALDataset.html#ab2c2b105b8f76a279e6a53b9b4a182e0
 	if (! Rcpp::CharacterVector::is_na(query[0]))
