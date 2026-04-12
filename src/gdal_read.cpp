@@ -653,24 +653,25 @@ Rcpp::List get_field_domains(OGRDataSource *poDS, Rcpp::CharacterVector fdn) {
 			Rcpp::CharacterVector descr = Rcpp::wrap(d->GetDescription());
 			fdi[0] = descr;
 			OGRFieldDomainMergePolicy mp = d->GetMergePolicy();
-			Rcpp::LogicalVector l(1);
-			l[0] = NA_LOGICAL;
+			Rcpp::LogicalVector merge_sum(1);
+			merge_sum[0] = NA_LOGICAL;
 			if (mp == OFDMP_SUM)
-				l[0] = true; // extensive
+				merge_sum[0] = true; // extensive
 			else if (mp == OFDMP_GEOMETRY_WEIGHTED)
-				l[0] = false; // intensive
+				merge_sum[0] = false; // intensive
 			else if (mp != OFDMP_DEFAULT_VALUE)
 				Rcpp::warning("unknown value for GetMergePolicy()");
-			fdi[1] = l;
+			fdi[1] = merge_sum;
 			OGRFieldDomainSplitPolicy sp = d->GetSplitPolicy();
-			l[0] = NA_LOGICAL;
+			Rcpp::LogicalVector split_geom_ratio(1);
+			split_geom_ratio[0] = NA_LOGICAL;
 			if (sp == OFDSP_DUPLICATE)
-				l[0] = false; // intensive
+				split_geom_ratio[0] = false; // intensive
 			else if (sp == OFDSP_GEOMETRY_RATIO)
-				l[0] = true; // extensive
+				split_geom_ratio[0] = true; // extensive
 			else if (sp != OFDSP_DEFAULT_VALUE)
 				Rcpp::warning("unknown value for GetSplitPolicy()");
-			fdi[2] = l;
+			fdi[2] = split_geom_ratio;
 			fdi.attr("names") = Rcpp::CharacterVector::create("description", "merge_sum", "split_geom_ratio");
 			fd[i] = fdi;
 		}
