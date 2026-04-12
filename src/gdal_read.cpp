@@ -68,7 +68,7 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, bool int64
 		attr_names[i] = poFieldDefn->GetNameRef();
 		domains[i] = NA_STRING;
 #if GDAL_VERSION_NUM >= 3030000
-		if (poFieldDefn->GetDomainName() != "")
+		if (! poFieldDefn->GetDomainName().empty())
 			domains[i] = poFieldDefn->GetDomainName();
 #endif
 	}
@@ -652,24 +652,26 @@ Rcpp::List get_field_domains(OGRDataSource *poDS, Rcpp::CharacterVector fdn) {
 			Rcpp::List fdi(3);
 			Rcpp::CharacterVector descr = Rcpp::wrap(d->GetDescription());
 			fdi[0] = descr;
-			fdi.attr("names") = Rcpp::CharacterVector::create("description", "merge_sum", "split_geom_ratio");
 			OGRFieldDomainMergePolicy mp = d->GetMergePolicy();
 			Rcpp::LogicalVector l(1);
-			if (mp == OFDMP_DEFAULT_VALUE)
-				l[0] = NA_LOGICAL;
-			else if (mp == OFDMP_SUM)
-				l[0] = true;
+			l[0] = NA_LOGICAL;
+			if (mp == OFDMP_SUM)
+				l[0] = true; // extensive
 			else if (mp == OFDMP_GEOMETRY_WEIGHTED)
-				l[0] = false;
+				l[0] = false; // intensive
+			else if (mp != OFDMP_DEFAULT_VALUE)
+				Rcpp::warning("unknown value for GetMergePolicy()");
 			fdi[1] = l;
 			OGRFieldDomainSplitPolicy sp = d->GetSplitPolicy();
-			if (sp == OFDSP_DEFAULT_VALUE)
-				l[0] = NA_LOGICAL;
-			else if (sp == OFDSP_DUPLICATE)
-				l[0] = false;
+			l[0] = NA_LOGICAL;
+			if (sp == OFDSP_DUPLICATE)
+				l[0] = false; // intensive
 			else if (sp == OFDSP_GEOMETRY_RATIO)
-				l[0] = true;
+				l[0] = true; // extensive
+			else if (sp != OFDSP_DEFAULT_VALUE)
+				Rcpp::warning("unknown value for GetSplitPolicy()");
 			fdi[2] = l;
+			fdi.attr("names") = Rcpp::CharacterVector::create("description", "merge_sum", "split_geom_ratio");
 			fd[i] = fdi;
 		}
 	}

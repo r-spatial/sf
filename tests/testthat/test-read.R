@@ -202,3 +202,9 @@ test_that("Missing data sources have useful error message (#967)", {
 	# delete temp file
 	file.remove(x)
 })
+
+test_that("Field domains are read from a geopackage", {
+	r = read_sf(system.file("gpkg/td.gpkg.zip", package = "sf"), options=c("IMMUTABLE=YES"))
+	expect_false(is.null(attr(r, "FieldDomains")))
+	expect_false(is.null(attr(r, "domains")))
+})
