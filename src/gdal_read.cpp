@@ -460,8 +460,12 @@ Rcpp::List sf_from_ogrlayer(OGRLayer *poLayer, bool quiet, bool int64_as_string,
 					if (geom == NULL)
 						geom = OGRGeometryFactory::createGeometry((OGRwkbGeometryType) toType); // #nocov
 					else if ((geom =
-							OGRGeometryFactory::forceTo(geom, (OGRwkbGeometryType) toType, NULL))
-							== NULL)
+#if GDAL_VERSION_NUM >= 3130000
+							OGRGeometryFactory::forceTo(std::unique_ptr<OGRGeometry>(geom), (OGRwkbGeometryType) toType, NULL).release()
+#else
+							OGRGeometryFactory::forceTo(geom, (OGRwkbGeometryType) toType, NULL)
+#endif
+							) == NULL)
 						Rcpp::stop("OGRGeometryFactory::forceTo returned NULL"); // #nocov
 					handle_error(poFeatureV[i]->SetGeomFieldDirectly(iGeom, geom));
 					poGeom[i] = poFeatureV[i]->GetGeomFieldRef(iGeom);
