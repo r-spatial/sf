@@ -21,8 +21,9 @@
   [\#2595](https://github.com/r-spatial/sf/issues/2595) by
   [@rariariari](https://github.com/rariariari) w. help from Claude
 
-- add `MULTISURFACE` to vctrs methods;
+- add `MULTISURFACE` and `CURVEPOLYGON` to vctrs methods;
   [\#2589](https://github.com/r-spatial/sf/issues/2589)
+  [\#2601](https://github.com/r-spatial/sf/issues/2601) ￼
 
 - add argument `include_non_intersected` to
   [`st_interpolate_aw()`](https://r-spatial.github.io/sf/reference/interpolate_aw.md)
