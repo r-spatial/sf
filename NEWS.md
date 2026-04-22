@@ -8,8 +8,8 @@
 
 * add the option `by_element = TRUE` to binary geometry predicates, measures and transformers; #2594 and #2595 by @rariariari w. help from Claude
 
-* add `MULTISURFACE` to vctrs methods; #2589
-
+* add `MULTISURFACE` and `CURVEPOLYGON` to vctrs methods; #2589 #2601
+￼
 * add argument `include_non_intersected` to `st_interpolate_aw()`
 
 * add argument `weights`, for dasymetric mapping, to `st_interpolate_aw()` (experimental)
