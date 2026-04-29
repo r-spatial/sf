@@ -279,34 +279,34 @@ that reside in the same directory, only one of them having extension <code>.shp<
 <span class="r-out co"><span class="r-pr">#&gt;</span> Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Geodetic CRS:  NAD27</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span> <span class="co"># note that AREA was computed using Euclidian area on lon/lat degrees</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       AREA          PERIMETER         CNTY_         CNTY_ID    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Min.   :0.0420   Min.   :0.999   Min.   :1825   Min.   :1825  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1st Qu.:0.0910   1st Qu.:1.324   1st Qu.:1902   1st Qu.:1902  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Median :0.1205   Median :1.609   Median :1982   Median :1982  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Mean   :0.1263   Mean   :1.673   Mean   :1986   Mean   :1986  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3rd Qu.:0.1542   3rd Qu.:1.859   3rd Qu.:2067   3rd Qu.:2067  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Max.   :0.2410   Max.   :3.640   Max.   :2241   Max.   :2241  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      NAME               FIPS               FIPSNO         CRESS_ID     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Length:100         Length:100         Min.   :37001   Min.   :  1.00  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Class :character   Class :character   1st Qu.:37050   1st Qu.: 25.75  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Mode  :character   Mode  :character   Median :37100   Median : 50.50  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                        Mean   :37100   Mean   : 50.50  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                        3rd Qu.:37150   3rd Qu.: 75.25  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                        Max.   :37199   Max.   :100.00  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      BIR74           SID74          NWBIR74           BIR79      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Min.   :  248   Min.   : 0.00   Min.   :   1.0   Min.   :  319  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1st Qu.: 1077   1st Qu.: 2.00   1st Qu.: 190.0   1st Qu.: 1336  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Median : 2180   Median : 4.00   Median : 697.5   Median : 2636  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Mean   : 3300   Mean   : 6.67   Mean   :1050.8   Mean   : 4224  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3rd Qu.: 3936   3rd Qu.: 8.25   3rd Qu.:1168.5   3rd Qu.: 4889  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Max.   :21588   Max.   :44.00   Max.   :8027.0   Max.   :30757  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      SID79          NWBIR79                 geometry  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Min.   : 0.00   Min.   :    3.0   MULTIPOLYGON :100  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1st Qu.: 2.00   1st Qu.:  250.5   epsg:4267    :  0  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Median : 5.00   Median :  874.5   +proj=long...:  0  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Mean   : 8.36   Mean   : 1352.8                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3rd Qu.:10.25   3rd Qu.: 1406.8                      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Max.   :57.00   Max.   :11631.0                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       AREA          PERIMETER         CNTY_         CNTY_ID            NAME    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Min.   :0.0420   Min.   :0.999   Min.   :1825   Min.   :1825   Length   :100  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1st Qu.:0.0910   1st Qu.:1.324   1st Qu.:1902   1st Qu.:1902   N.unique :100  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Median :0.1205   Median :1.609   Median :1982   Median :1982   N.blank  :  0  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Mean   :0.1263   Mean   :1.673   Mean   :1986   Mean   :1986   Min.nchar:  3  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3rd Qu.:0.1542   3rd Qu.:1.859   3rd Qu.:2067   3rd Qu.:2067   Max.nchar: 12  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Max.   :0.2410   Max.   :3.640   Max.   :2241   Max.   :2241                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         FIPS         FIPSNO         CRESS_ID          BIR74      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Length   :100   Min.   :37001   Min.   :  1.00   Min.   :  248  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  N.unique :100   1st Qu.:37050   1st Qu.: 25.75   1st Qu.: 1077  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  N.blank  :  0   Median :37100   Median : 50.50   Median : 2180  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Min.nchar:  5   Mean   :37100   Mean   : 50.50   Mean   : 3300  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Max.nchar:  5   3rd Qu.:37150   3rd Qu.: 75.25   3rd Qu.: 3936  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  Max.   :37199   Max.   :100.00   Max.   :21588  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      SID74          NWBIR74           BIR79           SID79      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Min.   : 0.00   Min.   :   1.0   Min.   :  319   Min.   : 0.00  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1st Qu.: 2.00   1st Qu.: 190.0   1st Qu.: 1336   1st Qu.: 2.00  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Median : 4.00   Median : 697.5   Median : 2636   Median : 5.00  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Mean   : 6.67   Mean   :1050.8   Mean   : 4224   Mean   : 8.36  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3rd Qu.: 8.25   3rd Qu.:1168.5   3rd Qu.: 4889   3rd Qu.:10.25  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Max.   :44.00   Max.   :8027.0   Max.   :30757   Max.   :57.00  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     NWBIR79                 geometry  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Min.   :    3.0   MULTIPOLYGON :100  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1st Qu.:  250.5   epsg:4267    :  0  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Median :  874.5   +proj=long...:  0  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Mean   : 1352.8                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3rd Qu.: 1406.8                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Max.   :11631.0                      </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## only three fields by select clause</span></span></span>
 <span class="r-in"><span><span class="co">## only two features by where clause</span></span></span>

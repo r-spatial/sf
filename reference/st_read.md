@@ -248,34 +248,34 @@ nc = st_read(system.file("shape/nc.shp", package="sf"))
 #> Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 #> Geodetic CRS:  NAD27
 summary(nc) # note that AREA was computed using Euclidian area on lon/lat degrees
-#>       AREA          PERIMETER         CNTY_         CNTY_ID    
-#>  Min.   :0.0420   Min.   :0.999   Min.   :1825   Min.   :1825  
-#>  1st Qu.:0.0910   1st Qu.:1.324   1st Qu.:1902   1st Qu.:1902  
-#>  Median :0.1205   Median :1.609   Median :1982   Median :1982  
-#>  Mean   :0.1263   Mean   :1.673   Mean   :1986   Mean   :1986  
-#>  3rd Qu.:0.1542   3rd Qu.:1.859   3rd Qu.:2067   3rd Qu.:2067  
-#>  Max.   :0.2410   Max.   :3.640   Max.   :2241   Max.   :2241  
-#>      NAME               FIPS               FIPSNO         CRESS_ID     
-#>  Length:100         Length:100         Min.   :37001   Min.   :  1.00  
-#>  Class :character   Class :character   1st Qu.:37050   1st Qu.: 25.75  
-#>  Mode  :character   Mode  :character   Median :37100   Median : 50.50  
-#>                                        Mean   :37100   Mean   : 50.50  
-#>                                        3rd Qu.:37150   3rd Qu.: 75.25  
-#>                                        Max.   :37199   Max.   :100.00  
-#>      BIR74           SID74          NWBIR74           BIR79      
-#>  Min.   :  248   Min.   : 0.00   Min.   :   1.0   Min.   :  319  
-#>  1st Qu.: 1077   1st Qu.: 2.00   1st Qu.: 190.0   1st Qu.: 1336  
-#>  Median : 2180   Median : 4.00   Median : 697.5   Median : 2636  
-#>  Mean   : 3300   Mean   : 6.67   Mean   :1050.8   Mean   : 4224  
-#>  3rd Qu.: 3936   3rd Qu.: 8.25   3rd Qu.:1168.5   3rd Qu.: 4889  
-#>  Max.   :21588   Max.   :44.00   Max.   :8027.0   Max.   :30757  
-#>      SID79          NWBIR79                 geometry  
-#>  Min.   : 0.00   Min.   :    3.0   MULTIPOLYGON :100  
-#>  1st Qu.: 2.00   1st Qu.:  250.5   epsg:4267    :  0  
-#>  Median : 5.00   Median :  874.5   +proj=long...:  0  
-#>  Mean   : 8.36   Mean   : 1352.8                      
-#>  3rd Qu.:10.25   3rd Qu.: 1406.8                      
-#>  Max.   :57.00   Max.   :11631.0                      
+#>       AREA          PERIMETER         CNTY_         CNTY_ID            NAME    
+#>  Min.   :0.0420   Min.   :0.999   Min.   :1825   Min.   :1825   Length   :100  
+#>  1st Qu.:0.0910   1st Qu.:1.324   1st Qu.:1902   1st Qu.:1902   N.unique :100  
+#>  Median :0.1205   Median :1.609   Median :1982   Median :1982   N.blank  :  0  
+#>  Mean   :0.1263   Mean   :1.673   Mean   :1986   Mean   :1986   Min.nchar:  3  
+#>  3rd Qu.:0.1542   3rd Qu.:1.859   3rd Qu.:2067   3rd Qu.:2067   Max.nchar: 12  
+#>  Max.   :0.2410   Max.   :3.640   Max.   :2241   Max.   :2241                  
+#>         FIPS         FIPSNO         CRESS_ID          BIR74      
+#>  Length   :100   Min.   :37001   Min.   :  1.00   Min.   :  248  
+#>  N.unique :100   1st Qu.:37050   1st Qu.: 25.75   1st Qu.: 1077  
+#>  N.blank  :  0   Median :37100   Median : 50.50   Median : 2180  
+#>  Min.nchar:  5   Mean   :37100   Mean   : 50.50   Mean   : 3300  
+#>  Max.nchar:  5   3rd Qu.:37150   3rd Qu.: 75.25   3rd Qu.: 3936  
+#>                  Max.   :37199   Max.   :100.00   Max.   :21588  
+#>      SID74          NWBIR74           BIR79           SID79      
+#>  Min.   : 0.00   Min.   :   1.0   Min.   :  319   Min.   : 0.00  
+#>  1st Qu.: 2.00   1st Qu.: 190.0   1st Qu.: 1336   1st Qu.: 2.00  
+#>  Median : 4.00   Median : 697.5   Median : 2636   Median : 5.00  
+#>  Mean   : 6.67   Mean   :1050.8   Mean   : 4224   Mean   : 8.36  
+#>  3rd Qu.: 8.25   3rd Qu.:1168.5   3rd Qu.: 4889   3rd Qu.:10.25  
+#>  Max.   :44.00   Max.   :8027.0   Max.   :30757   Max.   :57.00  
+#>     NWBIR79                 geometry  
+#>  Min.   :    3.0   MULTIPOLYGON :100  
+#>  1st Qu.:  250.5   epsg:4267    :  0  
+#>  Median :  874.5   +proj=long...:  0  
+#>  Mean   : 1352.8                      
+#>  3rd Qu.: 1406.8                      
+#>  Max.   :11631.0                      
 
 ## only three fields by select clause
 ## only two features by where clause

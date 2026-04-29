@@ -536,13 +536,13 @@ if (require(dplyr, quietly = TRUE)) {
 if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE) && "geometry" %in% names(nc)) {
  nc |> select(SID74, SID79) |> gather("VAR", "SID", -geometry) |> summary()
 }
-#>           geometry       VAR                 SID        
-#>  MULTIPOLYGON :200   Length:200         Min.   : 0.000  
-#>  epsg:4267    :  0   Class :character   1st Qu.: 2.000  
-#>  +proj=long...:  0   Mode  :character   Median : 5.000  
-#>                                         Mean   : 7.515  
-#>                                         3rd Qu.: 9.000  
-#>                                         Max.   :57.000  
+#>           geometry          VAR           SID        
+#>  MULTIPOLYGON :200   Length   :200   Min.   : 0.000  
+#>  epsg:4267    :  0   N.unique :  2   1st Qu.: 2.000  
+#>  +proj=long...:  0   N.blank  :  0   Median : 5.000  
+#>                      Min.nchar:  5   Mean   : 7.515  
+#>                      Max.nchar:  5   3rd Qu.: 9.000  
+#>                                      Max.   :57.000  
 if (require(tidyr, quietly = TRUE) && require(dplyr, quietly = TRUE) && "geometry" %in% names(nc)) {
  nc$row = 1:100 # needed for spread to work
  nc |> select(SID74, SID79, geometry, row) |>

@@ -170,7 +170,7 @@ if (require(sp, quietly = TRUE)) {
 #>  Mean   : 8.165   Mean   :0.24002   Mean   : 7.478                        
 #>  3rd Qu.: 8.955   3rd Qu.:0.36407   3rd Qu.: 9.000                        
 #>  Max.   :10.520   Max.   :0.88039   Max.   :17.000                        
-#>                                     NA's   :2                             
+#>                                     NAs    :2                             
 #>     landuse       dist.m                geometry  
 #>  W      :50   Min.   :  10.0   POINT        :155  
 #>  Ah     :39   1st Qu.:  80.0   epsg:28992   :  0  
@@ -178,7 +178,7 @@ if (require(sp, quietly = TRUE)) {
 #>  Fw     :10   Mean   : 290.3                      
 #>  Ab     : 8   3rd Qu.: 450.0                      
 #>  (Other):25   Max.   :1000.0                      
-#>  NA's   : 1                                       
+#>  NAs    : 1                                       
 if (require(sp, quietly = TRUE)) {
 x = rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))
 x1 = 0.1 * x + 0.1
