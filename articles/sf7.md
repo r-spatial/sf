@@ -10,6 +10,7 @@ it can be switched off (resorting to flat space geometry) by
 `sf_use_s2(FALSE)`.
 
 ``` r
+
 library(sf)
 ## Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
 ## 
@@ -20,6 +21,7 @@ library(sf)
 ```
 
 ``` r
+
 library(s2)
 ```
 
@@ -42,22 +44,22 @@ Spatial coordinates either refer to *projected* (or Cartesian)
 coordinates, meaning that they are associated to points on a flat space,
 or to unprojected or *geographic* coordinates, when they refer to angles
 (latitude, longitude) pointing to locations on a sphere (or ellipsoid).
-The flat space is also referred to as $R^{2}$, the sphere as $S^{2}$.
+The flat space is also referred to as $`R^2`$, the sphere as $`S^2`$.
 
 Package `sf` implements *simple features*, a standard for point, line,
 and polygon geometries where geometries are built from points (nodes)
 connected by straight lines (edges). The simple feature standard does
 not say much about its suitability for dealing with geographic
 coordinates, but the topological relational system it builds upon
-([DE9-IM](https://en.wikipedia.org/wiki/DE-9IM)) refer to $R^{2}$, the
+([DE9-IM](https://en.wikipedia.org/wiki/DE-9IM)) refer to $`R^2`$, the
 two-dimensional flat space.
 
 Yet, more and more data are routinely served or exchanged using
-geographic coordinates. Using software that assumes an $R^{2}$, flat
+geographic coordinates. Using software that assumes an $`R^2`$, flat
 space may work for some problems, and although `sf` has some functions
 in place for spherical/ellipsoidal computations (from package `lwgeom`,
 for computing area, length, distance, and for segmentizing), it has also
-happily warned the user that it is doing $R^{2}$, flat computations with
+happily warned the user that it is doing $`R^2`$, flat computations with
 such coordinates with messages like
 
     although coordinates are longitude/latitude, st_intersects assumes that they are planar
@@ -80,7 +82,7 @@ geographical coordinate reference system, `sf` uses the new package `s2`
 functions for computing pretty much all measures, predicates and
 transformations *on the sphere*. This means:
 
-- no more hodge-podge of some functions working on $R^{2}$, with
+- no more hodge-podge of some functions working on $`R^2`$, with
   annoying messages, some on the ellipsoid
 - a considerable speed increase for some functions
 - no computations on the ellipsoid (which are considered more accurate,
@@ -92,16 +94,16 @@ and which is used in many of its products (e.g. Google Maps, Google
 Earth Engine, BigQuery GIS) and has been translated in several other
 programming languages.
 
-With projected coordinates `sf` continues to work in $R^{2}$ as before.
+With projected coordinates `sf` continues to work in $`R^2`$ as before.
 
 ## Fundamental differences
 
-Compared to geometry on $R^{2}$, and DE9-IM, the `s2` package brings a
+Compared to geometry on $`R^2`$, and DE9-IM, the `s2` package brings a
 few fundamentally new concepts, which are discussed first.
 
-### Polygons on $S^{2}$ divide the sphere in two parts
+### Polygons on $`S^2`$ divide the sphere in two parts
 
-On the sphere ($S^{2}$), any polygon defines two areas; when following
+On the sphere ($`S^2`$), any polygon defines two areas; when following
 the exterior ring, we need to define what is inside, and the definition
 is *the left side of the enclosing edges*. This also means that we can
 flip a polygon (by inverting the edge order) to obtain the other part of
@@ -118,12 +120,13 @@ has an argument `check_ring_dir` that checks, and corrects, ring
 directions and many (legacy) datasets have wrong ring directions. With
 wrong ring directions, many things still work.
 
-For $S^{2}$, ring direction is essential. For that reason, `st_as_s2`
+For $`S^2`$, ring direction is essential. For that reason, `st_as_s2`
 has an argument `oriented = FALSE`, which will check and correct ring
 directions, assuming that all exterior rings occupy an area smaller than
 half the globe:
 
 ``` r
+
 nc = read_sf(system.file("gpkg/nc.gpkg", package="sf")) # wrong ring directions
 s2_area(st_as_s2(nc, oriented = FALSE)[1:3]) # corrects ring direction, correct area:
 ## [1] 1137107793  610916077 1423145355
@@ -138,6 +141,7 @@ The default conversion from `sf` to `s2` uses `oriented = FALSE`, so
 that we get
 
 ``` r
+
 all(units::drop_units(st_area(nc)) == s2_area(st_as_s2(nc, oriented = FALSE)))
 ## [1] TRUE
 ```
@@ -146,6 +150,7 @@ Here is an example where the oceans are computed as the difference from
 the full polygon representing the entire globe,
 
 ``` r
+
 g = st_as_sfc("POLYGON FULL", crs = 'EPSG:4326')
 g
 ## Geometry set for 1 feature 
@@ -159,6 +164,7 @@ g
 and the countries, and shown in an orthographic projection:
 
 ``` r
+
 options(s2_oriented = TRUE) # don't change orientation from here on
 co = st_as_sf(s2_data_countries())
 oc = st_difference(g, st_union(co)) # oceans
@@ -176,6 +182,7 @@ We can now calculate the proportion of the Earth’s surface covered by
 oceans:
 
 ``` r
+
 st_area(oc) / st_area(g)
 ## 0.711301 [1]
 ```
@@ -206,6 +213,7 @@ grid (raster) coverage, where every grid cell (typically) only contains
 its upper-left corner and its upper and left sides.
 
 ``` r
+
 a = st_as_sfc("POINT(0 0)", crs = 'EPSG:4326')
 b = st_as_sfc("POLYGON((0 0,1 0,1 1,0 1,0 0))", crs = 'EPSG:4326')
 st_intersects(a, b, model = "open")
@@ -244,6 +252,7 @@ range. Two examples:
 S2 has two alternatives: the bounding cap and the bounding rectangle:
 
 ``` r
+
 fiji = s2_data_countries("Fiji")
 aa = s2_data_countries("Antarctica")
 s2_bounds_cap(fiji)
@@ -263,11 +272,12 @@ angle around this point. The bounding rectangle reports the `_lo` and
 
 ## Switching between S2 and GEOS
 
-The two-dimensional $R^{2}$ library that was formerly used by `sf` is
+The two-dimensional $`R^2`$ library that was formerly used by `sf` is
 [GEOS](https://libgeos.org), and `sf` can be instrumented to use GEOS or
 `s2`. First we will ask if `s2` is being used by default:
 
 ``` r
+
 sf_use_s2()
 ## [1] TRUE
 ```
@@ -275,6 +285,7 @@ sf_use_s2()
 then we can switch it off (and use GEOS) by
 
 ``` r
+
 sf_use_s2(FALSE)
 ## Spherical geometry (s2) switched off
 ```
@@ -282,6 +293,7 @@ sf_use_s2(FALSE)
 and switch it on (and use s2) by
 
 ``` r
+
 sf_use_s2(TRUE)
 ## Spherical geometry (s2) switched on
 ```
@@ -297,6 +309,7 @@ coordinate system (e.g. `EPGS:3857`).
 ### Area
 
 ``` r
+
 options(s2_oriented = FALSE) # correct orientation from here on
 library(sf)
 library(units)
@@ -314,6 +327,7 @@ abline(0, 1)
 ![](sf7_files/figure-html/unnamed-chunk-14-1.png)
 
 ``` r
+
 summary((a1 - a2)/a1)
 ##       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. 
 ## -2.638e-04 -1.650e-04 -7.133e-05 -6.448e-05  1.598e-05  2.817e-04
@@ -322,6 +336,7 @@ summary((a1 - a2)/a1)
 ### Length
 
 ``` r
+
 nc_ls = st_cast(nc, "MULTILINESTRING")
 sf_use_s2(TRUE)
 ## Spherical geometry (s2) switched on
@@ -336,6 +351,7 @@ abline(0, 1)
 ![](sf7_files/figure-html/unnamed-chunk-15-1.png)
 
 ``` r
+
 summary((l1 - l2)/l1)
 ##       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. 
 ## -0.0012301 -0.0004396 -0.0001258 -0.0001123  0.0001742  0.0009660
@@ -344,6 +360,7 @@ summary((l1 - l2)/l1)
 ### Distances
 
 ``` r
+
 sf_use_s2(TRUE)
 ## Spherical geometry (s2) switched on
 d1 = st_distance(nc, nc[1:10,])
@@ -357,6 +374,7 @@ abline(0, 1)
 ![](sf7_files/figure-html/unnamed-chunk-16-1.png)
 
 ``` r
+
 summary(as.vector(d1) - as.vector(d2))
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ## -1424.5  -613.2  -236.5  -319.5     0.0   460.1
@@ -371,6 +389,7 @@ on the `model`, intersections with neighbours are only reported when
 `model` is `closed` (the default):
 
 ``` r
+
 sf_use_s2(TRUE)
 ## Spherical geometry (s2) switched on
 st_intersects(nc[1:3,], nc[1:3,]) # self-intersections + neighbours
@@ -405,6 +424,7 @@ Buffers can be calculated for features with geographic coordinates as
 follows, using an unprojected object representing the UK as an example:
 
 ``` r
+
 uk = s2_data_countries("United Kingdom")
 class(uk)
 ## [1] "s2_geography" "wk_vctr"
@@ -441,13 +461,14 @@ geometry engine in comparison with transforming and then creating
 buffers:
 
 ``` r
+
 # the sf way
 system.time({
   uk_projected = st_transform(uk_sfc, 27700)
   uk_buffer_sf = st_buffer(uk_projected, dist = 20000)
 })
 ##    user  system elapsed 
-##   0.027   0.001   0.027
+##   0.028   0.000   0.028
 # sf way with few than the 30 segments in the buffer
 system.time({
   uk_projected = st_transform(uk_sfc, 27700)
@@ -460,13 +481,13 @@ system.time({
   uk_buffer = s2_buffer_cells(uk, distance = 20000)
 })
 ##    user  system elapsed 
-##   0.024   0.000   0.025
+##   0.025   0.000   0.025
 # s2 with 10000 cells
 system.time({
   uk_buffer2 = s2_buffer_cells(uk, distance = 20000, max_cells = 10000)
 })
 ##    user  system elapsed 
-##   0.224   0.000   0.223
+##   0.226   0.000   0.226
 # s2 with 100 cells
 system.time({
   uk_buffer2 = s2_buffer_cells(uk, distance = 20000, max_cells = 100)
@@ -490,9 +511,9 @@ tracker](https://github.com/r-spatial/sf/issues/1367), deciding on
 workflows and selecting appropriate levels of level of geographic
 resolution can be an iterative process.
 [`st_buffer()`](https://r-spatial.github.io/sf/reference/geos_unary.md)
-as powered by GEOS, for $R^{2}$ data, are smooth and (nearly) exact.
+as powered by GEOS, for $`R^2`$ data, are smooth and (nearly) exact.
 [`st_buffer()`](https://r-spatial.github.io/sf/reference/geos_unary.md)
-as powered by $S^{2}$ is rougher, complex, non-smooth, and may need
+as powered by $`S^2`$ is rougher, complex, non-smooth, and may need
 tuning. A common pattern where
 [`st_buffer()`](https://r-spatial.github.io/sf/reference/geos_unary.md)
 is used is this:
@@ -507,11 +528,11 @@ When this is the case, and you are working with geographic coordinates,
 it may pay off to *not* compute buffers, but instead directly work with
 [`st_is_within_distance()`](https://r-spatial.github.io/sf/reference/geos_binary_pred.md)
 to select, for each feature of `x`, all features of `y` that are within
-a certain distance `d` from `x`. The $S^{2}$ version of this function
+a certain distance `d` from `x`. The $`S^2`$ version of this function
 uses spatial indexes, so is fast for large datasets.
 
 ### References
 
 - Dewey Dunnington, Edzer Pebesma and Ege Rubak, 2020. s2: Spherical
-  Geometry Operators Using the $S^{2}$ Geometry Library.
+  Geometry Operators Using the $`S^2`$ Geometry Library.
   <https://r-spatial.github.io/s2/>, <https://github.com/r-spatial/s2>

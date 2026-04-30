@@ -34,6 +34,7 @@ When there are multiple geometry columns, the default `print` methods
 reports which one is active:
 
 ``` r
+
 library(sf)
 ## Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
 demo(nc, ask = FALSE, echo = FALSE)
@@ -63,12 +64,14 @@ We can switch the active geometry by using `st_geometry<-` or
 as in
 
 ``` r
+
 plot(st_geometry(nc))
 ```
 
 ![](sf6_files/figure-html/unnamed-chunk-3-1.png)
 
 ``` r
+
 st_geometry(nc) <- "geom2"
 plot(st_geometry(nc))
 ```
@@ -92,6 +95,7 @@ They do! However, many developers like to write scripts that never load
 packages but address all functions by the `sf::` prefix, as in
 
 ``` r
+
 i = sf::st_intersects(sf1, sf2)
 ```
 
@@ -104,5 +108,6 @@ doesn’t exist)? Neither works. One should in this case simply load `sf`,
 e.g. by
 
 ``` r
+
 library(sf)
 ```

@@ -160,12 +160,12 @@ Failure modes and recovery plan:
 
 The following table contains the cost items.
 
-| Item                                                           | Cost              |
-|----------------------------------------------------------------|-------------------|
-| employ a student assistant for one year (10 hrs/week)          | € 6500            |
-| one week visit of Roger Bivand to the Inst. for Geoinformatics | € 1000            |
-| present the results at UseR! 2016                              | € 1500            |
-| Total:                                                         | € 9000 (9750 USD) |
+| Item | Cost |
+|----|----|
+| employ a student assistant for one year (10 hrs/week) | € 6500 |
+| one week visit of Roger Bivand to the Inst. for Geoinformatics | € 1000 |
+| present the results at UseR! 2016 | € 1500 |
+| Total: | € 9000 (9750 USD) |
 
 The visit of Roger is anticipated halfway the project; further
 communications will use skype. The project has a planned duration of 12

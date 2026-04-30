@@ -274,6 +274,7 @@ algorithm for calculating the convex hull
 ## Examples
 
 ``` r
+
 ## st_buffer, style options (taken from rgeos gBuffer)
 l1 = st_as_sfc("LINESTRING(0 0,1 5,4 5,5 2,8 2,9 4,4 6.5)")
 op = par(mfrow=c(2,3))

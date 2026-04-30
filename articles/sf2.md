@@ -32,6 +32,7 @@ As an example, we read the North Carolina counties SIDS dataset, which
 comes shipped with the `sf` package by:
 
 ``` r
+
 library(sf)
 ## Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
 fname <- system.file("shape/nc.shp", package="sf")
@@ -95,6 +96,7 @@ Available layers:
 A particular layer can now be read by e.g.
 
 ``` r
+
 st_read("PG:dbname=postgis", "sids")
 ```
 
@@ -120,6 +122,7 @@ retrieving character data as `factor`s, the argument `stringsAsFactors`
 can be set to `TRUE`:
 
 ``` r
+
 st_read(fname, stringsAsFactors = TRUE)
 ```
 
@@ -127,6 +130,7 @@ Alternatively, a user can set the global option `stringsAsFactors`, and
 this will have the same effect:
 
 ``` r
+
 options(stringsAsFactors = TRUE)
 ## Warning in options(stringsAsFactors = TRUE): 'options(stringsAsFactors = TRUE)'
 ## is deprecated and will be disabled
@@ -146,6 +150,7 @@ To write a simple features object to a file, we need at least two
 arguments, the object and a filename:
 
 ``` r
+
 st_write(nc, "nc1.shp")
 ```
 
@@ -157,6 +162,7 @@ needs to guess the driver. The above command is, for instance,
 equivalent to:
 
 ``` r
+
 st_write(nc, dsn = "nc1.shp", layer = "nc.shp", driver = "ESRI Shapefile")
 ## Writing layer `nc' to data source `nc1.shp' using driver `ESRI Shapefile'
 ## Writing 100 features with 14 fields and geometry type Multi Polygon.
@@ -219,6 +225,7 @@ process, for example what the driver should do when a table already
 exists in a database: append records to the table or overwrite it:
 
 ``` r
+
 st_write(st_as_sf(meuse), "PG:dbname=postgis", "meuse", 
     layer_options = "OVERWRITE=true")
 ```
@@ -243,6 +250,7 @@ using the `DBI` interface. So far, testing has mainly be done with
 example of reading is:
 
 ``` r
+
 library(RPostgreSQL) 
 conn = dbConnect(PostgreSQL(), dbname = "postgis") 
 meuse = st_read(conn, "meuse")
@@ -257,6 +265,7 @@ spatial datasets in R without having to read them completely in memory.
 Similarly, tables can be written:
 
 ``` r
+
 conn = dbConnect(PostgreSQL(), dbname = "postgis")
 st_write(conn, meuse, drop = TRUE)
 dbDisconnect(conn)
@@ -276,6 +285,7 @@ The usual form in which we see simple features printed is well-known
 text:
 
 ``` r
+
 st_point(c(0,1))
 ## POINT (0 1)
 st_linestring(matrix(0:9,ncol=2,byrow=TRUE))
@@ -286,6 +296,7 @@ We can create these well-known text strings explicitly using
 `st_as_text`:
 
 ``` r
+
 x = st_linestring(matrix(0:9,ncol=2,byrow=TRUE))
 str = st_as_text(x)
 x
@@ -296,6 +307,7 @@ We can convert back from WKT by using
 [`st_as_sfc()`](https://r-spatial.github.io/sf/reference/st_as_sfc.md):
 
 ``` r
+
 st_as_sfc(str)
 ## Geometry set for 1 feature 
 ## Geometry type: LINESTRING
@@ -311,6 +323,7 @@ Well-known binary is created from simple features by
 [`st_as_binary()`](https://r-spatial.github.io/sf/reference/st_as_binary.md):
 
 ``` r
+
 x = st_linestring(matrix(0:9,ncol=2,byrow=TRUE))
 (x = st_as_binary(x))
 ##  [1] 01 02 00 00 00 05 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 f0 3f
@@ -328,6 +341,7 @@ vector. These can be converted into a hexadecimal character vector using
 [`rawToHex()`](https://r-spatial.github.io/sf/reference/rawToHex.md):
 
 ``` r
+
 rawToHex(x)
 ## [1] "0102000000050000000000000000000000000000000000f03f000000000000004000000000000008400000000000001040000000000000144000000000000018400000000000001c4000000000000020400000000000002240"
 ```
@@ -336,6 +350,7 @@ Converting back to `sf` uses
 [`st_as_sfc()`](https://r-spatial.github.io/sf/reference/st_as_sfc.md):
 
 ``` r
+
 x = st_as_binary(st_sfc(st_point(0:1), st_point(5:6)))
 st_as_sfc(x)
 ## Geometry set for 2 features 
@@ -356,6 +371,7 @@ simple feature objects or geometries by
 respectively:
 
 ``` r
+
 methods(st_as_sf)
 ##  [1] st_as_sf.data.frame*   st_as_sf.lpp*          st_as_sf.map*         
 ##  [4] st_as_sf.owin*         st_as_sf.ppp*          st_as_sf.ppplist*     
@@ -379,6 +395,7 @@ methods(st_as_sfc)
 An example would be:
 
 ``` r
+
 library(sp)
 data(meuse)
 coordinates(meuse) = ~x+y
@@ -396,6 +413,7 @@ corresponding `Spatial*` objects is done using the `as` method, coercing
 to `Spatial`:
 
 ``` r
+
 x = st_sfc(st_point(c(5,5)), st_point(c(6,9)), crs = 4326)
 as(x, "Spatial")
 ## SpatialPoints:

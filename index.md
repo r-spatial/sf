@@ -88,6 +88,7 @@ Garnett](https://github.com/ryangarnett)
 Install either from CRAN with:
 
 ``` r
+
 install.packages("sf")
 ```
 
@@ -98,6 +99,7 @@ case, see below.
 Install development versions from GitHub with:
 
 ``` r
+
 library(remotes)
 install_github("r-spatial/sf")
 ```
@@ -116,6 +118,7 @@ source (or otherwise your install fails but you don’t understand what is
 going on) try again by explicitly installing the binary, using
 
 ``` r
+
 install.packages("sf", type = "binary")
 ```
 
@@ -136,12 +139,14 @@ source in R. With the current version of `proj` on homebrew,
 installation requires additional configuration:
 
 ``` r
+
 install.packages("sf", type = "source", configure.args = "--with-proj-lib=$(brew --prefix)/lib/")
 ```
 
 Or the development version:
 
 ``` r
+
 library(remotes)
 install_github("r-spatial/sf", configure.args = "--with-proj-lib=$(brew --prefix)/lib/")
 ```

@@ -74,15 +74,15 @@ The following seven simple feature types are the most common, and are
 for instance the only ones used for
 [GeoJSON](https://www.rfc-editor.org/rfc/rfc7946):
 
-| type                 | description                                                                                                                                                                                                               |
-|----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `POINT`              | zero-dimensional geometry containing a single point                                                                                                                                                                       |
-| `LINESTRING`         | sequence of points connected by straight, non-self intersecting line segments; one-dimensional geometry                                                                                                                   |
-| `POLYGON`            | geometry with a positive area (two-dimensional); sequence of points form a closed, non-self intersecting ring; the first ring denotes the exterior ring, zero or more subsequent rings denote holes in this exterior ring |
-| `MULTIPOINT`         | set of points; a MULTIPOINT is simple if no two Points in the MULTIPOINT are equal                                                                                                                                        |
-| `MULTILINESTRING`    | set of linestrings                                                                                                                                                                                                        |
-| `MULTIPOLYGON`       | set of polygons                                                                                                                                                                                                           |
-| `GEOMETRYCOLLECTION` | set of geometries of any type except GEOMETRYCOLLECTION                                                                                                                                                                   |
+| type | description |
+|----|----|
+| `POINT` | zero-dimensional geometry containing a single point |
+| `LINESTRING` | sequence of points connected by straight, non-self intersecting line segments; one-dimensional geometry |
+| `POLYGON` | geometry with a positive area (two-dimensional); sequence of points form a closed, non-self intersecting ring; the first ring denotes the exterior ring, zero or more subsequent rings denote holes in this exterior ring |
+| `MULTIPOINT` | set of points; a MULTIPOINT is simple if no two Points in the MULTIPOINT are equal |
+| `MULTILINESTRING` | set of linestrings |
+| `MULTIPOLYGON` | set of polygons |
+| `GEOMETRYCOLLECTION` | set of geometries of any type except GEOMETRYCOLLECTION |
 
 Each of the geometry types can also be a (typed) empty set, containing
 zero coordinates (for `POINT` the standard is not clear how to represent
@@ -91,18 +91,18 @@ to missing (`NA`) attributes, NULL values or empty lists.
 
 The remaining ten geometries are rare but are increasingly found:
 
-| type                | description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-|---------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `CIRCULARSTRING`    | The CIRCULARSTRING is the basic curve type, similar to a LINESTRING in the linear world. A single segment requires three points, the start and end points (first and third) and any other point on the arc. The exception to this is for a closed circle, where the start and end points are the same. In this case the second point MUST be the center of the arc, i.e., the opposite side of the circle. To chain arcs together, the last point of the previous arc becomes the first point of the next arc, just like in LINESTRING. This means that a valid circular string must have an odd number of points greater than 1. |
-| `COMPOUNDCURVE`     | A compound curve is a single, continuous curve that has both curved (circular) segments and linear segments. That means that in addition to having well-formed components, the end point of every component (except the last) must be coincident with the start point of the following component.                                                                                                                                                                                                                                                                                                                                 |
-| `CURVEPOLYGON`      | Example compound curve in a curve polygon: CURVEPOLYGON(COMPOUNDCURVE(CIRCULARSTRING(0 0,2 0, 2 1, 2 3, 4 3),(4 3, 4 5, 1 4, 0 0)), CIRCULARSTRING(1.7 1, 1.4 0.4, 1.6 0.4, 1.6 0.5, 1.7 1) )                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| `MULTICURVE`        | A MultiCurve is a 1-dimensional GeometryCollection whose elements are Curves, it can include linear strings, circular strings or compound strings.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| `MULTISURFACE`      | A MultiSurface is a 2-dimensional GeometryCollection whose elements are Surfaces, all using coordinates from the same coordinate reference system.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| `CURVE`             | A Curve is a 1-dimensional geometric object usually stored as a sequence of Points, with the subtype of Curve specifying the form of the interpolation between Points                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| `SURFACE`           | A Surface is a 2-dimensional geometric object                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| `POLYHEDRALSURFACE` | A PolyhedralSurface is a contiguous collection of polygons, which share common boundary segments                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| `TIN`               | A TIN (triangulated irregular network) is a PolyhedralSurface consisting only of Triangle patches.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| `TRIANGLE`          | A Triangle is a polygon with 3 distinct, non-collinear vertices and no interior boundary                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| type | description |
+|----|----|
+| `CIRCULARSTRING` | The CIRCULARSTRING is the basic curve type, similar to a LINESTRING in the linear world. A single segment requires three points, the start and end points (first and third) and any other point on the arc. The exception to this is for a closed circle, where the start and end points are the same. In this case the second point MUST be the center of the arc, i.e., the opposite side of the circle. To chain arcs together, the last point of the previous arc becomes the first point of the next arc, just like in LINESTRING. This means that a valid circular string must have an odd number of points greater than 1. |
+| `COMPOUNDCURVE` | A compound curve is a single, continuous curve that has both curved (circular) segments and linear segments. That means that in addition to having well-formed components, the end point of every component (except the last) must be coincident with the start point of the following component. |
+| `CURVEPOLYGON` | Example compound curve in a curve polygon: CURVEPOLYGON(COMPOUNDCURVE(CIRCULARSTRING(0 0,2 0, 2 1, 2 3, 4 3),(4 3, 4 5, 1 4, 0 0)), CIRCULARSTRING(1.7 1, 1.4 0.4, 1.6 0.4, 1.6 0.5, 1.7 1) ) |
+| `MULTICURVE` | A MultiCurve is a 1-dimensional GeometryCollection whose elements are Curves, it can include linear strings, circular strings or compound strings. |
+| `MULTISURFACE` | A MultiSurface is a 2-dimensional GeometryCollection whose elements are Surfaces, all using coordinates from the same coordinate reference system. |
+| `CURVE` | A Curve is a 1-dimensional geometric object usually stored as a sequence of Points, with the subtype of Curve specifying the form of the interpolation between Points |
+| `SURFACE` | A Surface is a 2-dimensional geometric object |
+| `POLYHEDRALSURFACE` | A PolyhedralSurface is a contiguous collection of polygons, which share common boundary segments |
+| `TIN` | A TIN (triangulated irregular network) is a PolyhedralSurface consisting only of Triangle patches. |
+| `TRIANGLE` | A Triangle is a polygon with 3 distinct, non-collinear vertices and no interior boundary |
 
 Note that `CIRCULASTRING`, `COMPOUNDCURVE` and `CURVEPOLYGON` are not
 described in the SFA standard, but in the [SQL-MM part 3
@@ -156,6 +156,7 @@ command reads the `nc` dataset from a file that is contained in the `sf`
 package:
 
 ``` r
+
 library(sf)
 ## Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
 nc <- st_read(system.file("shape/nc.shp", package="sf"))
@@ -177,6 +178,7 @@ mentions that there are 100 features (records, represented as rows) and
 14 fields (attributes, represented as columns). This object is of class
 
 ``` r
+
 class(nc)
 ## [1] "sf"         "data.frame"
 ```
@@ -185,6 +187,7 @@ meaning it extends (and “is” a) `data.frame`, but with a single
 list-column with geometries, which is held in the column with name
 
 ``` r
+
 attr(nc, "sf_column")
 ## [1] "geometry"
 ```
@@ -193,6 +196,7 @@ If we print the first three features, we see their attribute values and
 an abridged version of the geometry
 
 ``` r
+
 print(nc[9:15], n = 3)
 ```
 
@@ -213,6 +217,7 @@ In the output we see:
 Methods for `sf` objects are:
 
 ``` r
+
 methods(class = "sf")
 ##  [1] [                            [[<-                        
 ##  [3] [<-                          $<-                         
@@ -263,6 +268,7 @@ It is also possible to create `data.frame` objects with geometry
 list-columns that are not of class `sf`, e.g. by:
 
 ``` r
+
 nc.no_sf <- as.data.frame(nc)
 class(nc.no_sf)
 ## [1] "data.frame"
@@ -282,6 +288,7 @@ case by `nc$geom` or `nc[[15]]`, but the more general way uses
 [`st_geometry()`](https://r-spatial.github.io/sf/reference/st_geometry.md):
 
 ``` r
+
 (nc_geom <- st_geometry(nc))
 ## Geometry set for 100 features 
 ## Geometry type: MULTIPOLYGON
@@ -300,6 +307,7 @@ Geometries are printed in abbreviated form, but we can view a complete
 geometry by selecting it, e.g. the first one by:
 
 ``` r
+
 nc_geom[[1]]
 ## MULTIPOLYGON (((-81.47276 36.23436, -81.54084 36.27251, -81.56198 36.27359, -81.63306 36.34069, -81.74107 36.39178, -81.69828 36.47178, -81.7028 36.51934, -81.67 36.58965, -81.3453 36.57286, -81.34754 36.53791, -81.32478 36.51368, -81.31332 36.4807, -81.26624 36.43721, -81.26284 36.40504, -81.24069 36.37942, -81.23989 36.36536, -81.26424 36.35241, -81.32899 36.3635, -81.36137 36.35316, -81.36569 36.33905, -81.35413 36.29972, -81.36745 36.2787, -81.40639 36.28505, -81.41233 36.26729, -81.43104 36.26072, -81.45289 36.23959, -81.47276 36.23436)))
 ```
@@ -319,6 +327,7 @@ three parentheses.
 We can see there is a single polygon with no rings:
 
 ``` r
+
 par(mar = c(0,0,1,0))
 plot(nc[1], reset = FALSE) # reset = FALSE: we want to add to a plot with a legend
 plot(nc[1,1], col = 'grey', add = TRUE)
@@ -330,6 +339,7 @@ but some of the polygons in this dataset have multiple exterior rings;
 they can be identified by:
 
 ``` r
+
 par(mar = c(0,0,1,0))
 (w <- which(sapply(nc_geom, length) > 1))
 ## [1]  4 56 57 87 91 95
@@ -344,6 +354,7 @@ of the second exterior ring (first ring is always exterior) for the
 geometry of feature 4 by:
 
 ``` r
+
 nc_geom[[4]][[2]][[1]][1:3,]
 ##           [,1]     [,2]
 ## [1,] -76.02717 36.55672
@@ -354,6 +365,7 @@ nc_geom[[4]][[2]][[1]][1:3,]
 Geometry columns have their own class,
 
 ``` r
+
 class(nc_geom)
 ## [1] "sfc_MULTIPOLYGON" "sfc"
 ```
@@ -361,6 +373,7 @@ class(nc_geom)
 Methods for geometry list-columns include:
 
 ``` r
+
 methods(class = 'sfc')
 ##  [1] [                            [<-                         
 ##  [3] as.data.frame                c                           
@@ -417,6 +430,7 @@ retrieves the coordinate bounding box.
 Attributes include:
 
 ``` r
+
 attributes(nc_geom)
 ## $n_empty
 ## [1] 0
@@ -462,6 +476,7 @@ There are two “special” types: `GEOMETRYCOLLECTION`, and `GEOMETRY`.
 mix of geometry types, as in
 
 ``` r
+
 (mix <- st_sfc(st_geometrycollection(list(st_point(1:2))),
     st_geometrycollection(list(st_linestring(matrix(1:4,2))))))
 ## Geometry set for 2 features 
@@ -481,6 +496,7 @@ The second `GEOMETRY`, indicates that the geometries in the geometry
 list-column are of varying type:
 
 ``` r
+
 (mix <- st_sfc(st_point(1:2), st_linestring(matrix(1:4,2))))
 ## Geometry set for 2 features 
 ## Geometry type: GEOMETRY
@@ -518,6 +534,7 @@ Creator functions are rarely used in practice, since we typically bulk
 read and write spatial data. They are useful for illustration:
 
 ``` r
+
 (x <- st_point(c(1,2)))
 ## POINT (1 2)
 str(x)
@@ -549,6 +566,7 @@ correspond to single features (single records, or rows in a
 `data.frame`) are created like this
 
 ``` r
+
 p <- rbind(c(3.2,4), c(3,4.6), c(3.8,4.4), c(3.5,3.8), c(3.4,3.6), c(3.9,4.5))
 (mp <- st_multipoint(p))
 ## MULTIPOINT ((3.2 4), (3 4.6), (3.8 4.4), (3.5 3.8), (3.4 3.6), (3.9 4.5))
@@ -578,6 +596,7 @@ The objects created are shown here:
 Geometries can also be empty, as in
 
 ``` r
+
 (x <- st_geometrycollection())
 ## GEOMETRYCOLLECTION EMPTY
 length(x)
@@ -592,6 +611,7 @@ Well-known text (WKT) and well-known binary (WKB) are two encodings for
 simple feature geometries. Well-known text, e.g. seen in
 
 ``` r
+
 x <- st_linestring(matrix(10:1,5))
 st_as_text(x)
 ## [1] "LINESTRING (10 5, 9 4, 8 3, 7 2, 6 1)"
@@ -603,6 +623,7 @@ of information as text is slow and imprecise. For that reason, we use
 well-known binary (WKB) encoding
 
 ``` r
+
 st_as_binary(x)
 ##  [1] 01 02 00 00 00 05 00 00 00 00 00 00 00 00 00 24 40 00 00 00 00 00 00 14 40
 ## [26] 00 00 00 00 00 00 22 40 00 00 00 00 00 00 10 40 00 00 00 00 00 00 20 40 00
@@ -613,6 +634,7 @@ st_as_binary(x)
 WKT and WKB can both be transformed back into R native objects by
 
 ``` r
+
 st_as_sfc("LINESTRING(10 5, 9 4, 8 3, 7 2, 6 1)")[[1]]
 ## LINESTRING (10 5, 9 4, 8 3, 7 2, 6 1)
 st_as_sfc(structure(list(st_as_binary(x)), class = "WKB"))[[1]]
@@ -653,6 +675,7 @@ As we’ve seen above, reading spatial data from an external file can be
 done by:
 
 ``` r
+
 filename <- system.file("shape/nc.shp", package="sf")
 nc <- st_read(filename)
 ## Reading layer `nc' from data source 
@@ -668,6 +691,7 @@ we can suppress the output by adding argument `quiet=TRUE` or by using
 the otherwise nearly identical but more quiet
 
 ``` r
+
 nc <- read_sf(filename)
 ```
 
@@ -675,6 +699,7 @@ Writing takes place in the same fashion, using
 [`st_write()`](https://r-spatial.github.io/sf/reference/st_write.md):
 
 ``` r
+
 st_write(nc, "nc.shp")
 ## Writing layer `nc' to data source `nc.shp' using driver `ESRI Shapefile'
 ## Writing 100 features with 14 fields and geometry type Multi Polygon.
@@ -684,6 +709,7 @@ If we repeat this, we get an error message that the file already exists,
 and we can overwrite by:
 
 ``` r
+
 st_write(nc, "nc.shp", delete_layer = TRUE)
 ## Deleting layer `nc' using driver `ESRI Shapefile'
 ## Writing layer `nc' to data source `nc.shp' using driver `ESRI Shapefile'
@@ -693,6 +719,7 @@ st_write(nc, "nc.shp", delete_layer = TRUE)
 or its quiet alternative that does this by default,
 
 ``` r
+
 write_sf(nc, "nc.shp") # silently overwrites
 ```
 
@@ -709,6 +736,7 @@ best consulted for this. For instance, a PostGIS table in database
 `postgis` might be read by:
 
 ``` r
+
 meuse <- st_read("PG:dbname=postgis", "meuse")
 ```
 
@@ -735,6 +763,7 @@ is illustrated below:
 gives the number of fields, features and geometry type for each layer:
 
 ``` r
+
 st_layers(system.file("osm/overpass.osm", package="sf"))
 ```
 
@@ -743,6 +772,7 @@ this xml file the whole file needs to be read, which may be costly for
 large files. We can force counting by:
 
 ``` r
+
 Sys.setenv(OSM_USE_CUSTOM_INDEXING="NO")
 st_layers(system.file("osm/overpass.osm", package="sf"), do_count = TRUE)
 ```
@@ -750,6 +780,7 @@ st_layers(system.file("osm/overpass.osm", package="sf"), do_count = TRUE)
 Another example of reading kml and kmz files is:
 
 ``` r
+
 # Download .shp data
 u_shp <- "http://coagisweb.cabq.gov/datadownload/biketrails.zip"
 download.file(u_shp, "biketrails.zip")
@@ -828,6 +859,7 @@ e.g. converting longitudes/latitudes in NAD27 to Web Mercator
 (EPSG:3857) can be done by:
 
 ``` r
+
 nc.web_mercator <- st_transform(nc, "EPSG:3857")
 st_geometry(nc.web_mercator)[[4]][[2]][[1]][1:3,]
 ##          [,1]    [,2]
@@ -842,6 +874,7 @@ st_geometry(nc.web_mercator)[[4]][[2]][[1]][1:3,]
 coerced both ways:
 
 ``` r
+
 showMethods("coerce", classes = "sf")
 ## Function: coerce (package methods)
 ## from="sf", to="Spatial"
@@ -904,6 +937,7 @@ operations.
 return a Boolean indicating whether a geometry is valid or simple.
 
 ``` r
+
 st_is_valid(nc[1:2,])
 ## [1] TRUE TRUE
 ```
@@ -916,6 +950,7 @@ returns a character matrix with the
 each pair of geometries:
 
 ``` r
+
 x = st_transform(nc, 32119)
 st_distance(x[c(1,4,22),], x[c(1, 33,55,56),])
 ## Units: [m]
@@ -951,6 +986,7 @@ return a sparse matrix (`sgbp` object) with matching (`TRUE`) indexes,
 or a full logical matrix:
 
 ``` r
+
 st_intersects(nc[1:5,], nc[1:4,])
 ## Sparse geometry binary predicate list of length 5, where the predicate
 ## was `intersects'
@@ -980,6 +1016,7 @@ and
 return new geometries, e.g.:
 
 ``` r
+
 sel <- c(1,5,14)
 geom = st_geometry(nc.web_mercator[sel,])
 buf <- st_buffer(geom, dist = 30000)
@@ -998,6 +1035,7 @@ and
 return new geometries that are a function of pairs of geometries:
 
 ``` r
+
 par(mar = rep(0,4))
 u <- st_union(nc)
 plot(u)
@@ -1010,6 +1048,7 @@ polygons may yield a `GEOMETRYCOLLECTION` with a point, line and
 polygon:
 
 ``` r
+
 opar <- par(mfrow = c(1, 2))
 a <- st_polygon(list(cbind(c(0,0,7.5,7.5,0),c(0,-1,-1,0,0))))
 b <- st_polygon(list(cbind(c(0,1,2,3,4,5,6,7,7,0),c(1,0,.5,0,0,0.5,-0.5,-0.5,1,1))))
@@ -1027,6 +1066,7 @@ plot(i, add = TRUE, col = 'green', lwd = 2)
 ![](sf1_files/figure-html/unnamed-chunk-41-1.png)
 
 ``` r
+
 par(opar)
 ```
 
@@ -1037,6 +1077,7 @@ non-valid geometries are for instance polygons with slivers (middle) or
 self-intersections (right).
 
 ``` r
+
 library(sf)
 x1 <- st_linestring(cbind(c(0,1,0,1),c(0,1,1,0)))
 x2 <- st_polygon(list(cbind(c(0,1,1,1,0,0),c(0,0,1,0.6,1,0))))
@@ -1059,6 +1100,7 @@ and
 report results with a units attribute appropriate for the CRS:
 
 ``` r
+
 a <- st_area(nc[1,])
 attributes(a)
 ## $units
@@ -1078,6 +1120,7 @@ attributes(a)
 The **units** package can be used to convert between units:
 
 ``` r
+
 units::set_units(a, km^2) # result in square kilometers
 ## 1137.108 [km^2]
 units::set_units(a, ha) # result in hectares
@@ -1087,6 +1130,7 @@ units::set_units(a, ha) # result in hectares
 The result can be stripped of their attributes if needs be:
 
 ``` r
+
 as.numeric(a)
 ## [1] 1137107793
 ```
@@ -1125,6 +1169,7 @@ to the *attribute-geometry-relationship*, how attributes relate to their
 geometry. It can be defined at creation time:
 
 ``` r
+
 nc <- st_read(system.file("shape/nc.shp", package="sf"),
     agr = c(AREA = "aggregate", PERIMETER = "aggregate", CNTY_ = "identity",
         CNTY_ID = "identity", NAME = "identity", FIPS = "identity", FIPSNO = "identity",
@@ -1157,11 +1202,11 @@ st_agr(meuse_sf)
 When not specified, this field is filled with `NA` values, but if
 non-`NA`, it has one of three possibilities:
 
-| value     | meaning                                                                                                                   |
-|-----------|---------------------------------------------------------------------------------------------------------------------------|
-| constant  | a variable that has a constant value at every location over a spatial extent; examples: soil type, climate zone, land use |
-| aggregate | values are summary values (aggregates) over the geometry, e.g. population density, dominant land use                      |
-| identity  | values identify the geometry: they refer to (the whole of) this and only this geometry                                    |
+| value | meaning |
+|----|----|
+| constant | a variable that has a constant value at every location over a spatial extent; examples: soil type, climate zone, land use |
+| aggregate | values are summary values (aggregates) over the geometry, e.g. population density, dominant land use |
+| identity | values identify the geometry: they refer to (the whole of) this and only this geometry |
 
 With this information (still to be done) we can for instance
 

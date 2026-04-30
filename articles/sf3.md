@@ -32,6 +32,7 @@ For single geometries,
 Examples of the first three types are:
 
 ``` r
+
 library(sf)
 ## Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
 suppressPackageStartupMessages(library(dplyr))
@@ -50,6 +51,7 @@ st_multipoint(rbind(c(1,1),c(2,2))) |> st_cast("POINT")
 Examples of the fourth type are:
 
 ``` r
+
 st_geometrycollection(list(st_point(c(1,1)))) |> st_cast("POINT")
 ## POINT (1 1)
 ```
@@ -62,6 +64,7 @@ It should be noted here that when reading geometries using
 geometry:
 
 ``` r
+
 shp = system.file("shape/nc.shp", package="sf")
 class(st_geometry(st_read(shp, quiet = TRUE)))
 ## [1] "sfc_MULTIPOLYGON" "sfc"
@@ -87,6 +90,7 @@ feature sets (`sf),`st_cast\` can be used by specifying the target type,
 or without specifying it.
 
 ``` r
+
 ls <- st_linestring(rbind(c(0,0),c(1,1),c(2,1)))
 mls <- st_multilinestring(list(rbind(c(2,2),c(1,3)), rbind(c(0,0),c(1,1),c(2,1))))
 (sfc <- st_sfc(ls,mls))
@@ -130,6 +134,7 @@ to be smart for two cases:
 Examples are:
 
 ``` r
+
 ls <- st_linestring(rbind(c(0,0),c(1,1),c(2,1)))
 mls1 <- st_multilinestring(list(rbind(c(2,2),c(1,3)), rbind(c(0,0),c(1,1),c(2,1))))
 mls2 <- st_multilinestring(list(rbind(c(4,4),c(4,3)), rbind(c(2,2),c(2,1),c(3,1))))
@@ -167,11 +172,12 @@ class(st_cast(st_cast(sfc), "MULTILINESTRING"))
 
 ## Affine transformations
 
-Affine transformations are transformations of the type $f(x) = xA + b$,
-where matrix $A$ is used to flatten, scale and/or rotate, and $b$ to
-translate $x$. Low-level examples are:
+Affine transformations are transformations of the type
+$`f(x) = xA + b`$, where matrix $`A`$ is used to flatten, scale and/or
+rotate, and $`b`$ to translate $`x`$. Low-level examples are:
 
 ``` r
+
 (p = st_point(c(0,2)))
 ## POINT (0 2)
 p + 1
@@ -196,6 +202,7 @@ Carolina 90 degrees clockwise around their centroid, and shrink them to
 75% of their original size:
 
 ``` r
+
 nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 ncg = st_geometry(nc)
 plot(ncg, border = 'grey')
@@ -217,6 +224,7 @@ obtained by
 replaced by `st_crs<-`:
 
 ``` r
+
 library(sf)
 geom = st_sfc(st_point(c(0,1)), st_point(c(11,12)))
 s = st_sf(a = 15:16, geometry = geom)
@@ -264,6 +272,7 @@ all.equal(s1, s2)
 An alternative, more pipe-friendly version of `st_crs<-` is
 
 ``` r
+
 s1 |> st_set_crs(4326)
 ## Simple feature collection with 2 features and 1 field
 ## Geometry type: POINT
@@ -283,6 +292,7 @@ any coordinates, but a warning is issued that this did not reproject
 values:
 
 ``` r
+
 s3 <- s1 |> st_set_crs(4326) |> st_set_crs(3857)
 ## Warning: st_crs<- : replacing crs does not reproject data; use st_transform for
 ## that
@@ -293,6 +303,7 @@ generate this warning is to first wipe the CRS by assigning it a missing
 value, and then set it to the intended value.
 
 ``` r
+
 s3 <- s1  |> st_set_crs(NA) |> st_set_crs(3857)
 ```
 
@@ -300,6 +311,7 @@ To carry out a coordinate conversion or transformation, we use
 [`st_transform()`](https://r-spatial.github.io/sf/reference/st_transform.md)
 
 ``` r
+
 s3 <- s1 |> st_transform(3857)
 s3
 ## Simple feature collection with 2 features and 1 field
@@ -325,6 +337,7 @@ a single argument, as `st_op2(x)`, are handled as `st_op2(x,x)`.
 We will illustrate the geometrical operations on a very simple dataset:
 
 ``` r
+
 b0 = st_polygon(list(rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))))
 b1 = b0 + 2
 b2 = b0 + c(-0.2, 2)
@@ -346,6 +359,7 @@ plot(y, border = 'green', add = TRUE)
 returns whether polygon geometries are topologically valid:
 
 ``` r
+
 b0 = st_polygon(list(rbind(c(-1,-1), c(1,-1), c(1,1), c(-1,1), c(-1,-1))))
 b1 = st_polygon(list(rbind(c(-1,-1), c(1,-1), c(1,1), c(0,-1), c(-1,-1))))
 st_is_valid(st_sfc(b0,b1))
@@ -357,6 +371,7 @@ and
 whether line geometries are simple:
 
 ``` r
+
 s = st_sfc(st_linestring(rbind(c(0,0), c(1,1))), 
     st_linestring(rbind(c(0,0), c(1,1),c(0,1),c(1,0))))
 st_is_simple(s)
@@ -369,6 +384,7 @@ returns the area of polygon geometries,
 the length of line geometries:
 
 ``` r
+
 st_area(x)
 ## [1] 4 4 4
 st_area(st_sfc(st_point(c(0,0))))
@@ -386,6 +402,7 @@ computes the shortest distance matrix between geometries; this is a
 dense matrix:
 
 ``` r
+
 st_distance(x,y)
 ##           [,1] [,2] [,3]     [,4]
 ## [1,] 0.0000000  0.6    0 0.500000
@@ -398,6 +415,7 @@ returns a dense character matrix with the DE9-IM relationships between
 each pair of geometries:
 
 ``` r
+
 st_relate(x,y)
 ##      [,1]        [,2]        [,3]        [,4]       
 ## [1,] "212FF1FF2" "FF2FF1212" "212101212" "FF2FF1212"
@@ -407,10 +425,10 @@ st_relate(x,y)
 
 element \[i,j\] of this matrix has nine characters, referring to
 relationship between x\[i\] and y\[j\], encoded as
-$I_{x}I_{y},I_{x}B_{y},I_{x}E_{y},B_{x}I_{y},B_{x}B_{y},B_{x}E_{y},E_{x}I_{y},E_{x}B_{y},E_{x}E_{y}$
-where $I$ refers to interior, $B$ to boundary, and $E$ to exterior, and
-e.g. $B_{x}I_{y}$ the dimensionality of the intersection of the boundary
-$B_{x}$ of x\[i\] and the interior $I_{y}$ of y\[j\], which is one of
+$`I_xI_y,I_xB_y,I_xE_y,B_xI_y,B_xB_y,B_xE_y,E_xI_y,E_xB_y,E_xE_y`$ where
+$`I`$ refers to interior, $`B`$ to boundary, and $`E`$ to exterior, and
+e.g. $`B_xI_y`$ the dimensionality of the intersection of the boundary
+$`B_x`$ of x\[i\] and the interior $`I_y`$ of y\[j\], which is one of
 {0,1,2,F}, indicating zero-, one-, two-dimension intersection, and (F)
 no intersection, respectively.
 
@@ -419,6 +437,7 @@ no intersection, respectively.
 Binary logical operations return either a sparse matrix
 
 ``` r
+
 st_intersects(x,y)
 ## Sparse geometry binary predicate list of length 3, where the predicate
 ## was `intersects'
@@ -430,6 +449,7 @@ st_intersects(x,y)
 or a dense matrix
 
 ``` r
+
 st_intersects(x, x, sparse = FALSE)
 ##      [,1]  [,2]  [,3]
 ## [1,] TRUE  TRUE  TRUE
@@ -459,6 +479,7 @@ logicals as in
 Other binary predicates include (using sparse for readability):
 
 ``` r
+
 st_disjoint(x, y, sparse = FALSE)
 ##       [,1]  [,2]  [,3] [,4]
 ## [1,] FALSE  TRUE FALSE TRUE
@@ -519,6 +540,7 @@ st_equals_exact(x, y,0.001, sparse = FALSE)
 ### Operations returning a geometry
 
 ``` r
+
 u = st_union(x)
 plot(u)
 ```
@@ -526,6 +548,7 @@ plot(u)
 ![](sf3_files/figure-html/unnamed-chunk-23-1.png)
 
 ``` r
+
 par(mfrow=c(1,2), mar = rep(0,4))
 plot(st_buffer(u, 0.2))
 plot(u, border = 'red', add = TRUE)
@@ -537,12 +560,14 @@ plot(st_buffer(u, -0.2), add = TRUE)
 ![](sf3_files/figure-html/unnamed-chunk-24-1.png)
 
 ``` r
+
 plot(st_boundary(x))
 ```
 
 ![](sf3_files/figure-html/unnamed-chunk-25-1.png)
 
 ``` r
+
 par(mfrow = c(1:2))
 plot(st_convex_hull(x))
 plot(st_convex_hull(u))
@@ -551,10 +576,12 @@ plot(st_convex_hull(u))
 ![](sf3_files/figure-html/unnamed-chunk-26-1.png)
 
 ``` r
+
 par(mfrow = c(1,1))
 ```
 
 ``` r
+
 par(mfrow=c(1,2))
 plot(x)
 plot(st_centroid(x), add = TRUE, col = 'red')
@@ -569,6 +596,7 @@ is obtained by
 [`st_intersection()`](https://r-spatial.github.io/sf/reference/geos_binary_ops.md):
 
 ``` r
+
 plot(x)
 plot(y, add = TRUE)
 plot(st_intersection(st_union(x),st_union(y)), add = TRUE, col = 'red')
@@ -587,6 +615,7 @@ or
 [`st_sym_difference()`](https://r-spatial.github.io/sf/reference/geos_binary_ops.md):
 
 ``` r
+
 par(mfrow=c(2,2), mar = c(0,0,1,0))
 plot(x, col = '#ff333388'); 
 plot(y, add=TRUE, col='#33ff3388')
@@ -608,6 +637,7 @@ title("sym_difference(x,y)")
 adds points to straight line sections of a lines or polygon object:
 
 ``` r
+
 par(mfrow=c(1,3),mar=c(1,1,0,0))
 pts = rbind(c(0,0),c(1,0),c(2,1),c(3,1))
 ls = st_linestring(pts)
@@ -630,6 +660,7 @@ polygonizes a multilinestring, as long as the points form a closed
 polygon:
 
 ``` r
+
 par(mfrow=c(1,2),mar=c(0,0,1,0))
 mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
 x = st_polygonize(mls)

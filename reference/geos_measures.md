@@ -156,9 +156,10 @@ mpoly = st_multipolygon(list(
 
 st_length(st_sfc(poly, mpoly))
 #> [1] 0 0
-st_perimeter(poly)
-#> [1] 48
-st_perimeter(mpoly)
+if (requireNamespace("lwgeom", quietly = TRUE)) {
+  st_perimeter(poly)
+  st_perimeter(mpoly)
+}
 #> [1] 92
 p = st_sfc(st_point(c(0,0)), st_point(c(0,1)), st_point(c(0,2)))
 st_distance(p, p)

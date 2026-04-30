@@ -15,6 +15,7 @@ feature attributes work identically to how they work on `data.frame`s,
 e.g.
 
 ``` r
+
 library(sf)
 ## Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
 nc <- st_read(system.file("shape/nc.shp", package="sf"))
@@ -45,6 +46,7 @@ means that if both `sf` and `dplyr` are loaded, manipulations such as
 selecting a single attribute will return an `sf` object:
 
 ``` r
+
 library(dplyr)
 ## 
 ## Attaching package: 'dplyr'
@@ -70,6 +72,7 @@ If we want to drop geometry, we can coerce to `data.frame` first, this
 drops geometry list-columns:
 
 ``` r
+
 nc |> as.data.frame() |> select(NWBIR74) |> head(2)
 ##   NWBIR74
 ## 1      10
@@ -81,6 +84,7 @@ nc |> as.data.frame() |> select(NWBIR74) |> head(2)
 We can subset feature sets by using the square bracket notation
 
 ``` r
+
 nc[1, "NWBIR74"]
 ## Simple feature collection with 1 feature and 1 field
 ## Geometry type: MULTIPOLYGON
@@ -94,6 +98,7 @@ nc[1, "NWBIR74"]
 and use the `drop` argument to drop geometries:
 
 ``` r
+
 nc[1, "NWBIR74", drop = TRUE]
 ## [1] 10
 ```
@@ -102,6 +107,7 @@ but we can also use a spatial object as the row selector, to select
 features that intersect with another spatial feature:
 
 ``` r
+
 Ashe = nc[nc$NAME == "Ashe",]
 class(Ashe)
 ## [1] "sf"         "data.frame"
@@ -132,6 +138,7 @@ using predicate
 (overlapping features don’t touch):
 
 ``` r
+
 Ashe = nc[nc$NAME == "Ashe",]
 nc[Ashe, op = st_touches]
 ## Simple feature collection with 3 features and 14 fields
@@ -152,6 +159,7 @@ nc[Ashe, op = st_touches]
 Using `dplyr`, we can do the same by calling the predicate directly:
 
 ``` r
+
 nc |> filter(lengths(st_touches(nc, Ashe)) > 0)
 ## Simple feature collection with 3 features and 14 fields
 ## Geometry type: MULTIPOLYGON
@@ -175,6 +183,7 @@ death) of the counties that intersect with `Ashe` to the remaining ones.
 We can do this by:
 
 ``` r
+
 a <- aggregate(nc[, c("SID74", "BIR74")], list(Ashe_nb = lengths(st_intersects(nc, Ashe)) > 0), sum)
 a <- a |> mutate(frac74 = SID74 / BIR74) |> select(frac74)
 plot(a[2], col = c(grey(.8), grey(.5)))
@@ -193,6 +202,7 @@ empty geometry is substituted. The second argument should be a
 `data.frame` (or similar), not an `sf` object:
 
 ``` r
+
 x = st_sf(a = 1:2, geom = st_sfc(st_point(c(0,0)), st_point(c(1,1))))
 y = data.frame(a = 2:3)
 merge(x, y)
@@ -232,6 +242,7 @@ For joining based on spatial intersections (of any kind),
 used:
 
 ``` r
+
 x = st_sf(a = 1:3, geom = st_sfc(st_point(c(1,1)), st_point(c(2,2)), st_point(c(3,3))))
 y = st_buffer(x, 0.1)
 x = x[1:2,]
@@ -246,6 +257,7 @@ The join method is a left join, retaining all records of the first
 attribute:
 
 ``` r
+
 st_join(x, y)
 ## Simple feature collection with 2 features and 2 fields
 ## Geometry type: POINT
@@ -274,6 +286,7 @@ compatible with
 (the default), e.g.
 
 ``` r
+
 st_join(x, y, join = st_covers) # no matching y records: points don't cover circles
 ## Simple feature collection with 2 features and 2 fields
 ## Geometry type: POINT
