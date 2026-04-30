@@ -1022,17 +1022,17 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 
 	int dim = 2;
 	GEOSContextHandle_t hGEOSCtxt = CPL_geos_init();
-	std::vector<GeomPtr> x = geometries_from_sfc(hGEOSCtxt, sfcx, &dim);
-	std::vector<GeomPtr> y = geometries_from_sfc(hGEOSCtxt, sfcy, &dim);
 	std::vector<GeomPtr> out;
 	std::vector<double> index_x, index_y;
-	std::vector<size_t> items(x.size());
+	std::vector<size_t> items(sfcx.length());
 #ifdef HAVE_390
 	double grid_size = geos_grid_size_xy(sfcx, sfcy);
 #endif
 
 	if (op == "intersection") {
 
+		std::vector<GeomPtr> x = geometries_from_sfc(hGEOSCtxt, sfcx, &dim);
+		std::vector<GeomPtr> y = geometries_from_sfc(hGEOSCtxt, sfcy, &dim);
 		bool tree_empty = true;
 		TreePtr tree = geos_ptr(GEOSSTRtree_create_r(hGEOSCtxt, 10), hGEOSCtxt);
 		for (size_t i = 0; i < x.size(); i++) {
@@ -1089,6 +1089,8 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 		else
 			Rcpp::stop("invalid operation"); // #nocov
 
+		std::vector<GeomPtr> x = geometries_from_sfc(hGEOSCtxt, sfcx, &dim);
+		std::vector<GeomPtr> y = geometries_from_sfc(hGEOSCtxt, sfcy, &dim);
 		for (size_t i = 0; i < y.size(); i++) {
 			for (size_t j = 0; j < x.size(); j++) {
 #ifndef HAVE_390
@@ -1113,9 +1115,9 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 	m(_, 1) = Rcpp::NumericVector(index_y.begin(), index_y.end());
 
 	Rcpp::List ret;
-	if ((x.size() == 0 || y.size() == 0) && op != "intersection") {
+	if ((sfcx.length() == 0 || sfcy.length() == 0) && op != "intersection") {
 		if (op == "union" || op == "sym_difference") { // return "the other"
-			if (y.size() == 0)
+			if (sfcy.length() == 0)
 				ret = sfcx;
 			else
 				ret = sfcy;
