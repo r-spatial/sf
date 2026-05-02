@@ -2,6 +2,9 @@
 
 ## version 1.1-1
 
+- use RAII in functions calling GEOS for handling context, based on how
+  terra does this; [\#2604](https://github.com/r-spatial/sf/issues/2604)
+
 - [`st_graticule()`](https://r-spatial.github.io/sf/reference/st_graticule.md)
   simplifies output lines;
   [\#1364](https://github.com/r-spatial/sf/issues/1364)
