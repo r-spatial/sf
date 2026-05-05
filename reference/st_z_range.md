@@ -67,10 +67,6 @@ st_z_range(obj, ..., crs = NA_crs_)
 NA_z_range_
 ```
 
-## Format
-
-An object of class `z_range` of length 2.
-
 ## Arguments
 
 - x:

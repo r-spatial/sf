@@ -7,7 +7,3 @@ Map prefix to driver
 ``` r
 prefix_map
 ```
-
-## Format
-
-An object of class `list` of length 10.

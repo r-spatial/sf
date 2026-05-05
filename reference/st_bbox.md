@@ -81,12 +81,6 @@ FULL_bbox_
 format(x, ...)
 ```
 
-## Format
-
-An object of class `bbox` of length 4.
-
-An object of class `bbox` of length 4.
-
 ## Arguments
 
 - x:

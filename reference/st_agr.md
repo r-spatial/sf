@@ -14,10 +14,6 @@ st_agr(x) <- value
 st_set_agr(x, value)
 ```
 
-## Format
-
-An object of class `factor` of length 1.
-
 ## Arguments
 
 - x:

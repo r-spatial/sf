@@ -38,6 +38,11 @@ Useful links:
 **Maintainer**: Edzer Pebesma <edzer.pebesma@uni-muenster.de>
 ([ORCID](https://orcid.org/0000-0001-8049-7069))
 
+Authors:
+
+- Edzer Pebesma <edzer.pebesma@uni-muenster.de>
+  ([ORCID](https://orcid.org/0000-0001-8049-7069))
+
 Other contributors:
 
 - Roger Bivand ([ORCID](https://orcid.org/0000-0003-2392-6140))

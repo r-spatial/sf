@@ -7,7 +7,3 @@ Map extension to driver
 ``` r
 extension_map
 ```
-
-## Format
-
-An object of class `list` of length 26.

@@ -7,7 +7,3 @@ Drivers for which update should be `TRUE` by default
 ``` r
 db_drivers
 ```
-
-## Format
-
-An object of class `character` of length 12.

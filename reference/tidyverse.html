@@ -76,6 +76,8 @@ Use these methods after loading the tidyverse package with the generic (or after
 <span></span>
 <span><span class="fu">summarise.sf</span><span class="op">(</span><span class="va">.data</span>, <span class="va">...</span>, <span class="va">.dots</span>, do_union <span class="op">=</span> <span class="cn">TRUE</span>, is_coverage <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu">count.sf</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, wt <span class="op">=</span> <span class="cn">NULL</span>, sort <span class="op">=</span> <span class="cn">FALSE</span>, name <span class="op">=</span> <span class="st">"n"</span>, .drop_geometry <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">distinct.sf</span><span class="op">(</span><span class="va">.data</span>, <span class="va">...</span>, .keep_all <span class="op">=</span> <span class="cn">FALSE</span>, exact <span class="op">=</span> <span class="cn">FALSE</span>, par <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">gather.sf</span><span class="op">(</span></span>
@@ -217,6 +219,22 @@ more details.</p></dd>
 
 <dt id="arg-is-coverage">is_coverage<a class="anchor" aria-label="anchor" href="#arg-is-coverage"></a></dt>
 <dd><p>logical; if <code>do_union</code> is <code>TRUE</code>, use an optimized algorithm for features that form a polygonal coverage (have no overlaps)</p></dd>
+
+
+<dt id="arg-wt">wt<a class="anchor" aria-label="anchor" href="#arg-wt"></a></dt>
+<dd><p>see original function docs</p></dd>
+
+
+<dt id="arg-sort">sort<a class="anchor" aria-label="anchor" href="#arg-sort"></a></dt>
+<dd><p>see original function docs</p></dd>
+
+
+<dt id="arg-name">name<a class="anchor" aria-label="anchor" href="#arg-name"></a></dt>
+<dd><p>see original function docs</p></dd>
+
+
+<dt id="arg--drop-geometry">.drop_geometry<a class="anchor" aria-label="anchor" href="#arg--drop-geometry"></a></dt>
+<dd><p>logical; if <code>TRUE</code>, remove geometry column before computing counts</p></dd>
 
 
 <dt id="arg--keep-all">.keep_all<a class="anchor" aria-label="anchor" href="#arg--keep-all"></a></dt>
@@ -386,6 +404,8 @@ Should be a character vector of length 2.</p></dd>
     <p><code>select</code> keeps the geometry regardless whether it is selected or not; to deselect it, first pipe through <code>as.data.frame</code> to let dplyr's own <code>select</code> drop it.</p>
 <p>In case one or more of the arguments (expressions) in the <code>summarise</code> call creates a geometry list-column, the first of these will be the (active) geometry of the returned object. If this is not the case, a geometry column is created, depending on the value of <code>do_union</code>.</p>
 <p>In case <code>do_union</code> is <code>FALSE</code>, <code>summarise</code> will simply combine geometries using <a href="st.html">c.sfg</a>. When polygons sharing a boundary are combined, this leads to geometries that are invalid; see for instance <a href="https://github.com/r-spatial/sf/issues/681" class="external-link">https://github.com/r-spatial/sf/issues/681</a>.</p>
+<p>The functions <code>count</code> and <code>tally</code> drop all geometries.
+For counting geometries use <code>summarise(.data, n = n(), .by = "geometry")</code>.</p>
 <p><code>distinct</code> gives distinct records for which all attributes and geometries are distinct; <a href="geos_binary_pred.html">st_equals</a> is used to find out which geometries are distinct.</p>
 <p><code>nest</code> assumes that a simple feature geometry list-column was among the columns that were nested.</p>
     </div>
@@ -493,6 +513,17 @@ Should be a character vector of length 2.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> (((-78.8068 36.23158, -78.95108 36.23384, -79.15927 36.23367, -79.1443…     2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> (((-78.49252 36.17359, -78.51472 36.17522, -78.51709 36.46148, -78.502…     2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> (((-77.33221 36.06798, -77.40531 35.99472, -77.42574 35.99606, -77.438…     2</span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">nc</span><span class="op">$</span><span class="va">area_cl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cut.html" class="external-link">cut</a></span><span class="op">(</span><span class="va">nc</span><span class="op">$</span><span class="va">AREA</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">.1</span>, <span class="fl">.12</span>, <span class="fl">.15</span>, <span class="fl">.25</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">nc</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span><span class="va">area_cl</span>, .drop_geometry <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   area_cl     .drop_geometry     n</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> (0,0.1]     TRUE              35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> (0.1,0.12]  TRUE              15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> (0.12,0.15] TRUE              22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> (0.15,0.25] TRUE              28</span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span> <span class="va">nc</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span>, <span class="op">]</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>

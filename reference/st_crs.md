@@ -54,10 +54,6 @@ format(x, ...)
 st_axis_order(authority_compliant = logical(0))
 ```
 
-## Format
-
-An object of class `crs` of length 2.
-
 ## Arguments
 
 - x:

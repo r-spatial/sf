@@ -32,6 +32,8 @@ slice.sf(.data, ..., .dots)
 
 summarise.sf(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE)
 
+count.sf(x, ..., wt = NULL, sort = FALSE, name = "n", .drop_geometry = FALSE)
+
 distinct.sf(.data, ..., .keep_all = FALSE, exact = FALSE, par = 0)
 
 gather.sf(
@@ -182,6 +184,22 @@ anti_join.sf(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
 
   logical; if `do_union` is `TRUE`, use an optimized algorithm for
   features that form a polygonal coverage (have no overlaps)
+
+- wt:
+
+  see original function docs
+
+- sort:
+
+  see original function docs
+
+- name:
+
+  see original function docs
+
+- .drop_geometry:
+
+  logical; if `TRUE`, remove geometry column before computing counts
 
 - .keep_all:
 
@@ -386,6 +404,9 @@ geometries using
 sharing a boundary are combined, this leads to geometries that are
 invalid; see for instance <https://github.com/r-spatial/sf/issues/681>.
 
+The functions `count` and `tally` drop all geometries. For counting
+geometries use `summarise(.data, n = n(), .by = "geometry")`.
+
 `distinct` gives distinct records for which all attributes and
 geometries are distinct;
 [st_equals](https://r-spatial.github.io/sf/reference/geos_binary_pred.md)
@@ -498,6 +519,17 @@ if (require(dplyr, quietly = TRUE)) {
 #> 14 (((-78.8068 36.23158, -78.95108 36.23384, -79.15927 36.23367, -79.1443…     2
 #> 15 (((-78.49252 36.17359, -78.51472 36.17522, -78.51709 36.46148, -78.502…     2
 #> 16 (((-77.33221 36.06798, -77.40531 35.99472, -77.42574 35.99606, -77.438…     2
+if (require(dplyr, quietly = TRUE)) {
+  nc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
+  nc |> count(area_cl, .drop_geometry = TRUE)
+}
+#> # A tibble: 4 × 3
+#>   area_cl     .drop_geometry     n
+#>   <fct>       <lgl>          <int>
+#> 1 (0,0.1]     TRUE              35
+#> 2 (0.1,0.12]  TRUE              15
+#> 3 (0.12,0.15] TRUE              22
+#> 4 (0.15,0.25] TRUE              28
 if (require(dplyr, quietly = TRUE)) {
  nc[c(1:100, 1:10), ] |> distinct() |> nrow()
 }

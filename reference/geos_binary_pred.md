@@ -119,6 +119,21 @@ st_is_within_distance(x, y = x, dist, sparse = TRUE, ..., remove_self = FALSE)
       [`s2_rebuild()`](https://r-spatial.github.io/s2/reference/s2_boundary.html)
       or a boolean operation.
 
+  `level`
+
+  :   A value from 0 to 30 corresponding to the cell level at which
+      snapping should occur.
+
+  `precision`
+
+  :   A number by which coordinates should be multiplied before being
+      rounded. Rounded to the nearest exponent of 10.
+
+  `distance`
+
+  :   A distance (in radians) denoting the maximum distance a vertex
+      should move in the snapping process.
+
 - by_element:
 
   logical; if `TRUE`, return logical vector with x-y pair-wise predicate

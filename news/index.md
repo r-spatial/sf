@@ -10,9 +10,7 @@
   [\#1364](https://github.com/r-spatial/sf/issues/1364)
 
 - [`dplyr::count()`](https://dplyr.tidyverse.org/reference/count.html)
-  and
-  [`dplyr::tally()`](https://dplyr.tidyverse.org/reference/count.html)
-  no longer preserve geometries;
+  drops geometries if `.drop_geom = TRUE` is set;
   [\#2596](https://github.com/r-spatial/sf/issues/2596)
 
 - better handle graticules crossing the antemeridian;
