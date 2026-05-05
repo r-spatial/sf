@@ -4,13 +4,9 @@
 \name{prefix_map}
 \alias{prefix_map}
 \title{Map prefix to driver}
-\format{
-An object of class \code{list} of length 10.
-}
 \usage{
 prefix_map
 }
 \description{
 Map prefix to driver
 }
-\keyword{datasets}

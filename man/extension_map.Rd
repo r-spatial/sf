@@ -4,13 +4,9 @@
 \name{extension_map}
 \alias{extension_map}
 \title{Map extension to driver}
-\format{
-An object of class \code{list} of length 26.
-}
 \usage{
 extension_map
 }
 \description{
 Map extension to driver
 }
-\keyword{datasets}

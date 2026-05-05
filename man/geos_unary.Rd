@@ -98,7 +98,7 @@ numeric \code{dist} is assumed to have the units of the coordinates, and a \code
 \item{singleSide}{logical; if \code{TRUE}, single-sided buffers are returned for linear geometries,
 in which case negative \code{dist} values give buffers on the right-hand side, positive on the left; see details}
 
-\item{...}{in \code{st_buffer} passed on to  \code{\link[s2:s2_boundary]{s2::s2_buffer_cells()}}, otherwise ignored}
+\item{...}{in \code{st_buffer} passed on to  \code{\link[s2:s2_buffer_cells]{s2::s2_buffer_cells()}}, otherwise ignored}
 
 \item{ratio}{numeric; fraction convex: 1 returns the convex hulls, 0 maximally concave hulls}
 
@@ -144,7 +144,7 @@ coordinate system, a different engine (GEOS or S2) can be used, which have diffe
 arguments. The \code{nQuadSegs}, \code{endCapsStyle}, \code{joinStyle}, \code{mitreLimit} and
 \code{singleSide} parameters only work if the GEOS engine is used (i.e. projected coordinates or
 when \code{sf_use_s2()} is set to \code{FALSE}). See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.html}
-for details. The \code{max_cells} and \code{min_level} parameters (\code{\link[s2:s2_boundary]{s2::s2_buffer_cells()}}) work with the S2
+for details. The \code{max_cells} and \code{min_level} parameters (\code{\link[s2:s2_buffer_cells]{s2::s2_buffer_cells()}}) work with the S2
 engine (i.e. geographic coordinates) and can be used to change the buffer shape (e.g. smoothing).
 The S2 engine returns a polygon \emph{around} a number of S2 cells that
 contain the buffer, and hence will always have an area larger than the

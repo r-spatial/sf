@@ -86,6 +86,12 @@ to satisfy vertex constraints.}
     \item{\code{dimensions}}{A combination of 'point', 'polyline', and/or 'polygon'
 that can used to constrain the output of \code{\link[s2:s2_rebuild]{s2_rebuild()}} or a
 boolean operation.}
+    \item{\code{level}}{A value from 0 to 30 corresponding to the cell level
+at which snapping should occur.}
+    \item{\code{precision}}{A number by which coordinates should be multiplied
+before being rounded. Rounded to the nearest exponent of 10.}
+    \item{\code{distance}}{A distance (in radians) denoting the maximum
+distance a vertex should move in the snapping process.}
   }}
 
 \item{by_element}{logical; if \code{TRUE}, return logical vector with x-y pair-wise predicate values}

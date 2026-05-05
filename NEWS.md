@@ -4,7 +4,7 @@
 
 * `st_graticule()` simplifies output lines; #1364
 
-* `dplyr::count()` and `dplyr::tally()` no longer preserve geometries; #2596
+* `dplyr::count()` drops geometries if `.drop_geom = TRUE` is set; #2596
 
 * better handle graticules crossing the antemeridian; #2561
 

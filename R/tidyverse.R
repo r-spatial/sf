@@ -345,6 +345,27 @@ summarise.sf <- function(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE
 }
 
 #' @name tidyverse
+#' @param wt see original function docs
+#' @param sort see original function docs
+#' @param name see original function docs
+#' @param name see original function docs
+#' @param .drop_geometry logical; if `TRUE`, remove geometry column before computing counts
+#' @examples
+#' if (require(dplyr, quietly = TRUE)) {
+#'   nc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
+#'   nc |> count(area_cl, .drop_geometry = TRUE)
+#' }
+#' @details The functions \code{count} and \code{tally} drop all geometries.
+#' For counting geometries use \code{summarise(.data, n = n(), .by = "geometry")}.
+count.sf <- function(x, ..., wt = NULL, sort = FALSE, name = "n", .drop_geometry = FALSE) {
+	if (!requireNamespace("dplyr", quietly = TRUE))
+		stop("dplyr required: install that first") # nocov
+	if (isTRUE(.drop_geometry))
+		x <- st_drop_geometry(x)
+	NextMethod()
+}
+
+#' @name tidyverse
 #' @param .keep_all see corresponding function in dplyr
 #' @param exact logical; if `TRUE` use \link{st_equals_exact} for geometry comparisons
 #' @param par numeric; passed on to \link{st_equals_exact}
@@ -675,6 +696,7 @@ register_all_s3_methods = function() {
 	s3_register("dplyr::dplyr_reconstruct", "sf")
 	s3_register("dplyr::anti_join", "sf")
 	s3_register("dplyr::arrange", "sf")
+	s3_register("dplyr::count", "sf")
 	s3_register("dplyr::distinct", "sf")
 	s3_register("dplyr::filter", "sf")
 	s3_register("dplyr::full_join", "sf")
