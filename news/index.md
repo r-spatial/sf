@@ -2,6 +2,8 @@
 
 ## version 1.1-1
 
+CRAN release: 2026-05-06
+
 - use RAII in functions calling GEOS for handling context, based on how
   terra does this; [\#2604](https://github.com/r-spatial/sf/issues/2604)
 
