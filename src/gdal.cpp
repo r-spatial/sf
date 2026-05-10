@@ -207,8 +207,10 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	if (srs == NULL)
 		Rcpp::stop("crs not found"); // #nocov
 
-	Rcpp::List out(17);
-	Rcpp::CharacterVector names(17);
+	int n = 18;
+	Rcpp::List out(n);
+	Rcpp::CharacterVector names(n);
+
 	out(0) = Rcpp::NumericVector::create(srs->GetSemiMajor());
 	names(0) = "SemiMajor";
 
@@ -350,6 +352,7 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 		Rcpp::_["orientation"] = orientation);
 	out(15) = axes_df;
 	names(15) = "axes";
+
 	// base GEOGCRS: https://github.com/r-spatial/sf/issues/2524
 	OGRSpatialReference *base_srs = new OGRSpatialReference;
 	if (base_srs->CopyGeogCSFrom(srs) == OGRERR_NONE) {
@@ -361,6 +364,10 @@ Rcpp::List CPL_crs_parameters(Rcpp::List crs) {
 	} else 
 		out(16) = Rcpp::CharacterVector::create(NA_STRING);
 	names(16) = "gcs_crs";
+
+	out(17) = Rcpp::LogicalVector::create((bool) base_srs->IsGeocentric());
+	names(17) = "is_geocentric";
+
 	delete base_srs;
 
 	set_error_handler();
@@ -637,20 +644,20 @@ Rcpp::List CPL_transform(Rcpp::List sfc, Rcpp::List crs,
 		Rcpp::stop("crs not found: is it missing?"); // #nocov
 
 #if GDAL_VERSION_NUM >= 3000000
-	OGRCoordinateTransformationOptions *options = new OGRCoordinateTransformationOptions;
-	if (pipeline.size() && !options->SetCoordinateOperation(pipeline[0], reverse))
+	// OGRCoordinateTransformationOptions *options = new OGRCoordinateTransformationOptions;
+	OGRCoordinateTransformationOptions options;
+	if (pipeline.size() && !options.SetCoordinateOperation(pipeline[0], reverse))
 		Rcpp::stop("pipeline value not accepted");
-	if (AOI.size() == 4 && !options->SetAreaOfInterest(AOI[0], AOI[1], AOI[2], AOI[3]))
+	if (AOI.size() == 4 && !options.SetAreaOfInterest(AOI[0], AOI[1], AOI[2], AOI[3]))
 		Rcpp::stop("values for area of interest not accepted");
 #if GDAL_VERSION_NUM >= 3030000
-	options->SetDesiredAccuracy(desired_accuracy);
-	options->SetBallparkAllowed(allow_ballpark);
+	options.SetDesiredAccuracy(desired_accuracy);
+	options.SetBallparkAllowed(allow_ballpark);
 #endif
 	// unset_error_handler(); // FIXME: is this always a good idea?
 	OGRCoordinateTransformation *ct =
-		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest, *options);
+		OGRCreateCoordinateTransformation(g[0]->getSpatialReference(), dest, options);
 	// set_error_handler();
-	delete options;
 #else
 	if (pipeline.size() || AOI.size())
 		Rcpp::stop("pipeline or area of interest require GDAL >= 3"); // #nocov

@@ -100,6 +100,8 @@ st_transform.sfc = function(x, crs = st_crs(x), ...,
 		desired_accuracy = -1.0, allow_ballpark = TRUE,
 		partial = TRUE, check = FALSE) {
 
+	stopifnot(is.character(pipeline), length(pipeline) %in% 0:1)
+
 	crs_missing = missing(crs)
 	if (length(pipeline) == 0) {
 		if (is.na(st_crs(x)))
@@ -112,8 +114,7 @@ st_transform.sfc = function(x, crs = st_crs(x), ...,
 	crs_input = crs
 	crs = make_crs(crs)
 
-	# FIXME: check for wkt here too WKT TODO:
-	if (grepl("+proj=geocent", crs$proj4string) && length(x) && Dimension(x[[1]]) == "XY") # add z:
+	if (crs_parameters(crs)$is_geocentric && length(x) && Dimension(x[[1]]) == "XY") # add z:
 		x = st_zm(x, drop = FALSE, what = "Z")
 
 	if (partial) {
@@ -124,9 +125,11 @@ st_transform.sfc = function(x, crs = st_crs(x), ...,
 	}
 
 	if (length(pipeline)) {
-		if (!crs_missing && !is.na(crs)) { # verify pipeline is a legitimate option:
-			if (!pipeline[1] %in% sf_proj_pipelines(st_crs(x), crs_input)$definition)
-				warning("pipeline not found in PROJ-suggested candidate transformations")
+		if (!crs_missing) { # verify pipeline is a legitimate option:
+			if (!(pipeline %in% sf_proj_pipelines(st_crs(x), crs)$definition)) {
+				warning("pipeline not found in PROJ-suggested candidate transformations; setting crs = NA")
+				crs = NA_crs_ 
+			}
 		} else
 			crs = NA_crs_  # to avoid st_crs(x) is crs of the returned object
 	}
@@ -148,7 +151,10 @@ st_transform.sfc = function(x, crs = st_crs(x), ...,
 #' library(units)
 #' set_units(st_area(st_transform(nc[1,], 2264)), m^2)
 st_transform.sf = function(x, crs = st_crs(x), ...) {
-	x[[ attr(x, "sf_column") ]] = st_transform(st_geometry(x), crs, ...)
+	x[[ attr(x, "sf_column") ]] = if (missing(crs))
+			st_transform(st_geometry(x), ...)
+		else
+			st_transform(st_geometry(x), crs = crs, ...)
 	x
 }
 
@@ -162,7 +168,7 @@ st_transform.sfg = function(x, crs = st_crs(x), ...) {
 	if (missing(crs))
 		stop("argument crs cannot be missing")
 	crs = make_crs(crs)
-	structure(st_transform(x, crs, ...)[[1]], crs = crs)
+	structure(st_transform(x, crs = crs, ...)[[1]], crs = crs)
 }
 
 #' @name st_transform
