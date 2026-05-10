@@ -105,6 +105,8 @@ Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVect
 
 	PJ_OBJ_LIST *obj_list = proj_create_operations(PJ_DEFAULT_CTX, source_crs, target_crs, 
 		factory_ctx);
+	if (obj_list == NULL)
+		Rcpp::stop("proj_create_operations() returned NULL"); // and clean up?
 	int n = proj_list_get_count(obj_list);
 	Rcpp::CharacterVector id(n);
 	Rcpp::CharacterVector description(n);
@@ -161,6 +163,7 @@ Rcpp::DataFrame CPL_get_pipelines(Rcpp::CharacterVector crs, Rcpp::CharacterVect
 		proj_destroy(pj);
 	}
 	// int sug = proj_get_suggested_operation(PJ_DEFAULT_CTX, *obj_list, PJ_DIRECTION direction, PJ_COORD coord)
+	proj_list_destroy(obj_list);
 
 	Rcpp::DataFrame df = Rcpp::DataFrame::create( 
 		Rcpp::Named("id") = id,
