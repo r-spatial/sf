@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 # minimal docker file to get sp and sf running on ubunty 16.04 image,
 # using gdal/geos/proj from ppa:ubuntugis/ubuntugis-unstable
 # 
@@ -48,7 +48,7 @@ RUN export DEBIAN_FRONTEND=noninteractive; apt-get install -y \
 # texlive-generic-recommended \
 
 # stuff for the tmaptools/rmapshaper/geojsonio etc stack:
-RUN apt-get install -y libv8-dev libprotobuf-dev protobuf-compiler libcairo2-dev pandoc pandoc-citeproc 
+RUN apt-get install -y libv8-dev libprotobuf-dev protobuf-compiler libcairo2-dev pandoc # pandoc-citeproc 
 #RUN add-apt-repository -y ppa:opencpu/jq
 #RUN apt-get update
 RUN apt-get install -y libjq-dev
@@ -99,7 +99,7 @@ RUN rm -fr sf
 
 RUN git clone https://github.com/r-spatial/sf.git
 
-RUN R CMD build sf
+# RUN R CMD build sf
 
 #ENV PROJ_VERSION 5.0.1
 #ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
@@ -112,17 +112,21 @@ RUN R CMD build sf
 #  && cd .. \
 #  && ldconfig
 
-RUN Rscript -e 'install.packages(c("rgdal"), dependencies = FALSE, repos = "https://cloud.r-project.org")'
-RUN Rscript -e 'install.packages(c("RPostgres"), dependencies = FALSE, repos = "https://cloud.r-project.org")'
+RUN apt-get install -y cmake
+RUN Rscript -e 'install.packages(c("s2"), dependencies = FALSE, repos = "https://cloud.r-project.org")'
+#RUN Rscript -e 'install.packages(c("RPostgres"), dependencies = FALSE, repos = "https://cloud.r-project.org")'
 
 RUN cd sf && git pull
-RUN PROJ_LIB=/usr/share/proj R CMD INSTALL sf_*tar.gz
-
-RUN Rscript -e 'install.packages(c("RPostgreSQL"), dependencies = FALSE, repos = "https://cloud.r-project.org")'
-RUN cd sf && git  pull
-# RUN R CMD INSTALL sf
-# RUN R -e 'library(sf);library(testthat);source("sf/tests/testthat/test_tm.R")'
 RUN R CMD build --no-build-vignettes sf
+RUN R CMD INSTALL sf_*tar.gz
+RUN Rscript -e 'install.packages(c("lwgeom"), dependencies = FALSE, repos = "https://cloud.r-project.org")'
+
+# RUN Rscript -e 'install.packages(c("RPostgreSQL"), dependencies = FALSE, repos = "https://cloud.r-project.org")'
 RUN _R_CHECK_FORCE_SUGGESTS_=false PROJ_LIB=/usr/share/proj R CMD check --as-cran sf_*tar.gz
+
+RUN wget https://cran.r-project.org/src/contrib/gstat_2.1-6.tar.gz
+RUN Rscript -e 'install.packages(c("stars", "sftime"), dependencies = FALSE, repos = "https://cloud.r-project.org")'
+RUN Rscript -e 'install.packages(c("mapdata"), repos = "https://cloud.r-project.org")'
+RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check gstat*gz
 
 CMD ["/bin/bash"]

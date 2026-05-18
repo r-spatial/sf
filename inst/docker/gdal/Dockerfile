@@ -98,8 +98,8 @@ RUN cd proj* \
   && ldconfig
 
 # GDAL:
-ENV GDAL_VERSION 3.12.2
-ENV GDAL_VERSION_NAME 3.12.2
+ENV GDAL_VERSION 3.13.0
+ENV GDAL_VERSION_NAME 3.13.0beta1
 RUN wget -q http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
   && cd gdal* \
@@ -114,22 +114,23 @@ RUN Rscript -e 'install.packages(c("sp", "RPostgreSQL", "RSQLite", "testthat", "
 
 # sf:
 RUN git clone --depth 10 https://github.com/r-spatial/sf.git
+RUN (cd sf; git pull)
 RUN R CMD build --no-build-vignettes --no-manual sf
 RUN R CMD INSTALL sf_*.tar.gz
 RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
 
 # lwgeom:
-RUN git clone --depth 10 https://github.com/r-spatial/lwgeom.git
-RUN R CMD build --no-build-vignettes --no-manual lwgeom
-RUN R CMD INSTALL lwgeom_*.tar.gz
-RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
+#RUN git clone --depth 10 https://github.com/r-spatial/lwgeom.git
+#RUN R CMD build --no-build-vignettes --no-manual lwgeom
+#RUN R CMD INSTALL lwgeom_*.tar.gz
+#RUN R CMD check --no-build-vignettes --no-manual --as-cran lwgeom_*.tar.gz 
 
 # stars:
-RUN git clone --depth 10 https://github.com/r-spatial/stars.git
-RUN R CMD build --no-manual stars
-RUN R CMD INSTALL stars_*.tar.gz
-RUN Rscript -e 'options(timeout=1200); install.packages("starsdata", repos="http://cran.uni-muenster.de/pebesma/")'
-RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
+#RUN git clone --depth 10 https://github.com/r-spatial/stars.git
+#RUN R CMD build --no-manual stars
+#RUN R CMD INSTALL stars_*.tar.gz
+#RUN Rscript -e 'options(timeout=1200); install.packages("starsdata", repos="http://cran.uni-muenster.de/pebesma/")'
+#RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
 
 #
 #RUN export DEBIAN_FRONTEND=noninteractive; apt-get install -y --fix-missing libmagick++-dev

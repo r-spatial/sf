@@ -31,6 +31,11 @@ Useful links:
 \author{
 \strong{Maintainer}: Edzer Pebesma \email{edzer.pebesma@uni-muenster.de} (\href{https://orcid.org/0000-0001-8049-7069}{ORCID})
 
+Authors:
+\itemize{
+  \item Edzer Pebesma \email{edzer.pebesma@uni-muenster.de} (\href{https://orcid.org/0000-0001-8049-7069}{ORCID})
+}
+
 Other contributors:
 \itemize{
   \item Roger Bivand (\href{https://orcid.org/0000-0003-2392-6140}{ORCID}) [contributor]

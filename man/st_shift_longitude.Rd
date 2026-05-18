@@ -23,7 +23,7 @@ being represented on the far left and right of a plot because they have
 values straddling 180 degrees. In general, using a projected
 coordinate reference system is to be preferred, but this method permits a
 geographical coordinate reference system to be used. This is the sf
-equivalent of \link[sp:recenter-methods]{recenter} in the sp package and
+equivalent of \link[sp:recenter]{recenter} in the sp package and
 \code{ST_ShiftLongitude} in PostGIS.
 }
 \examples{

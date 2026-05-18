@@ -1,6 +1,6 @@
 suppressPackageStartupMessages(library(sf))
 
-if (require(dplyr, quietly = TRUE)) {
+if (require(dplyr, quietly = TRUE) && require(tidyr, quietly = TRUE)) {
  options(dplyr.summarise.inform=FALSE)
  read_sf(system.file("shape/nc.shp", package="sf"), quiet = TRUE) |>
 	st_transform(3857) -> nc
@@ -109,4 +109,4 @@ if (require(DBI, quietly = TRUE) && require(RSQLite, quietly = TRUE)) {
 
  nc |> st_filter(nc[1,]) |> nrow()
 } # DBI & SQLITE
-} # dplyr
+} # dplyr & tidyr

@@ -16,7 +16,6 @@
 \alias{summarise.sf}
 \alias{summarise}
 \alias{count.sf}
-\alias{tally.sf}
 \alias{distinct.sf}
 \alias{gather.sf}
 \alias{pivot_longer.sf}
@@ -63,9 +62,7 @@ slice.sf(.data, ..., .dots)
 
 summarise.sf(.data, ..., .dots, do_union = TRUE, is_coverage = FALSE)
 
-count.sf(x, ..., wt = NULL, sort = FALSE, name = "n")
-
-tally.sf(x, ..., wt = NULL, sort = FALSE, name = "n")
+count.sf(x, ..., wt = NULL, sort = FALSE, name = "n", .drop_geometry = FALSE)
 
 distinct.sf(.data, ..., .keep_all = FALSE, exact = FALSE, par = 0)
 
@@ -195,6 +192,8 @@ more details.}
 \item{sort}{see original function docs}
 
 \item{name}{see original function docs}
+
+\item{.drop_geometry}{logical; if \code{TRUE}, remove geometry column before computing counts}
 
 \item{.keep_all}{see corresponding function in dplyr}
 
@@ -364,8 +363,7 @@ if (require(dplyr, quietly = TRUE)) {
 }
 if (require(dplyr, quietly = TRUE)) {
   nc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
-  nc |> count(area_cl)
-  nc |> group_by(area_cl) |> tally()
+  nc |> count(area_cl, .drop_geometry = TRUE)
 }
 if (require(dplyr, quietly = TRUE)) {
  nc[c(1:100, 1:10), ] |> distinct() |> nrow()

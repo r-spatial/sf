@@ -342,19 +342,10 @@ test_that("`pivot_wider()` works", {
 test_that("`count()` works", {
 		skip_if_not_installed("dplyr")
 		nc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
-		unsorted <- count(nc, area_cl)
-		sorted_and_named <- count(nc, area_cl, sort = TRUE, name = "number")
+		unsorted <- count(nc, area_cl, .drop_geometry = TRUE)
+		sorted_and_named <- count(nc, area_cl, sort = TRUE, name = "number", .drop_geometry = TRUE)
 		expect_equal(unsorted$n, c(35, 15, 22, 28))
 		expect_equal(sorted_and_named$number, c(35, 28, 22, 15))
 		expect_false("sf" %in% class(unsorted))
+		expect_true(inherits(count(nc["AREA"]), "sf")) # preserves geometries
 	})
-
-test_that("`tally()` works", {
-	skip_if_not_installed("dplyr")
-	nc$area_cl <- cut(nc$AREA, c(0, .1, .12, .15, .25))
-	unsorted <- tally(group_by(nc, area_cl))
-	sorted_and_named <- tally(group_by(nc, area_cl), sort = TRUE, name = "number")
-	expect_equal(unsorted$n, c(35, 15, 22, 28))
-	expect_equal(sorted_and_named$number, c(35, 28, 22, 15))
-	expect_false("sf" %in% class(unsorted))
-})

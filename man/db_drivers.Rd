@@ -4,13 +4,9 @@
 \name{db_drivers}
 \alias{db_drivers}
 \title{Drivers for which update should be \code{TRUE} by default}
-\format{
-An object of class \code{character} of length 12.
-}
 \usage{
 db_drivers
 }
 \description{
 Drivers for which update should be \code{TRUE} by default
 }
-\keyword{datasets}

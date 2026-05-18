@@ -112,8 +112,10 @@ message_longlat = function(caller) {
 #' @name geos_measures
 #' @export
 #' @examples
-#' st_perimeter(poly)
-#' st_perimeter(mpoly)
+#' if (requireNamespace("lwgeom", quietly = TRUE)) {
+#'   st_perimeter(poly)
+#'   st_perimeter(mpoly)
+#' }
 st_perimeter = function(x, ...) {
 	x = st_geometry(x)
 	if (sf_use_s2() && isTRUE(st_is_longlat(x))) { # for spherical geometries we use s2 

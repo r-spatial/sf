@@ -2,16 +2,18 @@
 
 * elementary support for reading (some of the) field domains; #1640, #2598
 
+* use RAII in functions calling GEOS for handling context, based on how terra does this; #2604
+
 * `st_graticule()` simplifies output lines; #1364
 
-* `dplyr::count()` and `dplyr::tally()` no longer preserve geometries; #2596
+* `dplyr::count()` drops geometries if `.drop_geom = TRUE` is set; #2596
 
 * better handle graticules crossing the antemeridian; #2561
 
 * add the option `by_element = TRUE` to binary geometry predicates, measures and transformers; #2594 and #2595 by @rariariari w. help from Claude
 
-* add `MULTISURFACE` to vctrs methods; #2589
-
+* add `MULTISURFACE` and `CURVEPOLYGON` to vctrs methods; #2589 #2601
+￼
 * add argument `include_non_intersected` to `st_interpolate_aw()`
 
 * add argument `weights`, for dasymetric mapping, to `st_interpolate_aw()` (experimental)

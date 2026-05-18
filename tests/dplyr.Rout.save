@@ -1,6 +1,6 @@
 
-R version 4.5.2 (2025-10-31) -- "[Not] Part in a Rumble"
-Copyright (C) 2025 The R Foundation for Statistical Computing
+R version 4.6.0 (2026-04-24) -- "Because it was There"
+Copyright (C) 2026 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -17,7 +17,7 @@ Type 'q()' to quit R.
 
 > suppressPackageStartupMessages(library(sf))
 > 
-> if (require(dplyr, quietly = TRUE)) {
+> if (require(dplyr, quietly = TRUE) && require(tidyr, quietly = TRUE)) {
 +  options(dplyr.summarise.inform=FALSE)
 +  read_sf(system.file("shape/nc.shp", package="sf"), quiet = TRUE) |>
 + 	st_transform(3857) -> nc
@@ -126,7 +126,7 @@ Type 'q()' to quit R.
 + 
 +  nc |> st_filter(nc[1,]) |> nrow()
 + } # DBI & SQLITE
-+ } # dplyr
++ } # dplyr & tidyr
 
 Attaching package: 'dplyr'
 
@@ -144,4 +144,4 @@ plotting the first 10 out of 14 attributes; use max.plot = 14 to plot all
 > 
 > proc.time()
    user  system elapsed 
-  1.542   1.393   1.428 
+  1.692   1.299   1.596 
