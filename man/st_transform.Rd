@@ -56,7 +56,7 @@ sf_proj_info(type = "proj", path)
 
 \item{crs}{target coordinate reference system: object of class \code{crs}, or input string for \link{st_crs}}
 
-\item{...}{ignored}
+\item{...}{for the sfc method ignored, for other methods passed on to the sfc method}
 
 \item{aoi}{area of interest, in degrees:
 WestLongitude, SouthLatitude, EastLongitude, NorthLatitude}

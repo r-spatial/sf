@@ -52,7 +52,7 @@ st_can_transform = function(src, dst) {
 #'
 #' @param x object of class sf, sfc or sfg
 #' @param crs target coordinate reference system: object of class `crs`, or input string for \link{st_crs}
-#' @param ... ignored
+#' @param ... for the sfc method ignored, for other methods passed on to the sfc method
 #' @param aoi area of interest, in degrees: 
 #' WestLongitude, SouthLatitude, EastLongitude, NorthLatitude
 #' @param pipeline character; coordinate operation pipeline, for overriding the default operation
