@@ -68,7 +68,8 @@ sf_proj_info(type = "proj", path)
 
 - ...:
 
-  ignored
+  for the sfc method ignored, for other methods passed on to the sfc
+  method
 
 - aoi:
 
