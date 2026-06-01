@@ -98,8 +98,8 @@ RUN cd proj* \
   && ldconfig
 
 # GDAL:
-ENV GDAL_VERSION 3.13.0
-ENV GDAL_VERSION_NAME 3.13.0beta1
+ENV GDAL_VERSION 3.13.1
+ENV GDAL_VERSION_NAME 3.13.1rc1
 RUN wget -q http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
   && cd gdal* \
@@ -117,6 +117,9 @@ RUN git clone --depth 10 https://github.com/r-spatial/sf.git
 RUN (cd sf; git pull)
 RUN R CMD build --no-build-vignettes --no-manual sf
 RUN R CMD INSTALL sf_*.tar.gz
+
+RUN export DEBIAN_FRONTEND=noninteractive; apt-get install -y libuv1-dev
+RUN Rscript -e 'install.packages(c("mapview", "rmarkdown", "testthat", "tmap"))'
 RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
 
 # lwgeom:
