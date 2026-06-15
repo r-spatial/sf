@@ -120,18 +120,21 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 #' # example Dasymetric mapping:
 #' # load nr of addresses per 10 km grid cell, to proxy population -> birth density:
 #' grd.addr = system.file("gpkg/grd_addr.gpkg", package="sf") |> read_sf()
-#' xgrd.addr = grd.addr # copy for plotting
-#' xgrd.addr$ones[grd.addr$ones==0] = 1 # so that logz shows finite values
-#' \donttest{plot(xgrd.addr, logz=TRUE, main = "nr of addresses per cell") # log scale}
 #' nc = st_transform(nc, st_crs(grd.addr))
 #' # avoid "assumes attributes are constant or uniform over areas" warnings:
-#' st_agr(nc) = c(BIR74 = "constant", BIR79 = "constant")
 #' st_agr(grd.addr) = c(ones = "constant")
+#' st_agr(nc) = c(BIR74 = "constant", BIR79 = "constant")
+#' \donttest{plot(nc["BIR74"], logz = TRUE, main = "county birth counts, 1974-")}
+#' bir0.grd = st_interpolate_aw(nc[c("BIR74","BIR79")], extensive = TRUE, grd.addr)
+#' \donttest{plot(bir0.grd["BIR74"], logz = TRUE, main = "area-weighted birth counts, 1974-")}
+#' xgrd.addr = grd.addr # copy for plotting
+#' xgrd.addr$ones[grd.addr$ones==0] = 1 # so that logz shows finite values
+#' \donttest{plot(xgrd.addr, logz = TRUE, main = "nr of addresses per cell") # log scale}
 #' # dasymetric mapping
 #' bir.grd = st_interpolate_aw(nc[c("BIR74","BIR79")], extensive = TRUE, grd.addr, weights = "ones")
 #' xbir.grd = bir.grd # copy for plotting
 #' xbir.grd$BIR74[xbir.grd$BIR74 == 0] = 1 # so that logz shows finite values
-#' \donttest{plot(xbir.grd["BIR74"], logz = TRUE, main = "redistributed birth counts, 1974-")}
+#' \donttest{plot(xbir.grd["BIR74"], logz = TRUE, main = "dasym. redistributed birth counts, 1974-")}
 #' # verify sums:
 #' apply(as.data.frame(bir.grd)[1:2], 2, sum)
 #' apply(as.data.frame(nc)[c("BIR74", "BIR79")], 2, sum)
