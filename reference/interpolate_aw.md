@@ -116,7 +116,8 @@ plot(xgrd.addr, logz = TRUE, main = "nr of addresses per cell") # log scale
 # dasymetric mapping
 bir.grd = st_interpolate_aw(nc[c("BIR74","BIR79")], extensive = TRUE, grd.addr, weights = "ones")
 xbir.grd = bir.grd # copy for plotting
-xbir.grd$BIR74[xbir.grd$BIR74 == 0] = 1 # so that logz shows finite values
+smallest_pos = function(x) min(x[x > 0])
+xbir.grd$BIR74[xbir.grd$BIR74 == 0] = smallest_pos(xbir.grd$BIR74) # so that logz shows finite values
 plot(xbir.grd["BIR74"], logz = TRUE, main = "dasym. redistributed birth counts, 1974-")
 
 # verify sums:
