@@ -1,5 +1,9 @@
 # Changelog
 
+## version 1.1-2
+
+- move dependency `classInt` to Suggests:
+
 ## version 1.1-1
 
 CRAN release: 2026-05-06
