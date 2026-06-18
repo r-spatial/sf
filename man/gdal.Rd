@@ -59,7 +59,7 @@ gdal_polygonize(
   driver = "GTiff",
   use_integer = TRUE,
   geotransform,
-  breaks = classInt::classIntervals(na.omit(as.vector(x[[1]])))$brks,
+  breaks = pretty(na.omit(as.vector(x[[1]]))),
   use_contours = FALSE,
   contour_lines = FALSE,
   connect8 = FALSE,

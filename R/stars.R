@@ -276,7 +276,7 @@ gdal_subdatasets = function(file, options = character(0), name = TRUE) {
 #' @rdname gdal
 #' @export
 gdal_polygonize = function(x, mask = NULL, file = tempfile(), driver = "GTiff", use_integer = TRUE,
-		geotransform, breaks = classInt::classIntervals(na.omit(as.vector(x[[1]])))$brks, 
+		geotransform, breaks = pretty(na.omit(as.vector(x[[1]]))), 
 		use_contours = FALSE, contour_lines = FALSE, connect8 = FALSE, ...) {
 	gdal_write(x, file = file, driver = driver, geotransform = geotransform) # nocov start
 	on.exit(unlink(file))

@@ -66,7 +66,6 @@ Depends:
     methods,
     R (>= 4.1.0)
 Imports:
-    classInt (>= 0.4-1),
     DBI (>= 0.8),
     graphics,
     grDevices,
@@ -78,7 +77,7 @@ Imports:
     utils
 Suggests:
     blob,
-    nanoarrow,
+    classInt (>= 0.4-1),
     covr,
     dplyr (>= 1.0.0),
     ggplot2,
@@ -88,6 +87,7 @@ Suggests:
     mapview,
     Matrix,
     microbenchmark,
+    nanoarrow,
     odbc,
     pbapply,
     pillar,

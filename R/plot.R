@@ -172,10 +172,15 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 			if (is.character(breaks) && is.numeric(values)) { # compute breaks from values:
 				v0 = values[!is.na(values)]
 				n.unq = length(unique(v0))
-				breaks = if (! all(is.na(values)) && n.unq > 1)
-						classInt::classIntervals(v0, min(nbreaks, n.unq),
-							breaks, warnSmallN = FALSE)$brks
-					else
+				breaks = if (! all(is.na(values)) && n.unq > 1) {
+						if (breaks != "pretty") {
+							if (!requireNamespace("classInt", quietly = TRUE))
+								stop("package classInt required, please install it first")
+							classInt::classIntervals(v0, min(nbreaks, n.unq),
+								breaks, warnSmallN = FALSE)$brks
+						} else
+							pretty(v0, min(nbreaks, n.unq))
+					} else
 						range(values, na.rm = TRUE) # lowest and highest!
 				nbreaks = length(breaks) - 1
 			}
@@ -252,10 +257,16 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 						if (is.character(breaks)) { # compute breaks from values:
 							v0 = values[!is.na(values)]
 							n.unq = length(unique(v0))
-							breaks = if (! all(is.na(values)) && n.unq > 1)
-									classInt::classIntervals(v0, min(nbreaks, n.unq),
-										breaks, warnSmallN = FALSE)$brks
-								else
+							breaks = if (! all(is.na(values)) && n.unq > 1) {
+									# xxx
+									if (breaks != "pretty") {
+										if (!requireNamespace("classInt", quietly = TRUE))
+											stop("package classInt required, please install it first")
+										classInt::classIntervals(v0, min(nbreaks, n.unq),
+											breaks, warnSmallN = FALSE)$brks
+									} else
+										pretty(v0, min(nbreaks, n.unq))
+								} else
 									range(values, na.rm = TRUE) # lowest and highest!
 						}
 						# this is necessary if breaks were specified either as character or as numeric
