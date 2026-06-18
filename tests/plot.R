@@ -109,7 +109,9 @@ plot(g, axes = TRUE)
 nc[[1]] = NA
 nc[[10]] = 1
 plot(nc, pal = rainbow, nbreaks = 3)
-plot(nc, pal = rainbow, breaks = "jenks", nbreaks = 3)
+if (requireNamespace("classInt", quietly = TRUE)) {
+  plot(nc, pal = rainbow, breaks = "jenks", nbreaks = 3)
+}
 plot(nc, pal = rainbow, breaks = (0:10)/3)
 
 # logz:
