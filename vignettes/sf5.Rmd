@@ -94,7 +94,7 @@ plot(nc["AREA"], breaks = c(0,.05,.1,.15,.2,.25))
 
 or `breaks` is used to indicate a breaks-finding method that is passed as the `style` argument to `classInt::classIntervals()`. Its default value, `pretty`, results in rounded class breaks, and has as a side effect that `nbreaks` may be honoured only approximately. Other methods include `"equal"` to break the data range into `"nbreaks"` equal classes, `"quantile"` to use quantiles as class breaks, and `"jenks"`, used in other software.
 
-```{r}
+```{r eval=require("classInt", quietly = TRUE)}
 plot(nc["AREA"], breaks = "jenks")
 ```
 
