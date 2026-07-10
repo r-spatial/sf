@@ -790,6 +790,7 @@ extension_map <- list(
         "nc" = "netCDF",
         "ods" = "ODS",
         "osm" = "OSM",
+		"parquet" = "Parquet",
         "pbf" = "OSM",
         "shp" = "ESRI Shapefile",
         "sqlite" = "SQLite",

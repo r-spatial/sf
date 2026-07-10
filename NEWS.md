@@ -1,5 +1,7 @@
 # version 1.1-2
 
+* guess Parquet driver from `.parquet` file extension; #2506
+
 * move dependency `classInt` to Suggests:
 
 # version 1.1-1
