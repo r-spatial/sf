@@ -98,8 +98,8 @@ any(duplicated(unclass(st_cast(mpl, "MULTIPOINT"))))  ## should be FALSE
 sum(duplicated(do.call(rbind, unclass(st_cast(mpl, "MULTILINESTRING"))))
      ) == sum(unlist(lapply(mpl, length)))  ## should be TRUE
 
-p1 <- structure(c(0, 1, 3, 2, 1, 0, 0, 0, 2, 4, 4, 0), .Dim = c(6L, 2L))
-p2 <- structure(c(1, 1, 2, 1, 1, 2, 2, 1), .Dim = c(4L, 2L))
+p1 <- structure(c(0, 1, 3, 2, 1, 0, 0, 0, 2, 4, 4, 0), dim = c(6L, 2L))
+p2 <- structure(c(1, 1, 2, 1, 1, 2, 2, 1), dim = c(4L, 2L))
 st_polygon(list(p1, p2))
 mls <- st_cast(st_geometry(nc)[[4]], "MULTILINESTRING")
 st_sfc(cast_all(mls))
