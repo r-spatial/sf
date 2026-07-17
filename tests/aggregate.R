@@ -6,7 +6,13 @@ pl1 = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,0))))
 pl2 = st_polygon(list(rbind(c(0,0),c(1,1),c(0,1),c(0,0))))
 s = st_sf(a = 1:2, geom = st_sfc(pl1, pl2))
 (a = aggregate(s, list(c(1,1)), mean, do_union = FALSE))
+## IGNORE_RDIFF_BEGIN
+# expect do_union diff from GEOS 3.14 (out.save) to 3.15 (out)
+# because of changed coordinate order from 3.15.0
+# 3.14: POLYGON ((1 0, 0 0, 0 1, 1 ...
+# 3.15: POLYGON ((1 1, 1 0, 0 0, 0 ...
 (a = aggregate(s, list(c(1,1)), mean, do_union = TRUE))
+## IGNORE_RDIFF_END
 # expect_warning(st_cast(a, "POINT"))
 if (suppressPackageStartupMessages(require(sp, quietly = TRUE))) {
  demo(meuse_sf, echo = FALSE, ask = FALSE)

@@ -24,7 +24,7 @@ x = st_simplify(nc_tr, dTolerance = rep(1e4, nrow(nc_tr)))
 
 x = st_simplify(nc_tr, preserveTopology = TRUE)
 
-if (sf:::CPL_geos_version() >= "3.4.0")
+if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.4.0") > -1)
 	x = st_triangulate(nc_tr)
 
 mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
