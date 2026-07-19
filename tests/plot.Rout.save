@@ -1,6 +1,6 @@
 
-R version 4.5.2 (2025-10-31) -- "[Not] Part in a Rumble"
-Copyright (C) 2025 The R Foundation for Statistical Computing
+R version 4.6.1 (2026-06-24) -- "Happy Hop"
+Copyright (C) 2026 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -126,7 +126,9 @@ Type 'q()' to quit R.
 + nc[[1]] = NA
 + nc[[10]] = 1
 + plot(nc, pal = rainbow, nbreaks = 3)
-+ plot(nc, pal = rainbow, breaks = "jenks", nbreaks = 3)
++ if (requireNamespace("classInt", quietly = TRUE)) {
++   plot(nc, pal = rainbow, breaks = "jenks", nbreaks = 3)
++ }
 + plot(nc, pal = rainbow, breaks = (0:10)/3)
 + 
 + # logz:
@@ -152,4 +154,4 @@ There were 13 warnings (use warnings() to see them)
 > 
 > proc.time()
    user  system elapsed 
-  3.065   1.396   3.020 
+  3.745   1.066   3.404 

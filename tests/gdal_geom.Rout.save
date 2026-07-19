@@ -1,6 +1,6 @@
 
-R version 4.5.2 (2025-10-31) -- "[Not] Part in a Rumble"
-Copyright (C) 2025 The R Foundation for Statistical Computing
+R version 4.6.1 (2026-06-24) -- "Happy Hop"
+Copyright (C) 2026 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -55,7 +55,7 @@ Type 'q()' to quit R.
 > 
 > x = st_simplify(nc_tr, preserveTopology = TRUE)
 > 
-> if (sf:::CPL_geos_version() >= "3.4.0")
+> if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.4.0") > -1)
 + 	x = st_triangulate(nc_tr)
 > 
 > mls = st_multilinestring(list(matrix(c(0,0,0,1,1,1,0,0),,2,byrow=TRUE)))
@@ -327,4 +327,4 @@ lines[GRID.lines.1]
 > 
 > proc.time()
    user  system elapsed 
-  0.844   1.405   0.746 
+  1.395   0.985   0.974 

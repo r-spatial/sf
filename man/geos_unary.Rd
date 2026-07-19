@@ -186,7 +186,7 @@ the smallest circle that contains the input.
 
 \code{st_polygonize} creates a polygon from lines that form a closed ring. In case of \code{st_polygonize}, \code{x} must be an object of class \code{LINESTRING} or \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
 
-\code{st_line_merge} merges lines. In case of \code{st_line_merge}, \code{x} must be an object of class \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
+\code{st_line_merge} merges lines. In case of \code{st_line_merge}, \code{x} must be an object of class \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these; for GEOS >= 3.15.0, objects of class \code{LINESTRING} are permitted temporarily following \url{https://github.com/libgeos/geos/pull/1459; use cases \code{vectra::contour}, \code{rcrisp:::cap_corridor}}
 
 \code{st_centroid} gives the centroid of a geometry
 

@@ -1,7 +1,7 @@
 
-R Under development (unstable) (2025-11-05 r88988 ucrt) -- "Unsuffered Consequences"
-Copyright (C) 2025 The R Foundation for Statistical Computing
-Platform: x86_64-w64-mingw32/x64
+R version 4.6.1 (2026-06-24) -- "Happy Hop"
+Copyright (C) 2026 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -36,7 +36,7 @@ Type 'q()' to quit R.
 > all.equal(cp1, cp2)
 [1] TRUE
 > 
-> if (compareVersion(sf_extSoftVersion()["GEOS"], "3.6.1") > -1) {
+> if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()["GEOS"]), "3.6.1") > -1) {
 + # st_nearest_feature
 +   nf1 = st_nearest_feature(n0[1:50,], n0[51:100,])
 +   nf2 = st_nearest_feature(n1[1:50,], n1[51:100,])
@@ -65,4 +65,4 @@ Type 'q()' to quit R.
 > 
 > proc.time()
    user  system elapsed 
-   1.07    0.18    1.25 
+  1.423   0.976   0.894 

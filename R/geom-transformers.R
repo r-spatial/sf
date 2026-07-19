@@ -625,7 +625,7 @@ st_line_merge.sfc = function(x, ..., directed = FALSE) {
 # GEOS 3.15.0 https://github.com/libgeos/geos/pull/1459
 		stopifnot(inherits(x, "sfc_MULTILINESTRING"))
 	} else {
-		stopifnot(inherits(x, "sfc_MULTILINESTRING") || inherits(x, "sfc_LINESTRING"))
+		stopifnot(inherits(x, c("sfc_MULTILINESTRING", "sfc_LINESTRING")))
 	}
 	if (directed)
 		st_sfc(CPL_geos_op("linemergedirected", x, numeric(0), integer(0), numeric(0), logical(0)))
