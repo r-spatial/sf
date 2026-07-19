@@ -249,7 +249,11 @@ these
 
 `st_line_merge` merges lines. In case of `st_line_merge`, `x` must be an
 object of class `MULTILINESTRING`, or an `sfc` geometry list-column
-object containing these
+object containing these; for GEOS \>= 3.15.0, objects of class
+`LINESTRING` are permitted temporarily following
+[https://github.com/libgeos/geos/pull/1459; use cases
+\code{vectra::contour},
+\code{rcrisp:::cap_corridor}](https://github.com/libgeos/geos/pull/1459;%20use%20cases%20%5Ccode%7Bvectra::contour%7D,%20%5Ccode%7Brcrisp:::cap_corridor%7D)
 
 `st_centroid` gives the centroid of a geometry
 
