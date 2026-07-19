@@ -368,7 +368,7 @@ st_convex_hull(st_set_crs(pt, 'OGC:CRS84')) # S2
 #> Geodetic CRS:  WGS 84 (CRS84)
 #> POLYGON ((-120 80, 0 80, 120 80, -120 80))
 set.seed(131)
-if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.11.0") > -1) {
+if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.11.0") > -1) {
  pts = cbind(runif(100), runif(100))
  m = st_multipoint(pts)
  co = sf:::st_concave_hull(m, 0.3)
@@ -391,7 +391,7 @@ plot(st_simplify(nc_g_planar[1], dTolerance = 5e3)) # 5000 foot
 
 par(op)
 
-if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.10.0") > -1) {
+if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.10.0") > -1) {
  pts = rbind(c(0,0), c(1,0), c(1,1), c(.5,.5), c(0,1), c(0,0))
  po = st_polygon(list(pts))
  co = st_triangulate_constrained(po)
@@ -401,7 +401,7 @@ if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.10.0") > -1) {
  plot(co, border = 'red', col = 'NA', add = TRUE)
 }
 
-if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.9.0") > -1) {
+if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.9.0") > -1) {
   nc_t = st_transform(nc, 'EPSG:2264')
   x = st_inscribed_circle(st_geometry(nc_t))
   plot(st_geometry(nc_t), asp = 1, col = grey(.9))
@@ -411,7 +411,7 @@ if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.9.0") > -1) {
 set.seed(1)
 x = st_multipoint(matrix(runif(10),,2))
 box = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))))
-if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.5.0") > -1) {
+if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.5.0") > -1) {
  v = st_sfc(st_voronoi(x, st_sfc(box)))
  plot(v, col = 0, border = 1, axes = TRUE)
  plot(box, add = TRUE, col = 0, border = 1) # a larger box is returned, as documented
@@ -428,7 +428,7 @@ if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.5.0") > -1) {
  # match them to points:
  pts_pol = st_intersects(pts, pols)
  pts$pols = pols[unlist(pts_pol)] # re-order
- if (isTRUE(try(compareVersion(sf_extSoftVersion()["GEOS"], "3.12.0") > -1,
+ if (isTRUE(try(compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()["GEOS"]), "3.12.0") > -1,
    silent = TRUE))) {
    pols_po = st_collection_extract(st_voronoi(do.call(c, st_geometry(pts)),
      point_order = TRUE)) # GEOS >= 3.12 can preserve order of inputs
@@ -473,7 +473,7 @@ plot(nc_g, axes = TRUE)
 plot(st_point_on_surface(nc_g), add = TRUE, pch = 3, col = 'red')
 #> Warning: st_point_on_surface may not give correct results for longitude/latitude data
 
-if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.7.0") > -1) {
+if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.7.0") > -1) {
   st_reverse(st_linestring(rbind(c(1,1), c(2,2), c(3,3))))
 }
 #> LINESTRING (3 3, 2 2, 1 1)
