@@ -88,7 +88,7 @@ st_make_valid.sfc = function(x, ..., oriented = FALSE, s2_options = s2::s2_optio
 		ret = st_as_sfc(s2, crs = crs)
 		ret[full] = st_polygon(list(POLYGON_FULL))
 		ret
-	} else if (compareVersion(CPL_geos_version(), "3.8.0") == -1) {
+	} else if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.8.0") == -1) {
 		if (!missing(geos_method) || !missing(geos_keep_collapsed))
 			warning("ignoring arguments geos_method and geos_keep_collapsed, as these require GEOS >= 3.8.0")
 		if (!requireNamespace("lwgeom", quietly = TRUE))

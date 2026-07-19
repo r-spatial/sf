@@ -47,7 +47,7 @@ test_that("geos ops give warnings and errors on longlat", {
 	expect_silent(out <- st_segmentize(l, units::set_units(0.001, rad)))
 	expect_silent(out <- st_segmentize(l, units::set_units(100, km)))
 
-	if (CPL_geos_version() >= "3.4.0")
+	if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.4.0") > -1)
 		expect_warning(st_triangulate(x))
 	else
 		expect_error(st_triangulate(x))
@@ -100,7 +100,7 @@ test_that("geom operations work on sfg or sfc or sf", {
 	expect_silent(st_simplify(gpnc, FALSE, 1e4))
 	expect_silent(st_simplify(gpnc[[1L]], FALSE, 1e4))
 
-	if (sf:::CPL_geos_version() >= "3.4.0") {
+	if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.4.0") > -1) {
 		expect_silent(st_triangulate(pnc))
 		expect_s3_class(st_triangulate(gpnc), "sfc_GEOMETRYCOLLECTION")
 		expect_s3_class(st_triangulate(gpnc[[1]]), "GEOMETRYCOLLECTION")
@@ -172,7 +172,7 @@ test_that("st_difference works with partially overlapping geometries", {
 	pl3 = st_polygon(list(matrix(c(0, 1.25, 2, 1.25, 1, 2.5, 0, 1.25), byrow = TRUE, ncol = 2)))
 	in1 = st_sfc(list(pl1, pl2, pl3))
 	in2 = st_sf(order = c("A", "B", "C"), geometry = st_sfc(list(pl1, pl2, pl3), crs = 4326), agr = "constant")
-	if (package_version(gsub("[a-zA-Z]", "", sf_extSoftVersion()[["GEOS"]])) < "3.9.0") {
+	if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.9.0") == -1) {
 		correct_geom = st_sfc(list(
 		st_polygon(list(matrix(c(0, 2, 1, 0, 0, 0, 1, 0), ncol = 2))),
 		st_polygon(list(matrix(c(0.5, 0, 1, 2, 1.5, 1, 0.5, 0.5, 0.5, 1.5, 0.5, 0.5, 1, 0.5), ncol = 2))),
@@ -182,6 +182,10 @@ test_that("st_difference works with partially overlapping geometries", {
 		st_polygon(list(matrix(c(0, 2, 1, 0, 0, 0, 1, 0), ncol = 2))),
 		st_polygon(list(matrix(c(0, 1, 2, 1.5, 1, 0.5, 0, 0.5, 1.5, 0.5, 0.5, 1, 0.5, 0.5), ncol = 2))),
 		st_polygon(list(matrix(c(0, 1, 2, 1.25, 1, 0.75, 0, 1.25, 2.5, 1.25, 1.25, 1.5, 1.25, 1.25), ncol = 2)))))
+		if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.15.0") > -1) {
+			correct_geom[[2]][[1]] = correct_geom[[2]][[1]][c(6, 1:6),]
+			correct_geom[[3]][[1]] = correct_geom[[3]][[1]][c(6, 1:6),]
+		}
 	}
 	# erase overlaps
 	out1 = st_difference(in1)

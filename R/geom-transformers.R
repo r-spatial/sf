@@ -250,7 +250,7 @@ st_convex_hull.sf = function(x) {
 #' @param allow_holes logical; if \code{TRUE}, the resulting concave hull may have holes
 #' @examples
 #' set.seed(131)
-#' if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.11.0") > -1) {
+#' if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.11.0") > -1) {
 #'  pts = cbind(runif(100), runif(100))
 #'  m = st_multipoint(pts)
 #'  co = sf:::st_concave_hull(m, 0.3)
@@ -358,7 +358,7 @@ st_triangulate.sfg = function(x, dTolerance = 0.0, bOnlyEdges = FALSE)
 
 #' @export
 st_triangulate.sfc = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
-	if (compareVersion(CPL_geos_version(), "3.4.0") > -1) { # >= ; see https://github.com/r-spatial/sf/issues/1653
+	if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.4.0") > -1) { # >= ; see https://github.com/r-spatial/sf/issues/1653
 		if (isTRUE(st_is_longlat(x)))
 			warning("st_triangulate does not correctly triangulate longitude/latitude data")
 		st_sfc(CPL_geos_op("triangulate", x, numeric(0), integer(0),
@@ -377,7 +377,7 @@ st_triangulate.sf = function(x, dTolerance = 0.0, bOnlyEdges = FALSE) {
 #' @export
 #' @details \code{st_triangulate_constrained} returns the constrained delaunay triangulation of polygons; requires GEOS version 3.10 or above
 #' @examples
-#' if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.10.0") > -1) {
+#' if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.10.0") > -1) {
 #'  pts = rbind(c(0,0), c(1,0), c(1,1), c(.5,.5), c(0,1), c(0,0))
 #'  po = st_polygon(list(pts))
 #'  co = st_triangulate_constrained(po)
@@ -395,7 +395,7 @@ st_triangulate_constrained.sfg = function(x)
 
 #' @export
 st_triangulate_constrained.sfc = function(x) {
-	if (compareVersion(CPL_geos_version(), "3.10.0") > -1) { # >= ; see https://github.com/r-spatial/sf/issues/1653
+	if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.10.0") > -1) { # >= ; see https://github.com/r-spatial/sf/issues/1653
 		if (isTRUE(st_is_longlat(x)))
 			warning("st_triangulate does not correctly triangulate longitude/latitude data")
 		st_sfc(CPL_geos_op("triangulate_constrained", x, numeric(0), integer(0), numeric(0), logical(0)))
@@ -416,7 +416,7 @@ st_triangulate_constrained.sf = function(x) {
 #' \code{nQuadSegs} controls the number of points per quadrant to approximate the circle.
 #' \code{st_inscribed_circle} requires GEOS version 3.9 or above
 #' @examples
-#' if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.9.0") > -1) {
+#' if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.9.0") > -1) {
 #'   nc_t = st_transform(nc, 'EPSG:2264')
 #'   x = st_inscribed_circle(st_geometry(nc_t))
 #'   plot(st_geometry(nc_t), asp = 1, col = grey(.9))
@@ -432,7 +432,7 @@ st_inscribed_circle.sfg = function(x, dTolerance, ...) {
 
 #' @export
 st_inscribed_circle.sfc = function(x, dTolerance = sqrt(st_area(st_set_crs(x, NA_crs_)))/1000, ..., nQuadSegs = 30) {
-	if (compareVersion(CPL_geos_version(), "3.9.0") > -1) { # >=
+	if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.9.0") > -1) { # >=
 		if (isTRUE(st_is_longlat(x)))
 			warning("st_inscribed_circle does not work correctly for longitude/latitude data")
 		nQ = rep(nQuadSegs, length.out = length(x))
@@ -471,7 +471,7 @@ st_minimum_rotated_rectangle.sfg = function(x, ...) {
 
 #' @export
 st_minimum_rotated_rectangle.sfc = function(x, ...) {
-	if (compareVersion(CPL_geos_version(), "3.9.0") > -1) { # >=
+	if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.9.0") > -1) { # >=
 		if (isTRUE(st_is_longlat(x)))
 			warning("st_minimum_rotated_rectangle does not work correctly for longitude/latitude data")
 		st_sfc(CPL_geos_op("minimum_rotated_rectangle", x, 0L, integer(0),
@@ -500,7 +500,7 @@ st_minimum_bounding_circle.sfg = function(x, ...) {
 
 #' @export
 st_minimum_bounding_circle.sfc = function(x, ...) {
-	if (compareVersion(CPL_geos_version(), "3.8.0") > -1) { # >=
+	if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.8.0") > -1) { # >=
 		if (isTRUE(st_is_longlat(x)))
 			warning("st_minimum_rotated_rectangle does not work correctly for longitude/latitude data")
 		st_sfc(CPL_geos_op("bounding_circle", x, 0L, integer(0),
@@ -523,7 +523,7 @@ st_minimum_bounding_circle.sf = function(x, ...) {
 #' set.seed(1)
 #' x = st_multipoint(matrix(runif(10),,2))
 #' box = st_polygon(list(rbind(c(0,0),c(1,0),c(1,1),c(0,1),c(0,0))))
-#' if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.5.0") > -1) {
+#' if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.5.0") > -1) {
 #'  v = st_sfc(st_voronoi(x, st_sfc(box)))
 #'  plot(v, col = 0, border = 1, axes = TRUE)
 #'  plot(box, add = TRUE, col = 0, border = 1) # a larger box is returned, as documented
@@ -540,7 +540,7 @@ st_minimum_bounding_circle.sf = function(x, ...) {
 #'  # match them to points:
 #'  pts_pol = st_intersects(pts, pols)
 #'  pts$pols = pols[unlist(pts_pol)] # re-order
-#'  if (isTRUE(try(compareVersion(sf_extSoftVersion()["GEOS"], "3.12.0") > -1,
+#'  if (isTRUE(try(compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()["GEOS"]), "3.12.0") > -1,
 #'    silent = TRUE))) {
 #'    pols_po = st_collection_extract(st_voronoi(do.call(c, st_geometry(pts)),
 #'      point_order = TRUE)) # GEOS >= 3.12 can preserve order of inputs
@@ -561,11 +561,11 @@ st_voronoi.sfg = function(x, envelope = st_polygon(), dTolerance = 0.0, bOnlyEdg
 
 #' @export
 st_voronoi.sfc = function(x, envelope = st_polygon(), dTolerance = 0.0, bOnlyEdges = FALSE, point_order = FALSE) {
-	if (compareVersion(CPL_geos_version(), "3.5.0") > -1) {
+	if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()["GEOS"]), "3.5.0") > -1) {
 		if (isTRUE(st_is_longlat(x)))
 			warning("st_voronoi does not correctly triangulate longitude/latitude data")
 		if (point_order) {
-			if (compareVersion(CPL_geos_version(), "3.12.0") > -1)
+			if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()["GEOS"]), "3.12.0") > -1)
 				bOnlyEdges = 2L # GEOS enum GEOS_VORONOI_PRESERVE_ORDER
 			else
 				warning("Point order retention not supported for GEOS ", CPL_geos_version())
@@ -608,7 +608,7 @@ st_polygonize.sf = function(x) {
 #' @name geos_unary
 #' @export
 #' @param directed logical; if \code{TRUE}, lines with opposite directions will not be merged
-#' @details \code{st_line_merge} merges lines. In case of \code{st_line_merge}, \code{x} must be an object of class \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these
+#' @details \code{st_line_merge} merges lines. In case of \code{st_line_merge}, \code{x} must be an object of class \code{MULTILINESTRING}, or an \code{sfc} geometry list-column object containing these; for GEOS >= 3.15.0, objects of class \code{LINESTRING} are permitted temporarily following \url{https://github.com/libgeos/geos/pull/1459; use cases \code{vectra::contour}, \code{rcrisp:::cap_corridor}}
 #' @examples
 #' mls = st_multilinestring(list(rbind(c(0,0), c(1,1)), rbind(c(2,0), c(1,1))))
 #' st_line_merge(st_sfc(mls))
@@ -621,7 +621,12 @@ st_line_merge.sfg = function(x, ..., directed = FALSE)
 
 #' @export
 st_line_merge.sfc = function(x, ..., directed = FALSE) {
-	stopifnot(inherits(x, "sfc_MULTILINESTRING"))
+	if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.15.0") == -1) {
+# GEOS 3.15.0 https://github.com/libgeos/geos/pull/1459
+		stopifnot(inherits(x, "sfc_MULTILINESTRING"))
+	} else {
+		stopifnot(inherits(x, "sfc_MULTILINESTRING") || inherits(x, "sfc_LINESTRING"))
+	}
 	if (directed)
 		st_sfc(CPL_geos_op("linemergedirected", x, numeric(0), integer(0), numeric(0), logical(0)))
 	else
@@ -721,7 +726,7 @@ st_point_on_surface.sf = function(x) {
 #' @export
 #' @details \code{st_reverse} reverses the nodes in a line
 #' @examples
-#' if (compareVersion(sf_extSoftVersion()[["GEOS"]], "3.7.0") > -1) {
+#' if (compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.7.0") > -1) {
 #'   st_reverse(st_linestring(rbind(c(1,1), c(2,2), c(3,3))))
 #' }
 #nocov start
