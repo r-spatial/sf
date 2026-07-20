@@ -76,6 +76,7 @@ crs <- gdal_crs(tif)
 try(gdal_metadata("foo"))
 gdal_metadata(tif)
 
+## IGNORE_RDIFF_BEGIN
 suppressMessages(
 suppressWarnings(
 if (require(stars, quietly = TRUE)) {
@@ -83,16 +84,17 @@ if (require(stars, quietly = TRUE)) {
 	z = paste0('ZARR:/vsizip/"', p, '"/ones.zarr')
 	d = try(gdal_utils("mdiminfo", z), silent = TRUE)
 	if (!inherits(d, "try-error")) {
-		print(d)
-		cat("\n")
+		# print(d)
+		# cat("\n")
 	}
 	e = try(read_stars(z, normalize_path = FALSE), silent = TRUE)
 	f = try(read_mdim(z, normalize_path = FALSE), silent = TRUE)
 	if (inherits(e, "try-error") || inherits(f, "try-error")) {
 		print("Cannot read blosc-compressed Zarr file: blosc not supported?")
 	} else { 
-		print(e)
-		print(f)
+	  	print(e)
+	  	print(f)
 	}
 }
 ))
+## IGNORE_RDIFF_END

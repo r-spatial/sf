@@ -1,6 +1,6 @@
 
-R version 4.5.2 (2025-10-31) -- "[Not] Part in a Rumble"
-Copyright (C) 2025 The R Foundation for Statistical Computing
+R version 4.6.1 (2026-06-24) -- "Happy Hop"
+Copyright (C) 2026 The R Foundation for Statistical Computing
 Platform: x86_64-pc-linux-gnu
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -259,6 +259,7 @@ First 10 features:
 > gdal_metadata(tif)
 [1] "AREA_OR_POINT=Point"
 > 
+> ## IGNORE_RDIFF_BEGIN
 > suppressMessages(
 + suppressWarnings(
 + if (require(stars, quietly = TRUE)) {
@@ -266,16 +267,16 @@ First 10 features:
 + 	z = paste0('ZARR:/vsizip/"', p, '"/ones.zarr')
 + 	d = try(gdal_utils("mdiminfo", z), silent = TRUE)
 + 	if (!inherits(d, "try-error")) {
-+ 		print(d)
-+ 		cat("\n")
++ 		# print(d)
++ 		# cat("\n")
 + 	}
 + 	e = try(read_stars(z, normalize_path = FALSE), silent = TRUE)
 + 	f = try(read_mdim(z, normalize_path = FALSE), silent = TRUE)
 + 	if (inherits(e, "try-error") || inherits(f, "try-error")) {
 + 		print("Cannot read blosc-compressed Zarr file: blosc not supported?")
 + 	} else { 
-+ 		print(e)
-+ 		print(f)
++ 	  	print(e)
++ 	  	print(f)
 + 	}
 + }
 + ))
@@ -312,9 +313,7 @@ First 10 features:
       }
     }
   }
-}[1] "{\n  \"type\": \"group\",\n  \"driver\": \"Zarr\",\n  \"name\": \"/\",\n  \"arrays\": {\n    \"ones\": {\n      \"datatype\": \"Int32\",\n      \"dimensions\": [\n        {\n          \"name\": \"dim0\",\n          \"full_name\": \"dim0\",\n          \"size\": 100\n        },\n        {\n          \"name\": \"dim1\",\n          \"full_name\": \"dim1\",\n          \"size\": 100\n        }\n      ],\n      \"dimension_size\": [\n        100,\n        100\n      ],\n      \"block_size\": [\n        50,\n        50\n      ],\n      \"nodata_value\": 0,\n      \"structural_info\": {\n        \"COMPRESSOR\": \"{ \\\"blocksize\\\": 0, \\\"clevel\\\": 5, \\\"cname\\\": \\\"lz4\\\", \\\"id\\\": \\\"blosc\\\", \\\"shuffle\\\": 1 }\"\n      }\n    }\n  }\n}"
-
-stars object with 2 dimensions and 1 attribute
+}stars object with 2 dimensions and 1 attribute
 attribute(s):
            Min. 1st Qu. Median Mean 3rd Qu. Max.
 ones.zarr     1       1      1    1       1    1
@@ -330,7 +329,8 @@ dimension(s):
      from  to offset delta x/y
 dim1    1 100    0.5     1 [x]
 dim0    1 100    0.5     1 [y]
+> ## IGNORE_RDIFF_END
 > 
 > proc.time()
    user  system elapsed 
-  1.948   4.046   1.515 
+  3.010   2.818   1.728 
