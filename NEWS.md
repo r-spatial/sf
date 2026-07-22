@@ -1,8 +1,12 @@
-# version 1.1-2
+# version 1.1-3
 
 * guess Parquet driver from `.parquet` file extension; #2506
 
 * move dependency `classInt` to Suggests:
+
+# version 1.1-2
+
+* remove use of `.Dim` in `structure()`
 
 # version 1.1-1
 
