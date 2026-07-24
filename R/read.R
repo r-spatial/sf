@@ -164,12 +164,18 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 				as.data.frame(x , stringsAsFactors = stringsAsFactors, optional = optional)
 			} else
 				tibble::as_tibble(x)
-		return(x)
+		return(structure(x, domains = NULL, FieldDomains = NULL))
 	}
 
 	nm = names(x)[which.geom]
 	Encoding(nm) = "UTF-8"
 	geom = x[which.geom]
+	do = fd = NULL
+	domains = attr(x, "domains")
+	if (!is.null(domains) && length(domains) && !all(is.na(domains))) {
+		fd = attr(x, "FieldDomains")
+		do = domains
+	}
 
 	lc.other = setdiff(which(vapply(x, is.list, TRUE)), which.geom) # non-sfc list-columns
 	list.cols = x[lc.other]
@@ -200,9 +206,9 @@ process_cpl_read_ogr = function(x, quiet = FALSE, ..., check_ring_dir = FALSE,
 		}
 	}
 
-	x = st_as_sf(x, ...,
+	x = structure(st_as_sf(x, ...,
 		sf_column_name = if (is.character(geometry_column)) geometry_column else nm[geometry_column],
-		check_ring_dir = check_ring_dir)
+		check_ring_dir = check_ring_dir), FieldDomains = fd, domains = do)
 	if (! quiet)
 		print(x, n = 0)
 	else
