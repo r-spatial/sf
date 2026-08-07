@@ -139,7 +139,12 @@ st_crs.CRS = function(x, ...) {
 
 #' @name st_crs
 #' @export
-st_crs.crs = function(x, ...) x
+st_crs.crs = function(x, ..., parameters = FALSE) {
+	if (isTRUE(parameters))
+		st_crs(st_sfc(crs = x), parameters = TRUE)
+	else
+		x
+}
 
 #' @export
 st_crs.default = function(x, ...) NA_crs_

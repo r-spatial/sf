@@ -34,7 +34,7 @@ st_crs(x, ...)
 
 \method{st_crs}{CRS}(x, ...)
 
-\method{st_crs}{crs}(x, ...)
+\method{st_crs}{crs}(x, ..., parameters = FALSE)
 
 st_crs(x) <- value
 
