@@ -536,53 +536,69 @@ exportMethods(dbDataType)
 exportMethods(dbWriteTable)
 import(graphics)
 importClassesFrom(DBI,DBIObject)
-importFrom(DBI,dbConnect)
-importFrom(DBI,dbDisconnect)
-importFrom(DBI,dbExecute)
-importFrom(DBI,dbGetQuery)
-importFrom(DBI,dbReadTable)
-importFrom(DBI,dbSendQuery)
-importFrom(DBI,dbWriteTable)
-importFrom(grDevices,cm)
-importFrom(grDevices,dev.size)
-importFrom(grDevices,rgb)
-importFrom(grid,convertHeight)
-importFrom(grid,convertUnit)
-importFrom(grid,convertWidth)
-importFrom(grid,current.viewport)
-importFrom(grid,gList)
-importFrom(grid,gpar)
-importFrom(grid,linesGrob)
-importFrom(grid,nullGrob)
-importFrom(grid,pathGrob)
-importFrom(grid,pointsGrob)
-importFrom(grid,polylineGrob)
-importFrom(grid,unit)
-importFrom(grid,viewport)
-importFrom(methods,"slot<-")
-importFrom(methods,as)
-importFrom(methods,new)
-importFrom(methods,slot)
-importFrom(methods,slotNames)
-importFrom(stats,aggregate)
-importFrom(stats,dist)
-importFrom(stats,na.omit)
-importFrom(stats,rbinom)
-importFrom(stats,runif)
-importFrom(stats,setNames)
-importFrom(tools,file_ext)
-importFrom(tools,file_path_sans_ext)
-importFrom(units,as_units)
-importFrom(units,drop_units)
-importFrom(units,make_unit_label)
-importFrom(units,set_units)
-importFrom(utils,compareVersion)
-importFrom(utils,globalVariables)
-importFrom(utils,head)
-importFrom(utils,object.size)
-importFrom(utils,packageVersion)
-importFrom(utils,str)
-importFrom(utils,tail)
+importFrom(DBI,
+  dbConnect,
+  dbDisconnect,
+  dbExecute,
+  dbGetQuery,
+  dbReadTable,
+  dbSendQuery,
+  dbWriteTable
+)
+importFrom(grDevices,
+  cm,
+  dev.size,
+  rgb
+)
+importFrom(grid,
+  convertHeight,
+  convertUnit,
+  convertWidth,
+  current.viewport,
+  gList,
+  gpar,
+  linesGrob,
+  nullGrob,
+  pathGrob,
+  pointsGrob,
+  polylineGrob,
+  unit,
+  viewport
+)
+importFrom(methods,
+  "slot<-",
+  as,
+  new,
+  slot,
+  slotNames
+)
+importFrom(stats,
+  aggregate,
+  dist,
+  na.omit,
+  rbinom,
+  runif,
+  setNames
+)
+importFrom(tools,
+  file_ext,
+  file_path_sans_ext
+)
+importFrom(units,
+  as_units,
+  drop_units,
+  make_unit_label,
+  set_units
+)
+importFrom(utils,
+  compareVersion,
+  globalVariables,
+  head,
+  object.size,
+  packageVersion,
+  str,
+  tail
+)
 importMethodsFrom(DBI,dbDataType)
 importMethodsFrom(DBI,dbExistsTable)
 importMethodsFrom(DBI,dbWriteTable)

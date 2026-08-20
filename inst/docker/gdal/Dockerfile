@@ -99,8 +99,8 @@ RUN cd proj* \
   && ldconfig
 
 # GDAL:
-ENV GDAL_VERSION 3.13.1
-ENV GDAL_VERSION_NAME 3.13.1rc1
+ENV GDAL_VERSION 3.13.3
+ENV GDAL_VERSION_NAME 3.13.3
 RUN wget -q http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
   && cd gdal* \

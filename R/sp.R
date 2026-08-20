@@ -272,12 +272,19 @@ setAs("XY", "Spatial", function(from) as(st_sfc(from), "Spatial"))
 #' `Spatial*` for `sp` compatibility. You can also use `as(x, "Spatial")` To transform
 #' `sp` objects to `sf` and `sfc` with `as(x, "sf")`.
 #' @rdname coerce-methods
+#' @aliases coerce,Spatial,sf-method
+#' @aliases coerce,Spatial,sfc-method
+#' @aliases coerce,sf,Spatial-method
+#' @aliases coerce,sfc,Spatial-method
+#' @aliases coerce,crs,CRS-method
 #' @name as_Spatial
 #' @param from object of class `sf`, `sfc_POINT`, `sfc_MULTIPOINT`, `sfc_LINESTRING`,
 #' `sfc_MULTILINESTRING`, `sfc_POLYGON`, or `sfc_MULTIPOLYGON`.
 #' @param cast logical; if `TRUE`, [st_cast()] `from` before converting, so that e.g.
 #' `GEOMETRY` objects with a mix of `POLYGON` and `MULTIPOLYGON` are cast to `MULTIPOLYGON`.
 #' @param IDs character vector with IDs for the `Spatial*` geometries
+#' @param strict ignored
+#' @param to target class
 #' @details Package \code{sp} supports three dimensions for `POINT` and `MULTIPOINT` (`SpatialPoint*`).
 #' Other geometries must be two-dimensional (`XY`). Dimensions can be dropped using
 #' [st_zm()] with `what = "M"` or `what = "ZM"`.
