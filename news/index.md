@@ -9,6 +9,8 @@
 
 ## version 1.1-2
 
+CRAN release: 2026-07-23
+
 - remove use of `.Dim` in
   [`structure()`](https://rdrr.io/r/base/structure.html)
 

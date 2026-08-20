@@ -8,7 +8,22 @@ and `Spatial*` for `sp` compatibility. You can also use
 ## Usage
 
 ``` r
+# S4 method for class 'Spatial,sf'
+coerce(from, to = "sf", strict = TRUE)
+
+# S4 method for class 'Spatial,sfc'
+coerce(from, to = "sfc", strict = TRUE)
+
+# S4 method for class 'sf,Spatial'
+coerce(from, to = "Spatial", strict = TRUE)
+
+# S4 method for class 'sfc,Spatial'
+coerce(from, to = "Spatial", strict = TRUE)
+
 as_Spatial(from, cast = TRUE, IDs = paste0("ID", seq_along(from)))
+
+# S4 method for class 'crs,CRS'
+coerce(from, to = "CRS", strict = TRUE)
 ```
 
 ## Arguments
@@ -17,6 +32,14 @@ as_Spatial(from, cast = TRUE, IDs = paste0("ID", seq_along(from)))
 
   object of class `sf`, `sfc_POINT`, `sfc_MULTIPOINT`, `sfc_LINESTRING`,
   `sfc_MULTILINESTRING`, `sfc_POLYGON`, or `sfc_MULTIPOLYGON`.
+
+- to:
+
+  target class
+
+- strict:
+
+  ignored
 
 - cast:
 

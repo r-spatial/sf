@@ -28,7 +28,7 @@ st_crs(x, ...)
 st_crs(x, ...)
 
 # S3 method for class 'crs'
-st_crs(x, ...)
+st_crs(x, ..., parameters = FALSE)
 
 st_crs(x) <- value
 

@@ -16,7 +16,12 @@
   [`st_bind_cols()`](https://r-spatial.github.io/sf/reference/bind.md) :
   Bind rows (features) of sf objects
 
-- [`as_Spatial()`](https://r-spatial.github.io/sf/reference/coerce-methods.md)
+- [`coerce(`*`<Spatial>`*`,`*`<sf>`*`)`](https://r-spatial.github.io/sf/reference/coerce-methods.md)
+  [`coerce(`*`<Spatial>`*`,`*`<sfc>`*`)`](https://r-spatial.github.io/sf/reference/coerce-methods.md)
+  [`coerce(`*`<sf>`*`,`*`<Spatial>`*`)`](https://r-spatial.github.io/sf/reference/coerce-methods.md)
+  [`coerce(`*`<sfc>`*`,`*`<Spatial>`*`)`](https://r-spatial.github.io/sf/reference/coerce-methods.md)
+  [`as_Spatial()`](https://r-spatial.github.io/sf/reference/coerce-methods.md)
+  [`coerce(`*`<crs>`*`,`*`<CRS>`*`)`](https://r-spatial.github.io/sf/reference/coerce-methods.md)
   :
 
   Methods to coerce simple features to `Spatial*` and
