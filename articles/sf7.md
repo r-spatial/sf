@@ -468,7 +468,7 @@ system.time({
   uk_buffer_sf = st_buffer(uk_projected, dist = 20000)
 })
 ##    user  system elapsed 
-##   0.028   0.000   0.027
+##   0.028   0.000   0.028
 # sf way with few than the 30 segments in the buffer
 system.time({
   uk_projected = st_transform(uk_sfc, 27700)
@@ -493,7 +493,7 @@ system.time({
   uk_buffer2 = s2_buffer_cells(uk, distance = 20000, max_cells = 100)
 })
 ##    user  system elapsed 
-##   0.003   0.000   0.003
+##   0.003   0.000   0.004
 ```
 
 The result of the previous benchmarks emphasizes the point that there
