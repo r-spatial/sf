@@ -10,6 +10,8 @@
 
 # version 1.1-1
 
+* elementary support for reading (some of the) field domains; #1640, #2598
+
 * use RAII in functions calling GEOS for handling context, based on how terra does this; #2604
 
 * `st_graticule()` simplifies output lines; #1364
