@@ -114,6 +114,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 	col_missing = is.null(dots$col)
 	breaks_numeric = is.numeric(breaks)
 	reset_layout_needed = reset
+	plot_completed = FALSE
 
 	x = swap_axes_if_needed(x)
 	
@@ -125,9 +126,11 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 	on.exit(
 		expr = {
 			if (!isTRUE(dots$add) && reset) { # reset device: 
+				par(opar)
+				if (reset_layout_needed && !plot_completed)
+					try(plot.new(), silent = TRUE)
 				if (reset_layout_needed) 
 					layout(matrix(1))
-				par(opar)
 			}
 		}, 
 		add = TRUE
@@ -345,6 +348,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 			localTitle(main, ...)
 		}
 	}
+	plot_completed = TRUE
 	invisible()
 }
 
@@ -1062,13 +1066,13 @@ xy_from_r = function(r, l, o) {
 	poly = vector(mode="list", length(col))
 	for (i in seq(poly))
 		poly[[i]] = c(breaks[i], breaks[i+1], breaks[i+1], breaks[i])
+	sz = cm(max(strwidth(z, "inches"))) * 1.3 + par("ps")/12 # cm
 
 	tryCatch({
 		plot(1, 1, type = "n", ylim = ylim, xlim = xlim, axes = FALSE,
 			xlab = "", ylab = "", xaxs = "i", yaxs = "i")
 		},
 		error = function(x) {
-			sz = cm(max(strwidth(z, "inches"))) * 1.3 + par("ps")/12 # cm
 			stop(paste0("key.width too small, try key.width = lcm(", signif(sz, 3), ")"), call. = FALSE)
 		}
 	)
