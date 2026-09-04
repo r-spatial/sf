@@ -2,7 +2,7 @@
 
 Get precision
 
-Set precision
+Set precision attribute (without changing coordinates)
 
 ## Usage
 
@@ -73,7 +73,13 @@ therein.
 x <- st_sfc(st_point(c(pi, pi)))
 st_precision(x)
 #> [1] 0
-st_precision(x) <- 0.01
+st_precision(x) <- 100
 st_precision(x)
-#> [1] 0.01
+#> [1] 100
+st_coordinates(x) # no rounding
+#>             X        Y
+#> [1,] 3.141593 3.141593
+st_as_binary(x) |> st_as_sfc() |> st_coordinates() # rounds
+#>         X    Y
+#> [1,] 3.14 3.14
 ```
