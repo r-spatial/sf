@@ -4,6 +4,8 @@
 
 * move dependency `classInt` to Suggests:
 
+* `st_combine()` preserves the precision of input object; #2618
+
 # version 1.1-2
 
 * remove use of `.Dim` in `structure()`
