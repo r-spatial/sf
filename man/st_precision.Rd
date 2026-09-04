@@ -22,7 +22,7 @@ st_precision(x) <- value
 \description{
 Get precision
 
-Set precision
+Set precision attribute (without changing coordinates)
 }
 \details{
 If \code{precision} is a \code{units} object, the object on which we set precision must have a coordinate reference system with compatible distance units.
@@ -37,8 +37,10 @@ The reason to support precision is that geometrical operations in GEOS or liblwg
 \examples{
 x <- st_sfc(st_point(c(pi, pi)))
 st_precision(x)
-st_precision(x) <- 0.01
+st_precision(x) <- 100
 st_precision(x)
+st_coordinates(x) # no rounding
+st_as_binary(x) |> st_as_sfc() |> st_coordinates() # rounds
 }
 \seealso{
 \link{st_as_binary} for an explanation of what setting precision does, and the examples therein.

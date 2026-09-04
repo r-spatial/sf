@@ -422,7 +422,7 @@ st_precision.sfc <- function(x) {
   attr(x, "precision")
 }
 
-#' Set precision
+#' Set precision attribute (without changing coordinates)
 #'
 #' @rdname st_precision
 #' @param precision numeric, or object of class \code{units} with distance units (but see details); see \link{st_as_binary} for how to do this.
@@ -439,8 +439,10 @@ st_precision.sfc <- function(x) {
 #' @examples
 #' x <- st_sfc(st_point(c(pi, pi)))
 #' st_precision(x)
-#' st_precision(x) <- 0.01
+#' st_precision(x) <- 100
 #' st_precision(x)
+#' st_coordinates(x) # no rounding
+#' st_as_binary(x) |> st_as_sfc() |> st_coordinates() # rounds
 #' @export
 st_set_precision <- function(x, precision) {
     UseMethod("st_set_precision")
