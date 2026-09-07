@@ -2,6 +2,8 @@
 
 * guess Parquet driver from `.parquet` file extension; #2506
 
+* restore the graphics state after a failed `plot.sf()` key; #2611
+
 * move dependency `classInt` to Suggests:
 
 # version 1.1-2

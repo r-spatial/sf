@@ -18,3 +18,20 @@ test_that("plot.sf deals with key.length in cm", {
   expect_silent(plot(nc["f"], key.length = lcm(5), key.pos = 2))
   expect_silent(plot(nc["f"], key.length = lcm(5), key.pos = 1))
 })
+
+test_that("plot.sf restores the graphics state after a key error", {
+	nc = st_read(system.file("shape/nc.shp", package="sf"), "nc", quiet = TRUE)
+	nc$toy = c("A,    B", rep("A", length.out = nrow(nc) - 1))
+
+	png_file = tempfile(fileext = ".png")
+	png(png_file, type = "cairo", width = 800, height = 600)
+	par(family = "sans")
+	on.exit({
+		dev.off()
+		unlink(png_file)
+	})
+
+	expect_silent(plot(nc["toy"]))
+	expect_error(plot(nc["toy"], key.pos = 2), "key.width too small")
+	expect_silent(plot(nc["toy"], key.pos = 2, key.width = lcm(6)))
+})
