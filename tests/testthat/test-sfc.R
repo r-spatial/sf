@@ -96,6 +96,12 @@ test_that("st_coordinates works", {
 	nc <- st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 	expect_true(is.matrix(st_coordinates(nc)))
 	# expect_true(is.matrix(st_coordinates(st_geometrycollection(list(st_point)))))
+	
+	st_precision(x) = 1e2
+	expect_identical(
+		st_coordinates(x, round = TRUE), 
+		matrix(c(3.14, 3.14), ncol = 2, dimnames = list(NULL, c("X", "Y")))
+	)
 })
 
 test_that("as.data.frame.sfc works", {
