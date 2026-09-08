@@ -509,6 +509,15 @@ typed_empty = function(cls, ncol = 2, dim = "XY") {
 #' feature and \code{L2} refers to the component \code{POLYGON}.
 #' 
 #' @export
+#' @examples
+#' x = st_sfc(st_point(c(1.234, 1.234)), crs = 3003) # units: m
+#' st_coordinates(x)
+#' 
+#' st_precision(x) = 1e1
+#' st_coordinates(x, round = TRUE) # round 1 decimal place 
+#' 
+#' st_precision(x) = units::set_units(1, cm)
+#' st_coordinates(x, round = TRUE) # round to cm
 st_coordinates = function(x, round = FALSE, ...) UseMethod("st_coordinates")
 
 #' @export
