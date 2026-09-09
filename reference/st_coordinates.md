@@ -5,7 +5,7 @@ retrieve coordinates in matrix form
 ## Usage
 
 ``` r
-st_coordinates(x, ...)
+st_coordinates(x, round = FALSE, ...)
 ```
 
 ## Arguments
@@ -13,6 +13,13 @@ st_coordinates(x, ...)
 - x:
 
   object of class sf, sfc or sfg
+
+- round:
+
+  logical; if `TRUE` and input object has a `precision` attribute
+  different from 0, then its coordinates are rounded to the chosen
+  precision level before building the output matrix. See also
+  [`st_precision()`](https://r-spatial.github.io/sf/reference/st_precision.md).
 
 - ...:
 
@@ -36,3 +43,22 @@ identified when `L1` is greater than 1. `L2` can be used to
 differentiate between the feature. Whereas for `MULTIPOLYGON`, `L3`
 refers to the `MULTIPOLYGON` feature and `L2` refers to the component
 `POLYGON`.
+
+## Examples
+
+``` r
+x = st_sfc(st_point(c(1.234, 1.234)), crs = 3003) # units: m
+st_coordinates(x)
+#>          X     Y
+#> [1,] 1.234 1.234
+
+st_precision(x) = 1e1
+st_coordinates(x, round = TRUE) # round 1 decimal place 
+#>        X   Y
+#> [1,] 1.2 1.2
+
+st_precision(x) = units::set_units(1, cm)
+st_coordinates(x, round = TRUE) # round to cm
+#>         X    Y
+#> [1,] 1.23 1.23
+```

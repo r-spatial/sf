@@ -49,7 +49,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">st_coordinates</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">st_coordinates</span><span class="op">(</span><span class="va">x</span>, round <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -58,6 +58,12 @@
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>object of class sf, sfc or sfg</p></dd>
+
+
+<dt id="arg-round">round<a class="anchor" aria-label="anchor" href="#arg-round"></a></dt>
+<dd><p>logical; if <code>TRUE</code> and input object has a <code>precision</code> attribute
+different from 0, then its coordinates are rounded to the chosen precision
+level before building the output matrix. See also <code><a href="st_precision.html">st_precision()</a></code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -74,6 +80,24 @@ feature. Whereas for <code>MULTIPOLYGON</code>, <code>L3</code> refers to the <c
 feature and <code>L2</code> refers to the component <code>POLYGON</code>.</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="sfc.html">st_sfc</a></span><span class="op">(</span><span class="fu"><a href="st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.234</span>, <span class="fl">1.234</span><span class="op">)</span><span class="op">)</span>, crs <span class="op">=</span> <span class="fl">3003</span><span class="op">)</span> <span class="co"># units: m</span></span></span>
+<span class="r-in"><span><span class="fu">st_coordinates</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          X     Y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.234 1.234</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="st_precision.html">st_precision</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">=</span> <span class="fl">1e1</span></span></span>
+<span class="r-in"><span><span class="fu">st_coordinates</span><span class="op">(</span><span class="va">x</span>, round <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># round 1 decimal place </span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        X   Y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.2 1.2</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="st_precision.html">st_precision</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">=</span> <span class="fu">units</span><span class="fu">::</span><span class="fu"><a href="https://r-quantities.github.io/units/reference/units.html" class="external-link">set_units</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">cm</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">st_coordinates</span><span class="op">(</span><span class="va">x</span>, round <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># round to cm</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         X    Y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.23 1.23</span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
