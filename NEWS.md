@@ -4,6 +4,8 @@
 
 * move dependency `classInt` to Suggests:
 
+* new argument `round` to `st_coordinates` to round output coordinates to a given precision level; #2620
+
 # version 1.1-2
 
 * remove use of `.Dim` in `structure()`
