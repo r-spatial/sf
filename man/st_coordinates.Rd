@@ -10,7 +10,7 @@ st_coordinates(x, round = FALSE, ...)
 \item{x}{object of class sf, sfc or sfg}
 
 \item{round}{logical; if \code{TRUE} and input object has a \code{precision} attribute
-greater than 0, then its coordinates are rounded to the chosen precision
+different from 0, then its coordinates are rounded to the chosen precision
 level before building the output matrix. See also \code{st_precision()}.}
 
 \item{...}{ignored}
