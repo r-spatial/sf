@@ -4,6 +4,8 @@
 
 * adapt tests to changes in GEOS >= 3.15.0
 
+* new argument `round` to `st_coordinates` to round output coordinates to a given precision level; #2620
+
 # version 1.1-2
 
 * remove use of `.Dim` in `structure()`
