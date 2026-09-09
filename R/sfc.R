@@ -531,8 +531,11 @@ st_coordinates.sfc = function(x, round = FALSE, ...) {
 	if (length(x) == 0)
 		return(matrix(nrow = 0, ncol = 2))
 	
-	# See the discussion in #2620
-	if (round && st_precision(x) > 0) {
+	# See the discussion in #2620 and #2622
+	if (round && st_precision(x) != 0) {
+		# NB: The following does not restore CRS, bbox, precision, ... of x but that
+		# shouldn't be relevant since we are only interested in the underlying
+		# representation of coordinates
 		x = st_as_sfc(st_as_binary(x, precision = st_precision(x)))
 	}
 
