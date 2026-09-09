@@ -5,7 +5,7 @@
 - guess Parquet driver from `.parquet` file extension;
   [\#2506](https://github.com/r-spatial/sf/issues/2506)
 
-- move dependency `classInt` to Suggests:
+- adapt tests to changes in GEOS \>= 3.15.0
 
 - new argument `round` to `st_coordinates` to round output coordinates
   to a given precision level;
