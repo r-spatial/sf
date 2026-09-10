@@ -2,6 +2,11 @@
 
 ## version 1.1-3
 
+- move
+  [`st_interpolate_aw.stars()`](https://r-spatial.github.io/sf/reference/interpolate_aw.md)
+  from `stars` to `sf`, to get ready for using
+  `GEOS::GEOSGridIntersectionFractions()` in the future
+
 - guess Parquet driver from `.parquet` file extension;
   [\#2506](https://github.com/r-spatial/sf/issues/2506)
 

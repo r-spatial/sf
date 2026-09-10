@@ -18,6 +18,9 @@ st_interpolate_aw(
   include_non_intersected = FALSE,
   weights = character(0)
 )
+
+# S3 method for class 'stars'
+st_interpolate_aw(x, to, extensive, ...)
 ```
 
 ## Arguments
