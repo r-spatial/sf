@@ -5,7 +5,7 @@ retrieve coordinates in matrix form
 ## Usage
 
 ``` r
-st_coordinates(x, round = FALSE, ...)
+st_coordinates(x, ...)
 ```
 
 ## Arguments
@@ -14,16 +14,16 @@ st_coordinates(x, round = FALSE, ...)
 
   object of class sf, sfc or sfg
 
+- ...:
+
+  ignored
+
 - round:
 
   logical; if `TRUE` and input object has a `precision` attribute
   different from 0, then its coordinates are rounded to the chosen
   precision level before building the output matrix. See also
   [`st_precision()`](https://r-spatial.github.io/sf/reference/st_precision.md).
-
-- ...:
-
-  ignored
 
 ## Value
 
