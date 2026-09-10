@@ -546,6 +546,7 @@ importFrom(DBI,
   dbSendQuery,
   dbWriteTable
 )
+importFrom(classInt,classIntervals)
 importFrom(grDevices,
   cm,
   dev.size,

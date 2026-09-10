@@ -83,7 +83,7 @@ apply(as.data.frame(bir.grd)[1:2], 2, sum)
 apply(as.data.frame(nc)[c("BIR74", "BIR79")], 2, sum)
 # compare county-wise:
 st_agr(bir.grd) = c(BIR74 = "constant")
-aw = st_interpolate_aw(bir.grd["BIR74"], st_geometry(nc), extensive = TRUE)
-plot(nc$BIR74, aw$BIR74, log = 'xy', xlab = 'county-value', ylab = 'area-w interpolated')
-abline(0,1)
+\donttest{aw <- st_interpolate_aw(bir.grd["BIR74"], st_geometry(nc), extensive = TRUE)}
+\donttest{plot(nc$BIR74, aw$BIR74, log = 'xy', xlab = 'county-value', ylab = 'area-w interpolated')}
+\donttest{abline(0,1)}
 }
