@@ -141,9 +141,9 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 #' apply(as.data.frame(nc)[c("BIR74", "BIR79")], 2, sum)
 #' # compare county-wise:
 #' st_agr(bir.grd) = c(BIR74 = "constant")
-#' aw = st_interpolate_aw(bir.grd["BIR74"], st_geometry(nc), extensive = TRUE)
-#' plot(nc$BIR74, aw$BIR74, log = 'xy', xlab = 'county-value', ylab = 'area-w interpolated')
-#' abline(0,1)
+#' \donttest{aw <- st_interpolate_aw(bir.grd["BIR74"], st_geometry(nc), extensive = TRUE)}
+#' \donttest{plot(nc$BIR74, aw$BIR74, log = 'xy', xlab = 'county-value', ylab = 'area-w interpolated')}
+#' \donttest{abline(0,1)}
 #' @export
 st_interpolate_aw = function(x, to, extensive, ...) UseMethod("st_interpolate_aw")
 

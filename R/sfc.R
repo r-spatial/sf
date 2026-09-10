@@ -521,7 +521,7 @@ typed_empty = function(cls, ncol = 2, dim = "XY") {
 st_coordinates = function(x, ...) UseMethod("st_coordinates")
 
 #' @export
-st_coordinates.sf = function(x, ..., round = FALSE st_coordinates(st_geometry(x), round = round)
+st_coordinates.sf = function(x, ..., round = FALSE) st_coordinates(st_geometry(x), round = round)
 
 #' @export
 st_coordinates.sfg = function(x, ..., round = FALSE) st_coordinates(st_geometry(x), round = round)
