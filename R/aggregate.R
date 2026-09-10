@@ -216,17 +216,29 @@ st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE, na.rm = 
 st_interpolate_aw.stars = function(x, to, extensive, ...) {
 	if (! requireNamespace("stars", quietly = TRUE))
 		stop("package stars required, please install it first")
-	ret = st_interpolate_aw(st_as_sf(x), to, extensive, ...)
-	geom = attr(ret, "sf_column")
-	dx = dim(x)
-	if (length(dx) > 2 && length(x) == 1 && length(ret) > 2) {
-		ret = merge(stars::st_as_stars(ret))
-		nd = names(stars::st_dimensions(x))
-		ret = stars::st_set_dimensions(ret, seq_along(dx), 
-								names = c(geom, paste0(nd[-(1:2)], collapse = ".")))
-		setNames(ret, names(x))
-	} else
-		ret
+
+	if (st_raster_type(x) == "regular" && 
+			compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.14.0") > -1) {
+		# we HAVE_GEOS_3_14_0
+		if (!inherits(to, "sf") && !inherits(to, "sfc")) {
+			to <- try(st_as_sf(to))
+			if (inherits(to, "try-error"))
+				stop("st_interpolate_aw requires geometries in argument to")
+		}
+		stop("not yet implemented")
+	} else {
+		ret = st_interpolate_aw(st_as_sf(x), to, extensive, ...)
+		geom = attr(ret, "sf_column")
+		dx = dim(x)
+		if (length(dx) > 2 && length(x) == 1 && length(ret) > 2) {
+			ret = merge(stars::st_as_stars(ret))
+			nd = names(stars::st_dimensions(x))
+			ret = stars::st_set_dimensions(ret, seq_along(dx), 
+									names = c(geom, paste0(nd[-(1:2)], collapse = ".")))
+			setNames(ret, names(x))
+		} else
+			ret
+	}
 }
 
 dasymetric = function(x, to, extensive, keep_NA, include_non_intersected) {
