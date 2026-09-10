@@ -1,5 +1,7 @@
 # version 1.1-3
 
+* move `st_interpolate_aw.stars()` from `stars` to `sf`, to get ready for using `GEOS::GEOSGridIntersectionFractions()` in the future
+
 * guess Parquet driver from `.parquet` file extension; #2506
 
 * adapt tests to changes in GEOS >= 3.15.0

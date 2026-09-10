@@ -4,6 +4,7 @@
 \alias{interpolate_aw}
 \alias{st_interpolate_aw}
 \alias{st_interpolate_aw.sf}
+\alias{st_interpolate_aw.stars}
 \title{Area-weighted interpolation or dasymetric mapping of polygon data}
 \usage{
 st_interpolate_aw(x, to, extensive, ...)
@@ -18,6 +19,8 @@ st_interpolate_aw(x, to, extensive, ...)
   include_non_intersected = FALSE,
   weights = character(0)
 )
+
+\method{st_interpolate_aw}{stars}(x, to, extensive, ...)
 }
 \arguments{
 \item{x}{object of class \code{sf}, for which we want to aggregate attributes}

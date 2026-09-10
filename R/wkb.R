@@ -54,9 +54,9 @@ st_as_sfc.WKB = function(x, ..., EWKB = FALSE, spatialite = FALSE, pureR = FALSE
 		crs = attr(ret, "srid")
 	if (! is.na(st_crs(crs))) {
 		attr(ret, "srid") = NULL # remove
-		st_sfc(ret, crs = crs)
+		st_sfc(ret, crs = crs, ...)
 	} else
-		st_sfc(ret) # leave attr srid in place: PostGIS srid that is not an EPSG code
+		st_sfc(ret, ...) # leave attr srid in place: PostGIS srid that is not an EPSG code
 }
 
 #' @export
