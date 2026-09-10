@@ -518,16 +518,16 @@ typed_empty = function(cls, ncol = 2, dim = "XY") {
 #' 
 #' st_precision(x) = units::set_units(1, cm)
 #' st_coordinates(x, round = TRUE) # round to cm
-st_coordinates = function(x, round = FALSE, ...) UseMethod("st_coordinates")
+st_coordinates = function(x, ...) UseMethod("st_coordinates")
 
 #' @export
-st_coordinates.sf = function(x, round = FALSE, ...) st_coordinates(st_geometry(x), round = round)
+st_coordinates.sf = function(x, ..., round = FALSE st_coordinates(st_geometry(x), round = round)
 
 #' @export
-st_coordinates.sfg = function(x, round = FALSE, ...) st_coordinates(st_geometry(x), round = round)
+st_coordinates.sfg = function(x, ..., round = FALSE) st_coordinates(st_geometry(x), round = round)
 
 #' @export
-st_coordinates.sfc = function(x, round = FALSE, ...) {
+st_coordinates.sfc = function(x, ..., round = FALSE) {
 	if (length(x) == 0)
 		return(matrix(nrow = 0, ncol = 2))
 	
