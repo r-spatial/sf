@@ -119,8 +119,6 @@ message_longlat = function(caller) {
 st_perimeter = function(x, ...) {
 	x = st_geometry(x)
 	if (sf_use_s2() && isTRUE(st_is_longlat(x))) { # for spherical geometries we use s2 
-		if (!requireNamespace("s2", quietly = TRUE))
-			stop("package s2 required to calculate the perimeter of spherical geometries")
 		# ensure units are set to meters 
 		units::set_units(
 			s2::s2_perimeter(x, ...), 
