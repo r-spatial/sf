@@ -246,9 +246,11 @@ st_interpolate_aw.stars = function(x, to, extensive, ...) {
 		ret = lapply(x, weight, w, extensive)
 		dm = st_dimensions(x)
 		dm[[1]] = NULL
+		attr(dm, "raster") = NULL
 		g = st_geometry(to)
-		dm[[2]] = structure(list(from = 1L, to = length(g), offset = NA_real_, delta = NA_real_,
+		dm[[1]] = structure(list(from = 1L, to = length(g), offset = NA_real_, delta = NA_real_,
 								 refsys = st_crs(g), point = any(st_dimension(g) > 0), values = g), class = "dimension")
+		names(dm)[1] = "geometry"
 		st_as_stars(ret, dimensions = dm)
 	} else {
 		ret = st_interpolate_aw(st_as_sf(x), to, extensive, ...)
