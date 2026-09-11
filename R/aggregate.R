@@ -225,7 +225,11 @@ st_interpolate_aw.stars = function(x, to, extensive, ...) {
 			if (inherits(to, "try-error"))
 				stop("st_interpolate_aw requires geometries in argument to")
 		}
-		stop("not yet implemented")
+		# stop("not yet implemented")
+		if (!identical(match(attr(st_dimensions(x), "raster")$dimensions, names(dim(x))), 1:2))
+			stop("raster dimensions need to be as position 1 and 2; use aperm to rearrange")
+		w = CPL_grid_intersection_fractions(c(st_bbox(x), dim(x)), to)
+		w
 	} else {
 		ret = st_interpolate_aw(st_as_sf(x), to, extensive, ...)
 		geom = attr(ret, "sf_column")

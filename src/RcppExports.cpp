@@ -897,6 +897,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// CPL_grid_intersection_fractions
+Rcpp::NumericVector CPL_grid_intersection_fractions(Rcpp::NumericVector p, Rcpp::List geoms);
+RcppExport SEXP _sf_CPL_grid_intersection_fractions(SEXP pSEXP, SEXP geomsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type p(pSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type geoms(geomsSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_grid_intersection_fractions(p, geoms));
+    return rcpp_result_gen;
+END_RCPP
+}
 // CPL_hex_to_raw
 Rcpp::List CPL_hex_to_raw(Rcpp::CharacterVector cx);
 RcppExport SEXP _sf_CPL_hex_to_raw(SEXP cxSEXP) {
@@ -1497,6 +1508,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_nary_intersection", (DL_FUNC) &_sf_CPL_nary_intersection, 1},
     {"_sf_CPL_line_project", (DL_FUNC) &_sf_CPL_line_project, 3},
     {"_sf_CPL_line_interpolate", (DL_FUNC) &_sf_CPL_line_interpolate, 3},
+    {"_sf_CPL_grid_intersection_fractions", (DL_FUNC) &_sf_CPL_grid_intersection_fractions, 2},
     {"_sf_CPL_hex_to_raw", (DL_FUNC) &_sf_CPL_hex_to_raw, 1},
     {"_sf_CPL_raw_to_hex", (DL_FUNC) &_sf_CPL_raw_to_hex, 1},
     {"_sf_CPL_read_mdim", (DL_FUNC) &_sf_CPL_read_mdim, 8},

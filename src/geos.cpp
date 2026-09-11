@@ -38,6 +38,9 @@
 # if GEOS_VERSION_MINOR >= 12
 #  define HAVE312
 # endif
+# if GEOS_VERSION_MINOR >= 14
+#  define HAVE314
+# endif
 #else
 # if GEOS_VERSION_MAJOR > 3
 #  define HAVE340
@@ -49,6 +52,8 @@
 #  define HAVE310
 #  define HAVE3101
 #  define HAVE311
+#  define HAVE312
+#  define HAVE314
 # endif
 #endif
 
@@ -1607,5 +1612,28 @@ Rcpp::List CPL_line_interpolate(Rcpp::List lines, Rcpp::NumericVector dists, boo
 			p[i] = geos_ptr(GEOSInterpolate_r(hGEOSCtxt, l[i].get(), dists[i]), hGEOSCtxt);
 	}
 	Rcpp::List ret(sfc_from_geometry(hGEOSCtxt, p, dim));
+	return ret;
+}
+
+// [[Rcpp::export(rng=false)]]
+Rcpp::NumericVector CPL_grid_intersection_fractions(Rcpp::NumericVector p, Rcpp::List geoms) {
+	GEOSContextScope hGEOSCtxt;
+	int dim = 2;
+	unsigned ncell = p[4] * p[5];
+	std::vector<GeomPtr> g = geometries_from_sfc(hGEOSCtxt, geoms, &dim);
+	std::vector<float> buf(ncell); // nx * ny * n.geoms
+	Rcpp::NumericVector ret(ncell * g.size());
+	for (int i = 0; i < (int) g.size(); i++) {
+#ifdef HAVE314
+		if (GEOSGridIntersectionFractions_r(hGEOSCtxt, g[i].get(), p[0], p[1], p[2], p[3], (unsigned) p[4], (unsigned) p[5], buf.data()))
+#else
+			Rcpp::stop("GEOS >= 3.14.0 required");
+#endif
+		for (int j = 0; j < ncell; j++)
+			ret[i * ncell + j] = buf[j];
+	}
+	Rcpp::IntegerVector d(2);
+	d[0] = ncell; d[1] = g.size();
+	ret.attr("dim") = d;
 	return ret;
 }
