@@ -225,11 +225,29 @@ st_interpolate_aw.stars = function(x, to, extensive, ...) {
 			if (inherits(to, "try-error"))
 				stop("st_interpolate_aw requires geometries in argument to")
 		}
-		# stop("not yet implemented")
+		# check x and y are first two dimensions:
 		if (!identical(match(attr(st_dimensions(x), "raster")$dimensions, names(dim(x))), 1:2))
 			stop("raster dimensions need to be as position 1 and 2; use aperm to rearrange")
-		w = CPL_grid_intersection_fractions(c(st_bbox(x), dim(x)), to)
-		w
+		if (st_dimensions(x)[[2]]$delta > 0)
+			stop("only implemented for negative N-S cellsize")
+		w = CPL_grid_intersection_fractions(c(st_bbox(x), dim(x)), st_geometry(to))
+		weight = function(a, w, extensive) {
+			d = dim(a)
+			dim(a) = c(prod(d[1:2]), prod(d[-(1:2)]))
+			ret = t(w) %*% a
+			if (!extensive) {
+				cs = colSums(w)
+				cs[cs == 0] = 1
+				ret = ret / cs
+			}
+			dim(ret) = c(ncol(w), d[-(1:2)])
+			ret
+		}
+		ret = lapply(x, weight, w, extensive)
+		dm = st_dimensions(x)
+		dm[[1]] = NULL
+		dm[[2]] = create_dimension(values = st_geometry(to))
+		st_as_stars(ret, dimensions = dm)
 	} else {
 		ret = st_interpolate_aw(st_as_sf(x), to, extensive, ...)
 		geom = attr(ret, "sf_column")

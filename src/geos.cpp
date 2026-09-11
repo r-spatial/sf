@@ -1624,13 +1624,15 @@ Rcpp::NumericVector CPL_grid_intersection_fractions(Rcpp::NumericVector p, Rcpp:
 	std::vector<float> buf(ncell); // nx * ny * n.geoms
 	Rcpp::NumericVector ret(ncell * g.size());
 	for (int i = 0; i < (int) g.size(); i++) {
+		for (int j = 0; j < ncell; j++)
+			buf[j] = 0.0; // initialize, needed for i > 0!
 #ifdef HAVE314
 		if (GEOSGridIntersectionFractions_r(hGEOSCtxt, g[i].get(), p[0], p[1], p[2], p[3], (unsigned) p[4], (unsigned) p[5], buf.data()))
 #else
 			Rcpp::stop("GEOS >= 3.14.0 required");
 #endif
 		for (int j = 0; j < ncell; j++)
-			ret[i * ncell + j] = buf[j];
+			ret[i * ncell + j] = (double) buf[j];
 	}
 	Rcpp::IntegerVector d(2);
 	d[0] = ncell; d[1] = g.size();
