@@ -171,6 +171,11 @@ select.sf <- function(.data, ...) {
 	class(ret) = setdiff(class(ret), "sf")
 	ret = ret[loc]
 	names(ret) = names(loc)
+    mostattributes(ret) <- modifyList(
+      attributes(.data),
+      list(agr = NULL, sf_column = NULL, 
+      	   class = class(ret), names = names(loc))
+    )
 
 	st_set_agr(st_as_sf(ret, sf_column_name = sf_column), new_agr)
 }
