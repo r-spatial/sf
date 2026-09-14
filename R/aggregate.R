@@ -152,6 +152,19 @@ st_interpolate_aw = function(x, to, extensive, ...) UseMethod("st_interpolate_aw
 st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE, na.rm = FALSE,
 		include_non_intersected = FALSE, weights = character(0)) {
 
+	if (! all_constant(x))
+		warning("st_interpolate_aw assumes attributes are constant or uniform over areas of x")
+
+	if (inherits(to, "stars") && length(weights) == 0) {
+		if (! requireNamespace("stars", quietly = TRUE))
+			stop("package stars required, please install it first")
+		if (st_raster_type(x) == "regular" && 
+				compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.14.0") > -1) {
+			return(interpolate_aw_sf_stars(x, to, extensive, ..., keep_NA = keep_NA, na.rm = na.rm,
+						   include_non_intersected = include_non_intersected))
+		}
+	}
+
 	if (!inherits(to, "sf") && !inherits(to, "sfc")) {
 		to <- try(st_as_sf(to))
 		if (inherits(to, "try-error"))
@@ -165,8 +178,6 @@ st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE, na.rm = 
 		return(dasymetric(x, to[weights], extensive, keep_NA, include_non_intersected))
 	}
 
-	if (! all_constant(x))
-		warning("st_interpolate_aw assumes attributes are constant or uniform over areas of x")
 	i = st_intersection(st_geometry(x), st_geometry(to), dimensions = "polygon")
 	idx = attr(i, "idx")
 
@@ -220,14 +231,14 @@ st_interpolate_aw.stars = function(x, to, extensive, ...) {
 	if (st_raster_type(x) == "regular" && 
 			compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.14.0") > -1) {
 		# we HAVE_GEOS_3_14_0
-		if (!inherits(to, "sf") && !inherits(to, "sfc")) {
+		if (!inherits(to, "sf") && !inherits(to, "sfc")) { # the stars-stars is for another day
 			to <- try(st_as_sf(to))
 			if (inherits(to, "try-error"))
 				stop("st_interpolate_aw requires geometries in argument to")
 		}
 		# check x and y are first two dimensions:
 		if (!identical(match(attr(st_dimensions(x), "raster")$dimensions, names(dim(x))), 1:2))
-			stop("raster dimensions need to be as position 1 and 2; use aperm to rearrange")
+			stop("raster dimensions need to be at position 1 and 2; use aperm to rearrange")
 		if (st_dimensions(x)[[2]]$delta > 0)
 			stop("only implemented for negative N-S cellsize")
 		w = CPL_grid_intersection_fractions(c(st_bbox(x), dim(x)), st_geometry(to))
@@ -249,10 +260,10 @@ st_interpolate_aw.stars = function(x, to, extensive, ...) {
 		attr(dm, "raster")$dimensions = c(NA_character_, NA_character_)
 		g = st_geometry(to)
 		dm[[1]] = structure(list(from = 1L, to = length(g), offset = NA_real_, delta = NA_real_,
-								 refsys = st_crs(g), point = any(st_dimension(g) > 0), values = g), class = "dimension")
+							 refsys = st_crs(g), point = any(st_dimension(g) > 0), values = g), class = "dimension")
 		names(dm)[1] = "geometry"
 		st_as_stars(ret, dimensions = dm)
-	} else {
+	} else { # convert stars to sf...
 		ret = st_interpolate_aw(st_as_sf(x), to, extensive, ...)
 		geom = attr(ret, "sf_column")
 		dx = dim(x)
@@ -265,6 +276,28 @@ st_interpolate_aw.stars = function(x, to, extensive, ...) {
 		} else
 			ret
 	}
+}
+
+interpolate_aw_sf_stars = function(x, to, extensive, ..., keep_NA = keep_NA, na.rm = na.rm,
+		include_non_intersected = include_non_intersected) {
+
+	# st_interpolate_aw(x, st_as_sf(to), extensive, ...)
+
+	stopifnot(inherits(to, "stars"), inherits(x, "sf"))
+	# check x and y are first two dimensions:
+	if (!identical(match(attr(st_dimensions(to), "raster")$dimensions, names(dim(to))), 1:2))
+		stop("raster dimensions of to need to be at position 1 and 2; use aperm to rearrange")
+	if (st_dimensions(to)[[2]]$delta > 0)
+		stop("only implemented for negative N-S cellsize")
+	w = CPL_grid_intersection_fractions(c(st_bbox(to), dim(to)), st_geometry(x))
+	areas = st_area(x)
+	x = as.matrix(st_set_geometry(x, NULL))
+	ret = w %*% x
+	dim(ret) = c(dim(to)[1:2], ncol(x))
+	dm = st_dimensions(x)[1:2]
+	dm[["attribute"]] = structure(list(from = 1L, to = length(g), offset = NA_real_, delta = NA_real_,
+						 point = any(st_dimension(g) > 0), values = dimnames(x)[[2]]), class = "dimension")
+	st_as_stars(list(ret), dimensions = st_dimensions(to))
 }
 
 dasymetric = function(x, to, extensive, keep_NA, include_non_intersected) {
