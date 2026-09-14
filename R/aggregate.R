@@ -158,7 +158,7 @@ st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE, na.rm = 
 	if (inherits(to, "stars") && length(weights) == 0) {
 		if (! requireNamespace("stars", quietly = TRUE))
 			stop("package stars required, please install it first")
-		if (st_raster_type(x) == "regular" && 
+		if (st_raster_type(to) == "regular" && 
 				compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.14.0") > -1) {
 			return(interpolate_aw_sf_stars(x, to, extensive, ..., keep_NA = keep_NA, na.rm = na.rm,
 						   include_non_intersected = include_non_intersected))
