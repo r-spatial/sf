@@ -290,9 +290,14 @@ interpolate_aw_sf_stars = function(x, to, extensive, ..., keep_NA = keep_NA, na.
 	if (st_dimensions(to)[[2]]$delta > 0)
 		stop("only implemented for negative N-S cellsize")
 	w = CPL_grid_intersection_fractions(c(st_bbox(to), dim(to)), st_geometry(x))
-	areas = st_area(x)
+	g = st_geometry(x)
 	x = as.matrix(st_set_geometry(x, NULL))
-	ret = w %*% x
+	ret = if (extensive) {
+		areas = rep(st_area(g), each = ncol(w))
+		cellsize = st_area(to)
+		w %*% x * units::drop_units(cellsize / areas)
+	} else
+		w %*% x
 	dim(ret) = c(dim(to)[1:2], ncol(x))
 	dm = st_dimensions(x)[1:2]
 	dm[["attribute"]] = structure(list(from = 1L, to = length(g), offset = NA_real_, delta = NA_real_,
