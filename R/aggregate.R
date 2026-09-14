@@ -292,12 +292,16 @@ interpolate_aw_sf_stars = function(x, to, extensive, ..., keep_NA = keep_NA, na.
 	w = CPL_grid_intersection_fractions(c(st_bbox(to), dim(to)), st_geometry(x))
 	g = st_geometry(x)
 	x = as.matrix(st_set_geometry(x, NULL))
+	ret = w %*% x
+	rs = rowSums(w)
 	ret = if (extensive) {
 		areas = rep(st_area(g), each = ncol(w))
 		cellsize = st_area(to)
-		w %*% x * units::drop_units(cellsize / areas)
-	} else
-		w %*% x
+		ret * units::drop_units(cellsize / areas)
+	} else {
+		ret[rs == 0.0] = NA
+		ret / rs
+	}
 	dim(ret) = c(dim(to)[1:2], ncol(x))
 	dm = st_dimensions(x)[1:2]
 	dm[["attribute"]] = structure(list(from = 1L, to = length(g), offset = NA_real_, delta = NA_real_,
