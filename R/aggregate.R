@@ -289,18 +289,17 @@ interpolate_aw_sf_stars = function(x, to, extensive, ..., keep_NA = keep_NA, na.
 		stop("raster dimensions of to need to be at position 1 and 2; use aperm to rearrange")
 	if (st_dimensions(to)[[2]]$delta > 0)
 		stop("only implemented for negative N-S cellsize")
-	w = CPL_grid_intersection_fractions(c(st_bbox(to), dim(to)), st_geometry(x))
+	w = CPL_grid_intersection_fractions(c(st_bbox(to), dim(to)), st_geometry(x)) # n_cells x n_geoms
 	g = st_geometry(x)
-	x = as.matrix(st_set_geometry(x, NULL))
-	ret = w %*% x
-	rs = rowSums(w)
-	ret = if (extensive) {
-		areas = rep(st_area(g), each = ncol(w))
-		cellsize = st_area(to)
-		ret * units::drop_units(cellsize / areas)
+	x = as.matrix(st_set_geometry(x, NULL)) # n_geoms x n_attributes
+	if (extensive) {
+		cellsize = units::drop_units(st_area(to)[[1]][1,1])
+		ret = w %*% (x / st_area(g))  * cellsize # n_cells x n_attributes
 	} else {
+		ret = w %*% x # n_cells x n_attributes
+		rs = rowSums(w)
 		ret[rs == 0.0] = NA
-		ret / rs
+		ret = ret / rs
 	}
 	dim(ret) = c(dim(to)[1:2], ncol(x))
 	dm = st_dimensions(x)[1:2]
