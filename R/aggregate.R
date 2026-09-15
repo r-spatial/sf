@@ -293,16 +293,22 @@ interpolate_aw_sf_stars = function(x, to, extensive, ..., keep_NA = keep_NA, na.
 	g = st_geometry(x)
 	x = as.matrix(st_set_geometry(x, NULL)) # n_geoms x n_attributes
 	rs = rowSums(w)
-	if (extensive) {
-		cellsize = mean(units::drop_units(st_area(to)[[1]]))
-		ret = w %*% (x / st_area(g))  * cellsize # n_cells x n_attributes
+	ret = if (extensive) {
+		cellsize = as.vector(units::drop_units(st_area(to)[[1]]))
+		w %*% (x / st_area(g)) * cellsize # n_cells x n_attributes
+	} else
+		w %*% x # n_cells x n_attributes
+
+	if (ncol(x) > 1)
+		ret[rs == 0.0,] = NA
+	else
 		ret[rs == 0.0] = NA
-	} else {
-		ret = w %*% x # n_cells x n_attributes
-		ret[rs == 0.0] = NA
+
+	if (!extensive)
 		ret = ret / rs
-	}
+
 	dim(ret) = c(dim(to)[1:2], ncol(x))
+
 	dm = st_dimensions(x)[1:2]
 	dm[["attribute"]] = structure(list(from = 1L, to = length(g), offset = NA_real_, delta = NA_real_,
 						 point = any(st_dimension(g) > 0), values = dimnames(x)[[2]]), class = "dimension")
