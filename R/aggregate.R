@@ -310,8 +310,9 @@ interpolate_aw_sf_stars = function(x, to, extensive, ..., keep_NA = keep_NA, na.
 	dim(ret) = c(dim(to)[1:2], ncol(x))
 
 	dm = st_dimensions(to)[1:2]
-	dm[["attribute"]] = structure(list(from = 1L, to = length(g), offset = NA_real_, delta = NA_real_,
-						 point = any(st_dimension(g) > 0), values = dimnames(x)[[2]]), class = "dimension")
+	dm[["attribute"]] = structure(list(from = 1L, to = ncol(x), offset = NA_real_, delta = NA_real_,
+						 refsys = NA_character_, point = any(st_dimension(g) > 0), 
+						 values = dimnames(x)[[2]]), class = "dimension")
 	st_as_stars(list(attributes = ret), dimensions = st_dimensions(to))
 }
 
