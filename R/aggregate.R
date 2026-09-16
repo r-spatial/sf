@@ -158,7 +158,7 @@ st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE, na.rm = 
 	if (inherits(to, "stars") && length(weights) == 0) {
 		if (! requireNamespace("stars", quietly = TRUE))
 			stop("package stars required, please install it first")
-		if (st_raster_type(to) == "regular" && 
+		if (stars::st_raster_type(to) == "regular" && 
 				compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.14.0") > -1) {
 			return(interpolate_aw_sf_stars(x, to, extensive, ..., keep_NA = keep_NA, na.rm = na.rm,
 						   include_non_intersected = include_non_intersected))
@@ -174,7 +174,7 @@ st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE, na.rm = 
 		x = x[! apply(is.na(x), 1, any),]
 
 	if (length(weights)) {
-		stopifnot(length(weights) == 1, is.character(weights), inherits(to, "sf"), weights %in% names(to))
+		stopifnot(length(weights) == 1, is.character(weights), inherits(to, c("sf", "stars")), weights %in% names(to))
 		return(dasymetric(x, to[weights], extensive, keep_NA, include_non_intersected))
 	}
 
@@ -225,11 +225,16 @@ st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE, na.rm = 
 #' @name interpolate_aw
 #' @export
 st_interpolate_aw.stars = function(x, to, extensive, ...) {
+
 	if (! requireNamespace("stars", quietly = TRUE))
 		stop("package stars required, please install it first")
 
-	if (st_raster_type(x) == "regular" && 
+	stopifnot(st_crs(x) == st_crs(to))
+
+	if (stars::st_raster_type(x) == "regular" && 
 			compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.14.0") > -1) {
+		if (isTRUE(st_is_longlat(x)))
+			warning("for longitude/latitude data and gridded geometry, st_interpolate_aw computes intersections assuming Cartesian coordinates; use st_as_sf(x) if this is unwanted")
 		# we HAVE_GEOS_3_14_0
 		if (!inherits(to, "sf") && !inherits(to, "sfc")) { # the stars-stars is for another day
 			to <- try(st_as_sf(to))
@@ -237,9 +242,9 @@ st_interpolate_aw.stars = function(x, to, extensive, ...) {
 				stop("st_interpolate_aw requires geometries in argument to")
 		}
 		# check x and y are first two dimensions:
-		if (!identical(match(attr(st_dimensions(x), "raster")$dimensions, names(dim(x))), 1:2))
+		if (!identical(match(attr(stars::st_dimensions(x), "raster")$dimensions, names(dim(x))), 1:2))
 			stop("raster dimensions need to be at position 1 and 2; use aperm to rearrange")
-		if (st_dimensions(x)[[2]]$delta > 0)
+		if (stars::st_dimensions(x)[[2]]$delta > 0)
 			stop("only implemented for negative N-S cellsize")
 		w = CPL_grid_intersection_fractions(c(st_bbox(x), dim(x)), st_geometry(to))
 		weight = function(a, w, extensive) {
@@ -255,14 +260,14 @@ st_interpolate_aw.stars = function(x, to, extensive, ...) {
 			ret
 		}
 		ret = lapply(x, weight, w, extensive)
-		dm = st_dimensions(x)
+		dm = stars::st_dimensions(x)
 		dm[[1]] = NULL
 		attr(dm, "raster")$dimensions = c(NA_character_, NA_character_)
 		g = st_geometry(to)
 		dm[[1]] = structure(list(from = 1L, to = length(g), offset = NA_real_, delta = NA_real_,
 							 refsys = st_crs(g), point = any(st_dimension(g) > 0), values = g), class = "dimension")
 		names(dm)[1] = "geometry"
-		st_as_stars(ret, dimensions = dm)
+		stars::st_as_stars(ret, dimensions = dm)
 	} else { # convert stars to sf...
 		ret = st_interpolate_aw(st_as_sf(x), to, extensive, ...)
 		geom = attr(ret, "sf_column")
@@ -281,13 +286,15 @@ st_interpolate_aw.stars = function(x, to, extensive, ...) {
 interpolate_aw_sf_stars = function(x, to, extensive, ..., keep_NA = keep_NA, na.rm = na.rm,
 		include_non_intersected = include_non_intersected) {
 
-	# st_interpolate_aw(x, st_as_sf(to), extensive, ...)
+	# todo: deal with include_non_intersected...
+	stopifnot(inherits(to, "stars"), inherits(x, "sf"), st_crs(x) == st_crs(to))
+	if (isTRUE(st_is_longlat(x)))
+		warning("for longitude/latitude data and gridded geometry, st_interpolate_aw computes intersections assuming Cartesian coordinates; use st_as_sf(to) if this is unwanted")
 
-	stopifnot(inherits(to, "stars"), inherits(x, "sf"))
 	# check x and y are first two dimensions:
-	if (!identical(match(attr(st_dimensions(to), "raster")$dimensions, names(dim(to))), 1:2))
+	if (!identical(match(attr(stars::st_dimensions(to), "raster")$dimensions, names(dim(to))), 1:2))
 		stop("raster dimensions of to need to be at position 1 and 2; use aperm to rearrange")
-	if (st_dimensions(to)[[2]]$delta > 0)
+	if (stars::st_dimensions(to)[[2]]$delta > 0)
 		stop("only implemented for negative N-S cellsize")
 	w = CPL_grid_intersection_fractions(c(st_bbox(to), dim(to)), st_geometry(x)) # n_cells x n_geoms
 	g = st_geometry(x)
@@ -311,11 +318,11 @@ interpolate_aw_sf_stars = function(x, to, extensive, ..., keep_NA = keep_NA, na.
 
 	dim(ret) = c(dim(to)[1:2], ncol(x))
 
-	dm = st_dimensions(to)[1:2]
+	dm = stars::st_dimensions(to)[1:2]
 	dm[["attribute"]] = structure(list(from = 1L, to = ncol(x), offset = NA_real_, delta = NA_real_,
 						 refsys = NA_character_, point = any(st_dimension(g) > 0), 
 						 values = dimnames(x)[[2]]), class = "dimension")
-	st_as_stars(list(attributes = ret), dimensions = dm)
+	stars::st_as_stars(list(attributes = ret), dimensions = dm)
 }
 
 dasymetric = function(x, to, extensive, keep_NA, include_non_intersected) {
