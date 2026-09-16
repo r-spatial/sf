@@ -1621,7 +1621,7 @@ Rcpp::NumericVector CPL_grid_intersection_fractions(Rcpp::NumericVector p, Rcpp:
 	int dim = 2;
 	unsigned ncell = p[4] * p[5];
 	std::vector<GeomPtr> g = geometries_from_sfc(hGEOSCtxt, geoms, &dim);
-	std::vector<float> buf(ncell); // nx * ny * n.geoms
+	std::vector<float> buf(ncell); // nx * ny
 	Rcpp::NumericVector ret(ncell * g.size());
 	for (int i = 0; i < (int) g.size(); i++) {
 		for (int j = 0; j < ncell; j++)
