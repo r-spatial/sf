@@ -294,7 +294,9 @@ interpolate_aw_sf_stars = function(x, to, extensive, ..., keep_NA = keep_NA, na.
 	x = as.matrix(st_set_geometry(x, NULL)) # n_geoms x n_attributes
 	rs = rowSums(w)
 	ret = if (extensive) {
-		cellsize = as.vector(units::drop_units(st_area(to)[[1]]))
+		cellsize = as.vector(st_area(to)[[1]])
+		if (inherits(cellsize, "units"))
+			cellsize = units::drop_units(cellsize)
 		w %*% (x / st_area(g)) * cellsize # n_cells x n_attributes
 	} else
 		w %*% x # n_cells x n_attributes
