@@ -2,8 +2,6 @@ FROM ubuntu:24.04
 # minimal docker file to get sp and sf running on ubunty 16.04 image,
 # using gdal/geos/proj from ppa:ubuntugis/ubuntugis-unstable
 
-MAINTAINER "edzerpebesma" edzer.pebesma@uni-muenster.de
-
 RUN apt-get update && apt-get install -y software-properties-common dirmngr
 RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 
@@ -63,15 +61,15 @@ RUN apt-get update && apt-get install -y --fix-missing \
 	libuv1-dev
 
 RUN locale-gen en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
 
 #ENV PROJ_VERSION=7.1.0
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 # GEOS:
-ENV GEOS_VERSION 3.14.1
+ENV GEOS_VERSION=3.15.0
 RUN wget -q http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
   && bzip2 -d geos-*bz2 \
   && tar xf geos*tar \
@@ -85,7 +83,7 @@ RUN wget -q http://download.osgeo.org/geos/geos-${GEOS_VERSION}.tar.bz2 \
   && ldconfig
 
 # PROJ
-ENV PROJ_VERSION 9.8.1
+ENV PROJ_VERSION=9.8.1
 RUN wget -q http://download.osgeo.org/proj/proj-${PROJ_VERSION}.tar.gz
 RUN tar zxvf proj-${PROJ_VERSION}.tar.gz
 RUN cd proj* \
@@ -99,8 +97,8 @@ RUN cd proj* \
   && ldconfig
 
 # GDAL:
-ENV GDAL_VERSION 3.13.3
-ENV GDAL_VERSION_NAME 3.13.3
+ENV GDAL_VERSION=3.13.3
+ENV GDAL_VERSION_NAME=3.13.3
 RUN wget -q http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION_NAME}.tar.gz \
   && tar -xf gdal-${GDAL_VERSION_NAME}.tar.gz \
   && cd gdal* \
@@ -132,6 +130,7 @@ RUN R CMD build --no-manual stars
 RUN Rscript -e 'options(timeout=1200); install.packages("starsdata", repos="https://cran.uni-muenster.de/pebesma/")'
 RUN _R_CHECK_FORCE_SUGGESTS_=false R CMD check --no-build-vignettes --no-manual --as-cran stars_*.tar.gz 
 
+RUN R CMD check --no-build-vignettes --no-manual --as-cran sf_*.tar.gz 
 #
 #RUN export DEBIAN_FRONTEND=noninteractive; apt-get install -y --fix-missing libmagick++-dev
 #RUN Rscript -e 'install.packages("animation")'

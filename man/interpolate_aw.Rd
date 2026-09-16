@@ -4,6 +4,7 @@
 \alias{interpolate_aw}
 \alias{st_interpolate_aw}
 \alias{st_interpolate_aw.sf}
+\alias{st_interpolate_aw.stars}
 \title{Area-weighted interpolation or dasymetric mapping of polygon data}
 \usage{
 st_interpolate_aw(x, to, extensive, ...)
@@ -18,6 +19,8 @@ st_interpolate_aw(x, to, extensive, ...)
   include_non_intersected = FALSE,
   weights = character(0)
 )
+
+\method{st_interpolate_aw}{stars}(x, to, extensive, ...)
 }
 \arguments{
 \item{x}{object of class \code{sf}, for which we want to aggregate attributes}
@@ -80,7 +83,7 @@ apply(as.data.frame(bir.grd)[1:2], 2, sum)
 apply(as.data.frame(nc)[c("BIR74", "BIR79")], 2, sum)
 # compare county-wise:
 st_agr(bir.grd) = c(BIR74 = "constant")
-aw = st_interpolate_aw(bir.grd["BIR74"], st_geometry(nc), extensive = TRUE)
-plot(nc$BIR74, aw$BIR74, log = 'xy', xlab = 'county-value', ylab = 'area-w interpolated')
-abline(0,1)
+\donttest{aw <- st_interpolate_aw(bir.grd["BIR74"], st_geometry(nc), extensive = TRUE)}
+\donttest{plot(nc$BIR74, aw$BIR74, log = 'xy', xlab = 'county-value', ylab = 'area-w interpolated')}
+\donttest{abline(0,1)}
 }

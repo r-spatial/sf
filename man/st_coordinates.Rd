@@ -2,14 +2,27 @@
 % Please edit documentation in R/sfc.R
 \name{st_coordinates}
 \alias{st_coordinates}
+\alias{st_coordinates.sf}
+\alias{st_coordinates.sfg}
+\alias{st_coordinates.sfc}
 \title{retrieve coordinates in matrix form}
 \usage{
 st_coordinates(x, ...)
+
+\method{st_coordinates}{sf}(x, ..., round = FALSE)
+
+\method{st_coordinates}{sfg}(x, ..., round = FALSE)
+
+\method{st_coordinates}{sfc}(x, ..., round = FALSE)
 }
 \arguments{
 \item{x}{object of class sf, sfc or sfg}
 
 \item{...}{ignored}
+
+\item{round}{logical; if \code{TRUE} and input object has a \code{precision} attribute
+different from 0, then its coordinates are rounded to the chosen precision
+level before building the output matrix. See also \link{st_precision}.}
 }
 \value{
 matrix with coordinates (X, Y, possibly Z and/or M) in rows, possibly followed by integer indicators \code{L1},...,\code{L3} that point out to which structure the coordinate belongs; for \code{POINT} this is absent (each coordinate is a feature), for \code{LINESTRING} \code{L1} refers to the feature, for \code{MULTILINESTRING} \code{L1} refers to the part and \code{L2} to the simple feature, for \code{POLYGON} \code{L1} refers to the main ring or holes and \code{L2} to the simple feature, for \code{MULTIPOLYGON} \code{L1} refers to the main ring or holes, \code{L2} to the ring id in the \code{MULTIPOLYGON}, and \code{L3} to the simple feature.
@@ -22,4 +35,14 @@ feature and \code{L2} refers to the component \code{POLYGON}.
 }
 \description{
 retrieve coordinates in matrix form
+}
+\examples{
+x = st_sfc(st_point(c(1.234, 1.234)), crs = 3003) # units: m
+st_coordinates(x)
+
+st_precision(x) = 1e1
+st_coordinates(x, round = TRUE) # round 1 decimal place 
+
+st_precision(x) = units::set_units(1, cm)
+st_coordinates(x, round = TRUE) # round to cm
 }

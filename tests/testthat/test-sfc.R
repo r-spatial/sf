@@ -96,6 +96,12 @@ test_that("st_coordinates works", {
 	nc <- st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE)
 	expect_true(is.matrix(st_coordinates(nc)))
 	# expect_true(is.matrix(st_coordinates(st_geometrycollection(list(st_point)))))
+	
+	st_precision(x) = 1e2
+	expect_identical(
+		st_coordinates(x, round = TRUE), 
+		matrix(c(3.14, 3.14), ncol = 2, dimnames = list(NULL, c("X", "Y")))
+	)
 })
 
 test_that("as.data.frame.sfc works", {
@@ -126,4 +132,9 @@ test_that("bounding box is flipped when geometry is flipped", {
 	expect_equal(st_bbox(bar), st_bbox(c(xmin=0, ymin=-200, xmax=100, ymax=0)))
 })
 
-
+test_that("st_combine preserves precision of input object", {
+	# See https://github.com/r-spatial/sf/issues/2618
+	pt1 <- st_sfc(st_point(c(1, 1)), st_point(c(2, 2)), precision = 1)
+	pt2 <- st_combine(pt1)
+	expect_equal(st_precision(pt1), st_precision(pt2))
+})
