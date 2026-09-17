@@ -13,6 +13,19 @@ test_that("well-known binary is read correctly", {
   expect_true(identical(g, st_point(c(181072,333611))))
 })
 
+test_that("st_as_sfc.pq_geometry() reads geometry columns returned by RPostgres (#2625)", {
+  # RPostgres tags PostGIS geometry columns read via DBI::dbGetQuery() with
+  # class "pq_geometry" (see #1195). st_as_sfc.pq_geometry() forwards to
+  # st_as_sfc.WKB() using an argument name ("spatiallite") that doesn't match
+  # st_as_sfc.WKB()'s actual "spatialite" parameter; the unmatched argument
+  # was silently swallowed by st_as_sfc.WKB()'s own `...` and forwarded all
+  # the way to st_sfc(), where it broke the sfg-class check on every input.
+  wkb = structure(list("01010000204071000000000000801A064100000000AC5C1441"), class = "pq_geometry")
+  g = st_as_sfc(wkb)[[1]]
+  attr(g, "epsg") <- NULL
+  expect_true(identical(g, st_point(c(181072,333611))))
+})
+
 test_that("Char -> Raw conversion in R and C++ gives identical results", {
   expect_identical(
     sf:::hex_to_raw(           "0x01010000204071000000000000801A064100000000AC5C1441"),

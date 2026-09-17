@@ -825,8 +825,11 @@ st_segmentize.sf = function(x, dfMaxLength, ...) {
 #' @examples
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
 #' st_combine(nc)
-st_combine = function(x)
-	st_sfc(do.call(c, st_geometry(x)), crs = st_crs(x)) # flatten/merge
+st_combine = function(x) {
+	precision = st_precision(st_geometry(x)) # st_geometry is needed since we cannot run st_precision on sfg objects
+	st_sfc(do.call(c, st_geometry(x)), crs = st_crs(x), precision = precision) # flatten/merge
+}
+	
 
 # x: object of class sf
 # y: object of class sf or sfc

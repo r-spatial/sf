@@ -57,7 +57,7 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 		stopifnot(length(x) == length(y))
 		if (longlat && sf_use_s2() && op %in% c("intersects", "contains", "within",
 				"covers", "covered_by", "disjoint", "equals", "touches")) {
-			fn = get(paste0("s2_", op), envir = getNamespace("s2"))
+			fn = getExportedValue("s2", paste0("s2_", op))
 			fn(x, y, s2::s2_options(model = model, ...))
 		} else {
 			if (longlat && !(op %in% c("equals", "equals_exact")))
@@ -71,7 +71,7 @@ st_geos_binop = function(op, x, y, par = 0.0, pattern = NA_character_,
 			stopifnot(st_crs(x) == st_crs(y))
 		if (longlat && sf_use_s2() && op %in% c("intersects", "contains", "within",
 				"covers", "covered_by", "disjoint", "equals", "touches")) {
-			fn = get(paste0("s2_", op, "_matrix"), envir = getNamespace("s2")) # get op function
+			fn = getExportedValue("s2", paste0("s2_", op, "_matrix")) # get op function
 			lst = fn(x, y, s2::s2_options(model = model, ...)) # call function
 			id = if (is.null(row.names(x)))
 					as.character(seq_along(lst))
