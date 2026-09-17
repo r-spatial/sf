@@ -152,9 +152,6 @@ st_interpolate_aw = function(x, to, extensive, ...) UseMethod("st_interpolate_aw
 st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE, na.rm = FALSE,
 		include_non_intersected = FALSE, weights = character(0)) {
 
-	if (! all_constant(x))
-		warning("st_interpolate_aw assumes attributes are constant or uniform over areas of x")
-
 	if (inherits(to, "stars") && length(weights) == 0) {
 		if (! requireNamespace("stars", quietly = TRUE))
 			stop("package stars required, please install it first")
@@ -164,6 +161,9 @@ st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE, na.rm = 
 						   include_non_intersected = include_non_intersected))
 		}
 	}
+
+	if (! all_constant(x))
+		warning("st_interpolate_aw assumes attributes are constant or uniform over areas of x")
 
 	if (!inherits(to, "sf") && !inherits(to, "sfc")) {
 		to <- try(st_as_sf(to))
