@@ -2,6 +2,8 @@
 
 ## version 1.1-3
 
+CRAN release: 2026-09-11
+
 - move
   [`st_interpolate_aw.stars()`](https://r-spatial.github.io/sf/reference/interpolate_aw.md)
   from `stars` to `sf`, to get ready for using
