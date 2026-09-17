@@ -1,3 +1,9 @@
+# version 1.1-4
+
+* optimize `st_interpolate_aw()` for regular gridded source or
+target geometries using `GEOS::GEOSGridIntersectionFractions()`
+(requiring GEOS >= 3.14); #2624
+
 # version 1.1-3
 
 * move `st_interpolate_aw.stars()` from `stars` to `sf`, to get ready for using `GEOS::GEOSGridIntersectionFractions()` in the future
