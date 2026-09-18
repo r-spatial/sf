@@ -4,6 +4,8 @@
 
 * guess Parquet driver from `.parquet` file extension; #2506
 
+* restore the graphics state after a failed `plot.sf()` key; #2611
+
 * adapt tests to changes in GEOS >= 3.15.0
 
 * new argument `round` to `st_coordinates` to round output coordinates to a given precision level; #2620
@@ -1258,4 +1260,3 @@
 * add and fix `st_agr` API, to set and get attribute-to-geometry relationships
 
 # version 0.2-8, Jan 5, 2017
-
