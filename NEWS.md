@@ -1,3 +1,7 @@
+# version 1.1-4
+
+* `st_combine()` preserves the precision of input object; #2618
+
 # version 1.1-3
 
 * move `st_interpolate_aw.stars()` from `stars` to `sf`, to get ready for using `GEOS::GEOSGridIntersectionFractions()` in the future
@@ -7,8 +11,6 @@
 * adapt tests to changes in GEOS >= 3.15.0
 
 * new argument `round` to `st_coordinates` to round output coordinates to a given precision level; #2620
-
-* `st_combine()` preserves the precision of input object; #2618
 
 # version 1.1-2
 
