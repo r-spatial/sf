@@ -152,7 +152,7 @@ void SetFields(OGRFeature *poFeature, std::vector<OGRFieldType> tp, Rcpp::List o
 				Rcpp::List lv;
 				lv = obj[j];
 				Rcpp::RawVector rv;
-				rv = lv(0);
+				rv = lv(i);
 				if (rv.size() == 0)
 					SetNull(poFeature, fld[j]); // #nocov
 				else {
