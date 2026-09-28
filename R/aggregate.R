@@ -90,13 +90,13 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 	}
 }
 
-#' Area-weighted interpolation or dasymetric mapping of polygon data
+#' Area-weighted interpolation (conservative regridding) or dasymetric mapping
 #'
-#' Area-weighted interpolation or dasymetric mapping of polygon data
+#' Area-weighted interpolation (conservative regridding) or dasymetric mapping
 #' @name interpolate_aw
-#' @param x object of class \code{sf}, for which we want to aggregate attributes
-#' @param to object of class \code{sf} or \code{sfc}, with the target geometries
-#' @param extensive logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population) and the sum is preserved, otherwise, spatially intensive (like population density) and the mean is preserved.
+#' @param x object of class \code{sf} or \code{stars}, for which we want to aggregate attributes
+#' @param to object of class \code{sf}, \code{sfc} or \code{stars}, with the target geometries
+#' @param extensive logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population) and their sum is preserved, otherwise, spatially intensive (like population density) and their mean is preserved.
 #' @param na.rm logical; if `TRUE` remove features with `NA` attributes from `x` before interpolating
 #' @param ... ignored
 #' @param keep_NA logical; if \code{TRUE}, return all features in \code{to}, if \code{FALSE} return only those with non-NA values (but with \code{row.names} the index corresponding to the feature in \code{to})
@@ -104,6 +104,8 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 #' when `FALSE` divide by the sum of the source areas.
 #' @param weights character; name of column in `to` that indicates (extensive) weights, to be used instead of areas, for redistributing attributes in `x`; currently only works for `extensive=TRUE`.
 #' @details if `extensive` is `TRUE` and `na.rm` is set to `TRUE`, geometries with `NA` are effectively treated as having zero attribute values. Dasymetric mapping is obtained when `weights` are specified.
+#'
+#' Handling of gridded data (\code{stars} objects) is efficient when GEOS >= 3.14
 #' @examples
 #' # example Area-weighted interpolation:
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
@@ -152,7 +154,7 @@ st_interpolate_aw = function(x, to, extensive, ...) UseMethod("st_interpolate_aw
 st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE, na.rm = FALSE,
 		include_non_intersected = FALSE, weights = character(0)) {
 
-	if (inherits(to, "stars") && length(weights) == 0) {
+	if (inherits(to, "stars") && length(weights) == 0) { # use S7 multiple dispatch instead?
 		if (! requireNamespace("stars", quietly = TRUE))
 			stop("package stars required, please install it first")
 		if (stars::st_raster_type(to) == "regular" && 
@@ -165,7 +167,7 @@ st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE, na.rm = 
 	if (! all_constant(x))
 		warning("st_interpolate_aw assumes attributes are constant or uniform over areas of x")
 
-	if (!inherits(to, "sf") && !inherits(to, "sfc")) {
+	if (!inherits(to, c("sf", "sfc"))) {
 		to <- try(st_as_sf(to))
 		if (inherits(to, "try-error"))
 			stop("st_interpolate_aw requires geometries in argument to")
