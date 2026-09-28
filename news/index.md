@@ -1,5 +1,12 @@
 # Changelog
 
+## version 1.1-4
+
+- fix
+  [`st_write()`](https://r-spatial.github.io/sf/reference/st_write.md)
+  for writing binary blobs;
+  [\#2629](https://github.com/r-spatial/sf/issues/2629)
+
 ## version 1.1-3
 
 CRAN release: 2026-09-11
