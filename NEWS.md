@@ -1,3 +1,7 @@
+# version 1.1-4
+
+* fix `st_write()` for writing binary blobs; #2629
+
 # version 1.1-3
 
 * move `st_interpolate_aw.stars()` from `stars` to `sf`, to get ready for using `GEOS::GEOSGridIntersectionFractions()` in the future
