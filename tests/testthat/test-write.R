@@ -172,3 +172,14 @@ test_that("non-spatial tables can be written to GPKG; #1345", {
 			  "no simple feature geometries present:"),
 	  "Reading layer `nonspatial_table1' from data source")
 })
+
+test_that("raw (blob) columns keep each row's own value", {
+  skip_if_not("GPKG" %in% st_drivers()$name)
+  skip_if_not(sf_extSoftVersion()[["GDAL"]] > "3.0.0")
+  x = st_sf(id = 1:3, geometry = st_sfc(st_point(c(0, 0)), st_point(c(1, 0)),
+    st_point(c(2, 0)), crs = 4326))
+  x$b = list(as.raw(1:3), as.raw(4:6), as.raw(7:9))
+  tf = tempfile(fileext = ".gpkg")
+  st_write(x, tf, quiet = TRUE)
+  expect_identical(st_read(tf, quiet = TRUE)$b, x$b)
+})
