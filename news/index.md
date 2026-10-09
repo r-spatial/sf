@@ -2,6 +2,10 @@
 
 ## version 1.1-4
 
+- [`st_combine()`](https://r-spatial.github.io/sf/reference/geos_combine.md)
+  preserves the precision of input object;
+  [\#2618](https://github.com/r-spatial/sf/issues/2618)
+
 - fix
   [`st_write()`](https://r-spatial.github.io/sf/reference/st_write.md)
   for writing binary blobs;
@@ -28,10 +32,6 @@ CRAN release: 2026-09-11
 - new argument `round` to `st_coordinates` to round output coordinates
   to a given precision level;
   [\#2620](https://github.com/r-spatial/sf/issues/2620)
-
-- [`st_combine()`](https://r-spatial.github.io/sf/reference/geos_combine.md)
-  preserves the precision of input object;
-  [\#2618](https://github.com/r-spatial/sf/issues/2618)
 
 ## version 1.1-2
 
