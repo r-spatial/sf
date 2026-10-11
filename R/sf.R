@@ -285,14 +285,19 @@ st_sf = function(..., agr = NA_agr_, row.names,
 			data.frame(row.names = row.names)
 		else if (!sfc_last && inherits(x, "data.frame"))
 			x
-		else if (sfc_last && inherits(x, "data.frame"))
-			x[-all_sfc_columns]
-		else if (inherits(x[[1]], c("tbl_df", "tbl")))
+	    else if (sfc_last && inherits(x, "data.frame")) {
+		    xx <- x
+		    xx[all_sfc_columns] <- NULL
+		    xx
+	    } else if (inherits(x[[1]], c("tbl_df", "tbl")))
 			x[[1]]
+	    else if (inherits(x[[1]], "data.frame") && length(x) == 2) 
+	    	x[[1]]
 		else
 			cbind(data.frame(row.names = row.names),
 				as.data.frame(x[-all_sfc_columns],
 					stringsAsFactors = stringsAsFactors, optional = TRUE))
+	 
 
 	if (check_ring_dir) { # process:
 		for (i in seq_along(all_sfc_names))
