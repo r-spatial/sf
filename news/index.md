@@ -2,6 +2,9 @@
 
 ## version 1.1-4
 
+- add `TIN`, `POLYHEDRALSURFACE` and `TRIANGLE` to vctrs methods;
+  [\#2632](https://github.com/r-spatial/sf/issues/2632)
+
 - [`st_combine()`](https://r-spatial.github.io/sf/reference/geos_combine.md)
   preserves the precision of input object;
   [\#2618](https://github.com/r-spatial/sf/issues/2618)
