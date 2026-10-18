@@ -1,5 +1,7 @@
 # version 1.1-4
 
+* add `TIN`, `POLYHEDRALSURFACE` and `TRIANGLE` to vctrs methods; #2632
+
 * `st_combine()` preserves the precision of input object; #2618
 
 * fix `st_write()` for writing binary blobs; #2629
