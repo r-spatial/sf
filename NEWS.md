@@ -2,7 +2,7 @@
 
 * optimize `st_interpolate_aw()` for regular gridded source or target geometries using `GEOS::GEOSGridIntersectionFractions()` (requiring GEOS >= 3.14); #2624
 
-* add `TIN`, `POLYHEDRALSURFACE` and `TRIANGLE` to vctrs methods; #2632
+* add `TIN`, `POLYHEDRALSURFACE`, `TRIANGLE`, `CIRCULARSTRING`, `COMPOUNDCURVE`, `CURVE`, and `MULTICURVE` to vctrs methods; #2632
 
 * `st_combine()` preserves the precision of input object; #2618
 
