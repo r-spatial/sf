@@ -1,7 +1,8 @@
-types = c("POINT", "MULTIPOINT", "LINESTRING", "MULTILINESTRING", 
+types = c("POINT", "MULTIPOINT", "LINESTRING", "MULTILINESTRING",
             "POLYGON", "MULTIPOLYGON", "GEOMETRYCOLLECTION", "GEOMETRY",
 			"MULTISURFACE", "CURVEPOLYGON", "TIN", "POLYHEDRALSURFACE",
-			"TRIANGLE")
+			"TRIANGLE", "CIRCULARSTRING", "COMPOUNDCURVE", "CURVE", 
+			"MULTICURVE")
 sfc_types = paste0("sfc_", types)
 
 # All S3 methods in this file are registered lazily when vctrs is loaded
