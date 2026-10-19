@@ -224,50 +224,71 @@ st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE, na.rm = 
 	st_set_agr(df, "aggregate")
 }
 
+# compute the intersection fraction (of a) of pairs of stars raster cells
+intersection_fraction = function(st_a, st_b) {
+  ord = function(d) {
+    xo = if (d[[1]]$delta < 0) c(3,1) else c(1,3) # x-order small-large
+    yo = if (d[[2]]$delta < 0) c(4,2) else c(2,4) # y-order small-large
+	c(xo, yo)
+  }
+  a = st_coordinates(st_a, add_max = TRUE)[, ord(da <- st_dimensions(st_a))]
+  b = st_coordinates(st_b, add_max = TRUE)[, ord(st_dimensions(st_b))]
+  i = rep(seq_len(nrow(a)), nrow(b))
+  j = rep(seq_len(nrow(b)), each = nrow(a))
+  ovx = ifelse(a[i,1] > b[j,2] | a[i,2] < b[j,1], 0, pmin(a[i,2], b[j,2])- pmax(a[i,1],b[j,1]))
+  ovy = ifelse(a[i,3] > b[j,4] | a[i,4] < b[j,3], 0, pmin(a[i,4], b[j,4])- pmax(a[i,3],b[j,3]))
+  matrix(ovx * ovy, nrow(a), nrow(b)) / abs(da[[1]]$delta * da[[2]]$delta) # / cellsize(st_a)
+}
+
+
 #' @name interpolate_aw
 #' @export
 st_interpolate_aw.stars = function(x, to, extensive, ...) {
-
 	if (! requireNamespace("stars", quietly = TRUE))
 		stop("package stars required, please install it first")
 
 	stopifnot(st_crs(x) == st_crs(to))
 
-	if (stars::st_raster_type(x) == "regular" && 
+	weigh = function(a, w, extensive) {
+		d = dim(a)
+		dim(a) = c(prod(d[1:2]), prod(d[-(1:2)]))
+		ret = structure(t(w) %*% a, dim = c(ncol(w), ifelse(length(d) <= 2, 1, d[-(1:2)])))
+		cs = colSums(w)
+		ret[cs == 0.,] = NA
+		if (! extensive)
+			ret = ret / cs
+		ret
+	}
+
+	if (inherits(to, "stars") && stars::st_raster_type(to) %in% c("regular", "rectilinear") && 
+			stars::st_raster_type(x) %in% c("regular", "rectilinear")) {
+		w = intersection_fraction(x, to)
+		ret = lapply(x, weigh, w, extensive)
+		ret = lapply(ret, structure, dim = dim(to))
+		stars::st_as_stars(ret, dimensions = st_dimensions(to))
+	} else if (stars::st_raster_type(x) == "regular" && 
 			compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.14.0") > -1) {
 		if (isTRUE(st_is_longlat(x)))
-			warning("for longitude/latitude data and gridded geometry, st_interpolate_aw computes intersections assuming Cartesian coordinates; use st_as_sf(x) if this is unwanted")
+			warning("for longitude/latitude data and gridded geometry, st_interpolate_aw computes intersections assuming Cartesian coordinates; use st_as_sf(x) if this is not wanted")
+		# check x and y are first two dimensions:
+		if (!identical(match(attr(stars::st_dimensions(x), "raster")$dimensions, names(dim(x))), 1:2))
+			stop("raster dimensions need to be at position 1 and 2; use aperm to rearrange")
 		# we HAVE_GEOS_3_14_0
 		if (!inherits(to, "sf") && !inherits(to, "sfc")) { # the stars-stars is for another day
 			to <- try(st_as_sf(to))
 			if (inherits(to, "try-error"))
 				stop("st_interpolate_aw requires geometries in argument to")
 		}
-		# check x and y are first two dimensions:
-		if (!identical(match(attr(stars::st_dimensions(x), "raster")$dimensions, names(dim(x))), 1:2))
-			stop("raster dimensions need to be at position 1 and 2; use aperm to rearrange")
 		if (stars::st_dimensions(x)[[2]]$delta > 0)
 			stop("only implemented for negative N-S cellsize")
-		w = CPL_grid_intersection_fractions(c(st_bbox(x), dim(x)), st_geometry(to))
-		weight = function(a, w, extensive) {
-			d = dim(a)
-			dim(a) = c(prod(d[1:2]), prod(d[-(1:2)]))
-			ret = t(w) %*% a
-			if (!extensive) {
-				cs = colSums(w)
-				cs[cs == 0] = 1
-				ret = ret / cs
-			}
-			dim(ret) = c(ncol(w), d[-(1:2)])
-			ret
-		}
-		ret = lapply(x, weight, w, extensive)
+		w = CPL_grid_intersection_fractions(c(st_bbox(x), dim(x)[1:2]), st_geometry(to))
+		ret = lapply(x, weigh, w, extensive)
 		dm = stars::st_dimensions(x)
 		dm[[1]] = NULL
 		attr(dm, "raster")$dimensions = c(NA_character_, NA_character_)
 		g = st_geometry(to)
 		dm[[1]] = structure(list(from = 1L, to = length(g), offset = NA_real_, delta = NA_real_,
-							 refsys = st_crs(g), point = any(st_dimension(g) > 0), values = g), class = "dimension")
+						 	refsys = st_crs(g), point = any(st_dimension(g) > 0), values = g), class = "dimension")
 		names(dm)[1] = "geometry"
 		stars::st_as_stars(ret, dimensions = dm)
 	} else { # convert stars to sf...
@@ -309,15 +330,12 @@ interpolate_aw_sf_stars = function(x, to, extensive, ..., keep_NA = keep_NA, na.
 		w %*% (x / st_area(g)) * cellsize # n_cells x n_attributes
 	} else
 		w %*% x # n_cells x n_attributes
-
-	if (ncol(x) > 1)
-		ret[rs == 0.0,] = NA
-	else
-		ret[rs == 0.0] = NA
-
+	dim(ret) = c(nrow(w), ncol(x)) # needed for the case of ncol(x) == 1
+	ret[rs == 0.0, ] = NA
 	if (!extensive)
 		ret = ret / rs
 
+	# redimension:
 	dim(ret) = c(dim(to)[1:2], ncol(x))
 
 	dm = stars::st_dimensions(to)[1:2]
