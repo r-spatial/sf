@@ -16,13 +16,16 @@ st_as_text(x, ...)
 
 # S3 method for class 'sfc'
 st_as_text(x, ..., EWKT = FALSE)
+
+# S3 method for class 'sf'
+st_as_text(x, ..., EWKT = FALSE)
 ```
 
 ## Arguments
 
 - x:
 
-  object of class `sfg`, `sfc` or `crs`
+  object of class `sf`, `sfg`, `sfc` or `crs`
 
 - ...:
 
