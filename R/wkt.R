@@ -78,7 +78,7 @@ prnt.GEOMETRYCOLLECTION = function(x, ..., EWKT = TRUE) {
 #' Return Well-known Text representation of simple feature geometry or coordinate reference system
 #'
 #' Return Well-known Text representation of simple feature geometry or coordinate reference system
-#' @param x object of class \code{sfg}, \code{sfc} or \code{crs}
+#' @param x object of class \code{sf}, \code{sfg}, \code{sfc} or \code{crs}
 #' @param ... modifiers; in particular \code{digits} can be passed to control the number of digits used
 #' @name st_as_text
 #' @details The returned WKT representation of simple feature geometry conforms to the
@@ -138,6 +138,12 @@ st_as_text.sfc = function(x, ..., EWKT = FALSE) {
 		}
 		vapply(x, st_as_text, "", ..., EWKT = EWKT)
 	}
+}
+
+#' @name st_as_text
+#' @export 
+st_as_text.sf = function(x, ..., EWKT = FALSE) {
+	st_as_text(st_geometry(x), ..., EWKT = EWKT)
 }
 
 #' @name st_as_sfc
