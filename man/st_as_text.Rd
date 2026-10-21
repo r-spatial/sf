@@ -5,6 +5,7 @@
 \alias{st_as_text.crs}
 \alias{st_as_text.sfg}
 \alias{st_as_text.sfc}
+\alias{st_as_text.sf}
 \title{Return Well-known Text representation of simple feature geometry or coordinate reference system}
 \usage{
 \method{st_as_text}{crs}(x, ..., projjson = FALSE, pretty = FALSE)
@@ -14,9 +15,11 @@ st_as_text(x, ...)
 \method{st_as_text}{sfg}(x, ...)
 
 \method{st_as_text}{sfc}(x, ..., EWKT = FALSE)
+
+\method{st_as_text}{sf}(x, ..., EWKT = FALSE)
 }
 \arguments{
-\item{x}{object of class \code{sfg}, \code{sfc} or \code{crs}}
+\item{x}{object of class \code{sf}, \code{sfg}, \code{sfc} or \code{crs}}
 
 \item{...}{modifiers; in particular \code{digits} can be passed to control the number of digits used}
 
