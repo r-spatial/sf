@@ -38,7 +38,7 @@ sf_cut = function(values, breaks, include.lowest = TRUE) {
 #' @param nbreaks number of colors breaks (ignored for \code{factor} or \code{character} variables)
 #' @param breaks either a numeric vector with the actual breaks, or a name of a method accepted by the \code{style} argument of \link[classInt]{classIntervals}
 #' @param max.plot integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overridden by setting the global option \code{sf_max.plot}, e.g. \code{options(sf_max.plot=2)}
-#' @param key.pos numeric; side to plot a color key: 1 bottom, 2 left, 3 top, 4 right; set to \code{NULL} to omit key completely, 0 to only not plot the key, or -1 to select automatically. If multiple columns are plotted in a single function call by default no key is plotted and every submap is stretched individually; if a key is requested (and \code{col} is missing) all maps are colored according to a single key. Auto select depends on plot size, map aspect, and, if set, parameter \code{asp}. If it has lenght 2, the second value, ranging from 0 to 1, determines where the key is placed in the available space (default: 0.5, center).
+#' @param key.pos numeric; side to plot a color key: 1 bottom, 2 left, 3 top, 4 right; set to \code{NULL} to omit key completely, 0 to only not plot the key, or -1 to select automatically. If multiple columns are plotted in a single function call by default no key is plotted and every submap is stretched individually; if a key is requested (and \code{col} is missing) all maps are colored according to a single key. Auto select depends on plot size, map aspect, and, if set, parameter \code{asp}. If it has length 2, the second value, ranging from 0 to 1, determines where the key is placed in the available space (default: 0.5, center).
 #' @param key.width amount of space reserved for the key (incl. labels), thickness/width of the scale bar
 #' @param key.length amount of space reserved for the key along its axis, length of the scale bar
 #' @param pch plotting symbol
@@ -71,8 +71,8 @@ sf_cut = function(values, breaks, include.lowest = TRUE) {
 #' parameter \code{at} can be set to specify where labels are placed along the key; see examples.
 #'
 #' parameter \code{mar} can be set in \code{...} to override default margins.
-#' 
-#' The features are plotted in the order as they apppear in the sf object. See examples for when a different plotting order is wanted.
+#'
+#' The features are plotted in the order as they appear in the sf object. See examples for when a different plotting order is wanted.
 #'
 #' @examples
 #' nc = st_read(system.file("gpkg/nc.gpkg", package="sf"), quiet = TRUE)
@@ -90,7 +90,7 @@ sf_cut = function(values, breaks, include.lowest = TRUE) {
 #' # when plotting only geometries, the reset=FALSE is not needed:
 #' plot(st_geometry(nc))
 #' plot(st_geometry(nc)[1], col = 'red', add = TRUE)
-#' # add a custom legend to an arbitray plot:
+#' # add a custom legend to an arbitrary plot:
 #' layout(matrix(1:2, ncol = 2), widths = c(1, lcm(2)))
 #' plot(1)
 #' .image_scale(1:10, col = sf.colors(9), key.length = lcm(8), key.pos = 4, at = 1:10)
@@ -98,7 +98,7 @@ sf_cut = function(values, breaks, include.lowest = TRUE) {
 #' p = st_polygon(list(rbind(c(0,0), c(1,0), c(1,1), c(0,1), c(0,0))))
 #' x = st_sf(a=1:4, st_sfc(p, p * 2, p * 3, p * 4)) # plot(x, col=2:5) only shows the largest polygon!
 #' plot(x[order(st_area(x), decreasing = TRUE),], col = 2:5) # plot largest polygons first
-#' 
+#'
 #' @export
 plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty",
 		max.plot = getOption("sf_max.plot", default = 9),
@@ -117,7 +117,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 	plot_completed = FALSE
 
 	x = swap_axes_if_needed(x)
-	
+
 	# The following code defines an expression which resets the plotting layout.
 	# The on.exit approach is needed since the plotting routing may fail for
 	# various reasons leaving the plot layout in a broken state. The on.exit
@@ -125,17 +125,17 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 	# of the plotting routing. See also #2519 for more details.
 	on.exit(
 		expr = {
-			if (!isTRUE(dots$add) && reset) { # reset device: 
+			if (!isTRUE(dots$add) && reset) { # reset device:
 				par(opar)
 				if (reset_layout_needed && !plot_completed)
 					try(plot.new(), silent = TRUE)
-				if (reset_layout_needed) 
+				if (reset_layout_needed)
 					layout(matrix(1))
 			}
-		}, 
+		},
 		add = TRUE
 	)
-	
+
 	opar = par(no.readonly = TRUE)
 	if (ncol(x) > 2 && !isTRUE(dots$add)) { # multiple maps to plot...
 		cols = setdiff(names(x), attr(x, "sf_column"))
@@ -238,7 +238,7 @@ plot.sf <- function(x, y, ..., main, pal = NULL, nbreaks = 10, breaks = "pretty"
 				reset_layout_needed = TRUE
 				stop("specify only one of `col' and `pal'")
 			}
-				
+
 
 			if (col_missing) { # compute colors from values:
 				col = if (is.factor(values)) {
@@ -510,7 +510,7 @@ plot.sfc_POLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, cex = 1, pch 
 #' @name plot
 #' @method plot sfc_MULTIPOLYGON
 #' @export
-plot.sfc_MULTIPOLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1, add = FALSE, 
+plot.sfc_MULTIPOLYGON = function(x, y, ..., lty = 1, lwd = 1, col = NA, border = 1, add = FALSE,
 		rule = "evenodd", xpd = par("xpd")) {
 # FIXME: take care of lend, ljoin, and lmitre
 	stopifnot(missing(y))
@@ -747,7 +747,7 @@ sf.colors = function (n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorica
 #' @param labels character, text to draw (one per row of input)
 #' @name plot
 #' @export
-#' @details `text.sf` adds text to an existing base graphic. Text is placed at the centroid of 
+#' @details `text.sf` adds text to an existing base graphic. Text is placed at the centroid of
 #' each feature in \code{x}. Provide POINT features for further control of placement.
 #' `points.sf` adds point symbols to an existing base graphic. If points of text are not shown
 #' correctly, try setting argument `reset` to `FALSE` in the `plot()` call.
@@ -806,9 +806,9 @@ get_asp = function(bb) {
 # if key.pos = -1 on input, it will be a return value, "optimally" placed
 	asp = get_asp(bb)
 	strip = if (is.character(main))
-			# strheight(main, "inches") 
+			# strheight(main, "inches")
 			par("cin")[2]
-		else 
+		else
 			0.0
 	size = function(nrow, n, asp, strip = 0) { # given nrow n asp, what size does a single tile occupy?
 		ncol = ceiling(n / nrow)
@@ -931,7 +931,7 @@ xy_from_r = function(r, l, o) {
 #' @param cex.axis see \link{par}
 #' @export
 .image_scale = function(z, col, breaks = NULL, key.pos, add.axis = TRUE,
-		at = NULL, ..., axes = FALSE, key.length, logz = FALSE, lab = "", 
+		at = NULL, ..., axes = FALSE, key.length, logz = FALSE, lab = "",
 		cex.axis = par("cex.axis")) {
 	if (!is.null(breaks) && length(breaks) != (length(col) + 1))
 		stop("must have one more break than colour")

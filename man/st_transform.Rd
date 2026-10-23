@@ -108,7 +108,7 @@ the method for \code{bbox} objects densifies lines for geographic coordinates al
 
 For a discussion of using \code{options}, see \url{https://github.com/r-spatial/sf/issues/280} and \url{https://github.com/r-spatial/sf/issues/1983}
 
-\code{sf_proj_info} lists the available projections, ellipses, datums, units, or data search path of the PROJ library when \code{type} is equal to proj, ellps, datum, units or path; when \code{type} equals \code{have_datum_files} a boolean is returned indicating whether datum files are installed and accessible (checking for \code{conus}). \code{path} returns the \code{PROJ_INFO.searchpath} field directly, as a single string with path separaters (\code{:}  or \verb{;}).
+\code{sf_proj_info} lists the available projections, ellipses, datums, units, or data search path of the PROJ library when \code{type} is equal to proj, ellps, datum, units or path; when \code{type} equals \code{have_datum_files} a boolean is returned indicating whether datum files are installed and accessible (checking for \code{conus}). \code{path} returns the \code{PROJ_INFO.searchpath} field directly, as a single string with path separators (\code{:}  or \verb{;}).
 
 for PROJ >= 6, \code{sf_proj_info} does not provide option \code{type = "datums"}.
 PROJ < 6 does not provide the option \code{type = "prime_meridians"}.

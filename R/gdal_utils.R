@@ -74,7 +74,7 @@ resampling_method = function(option = "near") {
 #' st_read(in_file)
 #' }
 gdal_utils = function(util = "info", source, destination, options = character(0),
-		quiet = !(util %in% c("info", "gdalinfo", "ogrinfo", "vectorinfo", 
+		quiet = !(util %in% c("info", "gdalinfo", "ogrinfo", "vectorinfo",
 							  "mdiminfo")) || ("-multi" %in% options),
 		processing = character(0), colorfilename = character(0),
 		config_options = character(0), read_only = FALSE) {
@@ -104,7 +104,7 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 
 	ret = switch(util,
 			gdalinfo =, info = CPL_gdalinfo(if (missing(source)) character(0) else source, options, oo, config_options),
-			vectorinfo =, ogrinfo = CPL_ogrinfo(if (missing(source)) character(0) else source, options, oo, config_options, 
+			vectorinfo =, ogrinfo = CPL_ogrinfo(if (missing(source)) character(0) else source, options, oo, config_options,
 												isTRUE(read_only) || "-ro" %in% options),
 			warp = CPL_gdalwarp(source, destination, options, oo, doo, config_options, quiet, "-overwrite" %in% options),
 			warper = CPL_gdal_warper(source, destination, as.integer(resampling_method(options)),
@@ -132,7 +132,7 @@ gdal_utils = function(util = "info", source, destination, options = character(0)
 		invisible(ret)
 	} else { # ret indicates error:
 		if (ret)
-			stop(paste0("gdal_utils ", util, ": an error occured"))
+			stop(paste0("gdal_utils ", util, ": an error occurred"))
 		invisible(! ret) # success
 	}
 }

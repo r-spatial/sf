@@ -219,7 +219,7 @@ get_possibly_new_srid <- function(conn, crs) {
 
 # Find srid in a database by using the srid
 # @param conn Dababase connection (e.g. `DBI`)
-# @param srid An integer descriing the srid to fetch
+# @param srid An integer describing the srid to fetch
 # @param validate if TRUE, then the crs_local is used to validate the remote crs.
 #   Use validate = FALSE when searching for an srid unavailable locally, or when
 #   the wkt is unknown locally.
@@ -482,7 +482,7 @@ setMethod("dbWriteTable", c("DBIObject", "character", "sf"),
 		  			field.types <- NULL
 		  		}
 		  	}
-		  	
+
 		  	dbWriteTable(conn, name, to_postgis(conn, value, binary),..., row.names = row.names,
 		  				 overwrite = overwrite, append = append,
 		  				 field.types = field.types)
@@ -552,7 +552,7 @@ setMethod("dbDataType", c("DBIObject", "sf"), function(dbObj, obj) {
     return(dtyp)
 })
 
-#' Check if the columns could be of a coercable type for sf
+#' Check if the columns could be of a coercible type for sf
 #'
 #' @param con database connection
 #' @param x inherits data.frame
