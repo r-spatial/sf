@@ -6,10 +6,10 @@
 #' Geometric unary operations on simple feature geometries. These are all generics, with methods for \code{sfg}, \code{sfc} and \code{sf} objects, returning an object of the same class. All operations work on a per-feature basis, ignoring all other features.
 #' @name geos_unary
 #' @param x object of class \code{sfg}, \code{sfc} or \code{sf}
-#' @param dist numeric or object of class `units`; buffer distance(s) for all, or for each of the elements in \code{x}. 
-#' In case \code{x} has geodetic coordinates (lon/lat) and `sf_use_s2()` is `TRUE`, a numeric 
+#' @param dist numeric or object of class `units`; buffer distance(s) for all, or for each of the elements in \code{x}.
+#' In case \code{x} has geodetic coordinates (lon/lat) and `sf_use_s2()` is `TRUE`, a numeric
 #' `dist` is taken as distance in meters and a `units` object in `dist` is converted to meters.
-#' In case \code{x} has geodetic coordinates (lon/lat) and `sf_use_s2()` is `FALSE`, a numeric 
+#' In case \code{x} has geodetic coordinates (lon/lat) and `sf_use_s2()` is `FALSE`, a numeric
 #' `dist` is taken as degrees, and a `units` object in `dist` is converted to `arc_degree` (and warnings are issued).
 #' In case \code{x} does not have geodetic coordinates (projected) then
 #' numeric `dist` is assumed to have the units of the coordinates, and a `units` `dist` is converted to those if `st_crs(x)` is not `NA`.
@@ -28,15 +28,15 @@
 #' \code{singleSide} parameters only work if the GEOS engine is used (i.e. projected coordinates or
 #' when \code{sf_use_s2()} is set to \code{FALSE}). See \href{https://postgis.net/docs/ST_Buffer.html}{postgis.net/docs/ST_Buffer.html}
 #' for details. The \code{max_cells} and \code{min_level} parameters ([s2::s2_buffer_cells()]) work with the S2
-#' engine (i.e. geographic coordinates) and can be used to change the buffer shape (e.g. smoothing). 
+#' engine (i.e. geographic coordinates) and can be used to change the buffer shape (e.g. smoothing).
 #' The S2 engine returns a polygon _around_ a number of S2 cells that
 #' contain the buffer, and hence will always have an area larger than the
-#' true buffer, depending on `max_cells`, and will be non-smooth when sufficiently zoomed in. 
+#' true buffer, depending on `max_cells`, and will be non-smooth when sufficiently zoomed in.
 #' The GEOS engine will return line segments between points
 #' on the circle, and so will always be _smaller_ than the true
 #' buffer, and be smooth, depending on the number of segments `nQuadSegs`.
 #' A negative `dist` value for geodetic coordinates using S2 does not give a proper (geodetic) buffer.
-#' 
+#'
 #' @examples
 #'
 #' ## st_buffer, style options (taken from rgeos gBuffer)
@@ -78,17 +78,17 @@
 #'
 #' # compare approximation errors depending on S2 or GEOS backend:
 #' # geographic coordinates, uses S2:
-#' x = st_buffer(st_as_sf(data.frame(lon=0,lat=0), coords=c("lon","lat"),crs='OGC:CRS84'), 
+#' x = st_buffer(st_as_sf(data.frame(lon=0,lat=0), coords=c("lon","lat"),crs='OGC:CRS84'),
 #'       units::as_units(1,"km"))
 #' y = units::set_units(st_area(x), "km^2")
-#' # error: postive, default maxcells = 1000
+#' # error: positive, default maxcells = 1000
 #' (units::drop_units(y)-pi)/pi
-#' x = st_buffer(st_as_sf(data.frame(lon=0,lat=0), coords=c("lon","lat"),crs='OGC:CRS84'), 
+#' x = st_buffer(st_as_sf(data.frame(lon=0,lat=0), coords=c("lon","lat"),crs='OGC:CRS84'),
 #'       units::as_units(1,"km"), max_cells=1e5)
 #' y = units::set_units(st_area(x), "km^2")
 #' # error: positive but smaller:
 #' (units::drop_units(y)-pi)/pi
-#' 
+#'
 #' # no CRS set: assumes Cartesian (projected) coordinates
 #' x = st_buffer(st_as_sf(data.frame(lon=0,lat=0), coords=c("lon","lat")), 1)
 #' y = st_area(x)
@@ -279,7 +279,7 @@ st_concave_hull.sf = function(x, ratio, ..., allow_holes = FALSE) {
 
 #' @name geos_unary
 #' @export
-#' @details \code{st_simplify} simplifies lines by removing vertices. 
+#' @details \code{st_simplify} simplifies lines by removing vertices.
 #' @param preserveTopology logical; carry out topology preserving
 #'   simplification? May be specified for each, or for all feature geometries.
 #'   Note that topology is preserved only for single feature geometries, not for
@@ -410,7 +410,7 @@ st_triangulate_constrained.sf = function(x) {
 
 #' @name geos_unary
 #' @export
-#' @details \code{st_inscribed_circle} returns the maximum inscribed circle for polygon geometries. 
+#' @details \code{st_inscribed_circle} returns the maximum inscribed circle for polygon geometries.
 #' For \code{st_inscribed_circle}, if \code{nQuadSegs} is 0 a 2-point LINESTRING is returned with the
 #' center point and a boundary point of every circle, otherwise a circle (buffer) is returned where
 #' \code{nQuadSegs} controls the number of points per quadrant to approximate the circle.
@@ -443,7 +443,7 @@ st_inscribed_circle.sfc = function(x, dTolerance = sqrt(st_area(st_set_crs(x, NA
 			pts = st_cast(ret, "POINT")
 			idx = seq(1, length(pts) * 2, by = 2)
 			ret = st_buffer(pts[idx], st_length(st_set_crs(ret, NA_crs_)), nQuadSegs = nQuadSegs)
-		} 
+		}
 		ret
 	} else
 		stop("for st_inscribed_circle, GEOS version 3.9.0 or higher is required")
@@ -486,7 +486,7 @@ st_minimum_rotated_rectangle.sf = function(x, dTolerance, ...) {
 }
 
 #' @name geos_unary
-#' @details \code{st_minimum_bounding_circle} 
+#' @details \code{st_minimum_bounding_circle}
 #' returns a geometry which represents the "minimum bounding circle",
 #' the smallest circle that contains the input.
 #' @export
@@ -676,7 +676,7 @@ st_centroid.sfc = function(x, ..., of_largest_polygon = FALSE) {
 	longlat = isTRUE(st_is_longlat(x))
 	if (longlat && sf_use_s2())
 		st_as_sfc(s2::s2_centroid(x), crs = st_crs(x))
-	else { 
+	else {
 		if (longlat)
 			warning("st_centroid does not give correct centroids for longitude/latitude data")
 		st_sfc(CPL_geos_op("centroid", x, numeric(0), integer(0), numeric(0), logical(0)))
@@ -829,7 +829,7 @@ st_combine = function(x) {
 	precision = st_precision(st_geometry(x)) # st_geometry is needed since we cannot run st_precision on sfg objects
 	st_sfc(do.call(c, st_geometry(x)), crs = st_crs(x), precision = precision) # flatten/merge
 }
-	
+
 
 # x: object of class sf
 # y: object of class sf or sfc
@@ -1096,8 +1096,8 @@ st_snap.sf = function(x, y, tolerance)
 #' @details
 #' If \code{st_union} is called with a single argument, \code{x}, (with \code{y} missing) and \code{by_feature} is \code{FALSE} all geometries are unioned together and an \code{sfg} or single-geometry \code{sfc} object is returned.
 #' If \code{by_feature} is \code{TRUE} each feature geometry is unioned individually.
-#' This can for instance be used to resolve internal boundaries after polygons were combined using \code{st_combine}. 
-#' If \code{y} is provided, all elements of \code{x} and \code{y} are unioned, pairwise if \code{by_feature} is TRUE, or else as the Cartesian product of both sets. 
+#' This can for instance be used to resolve internal boundaries after polygons were combined using \code{st_combine}.
+#' If \code{y} is provided, all elements of \code{x} and \code{y} are unioned, pairwise if \code{by_feature} is TRUE, or else as the Cartesian product of both sets.
 #'
 #' Unioning a set of overlapping polygons has the effect of merging the areas (i.e. the same effect as iteratively unioning all individual polygons together).
 #' Unioning a set of LineStrings has the effect of fully noding and dissolving the input linework. In this context "fully noded" means that there will be a node or endpoint in the output for every endpoint or line segment crossing in the input.
@@ -1119,14 +1119,14 @@ st_union.sfg = function(x, y, ..., by_feature = FALSE, is_coverage = FALSE) {
 st_union.sfc = function(x, y, ..., by_feature = isTRUE(list(...)$by_element), is_coverage = FALSE) {
 	ll = isTRUE(st_is_longlat(x))
 	if (missing(y)) { # unary union, possibly by_feature:
-		if (ll && sf_use_s2()) { 
+		if (ll && sf_use_s2()) {
 			if (! by_feature) { # see https://github.com/r-spatial/s2/issues/97 :
 				if (is_coverage)
 					st_as_sfc(s2::s2_coverage_union_agg(x, ...), crs = st_crs(x))
 				else
-					st_as_sfc(s2::s2_union_agg(x, ...), crs = st_crs(x)) 
+					st_as_sfc(s2::s2_union_agg(x, ...), crs = st_crs(x))
 			} else
-				st_as_sfc(s2::s2_union(x, ...), crs = st_crs(x)) 
+				st_as_sfc(s2::s2_union(x, ...), crs = st_crs(x))
 		} else {
 			if (ll)
 				message_longlat("st_union")
@@ -1141,11 +1141,11 @@ st_union.sfc = function(x, y, ..., by_feature = isTRUE(list(...)$by_element), is
 			stopifnot(length(x) == length(y))
 		if (ll && sf_use_s2()) {
 			if (by_feature)
-				st_as_sfc(s2::s2_union(x, y, ...), crs = st_crs(x)) 
+				st_as_sfc(s2::s2_union(x, y, ...), crs = st_crs(x))
 			else {
 				i = rep(seq_along(x), each = length(y))
 				j = rep(seq_along(y), length(x))
-				st_as_sfc(s2::s2_union(x[i], y[j], ...), crs = st_crs(x), precision = st_precision(x)) 
+				st_as_sfc(s2::s2_union(x[i], y[j], ...), crs = st_crs(x), precision = st_precision(x))
 			}
 		} else {
 			if (ll)
@@ -1238,7 +1238,7 @@ st_line_sample = function(x, n, density, type = "regular", sample = NULL) {
 #' @name st_line_project_point
 #' @returns `st_line_interpolate` returns the point(s) at dist(s), when measured along (interpolated on) the line(s)
 #' @export
-#' @examples 
+#' @examples
 #' st_line_interpolate(st_as_sfc("LINESTRING (0 0, 1 1)"), 1)
 #' st_line_interpolate(st_as_sfc("LINESTRING (0 0, 1 1)"), 1, TRUE)
 #' # https://github.com/r-spatial/sf/issues/2542; use for geographic coordinates:
@@ -1246,7 +1246,7 @@ st_line_sample = function(x, n, density, type = "regular", sample = NULL) {
 #' dists = units::set_units(seq(0, sqrt(2)/10, length.out = 5), degrees)
 #' st_line_interpolate(l1, dists)
 st_line_interpolate = function(line, dist, normalized = FALSE) {
-	stopifnot(inherits(line, "sfc"), all(st_dimension(line) == 1), 
+	stopifnot(inherits(line, "sfc"), all(st_dimension(line) == 1),
 		is.logical(normalized), length(normalized) == 1,
 		is.numeric(dist))
 	if (isTRUE(st_is_longlat(line))) {
@@ -1258,7 +1258,7 @@ st_line_interpolate = function(line, dist, normalized = FALSE) {
 	}
 	line = st_cast(line, "LINESTRING")
 	recycled = recycle_common(list(line, dist))
-	st_sfc(CPL_line_interpolate(recycled[[1]], recycled[[2]], normalized), 
+	st_sfc(CPL_line_interpolate(recycled[[1]], recycled[[2]], normalized),
 		   crs = st_crs(line))
 }
 

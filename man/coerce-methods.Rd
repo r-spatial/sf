@@ -17,30 +17,20 @@
 \alias{CRS-method}
 \title{Methods to coerce simple features to \verb{Spatial*} and \code{Spatial*DataFrame} objects}
 \usage{
-\S4method{coerce}{Spatial,sf}(from, to = "sf", strict = TRUE)
-
-\S4method{coerce}{Spatial,sfc}(from, to = "sfc", strict = TRUE)
-
-\S4method{coerce}{sf,Spatial}(from, to = "Spatial", strict = TRUE)
-
-\S4method{coerce}{sfc,Spatial}(from, to = "Spatial", strict = TRUE)
-
 as_Spatial(from, cast = TRUE, IDs = paste0("ID", seq_along(from)))
-
-\S4method{coerce}{crs,CRS}(from, to = "CRS", strict = TRUE)
 }
 \arguments{
 \item{from}{object of class \code{sf}, \code{sfc_POINT}, \code{sfc_MULTIPOINT}, \code{sfc_LINESTRING},
 \code{sfc_MULTILINESTRING}, \code{sfc_POLYGON}, or \code{sfc_MULTIPOLYGON}.}
 
-\item{to}{target class}
-
-\item{strict}{ignored}
-
 \item{cast}{logical; if \code{TRUE}, \code{\link[=st_cast]{st_cast()}} \code{from} before converting, so that e.g.
 \code{GEOMETRY} objects with a mix of \code{POLYGON} and \code{MULTIPOLYGON} are cast to \code{MULTIPOLYGON}.}
 
 \item{IDs}{character vector with IDs for the \verb{Spatial*} geometries}
+
+\item{strict}{ignored}
+
+\item{to}{target class}
 }
 \value{
 geometry-only object deriving from \code{Spatial}, of the appropriate class

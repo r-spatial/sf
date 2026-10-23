@@ -3,12 +3,12 @@
 #' @param type character; one of `have_datum_files`, `proj`, `ellps`, `datum`, `units`, `path`, or `prime_meridians`; see Details.
 #' @param path character; PROJ search path to be set
 #' @export
-#' @details \code{sf_proj_info} lists the available projections, ellipses, datums, units, or data search path of the PROJ library when \code{type} is equal to proj, ellps, datum, units or path; when \code{type} equals \code{have_datum_files} a boolean is returned indicating whether datum files are installed and accessible (checking for \code{conus}). `path` returns the `PROJ_INFO.searchpath` field directly, as a single string with path separaters (`:`  or `;`).
+#' @details \code{sf_proj_info} lists the available projections, ellipses, datums, units, or data search path of the PROJ library when \code{type} is equal to proj, ellps, datum, units or path; when \code{type} equals \code{have_datum_files} a boolean is returned indicating whether datum files are installed and accessible (checking for \code{conus}). `path` returns the `PROJ_INFO.searchpath` field directly, as a single string with path separators (`:`  or `;`).
 #'
-#' for PROJ >= 6, \code{sf_proj_info} does not provide option \code{type = "datums"}. 
+#' for PROJ >= 6, \code{sf_proj_info} does not provide option \code{type = "datums"}.
 #' PROJ < 6 does not provide the option \code{type = "prime_meridians"}.
 #'
-#' for PROJ >= 7.1.0, the "units" query of \code{sf_proj_info} returns the \code{to_meter} 
+#' for PROJ >= 7.1.0, the "units" query of \code{sf_proj_info} returns the \code{to_meter}
 #' variable as numeric, previous versions return a character vector containing a numeric expression.
 #' @examples
 #' sf_proj_info("datum")
@@ -19,7 +19,7 @@ sf_proj_info = function(type = "proj", path) {
 
 	if (type == "path")
 		return(CPL_get_data_dir(TRUE))
-	
+
 	if (!missing(path) && is.character(path))
 		return(invisible(unique(CPL_set_data_dir(path, TRUE))))
 
@@ -40,9 +40,9 @@ sf_proj_info = function(type = "proj", path) {
 #' directly transform a set of coordinates
 #'
 #' directly transform a set of coordinates
-#' @param from character description of source CRS, or object of class \code{crs}, 
+#' @param from character description of source CRS, or object of class \code{crs},
 #' or pipeline describing a transformation
-#' @param to character description of target CRS, or object of class \code{crs} 
+#' @param to character description of target CRS, or object of class \code{crs}
 #' @param pts two-, three- or four-column numeric matrix, or object that can be coerced into a matrix; columns 3 and 4 contain z and t values.
 #' @param keep logical value controlling the handling of unprojectable points. If
 #' `keep` is `TRUE`, then such points will yield `Inf` or `-Inf` in the
@@ -51,7 +51,7 @@ sf_proj_info = function(type = "proj", path) {
 #' @param authority_compliant logical; \code{TRUE} means handle axis order authority compliant (e.g. EPSG:4326 implying x=lat, y=lon), \code{FALSE} means use visualisation order (i.e. always x=lon, y=lat)
 #' @return two-column numeric matrix with transformed/converted coordinates, returning invalid values as \code{Inf}
 #' @export
-sf_project = function(from = character(0), to = character(0), pts, keep = FALSE, warn = TRUE, 
+sf_project = function(from = character(0), to = character(0), pts, keep = FALSE, warn = TRUE,
 		authority_compliant = st_axis_order()) {
 
 	if (!is.logical(keep) || length(keep) != 1 || is.na(keep))
@@ -80,7 +80,7 @@ sf_project = function(from = character(0), to = character(0), pts, keep = FALSE,
 }
 
 #' Manage PROJ settings
-#' 
+#'
 #' Query or manage PROJ search path and network settings
 #' @param paths the search path to be set; omit if paths need to be queried
 #' @param with_proj logical; if `NA` set for both GDAL and PROJ, otherwise set either for PROJ (`TRUE`) or GDAL (`FALSE`)
@@ -104,7 +104,7 @@ sf_proj_search_paths = function(paths = character(0), with_proj = NA) {
 }
 
 #' @param enable logical; set this to enable (`TRUE`) or disable (`FALSE`) the proj network search facility
-#' @param url character; use this to specify and override the default proj network CDN 
+#' @param url character; use this to specify and override the default proj network CDN
 #' @return `sf_proj_network` when called without arguments returns a logical indicating whether
 #' network search of datum grids is enabled, when called with arguments it returns a character
 #' vector with the URL of the CDN used (or specified with `url`).
@@ -113,39 +113,39 @@ sf_proj_search_paths = function(paths = character(0), with_proj = NA) {
 sf_proj_network = function(enable = FALSE, url = character(0)) {
 	if (missing(enable) && missing(url))
 		CPL_is_network_enabled()
-	else 
+	else
 		CPL_enable_network(url, enable)
 }
 
 #' @param source_crs,target_crs object of class `crs` or character
 #' @param authority character; constrain output pipelines to those of authority
-#' @param AOI length four numeric; desired area of interest for the resulting 
+#' @param AOI length four numeric; desired area of interest for the resulting
 #' coordinate transformations (west, south, east, north, in degrees).
 #' For an area of interest crossing the anti-meridian, west will be greater than east.
 #' @param Use one of "NONE", "BOTH", "INTERSECTION", "SMALLEST", indicating how AOI's
 #' of source_crs and target_crs are being used
-#' @param grid_availability character; one of "USED" (Grid availability is only used for sorting 
+#' @param grid_availability character; one of "USED" (Grid availability is only used for sorting
 #' results. Operations where some grids are missing will be sorted last), "DISCARD"
 #' (Completely discard an operation if a required grid is missing)
-#' , "IGNORED" (Ignore grid availability at all. Results will be presented as if all grids were 
-#' available.), or "AVAILABLE" (Results will be presented as if grids known to PROJ (that is 
-#' registered in the grid_alternatives table of its database) were available. Used typically when 
+#' , "IGNORED" (Ignore grid availability at all. Results will be presented as if all grids were
+#' available.), or "AVAILABLE" (Results will be presented as if grids known to PROJ (that is
+#' registered in the grid_alternatives table of its database) were available. Used typically when
 #' networking is enabled.)
 #' @param desired_accuracy numeric; only return pipelines with at least this accuracy
 #' @param strict_containment logical; default `FALSE`; permit partial matching of the area
 #' of interest; if `TRUE` strictly contain the area of interest.
 #' The area of interest is either as given in AOI, or as implied by the
-#' source/target coordinate reference systems 
-#' @param axis_order_authority_compliant logical; if `FALSE` always 
-#' choose ‘x’ or longitude for the first 
-#' axis; if TRUE, follow the axis orders given by the coordinate reference systems when 
+#' source/target coordinate reference systems
+#' @param axis_order_authority_compliant logical; if `FALSE` always
+#' choose ‘x’ or longitude for the first
+#' axis; if TRUE, follow the axis orders given by the coordinate reference systems when
 #' constructing the for the first axis; if `FALSE`, follow the axis orders given by
 #' @return `sf_proj_pipelines()` returns a table with candidate coordinate transformation
 #' pipelines along with their accuracy; `NA` accuracy indicates ballpark accuracy.
 #' @name proj_tools
 #' @export
 sf_proj_pipelines = function(source_crs, target_crs, authority = character(0), AOI = numeric(0),
-		Use = "NONE", grid_availability = "USED", desired_accuracy = -1.0, 
+		Use = "NONE", grid_availability = "USED", desired_accuracy = -1.0,
 		strict_containment = FALSE, axis_order_authority_compliant = st_axis_order()) {
 	stopifnot(!missing(source_crs), !missing(target_crs))
 	if (inherits(source_crs, "crs"))
@@ -154,14 +154,14 @@ sf_proj_pipelines = function(source_crs, target_crs, authority = character(0), A
 		target_crs = target_crs$wkt
 	stopifnot(is.character(source_crs), is.character(target_crs))
 
-	ret = CPL_get_pipelines(c(source_crs, target_crs), as.character(authority), 
+	ret = CPL_get_pipelines(c(source_crs, target_crs), as.character(authority),
 		as.numeric(AOI), as.character(Use), as.character(grid_availability),
-		as.numeric(desired_accuracy), as.logical(strict_containment), 
+		as.numeric(desired_accuracy), as.logical(strict_containment),
 		as.logical(axis_order_authority_compliant))
 	if (nrow(ret)) {
 		if (!startsWith(ret$definition[1], "+")) # paste + to every word
-			ret$definition = 
-				sapply(strsplit(ret$definition, " "), 
+			ret$definition =
+				sapply(strsplit(ret$definition, " "),
 					function(x) paste0(paste0("+", x), collapse=" "))
 		ret$containment = strict_containment
 		structure(ret, class = c("proj_pipelines", "data.frame"),
