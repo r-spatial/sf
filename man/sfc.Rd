@@ -40,7 +40,7 @@ st_sfc(
 \item{recompute_bbox}{logical; use \code{TRUE} to force recomputation of the bounding box}
 
 \item{oriented}{logical; if \code{TRUE}, the ring is oriented such that left of the edges is inside the polygon; this is
-needed for converting polygons larger than half the globe to s2}
+needed for convering polygons larger than half the globe to s2}
 
 \item{fall_back_class}{character; class for return object when no geometries are provided as input}
 

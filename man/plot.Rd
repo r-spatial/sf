@@ -183,7 +183,7 @@ sf.colors(n = 10, cutoff.tails = c(0.35, 0.2), alpha = 1, categorical = FALSE)
 
 \item{max.plot}{integer; lower boundary to maximum number of attributes to plot; the default value (9) can be overridden by setting the global option \code{sf_max.plot}, e.g. \code{options(sf_max.plot=2)}}
 
-\item{key.pos}{numeric; side to plot a color key: 1 bottom, 2 left, 3 top, 4 right; set to \code{NULL} to omit key completely, 0 to only not plot the key, or -1 to select automatically. If multiple columns are plotted in a single function call by default no key is plotted and every submap is stretched individually; if a key is requested (and \code{col} is missing) all maps are colored according to a single key. Auto select depends on plot size, map aspect, and, if set, parameter \code{asp}. If it has length 2, the second value, ranging from 0 to 1, determines where the key is placed in the available space (default: 0.5, center).}
+\item{key.pos}{numeric; side to plot a color key: 1 bottom, 2 left, 3 top, 4 right; set to \code{NULL} to omit key completely, 0 to only not plot the key, or -1 to select automatically. If multiple columns are plotted in a single function call by default no key is plotted and every submap is stretched individually; if a key is requested (and \code{col} is missing) all maps are colored according to a single key. Auto select depends on plot size, map aspect, and, if set, parameter \code{asp}. If it has lenght 2, the second value, ranging from 0 to 1, determines where the key is placed in the available space (default: 0.5, center).}
 
 \item{key.length}{amount of space reserved for the key along its axis, length of the scale bar}
 
@@ -277,7 +277,7 @@ parameter \code{at} can be set to specify where labels are placed along the key;
 
 parameter \code{mar} can be set in \code{...} to override default margins.
 
-The features are plotted in the order as they appear in the sf object. See examples for when a different plotting order is wanted.
+The features are plotted in the order as they apppear in the sf object. See examples for when a different plotting order is wanted.
 
 \code{plot_sf} sets up the plotting area, axes, graticule, or webmap background; it
 is called by all \code{plot} methods before anything is drawn.
@@ -314,7 +314,7 @@ layout(1)
 # when plotting only geometries, the reset=FALSE is not needed:
 plot(st_geometry(nc))
 plot(st_geometry(nc)[1], col = 'red', add = TRUE)
-# add a custom legend to an arbitrary plot:
+# add a custom legend to an arbitray plot:
 layout(matrix(1:2, ncol = 2), widths = c(1, lcm(2)))
 plot(1)
 .image_scale(1:10, col = sf.colors(9), key.length = lcm(8), key.pos = 4, at = 1:10)

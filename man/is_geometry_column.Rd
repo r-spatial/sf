@@ -2,7 +2,7 @@
 % Please edit documentation in R/db.R
 \name{is_geometry_column}
 \alias{is_geometry_column}
-\title{Check if the columns could be of a coercible type for sf}
+\title{Check if the columns could be of a coercable type for sf}
 \usage{
 is_geometry_column(con, x, classes = "")
 }
@@ -14,5 +14,5 @@ is_geometry_column(con, x, classes = "")
 \item{classes}{classes inherited}
 }
 \description{
-Check if the columns could be of a coercible type for sf
+Check if the columns could be of a coercable type for sf
 }
