@@ -679,8 +679,8 @@ Rcpp::List CPL_write_wkb(Rcpp::List sfc, bool EWKB = false) {
 	}
 
 	int srid = 0;
-	if (EWKB) { 
-		// get SRID from crs[["input"]], either of the form "4326" 
+	if (EWKB) {
+		// get SRID from crs[["input"]], either of the form "4326"
 		// or "XXXX:4326" with arbitrary XXXX string,
 		// or else from the wkt field of the crs using srid_from_crs()
 		Rcpp::List crs = sfc.attr("crs");
@@ -735,7 +735,7 @@ Rcpp::List get_dim_sfc(Rcpp::List sfc) {
 	}
 	switch (tp) {
 		case SF_Unknown: { // further check:
-			Rcpp::stop("impossible classs in get_dim_sfc()"); // #nocov
+			Rcpp::stop("impossible classes in get_dim_sfc()"); // #nocov
 		} break;
 		case SF_Point: { // numeric:
 			Rcpp::NumericVector v = sfc[0];
@@ -771,4 +771,3 @@ Rcpp::List get_dim_sfc(Rcpp::List sfc) {
 			Rcpp::IntegerVector::create(3) :
 			Rcpp::IntegerVector::create(2));
 }
-
