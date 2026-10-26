@@ -27,7 +27,7 @@ format.sfc = function(x, ..., width = 30) {
 #' @param dim character; if this function is called without valid geometries, this argument may carry the right dimension to set empty geometries
 #' @param recompute_bbox logical; use \code{TRUE} to force recomputation of the bounding box
 #' @param oriented logical; if \code{TRUE}, the ring is oriented such that left of the edges is inside the polygon; this is
-#' needed for convering polygons larger than half the globe to s2
+#' needed for converting polygons larger than half the globe to s2
 #' @param fall_back_class character; class for return object when no geometries are provided as input
 #' @return an object of class \code{sfc}, which is a classed list-column with simple feature geometries.
 #'
@@ -63,7 +63,7 @@ st_sfc = function(..., crs = NA_crs_, precision = 0.0, check_ring_dir = FALSE, d
 	attributes(lst) = a
 
 	dims_and_types = sfc_unique_sfg_dims_and_types(lst)
-	
+
 	cls = if (length(lst) == 0) # empty set: no geometries to learn from
 			fall_back_class
 		else {
@@ -499,21 +499,21 @@ typed_empty = function(cls, ncol = 2, dim = "XY") {
 #' @param x object of class sf, sfc or sfg
 #' @param ... ignored
 #' @return matrix with coordinates (X, Y, possibly Z and/or M) in rows, possibly followed by integer indicators \code{L1},...,\code{L3} that point out to which structure the coordinate belongs; for \code{POINT} this is absent (each coordinate is a feature), for \code{LINESTRING} \code{L1} refers to the feature, for \code{MULTILINESTRING} \code{L1} refers to the part and \code{L2} to the simple feature, for \code{POLYGON} \code{L1} refers to the main ring or holes and \code{L2} to the simple feature, for \code{MULTIPOLYGON} \code{L1} refers to the main ring or holes, \code{L2} to the ring id in the \code{MULTIPOLYGON}, and \code{L3} to the simple feature.
-#' 
-#' For \code{POLYGONS}, \code{L1} can be used to identify exterior rings and inner holes. 
-#' The exterior ring is when \code{L1} is equal to 1. Interior rings are identified 
-#' when \code{L1} is greater than 1. \code{L2} can be used to differentiate between the 
+#'
+#' For \code{POLYGONS}, \code{L1} can be used to identify exterior rings and inner holes.
+#' The exterior ring is when \code{L1} is equal to 1. Interior rings are identified
+#' when \code{L1} is greater than 1. \code{L2} can be used to differentiate between the
 #' feature. Whereas for \code{MULTIPOLYGON}, \code{L3} refers to the \code{MULTIPOLYGON}
 #' feature and \code{L2} refers to the component \code{POLYGON}.
-#' 
+#'
 #' @export
 #' @examples
 #' x = st_sfc(st_point(c(1.234, 1.234)), crs = 3003) # units: m
 #' st_coordinates(x)
-#' 
+#'
 #' st_precision(x) = 1e1
-#' st_coordinates(x, round = TRUE) # round 1 decimal place 
-#' 
+#' st_coordinates(x, round = TRUE) # round 1 decimal place
+#'
 #' st_precision(x) = units::set_units(1, cm)
 #' st_coordinates(x, round = TRUE) # round to cm
 st_coordinates = function(x, ...) UseMethod("st_coordinates")
@@ -534,7 +534,7 @@ st_coordinates.sfg = function(x, ..., round = FALSE) st_coordinates(st_geometry(
 st_coordinates.sfc = function(x, ..., round = FALSE) {
 	if (length(x) == 0)
 		return(matrix(nrow = 0, ncol = 2))
-	
+
 	# See the discussion in #2620 and #2622
 	if (round && st_precision(x) != 0) {
 		# NB: The following does not restore CRS, bbox, precision, ... of x but that
