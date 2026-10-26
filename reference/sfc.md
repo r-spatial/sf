@@ -58,7 +58,7 @@ x[i, j, ..., op = st_intersects]
 - oriented:
 
   logical; if `TRUE`, the ring is oriented such that left of the edges
-  is inside the polygon; this is needed for convering polygons larger
+  is inside the polygon; this is needed for converting polygons larger
   than half the globe to s2
 
 - fall_back_class:

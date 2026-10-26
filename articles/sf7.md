@@ -468,32 +468,32 @@ system.time({
   uk_buffer_sf = st_buffer(uk_projected, dist = 20000)
 })
 ##    user  system elapsed 
-##   0.017   0.001   0.018
+##    0.02    0.00    0.02
 # sf way with few than the 30 segments in the buffer
 system.time({
   uk_projected = st_transform(uk_sfc, 27700)
   uk_buffer_sf2 = st_buffer(uk_projected, dist = 20000, nQuadSegs = 4)
 })
 ##    user  system elapsed 
-##   0.005   0.000   0.006
+##   0.006   0.000   0.006
 # s2 with default cell size
 system.time({
   uk_buffer = s2_buffer_cells(uk, distance = 20000)
 })
 ##    user  system elapsed 
-##   0.015   0.000   0.016
+##   0.017   0.000   0.017
 # s2 with 10000 cells
 system.time({
   uk_buffer2 = s2_buffer_cells(uk, distance = 20000, max_cells = 10000)
 })
 ##    user  system elapsed 
-##   0.146   0.000   0.146
+##   0.152   0.000   0.152
 # s2 with 100 cells
 system.time({
   uk_buffer2 = s2_buffer_cells(uk, distance = 20000, max_cells = 100)
 })
 ##    user  system elapsed 
-##   0.002   0.000   0.002
+##   0.002   0.000   0.003
 ```
 
 The result of the previous benchmarks emphasizes the point that there

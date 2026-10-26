@@ -160,7 +160,7 @@ ellps, datum, units or path; when `type` equals `have_datum_files` a
 boolean is returned indicating whether datum files are installed and
 accessible (checking for `conus`). `path` returns the
 `PROJ_INFO.searchpath` field directly, as a single string with path
-separaters (`:` or `;`).
+separators (`:` or `;`).
 
 for PROJ \>= 6, `sf_proj_info` does not provide option
 `type = "datums"`. PROJ \< 6 does not provide the option

@@ -62,7 +62,7 @@ st_coordinates(x)
 #> [1,] 1.234 1.234
 
 st_precision(x) = 1e1
-st_coordinates(x, round = TRUE) # round 1 decimal place 
+st_coordinates(x, round = TRUE) # round 1 decimal place
 #>        X   Y
 #> [1,] 1.2 1.2
 

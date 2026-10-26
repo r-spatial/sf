@@ -1,6 +1,6 @@
-# Check if the columns could be of a coercable type for sf
+# Check if the columns could be of a coercible type for sf
 
-Check if the columns could be of a coercable type for sf
+Check if the columns could be of a coercible type for sf
 
 ## Usage
 

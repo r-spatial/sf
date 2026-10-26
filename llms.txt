@@ -405,7 +405,7 @@ This project gratefully acknowledges financial
   : Check if a driver can perform an action
 
 - [`is_geometry_column()`](https://r-spatial.github.io/sf/reference/is_geometry_column.md)
-  : Check if the columns could be of a coercable type for sf
+  : Check if the columns could be of a coercible type for sf
 
 - [`merge(`*`<sf>`*`)`](https://r-spatial.github.io/sf/reference/merge.sf.md)
   : merge method for sf and data.frame object
