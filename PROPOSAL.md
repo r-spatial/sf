@@ -71,14 +71,14 @@ The problems we will solve are:
 1.  R can currently not represent simple features directly. It can read
     most simple feature classes in `sp` classes, but uses its own
     representation for this, and can only write data back without loss
-    of information if it is furnished with ancilliary metadata encoded
-    in a comment attribute to each Polygons object. It does for instance
+    of information if it is furnished with ancillary metadata encoded in
+    a comment attribute to each Polygons object. It does for instance
     internally not distinguish between `POLYGON` and `MULTIPOLYGON` nor
     deal with several simple feature classes, including `TIN` and
     `GEOMETRYCOLLECTION`, nor handle `CURVE` geometries.
 2.  The current implementation of lines and vector data in package `sp`
     is partly ambiguous (both slot `ringDir` or slot `hole` indicate
-    whether a Polygon is a hole but are superceded by the comment
+    whether a Polygon is a hole but are superseded by the comment
     attribute), complicated (to which exterior polygon does a hole
     belong - handled by the comment attribute), and by some considered
     difficult to work with (S4). The current implementation is hard to
