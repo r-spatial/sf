@@ -127,13 +127,6 @@ the argument `stringsAsFactors` can be set to `TRUE`:
 st_read(fname, stringsAsFactors = TRUE)
 ```
 
-Alternatively, a user can set the global option `stringsAsFactors`, and this will have the same effect:
-
-```{r}
-options(stringsAsFactors = TRUE)
-st_read(fname)
-```
-
 ### Using st_write
 
 To write a simple features object to a file, we need at least
@@ -205,7 +198,7 @@ The list with prefixes is:
 
 ### Dataset and layer reading or creation options
 
-Various GDAL drivers have options that influences the reading
+Various GDAL drivers have options that influence the reading
 or writing process, for example what the driver should do when a
 table already exists in a database: append records to the table
 or overwrite it:
@@ -229,7 +222,7 @@ in the dataset.
 
 Package `sf` supports reading and
 writing from and to spatial databases using the `DBI` interface.
-So far, testing has mainly be done with `PostGIS`, other databases
+So far, testing has mainly been done with `PostGIS`, other databases
 might work but may also need more work. An example of reading is:
 
 ```{r eval=FALSE}
