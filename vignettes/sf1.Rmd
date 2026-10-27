@@ -111,7 +111,7 @@ The remaining ten geometries are rare but are increasingly found:
 | `TIN` | A TIN (triangulated irregular network) is a PolyhedralSurface consisting only of Triangle patches.|
 | `TRIANGLE` | A Triangle is a polygon with 3 distinct, non-collinear vertices and no interior boundary |
 
-Note that `CIRCULASTRING`, `COMPOUNDCURVE` and `CURVEPOLYGON` are not described in the SFA standard, but in the [SQL-MM part 3 standard](https://www.iso.org/standard/38651.html). The descriptions above were copied from the [PostGIS manual](http://postgis.net/docs/using_postgis_dbmanagement.html).
+Note that `CIRCULARSTRING`, `COMPOUNDCURVE` and `CURVEPOLYGON` are not described in the SFA standard, but in the [SQL-MM part 3 standard](https://www.iso.org/standard/38651.html). The descriptions above were copied from the [PostGIS manual](https://postgis.net/docs/using_postgis_dbmanagement.html).
 
 
 ## Coordinate reference system
@@ -127,7 +127,7 @@ unit](https://CRAN.R-project.org/package=units).
 # How simple features in R are organized
 
 Package `sf` represents simple features as native R objects.
-Similar to [PostGIS](http://postgis.net/), all functions and methods
+Similar to [PostGIS](https://postgis.net/), all functions and methods
 in `sf` that operate on spatial data are prefixed by `st_`, which
 refers to _spatial type_; this makes them easily findable
 by command-line completion.  Simple features are implemented as
@@ -788,4 +788,4 @@ With this information (still to be done) we can for instance
 Further reading:
 
 1. S. Scheider, B. Gräler, E. Pebesma, C. Stasch, 2016. Modelling spatio-temporal information generation. Int J of Geographic Information Science, 30 (10), 1980-2008. ([open access](https://doi.org/10.1080/13658816.2016.1151520))
-2. Stasch, C., S. Scheider, E. Pebesma, W. Kuhn, 2014. Meaningful Spatial Prediction and Aggregation. Environmental Modelling & Software, 51, (149–165, [open access](http://dx.doi.org/10.1016/j.envsoft.2013.09.006)).
+2. Stasch, C., S. Scheider, E. Pebesma, W. Kuhn, 2014. Meaningful Spatial Prediction and Aggregation. Environmental Modelling & Software, 51, (149–165, [open access](https://dx.doi.org/10.1016/j.envsoft.2013.09.006)).
