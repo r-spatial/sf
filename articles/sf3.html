@@ -92,7 +92,7 @@ union (overlap) of two polygons.</li>
 <div class="section level2">
 <h2 id="type-transformations">Type transformations<a class="anchor" aria-label="anchor" href="#type-transformations"></a>
 </h2>
-<p>This sections discusses how simple feature geometries of one type can
+<p>This section discusses how simple feature geometries of one type can
 be converted to another. For converting lines to polygons, see also
 <code><a href="../reference/geos_unary.html">st_polygonize()</a></code> below.</p>
 <div class="section level3">
@@ -107,7 +107,7 @@ be converted to another. For converting lines to polygons, see also
 still convert but warn about loss of information)</li>
 <li>convert from MULTIXX to XX if MULTIXX does not have length one, but
 it will warn about the loss of information</li>
-<li>convert GEOMETRYCOLLECTION of length one to its component if</li>
+<li>convert GEOMETRYCOLLECTION of length one to its component</li>
 </ol>
 <p>Examples of the first three types are:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -155,8 +155,8 @@ multipolygons get lost.</p>
 <code><a href="../reference/st_write.html">st_write()</a></code> may have difficulty handling them. For some of
 these cases, <code><a href="../reference/st_cast.html">st_cast()</a></code> may help modify their type. For sets
 of geometry objects (<code>sfc</code>) and simple feature sets
-(<code>sf),</code>st_cast` can be used by specifying the target type, or
-without specifying it.</p>
+(<code>sf</code>), <code>st_cast</code> can be used by specifying the
+target type, or without specifying it.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_linestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">mls</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/st.html">st_multilinestring</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">2</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
@@ -345,7 +345,7 @@ by <code>st_crs&lt;-</code>:</p>
 <h3 id="coordinate-reference-system-transformations">Coordinate reference system transformations<a class="anchor" aria-label="anchor" href="#coordinate-reference-system-transformations"></a>
 </h3>
 <p>If we change the coordinate reference system from one non-missing
-value into another non-missing value, the CRS is is changed without
+value into another non-missing value, the CRS is changed without
 modifying any coordinates, but a warning is issued that this did not
 reproject values:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">

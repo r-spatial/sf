@@ -104,11 +104,11 @@ The remaining ten geometries are rare but are increasingly found:
 | `TIN` | A TIN (triangulated irregular network) is a PolyhedralSurface consisting only of Triangle patches. |
 | `TRIANGLE` | A Triangle is a polygon with 3 distinct, non-collinear vertices and no interior boundary |
 
-Note that `CIRCULASTRING`, `COMPOUNDCURVE` and `CURVEPOLYGON` are not
+Note that `CIRCULARSTRING`, `COMPOUNDCURVE` and `CURVEPOLYGON` are not
 described in the SFA standard, but in the [SQL-MM part 3
 standard](https://www.iso.org/standard/38651.html). The descriptions
 above were copied from the [PostGIS
-manual](http://postgis.net/docs/using_postgis_dbmanagement.md).
+manual](https://postgis.net/docs/using_postgis_dbmanagement.html).
 
 ### Coordinate reference system
 
@@ -123,7 +123,7 @@ unit](https://CRAN.R-project.org/package=units).
 ## How simple features in R are organized
 
 Package `sf` represents simple features as native R objects. Similar to
-[PostGIS](http://postgis.net/), all functions and methods in `sf` that
+[PostGIS](https://postgis.net/), all functions and methods in `sf` that
 operate on spatial data are prefixed by `st_`, which refers to *spatial
 type*; this makes them easily findable by command-line completion.
 Simple features are implemented as R native data, using simple data
@@ -1228,4 +1228,4 @@ Further reading:
 2.  Stasch, C., S. Scheider, E. Pebesma, W. Kuhn, 2014. Meaningful
     Spatial Prediction and Aggregation. Environmental Modelling &
     Software, 51, (149–165, [open
-    access](http://dx.doi.org/10.1016/j.envsoft.2013.09.006)).
+    access](https://dx.doi.org/10.1016/j.envsoft.2013.09.006)).

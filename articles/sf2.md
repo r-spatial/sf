@@ -126,24 +126,6 @@ can be set to `TRUE`:
 st_read(fname, stringsAsFactors = TRUE)
 ```
 
-Alternatively, a user can set the global option `stringsAsFactors`, and
-this will have the same effect:
-
-``` r
-
-options(stringsAsFactors = TRUE)
-## Warning in options(stringsAsFactors = TRUE): 'options(stringsAsFactors = TRUE)'
-## is deprecated and will be disabled
-st_read(fname)
-## Reading layer `nc' from data source 
-##   `/home/runner/work/_temp/Library/sf/shape/nc.shp' using driver `ESRI Shapefile'
-## Simple feature collection with 100 features and 14 fields
-## Geometry type: MULTIPOLYGON
-## Dimension:     XY
-## Bounding box:  xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
-## Geodetic CRS:  NAD27
-```
-
 ### Using st_write
 
 To write a simple features object to a file, we need at least two
@@ -220,7 +202,7 @@ The list with prefixes is:
 
 ### Dataset and layer reading or creation options
 
-Various GDAL drivers have options that influences the reading or writing
+Various GDAL drivers have options that influence the reading or writing
 process, for example what the driver should do when a table already
 exists in a database: append records to the table or overwrite it:
 
@@ -245,7 +227,7 @@ the dataset.
 ## Reading and writing directly to and from spatial databases
 
 Package `sf` supports reading and writing from and to spatial databases
-using the `DBI` interface. So far, testing has mainly be done with
+using the `DBI` interface. So far, testing has mainly been done with
 `PostGIS`, other databases might work but may also need more work. An
 example of reading is:
 
@@ -406,7 +388,7 @@ plot(m.sf)
 ## all
 ```
 
-![](sf2_files/figure-html/unnamed-chunk-20-1.png)
+![](sf2_files/figure-html/unnamed-chunk-19-1.png)
 
 Conversion of simple feature objects of class `sf` or `sfc` into
 corresponding `Spatial*` objects is done using the `as` method, coercing

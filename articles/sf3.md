@@ -12,7 +12,7 @@ manipulated, where manipulations include
 
 ## Type transformations
 
-This sections discusses how simple feature geometries of one type can be
+This section discusses how simple feature geometries of one type can be
 converted to another. For converting lines to polygons, see also
 [`st_polygonize()`](https://r-spatial.github.io/sf/reference/geos_unary.md)
 below.
@@ -27,7 +27,7 @@ For single geometries,
     still convert but warn about loss of information)
 3.  convert from MULTIXX to XX if MULTIXX does not have length one, but
     it will warn about the loss of information
-4.  convert GEOMETRYCOLLECTION of length one to its component if
+4.  convert GEOMETRYCOLLECTION of length one to its component
 
 Examples of the first three types are:
 
@@ -86,8 +86,8 @@ downstream functions such as
 have difficulty handling them. For some of these cases,
 [`st_cast()`](https://r-spatial.github.io/sf/reference/st_cast.md) may
 help modify their type. For sets of geometry objects (`sfc`) and simple
-feature sets (`sf),`st_cast\` can be used by specifying the target type,
-or without specifying it.
+feature sets (`sf`), `st_cast` can be used by specifying the target
+type, or without specifying it.
 
 ``` r
 
@@ -287,9 +287,8 @@ s1 |> st_set_crs(4326)
 ### Coordinate reference system transformations
 
 If we change the coordinate reference system from one non-missing value
-into another non-missing value, the CRS is is changed without modifying
-any coordinates, but a warning is issued that this did not reproject
-values:
+into another non-missing value, the CRS is changed without modifying any
+coordinates, but a warning is issued that this did not reproject values:
 
 ``` r
 

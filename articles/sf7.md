@@ -51,7 +51,7 @@ and polygon geometries where geometries are built from points (nodes)
 connected by straight lines (edges). The simple feature standard does
 not say much about its suitability for dealing with geographic
 coordinates, but the topological relational system it builds upon
-([DE9-IM](https://en.wikipedia.org/wiki/DE-9IM)) refer to $`R^2`$, the
+([DE9-IM](https://en.wikipedia.org/wiki/DE-9IM)) refers to $`R^2`$, the
 two-dimensional flat space.
 
 Yet, more and more data are routinely served or exchanged using
@@ -77,7 +77,7 @@ and whether it is
 - a curved line following the Earth’s surface
 
 Starting with `sf` version 1.0, if you provide a spatial object in a
-geographical coordinate reference system, `sf` uses the new package `s2`
+geographical coordinate reference system, `sf` uses the `s2` package
 (Dunnington, Pebesma, Rubak 2020) for spherical geometry, which has
 functions for computing pretty much all measures, predicates and
 transformations *on the sphere*. This means:
@@ -468,32 +468,32 @@ system.time({
   uk_buffer_sf = st_buffer(uk_projected, dist = 20000)
 })
 ##    user  system elapsed 
-##    0.02    0.00    0.02
+##   0.018   0.000   0.018
 # sf way with few than the 30 segments in the buffer
 system.time({
   uk_projected = st_transform(uk_sfc, 27700)
   uk_buffer_sf2 = st_buffer(uk_projected, dist = 20000, nQuadSegs = 4)
 })
 ##    user  system elapsed 
-##   0.006   0.000   0.006
+##   0.013   0.000   0.014
 # s2 with default cell size
 system.time({
   uk_buffer = s2_buffer_cells(uk, distance = 20000)
 })
 ##    user  system elapsed 
-##   0.017   0.000   0.017
+##   0.016   0.000   0.016
 # s2 with 10000 cells
 system.time({
   uk_buffer2 = s2_buffer_cells(uk, distance = 20000, max_cells = 10000)
 })
 ##    user  system elapsed 
-##   0.152   0.000   0.152
+##   0.145   0.000   0.145
 # s2 with 100 cells
 system.time({
   uk_buffer2 = s2_buffer_cells(uk, distance = 20000, max_cells = 100)
 })
 ##    user  system elapsed 
-##   0.002   0.000   0.003
+##   0.002   0.000   0.002
 ```
 
 The result of the previous benchmarks emphasizes the point that there

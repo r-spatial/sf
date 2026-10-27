@@ -124,7 +124,7 @@ standard for point, line, and polygon geometries where geometries are
 built from points (nodes) connected by straight lines (edges). The
 simple feature standard does not say much about its suitability for
 dealing with geographic coordinates, but the topological relational
-system it builds upon (<a href="https://en.wikipedia.org/wiki/DE-9IM" class="external-link">DE9-IM</a>) refer to
+system it builds upon (<a href="https://en.wikipedia.org/wiki/DE-9IM" class="external-link">DE9-IM</a>) refers to
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>,
 the two-dimensional flat space.</p>
 <p>Yet, more and more data are routinely served or exchanged using
@@ -152,10 +152,10 @@ problems. Doing this however leaves ambiguities, e.g. whether
 </ul>
 <p>Starting with <code>sf</code> version 1.0, if you provide a spatial
 object in a geographical coordinate reference system, <code>sf</code>
-uses the new package <code>s2</code> (Dunnington, Pebesma, Rubak 2020)
-for spherical geometry, which has functions for computing pretty much
-all measures, predicates and transformations <em>on the sphere</em>.
-This means:</p>
+uses the <code>s2</code> package (Dunnington, Pebesma, Rubak 2020) for
+spherical geometry, which has functions for computing pretty much all
+measures, predicates and transformations <em>on the sphere</em>. This
+means:</p>
 <ul>
 <li>no more hodge-podge of some functions working on
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>,
@@ -494,32 +494,32 @@ comparison with transforming and then creating buffers:</p>
 <span>  <span class="va">uk_buffer_sf</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">uk_projected</span>, dist <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##    0.02    0.00    0.02</span></span>
+<span><span class="co">##   0.018   0.000   0.018</span></span>
 <span><span class="co"># sf way with few than the 30 segments in the buffer</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">uk_projected</span> <span class="op">=</span> <span class="fu"><a href="../reference/st_transform.html">st_transform</a></span><span class="op">(</span><span class="va">uk_sfc</span>, <span class="fl">27700</span><span class="op">)</span></span>
 <span>  <span class="va">uk_buffer_sf2</span> <span class="op">=</span> <span class="fu"><a href="../reference/geos_unary.html">st_buffer</a></span><span class="op">(</span><span class="va">uk_projected</span>, dist <span class="op">=</span> <span class="fl">20000</span>, nQuadSegs <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.006   0.000   0.006</span></span>
+<span><span class="co">##   0.013   0.000   0.014</span></span>
 <span><span class="co"># s2 with default cell size</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">uk_buffer</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.017   0.000   0.017</span></span>
+<span><span class="co">##   0.016   0.000   0.016</span></span>
 <span><span class="co"># s2 with 10000 cells</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span>, max_cells <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.152   0.000   0.152</span></span>
+<span><span class="co">##   0.145   0.000   0.145</span></span>
 <span><span class="co"># s2 with 100 cells</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span><span class="op">{</span></span>
 <span>  <span class="va">uk_buffer2</span> <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/s2/reference/s2_boundary.html" class="external-link">s2_buffer_cells</a></span><span class="op">(</span><span class="va">uk</span>, distance <span class="op">=</span> <span class="fl">20000</span>, max_cells <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.002   0.000   0.003</span></span></code></pre></div>
+<span><span class="co">##   0.002   0.000   0.002</span></span></code></pre></div>
 <p>The result of the previous benchmarks emphasizes the point that there
 are trade-offs between geographic resolution and computational
 resources, something that web developers working on geographic services

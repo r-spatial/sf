@@ -169,7 +169,7 @@ projection](https://en.wikipedia.org/wiki/Equirectangular_projection)
 (also called *equidistant circular*), where at the center of the plot
 (or of the bounding box) one unit north equals one unit east.
 
-Proj.4 also lets you project data to this projection, and the plot of
+PROJ also lets you project data to this projection, and the plot of
 
 ``` r
 
@@ -272,10 +272,10 @@ methods(st_as_grob)
     ## [19] st_as_grob.sfc_POLYGON*        
     ## see '?methods' for accessing help and source code
 
-which convert simple simple feature objects into `grob` (“graphics
-objects”) objects; `grob`s are the graphic primitives of the `grid`
-plotting package. These methods can be used by plotting packages that
-build on `grid`, such as `ggplot2` (which uses them in
+which convert simple feature objects into `grob` (“graphics objects”)
+objects; `grob`s are the graphic primitives of the `grid` plotting
+package. These methods can be used by plotting packages that build on
+`grid`, such as `ggplot2` (which uses them in
 [`geom_sf()`](https://ggplot2.tidyverse.org/reference/ggsf.html)) and
 `tmap`. In addition,
 [`st_viewport()`](https://r-spatial.github.io/sf/reference/st_viewport.md)
@@ -288,8 +288,6 @@ aspect ratio similar to that of
 contains a geom specially for simple feature objects, with support for
 graticule white lines in the background using
 [`sf::st_graticule()`](https://r-spatial.github.io/sf/reference/st_graticule.md).
-Support is currently good for polygons; for lines or points, your
-mileage may vary.
 
 ``` r
 

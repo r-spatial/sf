@@ -198,7 +198,7 @@ longitude and latitude, it chooses an <a href="https://en.wikipedia.org/wiki/Equ
 projection</a> (also called <em>equidistant circular</em>), where at the
 center of the plot (or of the bounding box) one unit north equals one
 unit east.</p>
-<p>Proj.4 also lets you project data to this projection, and the plot
+<p>PROJ also lets you project data to this projection, and the plot
 of</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span>, axes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
@@ -274,7 +274,7 @@ region of base plots is not easy.</p>
 <span><span class="co">## [17] st_as_grob.sfc_MULTIPOLYGON*    st_as_grob.sfc_POINT*          </span></span>
 <span><span class="co">## [19] st_as_grob.sfc_POLYGON*        </span></span>
 <span><span class="co">## see '?methods' for accessing help and source code</span></span></code></pre>
-<p>which convert simple simple feature objects into <code>grob</code>
+<p>which convert simple feature objects into <code>grob</code>
 (“graphics objects”) objects; <code>grob</code>s are the graphic
 primitives of the <code>grid</code> plotting package. These methods can
 be used by plotting packages that build on <code>grid</code>, such as
@@ -288,8 +288,7 @@ ratio similar to that of <code><a href="../reference/plot.html">plot.sf()</a></c
 </h3>
 <p>contains a geom specially for simple feature objects, with support
 for graticule white lines in the background using
-<code><a href="../reference/st_graticule.html">sf::st_graticule()</a></code>. Support is currently good for polygons;
-for lines or points, your mileage may vary.</p>
+<code><a href="../reference/st_graticule.html">sf::st_graticule()</a></code>.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">usa</span><span class="op">)</span></span></code></pre></div>
