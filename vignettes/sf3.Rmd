@@ -28,7 +28,7 @@ manipulated, where manipulations include
 
 ## Type transformations
 
-This sections discusses how simple feature geometries of one type can be converted to another. For converting lines to polygons, see also `st_polygonize()` below.
+This section discusses how simple feature geometries of one type can be converted to another. For converting lines to polygons, see also `st_polygonize()` below.
 
 ### For single geometries
 
@@ -37,7 +37,7 @@ For single geometries, `st_cast()` will
 1. convert from XX to MULTIXX, e.g. `LINESTRING` to `MULTILINESTRING`
 2. convert from MULTIXX to XX if MULTIXX has length one (else, it will still convert but warn about loss of information)
 3. convert from MULTIXX to XX if MULTIXX does not have length one, but it will warn about the loss of information
-4. convert GEOMETRYCOLLECTION of length one to its component if 
+4. convert GEOMETRYCOLLECTION of length one to its component
 
 Examples of the first three types are:
 ```{r}
@@ -64,7 +64,7 @@ class(st_geometry(st_read(shp, quiet = TRUE, type = 1)))
 
 This option is handled by the GDAL library; in case of failure to convert to the target type, the original types are returned, which in this case is a mix of `POLYGON` and `MULTIPOLYGON` geometries, leading to a `GEOMETRY` as superclass. When we try to read multipolygons as polygons, all secondary rings of multipolygons get lost. 
 
-When functions return objects with mixed geometry type (`GEOMETRY`), downstream functions such as `st_write()` may have difficulty handling them. For some of these cases, `st_cast()` may help modify their type.  For sets of geometry objects (`sfc`) and simple feature sets (`sf), `st_cast` can be used by specifying the target type, or without specifying it. 
+When functions return objects with mixed geometry type (`GEOMETRY`), downstream functions such as `st_write()` may have difficulty handling them. For some of these cases, `st_cast()` may help modify their type.  For sets of geometry objects (`sfc`) and simple feature sets (`sf`), `st_cast` can be used by specifying the target type, or without specifying it. 
 
 ```{r}
 ls <- st_linestring(rbind(c(0,0),c(1,1),c(2,1)))
@@ -150,7 +150,7 @@ s1 |> st_set_crs(4326)
 ### Coordinate reference system transformations
 
 If we change the coordinate reference system from one non-missing
-value into another non-missing value, the CRS is is changed without
+value into another non-missing value, the CRS is changed without
 modifying any coordinates, but a warning is issued that this
 did not reproject values:
 ```{r}

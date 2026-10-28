@@ -102,7 +102,7 @@ plot(nc["AREA"], breaks = "jenks")
 
 Package `sf` plots projected maps in their native projection, meaning that easting and northing are mapped linearly to the x and y axis, keeping an aspect ratio of 1 (one unit east equals one unit north). For geographic data, where coordinates constitute degrees longitude and latitude, it chooses an [equirectangular projection](https://en.wikipedia.org/wiki/Equirectangular_projection) (also called _equidistant circular_), where at the center of the plot (or of the bounding box) one unit north equals one unit east.
 
-Proj.4 also lets you project data to this projection, and the plot of
+`sf::st_transform()` also lets you project data to this projection using [proj-strings](https://proj.org/en/stable/usage/quickstart.html), and the plot of
 ```{r}
 plot(st_geometry(nc), axes = TRUE)
 ```
@@ -154,12 +154,12 @@ Package `sf` provides a number of methods for `st_as_grob()`:
 methods(st_as_grob)
 ```
 
-which convert simple simple feature objects into `grob` ("graphics objects") objects; `grob`s are the graphic primitives of the `grid` plotting package. These methods can be used by plotting packages that build on `grid`, such as `ggplot2` (which uses them in `geom_sf()`) and `tmap`. In addition, `st_viewport()` can be used to set up a grid viewport from an `sf` object, with an aspect ratio similar to that of `plot.sf()`.
+which convert simple feature objects into `grob` ("graphics objects") objects; `grob`s are the graphic primitives of the `grid` plotting package. These methods can be used by plotting packages that build on `grid`, such as `ggplot2` (which uses them in `geom_sf()`) and `tmap`. In addition, `st_viewport()` can be used to set up a grid viewport from an `sf` object, with an aspect ratio similar to that of `plot.sf()`.
 
 
 ## ggplot2
 
-contains a geom specially for simple feature objects, with support for graticule white lines in the background using `sf::st_graticule()`. Support is currently good for polygons; for lines or points, your mileage may vary.
+Package `ggplot2` contains a geom specially for simple feature objects, with support for graticule white lines in the background using `sf::st_graticule()`.
 
 ```{r}
 library(ggplot2)
@@ -174,7 +174,7 @@ ggplot() +
 ```
 
 and sets of maps can be plotted as facet plots after rearranging the `sf` object, e.g. by
-```{r}
+```{r message=FALSE}
 library(dplyr)
 library(tidyr)
 nc2 <- nc |> select(SID74, SID79, geom) |> gather(VAR, SID, -geom)
@@ -218,6 +218,6 @@ ttm()
 tmap_last()
 ```
 
-A draft version of the book _Elegant and informative maps
-with tmap_ by Martijn Tennekes and Jakub Nowosad is found at
-https://r-tmap.github.io/
+A draft version of the book _Spatial Data Visualization with
+tmap: A Practical Guide to Thematic Mapping in R_ by Martijn Tennekes
+and Jakub Nowosad is found at https://r-tmap.github.io/

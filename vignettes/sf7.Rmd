@@ -63,7 +63,7 @@ line, and polygon geometries where geometries are built from points
 (nodes) connected by straight lines (edges). The simple feature
 standard does not say much about its suitability for dealing with
 geographic coordinates, but the topological relational system it
-builds upon ([DE9-IM](https://en.wikipedia.org/wiki/DE-9IM)) refer
+builds upon ([DE9-IM](https://en.wikipedia.org/wiki/DE-9IM)) refers
 to $R^2$, the two-dimensional flat space. 
 
 Yet, more and more data are routinely served or exchanged using
@@ -89,7 +89,7 @@ and whether it is
 * a curved line following the Earth's surface
 
 Starting with `sf` version 1.0, if you provide a spatial object in a
-geographical coordinate reference system, `sf` uses the new package `s2`
+geographical coordinate reference system, `sf` uses the `s2` package
 (Dunnington, Pebesma, Rubak 2020) for spherical geometry, which
 has functions for computing pretty much all measures, predicates
 and transformations _on the sphere_. This means:
