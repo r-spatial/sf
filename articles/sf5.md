@@ -169,7 +169,10 @@ projection](https://en.wikipedia.org/wiki/Equirectangular_projection)
 (also called *equidistant circular*), where at the center of the plot
 (or of the bounding box) one unit north equals one unit east.
 
-PROJ also lets you project data to this projection, and the plot of
+[`sf::st_transform()`](https://r-spatial.github.io/sf/reference/st_transform.md)
+also lets you project data to this projection using
+[proj-strings](https://proj.org/en/stable/usage/quickstart.html), and
+the plot of
 
 ``` r
 
@@ -285,8 +288,8 @@ aspect ratio similar to that of
 
 ### ggplot2
 
-contains a geom specially for simple feature objects, with support for
-graticule white lines in the background using
+Package `ggplot2` contains a geom specially for simple feature objects,
+with support for graticule white lines in the background using
 [`sf::st_graticule()`](https://r-spatial.github.io/sf/reference/st_graticule.md).
 
 ``` r
@@ -314,21 +317,6 @@ and sets of maps can be plotted as facet plots after rearranging the
 ``` r
 
 library(dplyr)
-```
-
-    ## 
-    ## Attaching package: 'dplyr'
-
-    ## The following objects are masked from 'package:stats':
-    ## 
-    ##     filter, lag
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     intersect, setdiff, setequal, union
-
-``` r
-
 library(tidyr)
 nc2 <- nc |> select(SID74, SID79, geom) |> gather(VAR, SID, -geom)
 ggplot() + 
@@ -386,6 +374,6 @@ ttm()
 tmap_last()
 ```
 
-A draft version of the book *Elegant and informative maps with tmap* by
-Martijn Tennekes and Jakub Nowosad is found at
-<https://r-tmap.github.io/>
+A draft version of the book *Spatial Data Visualization with tmap: A
+Practical Guide to Thematic Mapping in R* by Martijn Tennekes and Jakub
+Nowosad is found at <https://r-tmap.github.io/>

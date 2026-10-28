@@ -198,8 +198,9 @@ longitude and latitude, it chooses an <a href="https://en.wikipedia.org/wiki/Equ
 projection</a> (also called <em>equidistant circular</em>), where at the
 center of the plot (or of the bounding box) one unit north equals one
 unit east.</p>
-<p>PROJ also lets you project data to this projection, and the plot
-of</p>
+<p><code><a href="../reference/st_transform.html">sf::st_transform()</a></code> also lets you project data to this
+projection using <a href="https://proj.org/en/stable/usage/quickstart.html" class="external-link">proj-strings</a>,
+and the plot of</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span>, axes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="sf5_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="" width="700"></p>
@@ -286,9 +287,9 @@ ratio similar to that of <code><a href="../reference/plot.html">plot.sf()</a></c
 <div class="section level3">
 <h3 id="ggplot2">ggplot2<a class="anchor" aria-label="anchor" href="#ggplot2"></a>
 </h3>
-<p>contains a geom specially for simple feature objects, with support
-for graticule white lines in the background using
-<code><a href="../reference/st_graticule.html">sf::st_graticule()</a></code>.</p>
+<p>Package <code>ggplot2</code> contains a geom specially for simple
+feature objects, with support for graticule white lines in the
+background using <code><a href="../reference/st_graticule.html">sf::st_graticule()</a></code>.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">usa</span><span class="op">)</span></span></code></pre></div>
@@ -302,17 +303,8 @@ for graticule white lines in the background using
 <p>and sets of maps can be plotted as facet plots after rearranging the
 <code>sf</code> object, e.g. by</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Attaching package: 'dplyr'</span></span></code></pre>
-<pre><code><span><span class="co">## The following objects are masked from 'package:stats':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     filter, lag</span></span></code></pre>
-<pre><code><span><span class="co">## The following objects are masked from 'package:base':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     intersect, setdiff, setequal, union</span></span></code></pre>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
 <span><span class="va">nc2</span> <span class="op">&lt;-</span> <span class="va">nc</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">SID74</span>, <span class="va">SID79</span>, <span class="va">geom</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/gather.html" class="external-link">gather</a></span><span class="op">(</span><span class="va">VAR</span>, <span class="va">SID</span>, <span class="op">-</span><span class="va">geom</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">nc2</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">SID</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
@@ -327,7 +319,7 @@ for graticule white lines in the background using
 using package <code>leaflet</code> as a workhorse. Extensive examples
 are found <a href="https://r-spatial.github.io/mapview/" class="external-link">here</a>.</p>
 <p>An example is obtained by</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-spatial/mapview" class="external-link">mapview</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://r-spatial.github.io/mapview/reference/mapviewOptions.html" class="external-link">mapviewOptions</a></span><span class="op">(</span>fgb <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># needed when creating web pages</span></span>
 <span><span class="fu"><a href="https://r-spatial.github.io/mapview/reference/mapView.html" class="external-link">mapview</a></span><span class="op">(</span><span class="va">nc</span><span class="op">[</span><span class="st">"BIR74"</span><span class="op">]</span>, col.regions <span class="op">=</span> <span class="fu"><a href="../reference/plot.html">sf.colors</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span>, fgb <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
@@ -339,20 +331,21 @@ features by clicking on them.</p>
 </h3>
 <p>Package <code>tmap</code> is another package for plotting maps, with
 emphasis on production-ready maps.</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-tmap/tmap" class="external-link">tmap</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/qtm.html" class="external-link">qtm</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span></span></code></pre></div>
 <p><img src="sf5_files/figure-html/unnamed-chunk-22-1.png" class="r-plt" alt="" width="700"></p>
 <p><code>tmap</code> also has interactive leaflet maps:</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tmap_mode.html" class="external-link">tmap_mode</a></span><span class="op">(</span><span class="st">"view"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_shape.html" class="external-link">tm_shape</a></span><span class="op">(</span><span class="va">nc</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tm_polygons.html" class="external-link">tm_fill</a></span><span class="op">(</span><span class="st">"BIR74"</span>, palette <span class="op">=</span> <span class="fu"><a href="../reference/plot.html">sf.colors</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Replotting the last map in non-interactive mode is as simple as:</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tmap_mode.html" class="external-link">ttm</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://r-tmap.github.io/tmap/reference/tmap_last.html" class="external-link">tmap_last</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>A draft version of the book <em>Elegant and informative maps with
-tmap</em> by Martijn Tennekes and Jakub Nowosad is found at <a href="https://r-tmap.github.io/" class="external-link uri">https://r-tmap.github.io/</a></p>
+<p>A draft version of the book <em>Spatial Data Visualization with tmap:
+A Practical Guide to Thematic Mapping in R</em> by Martijn Tennekes and
+Jakub Nowosad is found at <a href="https://r-tmap.github.io/" class="external-link uri">https://r-tmap.github.io/</a></p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
