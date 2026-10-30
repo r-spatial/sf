@@ -4,7 +4,7 @@ test_that("st_as_sf(<ppp>) does not ignore CRS", {
   sf_obj = st_read(system.file("gpkg/b_pump.gpkg", package = "sf"), quiet = TRUE)
   ppp_obj = spatstat.geom::as.ppp(sf_obj)
   expect_equal(
-    st_as_sfc(ppp_obj, crs = st_crs(sf_obj)) |> st_crs(), 
+    st_as_sf(ppp_obj, crs = st_crs(sf_obj)) |> st_crs(), 
     st_crs(sf_obj)
   )
 })
