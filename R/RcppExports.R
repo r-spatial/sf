@@ -281,6 +281,10 @@ CPL_line_interpolate <- function(lines, dists, normalized) {
     .Call(`_sf_CPL_line_interpolate`, lines, dists, normalized)
 }
 
+CPL_grid_intersection_fractions <- function(p, geoms) {
+    .Call(`_sf_CPL_grid_intersection_fractions`, p, geoms)
+}
+
 CPL_hex_to_raw <- function(cx) {
     .Call(`_sf_CPL_hex_to_raw`, cx)
 }

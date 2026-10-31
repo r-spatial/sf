@@ -1,6 +1,8 @@
 # version 1.1-4
 
-* add `TIN`, `POLYHEDRALSURFACE` and `TRIANGLE` to vctrs methods; #2632
+* optimize `st_interpolate_aw()` for regular gridded source xor target geometries using `GEOS::GEOSGridIntersectionFractions()` (requiring GEOS >= 3.14); #2624, and also for the case where both `x` and `to` are regular or rectilinear (`stars`) rasters
+
+* add `TIN`, `POLYHEDRALSURFACE`, `TRIANGLE`, `CIRCULARSTRING`, `COMPOUNDCURVE`, `CURVE`, and `MULTICURVE` to vctrs methods; #2632
 
 * `st_combine()` preserves the precision of input object; #2618
 
