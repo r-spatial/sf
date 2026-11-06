@@ -347,7 +347,7 @@ PROJ6="no"
 PROJH="no"
 if test "${proj_config_ok}" = yes; then
   PROJ_VERSION=`${PROJ_CONFIG} --modversion`
-  PROJV1=`echo "${PROJ_VERSION}" | cut -c 1`
+  PROJV1=${PROJ_VERSION%%.*}
   if test "${PROJV1}" -ge 6; then
     PROJ6="yes"
     PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DHAVE_PROJ_H"
@@ -395,7 +395,7 @@ else
       PROJ_LIB_PATH=`${PROJ_CONFIG} --libs`
     fi
     AC_SUBST([PROJ_LIBS], ["${PROJ_LIB_PATH} ${INPKG_LIBS}"])
-	proj_version=`${PROJ_CONFIG} --modversion`
+	proj_version="${PROJ_VERSION}"
 	AC_MSG_NOTICE([PROJ: ${proj_version}])
   else
     PROJ_LIBS="${PKG_LIBS} -lproj"
@@ -459,9 +459,10 @@ fi
 
 #AC_MSG_NOTICE([PKG_LIBS: ${PKG_LIBS}])
 
-${CC} ${CFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
-
-proj_version=`./proj_conf_test`
+if test "${proj_config_ok}" != yes; then
+  ${CC} ${CFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
+  proj_version=`./proj_conf_test`
+fi
 
 AC_ARG_WITH([proj-share],
     AS_HELP_STRING([--with-proj-share=SHARE_PATH],[the location of proj metadata files]),
