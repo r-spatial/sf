@@ -90,13 +90,13 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 	}
 }
 
-#' Area-weighted interpolation or dasymetric mapping of polygon data
+#' Area-weighted interpolation (conservative regridding) or dasymetric mapping
 #'
-#' Area-weighted interpolation or dasymetric mapping of polygon data
+#' Area-weighted interpolation (conservative regridding) or dasymetric mapping
 #' @name interpolate_aw
-#' @param x object of class \code{sf}, for which we want to aggregate attributes
-#' @param to object of class \code{sf} or \code{sfc}, with the target geometries
-#' @param extensive logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population) and the sum is preserved, otherwise, spatially intensive (like population density) and the mean is preserved.
+#' @param x object of class \code{sf} or \code{stars}, for which we want to aggregate attributes
+#' @param to object of class \code{sf}, \code{sfc} or \code{stars}, with the target geometries
+#' @param extensive logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population) and their sum is preserved, otherwise, spatially intensive (like population density) and their mean is preserved.
 #' @param na.rm logical; if `TRUE` remove features with `NA` attributes from `x` before interpolating
 #' @param ... ignored
 #' @param keep_NA logical; if \code{TRUE}, return all features in \code{to}, if \code{FALSE} return only those with non-NA values (but with \code{row.names} the index corresponding to the feature in \code{to})
@@ -104,6 +104,8 @@ aggregate.sf = function(x, by, FUN, ..., do_union = TRUE, simplify = TRUE,
 #' when `FALSE` divide by the sum of the source areas.
 #' @param weights character; name of column in `to` that indicates (extensive) weights, to be used instead of areas, for redistributing attributes in `x`; currently only works for `extensive=TRUE`.
 #' @details if `extensive` is `TRUE` and `na.rm` is set to `TRUE`, geometries with `NA` are effectively treated as having zero attribute values. Dasymetric mapping is obtained when `weights` are specified.
+#'
+#' Handling of gridded data (\code{stars} objects) is efficient when GEOS >= 3.14
 #' @examples
 #' # example Area-weighted interpolation:
 #' nc = st_read(system.file("shape/nc.shp", package="sf"))
@@ -152,7 +154,20 @@ st_interpolate_aw = function(x, to, extensive, ...) UseMethod("st_interpolate_aw
 st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE, na.rm = FALSE,
 		include_non_intersected = FALSE, weights = character(0)) {
 
-	if (!inherits(to, "sf") && !inherits(to, "sfc")) {
+	if (inherits(to, "stars") && length(weights) == 0) { # use S7 multiple dispatch instead?
+		if (! requireNamespace("stars", quietly = TRUE))
+			stop("package stars required, please install it first")
+		if (stars::st_raster_type(to) == "regular" && 
+				compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.14.0") > -1) {
+			return(interpolate_aw_sf_stars(x, to, extensive, ..., keep_NA = keep_NA, na.rm = na.rm,
+						   include_non_intersected = include_non_intersected))
+		}
+	}
+
+	if (! all_constant(x))
+		warning("st_interpolate_aw assumes attributes are constant or uniform over areas of x")
+
+	if (!inherits(to, c("sf", "sfc"))) {
 		to <- try(st_as_sf(to))
 		if (inherits(to, "try-error"))
 			stop("st_interpolate_aw requires geometries in argument to")
@@ -161,12 +176,10 @@ st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE, na.rm = 
 		x = x[! apply(is.na(x), 1, any),]
 
 	if (length(weights)) {
-		stopifnot(length(weights) == 1, is.character(weights), inherits(to, "sf"), weights %in% names(to))
+		stopifnot(length(weights) == 1, is.character(weights), inherits(to, c("sf", "stars")), weights %in% names(to))
 		return(dasymetric(x, to[weights], extensive, keep_NA, include_non_intersected))
 	}
 
-	if (! all_constant(x))
-		warning("st_interpolate_aw assumes attributes are constant or uniform over areas of x")
 	i = st_intersection(st_geometry(x), st_geometry(to), dimensions = "polygon")
 	idx = attr(i, "idx")
 
@@ -211,22 +224,125 @@ st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE, na.rm = 
 	st_set_agr(df, "aggregate")
 }
 
+# compute the intersection fraction (of a) of pairs of stars raster cells
+intersection_fraction = function(st_a, st_b) {
+  ord = function(d) {
+    xo = if (d[[1]]$delta < 0) c(3,1) else c(1,3) # x-order small-large
+    yo = if (d[[2]]$delta < 0) c(4,2) else c(2,4) # y-order small-large
+	c(xo, yo)
+  }
+  a = st_coordinates(st_a, add_max = TRUE)[, ord(da <- st_dimensions(st_a))]
+  b = st_coordinates(st_b, add_max = TRUE)[, ord(st_dimensions(st_b))]
+  i = rep(seq_len(nrow(a)), nrow(b))
+  j = rep(seq_len(nrow(b)), each = nrow(a))
+  ovx = ifelse(a[i,1] > b[j,2] | a[i,2] < b[j,1], 0, pmin(a[i,2], b[j,2])- pmax(a[i,1],b[j,1]))
+  ovy = ifelse(a[i,3] > b[j,4] | a[i,4] < b[j,3], 0, pmin(a[i,4], b[j,4])- pmax(a[i,3],b[j,3]))
+  matrix(ovx * ovy, nrow(a), nrow(b)) / abs(da[[1]]$delta * da[[2]]$delta) # / cellsize(st_a)
+}
+
+
 #' @name interpolate_aw
 #' @export
 st_interpolate_aw.stars = function(x, to, extensive, ...) {
 	if (! requireNamespace("stars", quietly = TRUE))
 		stop("package stars required, please install it first")
-	ret = st_interpolate_aw(st_as_sf(x), to, extensive, ...)
-	geom = attr(ret, "sf_column")
-	dx = dim(x)
-	if (length(dx) > 2 && length(x) == 1 && length(ret) > 2) {
-		ret = merge(stars::st_as_stars(ret))
-		nd = names(stars::st_dimensions(x))
-		ret = stars::st_set_dimensions(ret, seq_along(dx), 
-								names = c(geom, paste0(nd[-(1:2)], collapse = ".")))
-		setNames(ret, names(x))
-	} else
+
+	stopifnot(st_crs(x) == st_crs(to))
+
+	weigh = function(a, w, extensive) {
+		d = dim(a)
+		dim(a) = c(prod(d[1:2]), prod(d[-(1:2)]))
+		ret = structure(t(w) %*% a, dim = c(ncol(w), ifelse(length(d) <= 2, 1, d[-(1:2)])))
+		cs = colSums(w)
+		ret[cs == 0.,] = NA
+		if (! extensive)
+			ret = ret / cs
 		ret
+	}
+
+	if (inherits(to, "stars") && stars::st_raster_type(to) %in% c("regular", "rectilinear") && 
+			stars::st_raster_type(x) %in% c("regular", "rectilinear")) {
+		w = intersection_fraction(x, to)
+		ret = lapply(x, weigh, w, extensive)
+		ret = lapply(ret, structure, dim = dim(to))
+		stars::st_as_stars(ret, dimensions = st_dimensions(to))
+	} else if (stars::st_raster_type(x) == "regular" && 
+			compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.14.0") > -1) {
+		if (isTRUE(st_is_longlat(x)))
+			warning("for longitude/latitude data and gridded geometry, st_interpolate_aw computes intersections assuming Cartesian coordinates; use st_as_sf(x) if this is not wanted")
+		# check x and y are first two dimensions:
+		if (!identical(match(attr(stars::st_dimensions(x), "raster")$dimensions, names(dim(x))), 1:2))
+			stop("raster dimensions need to be at position 1 and 2; use aperm to rearrange")
+		# we HAVE_GEOS_3_14_0
+		if (!inherits(to, "sf") && !inherits(to, "sfc")) { # the stars-stars is for another day
+			to <- try(st_as_sf(to))
+			if (inherits(to, "try-error"))
+				stop("st_interpolate_aw requires geometries in argument to")
+		}
+		if (stars::st_dimensions(x)[[2]]$delta > 0)
+			stop("only implemented for negative N-S cellsize")
+		w = CPL_grid_intersection_fractions(c(st_bbox(x), dim(x)[1:2]), st_geometry(to))
+		ret = lapply(x, weigh, w, extensive)
+		dm = stars::st_dimensions(x)
+		dm[[1]] = NULL
+		attr(dm, "raster")$dimensions = c(NA_character_, NA_character_)
+		g = st_geometry(to)
+		dm[[1]] = structure(list(from = 1L, to = length(g), offset = NA_real_, delta = NA_real_,
+						 	refsys = st_crs(g), point = any(st_dimension(g) > 0), values = g), class = "dimension")
+		names(dm)[1] = "geometry"
+		stars::st_as_stars(ret, dimensions = dm)
+	} else { # convert stars to sf...
+		ret = st_interpolate_aw(st_as_sf(x), to, extensive, ...)
+		geom = attr(ret, "sf_column")
+		dx = dim(x)
+		if (length(dx) > 2 && length(x) == 1 && length(ret) > 2) {
+			ret = merge(stars::st_as_stars(ret))
+			nd = names(stars::st_dimensions(x))
+			ret = stars::st_set_dimensions(ret, seq_along(dx), 
+									names = c(geom, paste0(nd[-(1:2)], collapse = ".")))
+			setNames(ret, names(x))
+		} else
+			ret
+	}
+}
+
+interpolate_aw_sf_stars = function(x, to, extensive, ..., keep_NA = keep_NA, na.rm = na.rm,
+		include_non_intersected = include_non_intersected) {
+
+	# todo: deal with include_non_intersected...
+	stopifnot(inherits(to, "stars"), inherits(x, "sf"), st_crs(x) == st_crs(to))
+	if (isTRUE(st_is_longlat(x)))
+		warning("for longitude/latitude data and gridded geometry, st_interpolate_aw computes intersections assuming Cartesian coordinates; use st_as_sf(to) if this is unwanted")
+
+	# check x and y are first two dimensions:
+	if (!identical(match(attr(stars::st_dimensions(to), "raster")$dimensions, names(dim(to))), 1:2))
+		stop("raster dimensions of to need to be at position 1 and 2; use aperm to rearrange")
+	if (stars::st_dimensions(to)[[2]]$delta > 0)
+		stop("only implemented for negative N-S cellsize")
+	w = CPL_grid_intersection_fractions(c(st_bbox(to), dim(to)), st_geometry(x)) # n_cells x n_geoms
+	g = st_geometry(x)
+	x = as.matrix(st_set_geometry(x, NULL)) # n_geoms x n_attributes
+	rs = rowSums(w)
+	ret = if (extensive) {
+		cellsize = as.vector(st_area(to)[[1]])
+		if (inherits(cellsize, "units"))
+			cellsize = units::drop_units(cellsize)
+		w %*% (x / st_area(g)) * cellsize # n_cells x n_attributes
+	} else
+		w %*% x # n_cells x n_attributes
+	dim(ret) = c(nrow(w), ncol(x)) # needed for the case of ncol(x) == 1
+	ret[rs == 0.0, ] = NA
+	if (!extensive)
+		ret = ret / rs
+
+	# redimension:
+	dim(ret) = c(dim(to)[1:2], ncol(x))
+
+	dm = stars::st_dimensions(to)[1:2]
+	dm[["attribute"]] = structure(list(from = 1L, to = ncol(x), offset = NA_real_, delta = NA_real_,
+						 refsys = NA_character_, point = any(st_dimension(g) > 0), 
+						 values = dimnames(x)[[2]]), class = "dimension")
+	stars::st_as_stars(list(attributes = ret), dimensions = dm)
 }
 
 dasymetric = function(x, to, extensive, keep_NA, include_non_intersected) {
