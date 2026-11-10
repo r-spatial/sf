@@ -37,12 +37,12 @@ check_spatstat <- function(pkg, X = NULL) {
 st_as_sf.ppp = function(x, ...) {
 	check_spatstat("spatstat.geom")
 	# window:
-	win = st_sf(label = "window", geom = st_as_sfc(spatstat.geom::as.owin(x)))
+	win = st_sf(label = "window", geom = st_as_sfc(spatstat.geom::as.owin(x)), ...)
 
 	# points:
 	m = as.matrix(data.frame(x$x, x$y))
 	pointwork = st_sfc(lapply(seq_len(NROW(m)), function(i) st_point(m[i,])))
-	points_sf = st_sf(label = rep("point", NROW(m)), geom = pointwork)
+	points_sf = st_sf(label = rep("point", NROW(m)), geom = pointwork, ...)
 
 	# merge window and points:
 	ret = rbind(win, points_sf)
@@ -75,7 +75,7 @@ st_as_sf.psp = function(x, ...) {
 	win = st_as_sfc(spatstat.geom::as.owin(x))[[1]]
 
 	label = c("window", rep("segment", NROW(m)))
-	ret = st_sf(label = label, geom = st_sfc(c(list(win), lst1)))
+	ret = st_sf(label = label, geom = st_sfc(c(list(win), lst1)), ...)
 	if (spatstat.geom::is.marked(x)) { # add marks:
 		m = as.data.frame(spatstat.geom::marks(x))
 		cbind.sf(m[c(NA, seq_len(nrow(m))), , drop = FALSE], ret)
@@ -107,10 +107,10 @@ st_as_sfc.psp <- function(x, ...) {
 st_as_sf.lpp = function(x, ...) {
 	check_spatstat("spatstat.linnet")
 	# lines, polygon:
-	linework_sf = st_as_sf(spatstat.geom::as.psp(spatstat.geom::domain(x)))
+	linework_sf = st_as_sf(spatstat.geom::as.psp(spatstat.geom::domain(x)), ...)
 	# points:
 	m = as.matrix(as.data.frame(x$data)[1:2])
-	pointwork = st_sfc(lapply(seq_len(NROW(m)), function(i) st_point(m[i,])))
+	pointwork = st_sfc(lapply(seq_len(NROW(m)), function(i) st_point(m[i,])), ...)
 	sf = rbind(linework_sf, st_sf(label = rep("point", NROW(m)), geom = pointwork))
 	# de-select point coordinates
 	m = as.data.frame(x$data)[c(rep(NA,nrow(linework_sf)),seq_len(nrow(m))), -(1:2)]

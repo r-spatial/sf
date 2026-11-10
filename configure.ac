@@ -347,7 +347,7 @@ PROJ6="no"
 PROJH="no"
 if test "${proj_config_ok}" = yes; then
   PROJ_VERSION=`${PROJ_CONFIG} --modversion`
-  PROJV1=`echo "${PROJ_VERSION}" | cut -c 1`
+  PROJV1=`echo "${PROJ_VERSION}" | cut -d "." -f 1`
   if test "${PROJV1}" -ge 6; then
     PROJ6="yes"
     PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DHAVE_PROJ_H"
