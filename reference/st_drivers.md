@@ -39,6 +39,7 @@ support](https://gdal.org/en/latest/drivers/vector/index.html)
 # The following driver lists depend on the GDAL setup and platform used:
 st_drivers()
 #>                          name
+#> MEM                       MEM
 #> FITS                     FITS
 #> PCIDSK                 PCIDSK
 #> netCDF                 netCDF
@@ -50,15 +51,13 @@ st_drivers()
 #> BAG                       BAG
 #> EEDA                     EEDA
 #> OGCAPI                 OGCAPI
+#> GDALG                   GDALG
 #> ESRI Shapefile ESRI Shapefile
 #> MapInfo File     MapInfo File
-#> UK .NTF               UK .NTF
 #> LVBAG                   LVBAG
-#> OGR_SDTS             OGR_SDTS
 #> S57                       S57
 #> DGN                       DGN
 #> OGR_VRT               OGR_VRT
-#> Memory                 Memory
 #> CSV                       CSV
 #> NAS                       NAS
 #> GML                       GML
@@ -78,14 +77,12 @@ st_drivers()
 #> WAsP                     WAsP
 #> PGeo                     PGeo
 #> MSSQLSpatial     MSSQLSpatial
-#> OGR_OGDI             OGR_OGDI
 #> PostgreSQL         PostgreSQL
 #> MySQL                   MySQL
 #> OpenFileGDB       OpenFileGDB
 #> DXF                       DXF
 #> CAD                       CAD
 #> FlatGeobuf         FlatGeobuf
-#> Geoconcept         Geoconcept
 #> GeoRSS                 GeoRSS
 #> VFK                       VFK
 #> PGDUMP                 PGDUMP
@@ -96,7 +93,6 @@ st_drivers()
 #> OAPIF                   OAPIF
 #> SOSI                     SOSI
 #> EDIGEO                 EDIGEO
-#> SVG                       SVG
 #> Idrisi                 Idrisi
 #> XLS                       XLS
 #> ODS                       ODS
@@ -117,31 +113,32 @@ st_drivers()
 #> GTFS                     GTFS
 #> PMTiles               PMTiles
 #> JSONFG                 JSONFG
-#> TIGER                   TIGER
+#> MiraMonVector   MiraMonVector
+#> ADBC                     ADBC
 #> AVCBin                 AVCBin
 #> AVCE00                 AVCE00
+#> AIVector             AIVector
 #> HTTP                     HTTP
 #>                                                                    long_name
+#> MEM                     In Memory raster, vector and multidimensional raster
 #> FITS                                         Flexible Image Transport System
 #> PCIDSK                                                  PCIDSK Database File
 #> netCDF                                            Network Common Data Format
 #> PDS4                                            NASA Planetary Data System 4
 #> VICAR                                                        MIPL VICAR file
-#> JP2OpenJPEG                       JPEG-2000 driver based on OpenJPEG library
+#> JP2OpenJPEG                    JPEG-2000 driver based on JP2OpenJPEG library
 #> PDF                                                           Geospatial PDF
 #> MBTiles                                                              MBTiles
 #> BAG                                               Bathymetry Attributed Grid
 #> EEDA                                                   Earth Engine Data API
 #> OGCAPI                                                                OGCAPI
+#> GDALG                                         GDAL Streamed Algorithm driver
 #> ESRI Shapefile                                                ESRI Shapefile
 #> MapInfo File                                                    MapInfo File
-#> UK .NTF                                                              UK .NTF
 #> LVBAG                                            Kadaster LV BAG Extract 2.0
-#> OGR_SDTS                                                                SDTS
 #> S57                                                           IHO S-57 (ENC)
 #> DGN                                                         Microstation DGN
 #> OGR_VRT                                             VRT - Virtual Datasource
-#> Memory                                                                Memory
 #> CSV                                             Comma Separated Value (.csv)
 #> NAS                                                              NAS - ALKIS
 #> GML                                          Geography Markup Language (GML)
@@ -157,18 +154,16 @@ st_drivers()
 #> OGR_GMT                                             GMT ASCII Vectors (.gmt)
 #> GPKG                                                              GeoPackage
 #> SQLite                                                   SQLite / Spatialite
-#> ODBC                                                                        
+#> ODBC                                       Open Database Connectivity (ODBC)
 #> WAsP                                                        WAsP .map format
 #> PGeo                                               ESRI Personal GeoDatabase
 #> MSSQLSpatial                           Microsoft SQL Server Spatial Database
-#> OGR_OGDI                                       OGDI Vectors (VPF, VMAP, DCW)
 #> PostgreSQL                                                PostgreSQL/PostGIS
 #> MySQL                                                                  MySQL
-#> OpenFileGDB                                                     ESRI FileGDB
+#> OpenFileGDB                         ESRI FileGeodatabase (using OpenFileGDB)
 #> DXF                                                              AutoCAD DXF
 #> CAD                                                           AutoCAD Driver
 #> FlatGeobuf                                                        FlatGeobuf
-#> Geoconcept                                                        Geoconcept
 #> GeoRSS                                                                GeoRSS
 #> VFK                                     Czech Cadastral Exchange Data Format
 #> PGDUMP                                                   PostgreSQL SQL dump
@@ -179,10 +174,9 @@ st_drivers()
 #> OAPIF                                                     OGC API - Features
 #> SOSI                                                 Norwegian SOSI Standard
 #> EDIGEO                                         French EDIGEO exchange format
-#> SVG                                                 Scalable Vector Graphics
 #> Idrisi                                                  Idrisi Vector (.vct)
 #> XLS                                                          MS Excel format
-#> ODS                     Open Document/ LibreOffice / OpenOffice Spreadsheet 
+#> ODS                      Open Document/ LibreOffice / OpenOffice Spreadsheet
 #> XLSX                                          MS Office Open XML spreadsheet
 #> Elasticsearch                                                 Elastic Search
 #> Carto                                                                  Carto
@@ -200,11 +194,14 @@ st_drivers()
 #> GTFS                                      General Transit Feed Specification
 #> PMTiles                                                       ProtoMap Tiles
 #> JSONFG                                      OGC Features and Geometries JSON
-#> TIGER                                                 U.S. Census TIGER/Line
+#> MiraMonVector                             MiraMon Vectors (.pol, .arc, .pnt)
+#> ADBC                                             Arrow Database Connectivity
 #> AVCBin                                              Arc/Info Binary Coverage
 #> AVCE00                                         Arc/Info E00 (ASCII) Coverage
+#> AIVector                       Artificial Intelligence powered vector driver
 #> HTTP                                                   HTTP Fetching Wrapper
 #>                write  copy is_raster is_vector   vsi
+#> MEM             TRUE FALSE      TRUE      TRUE FALSE
 #> FITS            TRUE FALSE      TRUE      TRUE FALSE
 #> PCIDSK          TRUE FALSE      TRUE      TRUE  TRUE
 #> netCDF          TRUE  TRUE      TRUE      TRUE  TRUE
@@ -216,15 +213,13 @@ st_drivers()
 #> BAG             TRUE  TRUE      TRUE      TRUE  TRUE
 #> EEDA           FALSE FALSE     FALSE      TRUE FALSE
 #> OGCAPI         FALSE FALSE      TRUE      TRUE  TRUE
+#> GDALG          FALSE FALSE      TRUE      TRUE  TRUE
 #> ESRI Shapefile  TRUE FALSE     FALSE      TRUE  TRUE
 #> MapInfo File    TRUE FALSE     FALSE      TRUE  TRUE
-#> UK .NTF        FALSE FALSE     FALSE      TRUE  TRUE
 #> LVBAG          FALSE FALSE     FALSE      TRUE  TRUE
-#> OGR_SDTS       FALSE FALSE     FALSE      TRUE  TRUE
 #> S57             TRUE FALSE     FALSE      TRUE  TRUE
 #> DGN             TRUE FALSE     FALSE      TRUE  TRUE
 #> OGR_VRT        FALSE FALSE     FALSE      TRUE  TRUE
-#> Memory          TRUE FALSE     FALSE      TRUE FALSE
 #> CSV             TRUE FALSE     FALSE      TRUE  TRUE
 #> NAS            FALSE FALSE     FALSE      TRUE  TRUE
 #> GML             TRUE FALSE     FALSE      TRUE  TRUE
@@ -235,8 +230,8 @@ st_drivers()
 #> GeoJSONSeq      TRUE FALSE     FALSE      TRUE  TRUE
 #> ESRIJSON       FALSE FALSE     FALSE      TRUE  TRUE
 #> TopoJSON       FALSE FALSE     FALSE      TRUE  TRUE
-#> Interlis 1      TRUE FALSE     FALSE      TRUE  TRUE
-#> Interlis 2      TRUE FALSE     FALSE      TRUE  TRUE
+#> Interlis 1     FALSE FALSE     FALSE      TRUE  TRUE
+#> Interlis 2     FALSE FALSE     FALSE      TRUE  TRUE
 #> OGR_GMT         TRUE FALSE     FALSE      TRUE  TRUE
 #> GPKG            TRUE  TRUE      TRUE      TRUE  TRUE
 #> SQLite          TRUE FALSE     FALSE      TRUE  TRUE
@@ -244,14 +239,12 @@ st_drivers()
 #> WAsP            TRUE FALSE     FALSE      TRUE  TRUE
 #> PGeo           FALSE FALSE     FALSE      TRUE FALSE
 #> MSSQLSpatial    TRUE FALSE     FALSE      TRUE FALSE
-#> OGR_OGDI       FALSE FALSE     FALSE      TRUE FALSE
 #> PostgreSQL      TRUE FALSE     FALSE      TRUE FALSE
 #> MySQL           TRUE FALSE     FALSE      TRUE FALSE
 #> OpenFileGDB     TRUE FALSE      TRUE      TRUE  TRUE
 #> DXF             TRUE FALSE     FALSE      TRUE  TRUE
 #> CAD            FALSE FALSE      TRUE      TRUE  TRUE
 #> FlatGeobuf      TRUE FALSE     FALSE      TRUE  TRUE
-#> Geoconcept      TRUE FALSE     FALSE      TRUE  TRUE
 #> GeoRSS          TRUE FALSE     FALSE      TRUE  TRUE
 #> VFK            FALSE FALSE     FALSE      TRUE FALSE
 #> PGDUMP          TRUE FALSE     FALSE      TRUE  TRUE
@@ -262,7 +255,6 @@ st_drivers()
 #> OAPIF          FALSE FALSE     FALSE      TRUE FALSE
 #> SOSI           FALSE FALSE     FALSE      TRUE FALSE
 #> EDIGEO         FALSE FALSE     FALSE      TRUE  TRUE
-#> SVG            FALSE FALSE     FALSE      TRUE  TRUE
 #> Idrisi         FALSE FALSE     FALSE      TRUE  TRUE
 #> XLS            FALSE FALSE     FALSE      TRUE FALSE
 #> ODS             TRUE FALSE     FALSE      TRUE  TRUE
@@ -283,15 +275,21 @@ st_drivers()
 #> GTFS           FALSE FALSE     FALSE      TRUE  TRUE
 #> PMTiles         TRUE FALSE     FALSE      TRUE  TRUE
 #> JSONFG          TRUE FALSE     FALSE      TRUE  TRUE
-#> TIGER          FALSE FALSE     FALSE      TRUE  TRUE
+#> MiraMonVector   TRUE FALSE     FALSE      TRUE  TRUE
+#> ADBC           FALSE FALSE     FALSE      TRUE FALSE
 #> AVCBin         FALSE FALSE     FALSE      TRUE  TRUE
 #> AVCE00         FALSE FALSE     FALSE      TRUE  TRUE
+#> AIVector       FALSE FALSE     FALSE      TRUE FALSE
 #> HTTP           FALSE FALSE      TRUE      TRUE FALSE
 st_drivers("raster", "GeoT")
-#>        name                         long_name write copy is_raster is_vector
-#> GTiff GTiff                           GeoTIFF  TRUE TRUE      TRUE     FALSE
-#> COG     COG Cloud optimized GeoTIFF generator FALSE TRUE      TRUE     FALSE
-#>        vsi
-#> GTiff TRUE
-#> COG   TRUE
+#>                name                               long_name write  copy
+#> SNAP_TIFF SNAP_TIFF Sentinel Application Processing GeoTIFF FALSE FALSE
+#> GTiff         GTiff                                 GeoTIFF  TRUE  TRUE
+#> COG             COG       Cloud optimized GeoTIFF generator FALSE  TRUE
+#> LIBERTIFF LIBERTIFF       GeoTIFF (using LIBERTIFF library) FALSE FALSE
+#>           is_raster is_vector  vsi
+#> SNAP_TIFF      TRUE     FALSE TRUE
+#> GTiff          TRUE     FALSE TRUE
+#> COG            TRUE     FALSE TRUE
+#> LIBERTIFF      TRUE     FALSE TRUE
 ```

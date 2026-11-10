@@ -492,7 +492,7 @@ if (require(lwgeom, quietly = TRUE)) {
  seg = st_segmentize(sf, units::set_units(0.01, rad))
  nrow(seg$geom[[1]])
 }
-#> Linking to liblwgeom 3.0.0beta1 r16016, GEOS 3.12.1, PROJ 9.4.0
+#> Linking to liblwgeom 3.0.0beta1 r16016, GEOS 3.14.1, PROJ 9.7.1
 #> 
 #> Attaching package: ‘lwgeom’
 #> The following objects are masked from ‘package:sf’:

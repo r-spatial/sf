@@ -34,7 +34,7 @@ Examples of the first three types are:
 ``` r
 
 library(sf)
-## Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
+## Linking to GEOS 3.14.1, GDAL 3.12.2, PROJ 9.7.1; sf_use_s2() is TRUE
 suppressPackageStartupMessages(library(dplyr))
 st_point(c(1,1)) |> st_cast("MULTIPOINT")
 ## MULTIPOINT ((1 1))
@@ -245,6 +245,7 @@ st_crs(s1)
 ##         MEMBER["World Geodetic System 1984 (G1674)"],
 ##         MEMBER["World Geodetic System 1984 (G1762)"],
 ##         MEMBER["World Geodetic System 1984 (G2139)"],
+##         MEMBER["World Geodetic System 1984 (G2296)"],
 ##         ELLIPSOID["WGS 84",6378137,298.257223563,
 ##             LENGTHUNIT["metre",1]],
 ##         ENSEMBLEACCURACY[2.0]],

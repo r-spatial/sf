@@ -36,7 +36,7 @@ reports which one is active:
 ``` r
 
 library(sf)
-## Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
+## Linking to GEOS 3.14.1, GDAL 3.12.2, PROJ 9.7.1; sf_use_s2() is TRUE
 demo(nc, ask = FALSE, echo = FALSE)
 nc$geom2 = st_centroid(st_geometry(nc))
 print(nc, n = 2)
