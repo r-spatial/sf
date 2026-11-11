@@ -340,9 +340,6 @@ fi
 # for CPPFLAGS we will superfluously double R's flags
 # since we'll set PKG_CPPFLAGS with this, but that shouldn't hurt
 
-AC_ARG_WITH([proj-api],
-    AS_HELP_STRING([--with-proj-api=yes/no],[use the deprecated proj_api.h even when PROJ 6 is available; default no]),
-               [proj_api=$withval])
 PROJ6="no"
 PROJH="no"
 if test "${proj_config_ok}" = yes; then
@@ -366,20 +363,13 @@ else
     if test "${PROJH}" = yes; then
       PROJ6="yes"
       PROJ_CPPFLAGS="${PROJ_CPPFLAGS} -DHAVE_PROJ_H"
+    else
+      AC_MSG_ERROR([proj.h not found; PROJ >= 6.0.0 is required.])
     fi
   fi
 fi
 
 CPPFLAGS="${INCPPFLAGS} ${PKG_CPPFLAGS} ${PROJ_CPPFLAGS}"
-
-if test "${PROJH}" = no
-then
-  proj4ok=yes
-  AC_CHECK_HEADERS(proj_api.h,,proj4ok=no)
-  if test "${proj4ok}" = no; then
-     AC_MSG_ERROR([proj_api.h not found in standard or given locations.])
-  fi
-fi
 
 # dnl ditto for a library path
 AC_ARG_WITH([proj-lib],
@@ -404,23 +394,6 @@ fi
 
 LIBS="${PROJ_LIBS} ${INLIBS} ${PKG_LIBS}"
 
-if test "${PROJH}" = no; then
-  proj4ok=yes
-  AC_CHECK_LIB(proj,pj_init_plus,,proj4ok=no)
-  if test "${proj4ok}" = no; then
-     AC_MSG_ERROR([libproj not found in standard or given locations. ${GENERIC_INSTALL_MESSAGE}])
-  fi
-[cat > proj_conf_test.c <<_EOCONF
-#include <stdio.h>
-#include <stdlib.h>
-#include <proj_api.h>
-
-int main(void) {
-    printf("%d\n", PJ_VERSION);
-    exit(0);
-}
-_EOCONF]
-else
 [cat > proj_conf_test.cpp <<_EOCONF
 #include <stdio.h>
 #include <stdlib.h>
@@ -431,19 +404,19 @@ int main(void) {
     exit(0);
 }
 _EOCONF]
-  #AC_CHECK_LIB(proj,proj_context_create,,proj6ok=no)
-  AC_MSG_CHECKING(PROJ: checking whether PROJ and sqlite3 are available for linking:)
-  ${CXX} ${CPPFLAGS} -o proj_conf_test proj_conf_test.cpp ${LIBS} $SQLITE3_LIBS -lsqlite3 2> errors.txt
-  if test `echo $?` -ne 0 ; then
-    proj6ok=no
-    AC_MSG_RESULT(no)
-  else
-    proj6ok=yes
-    AC_MSG_RESULT(yes)
-  fi
-  if test "${proj6ok}" = no; then
-     AC_MSG_ERROR([libproj or sqlite3 not found in standard or given locations. ${GENERIC_INSTALL_MESSAGE}])
-  fi
+#AC_CHECK_LIB(proj,proj_context_create,,proj6ok=no)
+AC_MSG_CHECKING(PROJ: checking whether PROJ and sqlite3 are available for linking:)
+${CXX} ${CPPFLAGS} -o proj_conf_test proj_conf_test.cpp ${LIBS} $SQLITE3_LIBS -lsqlite3 2> errors.txt
+if test `echo $?` -ne 0 ; then
+  proj6ok=no
+  AC_MSG_RESULT(no)
+else
+  proj6ok=yes
+  AC_MSG_RESULT(yes)
+fi
+if test "${proj6ok}" = no; then
+  AC_MSG_ERROR([libproj or sqlite3 not found in standard or given locations. ${GENERIC_INSTALL_MESSAGE}])
+fi
 
 [cat > proj_conf_test.c <<_EOCONF
 #include <stdio.h>
@@ -455,7 +428,6 @@ int main(void) {
     exit(0);
 }
 _EOCONF]
-fi
 
 #AC_MSG_NOTICE([PKG_LIBS: ${PKG_LIBS}])
 
@@ -469,168 +441,6 @@ AC_ARG_WITH([proj-share],
 if test [ -n "$proj_share_path" ] ; then
     AC_MSG_NOTICE([PROJ_LIB: ${proj_share_path}])
 fi
-
-if test ${PROJ6} = "no"; then
-
-[cat > proj_conf_test.c <<_EOCONF
-#include <stdio.h>
-#include <proj_api.h>
-#if PJ_VERSION <= 480
-FILE *pj_open_lib(projCtx, const char *, const char *);
-#endif
-
-int main(void) {
-#if PJ_VERSION <= 480
-    FILE *fp;
-#else
-    PAFile fp;
-#endif
-    projCtx ctx;
-    ctx = pj_get_default_ctx();
-    fp = pj_open_lib(ctx, "epsg", "rb");
-    if (fp == NULL) exit(1);
-#if PJ_VERSION <= 480
-    fclose(fp);
-#else
-    pj_ctx_fclose(ctx, fp);
-#endif
-    exit(0);
-}
-_EOCONF]
-
-${CC} ${CFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
-if test [ -n "$proj_share_path" ] ; then
-  PROJ_LIB="${proj_share_path}" ./proj_conf_test
-  proj_share=`echo $?`
-else
-  ./proj_conf_test
-  proj_share=`echo $?`
-fi
-
-AC_MSG_CHECKING(PROJ: epsg found and readable)
-if test ${proj_share} -eq 1 ; then
-    AC_MSG_RESULT(no)
-    STOP="stop"
-else
-    AC_MSG_RESULT(yes)
-fi
-
-rm -f proj_conf_test.c proj_conf_test
-
-if test "$STOP" = "stop" ; then
-    echo "Error: proj/epsg not found"
-    echo "Either install missing proj support files, for example"
-    echo "the proj-nad and proj-epsg RPMs on systems using RPMs,"
-    echo "or if installed but not autodetected, set PROJ_LIB to the"
-    echo "correct path, and if need be use the --with-proj-share="
-    echo "configure argument."
-    exit 1
-fi
-
-else # proj >= 6
-
-if test "${PROJH}" = no; then
-
-[cat > proj_conf_test.c <<_EOCONF
-#include <stdio.h>
-#include <proj_api.h>
-
-int main(void) {
-    PAFile fp;
-    projCtx ctx;
-    ctx = pj_get_default_ctx();
-    fp = pj_open_lib(ctx, "proj.db", "rb");
-    if (fp == NULL) exit(1);
-    pj_ctx_fclose(ctx, fp);
-    exit(0);
-}
-_EOCONF]
-
-${CC} ${CFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
-if test [ -n "$proj_share_path" ] ; then
-  PROJ_LIB="${proj_share_path}" ./proj_conf_test
-  proj_share=`echo $?`
-else
-  ./proj_conf_test
-  proj_share=`echo $?`
-fi
-
-AC_MSG_CHECKING(PROJ: proj.db found and readable)
-if test ${proj_share} -eq 1 ; then
-    AC_MSG_RESULT(no)
-    STOP="stop"
-else
-    AC_MSG_RESULT(yes)
-fi
-
-rm -f proj_conf_test.c proj_conf_test
-
-if test "$STOP" = "stop" ; then
-    echo "Error: proj/proj.db not found"
-    echo "Either install missing proj support files, set PROJ_LIB to the"
-    echo "correct path, and if need be use the --with-proj-share="
-    echo "configure argument."
-    exit 1
-fi
-
-[cat > proj_conf_test.c <<_EOCONF
-#include <stdio.h>
-#include <proj_api.h>
-#if PJ_VERSION <= 480
-FILE *pj_open_lib(projCtx, const char *, const char *);
-#endif
-
-int main(void) {
-#if PJ_VERSION <= 480
-    FILE *fp;
-#else
-    PAFile fp;
-#endif
-    projCtx ctx;
-    ctx = pj_get_default_ctx();
-    fp = pj_open_lib(ctx, "conus", "rb");
-    if (fp == NULL) exit(1);
-#if PJ_VERSION <= 480
-    fclose(fp);
-#else
-    pj_ctx_fclose(ctx, fp);
-#endif
-    exit(0);
-}
-_EOCONF]
-
-${CC} ${CFLAGS} -o proj_conf_test proj_conf_test.c ${PROJ_LIBS}
-if test [ -n "$proj_share_path" ] ; then
-  PROJ_LIB="${proj_share_path}" ./proj_conf_test
-  proj_share=`echo $?`
-else
-  ./proj_conf_test
-  proj_share=`echo $?`
-fi
-
-AC_MSG_CHECKING(PROJ: conus found and readable)
-if test ${proj_share} -eq 1 ; then
-    WARN="warn"
-    AC_MSG_RESULT(no)
-else
-    AC_MSG_RESULT(yes)
-fi
-
-rm -f proj_conf_test.c proj_conf_test
-
-if test "$WARN" = "warn" ; then
-    echo "Note: proj/conus not found"
-    echo "No support available in PROJ4 for NAD grid datum transformations"
-    echo "If required, consider re-installing from source with the contents"
-    echo "of proj-datumgrid-1.<latest>.zip from http://download.osgeo.org/proj/ in nad/."
-fi
-
-fi # PROJH = no
-
-fi # proj >= 6
-
-
-
 
 #
 # GEOS:

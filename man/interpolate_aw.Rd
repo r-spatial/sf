@@ -5,7 +5,7 @@
 \alias{st_interpolate_aw}
 \alias{st_interpolate_aw.sf}
 \alias{st_interpolate_aw.stars}
-\title{Area-weighted interpolation or dasymetric mapping of polygon data}
+\title{Area-weighted interpolation (conservative regridding) or dasymetric mapping}
 \usage{
 st_interpolate_aw(x, to, extensive, ...)
 
@@ -23,11 +23,11 @@ st_interpolate_aw(x, to, extensive, ...)
 \method{st_interpolate_aw}{stars}(x, to, extensive, ...)
 }
 \arguments{
-\item{x}{object of class \code{sf}, for which we want to aggregate attributes}
+\item{x}{object of class \code{sf} or \code{stars}, for which we want to aggregate attributes}
 
-\item{to}{object of class \code{sf} or \code{sfc}, with the target geometries}
+\item{to}{object of class \code{sf}, \code{sfc} or \code{stars}, with the target geometries}
 
-\item{extensive}{logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population) and the sum is preserved, otherwise, spatially intensive (like population density) and the mean is preserved.}
+\item{extensive}{logical; if TRUE, the attribute variables are assumed to be spatially extensive (like population) and their sum is preserved, otherwise, spatially intensive (like population density) and their mean is preserved.}
 
 \item{...}{ignored}
 
@@ -41,10 +41,12 @@ when \code{FALSE} divide by the sum of the source areas.}
 \item{weights}{character; name of column in \code{to} that indicates (extensive) weights, to be used instead of areas, for redistributing attributes in \code{x}; currently only works for \code{extensive=TRUE}.}
 }
 \description{
-Area-weighted interpolation or dasymetric mapping of polygon data
+Area-weighted interpolation (conservative regridding) or dasymetric mapping
 }
 \details{
 if \code{extensive} is \code{TRUE} and \code{na.rm} is set to \code{TRUE}, geometries with \code{NA} are effectively treated as having zero attribute values. Dasymetric mapping is obtained when \code{weights} are specified.
+
+Handling of gridded data (\code{stars} objects) is efficient when GEOS >= 3.14
 }
 \examples{
 # example Area-weighted interpolation:

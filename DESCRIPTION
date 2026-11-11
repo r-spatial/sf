@@ -123,7 +123,7 @@ Config/needs/coverage: XML
 Config/roxygen2/markdown: TRUE
 Config/roxygen2/version: 8.1.0
 SystemRequirements: GDAL (>= 2.0.1), GEOS (>= 3.4.0),
-    PROJ (>= 4.8.0), sqlite3
+    PROJ (>= 6.0.0), sqlite3
 Collate: 
     'RcppExports.R'
     'init.R'
