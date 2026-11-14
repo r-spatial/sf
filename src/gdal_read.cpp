@@ -18,6 +18,8 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, bool int64
 	int n = poFDefn->GetFieldCount() + poFDefn->GetGeomFieldCount() + fid_column.size();
 	Rcpp::List out(n);
 	Rcpp::CharacterVector names(n);
+	Rcpp::CharacterVector domains(poFDefn->GetFieldCount()); // field domain names
+	Rcpp::CharacterVector attr_names(poFDefn->GetFieldCount()); // names of attributes
 	for (int i = 0; i < poFDefn->GetFieldCount(); i++) {
 		OGRFieldDefn *poFieldDefn = poFDefn->GetFieldDefn(i);
 		switch (poFieldDefn->GetType()) {
@@ -63,7 +65,14 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, bool int64
 				break;
 		}
 		names[i] = poFieldDefn->GetNameRef();
+		attr_names[i] = poFieldDefn->GetNameRef();
+		domains[i] = NA_STRING;
+#if GDAL_VERSION_NUM >= 3030000
+		if (! poFieldDefn->GetDomainName().empty())
+			domains[i] = poFieldDefn->GetDomainName();
+#endif
 	}
+	domains.attr("names") = attr_names;
 
 	if (fid_column.size())
 		names[ poFDefn->GetFieldCount() ] = fid_column[0];
@@ -86,6 +95,7 @@ Rcpp::List allocate_out_list(OGRFeatureDefn *poFDefn, int n_features, bool int64
 	}
 
 	out.attr("names") = names;
+	out.attr("domains") = domains;
 	return out;
 }
 
@@ -637,6 +647,46 @@ Rcpp::List CPL_ogr_layer_setup(Rcpp::CharacterVector datasource, Rcpp::Character
 	return Rcpp::List::create(dataset_xptr, layer_xptr);
 }
 
+Rcpp::List get_field_domains(OGRDataSource *poDS, Rcpp::CharacterVector fdn) {
+#if GDAL_VERSION_NUM >= 3050000
+	Rcpp::List fd(fdn.size());
+	for (size_t i = 0; i < fdn.size(); i++) {
+		const OGRFieldDomain *d = poDS->GetFieldDomain(Rcpp::as<std::string>(fdn[i]));
+		if (d != NULL) {
+			Rcpp::List fdi(3);
+			Rcpp::CharacterVector descr = Rcpp::wrap(d->GetDescription());
+			fdi[0] = descr;
+			OGRFieldDomainMergePolicy mp = d->GetMergePolicy();
+			Rcpp::LogicalVector merge_sum(1);
+			merge_sum[0] = NA_LOGICAL;
+			if (mp == OFDMP_SUM)
+				merge_sum[0] = true; // extensive
+			else if (mp == OFDMP_GEOMETRY_WEIGHTED)
+				merge_sum[0] = false; // intensive
+			else if (mp != OFDMP_DEFAULT_VALUE)
+				Rcpp::warning("unknown value for GetMergePolicy()");
+			fdi[1] = merge_sum;
+			OGRFieldDomainSplitPolicy sp = d->GetSplitPolicy();
+			Rcpp::LogicalVector split_geom_ratio(1);
+			split_geom_ratio[0] = NA_LOGICAL;
+			if (sp == OFDSP_DUPLICATE)
+				split_geom_ratio[0] = false; // intensive
+			else if (sp == OFDSP_GEOMETRY_RATIO)
+				split_geom_ratio[0] = true; // extensive
+			else if (sp != OFDSP_DEFAULT_VALUE)
+				Rcpp::warning("unknown value for GetSplitPolicy()");
+			fdi[2] = split_geom_ratio;
+			fdi.attr("names") = Rcpp::CharacterVector::create("description", "merge_sum", "split_geom_ratio");
+			fd[i] = fdi;
+		}
+	}
+	fd.attr("names") = fdn;
+	return fd;
+#else
+	return Rcpp::List::create();
+#endif
+}
+
 // [[Rcpp::export(rng=false)]]
 Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector layer,
 		Rcpp::CharacterVector query,
@@ -656,6 +706,12 @@ Rcpp::List CPL_read_ogr(Rcpp::CharacterVector datasource, Rcpp::CharacterVector 
 
 	Rcpp::List out = sf_from_ogrlayer(poLayer, quiet, int64_as_string, toTypeUser, fid_column_name,
 		promote_to_multi, -1);
+
+#if GDAL_VERSION_NUM >= 3050000
+	Rcpp::CharacterVector fdn = Rcpp::wrap(poDS->GetFieldDomainNames());
+	if (fdn.size() > 0)
+		out.attr("FieldDomains") = get_field_domains(poDS, fdn);
+#endif
 
 	// clean up if SQL was used https://www.gdal.org/classGDALDataset.html#ab2c2b105b8f76a279e6a53b9b4a182e0
 	if (! Rcpp::CharacterVector::is_na(query[0]))
