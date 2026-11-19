@@ -468,26 +468,26 @@ system.time({
   uk_buffer_sf = st_buffer(uk_projected, dist = 20000)
 })
 ##    user  system elapsed 
-##   0.019   0.002   0.021
+##    0.02    0.00    0.02
 # sf way with few than the 30 segments in the buffer
 system.time({
   uk_projected = st_transform(uk_sfc, 27700)
   uk_buffer_sf2 = st_buffer(uk_projected, dist = 20000, nQuadSegs = 4)
 })
 ##    user  system elapsed 
-##   0.007   0.000   0.006
+##   0.006   0.001   0.006
 # s2 with default cell size
 system.time({
   uk_buffer = s2_buffer_cells(uk, distance = 20000)
 })
 ##    user  system elapsed 
-##   0.017   0.000   0.016
+##   0.016   0.000   0.015
 # s2 with 10000 cells
 system.time({
   uk_buffer2 = s2_buffer_cells(uk, distance = 20000, max_cells = 10000)
 })
 ##    user  system elapsed 
-##   0.147   0.000   0.147
+##   0.145   0.000   0.145
 # s2 with 100 cells
 system.time({
   uk_buffer2 = s2_buffer_cells(uk, distance = 20000, max_cells = 100)
