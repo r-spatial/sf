@@ -759,14 +759,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_geos_op2
-Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy);
-RcppExport SEXP _sf_CPL_geos_op2(SEXP opSEXP, SEXP sfcxSEXP, SEXP sfcySEXP) {
+Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy, int min_dimension);
+RcppExport SEXP _sf_CPL_geos_op2(SEXP opSEXP, SEXP sfcxSEXP, SEXP sfcySEXP, SEXP min_dimensionSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< std::string >::type op(opSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type sfcx(sfcxSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type sfcy(sfcySEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_geos_op2(op, sfcx, sfcy));
+    Rcpp::traits::input_parameter< int >::type min_dimension(min_dimensionSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_op2(op, sfcx, sfcy, min_dimension));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -1496,7 +1497,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_sf_CPL_geos_snap", (DL_FUNC) &_sf_CPL_geos_snap, 3},
     {"_sf_CPL_geos_op", (DL_FUNC) &_sf_CPL_geos_op, 11},
     {"_sf_CPL_geos_voronoi", (DL_FUNC) &_sf_CPL_geos_voronoi, 4},
-    {"_sf_CPL_geos_op2", (DL_FUNC) &_sf_CPL_geos_op2, 3},
+    {"_sf_CPL_geos_op2", (DL_FUNC) &_sf_CPL_geos_op2, 4},
     {"_sf_CPL_geos_dist_by_element", (DL_FUNC) &_sf_CPL_geos_dist_by_element, 4},
     {"_sf_CPL_geos_version", (DL_FUNC) &_sf_CPL_geos_version, 2},
     {"_sf_CPL_geos_op2_by_element", (DL_FUNC) &_sf_CPL_geos_op2_by_element, 3},

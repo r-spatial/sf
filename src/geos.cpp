@@ -1020,7 +1020,7 @@ Rcpp::List CPL_geos_voronoi(Rcpp::List sfc, Rcpp::List env, double dTolerance = 
 }
 
 // [[Rcpp::export(rng=false)]]
-Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
+Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy, int min_dimension = 0) {
 
 	using namespace Rcpp; // so that later on the (_,1) works
 
@@ -1063,7 +1063,8 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy) {
 #endif
 				if (geom == nullptr)
 					Rcpp::stop("GEOS exception"); // #nocov
-				if (! chk_(GEOSisEmpty_r(hGEOSCtxt, geom.get()))) {
+				if (! chk_(GEOSisEmpty_r(hGEOSCtxt, geom.get())) && 
+						(min_dimension == 0 || GEOSGeom_getDimensions_r(hGEOSCtxt, geom.get()) >= min_dimension)) {
 					index_x.push_back(j + 1);
 					index_y.push_back(i + 1);
 					out.push_back(std::move(geom)); // keep
@@ -1619,19 +1620,19 @@ Rcpp::List CPL_line_interpolate(Rcpp::List lines, Rcpp::NumericVector dists, boo
 Rcpp::NumericVector CPL_grid_intersection_fractions(Rcpp::NumericVector p, Rcpp::List geoms) {
 	GEOSContextScope hGEOSCtxt;
 	int dim = 2;
-	unsigned ncell = p[4] * p[5];
+	unsigned int ncell = p[4] * p[5];
 	std::vector<GeomPtr> g = geometries_from_sfc(hGEOSCtxt, geoms, &dim);
 	std::vector<float> buf(ncell); // nx * ny
 	Rcpp::NumericVector ret(ncell * g.size());
 	for (int i = 0; i < (int) g.size(); i++) {
-		for (int j = 0; j < ncell; j++)
+		for (unsigned int j = 0; j < ncell; j++)
 			buf[j] = 0.0; // initialize, needed for i > 0!
 #ifdef HAVE314
 		if (GEOSGridIntersectionFractions_r(hGEOSCtxt, g[i].get(), p[0], p[1], p[2], p[3], (unsigned) p[4], (unsigned) p[5], buf.data()))
 #else
 			Rcpp::stop("GEOS >= 3.14.0 required");
 #endif
-		for (int j = 0; j < ncell; j++)
+		for (unsigned int j = 0; j < ncell; j++)
 			ret[i * ncell + j] = (double) buf[j];
 	}
 	Rcpp::IntegerVector d(2);

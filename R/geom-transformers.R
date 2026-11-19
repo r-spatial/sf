@@ -862,7 +862,7 @@ geos_op2_df = function(x, y, geoms) {
 # after checking identical crs,
 # call geos_op2 function op on x and y:
 # DE-9IM compliant should use model = "closed", more robust seems:
-geos_op2_geom = function(op, x, y, ..., by_element = FALSE, model = "semi-open") {
+geos_op2_geom = function(op, x, y, ..., by_element = FALSE, model = "semi-open", min_dimensions = 0L) {
 	stopifnot(st_crs(x) == st_crs(y))
 	x = st_geometry(x)
 	y = st_geometry(y)
@@ -887,7 +887,7 @@ geos_op2_geom = function(op, x, y, ..., by_element = FALSE, model = "semi-open")
 				sym_difference = s2::s2_sym_difference,
 				union = s2::s2_union, stop("invalid operator"))
 			# to be optimized -- this doesn't index on y:
-			lst = structure(unlist(lapply(y, function(yy) fn(x, yy, s2::s2_options(model = model, ...))),
+			lst = structure(unlist(lapply(y, function(yy) fn(x, yy, s2::s2_options(model = model, ...))), # absorbs the dimensions="polygon"
 				recursive = FALSE), class = "s2_geography")
 			e = s2::s2_is_empty(lst)
 			idx = cbind(rep(seq_along(x), length(y)), rep(seq_along(y), each = length(x)))
@@ -896,7 +896,7 @@ geos_op2_geom = function(op, x, y, ..., by_element = FALSE, model = "semi-open")
 		} else {
 			if (longlat)
 				message_longlat(paste0("st_", op))
-			st_sfc(CPL_geos_op2(op, x, y), crs = st_crs(x))
+			st_sfc(CPL_geos_op2(op, x, y, min_dimensions), crs = st_crs(x))
 		}
 	}
 }
@@ -967,8 +967,16 @@ st_intersection.sfc = function(x, y, ...) {
 			message_longlat("st_intersection")
 		ret = CPL_nary_intersection(x)
 		structure(st_sfc(ret), idx = attr(ret, "idx"))
-	} else
-		geos_op2_geom("intersection", x, y, ...)
+	} else {
+		dots = list(...)
+		min_dimensions = if (!is.null(dots$dimensions) && dots$dimensions == "polygon")
+				2L
+			else if (!is.null(dots$dimensions) && dots$dimensions %in% c("line", "lines", "polyline"))
+				1L
+			else
+				0L
+		geos_op2_geom("intersection", x, y, ..., min_dimensions = min_dimensions)
+	}
 }
 
 #' @name geos_binary_ops
@@ -987,7 +995,7 @@ st_intersection.sf = function(x, y, ...) {
 		x[[ sf_column ]] = structure(geom, idx = NULL)
 		st_sf(x)
 	} else
-		geos_op2_df(x, y, geos_op2_geom("intersection", x, y, ...))
+		geos_op2_df(x, y, st_intersection(st_geometry(x), st_geometry(y), ...))
 }
 
 #' @name geos_binary_ops

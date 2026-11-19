@@ -233,8 +233,8 @@ CPL_geos_voronoi <- function(sfc, env, dTolerance = 0.0, bOnlyEdges = 1L) {
     .Call(`_sf_CPL_geos_voronoi`, sfc, env, dTolerance, bOnlyEdges)
 }
 
-CPL_geos_op2 <- function(op, sfcx, sfcy) {
-    .Call(`_sf_CPL_geos_op2`, op, sfcx, sfcy)
+CPL_geos_op2 <- function(op, sfcx, sfcy, min_dimension = 0L) {
+    .Call(`_sf_CPL_geos_op2`, op, sfcx, sfcy, min_dimension)
 }
 
 CPL_geos_dist_by_element <- function(sfc0, sfc1, which, par) {
