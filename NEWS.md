@@ -1,10 +1,10 @@
 # version 1.1-4
 
-* increase PROJ from >= 4.8.0 to >= 6.0.0 (released Mar 1, 2019).
+* increase minimum PROJ requirement from 4.8.0 to 6.0.0 (released Mar 1, 2019); #2641
 
-* `st_intersection()` becomes sensitive to setting `dimensions = "polygon"` (`"lines"`) to only have polygons (lines) returned, also for the planar case.
+* for the planar case `st_intersection()` accepts `dimensions = "polygon"` (`"lines"`, `"points"`) to _only_ return polygons (lines, points)
 
-* optimize `st_interpolate_aw()` for regular gridded source or target geometries (using `GEOS::GEOSGridIntersectionFractions()` which requires GEOS >= 3.14); #2624, and also for the case where both `x` and `to` are regular or rectilinear (`stars`) rasters
+* optimize `st_interpolate_aw()` for regular gridded source or target geometries (using `GEOS::GEOSGridIntersectionFractions()` which requires GEOS >= 3.14); #2624, and also for the case where both `x` and `to` are regular or rectilinear (`stars`) rasters; #2624
 
 * add `TIN`, `POLYHEDRALSURFACE`, `TRIANGLE`, `CIRCULARSTRING`, `COMPOUNDCURVE`, `CURVE`, and `MULTICURVE` to vctrs methods; #2632
 
