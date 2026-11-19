@@ -212,13 +212,19 @@ st_interpolate_aw.sf = function(x, to, extensive, ..., keep_NA = FALSE, na.rm = 
 			x_st$...area_t = merge(data.frame(idx = idx[,2]), df)$area
 			lapply(x_st, function(v) v * x_st$...area_st / x_st$...area_t)
 		}
-	x_st = aggregate(x_st, list(idx[,2]), sum)
-	df = if (keep_NA) {
-			ix = rep(NA_integer_, length(to))
-			ix[x_st$Group.1] = seq_along(x_st$Group.1)
-			st_sf(x_st[ix,], geometry = st_geometry(to))
-		} else
-			st_sf(x_st, geometry = st_geometry(to)[x_st$Group.1], row.names = x_st$Group.1)
+	to.g = st_geometry(to)
+	if (length(x_st[[1]])) {
+		x_st = aggregate(x_st, list(idx[,2]), sum) # converts x_st into a data.frame
+		df = if (keep_NA) {
+				ix = rep(NA_integer_, length(to.g))
+				ix[x_st$Group.1] = seq_along(x_st$Group.1)
+				st_sf(x_st[ix,], geometry = to.g)
+			} else
+				st_sf(x_st, geometry = to.g[x_st$Group.1], row.names = x_st$Group.1)
+	} else {
+		ix = rep(NA_integer_, length(to.g))
+		df = st_sf(data.frame(x_st)[ix,], geometry = to.g)
+	}
 	# clean up:
 	df$...area_t = df$...area_st = df$...area_s = df$Group.1 = NULL
 	st_set_agr(df, "aggregate")
@@ -231,15 +237,14 @@ intersection_fraction = function(st_a, st_b) {
     yo = if (d[[2]]$delta < 0) c(4,2) else c(2,4) # y-order small-large
 	c(xo, yo)
   }
-  a = st_coordinates(st_a, add_max = TRUE)[, ord(da <- st_dimensions(st_a))]
-  b = st_coordinates(st_b, add_max = TRUE)[, ord(st_dimensions(st_b))]
+  a = st_coordinates(st_a, add_max = TRUE)[, ord(da <- stars::st_dimensions(st_a))]
+  b = st_coordinates(st_b, add_max = TRUE)[, ord(stars::st_dimensions(st_b))]
   i = rep(seq_len(nrow(a)), nrow(b))
   j = rep(seq_len(nrow(b)), each = nrow(a))
   ovx = ifelse(a[i,1] > b[j,2] | a[i,2] < b[j,1], 0, pmin(a[i,2], b[j,2])- pmax(a[i,1],b[j,1]))
   ovy = ifelse(a[i,3] > b[j,4] | a[i,4] < b[j,3], 0, pmin(a[i,4], b[j,4])- pmax(a[i,3],b[j,3]))
   matrix(ovx * ovy, nrow(a), nrow(b)) / abs(da[[1]]$delta * da[[2]]$delta) # / cellsize(st_a)
 }
-
 
 #' @name interpolate_aw
 #' @export
@@ -265,7 +270,7 @@ st_interpolate_aw.stars = function(x, to, extensive, ...) {
 		w = intersection_fraction(x, to)
 		ret = lapply(x, weigh, w, extensive)
 		ret = lapply(ret, structure, dim = dim(to))
-		stars::st_as_stars(ret, dimensions = st_dimensions(to))
+		stars::st_as_stars(ret, dimensions = stars::st_dimensions(to))
 	} else if (stars::st_raster_type(x) == "regular" && 
 			compareVersion(gsub("[a-zA-Z].+$", "", sf_extSoftVersion()[["GEOS"]]), "3.14.0") > -1) {
 		if (isTRUE(st_is_longlat(x)))
@@ -274,7 +279,7 @@ st_interpolate_aw.stars = function(x, to, extensive, ...) {
 		if (!identical(match(attr(stars::st_dimensions(x), "raster")$dimensions, names(dim(x))), 1:2))
 			stop("raster dimensions need to be at position 1 and 2; use aperm to rearrange")
 		# we HAVE_GEOS_3_14_0
-		if (!inherits(to, "sf") && !inherits(to, "sfc")) { # the stars-stars is for another day
+		if (!inherits(to, c("sf", "sfc"))) {
 			to <- try(st_as_sf(to))
 			if (inherits(to, "try-error"))
 				stop("st_interpolate_aw requires geometries in argument to")
@@ -283,14 +288,23 @@ st_interpolate_aw.stars = function(x, to, extensive, ...) {
 			stop("only implemented for negative N-S cellsize")
 		w = CPL_grid_intersection_fractions(c(st_bbox(x), dim(x)[1:2]), st_geometry(to))
 		ret = lapply(x, weigh, w, extensive)
-		dm = stars::st_dimensions(x)
-		dm[[1]] = NULL
-		attr(dm, "raster")$dimensions = c(NA_character_, NA_character_)
-		g = st_geometry(to)
-		dm[[1]] = structure(list(from = 1L, to = length(g), offset = NA_real_, delta = NA_real_,
-						 	refsys = st_crs(g), point = any(st_dimension(g) > 0), values = g), class = "dimension")
-		names(dm)[1] = "geometry"
-		stars::st_as_stars(ret, dimensions = dm)
+		if (length(dim(x)) == 2) { # return sf object
+			sf = st_sf(a = as.vector(ret), geom = st_geometry(to))
+			names(sf)[1] = names(x)[1]
+			sf
+		} else {
+			dm = stars::st_dimensions(x)
+			dm[[1]] = NULL
+			attr(dm, "raster")$dimensions = c(NA_character_, NA_character_)
+			g = st_geometry(to)
+			# this is ugly, but stars does not export stars:::create_dimension():
+			dm[[1]] = structure(list(from = 1L, to = length(g), offset = NA_real_, delta = NA_real_,
+							refsys = st_crs(g), point = any(st_dimension(g) > 0), values = g), class = "dimension")
+			names(dm)[1] = "geometry"
+			if (length(dm) == 1L)
+				ret = lapply(ret, function(v) structure(as.vector(v), dim = nrow(v)))
+			stars::st_as_stars(ret, dimensions = dm)
+		}
 	} else { # convert stars to sf...
 		ret = st_interpolate_aw(st_as_sf(x), to, extensive, ...)
 		geom = attr(ret, "sf_column")
@@ -336,17 +350,20 @@ interpolate_aw_sf_stars = function(x, to, extensive, ..., keep_NA = keep_NA, na.
 		ret = ret / rs
 
 	# redimension:
-	dim(ret) = c(dim(to)[1:2], ncol(x))
-
 	dm = stars::st_dimensions(to)[1:2]
-	dm[["attribute"]] = structure(list(from = 1L, to = ncol(x), offset = NA_real_, delta = NA_real_,
+	if (ncol(x) > 1) {
+		dim(ret) = c(dim(to)[1:2], ncol(x))
+		dm[["attribute"]] = structure(list(from = 1L, to = ncol(x), offset = NA_real_, delta = NA_real_,
 						 refsys = NA_character_, point = any(st_dimension(g) > 0), 
 						 values = dimnames(x)[[2]]), class = "dimension")
+	} else
+		dim(ret) = dim(to)[1:2]
 	stars::st_as_stars(list(attributes = ret), dimensions = dm)
 }
 
 dasymetric = function(x, to, extensive, keep_NA, include_non_intersected) {
-	stopifnot(isTRUE(extensive), !keep_NA, !include_non_intersected) # later...
+	# stopifnot(isTRUE(extensive), !keep_NA, !include_non_intersected) # later...
+	stopifnot(isTRUE(extensive), !include_non_intersected) # later...
 	stopifnot(length(to) == 2)
 	if (!inherits(to[[2]], "sfc"))
 		to = to[2:1] # swap: geom last
@@ -391,7 +408,12 @@ dasymetric = function(x, to, extensive, keep_NA, include_non_intersected) {
 	x = do.call(rbind, spl)
 	# sum over the target regions:
 	# x = aggregate(x, list(idx[,2]), sum)
-	x = aggregate(x, list(idx2), sum)
+	if (length(x[[1]]))
+		x = aggregate(x, list(idx2), sum)
+	else {
+		x = data.frame(x)
+		x$Group.1 = integer(0)
+	}
 	df = if (keep_NA) {
 			ix = rep(NA_integer_, length(to))
 			ix[x$Group.1] = seq_along(x$Group.1)
