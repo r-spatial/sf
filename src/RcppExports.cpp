@@ -759,15 +759,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // CPL_geos_op2
-Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy, int min_dimension);
-RcppExport SEXP _sf_CPL_geos_op2(SEXP opSEXP, SEXP sfcxSEXP, SEXP sfcySEXP, SEXP min_dimensionSEXP) {
+Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy, int dimension);
+RcppExport SEXP _sf_CPL_geos_op2(SEXP opSEXP, SEXP sfcxSEXP, SEXP sfcySEXP, SEXP dimensionSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< std::string >::type op(opSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type sfcx(sfcxSEXP);
     Rcpp::traits::input_parameter< Rcpp::List >::type sfcy(sfcySEXP);
-    Rcpp::traits::input_parameter< int >::type min_dimension(min_dimensionSEXP);
-    rcpp_result_gen = Rcpp::wrap(CPL_geos_op2(op, sfcx, sfcy, min_dimension));
+    Rcpp::traits::input_parameter< int >::type dimension(dimensionSEXP);
+    rcpp_result_gen = Rcpp::wrap(CPL_geos_op2(op, sfcx, sfcy, dimension));
     return rcpp_result_gen;
 END_RCPP
 }

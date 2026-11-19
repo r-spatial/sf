@@ -62,7 +62,7 @@ Type 'q()' to quit R.
 Error in st_geos_binop("intersects", x, y, sparse = sparse, prepared = prepared,  : 
   length(x) == length(y) is not TRUE
 > try(st_intersection(st_sfc(b0, b1), st_sfc(a0), by_element = TRUE))
-Error in geos_op2_geom("intersection", x, y, ..., min_dimensions = min_dimensions) : 
+Error in geos_op2_geom("intersection", x, y, ..., dimension = dimension) : 
   length(x) == length(y) is not TRUE
 > 
 > # distance: non-POINT geometries
@@ -77,4 +77,4 @@ Error in geos_op2_geom("intersection", x, y, ..., min_dimensions = min_dimension
 > 
 > proc.time()
    user  system elapsed 
-  1.850   0.071   0.476 
+  1.855   0.086   0.487 

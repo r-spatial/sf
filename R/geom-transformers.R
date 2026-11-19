@@ -862,7 +862,7 @@ geos_op2_df = function(x, y, geoms) {
 # after checking identical crs,
 # call geos_op2 function op on x and y:
 # DE-9IM compliant should use model = "closed", more robust seems:
-geos_op2_geom = function(op, x, y, ..., by_element = FALSE, model = "semi-open", min_dimensions = 0L) {
+geos_op2_geom = function(op, x, y, ..., by_element = FALSE, model = "semi-open", dimension = -1L) {
 	stopifnot(st_crs(x) == st_crs(y))
 	x = st_geometry(x)
 	y = st_geometry(y)
@@ -896,7 +896,7 @@ geos_op2_geom = function(op, x, y, ..., by_element = FALSE, model = "semi-open",
 		} else {
 			if (longlat)
 				message_longlat(paste0("st_", op))
-			st_sfc(CPL_geos_op2(op, x, y, min_dimensions), crs = st_crs(x))
+			st_sfc(CPL_geos_op2(op, x, y, dimension), crs = st_crs(x))
 		}
 	}
 }
@@ -969,13 +969,15 @@ st_intersection.sfc = function(x, y, ...) {
 		structure(st_sfc(ret), idx = attr(ret, "idx"))
 	} else {
 		dots = list(...)
-		min_dimensions = if (!is.null(dots$dimensions) && dots$dimensions == "polygon")
+		dimension = if (!is.null(dots$dimensions) && dots$dimensions == "polygon")
 				2L
 			else if (!is.null(dots$dimensions) && dots$dimensions %in% c("line", "lines", "polyline"))
 				1L
-			else
+			else if (!is.null(dots$dimensions) && dots$dimensions %in% c("point", "points"))
 				0L
-		geos_op2_geom("intersection", x, y, ..., min_dimensions = min_dimensions)
+			else
+				-1L
+		geos_op2_geom("intersection", x, y, ..., dimension = dimension)
 	}
 }
 

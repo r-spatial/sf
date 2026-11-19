@@ -1020,7 +1020,7 @@ Rcpp::List CPL_geos_voronoi(Rcpp::List sfc, Rcpp::List env, double dTolerance = 
 }
 
 // [[Rcpp::export(rng=false)]]
-Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy, int min_dimension = 0) {
+Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy, int dimension = -1) {
 
 	using namespace Rcpp; // so that later on the (_,1) works
 
@@ -1064,7 +1064,7 @@ Rcpp::List CPL_geos_op2(std::string op, Rcpp::List sfcx, Rcpp::List sfcy, int mi
 				if (geom == nullptr)
 					Rcpp::stop("GEOS exception"); // #nocov
 				if (! chk_(GEOSisEmpty_r(hGEOSCtxt, geom.get())) && 
-						(min_dimension == 0 || GEOSGeom_getDimensions_r(hGEOSCtxt, geom.get()) >= min_dimension)) {
+						(dimension == -1 || GEOSGeom_getDimensions_r(hGEOSCtxt, geom.get()) == dimension)) {
 					index_x.push_back(j + 1);
 					index_y.push_back(i + 1);
 					out.push_back(std::move(geom)); // keep
