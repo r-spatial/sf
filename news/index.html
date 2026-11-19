@@ -44,7 +44,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.1-4" id="version-11-4">version 1.1-4<a class="anchor" aria-label="anchor" href="#version-11-4"></a></h2>
-<ul><li><p><code><a href="../reference/geos_binary_ops.html">st_intersection()</a></code> becomes sensitive to setting <code>dimensions = "polygon"</code> (<code>"lines"</code>) to only have polygons (lines) returned, also for the planar case.</p></li>
+<ul><li><p>increase PROJ from &gt;= 4.8.0 to &gt;= 6.0.0 (released Mar 1, 2019).</p></li>
+<li><p><code><a href="../reference/geos_binary_ops.html">st_intersection()</a></code> becomes sensitive to setting <code>dimensions = "polygon"</code> (<code>"lines"</code>) to only have polygons (lines) returned, also for the planar case.</p></li>
 <li><p>optimize <code><a href="../reference/interpolate_aw.html">st_interpolate_aw()</a></code> for regular gridded source or target geometries (using <code>GEOS::GEOSGridIntersectionFractions()</code> which requires GEOS &gt;= 3.14); <a href="https://github.com/r-spatial/sf/issues/2624" class="external-link">#2624</a>, and also for the case where both <code>x</code> and <code>to</code> are regular or rectilinear (<code>stars</code>) rasters</p></li>
 <li><p>add <code>TIN</code>, <code>POLYHEDRALSURFACE</code>, <code>TRIANGLE</code>, <code>CIRCULARSTRING</code>, <code>COMPOUNDCURVE</code>, <code>CURVE</code>, and <code>MULTICURVE</code> to vctrs methods; <a href="https://github.com/r-spatial/sf/issues/2632" class="external-link">#2632</a></p></li>
 <li><p><code><a href="../reference/geos_combine.html">st_combine()</a></code> preserves the precision of input object; <a href="https://github.com/r-spatial/sf/issues/2618" class="external-link">#2618</a></p></li>

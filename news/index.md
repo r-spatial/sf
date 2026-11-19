@@ -2,6 +2,8 @@
 
 ## version 1.1-4
 
+- increase PROJ from \>= 4.8.0 to \>= 6.0.0 (released Mar 1, 2019).
+
 - [`st_intersection()`](https://r-spatial.github.io/sf/reference/geos_binary_ops.md)
   becomes sensitive to setting `dimensions = "polygon"` (`"lines"`) to
   only have polygons (lines) returned, also for the planar case.
