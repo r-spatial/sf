@@ -113,7 +113,8 @@
   : Geometric unary operations on simple feature geometry sets
 
 - [`st_interpolate_aw()`](https://r-spatial.github.io/sf/reference/interpolate_aw.md)
-  : Area-weighted interpolation or dasymetric mapping of polygon data
+  : Area-weighted interpolation (conservative regridding) or dasymetric
+  mapping
 
 - [`is_driver_available()`](https://r-spatial.github.io/sf/reference/is_driver_available.md)
   : Check if driver is available

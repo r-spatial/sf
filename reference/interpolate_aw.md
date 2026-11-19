@@ -1,6 +1,7 @@
-# Area-weighted interpolation or dasymetric mapping of polygon data
+# Area-weighted interpolation (conservative regridding) or dasymetric mapping
 
-Area-weighted interpolation or dasymetric mapping of polygon data
+Area-weighted interpolation (conservative regridding) or dasymetric
+mapping
 
 ## Usage
 
@@ -27,17 +28,18 @@ st_interpolate_aw(x, to, extensive, ...)
 
 - x:
 
-  object of class `sf`, for which we want to aggregate attributes
+  object of class `sf` or `stars`, for which we want to aggregate
+  attributes
 
 - to:
 
-  object of class `sf` or `sfc`, with the target geometries
+  object of class `sf`, `sfc` or `stars`, with the target geometries
 
 - extensive:
 
   logical; if TRUE, the attribute variables are assumed to be spatially
-  extensive (like population) and the sum is preserved, otherwise,
-  spatially intensive (like population density) and the mean is
+  extensive (like population) and their sum is preserved, otherwise,
+  spatially intensive (like population density) and their mean is
   preserved.
 
 - ...:
@@ -72,6 +74,9 @@ st_interpolate_aw(x, to, extensive, ...)
 if `extensive` is `TRUE` and `na.rm` is set to `TRUE`, geometries with
 `NA` are effectively treated as having zero attribute values. Dasymetric
 mapping is obtained when `weights` are specified.
+
+Handling of gridded data (`stars` objects) is efficient when GEOS \>=
+3.14
 
 ## Examples
 
