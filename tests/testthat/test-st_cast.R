@@ -125,6 +125,27 @@ test_that("st_cast can crack GEOMETRYCOLLECTION", {
   expect_s3_class(st_cast(gc5), "sfc_POLYGON")
   expect_equal(st_is_empty(st_cast(gc5)), c(FALSE, TRUE))
 
+  gc6 <- st_sfc(st_geometrycollection(), gc1, st_geometrycollection(), crs = 4326)
+  cracked <- st_cast(gc6)
+  expect_s3_class(cracked, "sfc_LINESTRING")
+  expect_identical(attr(cracked, "ids"), c(0L, 1L, 0L))
+  expect_equal(st_crs(cracked), st_crs(gc6))
+  expect_equal(attr(cracked, "n_empty"), 0L)
+  expect_equal(st_cast(st_sfc(st_geometrycollection(), st_geometrycollection())),
+    st_sfc(st_geometrycollection(), st_geometrycollection()))
+
+  polygon <- st_polygon(list(m))
+  for (count in 1:2) {
+    named <- st_sfc(empty = st_geometrycollection(),
+      polygons = st_geometrycollection(rep(list(polygon), count)), crs = 4326)
+    cracked <- st_cast(named)
+    expect_length(cracked, count)
+    expect_identical(names(cracked), rep("polygons", count))
+    expect_identical(attr(cracked, "ids"), c(empty = 0L, polygons = as.integer(count)))
+    expect_identical(unname(cracked[[1]]), unname(polygon))
+    expect_equal(st_crs(cracked), st_crs(named))
+  }
+
   sfc2 <- st_sfc(gc1, gc2, gc4)
   expect_s3_class(sfc2 |> st_cast(), "sfc_GEOMETRY")
   expect_equal(sapply(sfc2 |> st_cast(), class)[2, ], c("LINESTRING", "MULTILINESTRING", "MULTIPOINT"))
