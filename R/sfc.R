@@ -200,7 +200,11 @@ c.sfc = function(..., recursive = FALSE) {
 #' @export
 print.sfc = function(x, ..., n = 5L, what = "Geometry set for", append = "") {
 	sep = if (length(x) != 1) "s" else ""
-	cls = substr(class(x)[1], 5, nchar(class(x)[1]))
+	cls = class(x)
+	geometry_cls = cls[cls %in% paste0("sfc_", c("GEOMETRY", sf.tp))]
+	if (!length(geometry_cls))
+		geometry_cls = grep("^sfc_", cls, value = TRUE)
+	cls = substring(geometry_cls[1L], 5L)
 	cat(paste0(what, " ", length(x), " feature", sep, " ", append))
 	if (! is.null(attr(x, "n_empty"))) {
 		ne = attr(x, "n_empty")
