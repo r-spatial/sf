@@ -172,7 +172,7 @@ vector containing a numeric expression.
 
 ## See also
 
-[st_transform_proj](https://rdrr.io/pkg/lwgeom/man/st_transform_proj.html),
+[st_transform_proj](https://r-spatial.github.io/lwgeom/reference/st_transform_proj.html),
 part of package lwgeom.
 
 [sf_project](https://r-spatial.github.io/sf/reference/sf_project.md)
