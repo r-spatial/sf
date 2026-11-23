@@ -2,11 +2,19 @@
 
 ## version 1.1-4
 
-- increase PROJ from \>= 4.8.0 to \>= 6.0.0 (released Mar 1, 2019).
+- Keep geometries when a neighboring collection is empty;
+  [\#2639](https://github.com/r-spatial/sf/issues/2639)
 
-- [`st_intersection()`](https://r-spatial.github.io/sf/reference/geos_binary_ops.md)
-  becomes sensitive to setting `dimensions = "polygon"` (`"lines"`) to
-  only have polygons (lines) returned, also for the planar case.
+- Print the underlying geometry type for sfc subclasses;
+  [\#2638](https://github.com/r-spatial/sf/issues/2638)
+
+- increase minimum PROJ requirement from 4.8.0 to 6.0.0 (released Mar 1,
+  2019); [\#2641](https://github.com/r-spatial/sf/issues/2641)
+
+- for the planar case
+  [`st_intersection()`](https://r-spatial.github.io/sf/reference/geos_binary_ops.md)
+  accepts `dimensions = "polygon"` (`"lines"`, `"points"`) to *only*
+  return polygons (lines, points)
 
 - optimize
   [`st_interpolate_aw()`](https://r-spatial.github.io/sf/reference/interpolate_aw.md)
@@ -14,7 +22,7 @@
   `GEOS::GEOSGridIntersectionFractions()` which requires GEOS \>= 3.14);
   [\#2624](https://github.com/r-spatial/sf/issues/2624), and also for
   the case where both `x` and `to` are regular or rectilinear (`stars`)
-  rasters
+  rasters; [\#2624](https://github.com/r-spatial/sf/issues/2624)
 
 - add `TIN`, `POLYHEDRALSURFACE`, `TRIANGLE`, `CIRCULARSTRING`,
   `COMPOUNDCURVE`, `CURVE`, and `MULTICURVE` to vctrs methods;
