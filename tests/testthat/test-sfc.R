@@ -7,6 +7,37 @@ test_that("we can print sfc objects", {
   expect_length(st_sfc(), 0)
 })
 
+test_that("sfc printing uses the geometry class behind custom subclasses", {
+  point = st_sfc(st_point(1:2))
+  polygon = st_sfc(st_polygon(list(rbind(c(0, 0), c(1, 0), c(0, 1), c(0, 0)))))
+  geometries = list(point, polygon, st_sfc(point[[1]], polygon[[1]]),
+    point[FALSE], polygon[FALSE], st_sfc())
+
+  for (x in geometries) {
+    original = capture.output(print(x))
+    for (aliases in list("my_class", c("sfc_custom", "another_class", "sfc_alias"))) {
+      subclass = x
+      class(subclass) = c(aliases, class(x))
+      expect_identical(capture.output(print(subclass)), original)
+      invisible(capture.output(returned <- withVisible(print(subclass))))
+      expect_identical(returned$value, subclass)
+      expect_false(returned$visible)
+    }
+  }
+  expect_output(print(point), "Geometry type: POINT")
+  expect_output(print(polygon), "Geometry type: POLYGON")
+  expect_output(print(geometries[[3]]), "Geometry type: GEOMETRY")
+  expect_output(print(geometries[[4]]), "Geometry type: POINT")
+  expect_output(print(geometries[[5]]), "Geometry type: POLYGON")
+  expect_false(any(grepl("Geometry type:", capture.output(print(st_sfc())))))
+
+  extension = st_sfc(fall_back_class = c("sfc_EXTENSION", "sfc"))
+  expect_output(print(extension), "Geometry type: EXTENSION")
+  original = capture.output(print(extension))
+  class(extension) = c("my_class", class(extension))
+  expect_identical(capture.output(print(extension)), original)
+})
+
 test_that("st_is_longlat works", {
   pt1 = st_point(1:2)
   pt2 = st_point(3:4)
