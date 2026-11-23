@@ -63,7 +63,7 @@ must be installed beforehand) and set the
 result in faster printing of complex geometries. Note that the
 representation as WKT is different from the sf package and may cause
 reproducibility problems. An alternative solution is to use the
-[`lwgeom::st_astext()`](https://r-spatial.github.io/lwgeom/reference/st_astext.html)
+[`lwgeom::st_astext()`](https://rdrr.io/pkg/lwgeom/man/st_astext.html)
 or [`wk::as_wkt()`](https://paleolimbot.github.io/wk/reference/wkt.html)
 functions.
 

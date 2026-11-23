@@ -1847,7 +1847,7 @@ CRAN release: 2018-01-06
   `st_plit`) have been moved to their own package,
   <https://github.com/r-spatial/lwgeom>; argument `use_gdal` of
   `st_transform` has been deprecated, instead one can use
-  [`lwgeom::st_transform_proj`](https://r-spatial.github.io/lwgeom/reference/st_transform_proj.html);
+  [`lwgeom::st_transform_proj`](https://rdrr.io/pkg/lwgeom/man/st_transform_proj.html);
   sf no longer tries to link to liblwgeom;
   [\#509](https://github.com/r-spatial/sf/issues/509),
   [\#537](https://github.com/r-spatial/sf/issues/537),
@@ -2169,8 +2169,8 @@ CRAN release: 2017-06-15
   object; [\#351](https://github.com/r-spatial/sf/issues/351)
 
 - on plotting with
-  [`ggplot2::geom_sf`](https://ggplot2.tidyverse.org/reference/ggsf.html),
-  empty geometries no longer break; grid functions return
+  [`ggplot2::geom_sf`](https://rdrr.io/pkg/ggplot2/man/ggsf.html), empty
+  geometries no longer break; grid functions return
   [`nullGrob()`](https://rdrr.io/r/grid/grid.null.html) for them;
   [\#351](https://github.com/r-spatial/sf/issues/351)
 

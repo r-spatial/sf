@@ -84,9 +84,8 @@ st_area returns the area of each feature geometry, computed in the
 coordinate reference system used. In case `x` has geodetic coordinates
 (unprojected), then if
 [`sf_use_s2()`](https://r-spatial.github.io/sf/reference/s2.md) is
-`FALSE`
-[st_geod_area](https://r-spatial.github.io/lwgeom/reference/geod.html)
-is used for area calculation, if it is `TRUE` then
+`FALSE` [st_geod_area](https://rdrr.io/pkg/lwgeom/man/geod.html) is used
+for area calculation, if it is `TRUE` then
 [s2_area](https://r-spatial.github.io/s2/reference/s2_is_collection.html)
 is used: the former assumes an ellipsoidal shape, the latter a spherical
 shape of the Earth. In case of projected data, areas are computed in
@@ -120,10 +119,10 @@ or
 [s2_distance_matrix](https://r-spatial.github.io/s2/reference/s2_closest_feature.html));
 if [`sf_use_s2()`](https://r-spatial.github.io/sf/reference/s2.md) is
 `FALSE`, ellipsoidal distances are computed using
-[st_geod_distance](https://r-spatial.github.io/lwgeom/reference/geod.html)
-which uses function `geod_inverse` from GeographicLib (part of PROJ);
-see Karney, Charles FF, 2013, Algorithms for geodesics, Journal of
-Geodesy 87(1), 43–55
+[st_geod_distance](https://rdrr.io/pkg/lwgeom/man/geod.html) which uses
+function `geod_inverse` from GeographicLib (part of PROJ); see Karney,
+Charles FF, 2013, Algorithms for geodesics, Journal of Geodesy 87(1),
+43–55
 
 ## See also
 

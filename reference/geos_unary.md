@@ -179,8 +179,7 @@ st_exterior_ring(x, ...)
   (long/lat), `dfMaxLength` is either a numeric expressed in meter, or
   an object of class `units` with length units `rad` or `degree`;
   segmentation in the long/lat case takes place along the great circle,
-  using
-  [st_geod_segmentize](https://r-spatial.github.io/lwgeom/reference/geod.html).
+  using [st_geod_segmentize](https://rdrr.io/pkg/lwgeom/man/geod.html).
 
 ## Value
 

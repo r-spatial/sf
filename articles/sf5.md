@@ -279,8 +279,8 @@ which convert simple feature objects into `grob` (“graphics objects”)
 objects; `grob`s are the graphic primitives of the `grid` plotting
 package. These methods can be used by plotting packages that build on
 `grid`, such as `ggplot2` (which uses them in
-[`geom_sf()`](https://ggplot2.tidyverse.org/reference/ggsf.html)) and
-`tmap`. In addition,
+[`geom_sf()`](https://rdrr.io/pkg/ggplot2/man/ggsf.html)) and `tmap`. In
+addition,
 [`st_viewport()`](https://r-spatial.github.io/sf/reference/st_viewport.md)
 can be used to set up a grid viewport from an `sf` object, with an
 aspect ratio similar to that of
