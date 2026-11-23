@@ -1,5 +1,9 @@
 # version 1.1-4
 
+* Keep geometries when a neighboring collection is empty; #2639
+
+* Print the underlying geometry type for sfc subclasses; #2638 
+
 * increase minimum PROJ requirement from 4.8.0 to 6.0.0 (released Mar 1, 2019); #2641
 
 * for the planar case `st_intersection()` accepts `dimensions = "polygon"` (`"lines"`, `"points"`) to _only_ return polygons (lines, points)
